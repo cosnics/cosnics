@@ -55,7 +55,7 @@ class RepositoryImplementationCategoryItem extends CategoryItem
 
         $html[] = '<ul>';
 
-        $selected = $this->getItem()->is_selected();
+        $selected = $this->isItemSelected();
         $class = $selected ? 'class="current" ' : '';
 
         $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
