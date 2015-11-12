@@ -20,7 +20,7 @@ class UserResultReportingTemplate extends ReportingTemplate
     {
         parent :: __construct($parent);
 
-        $user_id = Request :: get(\Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager :: PARAM_USER);
+        $user_id = Request :: get(\Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager :: PARAM_USER);
         $attempt_id = Request :: get(
             \Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager :: PARAM_ATTEMPT);
         $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
