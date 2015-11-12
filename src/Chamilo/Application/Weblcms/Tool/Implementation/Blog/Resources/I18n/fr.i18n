@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\blog
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Blog"
+BlogToolBrowserComponent = "Blogs"
+BlogToolViewerComponent = "Voir le blog"
+BlogToolUpdaterComponent = "Modifier le blog"
+BlogToolIntroductionPublisherComponent = "Publier l'introduction"
+BlogToolCategoryMoverComponent = "Déplacer le blog"
+Attachments = "Annexes"
+AuthorUnknown = "Auteur inconnu"
+BlogLayout = "Mise en page du blog"
+BlogLayoutNotExists = "La mise en page sélectionnée n'existe pas"
+Properties = "Propriétés"

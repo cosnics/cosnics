@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+List = "User list"
+ListDescription = "The user list"
+CreateDescription = "Create a new user in the platform"
+ExportDescription = "Export the users to csv / xml files"
+ImportDescription = "Import users from csv / xml files"
+BuildUserFields = "Build user fields"
+BuildUserFieldsDescription = "Add additional fields to the details of the user. The user can fill in these fields in 'My Account'"
+EditTermsConditions = "Update terms and conditions"
+EditTermsConditionsDescription = "Make changes to the terms and conditions the users see when logging in"
