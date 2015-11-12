@@ -134,6 +134,7 @@ class UserResultsViewerComponent extends Manager
                             self :: PARAM_USER => Request :: get(self :: PARAM_USER),
                             self :: PARAM_ATTEMPT => Request :: get(self :: PARAM_ATTEMPT)))));
         }
+
         return $action_bar->as_html();
     }
 

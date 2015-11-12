@@ -16,7 +16,7 @@ class UserResultReportingBlock extends ReportingBlock
     public function __construct($parent, $user, $attempt)
     {
         parent :: __construct($parent, false);
-        
+
         $this->user = $user;
         $this->attempt = $attempt;
     }
@@ -24,9 +24,6 @@ class UserResultReportingBlock extends ReportingBlock
     public static function factory($parent, $user, $attempt)
     {
         $processor = $parent->get_parent()->get_root_content_object()->get_scale();
-        
-        $file = __DIR__ . '/' . $processor . '_user_result_reporting_block.class.php';
-        require_once ($file);
         $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($processor)->upperCamelize() .
              'UserResultReportingBlock';
         return new $class($parent, $user, $attempt);

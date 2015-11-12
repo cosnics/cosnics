@@ -25,16 +25,24 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 {
 
+    private $courseIdentifier;
+
+    private $course;
+
+    private $show_groups;
+
+    private $group_users;
+
     public function run()
     {
-        $course = Request :: get('course');
-        $show_groups = Request :: get('show_groups');
+        $this->courseIdentifier = Request :: get('course');
+        $this->show_groups = Request :: get('show_groups');
 
-        if ($course)
+        if ($this->courseIdentifier)
         {
-            $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_by_id(
+            $this->course = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_by_id(
                 Course :: class_name(),
-                $course);
+                $this->courseIdentifier);
 
             $query = Request :: get('query');
             $exclude = Request :: get('exclude');
@@ -117,7 +125,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 // $group_condition = null;
                 $group_condition = new EqualityCondition(
                     new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
-                    new StaticConditionVariable($course->get_id()));
+                    new StaticConditionVariable($this->course->get_id()));
             }
 
             $userConditions = array();
@@ -125,7 +133,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 new PropertyConditionVariable(
                     CourseEntityRelation :: class_name(),
                     CourseEntityRelation :: PROPERTY_COURSE_ID),
-                new StaticConditionVariable($course->getId()));
+                new StaticConditionVariable($this->course->getId()));
             $userConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseEntityRelation :: class_name(),
@@ -139,21 +147,21 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
             $user_ids = DataManager :: distinct(CourseEntityRelation :: class_name(), $parameters);
 
             // Add users from subscribed platform groups to user ids array
-            $group_relations = $course->get_subscribed_groups();
+            $group_relations = $this->course->get_subscribed_groups();
 
             if (count($group_relations) > 0)
             {
-                $group_users = array();
+                $this->group_users = array();
 
                 foreach ($group_relations as $group_relation)
                 {
-                    $group = DataManager :: retrieve_by_id(Group::class_name(), $group_relation->getEntityId());
+                    $group = DataManager :: retrieve_by_id(Group :: class_name(), $group_relation->getEntityId());
                     $group_user_ids = $group->get_users(true, true);
 
-                    $group_users = array_merge($group_users, $group_user_ids);
+                    $this->group_users = array_merge($this->group_users, $group_user_ids);
                 }
 
-                $user_ids = array_merge($user_ids, $group_users);
+                $user_ids = array_merge($user_ids, $this->group_users);
             }
 
             // if ($user_conditions)
@@ -199,7 +207,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 $users[] = $user;
             }
 
-            if ($show_groups)
+            if ($this->show_groups)
             {
                 $groups = array();
 
@@ -276,8 +284,6 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
     function dump_tree($users, $groups_tree)
     {
-        global $group_users, $show_groups;
-
         if ($this->contains_results($users) || $this->contains_results($groups_tree))
         {
             if ($this->contains_results($users))
@@ -286,7 +292,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 echo Translation :: get('Users', null, 'user') . '">', "\n";
                 foreach ($users as $user)
                 {
-                    if (in_array($user->get_id(), $group_users))
+                    if (in_array($user->get_id(), $this->group_users))
                     {
                         $class = 'type type_user_platform';
                     }
@@ -302,16 +308,14 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 echo '</node>', "\n";
             }
 
-            if ($show_groups)
+            if ($this->show_groups)
             {
                 $this->dump_platform_groups_tree();
 
                 if ($this->contains_results($groups_tree))
                 {
-                    global $course;
-
-                    echo '<node id="group" classes="category unlinked" title="' . htmlspecialchars($course->get_title()) .
-                         '">', "\n";
+                    echo '<node id="group" classes="category unlinked" title="' .
+                         htmlspecialchars($this->course->get_title()) . '">', "\n";
 
                     $this->dump_groups_tree($groups_tree);
                     echo '</node>', "\n";
@@ -322,8 +326,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
     function dump_platform_groups_tree()
     {
-        global $course;
-        $group_relations = $course->get_subscribed_groups();
+        $group_relations = $this->course->get_subscribed_groups();
 
         if (count($group_relations) > 0)
         {
@@ -332,7 +335,9 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
 
             foreach ($group_relations as $group_relation)
             {
-                $group = $group_relation->get_group();
+                $group = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
+                    Group :: class_name(),
+                    $group_relation->getEntityId());
                 $this->dump_platform_group($group);
             }
 
