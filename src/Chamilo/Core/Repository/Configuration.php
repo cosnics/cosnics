@@ -1,12 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository;
 
+use Chamilo\Core\Repository\Service\ConfigurationCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
-use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * This class represents the current configuration
@@ -57,31 +54,8 @@ class Configuration
 
     private function initialize()
     {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-
-        if ($cache->contains('configuration.registrations'))
-        {
-            $this->registrations = $cache->fetch('configuration.registrations');
-        }
-        else
-        {
-            $registrations = DataManager :: retrieves(
-                TemplateRegistration :: class_name(),
-                new DataClassRetrievesParameters());
-
-            while ($registration = $registrations->next_result())
-            {
-                $this->registrations[self :: REGISTRATION_ID][$registration->get_id()] = $registration;
-                $this->registrations[self :: REGISTRATION_USER_ID][$registration->get_user_id()][$registration->get_content_object_type()][] = $registration;
-
-                if ($registration->get_default())
-                {
-                    $this->registrations[self :: REGISTRATION_DEFAULT][$registration->get_content_object_type()] = $registration;
-                }
-            }
-
-            $cache->save('configuration.registrations', $this->registrations);
-        }
+        $configurationCacheService = new ConfigurationCacheService();
+        $this->registrations = $configurationCacheService->getRegistrationsCache();
     }
 
     /**
