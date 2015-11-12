@@ -26,6 +26,8 @@ class EditorComponent extends Manager
         }
 
         $id = Request :: get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $this->set_parameter(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID, $id);
+
         $user = $this->get_user();
 
         if ($id)
@@ -102,10 +104,5 @@ class EditorComponent extends Manager
                         array('OBJECT' => Translation :: get('SystemAnnouncement')),
                         Utilities :: COMMON_LIBRARIES)));
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
     }
 }

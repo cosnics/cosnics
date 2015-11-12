@@ -10,9 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
- * User: Pieterjan Broekaert
- * Date: 30/07/12
- * Time: 12:41
+ * User: Pieterjan Broekaert Date: 30/07/12 Time: 12:41
  *
  * @author Pieterjan Broekaert Hogent
  */
@@ -25,6 +23,10 @@ class ManagerResultExporterComponent extends Manager
         {
             $request_id = \Chamilo\Libraries\Platform\Session\Request :: get(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: PARAM_CONTENT_OBJECT_IDS);
+            $this->set_parameter(
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: PARAM_CONTENT_OBJECT_IDS,
+                $request_id);
+
             $request = DataManager :: retrieve_by_id(Request :: class_name(), $request_id);
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
@@ -61,10 +63,5 @@ class ManagerResultExporterComponent extends Manager
     protected function can_execute_component()
     {
         return $this->get_parent()->is_allowed(WeblcmsRights :: EDIT_RIGHT);
-    }
-
-    function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: PARAM_CONTENT_OBJECT_IDS);
     }
 }

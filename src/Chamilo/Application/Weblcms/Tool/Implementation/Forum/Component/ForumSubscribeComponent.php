@@ -22,6 +22,7 @@ class ForumSubscribeComponent extends Manager
     public function run()
     {
         $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $this->publication_id);
 
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
@@ -56,10 +57,5 @@ class ForumSubscribeComponent extends Manager
             ($succes ? false : true),
             array(self :: PARAM_ACTION => self :: ACTION_BROWSE),
             array(self :: PARAM_PUBLICATION_ID));
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_PUBLICATION_ID);
     }
 }

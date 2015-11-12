@@ -34,6 +34,7 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
     public function run()
     {
         $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $this->publication_id);
 
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
@@ -94,11 +95,6 @@ class ViewerComponent extends Manager implements DelegateComponent, ForumDisplay
         return DataManager :: count(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView :: class_name(),
             new DataClassCountParameters($condition));
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
     }
 
     /**

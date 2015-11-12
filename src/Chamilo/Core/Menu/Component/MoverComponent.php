@@ -27,7 +27,9 @@ class MoverComponent extends Manager
     {
         $this->check_allowed();
         $direction = Request :: get(Manager :: PARAM_DIRECTION);
+        $this->set_parameter(Manager :: PARAM_DIRECTION, $direction);
         $item = intval(Request :: get(Manager :: PARAM_ITEM));
+        $this->set_parameter(Manager :: PARAM_ITEM, $item);
 
         if (isset($direction) && isset($item))
         {
@@ -74,10 +76,5 @@ class MoverComponent extends Manager
     {
         $breadcrumbtrail->add(new Breadcrumb($this->get_menu_home_url(), Translation :: get('ManagerBrowserComponent')));
         $breadcrumbtrail->add_help('menu_mover');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(Manager :: PARAM_ITEM, Manager :: PARAM_DIRECTION);
     }
 }

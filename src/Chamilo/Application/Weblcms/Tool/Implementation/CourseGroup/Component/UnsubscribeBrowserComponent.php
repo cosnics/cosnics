@@ -37,6 +37,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
     public function run()
     {
         $course_group_id = Request :: get(self :: PARAM_COURSE_GROUP);
+        $this->set_parameter(self :: PARAM_COURSE_GROUP, $course_group_id);
 
         $course_group = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $course_group_id);
         if (! $course_group)
@@ -264,11 +265,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('weblcms_course_group_unsubscribe_browser');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_COURSE_GROUP);
     }
 
     public function get_table_condition($table_class_name)

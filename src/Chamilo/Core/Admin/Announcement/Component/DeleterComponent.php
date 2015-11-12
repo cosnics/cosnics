@@ -22,6 +22,7 @@ class DeleterComponent extends Manager
         }
 
         $ids = $this->getRequest()->get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $this->set_parameter(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID, $ids);
         $failures = 0;
 
         if (! empty($ids))
@@ -82,10 +83,5 @@ class DeleterComponent extends Manager
                         array('OBJECTS' => Translation :: get('Publication')),
                         Utilities :: COMMON_LIBRARIES)));
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
     }
 }

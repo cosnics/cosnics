@@ -32,6 +32,10 @@ class ResultViewerComponent extends Manager
 
             $request_id = \Chamilo\Libraries\Platform\Session\Request :: get(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: PARAM_CONTENT_OBJECT_IDS);
+            $this->set_parameter(
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: PARAM_CONTENT_OBJECT_IDS,
+                $request_id);
+
             $result_to_html_converter = new ResultToHtmlConverter();
 
             $html[] = $result_to_html_converter->convert_to_html($request_id);
@@ -83,10 +87,5 @@ class ResultViewerComponent extends Manager
                 false));
 
         return $action_bar;
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: PARAM_CONTENT_OBJECT_IDS);
     }
 }

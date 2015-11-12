@@ -24,6 +24,8 @@ class HiderComponent extends Manager
         }
 
         $ids = Request :: get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
+        $this->set_parameter(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID, $ids);
+
         $failures = 0;
 
         if (! empty($ids))
@@ -85,11 +87,6 @@ class HiderComponent extends Manager
                         array('OBJECT' => 'Publication'),
                         Utilities :: COMMON_LIBRARIES)));
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
     }
 
     /**

@@ -59,11 +59,6 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
         return $this->publication;
     }
 
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-    }
-
     public function get_wiki_page_statistics_reporting_template_name()
     {
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate :: class_name();

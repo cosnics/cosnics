@@ -635,11 +635,6 @@ class SorterComponent extends Manager
         return '<div style="float:right;">' . $toolbar->as_html() . '</div>';
     }
 
-    public function get_additional_parameters()
-    {
-        return array(CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE);
-    }
-
     public function show_empty_courses()
     {
         return true;

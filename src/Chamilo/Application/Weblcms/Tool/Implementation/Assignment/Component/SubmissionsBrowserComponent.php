@@ -81,6 +81,10 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         $this->submitter_id = Request :: get(self :: PARAM_TARGET_ID);
         $this->submitter_type = Request :: get(self :: PARAM_SUBMITTER_TYPE);
 
+        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $this->publication_id);
+        $this->set_parameter(self :: PARAM_TARGET_ID, $this->submitter_id);
+        $this->set_parameter(self :: PARAM_SUBMITTER_TYPE, $this->submitter_type);
+
         switch ($this->submitter_type)
         {
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER :
@@ -692,14 +696,6 @@ class SubmissionsBrowserComponent extends SubmissionsManager implements TableSup
         }
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
-            self :: PARAM_TARGET_ID,
-            self :: PARAM_SUBMITTER_TYPE);
     }
 
     public function get_table_condition($table_class_name)

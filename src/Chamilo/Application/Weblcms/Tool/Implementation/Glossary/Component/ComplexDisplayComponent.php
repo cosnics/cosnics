@@ -60,11 +60,6 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
         return $this->publication->get_content_object();
     }
 
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-    }
-
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {

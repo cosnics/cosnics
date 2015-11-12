@@ -41,6 +41,8 @@ class EditorComponent extends Manager implements DelegateComponent
     public function run()
     {
         $id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $id);
+
         if ($id)
         {
             $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $id);
@@ -181,10 +183,5 @@ class EditorComponent extends Manager implements DelegateComponent
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('repository_editor');
-    }
-
-    public function get_additional_parameters()
-    {
-        return parent :: get_additional_parameters(array(self :: PARAM_CONTENT_OBJECT_ID));
     }
 }

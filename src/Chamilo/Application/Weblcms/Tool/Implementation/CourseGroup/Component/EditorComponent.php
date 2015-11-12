@@ -30,6 +30,7 @@ class EditorComponent extends Manager implements DelegateComponent
         }
 
         $course_group_id = Request :: get(self :: PARAM_COURSE_GROUP);
+        $this->set_parameter(self :: PARAM_COURSE_GROUP, $course_group_id);
 
         $course_group = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $course_group_id);
 
@@ -87,10 +88,5 @@ class EditorComponent extends Manager implements DelegateComponent
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('weblcms_course_group_editor');
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self :: PARAM_COURSE_GROUP);
     }
 }
