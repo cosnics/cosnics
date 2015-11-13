@@ -54,7 +54,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $tool = Request :: get(self :: PARAM_TOOL);
 
-        $this->set_parameter(self :: PARAM_COURSE, $this->get_course());
+        $this->set_parameter(self :: PARAM_COURSE, $this->get_course()->get_id());
         $this->set_parameter(self :: PARAM_TOOL, $tool);
 
         $breadcrumbtrail = BreadcrumbTrail :: get_instance();
