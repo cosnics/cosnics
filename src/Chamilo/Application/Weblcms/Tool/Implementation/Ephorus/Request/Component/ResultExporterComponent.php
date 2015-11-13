@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  *
  * @author Pieterjan Broekaert Hogent
  */
-class ManagerResultExporterComponent extends Manager
+class ResultExporterComponent extends Manager
 {
 
     public function run()

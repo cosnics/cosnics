@@ -138,6 +138,7 @@ class DoctrineExtension
              $er_table . ' ' . $er_alias . ' ON ' . $ast_cid . '=' . $er_content_object_id . ' AND ' . $ast_sid . '=' .
              $er_author_id;
         // $join;
+
         if ($condition)
         {
             $query .= ' WHERE ' . ConditionTranslator :: render($condition);
@@ -170,7 +171,11 @@ class DoctrineExtension
         $query = $er_table . ' ' . $er_alias . ' JOIN ' . $rco_table . ' ' . $rco_alias . ' ON ' . $rco_id . '=' .
              $er_content_object_id . ' JOIN ' . $usr_table . ' ' . $usr_alias . ' ON ' . $usr_id . '=' . $er_author_id;
         // $join;
-        $query .= ' WHERE ' . ConditionTranslator :: render($condition);
+
+        if ($condition)
+        {
+            $query .= ' WHERE ' . ConditionTranslator :: render($condition);
+        }
 
         return $query;
     }
@@ -210,6 +215,7 @@ class DoctrineExtension
         $order_by = $params->get_order_by();
 
         $ob = 'ORDER BY ';
+
         if ($order_by != null)
         {
             $order_by = $order_by[0];
@@ -243,6 +249,7 @@ class DoctrineExtension
         {
             $guids = array($guids);
         }
+
         $condition = new InCondition(
             new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_GUID),
             $guids);
@@ -275,10 +282,12 @@ class DoctrineExtension
 
         $selects = array();
         $selects[] = $er_guid;
+
         foreach (ContentObject :: get_default_property_names() as $default_property)
         {
             $selects[] = $rdm->escape_column_name($default_property, $rco_alias);
         }
+
         $select = implode(', ', $selects);
 
         $table_aliases = array();
@@ -286,6 +295,7 @@ class DoctrineExtension
         $table_aliases[] = $rco_ref;
 
         $tables = array();
+
         foreach ($table_aliases as $table_alias)
         {
             $tables[${$table_alias . $ref_table}] = ${$table_alias . $ref_table} . ' AS ' . ${$table_alias . $ref_alias};
@@ -317,19 +327,23 @@ class DoctrineExtension
             $join_right_value => $rco_id);
 
         $joins = array();
+
         foreach ($join_declarations as $join_declaration)
         {
             $joins_entry_parts = array();
+
             if ($join_declaration[$join_left_table])
             {
                 $joins_entry_parts[] = $join_declaration[$join_left_table];
             }
+
             $joins_entry_parts[] = $join_declaration[$join_type];
             $joins_entry_parts[] = $join_declaration[$join_right_table];
             $joins_entry_parts[] = 'ON';
             $joins_entry_parts[] = $join_declaration[$join_left_value];
             $joins_entry_parts[] = '=';
             $joins_entry_parts[] = $join_declaration[$join_right_value];
+
             foreach ($join_declaration[$join_conditions] as $join_condition)
             {
                 $joins_entry_parts[] = 'AND';
@@ -337,8 +351,10 @@ class DoctrineExtension
                 $joins_entry_parts[] = $join_condition[$join_condition_operator];
                 $joins_entry_parts[] = $join_condition[$join_condition_value];
             }
+
             $joins[] = implode(' ', $joins_entry_parts);
         }
+
         $join = implode(' ', $joins);
 
         $query_parts = array();

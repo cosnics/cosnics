@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -18,8 +18,11 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class RequestTableDataProvider extends DataClassTableDataProvider
 {
 
+    private $extension;
+
     /**
-     * Gets the objects to display in the table. For now, objects are composed in the code itself from several source
+     * Gets the objects to display in the table.
+     * For now, objects are composed in the code itself from several source
      * objects.
      *
      * @param $offset
@@ -35,8 +38,8 @@ class RequestTableDataProvider extends DataClassTableDataProvider
             $order_property = new OrderBy(
                 new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_REQUEST_TIME));
         }
-        return DataManager :: retrieve_results_content_objects_by_params(
-            new DataClassRetrievesParameters($this->get_condition(), $count, $offset, $order_property));
+        return $this->getExtension()->retrieve_results_content_objects_by_params(
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**
@@ -46,6 +49,16 @@ class RequestTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_results_content_objects_by_params(new DataClassCountParameters($condition));
+        return $this->getExtension()->count_results_content_objects_by_params($condition);
+    }
+
+    public function getExtension()
+    {
+        if (! isset($this->extension))
+        {
+            $this->extension = new DoctrineExtension(DataManager :: get_instance());
+        }
+
+        return $this->extension;
     }
 }
