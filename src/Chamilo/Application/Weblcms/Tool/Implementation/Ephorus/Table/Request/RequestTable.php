@@ -25,8 +25,9 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $actions->add_form_action(
-                $this->get_component()->get_url(
-                    new TableFormAction(
+
+                new TableFormAction(
+                    $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => Manager :: ACTION_INDEX_VISIBILITY_CHANGER)),
                     Translation :: get('ToggleIndexVisibility')));

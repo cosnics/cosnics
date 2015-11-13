@@ -70,7 +70,7 @@ class AssignmentBrowserComponent extends Manager implements TableSupport, Reques
      */
     public function get_table_condition($object_table_class_name)
     {
-        if ($object_table_class_name == __NAMESPACE__ . '\AssignmentRequestTable')
+        if ($object_table_class_name == 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable')
         {
             $search_conditions = $this->action_bar->get_conditions(
                 array(ContentObject :: PROPERTY_TITLE, ContentObject :: PROPERTY_DESCRIPTION));

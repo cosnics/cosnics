@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 
 /**
  *
@@ -45,8 +46,8 @@ class AssignmentLatestDocumentsPublisherComponent extends Manager
                 AssignmentSubmission :: PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_publication_id()));
 
-        $trackers = DataManager :: get_instance()->retrieve_results_by_assignment(
-            new DataClassRetrievesParameters($condition));
+        $doctrineExtension = new DoctrineExtension(DataManager :: get_instance());
+        $trackers = $doctrineExtension->retrieve_results_by_assignment(new DataClassRetrievesParameters($condition));
 
         $ids = array();
         while (($tracker = $trackers->next_result()) != null)

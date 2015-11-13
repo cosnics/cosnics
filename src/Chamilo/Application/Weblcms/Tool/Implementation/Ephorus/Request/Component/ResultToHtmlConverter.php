@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 
 /**
  * Class that converts the database result to html
@@ -236,7 +237,8 @@ class ResultToHtmlConverter
      */
     private function get_chamilo_hits($guids)
     {
-        $hits_rs = DataManager :: get_instance()->retrieve_results_content_objects($guids);
+        $doctrineExtension = new DoctrineExtension(DataManager :: get_instance());
+        $hits_rs = $doctrineExtension->retrieve_results_content_objects($guids);
 
         /**
          *
@@ -343,11 +345,9 @@ class ResultToHtmlConverter
         }
         else
         {
-            $html[] = "<span class='report_table_header'>" .
-                 Translation :: get(
-                    'LocalReport',
-                    array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) .
-                 "</span>";
+            $html[] = "<span class='report_table_header'>" . Translation :: get(
+                'LocalReport',
+                array("LOCAL_GUID" => $result->get_original_guid(), "SOURCE" => $result->get_student_name())) . "</span>";
         }
 
         $html[] = "</td>";
