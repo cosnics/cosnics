@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Service;
 
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
-use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ConfigurationCacheService extends DoctrinePhpFileCacheService
+class ConfigurationCacheService extends DoctrineFilesystemCacheService
 {
     // Identifiers
     const IDENTIFIER_REGISTRATIONS = 'registrations';
@@ -54,7 +54,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function getCachePathNamespace()
     {
-        return 'Chamilo\Core\Repository';
+        return 'Chamilo\Core\Repository\Configuration';
     }
 
     /**

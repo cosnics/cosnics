@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Reporting\Exporters;
+namespace Chamilo\Core\Reporting\Exporter;
 
 use Chamilo\Core\Reporting\ReportingExporter;
 use Chamilo\Libraries\File\Export\Export;
@@ -30,9 +30,9 @@ class Csv extends ReportingExporter
         $template = $this->get_template();
         $block = $template->get_current_block();
         $data = $block->retrieve_data();
-        
+
         $csv_data = array();
-        
+
         foreach ($data->get_categories() as $category_id => $category_name)
         {
             $category_array = array();
