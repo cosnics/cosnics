@@ -15,6 +15,15 @@ abstract class IdentifiableCacheService implements CacheResetterInterface
 
     /**
      *
+     * @see \Chamilo\Libraries\Cache\Interfaces\CacheClearerInterface::clear()
+     */
+    public function clear()
+    {
+        return $this->clearForIdentifiers($this->getIdentifiers());
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Cache\Interfaces\CacheWarmerInterface::warmUp()
      */
     public function warmUp()
