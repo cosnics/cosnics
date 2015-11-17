@@ -55,7 +55,8 @@ class CalendarService
      */
     public function getOwnedCalendars()
     {
-        return $this->getCalendarRepository()->findOwnedCalendars();
+        $ownedCalendarsCacheService = new OwnedCalendarsCacheService($this->getCalendarRepository());
+        return $ownedCalendarsCacheService->getOwnedCalendars();
     }
 
     /**
@@ -85,7 +86,8 @@ class CalendarService
      */
     public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
-        $googleCalendarEvents = $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
+        $eventsCacheService = new EventsCacheService($this->getCalendarRepository());
+        $googleCalendarEvents = $eventsCacheService->getEventsForCalendarIdentifierAndBetweenDates(
             $calendarIdentifier,
             $fromDate,
             $toDate);

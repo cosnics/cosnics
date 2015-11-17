@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Google\Manager;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -302,34 +301,23 @@ class CalendarRepository
      */
     public function findOwnedCalendars()
     {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cacheIdentifier = $this->getCacheIdentifier($this->getAccessToken(), __METHOD__);
+        $calendarItems = $this->getCalendarClient()->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems();
 
-        if (! $cache->contains($cacheIdentifier))
+        $availableCalendars = array();
+
+        foreach ($calendarItems as $calendarItem)
         {
-            $calendarItems = $this->getCalendarClient()->calendarList->listCalendarList(
-                array('minAccessRole' => 'owner'))->getItems();
+            $availableCalendar = new AvailableCalendar();
 
-            $availableCalendars = array();
+            $availableCalendar->setType(Manager :: package());
+            $availableCalendar->setIdentifier($calendarItem->id);
+            $availableCalendar->setName($calendarItem->summary);
+            $availableCalendar->setDescription($calendarItem->description);
 
-            foreach ($calendarItems as $calendarItem)
-            {
-                $availableCalendar = new AvailableCalendar();
-
-                $availableCalendar->setType(Manager :: package());
-                $availableCalendar->setIdentifier($calendarItem->id);
-                $availableCalendar->setName($calendarItem->summary);
-                $availableCalendar->setDescription($calendarItem->description);
-
-                $availableCalendars[] = $availableCalendar;
-            }
-
-            $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-                array(Manager :: package(), 'refresh_calendar'));
-            $cache->save($cacheIdentifier, $availableCalendars, $lifetimeInMinutes * 60);
+            $availableCalendars[] = $availableCalendar;
         }
 
-        return $cache->fetch($cacheIdentifier);
+        return $availableCalendars;
     }
 
     /**
@@ -341,32 +329,19 @@ class CalendarRepository
      */
     public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cacheIdentifier = $this->getCacheIdentifier(
-            $this->getAccessToken(),
-            __METHOD__,
-            array($calendarIdentifier, $fromDate, $toDate));
+        $timeMin = new \DateTime();
+        $timeMin->setTimestamp($fromDate);
 
-        if (! $cache->contains($cacheIdentifier))
-        {
-            $timeMin = new \DateTime();
-            $timeMin->setTimestamp($fromDate);
+        $timeMax = new \DateTime();
+        $timeMax->setTimestamp($toDate);
 
-            $timeMax = new \DateTime();
-            $timeMax->setTimestamp($toDate);
+        $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
+            array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_calendar'));
 
-            $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-                array(\Chamilo\Application\Calendar\Manager :: package(), 'refresh_calendar'));
-
-            $events = $this->getCalendarClient()->events->listEvents(
-                $calendarIdentifier,
-                array(
-                    'timeMin' => $timeMin->format(\DateTime :: RFC3339),
-                    'timeMax' => $timeMax->format(\DateTime :: RFC3339)));
-
-            $cache->save($cacheIdentifier, $events, $lifetimeInMinutes * 60);
-        }
-
-        return $cache->fetch($cacheIdentifier);
+        return $this->getCalendarClient()->events->listEvents(
+            $calendarIdentifier,
+            array(
+                'timeMin' => $timeMin->format(\DateTime :: RFC3339),
+                'timeMax' => $timeMax->format(\DateTime :: RFC3339)));
     }
 }

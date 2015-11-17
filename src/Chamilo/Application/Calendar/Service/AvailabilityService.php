@@ -96,7 +96,7 @@ class AvailabilityService
      * @param string $calendarType
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function getInactiveAvailabilitiesForUser(User $user, $calendarType)
+    public function getInactiveAvailabilitiesForUserAndCalendarType(User $user, $calendarType)
     {
         return $this->getAvailabilitiesForUserAndCalendarType($user, $calendarType, false);
     }

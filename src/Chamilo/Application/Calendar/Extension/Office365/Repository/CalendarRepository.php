@@ -2,11 +2,11 @@
 namespace Chamilo\Application\Calendar\Extension\Office365\Repository;
 
 use Chamilo\Application\Calendar\Extension\Office365\Manager;
+use Chamilo\Application\Calendar\Extension\Office365\Service\RequestCacheService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Cache\ParameterBag;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
@@ -410,7 +410,7 @@ class CalendarRepository
     public function findOwnedCalendars()
     {
         $request = $this->getGuzzleHttpClient()->createRequest('GET', 'me/calendars');
-        $result = $this->sendRequest($request);
+        $result = $this->executeRequest($request);
 
         $calendarItems = $result->value;
 
@@ -437,7 +437,7 @@ class CalendarRepository
     public function findCalendarByIdentifier($calendarIdentifier)
     {
         $request = $this->getGuzzleHttpClient()->createRequest('GET', 'me/calendars/' . $calendarIdentifier);
-        $result = $this->sendRequest($request);
+        $result = $this->executeRequest($request);
 
         $availableCalendar = new AvailableCalendar();
 
@@ -453,31 +453,39 @@ class CalendarRepository
      * @param \GuzzleHttp\Message\Request $request
      * @return \stdClass
      */
-    private function sendRequest(\GuzzleHttp\Message\Request $request)
+    private function executeRequest(\GuzzleHttp\Message\Request $request)
     {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
-        $cacheIdentifier = md5(serialize($request));
+        $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
+            array(Manager :: package(), 'refresh_calendar'));
 
-        if (! $cache->contains($cacheIdentifier))
+        $parameterBag = new ParameterBag(
+            array(
+                ParameterBag :: PARAM_IDENTIFIER => md5(serialize($request)),
+                RequestCacheService :: PARAM_REQUEST => $request,
+                RequestCacheService :: PARAM_LIFETIME => $lifetimeInMinutes * 60));
+
+        $cache = new RequestCacheService($this);
+        return $cache->getForIdentifier($parameterBag);
+    }
+
+    /**
+     *
+     * @param \GuzzleHttp\Message\Request $request
+     * @return \stdClass
+     */
+    public function sendRequest(\GuzzleHttp\Message\Request $request)
+    {
+        if ($this->hasAccessToken() && $this->isAccessTokenExpired())
         {
-            if ($this->hasAccessToken() && $this->isAccessTokenExpired())
-            {
-                $token = $this->refreshToken();
-                $this->saveToken($token);
-            }
-
-            $client = $this->getGuzzleHttpClient();
-            $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
-
-            $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-                array(Manager :: package(), 'refresh_calendar'));
-
-            $response = $client->send($request);
-            $result = json_decode($response->getBody()->getContents());
-            $cache->save($cacheIdentifier, $result, $lifetimeInMinutes * 60);
+            $token = $this->refreshToken();
+            $this->saveToken($token);
         }
 
-        return $cache->fetch($cacheIdentifier);
+        $client = $this->getGuzzleHttpClient();
+        $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken());
+
+        $response = $client->send($request);
+        return json_decode($response->getBody()->getContents());
     }
 
     /**
@@ -494,7 +502,7 @@ class CalendarRepository
             'me/calendars/' . $calendarIdentifier . '/calendarview',
             ['query' => ['startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]]);
 
-        $result = $this->sendRequest($request);
+        $result = $this->executeRequest($request);
 
         return new ArrayResultSet($result->value);
     }

@@ -20,7 +20,7 @@ class ParameterBag extends \Symfony\Component\HttpFoundation\ParameterBag
     {
         $simpleIdentifier = $this->get(self :: PARAM_IDENTIFIER);
 
-        if ($simpleIdentifier && $this->count() > 1)
+        if ($simpleIdentifier)
         {
             return $simpleIdentifier;
         }
