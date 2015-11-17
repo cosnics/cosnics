@@ -32,7 +32,7 @@ class BuildUtilities
 
             // Css
             $sourceResourceImagePath = Path :: getInstance()->getResourcesPath($packageNamespace) . 'Css' .
-                DIRECTORY_SEPARATOR;
+                 DIRECTORY_SEPARATOR;
             $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
             Filesystem :: recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
 
@@ -65,6 +65,8 @@ class BuildUtilities
         $devRequires = $package->getDevRequires();
         $autoload = $package->getAutoload();
         $repositories = $package->getRepositories();
+
+        $repositoryManager = $composer->getRepositoryManager();
 
         foreach ($packageNamespaces as $packageNamespace)
         {
@@ -108,9 +110,11 @@ class BuildUtilities
                 }
 
                 // Process repositories
-                foreach ((array) $completePackage->getRepositories() as $repository)
+                foreach ((array) $completePackage->getRepositories() as $repositoryConfig)
                 {
-                    array_unshift($repositories, $repository);
+                    $repository = $repositoryManager->createRepository($repositoryConfig['type'], $repositoryConfig);
+                    $repositoryManager->addRepository($repository);
+                    array_unshift($repositories, $repositoryConfig);
                 }
             }
         }
