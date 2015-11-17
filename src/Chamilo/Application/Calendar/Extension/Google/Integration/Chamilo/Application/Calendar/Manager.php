@@ -32,30 +32,85 @@ class Manager extends ExternalCalendar
 
         if ($calendarService->isAuthenticated())
         {
-            $availabilityService = new AvailabilityService(new AvailabilityRepository());
-            $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+            $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
 
-            $activeAvailabilities = $availabilityService->getActiveAvailabilitiesForUserAndCalendarType(
-                $calendarRendererProvider->getDataUser(),
-                $package);
-
-            while ($activeAvailability = $activeAvailabilities->next_result())
+            foreach ($calendarIdentifiers as $calendarIdentifier)
             {
-                $eventResultSet = $calendarService->getEventsForCalendarIdentifierAndBetweenDates(
-                    $activeAvailability->getCalendarId(),
-                    $fromDate,
-                    $toDate);
+                $events = array_merge(
+                    $events,
+                    $this->getCalendarEvents($calendarService, $calendarIdentifier, $fromDate, $toDate));
+            }
+        }
 
-                while ($googleCalenderEvent = $eventResultSet->next_result())
+        return $events;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
+     * @return string[]
+     */
+    private function getCalendarIdentifiers(
+        \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider)
+    {
+        $availabilityService = new AvailabilityService(new AvailabilityRepository());
+        $package = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+
+        $availabilities = $availabilityService->getAvailabilitiesForUserAndCalendarType(
+            $calendarRendererProvider->getDataUser(),
+            $package);
+
+        $calendarIdentifiers = array();
+
+        if ($availabilities->size() == 0)
+        {
+            $availableCalendars = $this->getCalendars();
+
+            foreach ($availableCalendars as $availableCalendar)
+            {
+                $calendarIdentifiers[] = $availableCalendar->getIdentifier();
+            }
+        }
+        else
+        {
+            while ($availability = $availabilities->next_result())
+            {
+                if ($availability->isActive())
                 {
-                    $eventParser = new EventParser(
-                        $eventResultSet->getCalendarProperties(),
-                        $googleCalenderEvent,
-                        $fromDate,
-                        $toDate);
-                    $events = array_merge($events, $eventParser->getEvents());
+                    $calendarIdentifiers[] = $availability->getCalendarId();
                 }
             }
+        }
+
+        return $calendarIdentifiers;
+    }
+
+    /**
+     *
+     * @param CalendarService $calendarService
+     * @param string $calendarId
+     * @param integer $fromDate
+     * @param integer $toDate
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\Event[]
+     */
+    private function getCalendarEvents(CalendarService $calendarService, $calendarId, $fromDate, $toDate)
+    {
+        $eventResultSet = $calendarService->getEventsForCalendarIdentifierAndBetweenDates(
+            $calendarId,
+            $fromDate,
+            $toDate);
+
+        $events = array();
+
+        while ($googleCalenderEvent = $eventResultSet->next_result())
+        {
+            $eventParser = new EventParser(
+                $eventResultSet->getCalendarProperties(),
+                $googleCalenderEvent,
+                $fromDate,
+                $toDate);
+            $events = array_merge($events, $eventParser->getEvents());
         }
 
         return $events;

@@ -115,6 +115,24 @@ class Availability extends DataClass
 
     /**
      *
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->getAvailability() == true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isInactive()
+    {
+        return $this->getAvailability() == false;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getColour()
