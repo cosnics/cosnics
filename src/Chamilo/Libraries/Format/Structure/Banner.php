@@ -137,16 +137,19 @@ class Banner
 
         $output[] = '</div> <!-- end of #header1 -->';
 
-        if ($this->getViewMode() == Page :: VIEW_MODE_FULL)
+        if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
-            $breadcrumbtrail = BreadcrumbTrail :: get_instance();
-
-            if ($breadcrumbtrail->size() > 0)
+            if ($this->getViewMode() == Page :: VIEW_MODE_FULL)
             {
-                $output[] = '<div id="trailbox">';
-                $output[] = $breadcrumbtrail->render();
-                $output[] = '<div class="clear">&nbsp;</div>';
-                $output[] = '</div>';
+                $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+
+                if ($breadcrumbtrail->size() > 0)
+                {
+                    $output[] = '<div id="trailbox">';
+                    $output[] = $breadcrumbtrail->render();
+                    $output[] = '<div class="clear">&nbsp;</div>';
+                    $output[] = '</div>';
+                }
             }
         }
 

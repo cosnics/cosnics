@@ -49,7 +49,7 @@ class LocalSetting
      * @param LocalSettingCacheService $localSettingCacheService
      * @param integer $userIdentifier
      */
-    private function __construct(LocalSettingCacheService $localSettingCacheService, $userIdentifier = 0)
+    public function __construct(LocalSettingCacheService $localSettingCacheService, $userIdentifier = 0)
     {
         $this->localSettingCacheService = $localSettingCacheService;
         $this->userIdentifier = $userIdentifier;

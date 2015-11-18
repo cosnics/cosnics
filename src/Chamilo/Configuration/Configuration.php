@@ -8,6 +8,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\Cache\RecordResultCache;
+use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 
 /**
  * This class represents the current configuration
@@ -37,7 +39,7 @@ class Configuration
      *
      * @var \Chamilo\Configuration\Storage\DataClass\Registration[]
      */
-    private $registrations;
+    public $registrations;
 
     /**
      *
@@ -275,7 +277,23 @@ class Configuration
     {
         $this->registrations = $this->getConfigurationCacheService()->getRegistrationsCache();
         $this->languages = $this->getConfigurationCacheService()->getLanguagesCache();
-        $this->settings = $this->getConfigurationCacheService()->getSettingsCache();
+
+        $storedSettings = $this->getConfigurationCacheService()->getSettingsCache();
+
+        if ($this->is_available())
+        {
+            $this->settings = $storedSettings;
+        }
+        else
+        {
+            foreach ($storedSettings as $context => $contextSettings)
+            {
+                foreach ($contextSettings as $variable => $value)
+                {
+                    $this->settings[$context][$variable] = $value;
+                }
+            }
+        }
     }
 
     /**
@@ -411,6 +429,8 @@ class Configuration
 
         $this->set(array('Chamilo\Core\Menu', 'show_sitemap'), false);
 
+        $this->set(array('Chamilo\Core\Help', 'hide_empty_pages'), true);
+
         $this->set(array('Chamilo\Core\User', 'allow_user_change_platform_language'), false);
         $this->set(array('Chamilo\Core\User', 'allow_user_quick_change_platform_language'), false);
 
@@ -460,8 +480,8 @@ class Configuration
      */
     public static function reset()
     {
-        DataClassResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
-        $this->getConfigurationCacheService()->clearAndWarmUp();
+        RecordResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
+        self :: get_instance()->getConfigurationCacheService()->clear();
         self :: get_instance()->loadFromStorage();
     }
 
