@@ -70,7 +70,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
      */
     public function clear()
     {
-        return $this->getCacheProvider()->deleteAll();
+        return $this->getCacheProvider()->flushAll();
     }
 
     /**
