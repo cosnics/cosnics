@@ -6,3 +6,4 @@
 TypeName = "Office 365"
 SourceName = "Office 365 - {CALENDAR}"
 Office365CalendarLogin = "Inloggen bij Office 365"
+TypeCategory = "Calendar Extensions"

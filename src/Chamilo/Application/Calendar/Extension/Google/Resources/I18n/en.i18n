@@ -6,3 +6,4 @@
 TypeName = "Google Calendar"
 SourceName = "Google Calendar - {CALENDAR}"
 GoogleCalendarLogin = "Google Calendar login"
+TypeCategory = "Calendar Extensions"
