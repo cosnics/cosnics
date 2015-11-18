@@ -28,12 +28,6 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
     /**
      *
-     * @var string[]
-     */
-    private $configurationFileSettings;
-
-    /**
-     *
      * @see \Chamilo\Libraries\Cache\IdentifiableCacheService::warmUpForIdentifier()
      */
     public function warmUpForIdentifier($identifier)
@@ -85,13 +79,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function getConfigurationFileSettings()
     {
-        if (! isset($this->configurationFileSettings))
-        {
-            $this->configurationFileSettings = array(
-                $this->getCachePathNamespace() => parse_ini_file($this->getConfigurationFilePath(), true));
-        }
-
-        return $this->configurationFileSettings;
+        return array($this->getCachePathNamespace() => parse_ini_file($this->getConfigurationFilePath(), true));
     }
 
     /**
