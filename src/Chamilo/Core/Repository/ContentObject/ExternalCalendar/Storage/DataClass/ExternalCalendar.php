@@ -1,22 +1,24 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
-use Sabre\VObject;
-use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
- * $Id: external_calendar.class.php 200 2009-11-13 12:30:04Z kariboe $
  *
- * @package repository.lib.content_object.external_calendar
+ * @package Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ExternalCalendar extends ContentObject implements Versionable
 {
@@ -56,14 +58,16 @@ class ExternalCalendar extends ContentObject implements Versionable
     private $calendar;
 
     /**
-     * In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @var mixed
      */
     private $in_memory_file;
 
     /**
-     * Temporary file path. A path to a file that has to be moved and renamed when the File is saved. Useful for
+     * Temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved. Useful for
      * instance when a file is uploaded to the server.
      *
      * @var string
@@ -167,38 +171,8 @@ class ExternalCalendar extends ContentObject implements Versionable
      */
     public function get_calendar()
     {
-        $cache = new FilesystemCache(Path :: getInstance()->getCachePath(__NAMESPACE__ . '\Object'));
-        $cacheId = md5('ical_' . serialize($this->get_full_path()));
-
-        if ($cache->contains($cacheId))
-        {
-            $this->calendar = $cache->fetch($cacheId);
-        }
-        else
-        {
-            if ($this->get_path_type() == ExternalCalendar :: PATH_TYPE_REMOTE)
-            {
-                if ($f = @fopen($this->get_full_path(), 'r'))
-                {
-                    $calendarData = '';
-                    while (! feof($f))
-                    {
-                        $calendarData .= fgets($f, 4096);
-                    }
-                    fclose($f);
-                }
-            }
-            else
-            {
-                $calendarData = file_get_contents($this->get_full_path());
-            }
-
-            $this->calendar = VObject\Reader :: read($calendarData, VObject\Reader :: OPTION_FORGIVING);
-
-            $cache->save($cacheId, $this->calendar, self :: CACHE_TIME);
-        }
-
-        return $this->calendar;
+        $externalCalendarCacheService = new ExternalCalendarCacheService();
+        return $externalCalendarCacheService->getCalendarForPath($this->get_full_path());
     }
 
     public function get_events()
@@ -271,7 +245,8 @@ class ExternalCalendar extends ContentObject implements Versionable
     }
 
     /**
-     * Get temporary file path. A path to a file that has to be moved and renamed when the File is saved
+     * Get temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved
      *
      * @return string
      */
@@ -281,7 +256,8 @@ class ExternalCalendar extends ContentObject implements Versionable
     }
 
     /**
-     * Set temporary file path. A path to a file that has to be moved and renamed when the File is saved
+     * Set temporary file path.
+     * A path to a file that has to be moved and renamed when the File is saved
      *
      * @var $temporary_file_path string
      * @return void
@@ -300,7 +276,8 @@ class ExternalCalendar extends ContentObject implements Versionable
     }
 
     /**
-     * Get In memory file content. Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
+     * Get In memory file content.
+     * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
      *
      * @return mixed
      */
@@ -473,7 +450,8 @@ class ExternalCalendar extends ContentObject implements Versionable
     }
 
     /**
-     * Copy the current file to a new unique filename. Set the new values of path and hash of the current object. Useful
+     * Copy the current file to a new unique filename.
+     * Set the new values of path and hash of the current object. Useful
      * when a File is updated as a new version, without replacing the content Note: needed as when saving a new version
      * of a File, a new record is saved in the repository_document table, and the 'hash' field must be unique.
      *
