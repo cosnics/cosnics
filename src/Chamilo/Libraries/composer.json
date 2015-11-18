@@ -13,13 +13,18 @@
         "danielstjules/stringy" : "2.*",
         "ensepar/html2pdf" : "=1.0.1",
         "phpoffice/phpexcel" : "=1.8.0",
-        "kigkonsult/icalcreator": "*"
-
+        "kigkonsult/icalcreator": "*",
+        "fastfeed/fastfeed": "=0.4.0"
     },
-
     "require-dev" : {
         "fabpot/php-cs-fixer" : "1.*"
     },
+    "repositories" : [
+        {
+            "type": "vcs",
+            "url": "https://github.com/yakovlev-vladimir/FastFeed/"
+        }
+    ],
     "keywords": [],
     "homepage": "http://www.chamilo.org",
     "license": "GPLv3",

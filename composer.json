@@ -46,14 +46,6 @@
         {
             "type" : "pear",
             "url" : "http://pear.php.net"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/mptre/php-soundcloud"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/yakovlev-vladimir/FastFeed/"
         }
     ],
     "autoload": {
