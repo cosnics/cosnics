@@ -265,6 +265,8 @@ class PlatformInstaller
             throw new \Exception(Translation :: get('ConfigWriteFailed'));
         }
 
+        \Chamilo\Configuration\Configuration :: get_instance()->reset();
+
         return new StepResult(true, Translation :: get('ConfigWriteSuccess'));
     }
 
