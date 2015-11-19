@@ -1,0 +1,87 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\quota
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Quota Manager"
+AggregatedUserDiskQuotas = "Total user disk space"
+AllocatedDiskSpace = "Allocated disk space"
+BackToOverview = "Back to the overview"
+BrowserComponent = "Browse requests"
+ConfigureManagementRights = "Configure access rights"
+CreationDate = "Requested on"
+CreatorComponent = "Request an upgrade"
+CurrentlyUsedDiskSpace = "Used"
+Decision = "Decision"
+DecisionGranted = "Request granted"
+DecisionMotivation = "Motivation"
+DecisionPending = "Pending review"
+DecisionDenied = "Request denied"
+DeniedRequests = "Denied requests"
+DenierComponent = "Deny a request"
+Deny = "Deny"
+Grant = "Grant"
+GrantedRequests = "Granted requests"
+GranterComponent = "Grant a request"
+MaximumUsedDiskSpace = "Max"
+Motivation = "Motivation"
+NumberOfContentObjects = "Number of objects"
+PendingRequests = "Pending requests"
+Personal = "Personal quota"
+Platform = "Platform quota"
+Quota = "Quota"
+QuotaStep = "Quota increase (in MB)"
+QuotaUpgraded = "Your quota was successfully upgraded"
+Request = "Request"
+RequestUpgrade = "Request a quota upgrade"
+ReservedDiskSpace = "Reserved disk space"
+UpgradeQuota = "Upgrade your quota"
+UpgraderComponent = "Upgrade your quota"
+UsedDiskSpace = "Used disk space"
+User = "User"
+YourRequests = "Your requests"
+GrantSelected = "Grant request(s)"
+DenySelected = "Deny request(s)"
+DeleteSelected = "Delete request(s)"
+RequestGrantedMailTitle = "Your {PLATFORM} repository quota was increased with {ADDED_QUOTA}"
+RequestDeniedMailTitle = "Your {PLATFORM} request for a {QUOTA} repository quota increase was denied"
+RequestGrantedMailBody = "Dear {USER},
+
+The quota of your {PLATFORM} repository was just increased with {ADDED_QUOTA}, allowing you to store a maximum of {QUOTA} worth of documents in your repository. If the new quota is still insufficient, please request another upgrade.
+
+Best regards,
+Your {PLATFORM} team"
+RequestDeniedMailBody = "Dear {USER},
+
+The request you recently made for a repository quota increase of {QUOTA} was denied for the following reason:
+{MOTIVATION}
+
+Please contact your administrator for more information.
+
+Best regards,
+Your {PLATFORM} team"
+RequestDeniedMailBodySimple = "Dear {USER},
+
+The request you recently made for a repository quota increase of {QUOTA} was denied. Please contact your administrator for more information.
+
+Best regards,
+Your {PLATFORM} team"
+PackageTypeNameQuota = ""
+QuotaPolicy = "Quota for an individual user"
+QuotaPolicyUser = "User quota"
+QuotaPolicyGroupHighest = "Highest group quota"
+QuotaPolicyGroupLowest = "Lowest group quota"
+QuotaPolicyHighest = "Whichever is highest"
+QuotaPolicyLowest = "Whichever is lowest"
+QuotaFallback = "Fall back to user/group if group/user is zero"
+QuotaFallbackUser = "Fall back for user quota"
+QuotaFallbackUserGroupHighest = "Highest group quota"
+QuotaFallbackUserGroupLowest = "Lowest group quota"
+DiskQuota = "Disk Quota"
+ResetTotal = "Refresh total user space"
+RepositoryStatistics = "Statistics"
+AvailableDiskSpace = "Available disk space"
+MostUsedContentObjectType = "Most used type"
+OtherFrequentlyUsedContentObjectTypes = "Frequently used types"
+OldestContentObject = "Oldest object"
+RightsComponent = "Configure access rights"
