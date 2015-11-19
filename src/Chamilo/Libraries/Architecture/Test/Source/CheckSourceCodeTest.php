@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Test\Source;
 
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 
 /**
@@ -11,7 +12,7 @@ use Chamilo\Libraries\File\Path;
  */
 abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\Test
 {
-    use Chamilo\Libraries\Architecture\Traits\DirectoryScanner;
+    use \Chamilo\Libraries\Architecture\Traits\DirectoryScanner;
 
     /**
      * **************************************************************************************************************
@@ -51,7 +52,7 @@ abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\
     public function test_package_uses_installer()
     {
         $namespace = $this->determine_package_namespace();
-        $class_name = $namespace . '\Installer';
+        $class_name = $namespace . '\Package\Installer';
 
         $this->assertTrue(class_exists($class_name));
     }
@@ -71,7 +72,7 @@ abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\
     {
         if (! isset($this->source_files))
         {
-            $this->source_files = $this->scan_files_in_directory($this->get_source_path(), '/^.+\.class\.php$/i');
+            $this->source_files = $this->scan_files_in_directory($this->get_source_path(), '/^.+\.php$/i');
         }
 
         return $this->source_files;
@@ -90,8 +91,7 @@ abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\
      */
     protected function get_source_path()
     {
-        return Path :: getInstance()->namespaceToFullPath($this->determine_package_namespace()) . DIRECTORY_SEPARATOR . 'php' .
-             DIRECTORY_SEPARATOR;
+        return Path :: getInstance()->namespaceToFullPath($this->determine_package_namespace());
     }
 
     /**
@@ -101,6 +101,10 @@ abstract class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\
      */
     protected function determine_package_namespace()
     {
-        return ClassnameUtilities :: getInstance()->getNamespaceParent(ClassnameUtilities :: getInstance()->getNamespaceFromClassname(get_called_class()));
+        return ClassnameUtilities :: getInstance()->getNamespaceParent(
+            ClassnameUtilities :: getInstance()->getNamespaceParent(
+                ClassnameUtilities :: getInstance()->getNamespaceFromClassname(get_called_class())
+            )
+        );
     }
 }
