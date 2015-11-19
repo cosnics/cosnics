@@ -20,6 +20,4 @@ syntax: regexp
 ^components/
 ^bin/
 ^files/
-^web/Chamilo
-^web/Ehb
-^web/Hogent
+^web/
