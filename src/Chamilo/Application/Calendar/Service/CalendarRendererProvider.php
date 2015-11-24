@@ -12,6 +12,8 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -20,8 +22,8 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements
-    \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport,
+class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider implements 
+    \Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport, 
     \Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport
 {
 
@@ -45,12 +47,12 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      * @param string[] $displayParameters;
      * @param string $visibilityContext
      */
-    public function __construct(CalendarRendererProviderRepository $dataProviderRepository, User $dataUser,
+    public function __construct(CalendarRendererProviderRepository $dataProviderRepository, User $dataUser, 
         User $viewingUser, $displayParameters, $visibilityContext)
     {
         $this->dataProviderRepository = $dataProviderRepository;
         $this->visibilityContext = $visibilityContext;
-
+        
         parent :: __construct($dataUser, $viewingUser, $displayParameters);
     }
 
@@ -109,9 +111,9 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         {
             $userIdentifier = $this->getViewingUser()->getId();
         }
-
+        
         $visibility = $this->getCalendarRendererProviderRepository()->findVisibilityBySourceAndUserIdentifier(
-            $source,
+            $source, 
             $userIdentifier);
         return ! $visibility instanceof Visibility;
     }
@@ -123,23 +125,23 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function getEventActions($event)
     {
         $actions = array();
-
+        
         if ($event->getContext() == \Chamilo\Application\Calendar\Extension\Personal\Manager :: context())
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->getPublicationEditingUrl($event->getId()),
+                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                $this->getPublicationEditingUrl($event->getId()), 
                 ToolbarItem :: DISPLAY_ICON);
-
+            
             $actions[] = new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->getPublicationDeletingUrl($event->getId()),
-                ToolbarItem :: DISPLAY_ICON,
+                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                $this->getPublicationDeletingUrl($event->getId()), 
+                ToolbarItem :: DISPLAY_ICON, 
                 true);
         }
-
+        
         return $actions;
     }
 
@@ -152,10 +154,10 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager :: context(),
-                \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_EDIT,
+                Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager :: context(), 
+                \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_EDIT, 
                 \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_PUBLICATION_ID => $eventIdentifier));
-
+        
         return $redirect->getUrl();
     }
 
@@ -168,10 +170,10 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager :: context(),
-                \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_DELETE,
+                Application :: PARAM_CONTEXT => \Chamilo\Application\Calendar\Extension\Personal\Manager :: context(), 
+                \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_ACTION => \Chamilo\Application\Calendar\Extension\Personal\Manager :: ACTION_DELETE, 
                 \Chamilo\Application\Calendar\Extension\Personal\Manager :: PARAM_PUBLICATION_ID => $eventIdentifier));
-
+        
         return $redirect->getUrl();
     }
 
@@ -184,18 +186,18 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function aggregateEvents($requestedSourceType, $startTime, $endTime)
     {
         $events = array();
-
+        
         foreach ($this->getSources($requestedSourceType) as $context => $implementor)
         {
             $events = array_merge($events, $implementor->getEvents($this, $requestedSourceType, $startTime, $endTime));
         }
-
+        
         return $events;
     }
 
     /**
      * Get the internal sources
-     *
+     * 
      * @return string[]
      */
     public function getInternalSources()
@@ -205,7 +207,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      * Get the external sources
-     *
+     * 
      * @return string[]
      */
     public function getExternalSources()
@@ -215,7 +217,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      * Get the sources
-     *
+     * 
      * @return string[]
      */
     public function getAllSources()
@@ -230,22 +232,22 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      */
     public function getSources($requestedSourceType)
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            \Chamilo\Application\Calendar\Manager :: context());
-
+        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+            \Chamilo\Application\Calendar\Manager :: package());
+        
         $sources = array();
-
+        
         foreach ($registrations as $registration)
         {
-            if ($registration->is_active())
+            if ($registration[Registration :: PROPERTY_STATUS])
             {
-                $context = $registration->get_context();
+                $context = $registration[Registration :: PROPERTY_CONTEXT];
                 $class_name = $context . '\Manager';
-
+                
                 if (class_exists($class_name))
                 {
                     $implementor = new $class_name();
-
+                    
                     if ($this->matchesRequestedSource($requestedSourceType, $implementor->getSourceType()))
                     {
                         $sources[$context] = $implementor;
@@ -253,27 +255,27 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
                 }
             }
         }
-
+        
         return $sources;
     }
 
     public function getSourceNames($requestedSourceType)
     {
         $sourceNames = array();
-
+        
         foreach ($this->getSources($requestedSourceType) as $sourceContext => $sourceImplementor)
         {
             $sourceNames[] = Translation :: get('TypeName', array(), $sourceContext);
         }
-
+        
         sort($sourceNames);
-
+        
         return $sourceNames;
     }
 
     /**
      * Get the internal source names
-     *
+     * 
      * @return string[]
      */
     public function getInternalSourceNames()
@@ -283,7 +285,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      * Get the external source names
-     *
+     * 
      * @return string[]
      */
     public function getExternalSourceNames()
@@ -293,7 +295,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      * Get the source names
-     *
+     * 
      * @return string[]
      */
     public function getAllSourceNames()

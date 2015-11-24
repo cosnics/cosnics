@@ -7,10 +7,12 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  * $Id: learning_path.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.learning_path
  */
 class LearningPath extends ContentObject implements ComplexContentObjectSupport, ComplexContentObjectDisclosure
@@ -37,18 +39,20 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
 
     public function get_allowed_types()
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            self :: package(),
+        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+            self :: package(), 
             \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
         $types = array();
-
+        
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
+                $registration[Registration :: PROPERTY_CONTEXT], 
+                6);
             $types[] = $namespace . '\Storage\DataClass\\' .
                  ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
         }
-
+        
         return $types;
     }
 
@@ -61,7 +65,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
     {
         if (! is_array($control_mode))
             $control_mode = array($control_mode);
-
+        
         $this->set_additional_property(self :: PROPERTY_CONTROL_MODE, serialize($control_mode));
     }
 
@@ -89,7 +93,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
     {
         return Path :: getInstance()->getStoragePath('scorm') . $this->get_owner_id() . '/' . $this->get_path() . '/';
     }
-
+    
     // TODO: This should take variable $attempt_data into account
     /**
      *
@@ -102,7 +106,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
         {
             $this->complex_content_object_path = new ComplexContentObjectPath($this, $nodes_attempt_data);
         }
-
+        
         return $this->complex_content_object_path;
     }
 }

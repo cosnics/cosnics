@@ -14,8 +14,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Configuration\Configuration;
 
-class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject implements ComplexContentObjectSupport,
+class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject implements ComplexContentObjectSupport, 
     ComplexContentObjectDisclosure, Versionable
 {
     const PROPERTY_FINISH_TEXT = 'finish_text';
@@ -76,20 +78,22 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
 
     function get_allowed_types()
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            'Chamilo\Core\Repository\ContentObject\Survey',
-            \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
+        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+            'Chamilo\Core\Repository\ContentObject\Survey', 
+            \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();
-
+        
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
+                $registration[Registration :: PROPERTY_CONTEXT], 
+                6);
             $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
             $types[] = $namespace . '\Storage\DataClass\\' . $classname;
         }
-
+        
         $types[] = self :: class_name();
-
+        
         return $types;
     }
 
@@ -103,31 +107,31 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
         $order = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER,
+                    ComplexContentObjectItem :: class_name(), 
+                    ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER, 
                     SORT_ASC)));
-
+        
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_PARENT),
+                ComplexContentObjectItem :: class_name(), 
+                ComplexContentObjectItem :: PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_id()));
         $complex_content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(),
+            ComplexContentObjectItem :: class_name(), 
             new DataClassRetrievesParameters($condition, null, null, $order))->as_array();
-
+        
         if ($complex_items)
         {
             return $complex_content_objects;
         }
-
+        
         $survey_pages = array();
-
+        
         foreach ($complex_content_objects as $complex_content_object)
         {
             $survey_pages[] = $complex_content_object->get_ref_object();
         }
-
+        
         return $survey_pages;
     }
 
@@ -141,7 +145,7 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
         if (! isset($this->survey_page_cache) || ! isset($this->survey_page_cache[$page_id]))
         {
             $this->survey_page_cache[$page_id] = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+                ContentObject :: class_name(), 
                 $page_id);
         }
         return $this->survey_page_cache[$page_id];
