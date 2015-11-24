@@ -8,6 +8,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -25,7 +27,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager :: context(),
+                \Chamilo\Core\Repository\Viewer\Manager :: context(), 
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             return $factory->run();
         }
@@ -51,18 +53,20 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
      */
     public function get_allowed_content_object_types()
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            Manager :: package(),
-            \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
+        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+            Manager :: package(), 
+            \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();
-
+        
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($registration->get_context(), 6);
+            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
+                $registration[Registration :: PROPERTY_CONTEXT], 
+                6);
             $types[] = $namespace . '\Storage\DataClass\\' .
                  ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
         }
-
+        
         return $types;
     }
 }

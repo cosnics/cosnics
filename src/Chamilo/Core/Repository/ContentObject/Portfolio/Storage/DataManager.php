@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage;
 
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
+
 /**
  * Portfolio datamanager
  * 
@@ -20,11 +24,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function update_node_ids($old_node_ids, $new_node_ids)
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
+        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(Portfolio :: package());
         
         foreach ($registrations as $registration)
         {
-            $manager_class = $registration->get_context() . '\Manager';
+            $manager_class = $registration[Registration :: PROPERTY_CONTEXT] . '\Manager';
             $result = $manager_class :: update_node_ids($old_node_ids, $new_node_ids);
             
             if (! $result)
@@ -44,11 +48,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function delete_node_ids($node_ids)
     {
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(__NAMESPACE__);
+        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(Portfolio :: package());
         
         foreach ($registrations as $registration)
         {
-            $manager_class = $registration->get_context() . '\Manager';
+            $manager_class = $registration[Registration :: PROPERTY_CONTEXT] . '\Manager';
             $result = $manager_class :: delete_node_ids($node_ids);
             
             if (! $result)

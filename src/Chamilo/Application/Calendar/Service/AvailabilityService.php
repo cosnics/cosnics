@@ -6,6 +6,8 @@ use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *
@@ -74,8 +76,8 @@ class AvailabilityService
     public function getAvailabilitiesForUserAndCalendarType(User $user, $calendarType, $isAvailable = null)
     {
         return $this->getAvailabilityRepository()->findAvailabilitiesForUserAndCalendarType(
-            $user,
-            $calendarType,
+            $user, 
+            $calendarType, 
             $isAvailable);
     }
 
@@ -114,12 +116,12 @@ class AvailabilityService
     {
         $availability = new Availability();
         $this->setAvailabilityProperties($availability, $user, $calendarType, $calendarIdentifier, $isAvailable);
-
+        
         if (! $availability->create())
         {
             return false;
         }
-
+        
         return $availability;
     }
 
@@ -133,22 +135,22 @@ class AvailabilityService
      * @param string $colour
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      */
-    public function updateAvailability(Availability $availability, User $user, $calendarType, $calendarIdentifier,
+    public function updateAvailability(Availability $availability, User $user, $calendarType, $calendarIdentifier, 
         $isAvailable = true, $colour = null)
     {
         $this->setAvailabilityProperties(
-            $availability,
-            $user,
-            $calendarType,
-            $calendarIdentifier,
-            $isAvailable,
+            $availability, 
+            $user, 
+            $calendarType, 
+            $calendarIdentifier, 
+            $isAvailable, 
             $colour);
-
+        
         if (! $availability->update())
         {
             return false;
         }
-
+        
         return $availability;
     }
 
@@ -161,7 +163,7 @@ class AvailabilityService
      * @param boolean $isAvailable
      * @param string $colour
      */
-    private function setAvailabilityProperties(Availability $availability, User $user, $calendarType,
+    private function setAvailabilityProperties(Availability $availability, User $user, $calendarType, 
         $calendarIdentifier, $isAvailable, $colour)
     {
         $availability->setUserId($user->getId());
@@ -182,18 +184,18 @@ class AvailabilityService
     public function setAvailability(User $user, $calendarType, $calendarIdentifier, $isAvailable = true, $colour = null)
     {
         $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $user,
-            $calendarType,
+            $user, 
+            $calendarType, 
             $calendarIdentifier);
-
+        
         if ($availability instanceof Availability)
         {
             return $this->updateAvailability(
-                $availability,
-                $user,
-                $calendarType,
-                $calendarIdentifier,
-                $isAvailable,
+                $availability, 
+                $user, 
+                $calendarType, 
+                $calendarIdentifier, 
+                $isAvailable, 
                 $colour);
         }
         else
@@ -211,27 +213,27 @@ class AvailabilityService
     public function setAvailabilities(User $user, $calendarAvailabilityTypes = array())
     {
         $failedActions = 0;
-
+        
         foreach ($calendarAvailabilityTypes as $calendarType => $calendarAvailabilities)
         {
             foreach ($calendarAvailabilities as $calendarIdentifier => $settings)
             {
                 if (! $this->setAvailability(
-                    $user,
-                    $calendarType,
-                    $calendarIdentifier,
-                    (boolean) $settings[self :: PROPERTY_AVAILABLE],
+                    $user, 
+                    $calendarType, 
+                    $calendarIdentifier, 
+                    (boolean) $settings[self :: PROPERTY_AVAILABLE], 
                     $settings[self :: PROPERTY_COLOUR]))
                 {
                     $failedActions ++;
                 }
             }
         }
-
+        
         return new ActionResult(
-            count($calendarAvailabilityTypes),
-            $failedActions,
-            __METHOD__,
+            count($calendarAvailabilityTypes), 
+            $failedActions, 
+            __METHOD__, 
             Availability :: class_name(false));
     }
 
@@ -242,12 +244,12 @@ class AvailabilityService
      * @param string $calendarIdentifier
      * @return \Chamilo\Application\Calendar\Storage\DataClass\Availability
      */
-    public function getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType,
+    public function getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType, 
         $calendarIdentifier)
     {
         return $this->getAvailabilityRepository()->findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $user,
-            $calendarType,
+            $user, 
+            $calendarType, 
             $calendarIdentifier);
     }
 
@@ -258,15 +260,15 @@ class AvailabilityService
     public function getAvailableCalendars()
     {
         $availableCalendars = array();
-
-        $registrations = \Chamilo\Configuration\Storage\DataManager :: get_integrating_contexts(
-            \Chamilo\Application\Calendar\Manager :: context());
-
+        
+        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+            \Chamilo\Application\Calendar\Manager :: package());
+        
         foreach ($registrations as $registration)
         {
-            $context = $registration->get_context();
+            $context = $registration[Registration :: PROPERTY_CONTEXT];
             $class_name = $context . '\Manager';
-
+            
             if (class_exists($class_name))
             {
                 $package = ClassnameUtilities :: getInstance()->getNamespaceParent($context, 4);
@@ -274,7 +276,7 @@ class AvailabilityService
                 $availableCalendars[$package] = $implementor->getCalendars();
             }
         }
-
+        
         return $availableCalendars;
     }
 
@@ -285,14 +287,14 @@ class AvailabilityService
      * @param string $calendarIdentifier
      * @return boolean
      */
-    public function isAvailableForUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType,
+    public function isAvailableForUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType, 
         $calendarIdentifier)
     {
         $availability = $this->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $user,
-            $calendarType,
+            $user, 
+            $calendarType, 
             $calendarIdentifier);
-
+        
         return ! $availability instanceof Availability || $availability->getAvailability() == 1;
     }
 

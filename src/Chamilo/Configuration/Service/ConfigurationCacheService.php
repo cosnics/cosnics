@@ -7,6 +7,7 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -21,10 +22,11 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
     const IDENTIFIER_SETTINGS = 'settings';
     const IDENTIFIER_REGISTRATIONS = 'registrations';
     const IDENTIFIER_LANGUAGES = 'languages';
-
+    
     // Registration cache types
     const REGISTRATION_CONTEXT = 1;
     const REGISTRATION_TYPE = 2;
+    const REGISTRATION_INTEGRATION = 3;
 
     /**
      *
@@ -62,14 +64,14 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
     public function fillSettingsCache()
     {
         $settings = $this->getConfigurationFileSettings();
-
+        
         $settingObjects = DataManager :: records(Setting :: class_name(), new RecordRetrievesParameters());
-
+        
         while ($setting = $settingObjects->next_result())
         {
             $settings[$setting[Setting :: PROPERTY_APPLICATION]][$setting[Setting :: PROPERTY_VARIABLE]] = $setting[Setting :: PROPERTY_VALUE];
         }
-
+        
         return $this->getCacheProvider()->save(self :: IDENTIFIER_SETTINGS, $settings);
     }
 
@@ -90,13 +92,26 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
     {
         $registrations = array();
         $registrationsObjects = DataManager :: records(Registration :: class_name(), new RecordRetrievesParameters());
-
+        
         while ($registration = $registrationsObjects->next_result())
         {
             $registrations[self :: REGISTRATION_TYPE][$registration[Registration :: PROPERTY_TYPE]][$registration[Registration :: PROPERTY_CONTEXT]] = $registration;
             $registrations[self :: REGISTRATION_CONTEXT][$registration[Registration :: PROPERTY_CONTEXT]] = $registration;
+            
+            $contextStringUtilities = StringUtilities :: getInstance()->createString(
+                $registration[Registration :: PROPERTY_CONTEXT]);
+            $isIntegration = $contextStringUtilities->contains('\Integration\\');
+            
+            if($isIntegration)
+            {
+                $contextParts = $contextStringUtilities->split('\\\Integration\\\\', 2);
+                $integrationContext = $contextParts[1]->__toString();
+                $rootContext = $contextParts[0]->__toString();
+                
+                $registrations[self :: REGISTRATION_INTEGRATION][$integrationContext][$rootContext] = $registration;
+            }
         }
-
+        
         return $this->getCacheProvider()->save(self :: IDENTIFIER_REGISTRATIONS, $registrations);
     }
 
@@ -108,12 +123,12 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
     {
         $languages = array();
         $languageObjects = DataManager :: records(Language :: class_name(), new RecordRetrievesParameters());
-
+        
         while ($language = $languageObjects->next_result())
         {
             $languages[$language[Language :: PROPERTY_ISOCODE]] = $language[Language :: PROPERTY_ORIGINAL_NAME];
         }
-
+        
         return $this->getCacheProvider()->save(self :: IDENTIFIER_LANGUAGES, $languages);
     }
 
