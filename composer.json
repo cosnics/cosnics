@@ -39,7 +39,7 @@
         "behat/mink" : "*",
         "behat/mink-extension" : "*",
         "behat/mink-goutte-driver" : "*",
-        "fabpot/goutte" : "*",
+        "fabpot/goutte" : "<3",
         "composer/composer": "*@dev"
     },
     "repositories" : [
