@@ -35,6 +35,12 @@ class ClassnameUtilities
      *
      * @var string[]
      */
+    private $namespaceFromIdMap = array();
+
+    /**
+     *
+     * @var string[]
+     */
     private $namespaceMap = array();
 
     /**
@@ -279,6 +285,17 @@ class ClassnameUtilities
     public function getNamespaceId($namespace)
     {
         return $this->namespaceIdMap[$namespace] = strtr($namespace, '\\', '-');
+    }
+
+    /**
+     * Convert the namespace string to an id
+     *
+     * @param string $namespace
+     * @return string
+     */
+    public function getNamespaceFromId($namespaceIdentifier)
+    {
+        return $this->namespaceFromIdMap[$namespaceIdentifier] = strtr($namespaceIdentifier, '-', '\\');
     }
 
     /**
