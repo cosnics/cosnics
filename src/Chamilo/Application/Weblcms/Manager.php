@@ -28,8 +28,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'weblcms';
-
     // Parameters
     const PARAM_REQUEST_TYPE = 'request_type';
     const PARAM_REQUEST_VIEW = 'request_view';

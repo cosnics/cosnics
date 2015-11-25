@@ -15,5 +15,4 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'reporting';
 }

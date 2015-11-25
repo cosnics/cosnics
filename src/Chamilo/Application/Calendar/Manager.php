@@ -10,8 +10,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'calendar';
-
     // Parameters
     const PARAM_TIME = 'time';
     const PARAM_VIEW = 'view';

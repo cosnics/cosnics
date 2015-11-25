@@ -92,7 +92,7 @@ class WeblcmsBookmarkDisplay extends NewBlock implements ConfigurableInterface
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Bookmark :: class_name(), Bookmark :: PROPERTY_APPLICATION),
-            new StaticConditionVariable(\Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME));
+            new StaticConditionVariable(\Chamilo\Application\Weblcms\Manager :: package()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session :: get_user_id()));

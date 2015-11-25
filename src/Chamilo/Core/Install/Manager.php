@@ -18,7 +18,6 @@ use Chamilo\Libraries\Format\Structure\Page;
  */
 abstract class Manager extends Application implements NoContextComponent
 {
-    const APPLICATION_NAME = 'install';
     const DEFAULT_ACTION = self :: ACTION_INSTALL_PLATFORM;
 
     /**

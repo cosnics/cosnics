@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: home_manager.class.php 227 2009-11-13 14:45:05Z kariboe $
- * 
+ *
  * @package home.lib.home_manager
  */
 
@@ -16,7 +16,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'home';
     const PARAM_HOME_ID = 'id';
     const PARAM_HOME_TYPE = 'type';
     const PARAM_DIRECTION = 'direction';

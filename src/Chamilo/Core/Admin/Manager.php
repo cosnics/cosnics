@@ -11,7 +11,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'admin';
     const PARAM_WEB_APPLICATION = 'web_application';
     const PARAM_CONTEXT = 'context';
     const PARAM_DELETE_SELECTED = 'delete_selected';

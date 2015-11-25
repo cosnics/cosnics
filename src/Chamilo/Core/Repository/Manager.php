@@ -43,8 +43,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'repository';
-
     /**
      * #@+ Constant defining a parameter of the repository manager.
      */

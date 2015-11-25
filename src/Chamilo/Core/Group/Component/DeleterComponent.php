@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: deleter.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -48,7 +49,8 @@ class DeleterComponent extends Manager
             array(
                 Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
                 \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
-                DynamicTabsRenderer :: PARAM_SELECTED_TAB => self :: APPLICATION_NAME));
+                DynamicTabsRenderer :: PARAM_SELECTED_TAB => ClassnameUtilities :: getInstance()->getNamespaceId(
+                    self :: package())));
         $trail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('Group')));
 
         $trail->add(

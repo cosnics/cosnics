@@ -49,7 +49,7 @@ class DeleterComponent extends Manager
                     new StaticConditionVariable($pid));
                 $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-                    \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                    null,
                     $condition);
 
                 while ($submission = $submissions->next_result())
@@ -62,17 +62,17 @@ class DeleterComponent extends Manager
 
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: remove_data(
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
-                        \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                        null,
                         $subm_condition);
 
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: remove_data(
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
-                        \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                        null,
                         $subm_condition);
 
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote :: remove_data(
                         \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote :: class_name(),
-                        \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                        null,
                         $subm_condition);
 
                     $submission->delete();
