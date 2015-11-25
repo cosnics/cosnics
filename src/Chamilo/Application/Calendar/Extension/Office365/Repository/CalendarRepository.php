@@ -500,7 +500,11 @@ class CalendarRepository
         $request = $this->getGuzzleHttpClient()->createRequest(
             'GET',
             'me/calendars/' . $calendarIdentifier . '/calendarview',
-            ['query' => ['startDateTime' => date('c', $fromDate), 'endDateTime' => date('c', $toDate)]]);
+            [
+                'query' => [
+                    '$top' => 200,
+                    'startDateTime' => date('c', $fromDate),
+                    'endDateTime' => date('c', $toDate)]]);
 
         $result = $this->executeRequest($request);
 
