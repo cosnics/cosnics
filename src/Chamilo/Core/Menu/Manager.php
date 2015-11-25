@@ -17,7 +17,6 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'menu';
     const PARAM_DIRECTION = 'direction';
     const PARAM_ITEM = 'item';
     const PARAM_TYPE = 'type';

@@ -28,18 +28,9 @@ class Basic extends Html
     {
         $html = array();
 
-        // $toolbar->add_item(
-        // new ToolbarItem(
-        // Translation :: get('ShowReportingFilter', null, ReportingManager :: APPLICATION_NAME),
-        // Theme :: getInstance()->getCommonImagePath('reporting_filter'),
-        // '#',
-        // ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-        // false,
-        // 'reporting_filter_text'));
-
         $html[] = $this->get_action_bar()->as_html();
-        // $html[] = $this->display_filter();
         $html[] = $this->render_block();
+
         return implode(PHP_EOL, $html);
     }
 

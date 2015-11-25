@@ -52,7 +52,7 @@ class ExportComponent extends Manager
 
                 $export_trackers = Event :: trigger(
                     Export :: REGISTER_PUBLICATION_EXPORT_EVENT,
-                    Manager :: APPLICATION_NAME,
+                    Manager :: package(),
                     $args);
                 $export_tracker = $export_trackers[0];
 

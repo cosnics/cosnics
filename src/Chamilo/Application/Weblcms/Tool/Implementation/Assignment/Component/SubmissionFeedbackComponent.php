@@ -114,7 +114,7 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
 
         $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
         $submission = $submissions[0]->get_content_object();
 
@@ -190,7 +190,8 @@ class SubmissionFeedbackComponent extends Manager implements \Chamilo\Core\Repos
     }
 
     /**
-     * Returns the name of the submitter as a string. When submitted as a group, it will return the name of the user who
+     * Returns the name of the submitter as a string.
+     * When submitted as a group, it will return the name of the user who
      * submitted followed by the group name.
      *
      * @return string The name of the submitter

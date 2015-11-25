@@ -182,10 +182,7 @@ class SubmissionViewerComponent extends SubmissionsManager
             new StaticConditionVariable(Request :: get(self :: PARAM_SUBMISSION)));
 
         // Submission
-        $submissions = AssignmentSubmission :: get_data(
-            AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
-            $condition)->as_array();
+        $submissions = AssignmentSubmission :: get_data(AssignmentSubmission :: class_name(), null, $condition)->as_array();
         $this->submission = $submissions[0]->get_content_object();
     }
 
@@ -276,7 +273,8 @@ class SubmissionViewerComponent extends SubmissionsManager
     }
 
     /**
-     * Returns the name of the submitter as a string. When submitted as a group, it will return the name of the user who
+     * Returns the name of the submitter as a string.
+     * When submitted as a group, it will return the name of the user who
      * submitted followed by the group name.
      *
      * @return string The name of the submitter

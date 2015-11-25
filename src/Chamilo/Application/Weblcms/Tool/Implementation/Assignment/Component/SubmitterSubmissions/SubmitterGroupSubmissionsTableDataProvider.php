@@ -16,7 +16,8 @@ class SubmitterGroupSubmissionsTableDataProvider extends DataClassTableDataProvi
 {
 
     /**
-     * Retrieves Submissions from the database. WARNING: This function circumvents the tracking model. REASON: The table
+     * Retrieves Submissions from the database.
+     * WARNING: This function circumvents the tracking model. REASON: The table
      * construction model is based on result sets retrieved straight from the database whereas the tracking model is
      * based on arrays.
      *
@@ -36,7 +37,7 @@ class SubmitterGroupSubmissionsTableDataProvider extends DataClassTableDataProvi
         // From here on, the tracking model is circumvented.
         return AssignmentSubmission :: get_data(
             AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition,
             $offset,
             $count,

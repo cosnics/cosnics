@@ -253,7 +253,8 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     }
 
     /**
-     * Returns the reporting block as HTML code. This block contains the automatic feedback of the assignment and the
+     * Returns the reporting block as HTML code.
+     * This block contains the automatic feedback of the assignment and the
      * average score of the user or group.
      *
      * @return array The HTML code
@@ -310,7 +311,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     {
         return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: count_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $this->get_own_table_conditions()) > 0;
     }
 
@@ -326,7 +327,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
 
         $submissions = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $this->get_own_table_conditions(),
             null,
             null,
@@ -385,7 +386,8 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
     }
 
     /**
-     * Returns the url for the add submission button. When it's not a group assignment the url will have the extra
+     * Returns the url for the add submission button.
+     * When it's not a group assignment the url will have the extra
      * parameters target id and submitter type.
      *
      * @return array The url

@@ -12,8 +12,6 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'portfolio';
-
     // Parameters
     const PARAM_USER_ID = 'user_id';
 

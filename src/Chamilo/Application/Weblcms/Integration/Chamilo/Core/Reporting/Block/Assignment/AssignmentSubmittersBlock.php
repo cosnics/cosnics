@@ -214,7 +214,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
 
             $submission_trackers = AssignmentSubmission :: get_data(
                 AssignmentSubmission :: class_name(),
-                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                null,
                 $condition)->as_array();
 
             $submission_tracker_ids = array();
@@ -230,7 +230,7 @@ abstract class AssignmentSubmittersBlock extends AssignmentReportingManager
                 $submission_tracker_ids);
             $score_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: get_data(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
-                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                null,
                 $condition)->as_array();
 
             $average_score = $this->format_score_html($this->get_avg_score($score_trackers));

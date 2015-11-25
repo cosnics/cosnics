@@ -29,7 +29,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'help';
     const PARAM_HELP_ITEM = 'help_item';
     const ACTION_UPDATE_HELP_ITEM = 'Updater';
     const ACTION_BROWSE_HELP_ITEMS = 'Browser';

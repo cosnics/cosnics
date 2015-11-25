@@ -110,7 +110,7 @@ abstract class AssignmentSubmitterInformationBlock extends AssignmentReportingMa
         $condition = new AndCondition($conditions);
         $submission_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
 
         $count_submissions_late = 0;
@@ -132,7 +132,7 @@ abstract class AssignmentSubmitterInformationBlock extends AssignmentReportingMa
 
             if (\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: count_data(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: class_name(),
-                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                null,
                 $condition) > 0)
             {
                 $count_submissions_feedback ++;
@@ -146,7 +146,7 @@ abstract class AssignmentSubmitterInformationBlock extends AssignmentReportingMa
             $submission_ids);
         $score_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
 
         $minimum_score = $this->format_score_html($this->get_min_score($score_trackers));

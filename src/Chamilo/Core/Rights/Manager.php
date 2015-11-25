@@ -16,7 +16,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'rights';
     const ACTION_BROWSE = 'Browser';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 }

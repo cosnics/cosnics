@@ -28,7 +28,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'group';
     const PARAM_GROUP_ID = 'group_id';
     const PARAM_GROUP_REL_USER_ID = 'group_rel_user_id';
     const PARAM_USER_ID = 'user_id';

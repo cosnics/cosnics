@@ -25,7 +25,7 @@ class StudentSubmissionsOwnGroupsTableDataProvider extends DataClassTableDataPro
         }
         return AssignmentSubmission :: get_data(
             AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition,
             $offset,
             $count,

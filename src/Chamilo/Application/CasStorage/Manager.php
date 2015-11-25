@@ -12,7 +12,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'cas_user';
     const PARAM_REQUEST_ID = 'request_id';
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';

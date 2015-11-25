@@ -95,7 +95,7 @@ class BrowserComponent extends Manager implements TableSupport
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));
         $action_bar->add_common_action(
             new ToolbarItem(
-                Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: APPLICATION_NAME),
+                Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: package()),
                 Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
                 ToolbarItem :: DISPLAY_ICON_AND_LABEL));

@@ -91,7 +91,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
 
         $submission_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
         $submission_tracker = $submission_trackers[0];
 
@@ -127,13 +127,14 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
 
         $submission_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
         $this->download_zipped_submissions($submission_trackers);
     }
 
     /**
-     * Downloads all the zippable submissions from the users with the given target ids. When submitter type is used,
+     * Downloads all the zippable submissions from the users with the given target ids.
+     * When submitter type is used,
      * only give one target id and it will download only the submissions from that specific user.
      *
      * @param $target_ids mixed
@@ -207,7 +208,7 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
 
         $submission_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
         $this->download_zipped_submissions($submission_trackers);
     }
@@ -276,7 +277,8 @@ class SubmissionsDownloaderComponent extends SubmissionsManager
     }
 
     /**
-     * Returns true if the given content object is zippable, and false otherwise. Only content objects of the type
+     * Returns true if the given content object is zippable, and false otherwise.
+     * Only content objects of the type
      * document are considered zippable for the moment.
      *
      * @param $content_object ContentObject

@@ -175,7 +175,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * Obtains the submissions trackers of the given submitter.
      *
      * @param $submitter_type int The type of submitter whose submission trackers are being fetched
-     *            (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...)
+     *        (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...)
      * @param $submitter_id int The id of the submitter whose submission trackers are being fetched.
      * @return array The submission trackers found for the given submitter.
      */
@@ -206,7 +206,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
         $this->index_array_by_id(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                null,
                 $condition,
                 null,
                 null,
@@ -236,7 +236,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
         $this->index_array_by_id(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-                \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+                null,
                 $condition,
                 null,
                 null,
@@ -250,7 +250,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * submitter_id and publication_id.
      *
      * @param $submitter_type int the submitter type
-     *            (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @param $submitter_id int the identity of the submitter.
      * @return \application\weblcms\integration\core\tracking\tracker\AssignmentSubmission the tracker or null if none
      *         found.
@@ -283,7 +283,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * cache if available, otherwise from the database.
      *
      * @param $submitter_type int the submitter type
-     *            (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @param $submitter_id int the identity of the submitter.
      * @param $submissions_tracker_array array the array in which the tracker is to be cached (by reference).
      * @return \application\weblcms\integration\tracking\AssignmentSubmission the tracker item retrieved from the
@@ -303,7 +303,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * Retrieves the submissions trackers from the database for the given submitter type.
      *
      * @param $submitter_type int the submitter type
-     *            (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @return array an array of trackers.
      */
     private function get_submissions_trackers_for_submitter_type($submitter_type)
@@ -333,7 +333,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * id and submission id.
      *
      * @param $submitter_type int the submitter type
-     *            (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...)
+     *        (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...)
      * @param $submitter_id int the identity of the submitter.
      * @return \application\weblcms\integration\tracking\SubmissionFeedback The single feedback tracker found, or null
      *         if none found.
@@ -383,7 +383,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * Retrieves feedback information from the database.
      *
      * @param $submitter_type int the submitter type
-     *            (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\tracking\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @return array an array of feedback information.
      */
     private function get_feedback_trackers_for_submitter_type($submitter_type)
@@ -841,7 +841,8 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
     }
 
     /**
-     * Gets the position of the submission within the list of current submissions. Does not instantiate the list of
+     * Gets the position of the submission within the list of current submissions.
+     * Does not instantiate the list of
      * current submissions.
      *
      * @param int The id of the submission whose position is to be determined.
@@ -973,8 +974,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_DATE_SUBMITTED));
         $submissions_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition,
             0,
             1,
@@ -1041,7 +1041,8 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
     }
 
     /**
-     * Obtains the item at the given position within the given array. Relies on the index of the array being the id of
+     * Obtains the item at the given position within the given array.
+     * Relies on the index of the array being the id of
      * the items.
      *
      * @param $reference_item_id mixed The id of the item at the reference point.
@@ -1074,7 +1075,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * Retrieves the id of the previous submission relative to the current submission.
      *
      * @param $submitter_type int The submitter type of the current submitter
-     *            (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @param $current_submitter_id int The id of the current submitter.
      * @param $current_submission_id int The id of the current submission.
      */
@@ -1091,7 +1092,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * Retrieves the id of the next submission relative to the current submission.
      *
      * @param $submitter_type int The submitter type of the current submitter
-     *            (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @param $current_submitter_id int The id of the current submitter.
      * @param $current_submission_id int The id of the current submission.
      */
@@ -1109,7 +1110,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * point.
      *
      * @param $submitter_type int The submitter type of the submitter
-     *            (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @param $current_submitter_id int The id of the current submitter.
      * @param $current_submission_id int The id of the current submission. Reference point.
      * @param $array_method string The position required relative to the reference point.
@@ -1137,7 +1138,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
      * Determines whether the trackers held in $this->submitter_submissions_trackers belong to the given submitter.
      *
      * @param $submitter_type int The submitter type of the submitter
-     *            (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
+     *        (\application\weblcms\integration\core\tracking\tracker\AssignmentSubmission::SUBMITTER_TYPE_...).
      * @param $submitter_id int The id of the submitter.
      * @return boolean whether the trackers belong to the given submitter.
      */

@@ -58,7 +58,7 @@ class DocumentSaverComponent extends Manager
             new StaticConditionVariable($publication_id));
         $assessment_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
         $assessment_attempt_tracker_ids = array();
         foreach ($assessment_attempt_trackers as $assessment_attempt_tracker)
@@ -73,7 +73,7 @@ class DocumentSaverComponent extends Manager
      *
      * @param $open_document_question_ids array The ids of the open questions where documents may be added.
      * @param $assessment_attempt_tracker_ids array The ids of the assessment attempts for which the added documents are
-     *            to be downloaded.
+     *        to be downloaded.
      */
     protected function retrieve_assessment_attempts_documents($open_document_question_ids,
         $assessment_attempt_tracker_ids)
@@ -100,7 +100,7 @@ class DocumentSaverComponent extends Manager
         $condition = new AndCondition($conditions);
         $question_attempt_trackers = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
         $document_ids = array();
         foreach ($question_attempt_trackers as $question_attempt_tracker)
@@ -135,7 +135,7 @@ class DocumentSaverComponent extends Manager
             new StaticConditionVariable($assessment_attempt_tracker_id));
         $assessment_attempts = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: get_data(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
-            \Chamilo\Application\Weblcms\Manager :: APPLICATION_NAME,
+            null,
             $condition)->as_array();
         $open_document_question_ids = $this->retrieve_open_document_question_ids(
             $assessment_attempts[0]->get_assessment_id());

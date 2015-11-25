@@ -20,8 +20,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 abstract class Manager extends Application
 {
-    const APPLICATION_NAME = 'user';
-
     // Parameters
     const PARAM_USER_USER_ID = 'user_id';
     const PARAM_ACTIVE = 'active';
