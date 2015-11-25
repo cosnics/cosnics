@@ -41,10 +41,12 @@ class BrowserComponent extends Manager
         $breadcrumbtrail->add_help('administration general');
 
         $this->tab = Request :: get(self :: PARAM_TAB);
+
         if (! $this->tab)
         {
-            $this->tab = 'Chamilo\Core';
+            $this->tab = ClassnameUtilities :: getInstance()->getNamespaceId('Chamilo\Core');
         }
+
         $tab_name = Translation :: get(
             (string) StringUtilities :: getInstance()->createString($this->tab)->upperCamelize());
 
@@ -73,7 +75,8 @@ class BrowserComponent extends Manager
 
     public function get_menu()
     {
-        $menu = new PackageTypeLinksMenu($this->tab, $this->get_url(array(self :: PARAM_TAB => '__TYPE__')));
+        $tabNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromId($this->tab);
+        $menu = new PackageTypeLinksMenu($tabNamespace, $this->get_url(array(self :: PARAM_TAB => '__TYPE__')));
         return $menu->render_as_tree();
     }
 
@@ -85,7 +88,9 @@ class BrowserComponent extends Manager
 
         $packageNames = array();
 
-        foreach ($packages[$this->tab] as $namespace => $package)
+        $tabNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromId($this->tab);
+
+        foreach ($packages[$tabNamespace] as $namespace => $package)
         {
             $packageNames[Translation :: get('TypeName', null, $namespace)] = $package;
         }
@@ -104,7 +109,7 @@ class BrowserComponent extends Manager
                 $index = 0;
                 $index ++;
                 $actions_tab = new DynamicActionsTab(
-                    ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package->get_context()),
+                    ClassnameUtilities :: getInstance()->getNamespaceId($package->get_context()),
                     Translation :: get('TypeName', null, $package->get_context()),
                     Theme :: getInstance()->getImagePath($package->get_context(), 'Logo/22'));
 

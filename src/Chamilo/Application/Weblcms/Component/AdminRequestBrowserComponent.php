@@ -26,6 +26,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: admin_course_type_browser.class.php 218 2010-03-11 14:21:26Z Yannick & Tristan $
