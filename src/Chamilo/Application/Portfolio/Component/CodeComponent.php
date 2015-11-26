@@ -28,9 +28,12 @@ class CodeComponent extends \Chamilo\Application\Portfolio\Manager
 
                 if ($user instanceof User)
                 {
-                    Redirect :: link(
-                        self :: context(),
-                        array(self :: PARAM_ACTION => self :: ACTION_HOME, self :: PARAM_USER_ID => $user->get_id()));
+                    $redirect = new Redirect(
+                        array(
+                            self :: PARAM_CONTEXT => self :: package(),
+                            self :: PARAM_ACTION => self :: ACTION_HOME,
+                            self :: PARAM_USER_ID => $user->get_id()));
+                    $redirect->toUrl();
                 }
                 else
                 {
