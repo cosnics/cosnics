@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Storage;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataClass\UserLoginSession;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -431,19 +430,5 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $user->delete();
         }
-    }
-
-    /**
-     * retrieves the last stored browser session for a certain user
-     *
-     * @param int $user_id
-     * @return UserLoginSession
-     */
-    public function retrieve_user_login_session_by_user_id($user_id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(UserLoginSession :: class_name(), UserLoginSession :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
-        return self :: retrieve(UserLoginSession :: class_name(), new DataClassRetrieveParameters($condition));
     }
 }

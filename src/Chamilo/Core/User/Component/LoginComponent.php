@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Core\User\Storage\DataClass\UserLoginSession;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -39,18 +38,6 @@ class LoginComponent extends Manager implements NoAuthenticationSupport
         try
         {
             $user = $authenticationValidator->performCredentialsAuthentication($userName, $password);
-
-            if (PlatformSetting :: get('enable_terms_and_conditions', self :: context()) &&
-                 ! $user->terms_conditions_uptodate())
-            {
-                $redirect = new Redirect(array(Application :: PARAM_ACTION => self :: ACTION_VIEW_TERMSCONDITIONS));
-                $redirect->toUrl();
-            }
-
-            if (PlatformSetting :: get('prevent_double_login', self :: context()))
-            {
-                UserLoginSession :: check_single_login();
-            }
 
             $request_uri = \Chamilo\Libraries\Platform\Session\Session :: retrieve(self :: PARAM_REQUEST_URI);
 
