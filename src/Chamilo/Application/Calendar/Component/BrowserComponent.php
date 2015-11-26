@@ -183,7 +183,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $actionRendererClass = $extensionRegistration[Registration :: PROPERTY_CONTEXT] . '\Actions';
             $actionRenderer = new $actionRendererClass($tabs);
-            $extensionTabs = $actionRenderer->get();
+            $extensionTabs = $actionRenderer->get($this);
 
             foreach ($extensionTabs as $extensionTab)
             {

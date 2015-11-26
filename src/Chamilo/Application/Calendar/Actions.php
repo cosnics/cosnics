@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar;
 
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -41,7 +42,7 @@ abstract class Actions
      *
      * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
      */
-    public function get()
+    public function get(Application $application)
     {
         return array();
     }
