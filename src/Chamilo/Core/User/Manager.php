@@ -58,8 +58,6 @@ abstract class Manager extends Application
     const ACTION_APPROVE_USER = 'UserAccepter';
     const ACTION_DENY_USER = 'UserDenier';
     const ACTION_MANAGE_METADATA = 'MetadataManager';
-    const ACTION_VIEW_TERMSCONDITIONS = 'TermsConditionsViewer';
-    const ACTION_EDIT_TERMSCONDITIONS = 'TermsConditionsEditor';
     const ACTION_QUICK_LANG = 'QuickLanguage';
 
     // Default action

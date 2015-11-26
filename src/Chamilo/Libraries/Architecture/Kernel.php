@@ -5,7 +5,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\User\Storage\DataClass\UserLoginSession;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
@@ -17,7 +16,6 @@ use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -195,7 +193,7 @@ class Kernel
         $package_info = \Chamilo\Configuration\Package\Storage\DataClass\Package :: get('Chamilo\Configuration');
         $registration = \Chamilo\Configuration\Configuration :: registration('Chamilo\Configuration');
 
-        if ($package_info->get_version() != $registration[Registration::PROPERTY_VERSION])
+        if ($package_info->get_version() != $registration[Registration :: PROPERTY_VERSION])
         {
             $theme = \Chamilo\Libraries\Platform\Session\Request :: get('theme');
             $server_type = \Chamilo\Libraries\Platform\Session\Request :: get('server_type');
@@ -244,20 +242,6 @@ class Kernel
                 $parameters->hash(),
                 1);
         }
-        return $this;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Kernel
-     */
-    private function checkMaintenance()
-    {
-        if (\Chamilo\Libraries\Platform\Configuration\PlatformSetting :: get('maintenance_mode', 'Chamilo\Core\Admin'))
-        {
-            throw new \Exception(Translation :: get('MaintenanceMessage'));
-        }
-
         return $this;
     }
 
@@ -315,7 +299,8 @@ class Kernel
 
             if ($languageSelectionAllowed)
             {
-                Translation :: getInstance()->setLanguageIsocode(LocalSetting :: getInstance()->get('platform_language'));
+                Translation :: getInstance()->setLanguageIsocode(
+                    LocalSetting :: getInstance()->get('platform_language'));
             }
         }
 
@@ -384,62 +369,6 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function displayTerms()
-    {
-        $already_viewed = \Chamilo\Libraries\Platform\Session\Session :: get('terms_and_conditions_viewed');
-        $is_terms_component = $this->getRequest()->query->get(Application :: PARAM_CONTEXT) ==
-             \Chamilo\Core\User\Manager :: context() && $this->getRequest()->query->get(Application :: PARAM_ACTION) ==
-             \Chamilo\Core\User\Manager :: ACTION_VIEW_TERMSCONDITIONS;
-        $terms_enabled = $this->getConfiguration()->get_setting(
-            array(\Chamilo\Core\User\Manager :: context(), 'enable_terms_and_conditions'));
-
-        if ($terms_enabled && ! $is_terms_component && ! $this->getUser()->terms_conditions_uptodate() &&
-             ! $already_viewed)
-        {
-            \Chamilo\Libraries\Platform\Session\Session :: register('terms_and_conditions_viewed', true);
-
-            $redirect = new Redirect(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_VIEW_TERMSCONDITIONS));
-            $redirect->toUrl();
-        }
-
-        return $this;
-    }
-
-    /**
-     * TODO: Re-invent this in a durable way
-     *
-     * @deprecated Re-invent this in a durable way ...
-     * @return \Chamilo\Libraries\Architecture\Kernel
-     */
-    private function preventDoubleLogin()
-    {
-        $prevent_double_logins = PlatformSetting :: get('prevent_double_login', \Chamilo\Core\User\Manager :: context());
-
-        if ($prevent_double_logins)
-        {
-            $exceptions = PlatformSetting :: get('double_login_exceptions', \Chamilo\Core\User\Manager :: context());
-            $exceptions = explode(',', $exceptions);
-            $exception_found = array_search($this->getUser()->get_auth_source(), $exceptions);
-
-            // logout when user is logged in more than once
-            if (UserLoginSession :: $single_login === false && $exception_found === false &&
-                 $this->getUser()->is_platform_admin() === false)
-            {
-                $udm = \Chamilo\Core\User\Storage\DataManager :: logout();
-                throw new NotAllowedException();
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Kernel
-     */
     private function traceVisit()
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName();
@@ -489,12 +418,7 @@ class Kernel
      */
     private function getApplicationFactory()
     {
-        if (! $this->applicationFactory)
-        {
-            $this->applicationFactory = new ApplicationFactory($this->getContext(), $this->getApplicationConfiguration());
-        }
-
-        return $this->applicationFactory;
+        return new ApplicationFactory($this->getContext(), $this->getApplicationConfiguration());
     }
 
     /**
@@ -513,7 +437,13 @@ class Kernel
      */
     private function runApplication()
     {
-        $response = new Response($this->getApplication()->run());
+        $response = $this->getApplication()->run();
+
+        if (! $response instanceof Response)
+        {
+            $response = new Response($response);
+        }
+
         $response->send();
     }
 
@@ -571,7 +501,7 @@ class Kernel
             }
             else
             {
-                $this->checkUpgrade()->checkMaintenance()->setup()->loadUser()->displayTerms()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
+                $this->checkUpgrade()->setup()->handleOAuth2()->checkAuthentication()->loadUser()->buildApplication()->traceVisit()->runApplication();
             }
         }
         catch (\Exception $exception)
