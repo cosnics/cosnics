@@ -107,7 +107,7 @@ class Kernel
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
-    private function setUser($user)
+    protected function setUser($user)
     {
         $this->user = $user;
     }
@@ -125,7 +125,7 @@ class Kernel
      *
      * @param string $context
      */
-    private function setContext($context)
+    protected function setContext($context)
     {
         $this->context = $context;
     }
@@ -143,7 +143,7 @@ class Kernel
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
-    private function setApplication($application)
+    protected function setApplication($application)
     {
         $this->application = $application;
     }
@@ -161,7 +161,7 @@ class Kernel
      *
      * @param \Chamilo\Configuration\Configuration $configuration
      */
-    private function setConfiguration($configuration)
+    protected function setConfiguration($configuration)
     {
         $this->configuration = $configuration;
     }
@@ -188,7 +188,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function checkUpgrade()
+    protected function checkUpgrade()
     {
         $package_info = \Chamilo\Configuration\Package\Storage\DataClass\Package :: get('Chamilo\Configuration');
         $registration = \Chamilo\Configuration\Configuration :: registration('Chamilo\Configuration');
@@ -249,7 +249,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function checkAuthentication()
+    protected function checkAuthentication()
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName();
         $applicationRequiresAuthentication = ! is_subclass_of(
@@ -271,7 +271,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function loadUser()
+    protected function loadUser()
     {
         $user_id = Session :: get_user_id();
         if ($user_id)
@@ -311,7 +311,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function setup()
+    protected function setup()
     {
         if (\Chamilo\Configuration\Configuration :: get('Chamilo\Configuration', 'debug', 'show_errors'))
         {
@@ -329,7 +329,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function configureContext()
+    protected function configureContext()
     {
         $this->context = $this->determineContext();
         $this->context = Application :: context_fallback($this->context);
@@ -341,7 +341,7 @@ class Kernel
      *
      * @return string
      */
-    private function determineContext()
+    protected function determineContext()
     {
         $getContext = $this->getRequest()->query->get(Application :: PARAM_CONTEXT);
 
@@ -369,7 +369,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function traceVisit()
+    protected function traceVisit()
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName();
         $applicationRequiresTracing = ! is_subclass_of(
@@ -407,7 +407,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Application\ApplicationConfiguration
      */
-    private function getApplicationConfiguration()
+    protected function getApplicationConfiguration()
     {
         return new ApplicationConfiguration($this->getRequest(), $this->getUser());
     }
@@ -416,7 +416,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Application\ApplicationFactory
      */
-    private function getApplicationFactory()
+    protected function getApplicationFactory()
     {
         return new ApplicationFactory($this->getContext(), $this->getApplicationConfiguration());
     }
@@ -425,7 +425,7 @@ class Kernel
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
-    private function buildApplication()
+    protected function buildApplication()
     {
         $this->application = $this->getApplicationFactory()->getComponent();
 
@@ -435,7 +435,7 @@ class Kernel
     /**
      * Executes the application's component
      */
-    private function runApplication()
+    protected function runApplication()
     {
         $response = $this->getApplication()->run();
 
@@ -470,7 +470,7 @@ class Kernel
         return $this;
     }
 
-    private function logException(\Exception $exception)
+    protected function logException(\Exception $exception)
     {
         if (! $exception instanceof NotAllowedException)
         {
