@@ -103,16 +103,6 @@ class AuthenticationValidator
         }
         else
         {
-            // TODO: Re-invent this in a durable way ...
-            // $preventDoubleLogin = (boolean) $this->getConfiguration()->get_setting(
-            // \Chamilo\Core\User\Manager :: context(),
-            // 'prevent_double_login');
-
-            // if ($preventDoubleLogin)
-            // {
-            // \Chamilo\Core\User\Storage\DataClass\UserLoginSession :: check_single_login(false);
-            // }
-
             return true;
         }
     }
