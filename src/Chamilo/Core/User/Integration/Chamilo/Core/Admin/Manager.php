@@ -85,16 +85,6 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
         $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_EDIT_TERMSCONDITIONS));
-        $links[] = new DynamicAction(
-            Translation :: get('EditTermsConditions'),
-            Translation :: get('EditTermsConditionsDescription'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Admin/Build'),
-            $redirect->getUrl());
-
-        $redirect = new Redirect(
-            array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
                 \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS));
         $info = new Actions(\Chamilo\Core\User\Manager :: context(), $links);
         $info->set_search($redirect->getUrl());
