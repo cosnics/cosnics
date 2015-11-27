@@ -25,7 +25,6 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
     public static function get_type_name()
     {
         return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
-        ;
     }
 
     public static function get_additional_property_names()
