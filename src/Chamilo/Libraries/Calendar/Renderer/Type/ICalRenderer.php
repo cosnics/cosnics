@@ -124,6 +124,7 @@ class ICalRenderer extends Renderer
 
         $description = trim(strip_tags($providedEvent->getContent()));
 
+        $event->add('LOCATION', trim($providedEvent->getLocation()));
         $event->add('SUMMARY', trim($providedEvent->getTitle()));
         $event->add('DESCRIPTION', $description);
 

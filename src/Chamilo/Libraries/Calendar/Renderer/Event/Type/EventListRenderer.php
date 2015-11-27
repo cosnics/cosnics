@@ -21,13 +21,13 @@ class EventListRenderer extends EventRenderer
 
     /**
      * Gets a html representation of an event for a list renderer
-     *
+     * 
      * @return string
      */
     public function render()
     {
         $html = array();
-
+        
         $html[] = '<div class="' . $this->getEventClasses() . '">';
         $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource()) .
              '">';
@@ -37,15 +37,16 @@ class EventListRenderer extends EventRenderer
         $html[] = $this->getRange();
         $html[] = '</h4>';
         $html[] = $this->getContent();
+        $html[] = $this->getLocation();
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventListRenderer::getContent()
+     * @return string
      */
     public function getContent()
     {
@@ -56,12 +57,30 @@ class EventListRenderer extends EventRenderer
      *
      * @return string
      */
+    public function getLocation()
+    {
+        $html = array();
+        
+        if ($this->getEvent()->getLocation())
+        {
+            $html[] = '<h4>';
+            $html[] = Translation :: get('Location') . ': ' . $this->getEvent()->getLocation();
+            $html[] = '</h4>';
+        }
+        
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function getRange()
     {
         $html = array();
-
+        
         $dateFormat = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
-
+        
         if ($this->getEvent()->getEndDate() != '')
         {
             $html[] = '<div class="calendar-event-range">' . htmlentities(
@@ -73,26 +92,26 @@ class EventListRenderer extends EventRenderer
         else
         {
             $html[] = '<div class="calendar-event-range">' . DatetimeUtilities :: format_locale_date(
-                $dateFormat,
+                $dateFormat, 
                 $this->getEvent()->getStartDate()) . '</div>';
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function getActions()
     {
         $html = array();
-
+        
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                html_entity_decode($this->getEvent()->getUrl()),
+                Translation :: get('View', null, Utilities :: COMMON_LIBRARIES), 
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                html_entity_decode($this->getEvent()->getUrl()), 
                 ToolbarItem :: DISPLAY_ICON));
-
+        
         if ($this->getRenderer()->getDataProvider()->supportsActions())
         {
             foreach ($this->getRenderer()->getActions($this->getEvent()) as $action)
@@ -100,11 +119,11 @@ class EventListRenderer extends EventRenderer
                 $toolbar->add_item($action);
             }
         }
-
+        
         $html[] = '<div style="float: right; margin-top: 2px;">';
         $html[] = $toolbar->as_html();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

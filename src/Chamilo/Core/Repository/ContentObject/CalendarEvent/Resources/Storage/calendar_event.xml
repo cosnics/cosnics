@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="calendar_event">
 	<properties>
+		<property name="location" type="text" length="250" />
 		<property name="id" type="integer" unsigned="1" notnull="1" />
 		<property name="start_date" type="integer" unsigned="1" notnull="1" />
 		<property name="end_date" type="integer" unsigned="1" notnull="1" />

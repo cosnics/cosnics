@@ -16,6 +16,14 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
         
         $prepend = array();
+        
+        if ($object->get_location())
+        {
+            $prepend[] = '<div class="calendar_event_location" style="font-weight: bold;">';
+            $prepend[] = Translation :: get('Location'). ': ' . $object->get_location();
+            $prepend[] = '</div>';
+        }
+        
         $prepend[] = '<div class="calendar_event_range" style="font-weight: bold;">';
         $prepend[] = Translation :: get(
             'CalendarEventDate', 

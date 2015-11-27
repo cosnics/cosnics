@@ -5,7 +5,7 @@ use Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules;
 
 /**
  * An event in the personal calendar as a shell around concepts which exist in the integrating contexts
- *
+ * 
  * @package Chamilo\Libraries\Calendar\Event
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -61,6 +61,12 @@ class Event
      *
      * @var string
      */
+    private $location;
+
+    /**
+     *
+     * @var string
+     */
     private $source;
 
     /**
@@ -77,19 +83,21 @@ class Event
      * @param string $url
      * @param string $title
      * @param string $content
+     * @param string $location
      * @param string $source
      * @param string $context
      */
-    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules = null, $url, $title, $content,
-        $source, $context)
+    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules = null, $url, $title, $content, 
+        $location, $source, $context)
     {
         $this->id = $id;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
-        $this->recurrenceRules = $recurrenceRules ?  : new RecurrenceRules();
+        $this->recurrenceRules = $recurrenceRules ?: new RecurrenceRules();
         $this->url = $url;
         $this->title = $title;
         $this->content = $content;
+        $this->location = $location;
         $this->source = $source;
         $this->context = $context;
     }
@@ -236,6 +244,24 @@ class Event
     public function setContent($content)
     {
         $this->content = $content;
+    }
+
+    /**
+     *
+     * @return the $location
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     *
+     * @param string $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
     }
 
     /**
