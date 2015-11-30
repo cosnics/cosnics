@@ -147,33 +147,44 @@ class CasAuthentication extends ExternalAuthentication
         }
         else
         {
-            usleep(500);
-
-            $settings = $this->getConfiguration();
-
-            // initialize phpCAS
-            if ($settings['enable_log'])
+            try
             {
-                phpCAS :: setDebug($settings['log']);
+                $settings = $this->getConfiguration();
+
+                // initialize phpCAS
+                if ($settings['enable_log'])
+                {
+                    phpCAS :: setDebug($settings['log']);
+                }
+
+                $uri = ($settings['uri'] ? $settings['uri'] : '');
+
+                phpCAS :: client(
+                    SAML_VERSION_1_1,
+                    $settings['host'],
+                    (int) $settings['port'],
+                    (string) $settings['uri'],
+                    false);
+
+                $this->hasBeenInitialized = true;
+
+                // SSL validation for the CAS server
+                phpCAS :: setExtraCurlOption(CURLOPT_SSLVERSION, 3);
+                phpCAS :: setCasServerCACert($settings['certificate']);
+
+                // force CAS authentication
+                phpCAS :: forceAuthentication();
             }
-
-            $uri = ($settings['uri'] ? $settings['uri'] : '');
-
-            phpCAS :: client(
-                SAML_VERSION_1_1,
-                $settings['host'],
-                (int) $settings['port'],
-                (string) $settings['uri'],
-                false);
-
-            $this->hasBeenInitialized = true;
-
-            // SSL validation for the CAS server
-            phpCAS :: setExtraCurlOption(CURLOPT_SSLVERSION, 3);
-            phpCAS :: setCasServerCACert($settings['certificate']);
-
-            // force CAS authentication
-            phpCAS :: forceAuthentication();
+            catch (\Exception $exception)
+            {
+                throw new AuthenticationException(
+                    Translation :: get(
+                        'CasAuthenticationError',
+                        array(
+                            'PLATFORM' => Configuration :: get_instance()->get_setting(
+                                'Chamilo\Core\Admin',
+                                'platform_name'))));
+            }
         }
     }
 }
