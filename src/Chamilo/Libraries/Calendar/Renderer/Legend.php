@@ -77,6 +77,15 @@ class Legend
 
     /**
      *
+     * @return boolean
+     */
+    public function hasMultipleSources()
+    {
+        return count($this->getSources()) > 1;
+    }
+
+    /**
+     *
      * @param string[] $sources
      */
     public function setSources($sources)
@@ -164,7 +173,7 @@ class Legend
     {
         $result = array();
 
-        if ($this->hasSources())
+        if ($this->hasSources() && $this->hasMultipleSources())
         {
             $visibleSources = 0;
 

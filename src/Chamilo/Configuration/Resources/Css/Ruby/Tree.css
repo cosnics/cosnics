@@ -132,6 +132,11 @@ ul.tree-menu li div a.create {
 	background-image: url(../../Images/Ruby/Treemenu/Create.png);
 }
 
+ul.tree-menu li div a.add {
+	background-image: url(../../Images/Ruby/Treemenu/Add.png);
+}
+
+
 ul.tree-menu li div a.manage {
 	background-image: url(../../Images/Ruby/Treemenu/Manage.png);
 }
