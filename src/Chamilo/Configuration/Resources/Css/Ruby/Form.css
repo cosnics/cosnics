@@ -339,6 +339,10 @@ a.button {
 	display: inline-block;
 }
 
+button.last, a.last_button {
+	margin: 0px;
+}
+
 button.positive, a.positive_button {
 	background-image: url(../../Images/Ruby/Buttons/Confirm.png);
 	color: #529214;
