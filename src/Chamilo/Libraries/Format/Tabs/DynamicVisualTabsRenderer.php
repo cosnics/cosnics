@@ -56,15 +56,15 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
         $html = array();
         $html[] = '</div>';
 
-//         $html[] = '<script type="text/javascript">
-// 		$("#' . $this->get_name() . '_visual_tabs").dynamic_tabs( {
-//                 cycle : false,
-//                 follow : false,
-//                 nextButton : ">>",
-//                 prevButton : "<<"
-//         });
-//         </script>
-//         ';
+        // $html[] = '<script type="text/javascript">
+        // $("#' . $this->get_name() . '_visual_tabs").dynamic_tabs( {
+        // cycle : false,
+        // follow : false,
+        // nextButton : ">>",
+        // prevButton : "<<"
+        // });
+        // </script>
+        // ';
 
         return implode(PHP_EOL, $html);
     }
