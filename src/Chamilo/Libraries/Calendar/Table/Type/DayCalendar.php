@@ -285,9 +285,9 @@ class DayCalendar extends Calendar
         $next = strtotime('+1 Day', $this->getDisplayTime());
 
         $navigation = new HTML_Table('class="' . $this->getNavigationClasses() . '"');
-        $navigation->updateCellAttributes(0, 0, 'style="text-align: left;"');
-        $navigation->updateCellAttributes(0, 1, 'style="text-align: center;"');
-        $navigation->updateCellAttributes(0, 2, 'style="text-align: right;"');
+        $navigation->updateCellAttributes(0, 0, 'class="navigation-previous" style="text-align: left;"');
+        $navigation->updateCellAttributes(0, 1, 'class="navigation-title" style="text-align: center;"');
+        $navigation->updateCellAttributes(0, 2, 'class="navigation-next" style="text-align: right;"');
         $navigation->setCellContents(
             0,
             0,
