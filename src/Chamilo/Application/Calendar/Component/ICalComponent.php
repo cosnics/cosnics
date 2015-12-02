@@ -73,21 +73,25 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                         self :: PARAM_ACTION => Manager :: ACTION_ICAL,
                         User :: PROPERTY_SECURITY_TOKEN => $this->getUser()->get_security_token()));
 
-                $html = array();
-
-                $html[] = $this->render_header();
-
-                $html[] = Display :: normal_message(
+                $content = array();
+                $content[] = Display :: normal_message(
                     Translation :: get('ICalExternalMessage', array('URL' => $icalExternalUrl->getUrl())));
 
-                $html[] = Display :: normal_message(
+                $content[] = Display :: normal_message(
                     Translation :: get('ICalDownloadMessage', array('URL' => $icalDownloadUrl->getUrl())));
 
                 $includedCalendars = implode(', ', $this->getCalendarRendererProvider()->getInternalSourceNames());
 
-                $html[] = Display :: warning_message(
+                $content[] = Display :: warning_message(
                     Translation :: get('ICalWarningMessage', array('INCLUDED_CALENDARS' => $includedCalendars)));
 
+                $tabs = $this->getTabs();
+                $tabs->set_content(implode(PHP_EOL, $content));
+
+                $html = array();
+
+                $html[] = $this->render_header();
+                $html[] = $tabs->render();
                 $html[] = $this->render_footer();
 
                 return implode(PHP_EOL, $html);

@@ -173,7 +173,7 @@ class Legend
     {
         $result = array();
 
-        if ($this->hasSources() && $this->hasMultipleSources())
+        if ($this->hasSources())
         {
             $visibleSources = 0;
 
