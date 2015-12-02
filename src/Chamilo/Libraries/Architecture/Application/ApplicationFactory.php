@@ -130,7 +130,8 @@ class ApplicationFactory
 
         if (! class_exists($managerClass))
         {
-            throw new \Exception(Translation :: get('NoManagerFound', array('CONTEXT' => $this->getContext())));
+            throw new \Exception(
+                Translation :: get('NoManagerFound', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries'));
         }
 
         return $managerClass;
