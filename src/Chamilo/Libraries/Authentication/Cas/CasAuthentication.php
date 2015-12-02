@@ -19,10 +19,22 @@ use phpCAS;
 class CasAuthentication extends ExternalAuthentication
 {
 
+    /**
+     *
+     * @var string[]
+     */
     private $settings;
 
+    /**
+     *
+     * @var boolean
+     */
     private $hasBeenInitialized = false;
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Authentication\ExternalAuthentication::login()
+     */
     public function login()
     {
         if (! $this->hasBeenInitialized)
@@ -56,6 +68,11 @@ class CasAuthentication extends ExternalAuthentication
         }
     }
 
+    /**
+     *
+     * @throws AuthenticationException
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
     public function registerUser()
     {
         if (! $this->hasBeenInitialized)
@@ -86,6 +103,10 @@ class CasAuthentication extends ExternalAuthentication
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Authentication\Authentication::logout()
+     */
     public function logout($user)
     {
         if (! $this->isConfigured())
@@ -106,6 +127,10 @@ class CasAuthentication extends ExternalAuthentication
         }
     }
 
+    /**
+     *
+     * @return string[]
+     */
     public function getConfiguration()
     {
         if (! isset($this->settings))
@@ -122,6 +147,10 @@ class CasAuthentication extends ExternalAuthentication
         return $this->settings;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isConfigured()
     {
         $settings = $this->getConfiguration();
@@ -139,6 +168,11 @@ class CasAuthentication extends ExternalAuthentication
         return true;
     }
 
+    /**
+     *
+     * @throws \Exception
+     * @throws AuthenticationException
+     */
     public function initializeClient()
     {
         if (! $this->isConfigured())
@@ -177,13 +211,7 @@ class CasAuthentication extends ExternalAuthentication
             }
             catch (\Exception $exception)
             {
-                throw new AuthenticationException(
-                    Translation :: get(
-                        'CasAuthenticationError',
-                        array(
-                            'PLATFORM' => Configuration :: get_instance()->get_setting(
-                                'Chamilo\Core\Admin',
-                                'platform_name'))));
+                $this->initializeClient();
             }
         }
     }
