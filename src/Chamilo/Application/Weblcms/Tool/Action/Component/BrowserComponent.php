@@ -80,7 +80,9 @@ class BrowserComponent extends Manager
             $this->get_parent()->get_browser_type(),
             $this);
 
-        $actions = new TableFormActions('Chamilo\Application\Weblcms\Table\Publication\Table', \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        $actions = new TableFormActions(
+            'Chamilo\Application\Weblcms\Table\Publication\Table',
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
 
         if (method_exists($this->get_parent(), 'get_additional_form_actions'))
         {
@@ -140,26 +142,26 @@ class BrowserComponent extends Manager
             $this->get_course(),
             \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
         {
-            $content[] = $this->get_parent()->display_introduction_text($this->introduction_text);
+            $html[] = $this->get_parent()->display_introduction_text($this->introduction_text);
         }
 
-        $content[] = $this->action_bar->as_html();
-        $content[] = '<div id="action_bar_browser" style="width:100%;">';
+        $html[] = $this->action_bar->as_html();
+        $html[] = '<div id="action_bar_browser" style="width:100%;">';
 
         if ($this->get_parent() instanceof Categorizable)
         {
-            $content[] = '<div class="tree_menu_on_top" style="max-height:150px; overflow: auto;">';
-            $content[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
+            $html[] = '<div class="tree_menu_on_top" style="max-height:150px; overflow: auto;">';
+            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
                  'overflow: auto; ">';
-            $content[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get(
-                'ShowAll') . '</a>';
-            $content[] = '</div>';
-            $content[] = '<div id=tree style="width:90%;overflow: auto;">';
-            $content[] = $this->publication_category_tree->render_as_tree();
-            $content[] = '</div>';
-            $content[] = ResourceManager :: get_instance()->get_resource_html(
+            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
+                 '</a>';
+            $html[] = '</div>';
+            $html[] = '<div id=tree style="width:90%;overflow: auto;">';
+            $html[] = $this->publication_category_tree->render_as_tree();
+            $html[] = '</div>';
+            $html[] = ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'TreeMenu.js');
-            $content[] = '</div>';
+            $html[] = '</div>';
 
             $cat_id = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
 
@@ -179,8 +181,8 @@ class BrowserComponent extends Manager
                     $cat_name = Translation :: get('Root');
                 }
             }
-            $content[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') .
-                 ': ' . $cat_name . '</div><br />';
+            $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ': ' .
+                 $cat_name . '</div><br />';
         }
 
         $type = $this->get_publication_type();
@@ -220,13 +222,13 @@ class BrowserComponent extends Manager
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME)),
                 $type == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME));
         $content[] = $publication_renderer->as_html();
-        $content[] = '<div class="clear"></div>';
+        $html[] = '<div class="clear"></div>';
 
         if (method_exists($this->get_parent(), 'show_additional_information'))
         {
             $html[] = $this->get_parent()->show_additional_information($this);
         }
-        $content[] = '</div>';
+        $html[] = '</div>';
 
         $tabs->set_content(implode(PHP_EOL, $content));
 
@@ -668,7 +670,8 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * Returns the default object table order for the browser. Can be "overridden" by the individual component to force
+     * Returns the default object table order for the browser.
+     * Can be "overridden" by the individual component to force
      * a different order if needed. Because the individual component is not an actual implementation but merely this
      * parent, there is a check if the method exists.
      *

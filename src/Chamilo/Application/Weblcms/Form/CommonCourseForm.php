@@ -436,12 +436,12 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $tool_name = $tool->get_name();
 
             // Filter out the course settings so this can not be disabled (would cause a deadlock otherwise)
-            if ($tool_name == 'course_settings')
+            if ($tool_name == 'CourseSettings')
             {
                 continue;
             }
 
-            $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool_name);
+            $tool_namespace = $tool->getContext();
             $tool_title = Translation :: get('TypeName', null, $tool_namespace);
             $tool_image_src = Theme :: getInstance()->getImagePath($tool_namespace, 'Logo/' . Theme :: ICON_MINI);
             $tool_image = $tool_name . "_image";
