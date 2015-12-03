@@ -50,13 +50,14 @@ class WorkspaceItem extends Bar
         {
             $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo/16');
 
-            $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+                 $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
-                 '</div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
         $html[] = '</a>';

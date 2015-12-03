@@ -30,7 +30,7 @@ class WorkspaceConfigureItem extends Bar
 
         if ($selected)
         {
-            $class = 'class="current" ';
+            $class = 'class="chamilo-menu-item-current" ';
         }
         else
         {
@@ -48,13 +48,15 @@ class WorkspaceConfigureItem extends Bar
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu',
                 'ConfigureWorkspaces' . ($this->isSelected() ? 'Selected' : ''));
 
-            $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+                 $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '"><em>' .
-                 $title . '</em></div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '"><em>' . $title .
+                 '</em></div>';
         }
 
         $html[] = '</a>';

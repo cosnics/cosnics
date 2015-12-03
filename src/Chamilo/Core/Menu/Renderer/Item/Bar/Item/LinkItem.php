@@ -22,10 +22,9 @@ class LinkItem extends Bar
     public function getContent()
     {
         $html = array();
-        $html[] = '<a href="' . $this->getItem()->get_url() . '" target="' . $this->getItem()->get_target_string() .
-             '">';
+        $html[] = '<a href="' . $this->getItem()->get_url() . '" target="' . $this->getItem()->get_target_string() . '">';
 
-        $html[] = '<div class="label">' .
+        $html[] = '<div class="chamilo-menu-item-label">' .
              $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
              '</div>';
 

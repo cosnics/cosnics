@@ -86,8 +86,8 @@ class WidgetItem extends Bar
 
         $html[] = '<ul>';
 
-        $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
-        $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->getAccountUrl() . '">';
+        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
+        $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' . $this->getAccountUrl() . '">';
 
         if ($this->getItem()->show_icon())
         {
@@ -103,13 +103,13 @@ class WidgetItem extends Bar
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                     \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->getMenuRenderer()->get_user()->get_id()));
 
-            $html[] = '<img class="item-icon item-icon-account" src="' . $profilePhotoUrl->getUrl() . '" title="' .
+            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account" src="' . $profilePhotoUrl->getUrl() . '" title="' .
                  $title . '" alt="' . $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
+            $html[] = '<div class="chamilo-menu-item-label' . ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title .
                  '</div>';
         }
 
@@ -124,17 +124,17 @@ class WidgetItem extends Bar
 
         $profileHtml = array();
 
-        $profileHtml[] = '<div class="item-account">';
-        $profileHtml[] = '<div class="item-account-photo">';
+        $profileHtml[] = '<div class="chamilo-menu-item-account">';
+        $profileHtml[] = '<div class="chamilo-menu-item-account-photo">';
 
         $editProfilePicture = Translation :: get('EditProfilePictureOverlay', null, 'Chamilo\Core\User');
 
-        $profileHtml[] = '<div class="item-account-photo-base">';
+        $profileHtml[] = '<div class="chamilo-menu-item-account-photo-base">';
         $profileHtml[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" />';
 
         if (Configuration :: get(\Chamilo\Core\User\Manager :: context(), 'allow_change_user_picture'))
         {
-            $profileHtml[] = '<div class="item-account-photo-edit">';
+            $profileHtml[] = '<div class="chamilo-menu-item-account-photo-edit">';
             $profileHtml[] = '<a href="' . $this->getPictureUrl() . '">';
             $profileHtml[] = $editProfilePicture;
             $profileHtml[] = '</a>';
@@ -144,18 +144,16 @@ class WidgetItem extends Bar
         $profileHtml[] = '</div>';
 
         $profileHtml[] = '</div>';
-        $profileHtml[] = '<div class="item-account-data">';
-        $profileHtml[] = '<span class="item-account-data-name">' . $user->get_fullname() . '</span>';
-        $profileHtml[] = '<span class="item-account-data-email">' . $user->get_email() . '</span>';
-        $profileHtml[] = '<span class="item-account-data-my-account">';
+        $profileHtml[] = '<div class="chamilo-menu-item-account-data">';
+        $profileHtml[] = '<span class="chamilo-menu-item-account-data-name">' . $user->get_fullname() . '</span>';
+        $profileHtml[] = '<span class="chamilo-menu-item-account-data-email">' . $user->get_email() . '</span>';
+        $profileHtml[] = '<span class="chamilo-menu-item-account-data-my-account">';
 
         $imagePath = Theme :: getInstance()->getImagePath(
             'Chamilo\Core\User\Integration\Chamilo\Core\Menu',
             'Widget/MyAccount');
 
         $profileHtml[] = '<a href="' . $this->getAccountUrl() . '">';
-        // $profileHtml[] = '<img src="' . $imagePath . '" title="' .
-        // Translation :: get('MyAccount', null, 'Chamilo\Core\User') . '" />';
         $profileHtml[] = Translation :: get('MyAccount', null, 'Chamilo\Core\User');
         $profileHtml[] = '</a>';
 
@@ -166,8 +164,6 @@ class WidgetItem extends Bar
             'Widget/Settings');
 
         $profileHtml[] = '<a href="' . $this->getSettingsUrl() . '">';
-        // $profileHtml[] = '<img src="' . $imagePath . '" title="' .
-        // Translation :: get('Settings', null, 'Chamilo\Core\User') . '" />';
         $profileHtml[] = Translation :: get('Settings', null, 'Chamilo\Core\User');
         $profileHtml[] = '</a>';
 
@@ -179,7 +175,7 @@ class WidgetItem extends Bar
             'Chamilo\Core\User\Integration\Chamilo\Core\Menu',
             'LogoutItem');
 
-        $profileHtml[] = '<div class="item-account-logout">';
+        $profileHtml[] = '<div class="chamilo-menu-item-account-logout">';
         $profileHtml[] = '<a href="' . $this->getLogoutUrl() . '">';
         $profileHtml[] = '<img src="' . $imagePath . '" />';
         $profileHtml[] = Translation :: get('Logout', null, 'Chamilo\Core\User');

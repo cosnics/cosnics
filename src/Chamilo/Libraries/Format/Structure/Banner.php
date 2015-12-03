@@ -124,7 +124,7 @@ class Banner
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
-            $output[] = '<div class="applications">';
+            $output[] = '<div class="chamilo-menu-container">';
             $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
                 \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_BAR,
                 $this->getApplication()->getRequest(),

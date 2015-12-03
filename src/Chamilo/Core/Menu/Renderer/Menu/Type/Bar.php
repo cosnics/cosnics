@@ -17,7 +17,7 @@ class Bar extends Renderer
     public function display_menu_header()
     {
         $html = array();
-        $html[] = '<div class="navbar">';
+        $html[] = '<div class="chamilo-menu-bar">';
 
         return implode(PHP_EOL, $html);
     }

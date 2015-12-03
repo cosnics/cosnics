@@ -36,7 +36,7 @@ abstract class Bar extends Renderer
             $html[] = '<ul>';
         }
 
-        $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
+        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
         $html[] = $this->getContent();
 
         $html[] = '</li>';
