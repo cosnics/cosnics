@@ -30,7 +30,7 @@ class LanguageItem extends Bar
                 \Chamilo\Core\User\Manager :: PARAM_REFER => $this->getItem()->getCurrentUrl()));
 
         $html[] = '<a href="' . $redirect->getUrl() . '">';
-        $html[] = '<div class="label">';
+        $html[] = '<div class="chamilo-menu-item-label">';
         $html[] = $this->getItem()->get_language();
         $html[] = '</div>';
         $html[] = '</a>';

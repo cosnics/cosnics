@@ -96,8 +96,8 @@ class CategoryItem extends Bar
 
         $html[] = '<ul>';
 
-        $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
-        $html[] = '<a ' . ($selected ? ' class="current"' : '') . 'href="#">';
+        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
+        $html[] = '<a ' . ($selected ? ' class="chamilo-menu-item-current"' : '') . 'href="#">';
 
         if ($this->getItem()->show_icon())
         {
@@ -105,13 +105,14 @@ class CategoryItem extends Bar
                 Manager :: context(),
                 'Menu/Folder' . ($selected ? 'Selected' : ''));
 
-            $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+                 $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
-                 '</div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
         $html[] = '<!--[if IE 7]><!--></a><!--<![endif]-->';

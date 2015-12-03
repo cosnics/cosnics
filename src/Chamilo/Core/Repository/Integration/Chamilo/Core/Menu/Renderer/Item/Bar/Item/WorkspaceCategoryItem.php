@@ -66,9 +66,9 @@ class WorkspaceCategoryItem extends CategoryItem
         $html[] = '<ul>';
 
         $selected = $this->isSelected();
-        $class = $selected ? 'class="current" ' : '';
+        $class = $selected ? 'class="chamilo-menu-item-current" ' : '';
 
-        $html[] = '<li' . ($selected ? ' class="current"' : '') . '>';
+        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
         $html[] = '<a ' . $class . 'href="#">';
 
         $title = Translation :: get('Workspaces');
@@ -80,13 +80,14 @@ class WorkspaceCategoryItem extends CategoryItem
                 $integrationNamespace,
                 'WorkspaceCategory' . ($selected ? 'Selected' : ''));
 
-            $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+                 $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
-                 '</div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
         $html[] = '<!--[if IE 7]><!--></a><!--<![endif]-->';

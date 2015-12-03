@@ -32,7 +32,7 @@ abstract class MenuItem extends Bar
         $selected = $this->isSelected() ||
              ($this->getItem()->get_parent() != 0 && $this->getItem()->get_parent_object()->is_selected());
 
-        $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->get_url() . '">';
+        $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' . $this->get_url() . '">';
 
         $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
 
@@ -44,13 +44,14 @@ abstract class MenuItem extends Bar
             $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($this->getItem()->get_type());
             $imagePath = Theme :: getInstance()->getImagePath($itemNamespace, $itemType . ($selected ? 'Selected' : ''));
 
-            $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+                 $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
-                 '</div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
         $html[] = '</a>';

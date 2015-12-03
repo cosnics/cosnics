@@ -1,11 +1,11 @@
-.navbar ul li a img.item-icon-account {
+.chamilo-menu-bar ul li a img.chamilo-menu-item-icon-account {
 	height: 50px;
 	width: 50px;
 	margin: 0px;
 	padding: 0px;
 }
 
-.navbar ul li div.item-account {
+.chamilo-menu-bar ul li div.chamilo-menu-item-account {
 	display: none;
 	width: 300px;
 	height: 106px;
@@ -25,11 +25,11 @@
 	line-height: normal;
 }
 
-.navbar ul li:hover div.item-account {
+.chamilo-menu-bar ul li:hover div.chamilo-menu-item-account {
 	display: block;
 }
 
-div.item-account div.item-account-photo {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo {
 	display: inline-block;
 	width: 74px;
 	height: 74px;
@@ -37,21 +37,22 @@ div.item-account div.item-account-photo {
 	float: left;
 }
 
-div.item-account div.item-account-photo a {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo a {
 	height: auto;
 	line-height: normal;
 	padding: 0px;
 	margin: 0px;
 }
 
-div.item-account div.item-account-photo img {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo img {
 	width: 72px;
 	height: 72px;
 	border: 1px solid #3a5599;
 	z-index: 10;
 }
 
-div.item-account div.item-account-photo div.item-account-photo-edit {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo div.chamilo-menu-item-account-photo-edit
+	{
 	width: 72px;
 	height: 16px;
 	line-height: 16px;
@@ -67,51 +68,52 @@ div.item-account div.item-account-photo div.item-account-photo-edit {
 	display: none;
 }
 
-div.item-account div.item-account-photo div.item-account-photo-edit a {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo div.chamilo-menu-item-account-photo-edit a
+	{
 	margin: 0px;
 	padding: 0px;
 	color: white;
 }
 
-div.item-account div.item-account-photo:hover div.item-account-photo-edit
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo:hover div.chamilo-menu-item-account-photo-edit
 	{
 	display: block;
 }
 
-div.item-account div.item-account-data {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-data {
 	display: inline-block;
 	width: 210px;
 	white-space: normal;
 	float: left;
 }
 
-span.item-account-data-name, span.item-account-data-email, span.item-account-data-my-account
-	{
+span.chamilo-menu-item-account-data-name, span.chamilo-menu-item-account-data-email,
+	span.chamilo-menu-item-account-data-my-account {
 	display: block;
 }
 
-span.item-account-data-name {
+span.chamilo-menu-item-account-data-name {
 	font-size: 14px;
 	font-weight: bold;
 	color: white;
 }
 
-span.item-account-data-email {
+span.chamilo-menu-item-account-data-email {
 	font-size: 13px;
 }
 
-span.item-account-data-my-account {
+span.chamilo-menu-item-account-data-my-account {
 	margin-top: 8px;
 }
 
-span.item-account-data-my-account a {
+span.chamilo-menu-item-account-data-my-account a {
 	margin: 0px !important;
 	padding: 0px !important;
 	font-size: 11px;
 	display: inline !important;
 }
 
-div.item-account div.item-account-logout {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	border-top: 1px dotted #dcdcdc;
 	padding: 8px 16px;
 	position: absolute;
@@ -126,14 +128,14 @@ div.item-account div.item-account-logout {
 	background-color: #262F52;
 }
 
-div.item-account div.item-account-logout a {
+div.chamilo-menu-item-account div.chamilo-menu-item-account-logout a {
 	height: auto;
 	line-height: normal;
 	padding: 0px;
 }
 
-div.item-account div.item-account-logout img, span.item-account-data-my-account img
-	{
+div.chamilo-menu-item-account div.chamilo-menu-item-account-logout img,
+	span.chamilo-menu-item-account-data-my-account img {
 	vertical-align: middle;
 	margin-right: 5px;
 }

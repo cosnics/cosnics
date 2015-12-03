@@ -29,10 +29,10 @@ class LinkApplicationItem extends Bar
             $selected = $this->isSelected();
         }
 
-        $html[] = '<a' . ($selected ? ' class="current"' : '') . ' href="' . $this->getItem()->get_url() . '" target="' .
-             $this->getItem()->get_target_string() . '">';
+        $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' . $this->getItem()->get_url() .
+             '" target="' . $this->getItem()->get_target_string() . '">';
 
-        $html[] = '<div class="label">' .
+        $html[] = '<div class="chamilo-menu-item-label">' .
              $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
              '</div>';
 

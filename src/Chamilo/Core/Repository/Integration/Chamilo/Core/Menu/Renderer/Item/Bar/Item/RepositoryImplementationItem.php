@@ -31,7 +31,7 @@ class RepositoryImplementationItem extends Bar
 
         if ($selected)
         {
-            $class = 'class="current" ';
+            $class = 'class="chamilo-menu-item-current" ';
         }
         else
         {
@@ -50,13 +50,14 @@ class RepositoryImplementationItem extends Bar
         {
             $imagePath = Theme :: getInstance()->getImagePath($this->getItem()->get_implementation(), 'Menu');
 
-            $html[] = '<img class="item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+                 $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="label' . ($this->getItem()->show_icon() ? ' label-with-image' : '') . '">' . $title .
-                 '</div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
         $html[] = '</a>';
