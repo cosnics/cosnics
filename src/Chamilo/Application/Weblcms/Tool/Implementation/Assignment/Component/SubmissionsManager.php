@@ -887,6 +887,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
                 $current_submitter_id);
             $this->populate_groups_field();
         }
+
         switch ($submitter_type)
         {
             case \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
@@ -898,6 +899,7 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
                 $submitter = $this->get_position_item($current_submitter_id, $this->users, $array_method);
                 break;
         }
+
         if ($submitter)
         {
             $submitter_type = $this->determine_submitter_type($submitter);
@@ -1060,7 +1062,9 @@ abstract class SubmissionsManager extends Manager // implements DelegateComponen
             default :
                 break;
         }
+
         $current_item = reset($item_array);
+
         while ($current_item)
         {
             if (key($item_array) == $reference_item_id)
