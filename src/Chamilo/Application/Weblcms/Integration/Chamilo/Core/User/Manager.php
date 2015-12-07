@@ -8,6 +8,7 @@ use HTML_Table;
 
 class Manager implements UserInterface
 {
+
     /*
      * (non-PHPdoc) @see \core\user\UserInterface::get_additional_user_information()
      */
@@ -36,7 +37,9 @@ class Manager implements UserInterface
         while ($course = $courses->next_result())
         {
             $redirect = new Redirect(
-                array(self :: PARAM_ACTION => self :: ACTION_VIEW_COURSE, self :: PARAM_COURSE => $course->get_id()));
+                array(
+                    \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
+                    \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course->get_id()));
             $url = $redirect->getUrl();
 
             $url = '<a href="' . $url . '">';
