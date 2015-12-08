@@ -1,22 +1,23 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 
 /**
- * Portfolio item table
  *
- * @package repository\content_object\portfolio\display
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntityTable extends DataClassTable implements TableFormActionsSupport
+abstract class EntityTable extends RecordTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Entry :: PROPERTY_ENTITY_ID;
 

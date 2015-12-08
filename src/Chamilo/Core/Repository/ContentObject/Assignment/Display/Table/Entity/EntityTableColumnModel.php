@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity;
 
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 
 /**
@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntityTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
+abstract class EntityTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
     const PROPERTY_NAME = 'name';
     const PROPERTY_FIRST_ENTRY_DATE = 'first_entry_date';

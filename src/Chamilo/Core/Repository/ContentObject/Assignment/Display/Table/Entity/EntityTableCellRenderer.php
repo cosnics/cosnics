@@ -1,27 +1,23 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * Portfolio item table cell renderer
  *
- * @package repository\content_object\portfolio\display
+ * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntityTableCellRenderer extends DataClassTableCellRenderer implements
-    TableCellRendererActionsColumnSupport
+abstract class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
     public function render_cell($column, $entity)
@@ -31,21 +27,35 @@ abstract class EntityTableCellRenderer extends DataClassTableCellRenderer implem
             return $this->get_actions($entity);
         }
 
-        // $content_object = $node->get_content_object();
+        switch ($column->get_name())
+        {
+            case EntityTableColumnModel :: PROPERTY_FIRST_ENTRY_DATE :
+                if (is_null($entity[EntityTableColumnModel :: PROPERTY_FIRST_ENTRY_DATE]))
+                {
+                    return '-';
+                }
+                return $this->formatDate($entity[EntityTableColumnModel :: PROPERTY_FIRST_ENTRY_DATE]);
+                break;
+            case EntityTableColumnModel :: PROPERTY_LAST_ENTRY_DATE :
+                if (is_null($entity[EntityTableColumnModel :: PROPERTY_LAST_ENTRY_DATE]))
+                {
+                    return '-';
+                }
+                return $this->formatDate($entity[EntityTableColumnModel :: PROPERTY_LAST_ENTRY_DATE]);
+                break;
+            case EntityTableColumnModel :: PROPERTY_FEEDBACK_COUNT :
+                return $this->get_table()->getAssignmentDataProvider()->countFeedbackByEntityTypeAndEntityId(
+                    $this->get_table()->getAssignmentDataProvider()->getCurrentEntityType(),
+                    $entity[Entry :: PROPERTY_ENTITY_ID]);
+                break;
+        }
 
-        // switch ($column->get_name())
-        // {
-        // case ContentObject :: PROPERTY_CREATION_DATE :
-        // return DatetimeUtilities :: format_locale_date(
-        // Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
-        // $content_object->get_creation_date());
-        // case ContentObject :: PROPERTY_MODIFICATION_DATE :
-        // return DatetimeUtilities :: format_locale_date(
-        // Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
-        // $content_object->get_modification_date());
-        // }
+        return parent :: render_cell($column, $entity);
+    }
 
-        // return $node->get_content_object()->get_default_property($column->get_name());
+    public function render_id_cell($row)
+    {
+        return $row[Entry :: PROPERTY_ENTITY_ID];
     }
 
     /**
@@ -120,5 +130,25 @@ abstract class EntityTableCellRenderer extends DataClassTableCellRenderer implem
         // }
 
         return $toolbar->as_html();
+    }
+
+    /**
+     * Formats a date.
+     *
+     * @param int $date the date to be formatted.
+     * @return string
+     */
+    protected function formatDate($date)
+    {
+        $formatted_date = DatetimeUtilities :: format_locale_date(
+            Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
+            $date);
+
+        if ($this->get_table()->getAssignmentDataProvider()->isDateAfterAssignmentEndTime($date))
+        {
+            return '<span style="color:red">' . $formatted_date . '</span>';
+        }
+
+        return $formatted_date;
     }
 }

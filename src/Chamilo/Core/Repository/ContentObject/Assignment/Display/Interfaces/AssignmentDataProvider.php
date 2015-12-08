@@ -56,5 +56,23 @@ interface AssignmentDataProvider
      */
     public function getEntityTableForType(Application $application, $entityType);
 
+    /**
+     *
+     * @return integer
+     */
     public function getCurrentEntityType();
+
+    /**
+     *
+     * @param integer $date
+     * @return boolean
+     */
+    public function isDateAfterAssignmentEndTime($date);
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityId
+     */
+    public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId);
 }
