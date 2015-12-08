@@ -167,27 +167,34 @@ abstract class Manager extends Application
      *
      * @param \core\repository\ContentObject,int $content_object
      */
-    public static function get_content_object_default_action_link($content_object)
+    public static function get_content_object_default_action_link($contentObject)
     {
-        if (! $content_object instanceof ContentObject && is_numeric($content_object))
+        if (! $contentObject instanceof ContentObject && is_numeric($contentObject))
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            $contentObject = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
-                $content_object);
+                $contentObject);
         }
 
-        if (! $content_object instanceof ContentObject)
+        if (! $contentObject instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
 
-        $action = $content_object->is_complex_content_object() ? self :: ACTION_DISPLAY : self :: ACTION_RENDITION;
+        if (\Chamilo\Core\Repository\Display\Manager :: exists($contentObject->package()))
+        {
+            $action = self :: ACTION_DISPLAY;
+        }
+        else
+        {
+            $action = self :: ACTION_RENDITION;
+        }
 
         $redirect = new Redirect(
             array(
                 self :: PARAM_CONTEXT => self :: context(),
                 self :: PARAM_ACTION => $action,
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()));
+                self :: PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()));
 
         return $redirect->getUrl();
     }
@@ -196,7 +203,9 @@ abstract class Manager extends Application
     {
         $package = $this->get_content_object()->package();
         $context = $package . '\Display\Preview';
-        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
         return $factory;
     }
