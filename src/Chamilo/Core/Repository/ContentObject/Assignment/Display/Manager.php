@@ -18,9 +18,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_ENTITY_ID = 'entity_id';
 
     // Actions
-    const ACTION_VIEW = 'Viewer';
+    const ACTION_CREATE = self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
+    const ACTION_VIEW = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
     const ACTION_DOWNLOAD = 'Downloader';
     const ACTION_SUBMIT = 'Submitter';
+    const ACTION_BROWSE = 'Browser';
 
     /**
      *

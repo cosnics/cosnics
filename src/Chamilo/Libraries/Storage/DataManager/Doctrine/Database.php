@@ -939,7 +939,6 @@ class Database
     {
         try
         {
-            var_dump($sql);
             return $this->get_connection()->query($sql);
         }
         catch (\PDOException $exception)

@@ -75,4 +75,10 @@ interface AssignmentDataProvider
      * @param integer $entityId
      */
     public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
+     *
+     * @return boolean
+     */
+    public function canEditAssignment();
 }
