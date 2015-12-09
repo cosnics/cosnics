@@ -45,6 +45,7 @@ class FunctionConditionVariable extends ConditionVariable
      * @var integer
      */
     CONST DISTINCT = 5;
+    const AVERAGE = 6;
 
     /**
      * The ConditionVariable
