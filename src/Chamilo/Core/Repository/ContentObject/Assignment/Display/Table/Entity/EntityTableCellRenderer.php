@@ -9,6 +9,9 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 
 /**
  *
@@ -59,75 +62,61 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
     }
 
     /**
-     * Returns the actions toolbar
      *
-     * @param \core\repository\common\path\ComplexContentObjectPathNode $node
-     * @return string
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
      */
     public function get_actions($entity)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+        $toolbar = new Toolbar();
 
-        // if ($this->get_component()->get_parent()->is_allowed_to_view_content_object($node))
-        // {
-        // $toolbar->add_item(
-        // new ToolbarItem(
-        // Translation :: get('ViewerComponent'),
-        // Theme :: getInstance()->getImagePath(
-        // 'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
-        // 'Action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT),
-        // $this->get_component()->get_url(
-        // array(
-        // Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-        // Manager :: PARAM_STEP => $node->get_id())),
-        // ToolbarItem :: DISPLAY_ICON));
-        // }
-        // else
-        // {
-        // $toolbar->add_item(
-        // new ToolbarItem(
-        // Translation :: get('ViewNotAllowed'),
-        // Theme :: getInstance()->getImagePath(
-        // 'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
-        // 'Action/' . Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT . 'Na'),
-        // null,
-        // ToolbarItem :: DISPLAY_ICON));
-        // }
+        $entityId = $entity[Entry :: PROPERTY_ENTITY_ID];
+        $isEntity = $this->isEntity($entityId, $this->get_component()->get_user_id());
 
-        // if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object($node->get_parent()))
-        // {
-        // $variable = $node->get_content_object() instanceof Portfolio ? 'MoveFolder' : 'MoverComponent';
+        $assignment = $this->get_table()->get_component()->get_root_content_object();
 
-        // $toolbar->add_item(
-        // new ToolbarItem(
-        // Translation :: get($variable),
-        // Theme :: getInstance()->getImagePath(
-        // 'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
-        // 'Action/' . Manager :: ACTION_MOVE),
-        // $this->get_component()->get_url(
-        // array(
-        // Manager :: PARAM_ACTION => Manager :: ACTION_MOVE,
-        // Manager :: PARAM_STEP => $node->get_id())),
-        // ToolbarItem :: DISPLAY_ICON));
-        // }
+        if ($isEntity || $assignment->get_visibility_submissions() == 1 ||
+             $this->get_table()->getAssignmentDataProvider()->canEditAssignment())
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('ViewSubmissions'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE,
+                            Manager :: PARAM_ENTITY_TYPE => $entity[Entry :: PROPERTY_ENTITY_TYPE],
+                            Manager :: PARAM_ENTITY_ID => $entity[Entry :: PROPERTY_ENTITY_ID])),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
 
-        // if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object($node->get_parent()))
-        // {
-        // $variable = $node->get_content_object() instanceof Portfolio ? 'DeleteFolder' : 'DeleterComponent';
+        if ($this->get_table()->getAssignmentDataProvider()->canEditAssignment() &&
+             $entity[EntityTableColumnModel :: PROPERTY_ENTRY_COUNT] > 0)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('DownloadAllSubmissions'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD,
+                            Manager :: PARAM_ENTITY_TYPE => $entity[Entry :: PROPERTY_ENTITY_TYPE],
+                            Manager :: PARAM_ENTITY_ID => $entity[Entry :: PROPERTY_ENTITY_ID])),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
 
-        // $toolbar->add_item(
-        // new ToolbarItem(
-        // Translation :: get($variable),
-        // Theme :: getInstance()->getImagePath(
-        // 'Chamilo\Core\Repository\ContentObject\LearningPath\Display',
-        // 'Action/' . Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM),
-        // $this->get_component()->get_url(
-        // array(
-        // Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-        // Manager :: PARAM_STEP => $node->get_id())),
-        // ToolbarItem :: DISPLAY_ICON,
-        // true));
-        // }
+        if ($isEntity)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation :: get('SubmissionSubmit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Add'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_CREATE,
+                            Manager :: PARAM_ENTITY_TYPE => $entity[Entry :: PROPERTY_ENTITY_TYPE],
+                            Manager :: PARAM_ENTITY_ID => $entity[Entry :: PROPERTY_ENTITY_ID])),
+                    ToolbarItem :: DISPLAY_ICON));
+        }
 
         return $toolbar->as_html();
     }
@@ -151,4 +140,6 @@ abstract class EntityTableCellRenderer extends RecordTableCellRenderer implement
 
         return $formatted_date;
     }
+
+    abstract protected function isEntity($entityId, $userId);
 }
