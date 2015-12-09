@@ -37,11 +37,14 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
             case FunctionConditionVariable :: DISTINCT :
                 $strings[] = 'DISTINCT';
                 break;
+            case FunctionConditionVariable :: AVERAGE :
+                $strings[] = 'AVG';
+                break;
         }
 
         if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
         {
-        $strings[] = '(';
+            $strings[] = '(';
         }
         else
         {
@@ -52,7 +55,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
 
         if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
         {
-        $strings[] = ')';
+            $strings[] = ')';
         }
 
         if ($this->get_condition_variable()->get_alias())

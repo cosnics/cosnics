@@ -81,4 +81,47 @@ interface AssignmentDataProvider
      * @return boolean
      */
     public function canEditAssignment();
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityId
+     * @param integer $userId
+     * @param integer $contentObjectId
+     * @param string $ipAdress
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     */
+    public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress);
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityId
+     * @return integer
+     */
+    public function countEntriesForEntityTypeAndId($entityType, $entityId);
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityId
+     * @return integer
+     */
+    public function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId);
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityId
+     * @return integer
+     */
+    public function countDistinctScoreForEntityTypeAndId($entityType, $entityId);
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityId
+     * @return integer
+     */
+    public function getAverageScoreForEntityTypeAndId($entityType, $entityId);
 }
