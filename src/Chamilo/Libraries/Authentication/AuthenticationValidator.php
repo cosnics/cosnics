@@ -340,10 +340,18 @@ class AuthenticationValidator
 
     private function redirectAfterLogin()
     {
-        $parameters = array(
-            Application :: PARAM_CONTEXT => $this->getConfiguration()->get_setting(
-                'Chamilo\Core\Admin',
-                'page_after_login'));
+        $context = $this->getRequest()->query->get(Application :: PARAM_CONTEXT);
+
+        if ($this->getRequest()->query->count() > 0 && $context != 'Chamilo\Core\Home')
+        {
+            $parameters = $this->getRequest()->query->all();
+        }
+        else
+        {
+            $parameters = array(
+                Application :: PARAM_CONTEXT => $this->getConfiguration()->get_setting(
+                    array('Chamilo\Core\Admin', 'page_after_login')));
+        }
 
         $redirect = new Redirect($parameters);
         $redirect->toUrl();
