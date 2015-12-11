@@ -70,10 +70,7 @@ abstract class Manager extends Application
         $html[] = $page->getHeader()->toHtml();
         $html[] = '<div class="warning-banner">';
 
-        $translation = Translation :: get(
-            'PreviewModeWarning',
-            null,
-            ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_content_object()));
+        $translation = Translation :: get('PreviewModeWarning', null, $this->get_content_object()->package() . '\Display');
 
         if ($translation == 'PreviewModeWarning')
         {
@@ -196,7 +193,9 @@ abstract class Manager extends Application
     {
         $package = $this->get_content_object()->package();
         $context = $package . '\Display\Preview';
-        $factory = new ApplicationFactory($context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        $factory = new ApplicationFactory(
+            $context,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
         return $factory;
     }
