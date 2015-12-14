@@ -1,12 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions;
 
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataClass\FrequentlyAskedQuestions;
+use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
  * $Id: forum_tool.class.php 216 2009-11-13 14:08:06Z kariboe $

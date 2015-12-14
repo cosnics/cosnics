@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Admin">
+	<settings>
+		<category name="working_hours">
+			<setting name="working_hours_start" field="select" default="0" user_setting="1">
+				<options type="dynamic" source="get_working_hours" />
+			</setting>
+			<setting name="working_hours_end" field="select" default="24" user_setting="1">
+				<options type="dynamic" source="get_working_hours" />
+			</setting>
+			<setting name="hide_none_working_hours" field="checkbox" default="0" user_setting="1">
+				<options type="static">
+					<option name="hide_non_working_hours" value="1" />
+				</options>
+			</setting>
+			<setting name="first_day_of_week" field="radio" default="monday">
+				<options type="static">
+					<option name="sunday" value="sunday" />
+					<option name="monday" value="monday" />
+				</options>
+			</setting>
+		</category>
+		<category name="caching">
+			<setting name="refresh_external" field="text" default="60" user_setting="1" />
+		</category>
+	</settings>
+</package>
