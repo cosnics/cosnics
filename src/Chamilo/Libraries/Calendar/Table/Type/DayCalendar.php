@@ -150,7 +150,6 @@ class DayCalendar extends Calendar
     {
         if ($this->getHideOtherHours())
         {
-            // $workingStart = LocalSetting :: getInstance()->get('working_hours_start');
             return strtotime(date('Y-m-d ' . $this->getStartHour() . ':00:00', $this->getDisplayTime()));
         }
 
@@ -166,7 +165,6 @@ class DayCalendar extends Calendar
     {
         if ($this->getHideOtherHours())
         {
-            // $workingEnd = LocalSetting :: getInstance()->get('working_hours_end');
             return strtotime(date('Y-m-d ' . ($this->getEndHour() - 1) . ':59:59', $this->getDisplayTime()));
         }
 

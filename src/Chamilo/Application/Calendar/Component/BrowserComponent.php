@@ -143,9 +143,11 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY ||
              $this->getCurrentRendererType() == ViewRenderer :: TYPE_WEEK)
         {
-            $renderer->setStartHour(LocalSetting :: getInstance()->get('working_hours_start'));
-            $renderer->setEndHour(LocalSetting :: getInstance()->get('working_hours_end'));
-            $renderer->setHideOtherHours(LocalSetting :: getInstance()->get('hide_none_working_hours'));
+            $renderer->setStartHour(
+                LocalSetting :: getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar'));
+            $renderer->setEndHour(LocalSetting :: getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
+            $renderer->setHideOtherHours(
+                LocalSetting :: getInstance()->get('hide_non_working_hours', 'Chamilo\Libraries\Calendar'));
         }
 
         return $renderer->render();

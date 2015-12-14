@@ -456,7 +456,7 @@ class CalendarRepository
     private function executeRequest(\GuzzleHttp\Message\Request $request)
     {
         $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-            array(Manager :: package(), 'refresh_calendar'));
+            array('Chamilo\Libraries\Calendar', 'refresh_external'));
 
         $parameterBag = new ParameterBag(
             array(
