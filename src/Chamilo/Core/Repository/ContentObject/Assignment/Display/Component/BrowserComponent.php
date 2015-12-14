@@ -93,6 +93,10 @@ class BrowserComponent extends Manager implements TableSupport
      */
     private function renderEntryTable()
     {
+        return $this->getDataProvider()->getEntryTableForEntityTypeAndId(
+            $this,
+            $this->getEntityType(),
+            $this->getEntityIdentifier())->as_html();
     }
 
     /**
