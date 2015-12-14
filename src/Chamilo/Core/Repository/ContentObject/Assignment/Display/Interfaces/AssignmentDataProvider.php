@@ -58,6 +58,15 @@ interface AssignmentDataProvider
 
     /**
      *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param integer $entityType
+     * @param integer $entityId
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTable
+     */
+    public function getEntryTableForEntityTypeAndId(Application $application, $entityType, $entityId);
+
+    /**
+     *
      * @return integer
      */
     public function getCurrentEntityType();
