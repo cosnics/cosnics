@@ -258,10 +258,12 @@ class Kernel
 
         $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfiguration());
 
-        if ($applicationRequiresAuthentication && ! $authenticationValidator->validate() &&
-             ! Authentication :: anonymous_user_exists())
+        if ($applicationRequiresAuthentication)
         {
-            throw new NotAllowedException();
+            if (! $authenticationValidator->validate() && ! Authentication :: anonymous_user_exists())
+            {
+                throw new NotAllowedException();
+            }
         }
 
         return $this;

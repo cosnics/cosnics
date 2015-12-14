@@ -3,7 +3,7 @@
 	<package>
 		<name>Display</name>
 		<code>Display</code>
-		<context>Chamilo\Core\Repository\ContentObject\Page\Integration\Chamilo\Core\Repository\ContentObject\Portfolio
+		<context>Chamilo\Core\Repository\ContentObject\Page\Integration\Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions
 		</context>
 		<type>Chamilo\Core\Repository\ContentObject\Page\Integration</type>
 		<category />
@@ -17,7 +17,8 @@
 					<version operator="4">5.0.0</version>
 				</dependency>
 				<dependency type="registration">
-					<id>Chamilo\Core\Repository\ContentObject\Portfolio</id>
+					<id>Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions
+					</id>
 					<version operator="4">5.0.0</version>
 				</dependency>
 			</dependencies>

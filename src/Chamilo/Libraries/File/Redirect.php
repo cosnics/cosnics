@@ -32,17 +32,38 @@ class Redirect
      */
     private $encodeEntities;
 
+    private $anchor;
+
     /**
      *
      * @param string[] $parameters
      * @param string[] $filterParameters
      * @param boolean $encodeEntities
      */
-    public function __construct($parameters = array (), $filterParameters = array(), $encodeEntities = false)
+    public function __construct($parameters = array (), $filterParameters = array(), $encodeEntities = false, $anchor = null)
     {
         $this->parameters = $parameters;
         $this->filterParameters = $filterParameters;
         $this->encodeEntities = $encodeEntities;
+        $this->anchor = $anchor;
+    }
+
+    /**
+     *
+     * @return the $anchor
+     */
+    public function getAnchor()
+    {
+        return $this->anchor;
+    }
+
+    /**
+     *
+     * @param string $anchor
+     */
+    public function setAnchor($anchor)
+    {
+        $this->anchor = $anchor;
     }
 
     /**
@@ -173,7 +194,14 @@ class Redirect
             // file, we explicitly add it as a parameter here to avoid
             // trouble when parsing the resulting urls
             $url .= http_build_query($parameters, '', self :: ARGUMENT_SEPARATOR);
-            $url .= $anchor;
+            if ($this->getAnchor())
+            {
+                $url .= '#' . $this->getAnchor();
+            }
+            else
+            {
+                $url .= $anchor;
+            }
         }
 
         if ($this->getEncodeEntities())
