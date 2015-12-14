@@ -35,7 +35,6 @@ class PrinterComponent extends BrowserComponent implements DelegateComponent
         $html[] = $this->renderNormalCalendar();
         $html[] = '<script type="text/javascript">';
         $html[] = 'window.print();';
-        $html[] = 'window.close();';
         $html[] = '</script>';
         $html[] = $this->render_footer();
 
