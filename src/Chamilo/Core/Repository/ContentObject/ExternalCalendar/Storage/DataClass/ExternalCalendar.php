@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataCla
 use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service\ExternalCalendarCacheService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\File\Filesystem;
@@ -20,7 +21,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ExternalCalendar extends ContentObject implements Versionable
+class ExternalCalendar extends ContentObject implements Versionable, FileStorageSupport
 {
     // Properties
     const PROPERTY_STORAGE_PATH = 'storage_path';

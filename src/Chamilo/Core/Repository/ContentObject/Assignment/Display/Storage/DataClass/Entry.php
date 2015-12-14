@@ -21,6 +21,8 @@ abstract class Entry extends DataClass
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_IP_ADDRESS = 'ip_address';
 
+    private $contentObject;
+
     /**
      *
      * @param string[] $extendedPropertyNames
@@ -154,9 +156,14 @@ abstract class Entry extends DataClass
     {
         try
         {
-            return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
-                $this->getContentObjectId());
+            if (! isset($this->contentObject))
+            {
+                $this->contentObject = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $this->getContentObjectId());
+            }
+
+            return $this->contentObject;
         }
         catch (\Exception $ex)
         {

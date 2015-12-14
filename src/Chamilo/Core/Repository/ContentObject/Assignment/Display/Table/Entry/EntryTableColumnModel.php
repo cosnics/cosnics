@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
-use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
+use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 
 /**
  *
@@ -15,9 +16,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
+abstract class EntryTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
-    const PROPERTY_SCORE = 'score';
     const PROPERTY_FEEDBACK_COUNT = 'feedback_count';
 
     /**
@@ -30,7 +30,7 @@ abstract class EntryTableColumnModel extends DataClassTableColumnModel implement
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION));
         $this->add_column(new DataClassPropertyTableColumn(Entry :: class_name(), Entry :: PROPERTY_SUBMITTED));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_SCORE));
+        $this->add_column(new StaticTableColumn(Score :: PROPERTY_SCORE));
         $this->add_column(new StaticTableColumn(self :: PROPERTY_FEEDBACK_COUNT));
     }
 }

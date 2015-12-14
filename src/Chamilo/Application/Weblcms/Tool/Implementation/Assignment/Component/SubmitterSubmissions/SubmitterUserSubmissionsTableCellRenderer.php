@@ -93,6 +93,7 @@ class SubmitterUserSubmissionsTableCellRenderer extends DataClassTableCellRender
                             Manager :: PARAM_SUBMISSION => $submission->get_id())),
                     ToolbarItem :: DISPLAY_ICON));
         }
+
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             if ($submission->get_content_object() &&

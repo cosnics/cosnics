@@ -133,4 +133,18 @@ interface AssignmentDataProvider
      * @return integer
      */
     public function getAverageScoreForEntityTypeAndId($entityType, $entityId);
+
+    /**
+     *
+     * @param integer $entryIdentifier
+     * @return integer
+     */
+    public function countFeedbackByEntryIdentifier($entryIdentifier);
+
+    /**
+     *
+     * @param integer $entryIdentifier
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     */
+    public function findEntryByIdentifier($entryIdentifier);
 }

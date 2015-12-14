@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 
 /**
  *
@@ -10,6 +10,6 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryTableDataProvider extends DataClassTableDataProvider
+abstract class EntryTableDataProvider extends RecordTableDataProvider
 {
 }

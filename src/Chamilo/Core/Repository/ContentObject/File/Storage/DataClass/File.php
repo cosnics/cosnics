@@ -4,25 +4,26 @@ namespace Chamilo\Core\Repository\ContentObject\File\Storage\DataClass;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  *
  * @package repository.content_object.document
  */
-class File extends ContentObject implements Versionable, Includeable
+class File extends ContentObject implements Versionable, Includeable, FileStorageSupport
 {
 
     // Properties

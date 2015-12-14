@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
@@ -17,7 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class EntryTable extends DataClassTable implements TableFormActionsSupport
+abstract class EntryTable extends RecordTable implements TableFormActionsSupport
 {
     const TABLE_IDENTIFIER = Entry :: PROPERTY_ID;
 
@@ -90,12 +90,17 @@ abstract class EntryTable extends DataClassTable implements TableFormActionsSupp
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
+        $actions = new TableFormActions(__NAMESPACE__, Manager :: PARAM_ENTRY_ID);
 
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD)),
                 Translation :: get('DownloadSelected')));
+
+        $actions->add_form_action(
+            new TableFormAction(
+                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
+                Translation :: get('DeleteSelected')));
 
         return $actions;
     }

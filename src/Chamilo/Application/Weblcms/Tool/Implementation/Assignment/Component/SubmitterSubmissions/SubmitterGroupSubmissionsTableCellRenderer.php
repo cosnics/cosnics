@@ -162,6 +162,7 @@ class SubmitterGroupSubmissionsTableCellRenderer extends DataClassTableCellRende
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_SUBMISSION)),
                     ToolbarItem :: DISPLAY_ICON));
         }
+
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             if ($submission->get_content_object() &&
