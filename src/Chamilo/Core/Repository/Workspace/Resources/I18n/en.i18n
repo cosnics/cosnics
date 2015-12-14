@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeCategory = "Workspace"
+CreatorComponent = "Create workspace"
+FavouriteComponent = "Favourites"
+PersonalBrowserComponent = "My workspaces"
+SharedBrowserComponent = "Shared workspaces"
+BrowserComponent = "All workspaces"
+UpdaterComponent = "Update workspace"
+RightsComponent = "Configure workspace rights"
