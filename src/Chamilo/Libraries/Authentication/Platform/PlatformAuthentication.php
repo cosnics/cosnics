@@ -27,6 +27,7 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
     {
         if ($this->getUser() instanceof User && $this->getUser()->get_password() == Hashing :: hash($password))
         {
+
             return true;
         }
         else
