@@ -35,7 +35,6 @@ abstract class Manager extends Application
     const ACTION_UPDATE_USER = 'Updater';
     const ACTION_DELETE_USER = 'Deleter';
     const ACTION_REGISTER_USER = 'Register';
-    const ACTION_LOGIN = 'Login';
     const ACTION_LOGOUT = 'Logout';
     const ACTION_VIEW_ACCOUNT = 'Account';
     const ACTION_CHANGE_PICTURE = 'Picture';

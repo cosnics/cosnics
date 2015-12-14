@@ -136,11 +136,11 @@ abstract class Application
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
      * @param string $redirect_type
      */
-    public function simple_redirect($parameters = array(), $filter = array(), $encodeEntities = false)
+    public function simple_redirect($parameters = array(), $filter = array(), $encodeEntities = false, $anchor = null)
     {
         $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
 
-        $redirect = new Redirect($parameters, $filter, $encodeEntities);
+        $redirect = new Redirect($parameters, $filter, $encodeEntities, $anchor);
         $redirect->toUrl();
         exit();
     }
@@ -157,7 +157,7 @@ abstract class Application
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
      * @param string $redirect_type
      */
-    public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false)
+    public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false, $anchor = null)
     {
         if ($message != null)
         {
@@ -171,7 +171,7 @@ abstract class Application
             Session :: register(self :: PARAM_MESSAGES, $messages);
         }
 
-        $this->simple_redirect($parameters, $filter, $encode_entities);
+        $this->simple_redirect($parameters, $filter, $encode_entities, $anchor);
     }
 
     /**

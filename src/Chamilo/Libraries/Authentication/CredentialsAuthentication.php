@@ -12,6 +12,8 @@ use Chamilo\Libraries\File\Redirect;
  */
 abstract class CredentialsAuthentication extends Authentication
 {
+    const PARAM_LOGIN = 'login';
+    const PARAM_PASSWORD = 'password';
 
     /**
      *

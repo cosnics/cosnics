@@ -75,7 +75,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->get_action_bar()->as_html();
         $html[] = $output;
         $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Faq.js');
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

@@ -70,10 +70,7 @@ abstract class Manager extends Application
         $html[] = $page->getHeader()->toHtml();
         $html[] = '<div class="warning-banner">';
 
-        $translation = Translation :: get(
-            'PreviewModeWarning',
-            null,
-            ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_content_object()));
+        $translation = Translation :: get('PreviewModeWarning', null, $this->get_content_object()->package() . '\Display');
 
         if ($translation == 'PreviewModeWarning')
         {
