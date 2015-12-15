@@ -41,6 +41,12 @@ abstract class CalendarRendererProvider implements
 
     /**
      *
+     * @var \Chamilo\Libraries\Calendar\Event\Event[]
+     */
+    private $events;
+
+    /**
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
      * @param string[] $displayParameters;
@@ -185,29 +191,36 @@ abstract class CalendarRendererProvider implements
      */
     private function getEvents($sourceType, $startTime = null, $endTime = null, $calculateRecurrence = false)
     {
-        $events = $this->aggregateEvents($sourceType, $startTime, $endTime);
+        $cacheIdentifier = md5(serialize(array($sourceType, $startTime, $endTime, $calculateRecurrence)));
 
-        if ($startTime && $endTime && $calculateRecurrence)
+        if (! isset($this->events[$cacheIdentifier]))
         {
-            $recurringEvents = array();
+            $events = $this->aggregateEvents($sourceType, $startTime, $endTime);
 
-            foreach ($events as $event)
+            if ($startTime && $endTime && $calculateRecurrence)
             {
-                $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
-                $parsedEvents = $recurrenceCalculator->getEvents();
+                $recurringEvents = array();
 
-                foreach ($parsedEvents as $parsedEvent)
+                foreach ($events as $event)
                 {
-                    $recurringEvents[] = $parsedEvent;
-                }
-            }
+                    $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
+                    $parsedEvents = $recurrenceCalculator->getEvents();
 
-            return $recurringEvents;
+                    foreach ($parsedEvents as $parsedEvent)
+                    {
+                        $recurringEvents[] = $parsedEvent;
+                    }
+                }
+
+                $this->events[$cacheIdentifier] = $recurringEvents;
+            }
+            else
+            {
+                $this->events[$cacheIdentifier] = $events;
+            }
         }
-        else
-        {
-            return $events;
-        }
+
+        return $this->events[$cacheIdentifier];
     }
 
     /**
