@@ -37,3 +37,4 @@ CalendarAvailabilityInformation = "Calendars which are not selected or enabled o
 ICalComponent = "iCal calendar"
 ICalDownload = "Download iCal"
 ICalExternal = "Get iCal link for application"
+ConfigureComponent = "Configuration"

@@ -49,10 +49,6 @@
 			<setting name="page_after_login" field="select" default="Chamilo\Core\Home">
 				<options type="dynamic" source="get_active_applications" />
 			</setting>
-			<setting name="platform_timezone" field="select" default="Europe/Brussels" user_setting="1">
-				<options type="dynamic" source="get_time_zones" />
-				<availability source="is_allowed_to_change_platform_timezone" />
-			</setting>
 			<setting name="active_online_email_editor" field="checkbox" default="0">
 				<options type="static">
 					<option name="active_online_email_editor" value="1" />
@@ -89,25 +85,6 @@
 			<setting name="write_new_variables_to_translation_file" field="checkbox" default="0">
 				<options type="static">
 					<option name="write_new_variables_to_translation_file" value="1" />
-				</options>
-			</setting>
-		</category>
-		<category name="calendar">
-			<setting name="working_hours_start" field="select" default="0" user_setting="1">
-				<options type="dynamic" source="get_working_hours" />
-			</setting>
-			<setting name="working_hours_end" field="select" default="24" user_setting="1">
-				<options type="dynamic" source="get_working_hours" />
-			</setting>
-			<setting name="hide_none_working_hours" field="checkbox" default="0" user_setting="1">
-				<options type="static">
-					<option name="hide_none_working_hours" value="1" />
-				</options>
-			</setting>
-			<setting name="first_day_of_week" field="radio" default="monday">
-				<options type="static">
-					<option name="sunday" value="sunday" />
-					<option name="monday" value="monday" />
 				</options>
 			</setting>
 		</category>

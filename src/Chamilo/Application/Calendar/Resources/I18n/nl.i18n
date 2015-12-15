@@ -37,3 +37,4 @@ CalendarAvailabilityInformation = "Agenda's die niet geselecteerd of geactiveerd
 ICalComponent = "iCal agenda"
 ICalDownload = "Download iCal"
 ICalExternal = "iCal link voor applicaties"
+ConfigureComponent = "Configuratie"

@@ -48,7 +48,7 @@ class YearCalendar extends Calendar
     public function getStartTime()
     {
         $firstDay = mktime(0, 0, 0, 1, 1, date('Y', $this->getDisplayTime()));
-        $setting = PlatformSetting :: get('first_day_of_week');
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -72,7 +72,7 @@ class YearCalendar extends Calendar
     public function getEndTime()
     {
         $lastDay = mktime(23, 59, 59, 12, 31, date('Y', $this->getDisplayTime()));
-        $setting = PlatformSetting :: get('first_day_of_week');
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {

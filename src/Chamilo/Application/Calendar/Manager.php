@@ -11,6 +11,8 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Core\User\Component\UserSettingsComponent;
 
 /**
  *
@@ -103,6 +105,23 @@ abstract class Manager extends Application
     private function addGeneralTabs(DynamicVisualTabsRenderer $tabs)
     {
         $currentAction = $this->getRequest()->query->get(self :: PARAM_ACTION);
+
+        $settingsUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_USER_SETTINGS,
+                UserSettingsComponent :: PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'));
+
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                'configuration',
+                Translation :: get('ConfigComponent'),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Configuration'),
+                $settingsUrl->getUrl(),
+                false,
+                false,
+                DynamicVisualTab :: POSITION_RIGHT,
+                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
 
         $availabilityUrl = new Redirect(
             array(
@@ -199,7 +218,14 @@ abstract class Manager extends Application
      */
     public function getCurrentRendererType()
     {
-        return $this->getRequest()->query->get(ViewRenderer :: PARAM_TYPE, ViewRenderer :: TYPE_MONTH);
+        $requestRendererType = $this->getRequest()->query->get(ViewRenderer :: PARAM_TYPE);
+
+        if (! $requestRendererType)
+        {
+            return LocalSetting :: getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
+        }
+
+        return $requestRendererType;
     }
 
     /**
