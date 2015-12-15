@@ -26,7 +26,7 @@ class MiniMonthCalendar extends MonthCalendar
     {
         parent :: __construct($displayTime);
 
-        $setting = PlatformSetting :: get('first_day_of_week');
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {

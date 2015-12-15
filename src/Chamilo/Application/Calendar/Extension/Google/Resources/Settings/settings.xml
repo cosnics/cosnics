@@ -7,8 +7,5 @@
 			<setting name="client_secret" field="text" default="" />
 			<setting name="token" field="text" default="" user_setting="1" />
 		</category>
-		<category name="caching">
-			<setting name="refresh_external" field="text" default="60" user_setting="1" />
-		</category>
 	</settings>
 </package>

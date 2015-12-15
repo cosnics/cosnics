@@ -65,7 +65,7 @@ class MiniWeekCalendar extends Calendar
      */
     public function getStartTime()
     {
-        $setting = PlatformSetting :: get('first_day_of_week');
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -83,7 +83,7 @@ class MiniWeekCalendar extends Calendar
      */
     public function getEndTime()
     {
-        $setting = PlatformSetting :: get('first_day_of_week');
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {

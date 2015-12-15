@@ -42,7 +42,7 @@ class CalendarPopupComponent extends \Chamilo\Libraries\Ajax\Manager implements 
             Translation :: get("FridayLong", null, Utilities :: COMMON_LIBRARIES),
             Translation :: get("SaturdayLong", null, Utilities :: COMMON_LIBRARIES));
 
-        $start_of_week = PlatformSetting :: get('first_day_of_week');
+        $start_of_week = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
         if ($start_of_week == 'sunday')
         {
             array_unshift($DaysShort, Translation :: get("SundayShort", null, Utilities :: COMMON_LIBRARIES));

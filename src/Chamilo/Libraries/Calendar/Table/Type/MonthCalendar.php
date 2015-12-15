@@ -56,7 +56,7 @@ class MonthCalendar extends Calendar
     public function getStartTime()
     {
         $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
-        $setting = PlatformSetting :: get('first_day_of_week');
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -94,7 +94,7 @@ class MonthCalendar extends Calendar
         $firstDayNr = date('w', $firstDay) == 0 ? 6 : date('w', $firstDay) - 1;
         $header = $this->getHeader();
 
-        $setting = PlatformSetting :: get('first_day_of_week');
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
