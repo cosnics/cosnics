@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
