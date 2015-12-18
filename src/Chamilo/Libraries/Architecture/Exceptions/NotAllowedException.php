@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -9,8 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * This class represents a parameter not defined exception.
- * Throw this if you expected an URL parameter that is not
+ * This class represents a parameter not defined exception. Throw this if you expected an URL parameter that is not
  * there
  */
 class NotAllowedException extends \Exception
@@ -34,12 +32,9 @@ class NotAllowedException extends \Exception
 
     public function getLoginForm()
     {
-        $redirect = new Redirect(
-            array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_LOGIN));
+        $redirect = new Redirect();
 
-        $form = new FormValidator('formLogin', 'post', $redirect->getUrl());
+        $form = new FormValidator('formLogin', 'post', $redirect->getCurrentUrl());
 
         $form->get_renderer()->setElementTemplate('<div class="row">{element}</div>');
 
