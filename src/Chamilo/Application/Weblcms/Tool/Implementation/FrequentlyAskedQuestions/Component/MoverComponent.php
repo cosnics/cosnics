@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -35,7 +35,7 @@ class MoverComponent extends Manager
                 $failure = false;
                 $message = Translation :: get(
                     'ObjectMoved',
-                    array('OBJECT' => Translation :: get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')),
+                    array('OBJECT' => Translation :: get('FrequentlyAskedQuestions', null, 'Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions')),
                     Utilities :: COMMON_LIBRARIES);
             }
             else
@@ -43,7 +43,7 @@ class MoverComponent extends Manager
                 $failure = true;
                 $message = Translation :: get(
                     'ObjectNotMoved',
-                    array('OBJECT' => Translation :: get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')),
+                    array('OBJECT' => Translation :: get('FrequentlyAskedQuestions', null, 'Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions')),
                     Utilities :: COMMON_LIBRARIES);
             }
 

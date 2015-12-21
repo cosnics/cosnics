@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestio
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
-use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Manager;
 use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
