@@ -10,6 +10,8 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 
 class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer implements
     TableCellRendererActionsColumnSupport
@@ -31,8 +33,12 @@ class GlossaryViewerTableCellRenderer extends DataClassTableCellRenderer impleme
             case ContentObject :: PROPERTY_TITLE :
                 return $this->glossary_item->get_title();
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return $this->glossary_item->get_description();
 
+                return ContentObjectRenditionImplementation :: launch(
+                    $this->glossary_item,
+                    ContentObjectRendition :: FORMAT_HTML,
+                    ContentObjectRendition :: VIEW_DESCRIPTION,
+                    $this->get_component());
         }
         return parent :: render_cell($column, $glossary_item);
     }
