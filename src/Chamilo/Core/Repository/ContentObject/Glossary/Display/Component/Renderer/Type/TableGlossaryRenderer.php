@@ -30,6 +30,7 @@ class TableGlossaryRenderer extends GlossaryRenderer implements TableSupport
      */
     public function get_parameters()
     {
+        return $this->get_component()->get_parameters();
     }
 
     /*
