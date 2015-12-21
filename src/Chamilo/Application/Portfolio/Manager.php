@@ -30,7 +30,7 @@ abstract class Manager extends Application
      */
     public function get_current_user_id()
     {
-        return Request :: get(self :: PARAM_USER_ID, $this->get_user_id());
+        return $this->getRequest()->query->get(self :: PARAM_USER_ID, $this->get_user_id());
     }
 
     /**

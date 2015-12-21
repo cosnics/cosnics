@@ -65,7 +65,8 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     public function run()
     {
-        $this->set_parameter(self :: PARAM_USER_ID, $this->get_user_id());
+        $this->set_parameter(self :: PARAM_USER_ID, $this->get_current_user_id());
+
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER_ID),
             new StaticConditionVariable($this->get_current_user_id()));
