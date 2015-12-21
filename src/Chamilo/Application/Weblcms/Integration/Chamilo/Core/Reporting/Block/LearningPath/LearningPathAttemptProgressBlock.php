@@ -78,8 +78,7 @@ class LearningPathAttemptProgressBlock extends ToolBlock
                     \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ATTEMPT_ID) : $params[\Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ATTEMPT_ID] = $tracker->get_id();
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ASSESSMENT_ID] = $object->get_id();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(
-                    LearningPath :: class_name(),
-                    true);
+                    LearningPath :: class_name());
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: ACTION_VIEW_ASSESSMENT_RESULTS;
 
                 $redirect = new Redirect(

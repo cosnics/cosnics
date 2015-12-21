@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Portfolio;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * Portfolio Application

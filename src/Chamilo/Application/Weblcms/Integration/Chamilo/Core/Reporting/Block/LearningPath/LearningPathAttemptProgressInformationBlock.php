@@ -76,8 +76,7 @@ class LearningPathAttemptProgressInformationBlock extends ToolBlock
         $params[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course_id;
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(
-            LearningPath :: class_name(),
-            true);
+            LearningPath :: class_name());
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $publication_id;
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
 

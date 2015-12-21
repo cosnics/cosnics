@@ -45,7 +45,7 @@ class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
                 $dsn .= 'dbname=' . $params['dbname'] . ';';
             }
         }
-        elseif(extension_loaded('pdo_sqlsrv'))
+        elseif (extension_loaded('pdo_sqlsrv'))
         {
             $dsn = 'sqlsrv:Server=' . $params['host'] . ';Database=' . $params['dbname'];
         }

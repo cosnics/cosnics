@@ -191,7 +191,7 @@ class StatisticsViewerComponent extends Manager implements DelegateComponent
                         new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
                     $component = $factory->getComponent();
                     $component->set_template_by_name(LearningPathAttemptProgressTemplate :: class_name());
-                    $component->run();
+                    return $component->run();
                 }
             }
         }
