@@ -58,6 +58,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             $itemTitle->set_title(Translation :: get('ChangeLanguage'));
             $itemTitle->set_isocode(Translation :: getInstance()->getLanguageIsocode());
             $itemTitle->set_item_id($languageItem->get_id());
+
             if (! $itemTitle->create())
             {
                 return false;

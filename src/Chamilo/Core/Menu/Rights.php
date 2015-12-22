@@ -49,7 +49,7 @@ class Rights extends RightsUtil
             $item_id,
             0,
             $parent_id,
-            false,
+            0,
             0,
             self :: TREE_TYPE_ROOT,
             true);

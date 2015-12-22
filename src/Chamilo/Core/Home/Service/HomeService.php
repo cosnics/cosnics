@@ -125,9 +125,14 @@ class HomeService
         {
             foreach ($typeElements as $typeElement)
             {
-                return $this->createDefaultElementByUserIdentifier($elementIdentifierMap, $typeElement, $userIdentifier);
+                if (!$this->createDefaultElementByUserIdentifier($elementIdentifierMap, $typeElement, $userIdentifier))
+                {
+                    return false;
+                }
             }
         }
+
+        return true;
     }
 
     private function createDefaultElementByUserIdentifier(&$elementIdentifierMap, Element $element, $userIdentifier)

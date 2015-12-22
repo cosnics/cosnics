@@ -57,6 +57,13 @@ class AttemptResultViewerComponent extends Manager
     private $assessment_publication;
 
     /**
+     * The question attempt
+     *
+     * @var QuestionAttempt[]
+     */
+    private $question_attempts;
+
+    /**
      * Runs this component
      *
      * @throws \libraries\architecture\exceptions\NotAllowedException
@@ -129,6 +136,66 @@ class AttemptResultViewerComponent extends Manager
             $context,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
+    }
+
+    /**
+     * Returns the registered question ids
+     *
+     * @return int[] $question_ids
+     */
+    public function get_registered_question_ids()
+    {
+        $question_ids = array();
+
+        $question_attempts = $this->get_assessment_question_attempts();
+        foreach ($question_attempts as $question_attempt)
+        {
+            $question_ids[] = $question_attempt->get_question_complex_id();
+        }
+
+        return $question_ids;
+    }
+
+    /**
+     * Returns the assessment question attempts
+     *
+     * @return QuestionAttempt[]
+     */
+    public function get_assessment_question_attempts()
+    {
+        if (is_null($this->question_attempts))
+        {
+            $this->question_attempts = $this->retrieve_question_attempts();
+        }
+
+        return $this->question_attempts;
+    }
+
+    /**
+     * Retrieves the question attempts for the selected assessment attempt
+     *
+     * @return QuestionAttempt[]
+     */
+    protected function retrieve_question_attempts()
+    {
+        $question_attempts = array();
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                QuestionAttempt :: class_name(),
+                QuestionAttempt :: PROPERTY_ASSESSMENT_ATTEMPT_ID),
+            new StaticConditionVariable($this->assessment_attempt->get_id()));
+
+        $question_attempts_result_set = DataManager :: retrieves(
+            QuestionAttempt :: class_name(),
+            new DataClassRetrievesParameters($condition));
+
+        while ($question_attempt = $question_attempts_result_set->next_result())
+        {
+            $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
+        }
+
+        return $question_attempts;
     }
 
     /**

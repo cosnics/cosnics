@@ -541,7 +541,8 @@ class CourseSettingsController
     public function install_course_settings(\Chamilo\Configuration\Package\Action\Installer $installer,
         $tool_registration_id = null)
     {
-        $settings_file = Path :: getInstance()->getResourcesPath($installer->package()) . 'Settings/course_settings.xml';
+        $settings_file = Path :: getInstance()->getResourcesPath($installer->package()) . 'Settings' .
+             DIRECTORY_SEPARATOR . 'course_settings.xml';
 
         if (self :: create_course_settings_from_xml($settings_file, $tool_registration_id))
         {
@@ -588,7 +589,7 @@ class CourseSettingsController
                     $setting->set_tool_id($tool_registration_id);
                 }
 
-                $setting->set_global_setting(is_null($tool_registration_id));
+                $setting->set_global_setting((integer) is_null($tool_registration_id));
                 $setting->set_name($course_setting_element->getAttribute('name'));
 
                 if (! $setting->create())
