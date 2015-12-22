@@ -61,10 +61,29 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
         ini_set('memory_limit', - 1);
         set_time_limit(0);
 
-        if (! $this->register_tool() || ! CourseSettingsController :: get_instance()->install_course_settings(
+        if (! $this->register_tool())
+        {
+            return false;
+        }
+
+        if (! CourseSettingsController :: get_instance()->install_course_settings(
             $this,
-            $this->tool_registration->get_id()) || ! $this->install_static_settings() ||
-             ! $this->install_tool_for_existing_course_types() || ! $this->install_tool_for_existing_courses())
+            $this->tool_registration->get_id()))
+        {
+            return false;
+        }
+
+        if (! $this->install_static_settings())
+        {
+            return false;
+        }
+
+        if (! $this->install_tool_for_existing_course_types())
+        {
+            return false;
+        }
+
+        if (! $this->install_tool_for_existing_courses())
         {
             return false;
         }
@@ -111,7 +130,8 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
     }
 
     /**
-     * Retrieves a course section type from the package info. If no package info or course section definition is found
+     * Retrieves a course section type from the package info.
+     * If no package info or course section definition is found
      * the default section "tool" is selected.
      *
      * @return int

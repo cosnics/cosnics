@@ -36,16 +36,16 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-        $this->fixTemplates();
-        $this->fixAssessmentMatchNumericQuestions();
-        $this->fixAssessmentMatchTextQuestions();
+//         $this->fixTemplates();
+//         $this->fixAssessmentMatchNumericQuestions();
+//         $this->fixAssessmentMatchTextQuestions();
         $this->fixAssessmentMatchingQuestions();
-        $this->fixAssessmentMatrixQuestions();
-        $this->fixAssessmentMultipleChoiceQuestions();
-        $this->fixAssessmentSelectQuestions();
-        $this->fixHotspotQuestions();
-        $this->fixOrderingQuestions();
-        $this->fixAssignmentAllowedTypes();
+//         $this->fixAssessmentMatrixQuestions();
+//         $this->fixAssessmentMultipleChoiceQuestions();
+//         $this->fixAssessmentSelectQuestions();
+//         $this->fixHotspotQuestions();
+//         $this->fixOrderingQuestions();
+//         $this->fixAssignmentAllowedTypes();
     }
 
     private function fixTemplates()
@@ -141,9 +141,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
                 $newOptions[$key] = new AssessmentMatchingQuestionOption(
                     $oldOption->value,
+                    $oldOption->match,
                     $oldOption->score,
-                    $oldOption->feedback,
-                    $oldOption->match);
+                    $oldOption->feedback);
             }
 
             $existingQuestion->set_options($newOptions);
