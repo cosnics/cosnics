@@ -31,7 +31,8 @@ use Chamilo\Application\Weblcms\Manager;
  */
 
 /**
- * This class represents a learning object publication. When publishing a learning object from the repository in the
+ * This class represents a learning object publication.
+ * When publishing a learning object from the repository in the
  * weblcms application, a new object of this type is created.
  */
 class ContentObjectPublication extends DataClass implements DisplayOrderDataClassListenerSupport
@@ -43,7 +44,6 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_TOOL = 'tool';
-    const PROPERTY_PARENT_ID = 'parent_id';
     const PROPERTY_CATEGORY_ID = 'category_id';
     const PROPERTY_FROM_DATE = 'from_date';
     const PROPERTY_TO_DATE = 'to_date';
@@ -56,7 +56,8 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     const PROPERTY_SHOW_ON_HOMEPAGE = 'show_on_homepage';
     const PROPERTY_ALLOW_COLLABORATION = 'allow_collaboration';
     const TYPE_FILE = 'file';
-    // added tos upport mailing within content object
+
+    // added to support mailing within content object
     private $target_course_groups;
 
     private $target_users;
@@ -80,7 +81,6 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
                 self :: PROPERTY_CONTENT_OBJECT_ID,
                 self :: PROPERTY_COURSE_ID,
                 self :: PROPERTY_TOOL,
-                self :: PROPERTY_PARENT_ID,
                 self :: PROPERTY_CATEGORY_ID,
                 self :: PROPERTY_FROM_DATE,
                 self :: PROPERTY_TO_DATE,
@@ -122,16 +122,6 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     public function get_tool()
     {
         return $this->get_default_property(self :: PROPERTY_TOOL);
-    }
-
-    /**
-     * Gets the parent_id of the learning object publication
-     *
-     * @return int
-     */
-    public function get_parent_id()
-    {
-        return $this->get_default_property(self :: PROPERTY_PARENT_ID);
     }
 
     /**
@@ -361,11 +351,6 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     public function set_tool($tool)
     {
         $this->set_default_property(self :: PROPERTY_TOOL, $tool);
-    }
-
-    public function set_parent_id($parent_id)
-    {
-        $this->set_default_property(self :: PROPERTY_PARENT_ID, $parent_id);
     }
 
     public function set_category_id($category)
