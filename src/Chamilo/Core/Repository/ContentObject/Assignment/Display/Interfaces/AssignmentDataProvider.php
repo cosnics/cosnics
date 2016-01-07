@@ -12,6 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 interface AssignmentDataProvider
 {
+    const AVERAGE_SCORE = 'average_score';
 
     /**
      *
@@ -147,4 +148,13 @@ interface AssignmentDataProvider
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
     public function findEntryByIdentifier($entryIdentifier);
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param integer $entityType
+     * @param integer $entityId
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
+     */
+    public function getEntityRendererForEntityTypeAndId(Application $application, $entityType, $entityId);
 }

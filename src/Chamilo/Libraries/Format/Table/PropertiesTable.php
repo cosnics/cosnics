@@ -63,4 +63,22 @@ class PropertiesTable extends HTML_Table
             $this->setCellAttributes($row, 0, 'style="font-style: italic;text-align:center;" colspan=2');
         }
     }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     *
+     * @param string[] $properties
+     */
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
+    }
 }

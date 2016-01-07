@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 
 /**
  *
@@ -72,10 +73,13 @@ class BrowserComponent extends Manager implements TableSupport
             $this->getEntityType(),
             $this->getEntityIdentifier());
 
+        $averageScoreValue = isset($averageScore[AssignmentDataProvider :: AVERAGE_SCORE]) ? $averageScore[AssignmentDataProvider :: AVERAGE_SCORE] .
+             ' %' : '-';
+
         $properties = array();
         $properties[Translation :: get('EntriesWithScore')] = $scoreCount . '/' . $entryCount;
         $properties[Translation :: get('EntriesWithFeedback')] = $feedbackCount . '/' . $entryCount;
-        $properties[Translation :: get('AverageScore')] = $averageScore;
+        $properties[Translation :: get('AverageScore')] = $averageScoreValue;
 
         $table = new PropertiesTable($properties);
 

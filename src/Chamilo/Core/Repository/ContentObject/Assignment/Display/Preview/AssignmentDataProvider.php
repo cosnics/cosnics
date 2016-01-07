@@ -69,4 +69,113 @@ class AssignmentDataProvider implements
     {
         return new EntityTable($application, $this);
     }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::canEditAssignment()
+     */
+    public function canEditAssignment()
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countDistinctFeedbackForEntityTypeAndId()
+     */
+    public function countDistinctFeedbackForEntityTypeAndId($entityType, $entityId)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countDistinctScoreForEntityTypeAndId()
+     */
+    public function countDistinctScoreForEntityTypeAndId($entityType, $entityId)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countEntriesForEntityTypeAndId()
+     */
+    public function countEntriesForEntityTypeAndId($entityType, $entityId)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countFeedbackByEntityTypeAndEntityId()
+     */
+    public function countFeedbackByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countFeedbackByEntryIdentifier()
+     */
+    public function countFeedbackByEntryIdentifier($entryIdentifier)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createEntry()
+     */
+    public function createEntry($entityType, $entityId, $userId, $contentObjectId, $ipAdress)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findEntryByIdentifier()
+     */
+    public function findEntryByIdentifier($entryIdentifier)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getAverageScoreForEntityTypeAndId()
+     */
+    public function getAverageScoreForEntityTypeAndId($entityType, $entityId)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getCurrentEntityType()
+     */
+    public function getCurrentEntityType()
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntryTableForEntityTypeAndId()
+     */
+    public function getEntryTableForEntityTypeAndId(\Chamilo\Libraries\Architecture\Application\Application $application,
+        $entityType, $entityId)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::isDateAfterAssignmentEndTime()
+     */
+    public function isDateAfterAssignmentEndTime($date)
+    {
+        // TODO Auto-generated method stub
+    }
 }
