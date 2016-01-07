@@ -18,10 +18,12 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
         $renderer = new ContentObjectResourceRenderer($this, $this->get_content_object()->get_description());
         $html[] = $renderer->run();
         $html[] = '<div class="clear"></div>';
+
         if (method_exists($this->get_rendition_implementation(), 'get_description'))
         {
             $html[] = $this->get_rendition_implementation()->get_description();
         }
+
         $html[] = $this->get_attachments();
         $html[] = '</div>';
 
@@ -32,6 +34,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
     {
         $object = $this->get_content_object();
         $html = array();
+
         if ($object instanceof AttachmentSupport)
         {
             $attachments = $object->get_attachments();
@@ -59,6 +62,7 @@ class HtmlDescriptionContentObjectRendition extends HtmlContentObjectRendition
                 $html[] = '</div>';
             }
         }
+
         return implode(PHP_EOL, $html);
     }
 }

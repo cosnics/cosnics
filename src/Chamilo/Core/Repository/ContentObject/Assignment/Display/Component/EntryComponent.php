@@ -3,11 +3,17 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\NoteForm;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
+use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -25,6 +31,18 @@ class EntryComponent extends Manager
      */
     private $entry;
 
+    /**
+     *
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
+     */
+    private $scoreForm;
+
+    /**
+     *
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\NoteForm
+     */
+    private $noteForm;
+
     public function run()
     {
         $entryIdentifier = $this->getRequest()->query->get(self :: PARAM_ENTRY_ID);
@@ -39,9 +57,7 @@ class EntryComponent extends Manager
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->renderDetails();
-//         $html[] = $this->renderReporting();
-//         $html[] = $this->renderEntityTable();
+        $html[] = $this->renderTabs();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -51,9 +67,43 @@ class EntryComponent extends Manager
      *
      * @return string
      */
-    private function renderDetails()
+    public function renderTabs()
     {
-        $contentObject = $this->entry->getContentObject();
+        $tabsRenderer = new DynamicTabsRenderer('entry');
+
+        $tabsRenderer->add_tab(
+            new DynamicContentTab(
+                'details',
+                Translation :: get('DetailsFeedback'),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Details'),
+                $this->renderDetails()));
+
+        $tabsRenderer->add_tab(
+            new DynamicContentTab(
+                'entry',
+                Translation :: get('Entry'),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Entry'),
+                $this->renderContentObject()));
+
+        return $tabsRenderer->render();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
+     */
+    public function getEntry()
+    {
+        return $this->entry;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function renderContentObject()
+    {
+        $contentObject = $this->getEntry()->getContentObject();
 
         $display = ContentObjectRenditionImplementation :: factory(
             $contentObject,
@@ -68,53 +118,58 @@ class EntryComponent extends Manager
      *
      * @return string
      */
-    private function renderReporting()
+    protected function renderDetails()
     {
+        $dateFormat = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
+        $submittedDate = DatetimeUtilities :: format_locale_date($dateFormat, $this->getEntry()->getSubmitted());
+
         $html = array();
 
-        $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath('Chamilo\Core\Reporting', 'Logo/16') . ');">';
-        $html[] = '<div class="title">' . Translation :: get('Reporting') . '</div>';
-
-        $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
-        $entryCount = $this->getDataProvider()->countDistinctEntriesByEntityType($this->getEntityType());
-        $feedbackCount = $this->getDataProvider()->countDistinctFeedbackByEntityType($this->getEntityType());
-        $lateEntryCount = $this->getDataProvider()->countDistinctLateEntriesByEntityType($this->getEntityType());
-        $entityCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
-
         $properties = array();
-        $properties[Translation :: get('EntriesForEntityType', array('NAME' => $entityName))] = $entryCount . '/' .
-             $entityCount;
-        $properties[Translation :: get('FeedbackForEntityType', array('NAME' => $entityName))] = $feedbackCount . '/' .
-             $entityCount;
-        $properties[Translation :: get('LateEntriesForEntityType', array('NAME' => $entityName))] = $lateEntryCount . '/' .
-             $entityCount;
+        $properties[Translation :: get('Submitted')] = $submittedDate;
+
+        $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
+            $this,
+            $this->getEntry()->getEntityType(),
+            $this->getEntry()->getEntityId());
+
+        $properties = array_merge($properties, $entityRenderer->getProperties());
+
+        $properties[Translation :: get('Score')] = $this->getScoreForm()->render();
+        $properties[Translation :: get('Note')] = $this->getNoteForm()->render();
 
         $table = new PropertiesTable($properties);
 
         $html[] = $table->toHtml();
-
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
 
         return implode(PHP_EOL, $html);
     }
 
     /**
      *
-     * @return string
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
      */
-    private function renderEntityTable()
+    protected function getScoreForm()
     {
-        return $this->getDataProvider()->getEntityTableForType($this, $this->getEntityType())->as_html();
+        if (! isset($this->scoreForm))
+        {
+            $this->scoreForm = new ScoreForm($this->getEntry(), $this->getDataProvider(), $this->get_url());
+        }
+
+        return $this->scoreForm;
     }
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableSupport::get_table_condition()
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
      */
-    public function get_table_condition($tableClassName)
+    protected function getNoteForm()
     {
-        // TODO Auto-generated method stub
+        if (! isset($this->noteForm))
+        {
+            $this->noteForm = new NoteForm($this->getEntry(), $this->getDataProvider(), $this->get_url());
+        }
+
+        return $this->noteForm;
     }
 }

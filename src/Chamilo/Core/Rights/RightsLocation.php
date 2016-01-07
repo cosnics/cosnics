@@ -136,12 +136,12 @@ class RightsLocation extends NestedTreeNode
 
     public function inherit()
     {
-        $this->set_inherit(true);
+        $this->set_inherit(1);
     }
 
     public function disinherit()
     {
-        $this->set_inherit(false);
+        $this->set_inherit(0);
     }
 
     public function get_locked()
