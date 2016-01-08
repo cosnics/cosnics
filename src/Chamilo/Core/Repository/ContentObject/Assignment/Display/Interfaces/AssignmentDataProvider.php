@@ -2,6 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
 
 /**
  *
@@ -157,4 +161,50 @@ interface AssignmentDataProvider
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
      */
     public function getEntityRendererForEntityTypeAndId(Application $application, $entityType, $entityId);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $submittedScore
+     * @return boolean
+     */
+    public function createScore(Entry $entry, User $user, $submittedScore);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score
+     * @return boolean
+     */
+    public function updateScore(Score $score);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $submittedNote
+     * @return boolean
+     */
+    public function createNote(Entry $entry, User $user, $submittedNote);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note $note
+     * @return boolean
+     */
+    public function updateNote(Note $note);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     */
+    public function findScoreByEntry(Entry $entry);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+     */
+    public function findNoteByEntry(Entry $entry);
 }
