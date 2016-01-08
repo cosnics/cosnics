@@ -3,11 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\NoteForm;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\DetailsForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\DetailsProcessor;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -33,15 +32,21 @@ class EntryComponent extends Manager
 
     /**
      *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
      */
-    private $scoreForm;
+    private $score;
 
     /**
      *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\NoteForm
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
      */
-    private $noteForm;
+    private $note;
+
+    /**
+     *
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\detailsForm
+     */
+    private $detailsForm;
 
     public function run()
     {
@@ -54,6 +59,8 @@ class EntryComponent extends Manager
 
         $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
 
+        $this->processSubmittedData();
+
         $html = array();
 
         $html[] = $this->render_header();
@@ -63,11 +70,62 @@ class EntryComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
+    protected function processSubmittedData()
+    {
+        $detailsForm = $this->getDetailsForm();
+
+        if ($detailsForm->validate())
+        {
+            $detailsProcessor = new DetailsProcessor(
+                $this->getDataProvider(),
+                $this->getUser(),
+                $this->getEntry(),
+                $this->getScore(),
+                $this->getNote(),
+                $detailsForm->exportValues());
+
+            if (! $detailsProcessor->run())
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score
+     */
+    protected function getScore()
+    {
+        if (! isset($this->score))
+        {
+            $this->score = $this->getDataProvider()->findScoreByEntry($this->getEntry());
+        }
+
+        return $this->score;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
+     */
+    protected function getNote()
+    {
+        if (! isset($this->note))
+        {
+            $this->note = $this->getDataProvider()->findNoteByEntry($this->getEntry());
+        }
+
+        return $this->note;
+    }
+
     /**
      *
      * @return string
      */
-    public function renderTabs()
+    protected function renderTabs()
     {
         $tabsRenderer = new DynamicTabsRenderer('entry');
 
@@ -92,7 +150,7 @@ class EntryComponent extends Manager
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry
      */
-    public function getEntry()
+    protected function getEntry()
     {
         return $this->entry;
     }
@@ -135,41 +193,62 @@ class EntryComponent extends Manager
 
         $properties = array_merge($properties, $entityRenderer->getProperties());
 
-        $properties[Translation :: get('Score')] = $this->getScoreForm()->render();
-        $properties[Translation :: get('Note')] = $this->getNoteForm()->render();
-
-        $table = new PropertiesTable($properties);
-
-        $html[] = $table->toHtml();
+        $html[] = $this->renderPropertiesRows($properties);
+        $html[] = $this->getDetailsForm()->toHtml();
 
         return implode(PHP_EOL, $html);
     }
 
     /**
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
+     * @param string[] $properties
+     * @return string
      */
-    protected function getScoreForm()
+    protected function renderPropertiesRows($properties)
     {
-        if (! isset($this->scoreForm))
+        $html = array();
+
+        foreach ($properties as $label => $value)
         {
-            $this->scoreForm = new ScoreForm($this->getEntry(), $this->getDataProvider(), $this->get_url());
+            $html[] = $this->renderRow($label, $value);
         }
 
-        return $this->scoreForm;
+        return implode(PHP_EOL, $html);
     }
 
     /**
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\ScoreForm
+     * @param string $label
+     * @param string $value
+     * @return string
      */
-    protected function getNoteForm()
+    protected function renderRow($label, $value)
     {
-        if (! isset($this->noteForm))
+        $html = array();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="label">' . $label . '</div>';
+        $html[] = '<div class="formw">' . $value . '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\DetailsForm
+     */
+    protected function getDetailsForm()
+    {
+        if (! isset($this->detailsForm))
         {
-            $this->noteForm = new NoteForm($this->getEntry(), $this->getDataProvider(), $this->get_url());
+            $this->detailsForm = new DetailsForm(
+                $this->getScore(),
+                $this->getNote(),
+                $this->getDataProvider(),
+                $this->get_url(array(self :: PARAM_ENTRY_ID => $this->getEntry()->getId())));
         }
 
-        return $this->noteForm;
+        return $this->detailsForm;
     }
 }
