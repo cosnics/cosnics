@@ -5,3 +5,5 @@
 
 TypeName = "Feedback"
 BrowserComponent = "Feedback"
+AddFeedback = "Feedback"
+Feedback = "Existing feedback"

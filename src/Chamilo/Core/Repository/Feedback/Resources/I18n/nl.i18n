@@ -5,4 +5,5 @@
 
 TypeName = "Feedback"
 BrowserComponent = "Feedback"
-Comment = "Commentaar"
+AddFeedback = "Feedback"
+Feedback = "Bestaande feedback"

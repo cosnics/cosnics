@@ -42,80 +42,6 @@ div.user_category_block {
 	padding: 0px;
 }
 
-div.user_category_block div.user_category_description {
-	
-}
-
-div.feedback_block {
-	background-color: #f8f8f8;
-	text-align: justify;
-	margin: 0px 0px 10px 0px;
-	padding: 15px;
-	clear: both;
-}
-
-div.feedback_block form {
-	margin: 0px;
-	padding: 0px;
-}
-
-div.feedback_block div.configuration_form {
-	clear: both;
-	margin: 0px;
-	padding: 0px;
-	border: 0px solid #f8f8f8;
-}
-
-div.feedback_block div.configuration_form span.category {
-	position: relative;
-	top: -20px;
-	background-color: #F6F6F6;
-	font-weight: bold;
-	padding: 0px 5px 0px 5px;
-	font-size: 0px;
-}
-
-div.feedback {
-	background-color: white;
-	margin: -1px 0 0 0;
-	padding: 10px 10px 10px 44px;
-	background-position: 10px 10px;
-	background-repeat: no-repeat;
-	border: 1px solid #CCCCCC;
-	border-top: 1px dotted #CCCCCC;
-	border-bottom: 1px dotted #CCCCCC;
-	-moz-border-radius-topleft: 10px;
-	-moz-border-radius-bottomright: 10px;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-bottom-right-radius: 10px;
-}
-
-div.feedback div.title {
-	font-weight: bold;
-	border-bottom: 1px solid #CCCCCC;
-	width: 60%;
-	margin-bottom: 1em;
-	float: left;
-}
-
-div.feedback div.topactions {
-	text-align: right;
-}
-
-div.feedback div.description {
-	clear: both;
-}
-
-div.feedback span.publication_info {
-	font-weight: normal;
-	font-style: italic;
-	text-align: right;
-}
-
-div.feedback div.publication_actions {
-	text-align: right;
-}
-
 div.mini_calendar {
 	float: left;
 	width: 250px;
@@ -139,6 +65,11 @@ div.level_2 {
 div.level_3 {
 	background-color: #C48B33;
 	color: #FFFFFF;
+}
+
+#publication_feedback {
+	border: 1px solid #C6C6C6;
+	padding: 10px;
 }
 
 div.announcements div.title {
@@ -202,12 +133,7 @@ div.announcements {
 }
 
 div.questionform input[type=text],div.row div.questionform input[type=password],div.row div.questionform select
-	{ /*
-	background-image: url(../images/common/buttons/button_link.png);
-	background-repeat: no-repeat;
-	background-position: 2px center;
-	padding-left: 20px;
-	*/
+	{
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 }
