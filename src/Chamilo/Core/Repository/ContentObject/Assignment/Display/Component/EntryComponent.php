@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Form\DetailsForm;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\DetailsProcessor;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
@@ -21,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EntryComponent extends Manager
+class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport
 {
 
     /**
@@ -55,6 +57,10 @@ class EntryComponent extends Manager
         if (! $entryIdentifier)
         {
             throw new NoObjectSelectedException(Translation :: get('Entry'));
+        }
+        else
+        {
+            $this->set_parameter(self :: PARAM_ENTRY_ID, $entryIdentifier);
         }
 
         $this->entry = $this->getDataProvider()->findEntryByIdentifier($entryIdentifier);
@@ -132,7 +138,7 @@ class EntryComponent extends Manager
         $tabsRenderer->add_tab(
             new DynamicContentTab(
                 'details',
-                Translation :: get('DetailsFeedback'),
+                Translation :: get('Details'),
                 Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Details'),
                 $this->renderDetails()));
 
@@ -196,6 +202,11 @@ class EntryComponent extends Manager
         $html[] = $this->renderPropertiesRows($properties);
         $html[] = $this->getDetailsForm()->toHtml();
 
+        $factory = new ApplicationFactory(
+            \Chamilo\Core\Repository\Feedback\Manager :: context(),
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this));
+        $html[] = $factory->run();
+
         return implode(PHP_EOL, $html);
     }
 
@@ -250,5 +261,83 @@ class EntryComponent extends Manager
         }
 
         return $this->detailsForm;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
+     */
+    public function retrieve_feedbacks()
+    {
+        return $this->getDataProvider()->findFeedbackByEntry($this->getEntry());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::count_feedbacks()
+     */
+    public function count_feedbacks()
+    {
+        return $this->getDataProvider()->countFeedbackByEntry($this->getEntry());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedback()
+     */
+    public function retrieve_feedback($feedbackIdentifier)
+    {
+        return $this->getDataProvider()->findFeedbackByIdentifier($feedbackIdentifier);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::get_feedback()
+     */
+    public function get_feedback()
+    {
+        $feedback = $this->getDataProvider()->initializeFeedback();
+        $feedback->setEntryId($this->getEntry()->getId());
+        return $feedback;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_view_feedback()
+     */
+    public function is_allowed_to_view_feedback()
+    {
+        // TODO: Only course managers / teachers should be able to do this
+        return true;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_create_feedback()
+     */
+    public function is_allowed_to_create_feedback()
+    {
+        // TODO: Only course managers / teachers should be able to do this
+        return true;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_update_feedback()
+     */
+    public function is_allowed_to_update_feedback($feedback)
+    {
+        // TODO: Only course managers / teachers should be able to do this
+        return true;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::is_allowed_to_delete_feedback()
+     */
+    public function is_allowed_to_delete_feedback($feedback)
+    {
+        // TODO: Only course managers / teachers should be able to do this
+        return true;
     }
 }

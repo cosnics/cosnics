@@ -61,6 +61,10 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $html = array();
 
+            $html[] = '<div class="row">';
+            $html[] = '<div class="label">' . Translation :: get('Feedback') . '</div>';
+            $html[] = '<div class="formw">';
+
             while ($feedback = $feedbacks->next_result())
             {
                 $html[] = '<div class="feedback-container ' .
@@ -83,13 +87,13 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = '</div>';
 
                 $html[] = '<div class="photo">';
-                
+
                 $profilePhotoUrl = new Redirect(
                     array(
                         Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
                         Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
-                        \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID =>  $feedback->get_user()->get_id()));
-                
+                        \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $feedback->get_user()->get_id()));
+
                 $html[] = '<img style="width: 32px;" src="' . $profilePhotoUrl->getUrl() . '" />';
                 $html[] = '</div>';
 
@@ -149,6 +153,11 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $html[] = ResourceManager :: get_instance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Feedback', true) . 'Feedback.js');
             }
+
+            $html[] = '<div class="clear"></div>';
+            $html[] = '</div>';
+            $html[] = '<div class="clear"></div>';
+            $html[] = '</div>';
 
             if ($this->get_parent()->is_allowed_to_create_feedback())
             {

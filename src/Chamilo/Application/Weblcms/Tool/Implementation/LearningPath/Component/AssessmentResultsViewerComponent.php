@@ -3,14 +3,18 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Table\AssessmentResults\AssessmentResultsTable;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -26,9 +30,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  * This component renders the assessment attempts from the learning path. Depending on the parameters in the URL, it
@@ -64,6 +65,66 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
         {
             return $this->view_assessment_results();
         }
+    }
+
+    /**
+     * Returns the registered question ids
+     *
+     * @return int[] $question_ids
+     */
+    public function get_registered_question_ids()
+    {
+        $question_ids = array();
+
+        $question_attempts = $this->get_assessment_question_attempts();
+        foreach ($question_attempts as $question_attempt)
+        {
+            $question_ids[] = $question_attempt->get_question_complex_id();
+        }
+
+        return $question_ids;
+    }
+
+    /**
+     * Returns the assessment question attempts
+     *
+     * @return QuestionAttempt[]
+     */
+    public function get_assessment_question_attempts()
+    {
+        if (is_null($this->question_attempts))
+        {
+            $this->question_attempts = $this->retrieve_question_attempts();
+        }
+
+        return $this->question_attempts;
+    }
+
+    /**
+     * Retrieves the question attempts for the selected assessment attempt
+     *
+     * @return QuestionAttempt[]
+     */
+    protected function retrieve_question_attempts()
+    {
+        $question_attempts = array();
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                LearningPathQuestionAttempt :: class_name(),
+                LearningPathQuestionAttempt :: PROPERTY_ITEM_ATTEMPT_ID),
+            new StaticConditionVariable(Request :: get(self :: PARAM_LEARNING_PATH_ITEM_ATTEMPT_ID)));
+
+        $question_attempts_result_set = DataManager :: retrieves(
+            LearningPathQuestionAttempt :: class_name(),
+            new DataClassRetrievesParameters($condition));
+
+        while ($question_attempt = $question_attempts_result_set->next_result())
+        {
+            $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
+        }
+
+        return $question_attempts;
     }
 
     /**
@@ -191,8 +252,8 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
      */
     public function view_single_result()
     {
-        Request :: set_get(
-            'display_action',
+        $this->getRequest()->query->set(
+            \Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION,
             \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager :: ACTION_VIEW_ASSESSMENT_RESULT);
 
         $this->set_parameter(

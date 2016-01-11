@@ -6,6 +6,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note;
+use Chamilo\Libraries\Storage\ResultSet\DataClassResultSet;
 
 /**
  *
@@ -207,4 +208,31 @@ interface AssignmentDataProvider
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note
      */
     public function findNoteByEntry(Entry $entry);
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     */
+    public function initializeFeedback();
+
+    /**
+     *
+     * @param integer $feedbackIdentifier
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Feedback
+     */
+    public function findFeedbackByIdentifier($feedbackIdentifier);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @return integer
+     */
+    public function countFeedbackByEntry(Entry $entry);
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry
+     * @return DataClassResultSet
+     */
+    public function findFeedbackByEntry(Entry $entry);
 }
