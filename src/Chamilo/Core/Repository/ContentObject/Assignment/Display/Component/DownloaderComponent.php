@@ -17,5 +17,8 @@ class DownloaderComponent extends Manager
     {
         var_dump($this->getRequest()->query);
         var_dump($this->getRequest()->request);
+
+        $entryDownloader = new EntryDownloader($this->getDataProvider(),
+                $this->getUser());
     }
 }
