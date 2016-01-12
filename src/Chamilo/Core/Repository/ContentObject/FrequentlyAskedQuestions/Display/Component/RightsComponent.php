@@ -219,4 +219,14 @@ class RightsComponent extends Manager
     {
         return array(self :: PARAM_STEP);
     }
+    /**
+     * {@inheritDoc}
+     * @see \Chamilo\Libraries\Architecture\Application\Application::run()
+     */
+    public function run()
+    {
+        // TODO Auto-generated method stub
+
+    }
+
 }
