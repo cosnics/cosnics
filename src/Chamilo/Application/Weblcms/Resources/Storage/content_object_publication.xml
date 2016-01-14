@@ -17,9 +17,6 @@
 		<property name="show_on_homepage" type="boolean" notnull="1" default="0" />
 		<property name="allow_collaboration" type="boolean" notnull="1" default="0" />
 	</properties>
-	<index name="parent_id">
-		<indexproperty name="parent_id" />
-	</index>
 	<index name="date">
 		<indexproperty name="from_date" />
 		<indexproperty name="to_date" />

@@ -31,7 +31,7 @@ class LdapAuthentication extends CredentialsAuthentication implements UserRegist
      */
     public function login($password)
     {
-        if (! $this->is_configured())
+        if (! $this->isConfigured())
         {
             throw new \Exception(Translation :: get('CheckLDAPConfiguration'));
         }
@@ -123,6 +123,21 @@ class LdapAuthentication extends CredentialsAuthentication implements UserRegist
         }
 
         ldap_close($ldapConnect);
+    }
+
+    public function isConfigured()
+    {
+        $settings = $this->getConfiguration();
+
+        foreach ($settings as $setting => $value)
+        {
+            if (empty($value) || ! isset($value))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
