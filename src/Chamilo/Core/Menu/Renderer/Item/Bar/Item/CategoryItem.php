@@ -75,7 +75,7 @@ class CategoryItem extends Bar
             {
                 if (($child->get_id() && Rights :: get_instance()->is_allowed(
                     Rights :: VIEW_RIGHT,
-                    __NAMESPACE__,
+                    Manager::context(),
                     null,
                     $entities,
                     $child->get_id(),
