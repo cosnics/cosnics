@@ -630,3 +630,4 @@ AttachmentWarning = "There are attachments included in this publication, <a href
 DownloadSelectedPublicationsConfirm = "Download selected publications?"
 NumberShort = "No."
 LastModifiedOn = "Last modified on"
+ConfirmDeletePublication = "Are you sure you want to delete this publication?"

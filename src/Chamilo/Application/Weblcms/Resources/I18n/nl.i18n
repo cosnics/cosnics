@@ -629,3 +629,4 @@ AttachmentWarning = "Er zijn bijlagen toegevoegd aan deze publicatie, <a href="{
 DownloadSelectedPublicationsConfirm = "Download geselecteerde publicaties?"
 NumberShort = "Nr."
 LastModifiedOn = "Laatst aangepast op"
+ConfirmDeletePublication = "Ben je zeker dat je deze publicatie wil verwijderen?"
