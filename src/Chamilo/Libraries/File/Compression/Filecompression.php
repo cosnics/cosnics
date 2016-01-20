@@ -35,7 +35,7 @@ abstract class Filecompression
      */
     protected function create_temporary_directory()
     {
-        $path = Path :: getInstance()->getTemporaryPath(__NAMESPACE__) . uniqid();
+        $path = Path :: getInstance()->getTemporaryPath(__NAMESPACE__) . uniqid() . DIRECTORY_SEPARATOR;
         Filesystem :: create_dir($path);
         return $path;
     }

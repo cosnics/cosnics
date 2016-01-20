@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\EntryCompressor;
 
 /**
  *
@@ -15,10 +16,7 @@ class DownloaderComponent extends Manager
 
     public function run()
     {
-        var_dump($this->getRequest()->query);
-        var_dump($this->getRequest()->request);
-
-        $entryDownloader = new EntryDownloader($this->getDataProvider(),
-                $this->getUser());
+        $entryCompressor = new EntryCompressor($this->getDataProvider(), $this->get_root_content_object());
+        $entryCompressor->downloadAll($this->getRequest());
     }
 }

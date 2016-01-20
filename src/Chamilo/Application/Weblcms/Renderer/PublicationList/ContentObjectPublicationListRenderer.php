@@ -1052,7 +1052,7 @@ abstract class ContentObjectPublicationListRenderer
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE,
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON,
-                    true));
+                    true, null, null, Translation::get('ConfirmDeletePublication', null, 'Chamilo\Application\Weblcms')));
         }
 
         if (method_exists($this->get_tool_browser()->get_parent(), 'add_content_object_publication_actions'))

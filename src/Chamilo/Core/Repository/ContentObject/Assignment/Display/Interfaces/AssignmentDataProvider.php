@@ -156,12 +156,11 @@ interface AssignmentDataProvider
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param integer $entityType
      * @param integer $entityId
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
      */
-    public function getEntityRendererForEntityTypeAndId(Application $application, $entityType, $entityId);
+    public function getEntityRendererForEntityTypeAndId($entityType, $entityId);
 
     /**
      *
@@ -235,4 +234,18 @@ interface AssignmentDataProvider
      * @return DataClassResultSet
      */
     public function findFeedbackByEntry(Entry $entry);
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer $entityIdentifier
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]
+     */
+    public function findEntriesByEntityTypeAndIdentifier($entityType, $entityIdentifier);
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]
+     */
+    public function findEntries();
 }
