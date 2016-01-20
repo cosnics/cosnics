@@ -193,7 +193,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $properties[Translation :: get('Submitted')] = $submittedDate;
 
         $entityRenderer = $this->getDataProvider()->getEntityRendererForEntityTypeAndId(
-            $this,
             $this->getEntry()->getEntityType(),
             $this->getEntry()->getEntityId());
 
