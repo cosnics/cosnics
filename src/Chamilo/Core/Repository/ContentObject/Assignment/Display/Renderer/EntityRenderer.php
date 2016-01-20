@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -14,12 +13,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 abstract class EntityRenderer
 {
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $application;
 
     /**
      *
@@ -41,33 +34,13 @@ abstract class EntityRenderer
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $component
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
      * @param integer $entityId
      */
-    public function __construct(Application $application, AssignmentDataProvider $assignmentDataProvider, $entityId)
+    public function __construct(AssignmentDataProvider $assignmentDataProvider, $entityId)
     {
-        $this->application = $application;
         $this->assignmentDataProvider = $assignmentDataProvider;
         $this->entityId = $entityId;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     */
-    public function setApplication(Application $application)
-    {
-        $this->application = $application;
     }
 
     /**
@@ -149,4 +122,10 @@ abstract class EntityRenderer
      * @return string[]
      */
     abstract public function renderProperties(DataClass $entity);
+
+    /**
+     *
+     * @return string
+     */
+    abstract function getEntityName();
 }
