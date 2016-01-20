@@ -128,15 +128,14 @@ class ICalRenderer extends Renderer
         $event->add('SUMMARY', trim($providedEvent->getTitle()));
         $event->add('DESCRIPTION', $description);
 
-        $event->add(
-            'CREATED',
-            new \DateTime(date('Y-m-d\TH:i:s', time()), new \DateTimeZone(date_default_timezone_get())));
+        $event->add('CREATED', date('Y-m-d\TH:i:s', time()));
+        $event->add('DTSTAMP', date('Y-m-d\TH:i:s', time()));
 
-        $event->add(
-            'DTSTAMP',
-            new \DateTime(date('Y-m-d\TH:i:s', time()), new \DateTimeZone(date_default_timezone_get())));
-
-        $uniqueIdentifiers = array($providedEvent->getSource(), $providedEvent->getId());
+        $uniqueIdentifiers = array(
+            $providedEvent->getSource(),
+            $providedEvent->getId(),
+            $providedEvent->getStartDate(),
+            $providedEvent->getEndDate());
 
         $event->add('UID', md5(serialize($uniqueIdentifiers)));
 

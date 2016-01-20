@@ -61,8 +61,6 @@ class PclzipFilecompression extends Filecompression
         $pclzip = new PclZip($archiveFile);
         $pclzip->add($fileList, PCLZIP_OPT_REMOVE_PATH, $path);
 
-        Filesystem :: remove($temporaryPath);
-
         return $archiveFile;
     }
 }
