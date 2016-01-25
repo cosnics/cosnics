@@ -4,7 +4,7 @@
 		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
 		<property name="entity_id" type="integer" unsigned="1" notnull="1" />
 		<property name="entity_type" type="integer" unsigned="1" notnull="1" />
-		<property name="location_id" type="integer" unsigned="1" notnull="1" />
+		<property name="location_id" type="text" length="255" notnull="1" />
 		<property name="right_id" type="integer" unsigned="1" notnull="1" />
 		<property name="publication_id" type="integer" unsigned="1" notnull="1" />
 	</properties>
