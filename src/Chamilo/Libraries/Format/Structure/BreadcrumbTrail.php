@@ -237,14 +237,6 @@ class BreadcrumbTrail
 
         $html[] = '<div id="extra_item">';
         $toolbar = new Toolbar();
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('ShowActionBar'),
-                Theme :: getInstance()->getCommonImagePath('Action/ActionBar'),
-                '#',
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                false,
-                'action_bar_text'));
 
         if (is_array($extra_items) && count($extra_items) > 0)
         {
