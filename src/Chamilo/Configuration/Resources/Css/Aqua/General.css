@@ -1203,22 +1203,22 @@ div.action_bar table {
 	width: 100%;
 }
 
-div.action_bar .common_menu, div.action_bar .tool_menu, div.action_bar .search_menu
+div.action_bar .action-bar-container
 	{
 	padding: 5px 5px 5px 5px;
 	width: 33%;
 	vertical-align: top;
 }
 
-div.action_bar .tool_menu {
+div.action_bar .action-bar-middle-container {
 	width: 34%;
 }
 
-div.action_bar .search_menu div.search_form {
+div.action_bar div.search_form {
 	float: right;
 }
 
-div.action_bar .search_menu div.help_item {
+div.action_bar div.help_item {
 	float: left;
 }
 

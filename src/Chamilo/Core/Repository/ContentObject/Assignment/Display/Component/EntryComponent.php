@@ -368,6 +368,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
                 new ToolbarItem(
                     Translation :: get('ScoreOverview'),
                     Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+
+            $this->actionBar->addRightItem(
+                new ToolbarItem(
+                    Translation :: get('ScoreOverview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
         }
 
         return $this->actionBar;
