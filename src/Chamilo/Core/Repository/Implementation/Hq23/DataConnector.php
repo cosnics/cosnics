@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Implementation\Hq23;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;

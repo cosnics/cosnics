@@ -6,7 +6,7 @@ use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Table\Vocabulary\VocabularyTable;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;

@@ -4,7 +4,7 @@ namespace Chamilo\Core\Metadata\Vocabulary\Component;
 use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;

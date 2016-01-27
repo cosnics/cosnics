@@ -3,7 +3,7 @@ namespace Chamilo\Core\Rights\Editor\Component;
 
 use Chamilo\Core\Rights\Editor\Form\ManageForm;
 use Chamilo\Core\Rights\Editor\Manager;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
