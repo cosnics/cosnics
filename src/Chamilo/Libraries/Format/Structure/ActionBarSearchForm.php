@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -40,6 +41,7 @@ class ActionBarSearchForm extends FormValidator
     public function __construct($url)
     {
         parent :: __construct(self :: FORM_NAME, 'post', $url);
+        $this->setAttribute('class', 'form-inline');
         $this->renderer = clone $this->defaultRenderer();
 
         $query = $this->get_query();
@@ -58,18 +60,37 @@ class ActionBarSearchForm extends FormValidator
      */
     private function build_simple_search_form()
     {
-        $this->renderer->setElementTemplate('<div style="vertical-align: middle; float: left;">{element}</div>');
         $this->addElement(
             'text',
             self :: PARAM_SIMPLE_SEARCH_QUERY,
             Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
-            'size="20" class="search_query"');
+            'class="form-control input-sm"');
 
-        $this->addElement('style_submit_button', 'submit', null, array('class' => 'search'));
+        $this->renderer->setElementTemplate(
+            '<div class="form-group">
+                <label class="sr-only">{label}</label>
+                <div class="input-group">
+                    <div class="input-group-addon">' .
+                        Theme :: getInstance()->getCommonImage('Action/Search') .
+                    '</div>
+                    {element}
+                </div>
+            </div>',
+            self :: PARAM_SIMPLE_SEARCH_QUERY);
+
+        $this->addElement(
+            'style_submit_button',
+            'submit',
+            // Theme :: getInstance()->getCommonImage('Action/Search'),
+            Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'btn btn-default btn-sm'));
+
+        $this->renderer->setElementTemplate('{element}', 'submit');
 
         if ($this->get_query())
         {
             $this->addElement('style_submit_button', 'clear', null, array('class' => 'clear', 'value' => 'clear'));
+            $this->renderer->setElementTemplate('{element}', 'clear');
         }
     }
 
@@ -78,11 +99,7 @@ class ActionBarSearchForm extends FormValidator
      */
     public function as_html()
     {
-        $html = array();
-        $html[] = '<div class="simple_search">';
-        $html[] = $this->renderer->toHTML();
-        $html[] = '</div>';
-        return implode('', $html);
+        return $this->renderer->toHTML();
     }
 
     /**
@@ -93,10 +110,12 @@ class ActionBarSearchForm extends FormValidator
     public function get_query()
     {
         $query = Request :: post(self :: PARAM_SIMPLE_SEARCH_QUERY);
+
         if (! $query)
         {
             $query = Request :: get(self :: PARAM_SIMPLE_SEARCH_QUERY);
         }
+
         return $query;
     }
 }

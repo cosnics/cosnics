@@ -156,6 +156,13 @@ interface AssignmentDataProvider
 
     /**
      *
+     * @param integer[] $entryIdentifiers
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]
+     */
+    public function findEntriesByIdentifiers($entryIdentifiers);
+
+    /**
+     *
      * @param integer $entityType
      * @param integer $entityId
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Renderer\EntityRenderer
@@ -238,10 +245,10 @@ interface AssignmentDataProvider
     /**
      *
      * @param integer $entityType
-     * @param integer $entityIdentifier
+     * @param integer[] $entityIdentifiers
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry[]
      */
-    public function findEntriesByEntityTypeAndIdentifier($entityType, $entityIdentifier);
+    public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers);
 
     /**
      *

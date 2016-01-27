@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EntryCompressor
+class EntryDownloader
 {
 
     /**
@@ -105,16 +105,42 @@ class EntryCompressor
      */
     public function downloadByEntryIdentifier(Request $request, $entryIdentifier)
     {
-        return $this->downloadEntries($request, $this->compressByEntryIdentifier());
+        return $this->downloadByEntryIdentifiers($request, array($entryIdentifier));
     }
 
+    /**
+     *
+     * @param integer $entryIdentifier
+     * @return string
+     */
     public function compressByEntryIdentifier($entryIdentifier)
     {
-        $entry = $this->getAssignmentDataProvider()->findEntryByIdentifier($entryIdentifier);
+        return $this->compressByEntryIdentifiers(array($entryIdentifier));
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param integer[] $entryIdentifier
+     */
+    public function downloadByEntryIdentifiers(Request $request, $entryIdentifiers)
+    {
+        return $this->downloadEntries($request, $this->compressByEntryIdentifiers($entryIdentifiers));
+    }
+
+    /**
+     *
+     * @param integer[] $entryIdentifiers
+     * @return string
+     */
+    public function compressByEntryIdentifiers($entryIdentifiers)
+    {
+        $entries = $this->getAssignmentDataProvider()->findEntriesByIdentifiers($entryIdentifiers);
+        $entry = $entries[0];
 
         return $this->compressEntries(
             $this->getEntityArchiveFileName($entry->getEntityType(), $entry->getEntityId()),
-            array($entry));
+            $entries);
     }
 
     /**
@@ -138,11 +164,39 @@ class EntryCompressor
      */
     public function compressForEntityTypeAndIdentifier($entityType, $entityIdentifier)
     {
-        $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifier(
+        $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
             $entityType,
-            $entityIdentifier);
+            array($entityIdentifier));
 
-        return $this->compressEntries($this->getEntityArchiveFileName(entityType, $entityIdentifier), $entries);
+        return $this->compressEntries($this->getEntityArchiveFileName($entityType, $entityIdentifier), $entries);
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param integer $entityType
+     * @param integer[] $entityIdentifiers
+     */
+    public function downloadForEntityTypeAndIdentifiers(Request $request, $entityType, $entityIdentifiers)
+    {
+        return $this->downloadEntries(
+            $request,
+            $this->compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers));
+    }
+
+    /**
+     *
+     * @param integer $entityType
+     * @param integer[] $entityIdentifiers
+     * @return string
+     */
+    public function compressForEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
+    {
+        $entries = $this->getAssignmentDataProvider()->findEntriesByEntityTypeAndIdentifiers(
+            $entityType,
+            $entityIdentifiers);
+
+        return $this->compressEntries($this->getAssignmentName(), $entries);
     }
 
     /**
@@ -160,19 +214,31 @@ class EntryCompressor
      */
     public function downloadByRequest(Request $request)
     {
-        $entryIdentifier = $request->get(Manager :: PARAM_ENTRY_ID);
+        $entryIdentifiers = $request->get(Manager :: PARAM_ENTRY_ID);
 
-        if (! is_null($entryIdentifier))
+        if (! is_null($entryIdentifiers))
         {
-            return $this->downloadByEntryIdentifier($request, $entryIdentifier);
+            if (! is_array($entryIdentifiers))
+            {
+                $entryIdentifiers = array($entryIdentifiers);
+            }
+
+            return $this->downloadByEntryIdentifiers($request, $entryIdentifiers);
         }
 
         $entityType = $request->get(Manager :: PARAM_ENTITY_TYPE);
-        $entityIdentifier = $request->get(Manager :: PARAM_ENTITY_ID);
+        $entityIdentifiers = $request->get(Manager :: PARAM_ENTITY_ID);
 
-        if (! is_null($entityType) && ! is_null($entityIdentifier))
+        if (! is_null($entityType) && ! is_null($entityIdentifiers))
         {
-            return $this->downloadForEntityTypeAndIdentifier($request, $entityType, $entityIdentifier);
+            if (! is_array($entityIdentifiers))
+            {
+                return $this->downloadForEntityTypeAndIdentifier($request, $entityType, $entityIdentifiers);
+            }
+            else
+            {
+                return $this->downloadForEntityTypeAndIdentifiers($request, $entityType, $entityIdentifiers);
+            }
         }
 
         return $this->downloadAll($request);

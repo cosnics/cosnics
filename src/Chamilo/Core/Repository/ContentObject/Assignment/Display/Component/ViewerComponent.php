@@ -8,6 +8,8 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
 
 /**
  *
@@ -19,11 +21,18 @@ use Chamilo\Libraries\Platform\Translation;
 class ViewerComponent extends Manager implements TableSupport
 {
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Structure\ActionBarRenderer
+     */
+    private $actionBarRenderer;
+
     public function run()
     {
         $html = array();
 
         $html[] = $this->render_header();
+        $html[] = $this->getActionBarRenderer()->render();
         $html[] = $this->renderDetails();
         $html[] = $this->renderReporting();
         $html[] = $this->renderEntityTable();
@@ -36,7 +45,7 @@ class ViewerComponent extends Manager implements TableSupport
      *
      * @return string
      */
-    private function renderDetails()
+    protected function renderDetails()
     {
         $display = ContentObjectRenditionImplementation :: factory(
             $this->get_root_content_object(),
@@ -51,7 +60,7 @@ class ViewerComponent extends Manager implements TableSupport
      *
      * @return string
      */
-    private function renderReporting()
+    protected function renderReporting()
     {
         $html = array();
 
@@ -87,7 +96,7 @@ class ViewerComponent extends Manager implements TableSupport
      *
      * @return string
      */
-    private function renderEntityTable()
+    protected function renderEntityTable()
     {
         return $this->getDataProvider()->getEntityTableForType($this, $this->getEntityType())->as_html();
     }
@@ -99,5 +108,33 @@ class ViewerComponent extends Manager implements TableSupport
     public function get_table_condition($tableClassName)
     {
         // TODO Auto-generated method stub
+    }
+
+    protected function getActionBarRenderer()
+    {
+        if (! isset($this->actionBar))
+        {
+            $this->actionBar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+
+            $this->actionBar->addLeftItem(
+                new ToolbarItem(
+                    Translation :: get('Download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download')));
+            $this->actionBar->addLeftItem(
+                new ToolbarItem(
+                    Translation :: get('SubmissionSubmit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Add')));
+
+            $this->actionBar->addMiddleItem(
+                new ToolbarItem(
+                    Translation :: get('ScoreOverview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+            $this->actionBar->addMiddleItem(
+                new ToolbarItem(
+                    Translation :: get('EntriesOverview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+        }
+
+        return $this->actionBar;
     }
 }
