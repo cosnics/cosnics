@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Structure;
 
 /**
  * $Id: toolbar.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common.html.toolbar
  */
 class Toolbar
@@ -68,7 +68,7 @@ class Toolbar
 
     /**
      * Returns the toolbaritem from the given position
-     * 
+     *
      * @param int $index
      * @return ToolbarItem
      */
@@ -79,7 +79,7 @@ class Toolbar
 
     /**
      * Inserts an item in the toolbar
-     * 
+     *
      * @param ToolbarItem $item
      * @param int $index
      */
@@ -92,7 +92,7 @@ class Toolbar
 
     /**
      * Replaces an item in the toolbar
-     * 
+     *
      * @param ToolbarItem $item
      * @param int $index
      */
@@ -153,47 +153,57 @@ class Toolbar
 
     /**
      *
+     * @deprecated Use render() now
      * @return string
      */
     public function as_html()
+    {
+        return $this->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function render()
     {
         $toolbar_data = $this->items;
         $type = $this->get_type();
         $class_names = $this->class_names;
         $css = $this->css;
-        
+
         if (! is_array($class_names))
         {
             $class_names = array($class_names);
         }
         $class_names[] = 'toolbar_' . $type;
-        
+
         $html = array();
         $html[] = '<div class="toolbar">';
         $html[] = '<ul class="' . implode(' ', $class_names) . '"' . (isset($css) ? ' style="' . $css . '"' : '') . '>';
-        
+
         foreach ($toolbar_data as $index => $toolbar_item)
         {
             $classes = array();
-            
+
             if ($index == 0)
             {
                 $classes[] = 'first';
             }
-            
+
             if ($index == count($toolbar_data) - 1)
             {
                 $classes[] = 'last';
             }
-            
+
             $html[] = '<li' . (count($classes) ? ' class="' . implode(' ', $classes) . '"' : '') . '>' .
                  $toolbar_item->as_html() . '</li>';
         }
-        
+
         $html[] = '</ul>';
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = '</div>';
-        
+
         return implode($html);
     }
 

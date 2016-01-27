@@ -9,6 +9,8 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\DetailsProc
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -50,6 +52,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      */
     private $detailsForm;
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Structure\ActionBarRenderer
+     */
+    private $actionBarRenderer;
+
     public function run()
     {
         $entryIdentifier = $this->getRequest()->query->get(self :: PARAM_ENTRY_ID);
@@ -70,6 +78,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $html = array();
 
         $html[] = $this->render_header();
+        $html[] = $this->getActionBarRenderer()->render();
         $html[] = $this->renderTabs();
         $html[] = $this->render_footer();
 
@@ -338,5 +347,34 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     {
         // TODO: Only course managers / teachers should be able to do this
         return true;
+    }
+
+    protected function getActionBarRenderer()
+    {
+        if (! isset($this->actionBar))
+        {
+            $this->actionBar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+
+            $this->actionBar->addLeftItem(
+                new ToolbarItem(
+                    Translation :: get('Download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download')));
+            $this->actionBar->addLeftItem(
+                new ToolbarItem(
+                    Translation :: get('SubmissionSubmit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Add')));
+
+            $this->actionBar->addMiddleItem(
+                new ToolbarItem(
+                    Translation :: get('ScoreOverview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+
+            $this->actionBar->addRightItem(
+                new ToolbarItem(
+                    Translation :: get('ScoreOverview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+        }
+
+        return $this->actionBar;
     }
 }

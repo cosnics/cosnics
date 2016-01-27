@@ -203,4 +203,13 @@ class ToolbarItem
 
         return $button;
     }
+
+    /**
+     *
+     * @return string
+     */
+    public function getClasses()
+    {
+        return $this->class;
+    }
 }

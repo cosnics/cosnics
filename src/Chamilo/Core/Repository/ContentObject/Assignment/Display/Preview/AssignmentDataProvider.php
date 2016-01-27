@@ -178,4 +178,136 @@ class AssignmentDataProvider implements
     {
         // TODO Auto-generated method stub
     }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::countFeedbackByEntry()
+     */
+    public function countFeedbackByEntry(
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createNote()
+     */
+    public function createNote(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry,
+        \Chamilo\Core\User\Storage\DataClass\User $user, $submittedNote)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::createScore()
+     */
+    public function createScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry,
+        \Chamilo\Core\User\Storage\DataClass\User $user, $submittedScore)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findEntries()
+     */
+    public function findEntries()
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findEntriesByEntityTypeAndIdentifiers()
+     */
+    public function findEntriesByEntityTypeAndIdentifiers($entityType, $entityIdentifiers)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findEntriesByIdentifiers()
+     */
+    public function findEntriesByIdentifiers($entryIdentifiers)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findFeedbackByEntry()
+     */
+    public function findFeedbackByEntry(
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findFeedbackByIdentifier()
+     */
+    public function findFeedbackByIdentifier($feedbackIdentifier)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findNoteByEntry()
+     */
+    public function findNoteByEntry(
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::findScoreByEntry()
+     */
+    public function findScoreByEntry(
+        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Entry $entry)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::getEntityRendererForEntityTypeAndId()
+     */
+    public function getEntityRendererForEntityTypeAndId($entityType, $entityId)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::initializeFeedback()
+     */
+    public function initializeFeedback()
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::updateNote()
+     */
+    public function updateNote(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note $note)
+    {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider::updateScore()
+     */
+    public function updateScore(\Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Score $score)
+    {
+        // TODO Auto-generated method stub
+    }
 }

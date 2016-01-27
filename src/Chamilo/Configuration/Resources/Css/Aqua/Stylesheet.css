@@ -16,3 +16,8 @@
 @import url('Tabs.css');
 
 @import url('Tree.css');
+
+/* Bootstrap */
+@import url('Bootstrap/bootstrap.min.css');
+
+@import url('Bootstrap/bootstrap-theme.min.css');

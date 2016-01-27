@@ -3,12 +3,14 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
+use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 
 /**
  *
@@ -20,11 +22,18 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\Assignme
 class BrowserComponent extends Manager implements TableSupport
 {
 
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Structure\ActionBarRenderer
+     */
+    private $actionBarRenderer;
+
     public function run()
     {
         $html = array();
 
         $html[] = $this->render_header();
+        $html[] = $this->getActionBarRenderer()->render();
         $html[] = $this->renderDetails();
         $html[] = $this->renderReporting();
         $html[] = $this->renderEntryTable();
@@ -110,5 +119,29 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_table_condition($tableClassName)
     {
         // TODO Auto-generated method stub
+    }
+
+    protected function getActionBarRenderer()
+    {
+        if (! isset($this->actionBar))
+        {
+            $this->actionBar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+
+            $this->actionBar->addLeftItem(
+                new ToolbarItem(
+                    Translation :: get('Download'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Download')));
+            $this->actionBar->addLeftItem(
+                new ToolbarItem(
+                    Translation :: get('SubmissionSubmit'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Add')));
+
+            $this->actionBar->addMiddleItem(
+                new ToolbarItem(
+                    Translation :: get('ScoreOverview'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+        }
+
+        return $this->actionBar;
     }
 }
