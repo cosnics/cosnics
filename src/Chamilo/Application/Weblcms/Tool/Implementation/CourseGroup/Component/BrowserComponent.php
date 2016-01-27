@@ -14,7 +14,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGrou
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;

@@ -6,7 +6,7 @@ use Chamilo\Application\CasStorage\Manager;
 use Chamilo\Application\CasStorage\Table\Request\RequestTable;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;

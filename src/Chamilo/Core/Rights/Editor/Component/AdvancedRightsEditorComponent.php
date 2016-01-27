@@ -5,7 +5,7 @@ use Chamilo\Core\Rights\Editor\Table\LocationEntity\LocationEntityBrowserTreeMen
 use Chamilo\Core\Rights\Entity\NestedRightsEntity;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;

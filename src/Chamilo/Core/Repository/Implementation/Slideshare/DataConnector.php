@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Slideshare;
 
 use Chamilo\Core\Repository\Implementation\Slideshare\DataConnector\RestClient;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 

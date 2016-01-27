@@ -5,7 +5,7 @@ use Chamilo\Application\Survey\Manager;
 use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Table\Publication\PublicationTable;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;

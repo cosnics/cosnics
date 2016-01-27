@@ -11,7 +11,7 @@ use Chamilo\Application\Survey\Export\Table\TrackerTable\ExportTable;
 use Chamilo\Application\Survey\Export\Storage\DataClass\Export;
 use Chamilo\Application\Survey\Export\Storage\DataClass\SynchronizeAnswer;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;

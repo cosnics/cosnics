@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\ContentObject\BlogItem\Storage\DataClass\BlogItem;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Component\Viewer\BlogLayout;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;

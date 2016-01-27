@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Schema\Manager;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Schema\Table\Schema\SchemaTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;

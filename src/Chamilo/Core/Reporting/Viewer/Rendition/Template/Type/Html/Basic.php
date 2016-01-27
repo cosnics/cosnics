@@ -7,7 +7,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\TemplateRendition;
 use Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Html;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;

@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\Bitbucket;
 
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;

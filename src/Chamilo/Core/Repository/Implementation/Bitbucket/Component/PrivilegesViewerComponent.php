@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Bitbucket\Component;
 
 use Chamilo\Core\Repository\Implementation\Bitbucket\Form\PriviligeForm;
 use Chamilo\Core\Repository\Implementation\Bitbucket\Manager;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;

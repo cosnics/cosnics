@@ -5,7 +5,7 @@ use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Menu\CategoryMenu;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Configuration\Category\Table\Browser\CategoryTable;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
