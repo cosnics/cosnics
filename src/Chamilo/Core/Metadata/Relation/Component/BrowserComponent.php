@@ -5,7 +5,7 @@ use Chamilo\Core\Metadata\Relation\Manager;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Relation\Table\Relation\RelationTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;

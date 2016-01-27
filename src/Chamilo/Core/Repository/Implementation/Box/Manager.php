@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\Box;
 
 use Chamilo\Core\Repository\External\Renderer\Renderer;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\Format\Structure\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 

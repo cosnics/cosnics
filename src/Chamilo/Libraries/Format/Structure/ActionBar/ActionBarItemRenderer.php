@@ -1,5 +1,7 @@
 <?php
-namespace Chamilo\Libraries\Format\Structure;
+namespace Chamilo\Libraries\Format\Structure\ActionBar;
+
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 
 /**
  *

@@ -1,15 +1,17 @@
 <?php
-namespace Chamilo\Libraries\Format\Structure;
+namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Theme;
 
 /**
  *
- * @package common.html.action_bar $Id: action_bar_search_form.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ * @package Chamilo\Libraries\Format\Structure\ActionBar
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ActionBarSearchForm extends FormValidator
 {
@@ -69,28 +71,28 @@ class ActionBarSearchForm extends FormValidator
         $this->renderer->setElementTemplate(
             '<div class="form-group">
                 <label class="sr-only">{label}</label>
-                <div class="input-group">
-                    <div class="input-group-addon">' .
-                        Theme :: getInstance()->getCommonImage('Action/Search') .
-                    '</div>
                     {element}
-                </div>
-            </div>',
+            </div> ',
             self :: PARAM_SIMPLE_SEARCH_QUERY);
 
         $this->addElement(
             'style_submit_button',
             'submit',
-            // Theme :: getInstance()->getCommonImage('Action/Search'),
-            Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
+            '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>',
             array('class' => 'btn btn-default btn-sm'));
 
-        $this->renderer->setElementTemplate('{element}', 'submit');
+        $buttonElementTemplate = '<div class="form-group"><label class="sr-only">{label}</label>{element}</div> ';
+
+        $this->renderer->setElementTemplate($buttonElementTemplate, 'submit');
 
         if ($this->get_query())
         {
-            $this->addElement('style_submit_button', 'clear', null, array('class' => 'clear', 'value' => 'clear'));
-            $this->renderer->setElementTemplate('{element}', 'clear');
+            $this->addElement(
+                'style_submit_button',
+                'clear',
+                '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>',
+                array('class' => 'btn btn-default btn-sm', 'value' => 'clear'));
+            $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
     }
 

@@ -4,7 +4,7 @@ namespace Chamilo\Application\CasStorage\Account\Component;
 use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Account\Manager;
 use Chamilo\Application\CasStorage\Account\Table\Account\AccountTable;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;

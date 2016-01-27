@@ -4,7 +4,7 @@ namespace Chamilo\Core\Lynx\Source\Component;
 use Chamilo\Core\Lynx\Source\DataClass\Source;
 use Chamilo\Core\Lynx\Source\Manager;
 use Chamilo\Core\Lynx\Source\Table\Source\SourceTable;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;

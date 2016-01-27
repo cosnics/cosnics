@@ -1,9 +1,10 @@
 <?php
-namespace Chamilo\Libraries\Format\Structure;
+namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 
 /**
  * Class that renders an action bar divided in 3 parts, a left menu for actions, a middle menu for actions and a right
@@ -361,8 +362,6 @@ class ActionBarRenderer
         $html[] = $this->renderToolbar(self :: ITEM_TYPE_MIDDLE);
         $html[] = $this->renderToolbar(self :: ITEM_TYPE_RIGHT);
 
-        $html[] = '</div>';
-
         if (! is_null($this->searchForm))
         {
             $searchForm = $this->searchForm;
@@ -381,6 +380,7 @@ class ActionBarRenderer
             }
         }
 
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

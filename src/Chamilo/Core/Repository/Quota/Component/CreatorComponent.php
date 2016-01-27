@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Form\RequestForm;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;

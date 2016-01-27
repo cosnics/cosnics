@@ -6,7 +6,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Metadata\Vocabulary\Table\Select\SelectTable;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
