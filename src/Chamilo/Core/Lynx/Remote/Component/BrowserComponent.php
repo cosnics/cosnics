@@ -4,7 +4,7 @@ namespace Chamilo\Core\Lynx\Remote\Component;
 use Chamilo\Core\Lynx\Manager;
 use Chamilo\Core\Lynx\Remote\DataClass\Package;
 use Chamilo\Core\Lynx\Remote\Table\Package\PackageTable;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;

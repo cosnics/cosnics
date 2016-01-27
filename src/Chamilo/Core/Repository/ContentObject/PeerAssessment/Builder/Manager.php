@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager\BuilderWizard;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager\BuilderWizardPage;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;

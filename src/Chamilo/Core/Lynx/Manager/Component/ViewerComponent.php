@@ -5,7 +5,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Lynx\Manager\Manager;
 use Chamilo\Core\Lynx\Manager\PackageDisplay;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
