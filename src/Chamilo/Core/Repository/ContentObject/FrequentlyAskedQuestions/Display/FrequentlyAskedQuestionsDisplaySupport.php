@@ -24,18 +24,18 @@ interface FrequentlyAskedQuestionsDisplaySupport
     /**
      * Is the user allowed to edit the content for the given node
      *
-     * @param ComplexContentObjectPathNode $node
+     * @param ComplexContentObjectPathNode $node            
      * @return boolean
      */
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node);
+    public function is_allowed_to_edit_content_object();
 
     /**
      * Is the user allowed to view the content for the given node
      *
-     * @param ComplexContentObjectPathNode $node
+     * @param ComplexContentObjectPathNode $node            
      * @return boolean
      */
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node);
+    public function is_allowed_to_view_content_object();
 
     /**
      *
