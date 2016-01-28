@@ -1,10 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\Toolbar;
 
 /**
  * Class that renders an action bar divided in 3 parts, a left menu for actions, a middle menu for actions and a right
@@ -49,12 +54,6 @@ class ActionBarRenderer
      * @var string
      */
     private $searchUrl;
-
-    /**
-     *
-     * @var unknown
-     */
-    private $searchLocation;
 
     /**
      *
@@ -288,10 +287,9 @@ class ActionBarRenderer
      *
      * @param string $searchUrl
      */
-    public function setSearchUrl($searchUrl, $searchLocation = self :: ITEM_TYPE_RIGHT)
+    public function setSearchUrl($searchUrl)
     {
         $this->searchUrl = $searchUrl;
-        $this->searchLocation = $searchLocation;
         $this->searchForm = new ActionBarSearchForm($searchUrl);
     }
 
@@ -315,52 +313,69 @@ class ActionBarRenderer
         return $this->render();
     }
 
-    /**
-     *
-     * @param string $itemType
-     * @param unknown $type
-     * @return string
-     */
-    protected function renderToolbar($itemType)
+    public function render()
     {
-        $actionBarItemRenderer = new ActionBarItemRenderer();
+        $type = $this->type;
 
-        $items = $this->actions[$itemType];
-
-        $html[] = '<div class="action-bar btn-group btn-group-sm">';
-
-        if ($items && count($items) >= 0)
+        switch ($type)
         {
-            foreach ($items as $item)
-            {
-                $html[] = $actionBarItemRenderer->render($item);
-            }
+            case self :: TYPE_HORIZONTAL :
+                return $this->renderHorizontal();
+                break;
+            case self :: TYPE_VERTICAL :
+                return $this->renderVertical();
+                break;
+            default :
+                return $this->renderHorizontal();
+                break;
         }
-
-        $html[] = '</div>';
-
-        return implode("\n", $html);
     }
 
-    public function render()
+    public function renderHorizontal()
     {
         $leftItems = $this->getLeftItems();
         $middleItems = $this->getMiddleItems();
-        $rightItems = $this->getRightItems();
 
-        if (count($leftItems) == 0 && count($middleItems) == 0 && count($rightItems) == 0 && is_null($this->searchForm))
+        if (count($leftItems) == 0 && count($middleItems) == 0 && is_null($this->searchForm))
         {
             return '';
         }
 
         $html = array();
 
-        $html[] = '<div class="action-bar">';
-        $html[] = '<div class="btn-toolbar">';
+        $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
+        $html[] = '<div id="' . $this->get_name() . '_action_bar" class="action_bar">';
+        $html[] = '<div class="bevel">';
 
-        $html[] = $this->renderToolbar(self :: ITEM_TYPE_LEFT);
-        $html[] = $this->renderToolbar(self :: ITEM_TYPE_MIDDLE);
-        $html[] = $this->renderToolbar(self :: ITEM_TYPE_RIGHT);
+        $html[] = '<table cellspacing="0">';
+        $html[] = '<tr>';
+        $html[] = '<td class="common_menu split">';
+
+        if ($leftItems && count($leftItems) >= 0)
+        {
+            $toolbar = new Toolbar();
+            $toolbar->set_items($leftItems);
+            $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
+
+            $html[] = $toolbar->as_html();
+        }
+
+        $html[] = '</td>';
+
+        $html[] = '<td class="tool_menu split split_bevel">';
+
+        if ($middleItems && count($middleItems) >= 0)
+        {
+            $toolbar = new Toolbar();
+            $toolbar->set_items($middleItems);
+            $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
+
+            $html[] = $toolbar->as_html();
+        }
+
+        $html[] = '</td>';
+
+        $html[] = '<td class="search_menu split_bevel">';
 
         if (! is_null($this->searchForm))
         {
@@ -376,12 +391,29 @@ class ActionBarRenderer
                     }
                 }
 
+                $html[] = '<div class="searchForm">';
                 $html[] = $searchForm->as_html();
+                $html[] = '</div>';
             }
         }
 
+        $html[] = '</td>';
+
+        $html[] = '</tr>';
+        $html[] = '</table>';
+
+        $html[] = '<div class="clear"></div>';
+        $html[] = '<div id="' . $this->get_name() . '_action_bar_hide_container" class="action_bar_hide_container">';
+        $html[] = '<a id="' . $this->get_name() . '_action_bar_hide" class="action_bar_hide" href="#"><img src="' .
+             Theme :: getInstance()->getCommonImagePath('Action/AjaxHide') . '" /></a>';
         $html[] = '</div>';
         $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ActionBarHorizontal.js');
+
+        $html[] = '<div class="clear"></div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -389,6 +421,83 @@ class ActionBarRenderer
     public function clear_form_submitted()
     {
         return ! is_null(Request :: post('clear'));
+    }
+
+    public function renderVertical()
+    {
+        $leftItems = $this->getLeftItems();
+        $middleItems = $this->getMiddleItems();
+
+        if (count($leftItems) == 0 && count($middleItems) == 0 && is_null($this->searchForm))
+        {
+            return '';
+        }
+
+        $html = array();
+
+        $html[] = '<div id="' . $this->get_name() . '_action_bar_left" class="action_bar_left">';
+        $html[] = '<h3>' . Translation :: get('ActionBar') . '</h3>';
+
+        $hasSearchForm = ! is_null($this->searchForm);
+        $hasLeftItems = (count($leftItems) > 0);
+        $hasMiddleItems = (count($middleItems) > 0);
+        $hasLeftAndMiddleItems = (count($leftItems) > 0) && (count($middleItems) > 0);
+
+        if (! is_null($this->searchForm))
+        {
+            $searchForm = $this->searchForm;
+            $html[] = $searchForm->as_html();
+        }
+
+        if ($hasSearchForm && ($hasLeftItems || $hasMiddleItems))
+        {
+            $html[] = '<div class="divider"></div>';
+        }
+
+        if ($hasLeftItems)
+        {
+            $html[] = '<div class="clear"></div>';
+
+            $toolbar = new Toolbar();
+            $toolbar->set_items($leftItems);
+            $toolbar->set_type(Toolbar :: TYPE_VERTICAL);
+            $html[] = $toolbar->as_html();
+        }
+
+        if ($hasLeftAndMiddleItems)
+        {
+            $html[] = '<div class="divider"></div>';
+        }
+
+        if ($hasMiddleItems)
+        {
+            $html[] = '<div class="clear"></div>';
+
+            $toolbar = new Toolbar();
+            $toolbar->set_items($middleItems);
+            $toolbar->set_type(Toolbar :: TYPE_VERTICAL);
+            $html[] = $toolbar->as_html();
+        }
+
+        $html[] = '<div class="clear"></div>';
+
+        $html[] = '<div id="' . $this->get_name() .
+             '_action_bar_left_hide_container" class="action_bar_left_hide_container hide">';
+        $html[] = '<a id="' . $this->get_name() .
+             '_action_bar_left_hide" class="action_bar_left_hide" href="#"><img src="' .
+             Theme :: getInstance()->getCommonImagePath('Action/ActionBar/Hide') . '" /></a>';
+        $html[] = '<a id="' . $this->get_name() .
+             '_action_bar_left_show" class="action_bar_left_show" href="#"><img src="' .
+             Theme :: getInstance()->getCommonImagePath('Action/ActionBar/Show') . '" /></a>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ActionBarVertical.js');
+
+        $html[] = '<div class="clear"></div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     public function get_query()

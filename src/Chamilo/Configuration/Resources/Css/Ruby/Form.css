@@ -1047,6 +1047,41 @@ form br {
 	clear: both;
 }
 
+/**************************
+ * ACTION BAR SEARCH FORM *
+ **************************/
+div.search_form {
+	background-color: white;
+	border: 1px solid grey;
+	height: 18px;
+	overflow: hidden;
+}
+
+div.search_form input.search_query {
+	border: 0px solid white;
+	background-image: none;
+	padding: 0px 2px 0px 2px;
+	height: 18px;
+}
+
+div.search_form button.search, div.search_form button.clear {
+	background-color: white;
+	border: 0px solid white;
+	width: 18px;
+	height: 18px;
+	/*	background-image: none;*/
+	background-position: center center;
+	padding: 0px;
+	margin: 0px;
+	vertical-align: top;
+	text-align: center;
+}
+
+div.search_form button.search img, div.search_form button.clear img {
+	padding: 0px;
+	margin: 1px 2px 0px 2px;
+}
+
 input.visual_input {
 	background-image: url(../../Images/Ruby/Buttons/Right.png);
 	background-repeat: no-repeat;
