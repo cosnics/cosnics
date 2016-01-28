@@ -8,64 +8,36 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Structure\Toolbar;
+
+/**
+ *
+ * @package common.html.action_bar $Id: action_bar_renderer.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ */
 
 /**
  * Class that renders an action bar divided in 3 parts, a left menu for actions, a middle menu for actions and a right
  * menu for a search bar.
- *
- * @package Chamilo\Libraries\Format\Structure
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class ActionBarRenderer
 {
-    // Item types
-    const ITEM_TYPE_LEFT = 'left';
-    const ITEM_TYPE_MIDDLE = 'middle';
-    const ITEM_TYPE_RIGHT = 'right';
-
-    // Rendering types
+    const ACTION_BAR_COMMON = 'common';
+    const ACTION_BAR_TOOL = 'tool';
+    const ACTION_BAR_SEARCH = 'search';
     const TYPE_HORIZONTAL = 'horizontal';
     const TYPE_VERTICAL = 'vertical';
 
-    /**
-     *
-     * @var string
-     */
     private $name;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
     private $actions = array(
-        self :: ITEM_TYPE_LEFT => array(),
-        self :: ITEM_TYPE_MIDDLE => array(),
-        self :: ITEM_TYPE_RIGHT => array());
+        self :: ACTION_BAR_COMMON => array(),
+        self :: ACTION_BAR_TOOL => array(),
+        self :: ACTION_BAR_SEARCH => array());
 
-    private $searchForm;
+    private $search_form;
 
-    /**
-     *
-     * @var string
-     */
-    private $searchUrl;
-
-    /**
-     *
-     * @var string
-     */
     private $type;
 
-    /**
-     *
-     * @param string $type
-     * @param string $name
-     */
     public function __construct($type, $name = 'component')
     {
         $this->type = $type;
@@ -92,257 +64,81 @@ class ActionBarRenderer
         return $this->type;
     }
 
-    /**
-     *
-     * @param string $itemType
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     */
-    public function addItem($itemType = self :: ITEM_TYPE_LEFT, ToolbarItem $item)
+    public function add_action($type = self :: ACTION_BAR_COMMON, $action)
     {
-        $this->actions[$itemType][] = $item;
+        $this->actions[$type][] = $action;
     }
 
-    /**
-     *
-     * @param string $type
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $action
-     * @deprecated Use addItem($itemType, $item) now
-     */
-    public function add_action($type = self :: ITEM_TYPE_LEFT, $action)
-    {
-        $this->addItem($type, $action);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     */
-    public function addLeftItem(ToolbarItem $item)
-    {
-        $this->addItem(self :: ITEM_TYPE_LEFT, $item);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $action
-     * @deprecated Use addLeftItem($item) now
-     */
     public function add_common_action($action)
     {
-        $this->addLeftItem($action);
+        $this->actions[self :: ACTION_BAR_COMMON][] = $action;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     */
-    public function addMiddleItem(ToolbarItem $item)
-    {
-        $this->addItem(self :: ITEM_TYPE_MIDDLE, $item);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $action
-     * @deprecated Use addMiddleItem($item) now
-     */
     public function add_tool_action($action)
     {
-        $this->addMiddleItem($action);
+        $this->actions[self :: ACTION_BAR_TOOL][] = $action;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem $item
-     */
-    public function addRightItem(ToolbarItem $item)
-    {
-        $this->addItem(self :: ITEM_TYPE_RIGHT, $item);
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
-    public function getLeftItems()
-    {
-        return $this->actions[self :: ITEM_TYPE_LEFT];
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
-    public function getMiddleItems()
-    {
-        return $this->actions[self :: ITEM_TYPE_MIDDLE];
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
-    public function getRightItems()
-    {
-        return $this->actions[self :: ITEM_TYPE_RIGHT];
-    }
-
-    /**
-     *
-     * @deprecated Use getMiddleItems() now
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
     public function get_tool_actions()
     {
-        return $this->getMiddleItems();
+        return $this->actions[self :: ACTION_BAR_TOOL];
     }
 
-    /**
-     *
-     * @deprecated Use getLeftItems() now
-     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
-     */
     public function get_common_actions()
     {
-        return $this->getLeftItems();
+        return $this->actions[self :: ACTION_BAR_COMMON];
     }
 
-    /**
-     *
-     * @deprecated Use getSearchUrl() now
-     * @return string
-     */
     public function get_search_url()
     {
-        return $this->getSearchUrl();
+        return $this->actions[self :: ACTION_BAR_SEARCH];
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getSearchUrl()
-    {
-        return $this->searchUrl;
-    }
-
-    /**
-     *
-     * @param string $itemType
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
-     */
-    public function setItems($itemType = self :: ITEM_TYPE_LEFT, $items)
-    {
-        $this->actions[$itemType] = $items;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
-     */
-    public function setLeftItems($items)
-    {
-        $this->setItems(self :: ITEM_TYPE_LEFT, $items);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
-     */
-    public function setMiddleItems($items)
-    {
-        $this->setItems(self :: ITEM_TYPE_MIDDLE, $items);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
-     */
-    public function setRightItems($items)
-    {
-        $this->setItems(self :: ITEM_TYPE_RIGHT, $items);
-    }
-
-    /**
-     *
-     * @deprecated Use setMiddleItems($items) now
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $actions
-     */
     public function set_tool_actions($actions)
     {
-        $this->setMiddleItems($actions);
+        $this->actions[self :: ACTION_BAR_TOOL] = $actions;
     }
 
-    /**
-     *
-     * @deprecated Use setLeftItems($items) now
-     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $actions
-     */
     public function set_common_actions($actions)
     {
-        $this->setLeftItems($actions);
+        $this->actions[self :: ACTION_BAR_COMMON] = $actions;
     }
 
-    /**
-     *
-     * @param string $searchUrl
-     */
-    public function setSearchUrl($searchUrl)
+    public function set_search_url($search_url)
     {
-        $this->searchUrl = $searchUrl;
-        $this->searchForm = new ActionBarSearchForm($searchUrl);
+        $this->actions[self :: ACTION_BAR_SEARCH] = $search_url;
+        $this->search_form = new ActionBarSearchForm($search_url);
     }
 
-    /**
-     *
-     * @param string $searchUrl
-     * @deprecated Use setSearchUrl($searchUrl) now
-     */
-    public function set_search_url($searchUrl)
-    {
-        $this->setSearchUrl($searchUrl);
-    }
-
-    /**
-     *
-     * @deprecated Use render() now
-     * @return string
-     */
     public function as_html()
-    {
-        return $this->render();
-    }
-
-    public function render()
     {
         $type = $this->type;
 
         switch ($type)
         {
             case self :: TYPE_HORIZONTAL :
-                return $this->renderHorizontal();
+                return $this->render_horizontal();
                 break;
             case self :: TYPE_VERTICAL :
-                return $this->renderVertical();
+                return $this->render_vertical();
                 break;
             default :
-                return $this->renderHorizontal();
+                return $this->render_horizontal();
                 break;
         }
     }
 
-    public function renderHorizontal()
+    public function render_horizontal()
     {
-        $leftItems = $this->getLeftItems();
-        $middleItems = $this->getMiddleItems();
+        $common_actions = $this->get_common_actions();
+        $tool_actions = $this->get_tool_actions();
 
-        if (count($leftItems) == 0 && count($middleItems) == 0 && is_null($this->searchForm))
+        if (count($common_actions) == 0 && count($tool_actions) == 0 && is_null($this->search_form))
         {
             return '';
         }
 
         $html = array();
-
         $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
         $html[] = '<div id="' . $this->get_name() . '_action_bar" class="action_bar">';
         $html[] = '<div class="bevel">';
@@ -351,48 +147,43 @@ class ActionBarRenderer
         $html[] = '<tr>';
         $html[] = '<td class="common_menu split">';
 
-        if ($leftItems && count($leftItems) >= 0)
+        if ($common_actions && count($common_actions) >= 0)
         {
             $toolbar = new Toolbar();
-            $toolbar->set_items($leftItems);
+            $toolbar->set_items($common_actions);
             $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
-
             $html[] = $toolbar->as_html();
         }
-
         $html[] = '</td>';
 
         $html[] = '<td class="tool_menu split split_bevel">';
 
-        if ($middleItems && count($middleItems) >= 0)
+        if ($tool_actions && count($tool_actions) >= 0)
         {
             $toolbar = new Toolbar();
-            $toolbar->set_items($middleItems);
+            $toolbar->set_items($tool_actions);
             $toolbar->set_type(Toolbar :: TYPE_HORIZONTAL);
-
             $html[] = $toolbar->as_html();
         }
 
         $html[] = '</td>';
 
         $html[] = '<td class="search_menu split_bevel">';
-
-        if (! is_null($this->searchForm))
+        if (! is_null($this->search_form))
         {
-            $searchForm = $this->searchForm;
-            if ($searchForm)
+            $search_form = $this->search_form;
+            if ($search_form)
             {
-                if ($searchForm->validate())
+                if ($search_form->validate())
                 {
                     if ($this->clear_form_submitted())
                     {
-                        $redirectResponse = new RedirectResponse($this->get_search_url());
-                        $redirectResponse->send();
+                        $redirect_response = new RedirectResponse($this->get_search_url());
+                        $redirect_response->send();
                     }
                 }
-
-                $html[] = '<div class="searchForm">';
-                $html[] = $searchForm->as_html();
+                $html[] = '<div class="search_form">';
+                $html[] = $search_form->as_html();
                 $html[] = '</div>';
             }
         }
@@ -423,12 +214,12 @@ class ActionBarRenderer
         return ! is_null(Request :: post('clear'));
     }
 
-    public function renderVertical()
+    public function render_vertical()
     {
-        $leftItems = $this->getLeftItems();
-        $middleItems = $this->getMiddleItems();
+        $common_actions = $this->get_common_actions();
+        $tool_actions = $this->get_tool_actions();
 
-        if (count($leftItems) == 0 && count($middleItems) == 0 && is_null($this->searchForm))
+        if (count($common_actions) == 0 && count($tool_actions) == 0 && is_null($this->search_form))
         {
             return '';
         }
@@ -438,43 +229,43 @@ class ActionBarRenderer
         $html[] = '<div id="' . $this->get_name() . '_action_bar_left" class="action_bar_left">';
         $html[] = '<h3>' . Translation :: get('ActionBar') . '</h3>';
 
-        $hasSearchForm = ! is_null($this->searchForm);
-        $hasLeftItems = (count($leftItems) > 0);
-        $hasMiddleItems = (count($middleItems) > 0);
-        $hasLeftAndMiddleItems = (count($leftItems) > 0) && (count($middleItems) > 0);
+        $action_bar_has_search_form = ! is_null($this->search_form);
+        $action_bar_has_common_actions = (count($common_actions) > 0);
+        $action_bar_has_tool_actions = (count($tool_actions) > 0);
+        $action_bar_has_common_and_tool_actions = (count($common_actions) > 0) && (count($tool_actions) > 0);
 
-        if (! is_null($this->searchForm))
+        if (! is_null($this->search_form))
         {
-            $searchForm = $this->searchForm;
-            $html[] = $searchForm->as_html();
+            $search_form = $this->search_form;
+            $html[] = $search_form->as_html();
         }
 
-        if ($hasSearchForm && ($hasLeftItems || $hasMiddleItems))
+        if ($action_bar_has_search_form && ($action_bar_has_common_actions || $action_bar_has_tool_actions))
         {
             $html[] = '<div class="divider"></div>';
         }
 
-        if ($hasLeftItems)
+        if ($action_bar_has_common_actions)
         {
             $html[] = '<div class="clear"></div>';
 
             $toolbar = new Toolbar();
-            $toolbar->set_items($leftItems);
+            $toolbar->set_items($common_actions);
             $toolbar->set_type(Toolbar :: TYPE_VERTICAL);
             $html[] = $toolbar->as_html();
         }
 
-        if ($hasLeftAndMiddleItems)
+        if ($action_bar_has_common_and_tool_actions)
         {
             $html[] = '<div class="divider"></div>';
         }
 
-        if ($hasMiddleItems)
+        if ($action_bar_has_tool_actions)
         {
             $html[] = '<div class="clear"></div>';
 
             $toolbar = new Toolbar();
-            $toolbar->set_items($middleItems);
+            $toolbar->set_items($tool_actions);
             $toolbar->set_type(Toolbar :: TYPE_VERTICAL);
             $html[] = $toolbar->as_html();
         }
@@ -502,9 +293,9 @@ class ActionBarRenderer
 
     public function get_query()
     {
-        if ($this->searchForm)
+        if ($this->search_form)
         {
-            return $this->searchForm->get_query();
+            return $this->search_form->get_query();
         }
         else
         {
