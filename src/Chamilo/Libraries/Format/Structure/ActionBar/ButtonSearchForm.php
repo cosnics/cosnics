@@ -41,7 +41,7 @@ class ButtonSearchForm extends FormValidator
         $this->setAttribute('class', 'form-inline');
         $this->renderer = clone $this->defaultRenderer();
 
-        $query = $this->get_query();
+        $query = $this->getQuery();
         if ($query)
         {
             $this->setDefaults(array(self :: PARAM_SIMPLE_SEARCH_QUERY => $query));

@@ -9,8 +9,10 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\DetailsProc
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -353,26 +355,28 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
     {
         if (! isset($this->actionBar))
         {
-            $this->actionBar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+            $buttonToolBar = new ButtonToolBar();
+            $buttonToolBar->addButtonGroup(
+                new ButtonGroup(
+                    array(
+                        new Button(
+                            Translation :: get('Download'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Download')),
+                        new Button(
+                            Translation :: get('SubmissionSubmit'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Add')))));
 
-            $this->actionBar->addLeftItem(
-                new ToolbarItem(
-                    Translation :: get('Download'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Download')));
-            $this->actionBar->addLeftItem(
-                new ToolbarItem(
-                    Translation :: get('SubmissionSubmit'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Add')));
+            $buttonToolBar->addButtonGroup(
+                new ButtonGroup(
+                    array(
+                        new Button(
+                            Translation :: get('ScoreOverview'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Statistics')),
+                        new Button(
+                            Translation :: get('ScoreOverview'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Statistics')))));
 
-            $this->actionBar->addMiddleItem(
-                new ToolbarItem(
-                    Translation :: get('ScoreOverview'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
-
-            $this->actionBar->addRightItem(
-                new ToolbarItem(
-                    Translation :: get('ScoreOverview'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+            $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
         }
 
         return $this->actionBar;

@@ -11,6 +11,10 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Table\PropertiesTable;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 
 /**
  *
@@ -125,21 +129,25 @@ class BrowserComponent extends Manager implements TableSupport
     {
         if (! isset($this->actionBar))
         {
-            $this->actionBar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+            $buttonToolBar = new ButtonToolBar();
+            $buttonToolBar->addButtonGroup(
+                new ButtonGroup(
+                    array(
+                        new Button(
+                            Translation :: get('Download'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Download')),
+                        new Button(
+                            Translation :: get('SubmissionSubmit'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Add')))));
 
-            $this->actionBar->addLeftItem(
-                new ToolbarItem(
-                    Translation :: get('Download'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Download')));
-            $this->actionBar->addLeftItem(
-                new ToolbarItem(
-                    Translation :: get('SubmissionSubmit'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Add')));
+            $buttonToolBar->addButtonGroup(
+                new ButtonGroup(
+                    array(
+                        new Button(
+                            Translation :: get('ScoreOverview'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Statistics')))));
 
-            $this->actionBar->addMiddleItem(
-                new ToolbarItem(
-                    Translation :: get('ScoreOverview'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Statistics')));
+            $this->actionBar = new ButtonToolBarRenderer($buttonToolBar);
         }
 
         return $this->actionBar;
