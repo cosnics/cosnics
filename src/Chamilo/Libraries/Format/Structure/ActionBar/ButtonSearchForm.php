@@ -57,11 +57,14 @@ class ButtonSearchForm extends FormValidator
      */
     private function buildForm()
     {
+        $this->renderer->setFormTemplate(
+            '<div class="action-bar btn-group"><form {attributes}>{content}<div class="clear">&nbsp;</div></form></div>');
+
         $this->addElement(
             'text',
             self :: PARAM_SIMPLE_SEARCH_QUERY,
             Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
-            'class="form-control input-sm"');
+            'class="form-control"');
 
         $this->renderer->setElementTemplate(
             '<div class="form-group">
@@ -74,7 +77,7 @@ class ButtonSearchForm extends FormValidator
             'style_submit_button',
             'submit',
             '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>',
-            array('class' => 'btn btn-default btn-sm'));
+            array('class' => 'btn btn-default'));
 
         $buttonElementTemplate = '<div class="form-group"><label class="sr-only">{label}</label>{element}</div> ';
 
@@ -86,7 +89,7 @@ class ButtonSearchForm extends FormValidator
                 'style_submit_button',
                 'clear',
                 '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>',
-                array('class' => 'btn btn-default btn-sm', 'value' => 'clear'));
+                array('class' => 'btn btn-default', 'value' => 'clear'));
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
     }

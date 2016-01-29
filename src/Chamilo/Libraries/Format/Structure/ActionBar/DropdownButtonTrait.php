@@ -13,34 +13,34 @@ trait DropdownButtonTrait
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\Button[]
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
-    private $buttons;
+    private $subButtons;
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Button[]
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
-    public function getButtons()
+    public function getSubButtons()
     {
-        return $this->buttons;
+        return $this->subButtons;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\Button[] $buttons
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] $subButtons
      */
-    public function setButtons($buttons)
+    public function setSubButtons($subButtons)
     {
-        $this->buttons = $buttons;
+        $this->subButtons = $subButtons;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\Button $button
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton $subButton
      */
-    public function addButton(Button $button)
+    public function addSubButton(SubButton $subButton)
     {
-        $this->buttons[] = $button;
+        $this->subButtons[] = $subButton;
     }
 }

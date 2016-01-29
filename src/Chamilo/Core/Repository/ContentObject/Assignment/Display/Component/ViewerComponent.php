@@ -116,7 +116,7 @@ class ViewerComponent extends Manager implements TableSupport
     {
         if (! isset($this->actionBar))
         {
-            $buttonToolBar = new ButtonToolBar('aaa');
+            $buttonToolBar = new ButtonToolBar();
             $buttonToolBar->addButtonGroup(
                 new ButtonGroup(
                     array(

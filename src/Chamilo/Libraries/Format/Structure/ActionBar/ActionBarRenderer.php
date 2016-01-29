@@ -194,15 +194,8 @@ class ActionBarRenderer
         $html[] = '</table>';
 
         $html[] = '<div class="clear"></div>';
-        $html[] = '<div id="' . $this->get_name() . '_action_bar_hide_container" class="action_bar_hide_container">';
-        $html[] = '<a id="' . $this->get_name() . '_action_bar_hide" class="action_bar_hide" href="#"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('Action/AjaxHide') . '" /></a>';
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ActionBarHorizontal.js');
 
         $html[] = '<div class="clear"></div>';
 
