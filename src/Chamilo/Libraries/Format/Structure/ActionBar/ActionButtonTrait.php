@@ -32,6 +32,16 @@ trait ActionButtonTrait
      */
     private $target;
 
+    public function __construct($label = null, $imagePath = null, $action = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $classes = null,
+        $target = null)
+    {
+        parent :: __construct($label, $imagePath, $display, $classes);
+
+        $this->setAction($action);
+        $this->setConfirmation($confirmation);
+        $this->setTarget($target);
+    }
+
     /**
      *
      * @return string

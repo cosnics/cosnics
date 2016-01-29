@@ -386,8 +386,12 @@
     "buttons.less",
     "glyphicons.less",
     "button-groups.less",
-    "input-groups.less"
+    "input-groups.less",
+    "dropdowns.less"
   ],
-  "js": [],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=6974c4330913439fb88d"
+  "js": [
+    "button.js",
+    "dropdown.js"
+  ],
+  "customizerUrl": "http://getbootstrap.com/customize/?id=8dd2aa7b075eb5bd1710"
 }

@@ -62,7 +62,6 @@ class ButtonToolBarRenderer
     {
         $html = array();
 
-        $html[] = '<div class="action-bar">';
         $html[] = '<div class="btn-toolbar">';
 
         foreach ($this->getButtonToolBar()->getButtonGroups() as $buttonGroup)
@@ -85,7 +84,6 @@ class ButtonToolBarRenderer
         }
 
         $html[] = '</div>';
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -94,7 +92,7 @@ class ButtonToolBarRenderer
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm
      */
-    protected function getSearchForm()
+    public function getSearchForm()
     {
         if (! isset($this->searchForm))
         {
