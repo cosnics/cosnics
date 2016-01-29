@@ -437,7 +437,7 @@ class ConfigurationForm extends FormValidator
                     $configuration_value = PlatformSetting :: get($name, $this->context);
                 }
 
-                if (isset($configuration_value) && ! empty($configuration_value))
+                if (isset($configuration_value) && ($configuration_value == 0 || ! empty($configuration_value)))
                 {
                     $defaults[$name] = $configuration_value;
                 }

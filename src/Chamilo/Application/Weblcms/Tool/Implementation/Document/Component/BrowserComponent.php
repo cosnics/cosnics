@@ -20,6 +20,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -31,8 +34,10 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_tool_actions()
     {
-        $tool_actions = array();
-        $tool_actions[] = new ToolbarItem(
+        $toolActions = array();
+        $showActions = array();
+
+        $showActions[] = new SubButton(
             Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
@@ -41,7 +46,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     self :: PARAM_FILTER => self :: FILTER_TODAY)),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 
-        $tool_actions[] = new ToolbarItem(
+        $showActions[] = new SubButton(
             Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
@@ -50,7 +55,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 
-        $tool_actions[] = new ToolbarItem(
+        $showActions[] = new SubButton(
             Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
@@ -59,13 +64,20 @@ class BrowserComponent extends Manager implements DelegateComponent
                     self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 
-        $tool_actions[] = new ToolbarItem(
+        $showAction = new DropdownButton(
+            Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'));
+        $showAction->setSubButtons($showActions);
+
+        $toolActions[] = $showAction;
+
+        $toolActions[] = new Button(
             Translation :: get('Download'),
             Theme :: getInstance()->getCommonImagePath('Action/Save'),
             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ZIP_AND_DOWNLOAD)),
             ToolbarItem :: DISPLAY_ICON_AND_LABEL);
 
-        return $tool_actions;
+        return $toolActions;
     }
 
     public function get_tool_conditions()

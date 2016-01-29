@@ -55,7 +55,7 @@ class ButtonGroupRenderer
     {
         $html = array();
 
-        $html[] = '<div class="action-bar btn-group btn-group-sm">';
+        $html[] = '<div class="action-bar btn-group">';
 
         foreach ($this->getButtonGroup()->getButtons() as $button)
         {
