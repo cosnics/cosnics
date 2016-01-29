@@ -1,15 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Storage\DataClass\AbstractFeedback;
-
 /**
  * Generic portfolio feedback object
  * 
  * @package repository\content_object\portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class Feedback extends AbstractFeedback
+abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
 {
     // Properties
     const PROPERTY_COMPLEX_CONTENT_OBJECT_ID = 'complex_content_object_id';

@@ -382,9 +382,12 @@
     "@hr-border": "@gray-lighter"
   },
   "css": [
+    "forms.less",
     "buttons.less",
-    "button-groups.less"
+    "glyphicons.less",
+    "button-groups.less",
+    "input-groups.less"
   ],
   "js": [],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=f98b8fe36fabeb91d5e2"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=6974c4330913439fb88d"
 }

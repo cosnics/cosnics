@@ -10,5 +10,9 @@ abstract class Manager extends Application
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_UPDATE = 'Updater';
+    const ACTION_SUBSCRIBER = 'Subscriber';
+    const ACTION_UNSUBSCRIBER = 'Unsubscriber';
+    
+    
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
 }
