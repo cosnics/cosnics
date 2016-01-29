@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\metadata\element
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Metadata Element Manager"
+BrowserComponent = "Beheer elementen"
+CreatorComponent = "Maak element"
+UpdaterComponent = "Update element"
+DeleterComponent = "Verwijder element"
+MoverComponent = "Verplaats element"
+VocabulatorComponent = "Beheer gecontroleerde vocabulaire"
+ElementControlledVocabulary = "Gecontroleerde vocabulaire voor het element"
+Associations = "Associaties"
+Elements = "Elementen"
+MoveDirectionNotSelected = "De verplaats richting is niet geslecteerd"

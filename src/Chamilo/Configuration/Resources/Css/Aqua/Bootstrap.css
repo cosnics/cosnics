@@ -1,0 +1,12 @@
+/**
+ * ACTION BAR
+ */
+.action-bar {
+	margin-bottom: 5px;
+}
+
+.action-bar form input[type=text]
+{
+	border: 1px solid #CCC;
+	padding: 5px 10px;
+}
