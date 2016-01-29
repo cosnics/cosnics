@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Package = repository\content_object\portfolio\feedback
+; Package = Core\Repository\Feedback
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -7,3 +7,7 @@ TypeName = "Feedback"
 BrowserComponent = "Feedback"
 AddFeedback = "Feedback"
 Feedback = "Existing feedback"
+Comment = "Comment"
+NoFeedbackYet = "No feedback available yet"
+StopReceivingNotifications = "Stop receiving feedback notifications"
+ReceiveNotifications = "Receive feedback notifications"

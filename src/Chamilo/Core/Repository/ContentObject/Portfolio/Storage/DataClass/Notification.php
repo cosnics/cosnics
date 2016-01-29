@@ -1,15 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Feedback\Storage\DataClass\AbstractNotification;
-
 /**
  * Generic portfolio notification object
  * 
  * @package repository\content_object\portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-abstract class Notification extends AbstractNotification
+abstract class Notification extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification
 {
     // Properties
     const PROPERTY_COMPLEX_CONTENT_OBJECT_ID = 'complex_content_object_id';
