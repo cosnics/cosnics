@@ -1,0 +1,16 @@
+/**
+ * ACTION BAR
+ */
+.btn-toolbar {
+	margin-bottom: 5px;
+}
+
+.btn-toolbar form input[type=text] {
+	border: 1px solid #CCC;
+	padding: 5px 10px;
+}
+
+.btn-toolbar a, .btn-toolbar a:hover {
+	font-weight: normal !important;
+	color: black;
+}
