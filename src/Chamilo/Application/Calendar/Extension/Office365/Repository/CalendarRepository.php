@@ -255,7 +255,8 @@ class CalendarRepository
      */
     public function hasAccessToken()
     {
-        return ! empty($this->getAccessToken());
+        $accessToken = $this->getAccessToken();
+        return ! empty($accessToken);
     }
 
     /**
