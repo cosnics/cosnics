@@ -99,9 +99,9 @@ class ImporterComponent extends Manager
 
         foreach ($package_names as $package => $package_name)
         {
-            $registration = \Chamilo\Configuration\Configuration :: is_registered($package);
+            $isRegistered = \Chamilo\Configuration\Configuration :: is_registered($package);
 
-            if (! $registration instanceof \Chamilo\Configuration\Storage\DataClass\Registration)
+            if (! $isRegistered)
             {
                 continue;
             }

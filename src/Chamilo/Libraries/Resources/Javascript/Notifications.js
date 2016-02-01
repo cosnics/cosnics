@@ -101,12 +101,12 @@ $(function() {
         addClosers();
         $(".notification").addClass("notification_mini");
         $(document).on('click', ".notification", showMessage);
-        $(".navbar").tabula({
-            cycle : false,
-            follow : false,
-            nextButton : ">>",
-            prevButton : "<<"
-        });
+        //$(".navbar").tabula({
+        //    cycle : false,
+        //    follow : false,
+        //    nextButton : ">>",
+        //    prevButton : "<<"
+        //});
 
         $("#datepicker").datepicker();
 
