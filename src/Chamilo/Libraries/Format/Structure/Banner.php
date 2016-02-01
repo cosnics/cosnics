@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
@@ -124,9 +125,11 @@ class Banner
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
+            $menuRenderer = Configuration::get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
+
             $output[] = '<div class="chamilo-menu-container">';
             $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
-                \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_BAR,
+                $menuRenderer,
                 $this->getApplication()->getRequest(),
                 $this->getApplication()->getUser());
             $output[] = '<div class="clear">&nbsp;</div>';
