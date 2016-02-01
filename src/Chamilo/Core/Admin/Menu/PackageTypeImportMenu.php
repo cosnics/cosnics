@@ -67,7 +67,7 @@ class PackageTypeImportMenu extends HTML_Menu
         {
             $registration = \Chamilo\Configuration\Configuration :: registration($package->get_context());
 
-            if (! empty($registration) && $registration[Registration :: PROPERTY_STATUS]())
+            if (! empty($registration) && $registration[Registration :: PROPERTY_STATUS])
             {
                 $manager_class = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
 
