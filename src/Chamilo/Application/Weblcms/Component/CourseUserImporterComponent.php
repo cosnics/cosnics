@@ -88,6 +88,9 @@ class CourseUserImporterComponent extends Manager
     public function display_extra_information()
     {
         $html = array();
+
+        $html[] = '<div style="border: solid 1px darkgray; margin: 15px; padding: 10px; background: #EFEFEF;">';
+        $html[] = '<h4>' . Translation :: get('Users') . '</h4>';
         $html[] = '<p>' . Translation :: get('CSVMustLookLikeForUsers') . ' (' . Translation :: get('MandatoryFields') . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
@@ -95,6 +98,10 @@ class CourseUserImporterComponent extends Manager
         $html[] = 'A;jdoe;course01;Teacher';
         $html[] = 'D;a.dam;course01;Student';
         $html[] = '</pre></blockquote>';
+        $html[] = '</div>';
+
+        $html[] = '<div style="border: solid 1px darkgray; margin: 15px; padding: 10px; background: #EFEFEF;">';
+        $html[] = '<h4>' . Translation :: get('Groups') . '</h4>';
         $html[] = '<p>' . Translation :: get('CSVMustLookLikeForGroups') . ' (' . Translation :: get('MandatoryFields') . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
@@ -102,14 +109,16 @@ class CourseUserImporterComponent extends Manager
         $html[] = 'A;group1;course01;Teacher';
         $html[] = 'D;group2;course01;Student';
         $html[] = '</pre></blockquote>';
-        $html[] = '<p>' . Translation :: get('Details') . '</p>';
+        $html[] = '</div>';
+
+        $html[] = '<h4>' . Translation :: get('Details') . '</h4>';
         $html[] = '<blockquote>';
-        $html[] = '<u><b>' . Translation :: get('Action') . '</u></b>';
+        $html[] = '<u><b>' . Translation :: get('Action') . '</u></b><br />';
         $html[] = '<br />A: ' . Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES);
         $html[] = '<br />U: ' . Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES);
         $html[] = '<br />D: ' . Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES);
-        $html[] = '<br /><br />';
-        $html[] = '<u><b>' . Translation :: get('Status') . '</u></b>';
+        $html[] = '<br /><br /><br />';
+        $html[] = '<u><b>' . Translation :: get('Status') . '</u></b><br />';
         $html[] = '<br />Teacher';
         $html[] = '<br />Student';
         $html[] = '</blockquote>';
