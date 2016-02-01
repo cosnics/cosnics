@@ -17,6 +17,7 @@ abstract class Renderer
 {
     const TYPE_BAR = 'bar';
     const TYPE_SITE_MAP = 'site_map';
+    const TYPE_BOOTSTRAP_BAR = 'bootstrap_bar';
 
     /**
      *

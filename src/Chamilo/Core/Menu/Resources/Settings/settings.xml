@@ -7,6 +7,9 @@
 					<option name="show_sitemap" value="1" />
 				</options>
 			</setting>
+			<setting name="menu_renderer" field="select" default="Aqua">
+				<options type="dynamic" source="get_renderers" />
+			</setting>
 		</category>
 		<category name="rights">
 			<setting name="enable_rights" field="checkbox" default="1">
