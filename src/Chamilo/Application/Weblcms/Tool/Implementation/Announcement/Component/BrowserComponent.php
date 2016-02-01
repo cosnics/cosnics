@@ -7,7 +7,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Announcement\Manager;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -28,32 +30,44 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         if ($this->get_browser_type() != ContentObjectPublicationListRenderer :: TYPE_CALENDAR)
         {
-            $tool_actions = array();
-            $tool_actions[] = new ToolbarItem(
+            $toolActions = array();
+            $showActions = array();
+
+            $showActions[] = new SubButton(
                 Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
                         self :: PARAM_FILTER => self :: FILTER_TODAY)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL);
-            $tool_actions[] = new ToolbarItem(
+                Button :: DISPLAY_ICON_AND_LABEL);
+
+            $showActions[] = new SubButton(
                 Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
                         self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL);
-            $tool_actions[] = new ToolbarItem(
+                Button :: DISPLAY_ICON_AND_LABEL);
+
+            $showActions[] = new SubButton(
                 Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
                         self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL);
-            return $tool_actions;
+                Button :: DISPLAY_ICON_AND_LABEL);
+
+            $showAction = new DropdownButton(
+                Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'));
+            $showAction->setSubButtons($showActions);
+
+            $toolActions[] = $showAction;
+
+            return $toolActions;
         }
     }
 

@@ -35,6 +35,8 @@ class SubButtonRenderer extends AbstractButtonRenderer
     {
         $classes = array();
 
+        $classes[] = $this->getButton()->getClasses();
+
         if (! $this->getButton()->getAction())
         {
             $classes[] = 'disabled';

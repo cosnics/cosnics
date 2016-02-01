@@ -12,12 +12,19 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -28,6 +35,7 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -39,15 +47,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 
 /**
  * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -153,7 +152,6 @@ class BrowserComponent extends Manager
         }
 
         $html[] = $this->action_bar->render();
-        $html[] = '<div id="action_bar_browser" style="width:100%;">';
 
         if ($this->get_parent() instanceof Categorizable)
         {
@@ -192,52 +190,14 @@ class BrowserComponent extends Manager
                  $cat_name . '</div><br />';
         }
 
-        $type = $this->get_publication_type();
-
-        $tabs = new DynamicVisualTabsRenderer('tool_browser');
-
-        if ($this->is_course_admin)
-        {
-            $tabs->add_tab(
-                new DynamicVisualTab(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL,
-                    Translation :: get('AllPublications'),
-                    Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL)),
-                    $type == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL));
-        }
-
-        $tabs->add_tab(
-            new DynamicVisualTab(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME,
-                Translation :: get('PublishedForMe'),
-                Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME)),
-                $type == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME));
-
-        $tabs->add_tab(
-            new DynamicVisualTab(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME,
-                Translation :: get('MyPublications'),
-                Theme :: getInstance()->getCommonImagePath('Treemenu/Publication'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME)),
-                $type == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME));
         $content[] = $publication_renderer->as_html();
+
         $html[] = '<div class="clear"></div>';
 
         if (method_exists($this->get_parent(), 'show_additional_information'))
         {
             $html[] = $this->get_parent()->show_additional_information($this);
         }
-        $html[] = '</div>';
-
-        $tabs->set_content(implode(PHP_EOL, $content));
 
         if ($this->get_publication_count() > 0 &&
              $this->get_parent()->get_tool_registration()->get_section_type() == CourseSection :: TYPE_DISABLED)
@@ -245,7 +205,7 @@ class BrowserComponent extends Manager
             $html[] = Display :: warning_message(Translation :: get('ToolInvisible'));
         }
 
-        $html[] = $tabs->render();
+        $html[] = implode(PHP_EOL, $content);
 
         $html[] = $this->render_footer();
 
@@ -345,6 +305,9 @@ class BrowserComponent extends Manager
         $commonActions = new ButtonGroup();
         $toolActions = new ButtonGroup();
 
+        $buttonToolBar->addButtonGroup($commonActions);
+        $buttonToolBar->addButtonGroup($toolActions);
+
         if ($this->is_allowed(WeblcmsRights :: ADD_RIGHT))
         {
 
@@ -359,7 +322,7 @@ class BrowserComponent extends Manager
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH,
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLISH_MODE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_MODE_QUICK)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL);
+                    Button :: DISPLAY_ICON_AND_LABEL);
             }
 
             // added tool dependent publish button
@@ -373,7 +336,7 @@ class BrowserComponent extends Manager
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL);
+                    Button :: DISPLAY_ICON_AND_LABEL);
             }
             else
             {
@@ -391,7 +354,7 @@ class BrowserComponent extends Manager
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL);
+                    Button :: DISPLAY_ICON_AND_LABEL);
             }
 
             $commonActions->addButton($publishActions);
@@ -399,17 +362,8 @@ class BrowserComponent extends Manager
 
         if ($this->is_course_admin)
         {
-            $managementActions = new DropdownButton(
-                Translation :: get('ManageTool'),
-                Theme :: getInstance()->getCommonImagePath('Action/Config'));
-            $commonActions->addButton($managementActions);
-        }
-
-        if ($this->is_course_admin)
-        {
-            $managementActions->addSubButton(
-                new SubButton(
-
+            $commonActions->addButton(
+                new Button(
                     Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                     $this->get_url(
@@ -417,20 +371,19 @@ class BrowserComponent extends Manager
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS,
                             \Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY => Request :: get(
                                 \Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY))),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Button :: DISPLAY_ICON_AND_LABEL));
         }
 
         if ($this->is_course_admin && $this->get_parent() instanceof Categorizable)
         {
-            $managementActions->addSubButton(
-                new SubButton(
-
+            $commonActions->addButton(
+                new Button(
                     Translation :: get('ManageCategories', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Category'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MANAGE_CATEGORIES)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Button :: DISPLAY_ICON_AND_LABEL));
         }
 
         $course_settings_controller = CourseSettingsController :: get_instance();
@@ -446,7 +399,7 @@ class BrowserComponent extends Manager
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Button :: DISPLAY_ICON_AND_LABEL));
         }
 
         if (method_exists($this->get_parent(), 'get_tool_actions'))
@@ -454,10 +407,72 @@ class BrowserComponent extends Manager
             $toolActions->setButtons($this->get_parent()->get_tool_actions());
         }
 
+        if (method_exists($this->get_parent(), 'addToolActions'))
+        {
+            $toolActions->setButtons($this->get_parent()->addToolActions($buttonToolBar));
+        }
+
+        $publicationType = $this->get_publication_type();
+        $publicationsActions = array();
+
+        if ($this->is_course_admin)
+        {
+            $publicationsActions[] = new SubButton(
+                Translation :: get('AllPublications'),
+                Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL)),
+                Button :: DISPLAY_LABEL,
+                false,
+                $publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL ? 'selected' : '');
+        }
+
+        $publicationsActions[] = new SubButton(
+            Translation :: get('PublishedForMe'),
+            Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME)),
+            Button :: DISPLAY_LABEL,
+            false,
+            $publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME ? 'selected' : '');
+
+        $publicationsActions[] = new SubButton(
+            Translation :: get('MyPublications'),
+            Theme :: getInstance()->getCommonImagePath('Treemenu/Publication'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME)),
+            Button :: DISPLAY_LABEL,
+            false,
+            $publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME ? 'selected' : '');
+
+        switch ($publicationType)
+        {
+            case \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL :
+                $variable = 'AllPublications';
+                $imagePath = Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects');
+                break;
+            case \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME :
+                $variable = 'PublishedForMe';
+                $imagePath = Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects');
+                break;
+            case \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME :
+                $variable = 'MyPublications';
+                $imagePath = Theme :: getInstance()->getCommonImagePath('Treemenu/Publication');
+                break;
+        }
+
+        $publicationsAction = new DropdownButton(Translation :: get($variable), $imagePath);
+        $publicationsAction->setSubButtons($publicationsActions);
+
+        $toolActions->addButton($publicationsAction);
+
         $browser_types = $this->get_parent()->get_available_browser_types();
 
         $browserTypeActions = new DropdownButton(
-            Translation :: get('ToolDisplayType'),
+            Translation :: get($this->get_parent()->get_browser_type() . 'View', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getCommonImagePath('View/' . $this->get_parent()->get_browser_type()));
         $toolActions->addButton($browserTypeActions);
 
@@ -465,6 +480,18 @@ class BrowserComponent extends Manager
         {
             foreach ($browser_types as $browser_type)
             {
+                if ($this->get_parent()->get_browser_type() != $browser_type)
+                {
+                    $action = $this->get_url(
+                        array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => $browser_type));
+                    $classes = '';
+                }
+                else
+                {
+                    $action = '';
+                    $classes = 'selected';
+                }
+
                 $browserTypeActions->addSubButton(
                     new SubButton(
                         Translation :: get(
@@ -473,14 +500,12 @@ class BrowserComponent extends Manager
                                 null,
                                 Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getCommonImagePath('View/' . $browser_type),
-                        $this->get_url(
-                            array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => $browser_type)),
-                        ToolbarItem :: DISPLAY_LABEL));
+                        $action,
+                        Button :: DISPLAY_LABEL,
+                        false,
+                        $classes));
             }
         }
-
-        $buttonToolBar->addButtonGroup($commonActions);
-        $buttonToolBar->addButtonGroup($toolActions);
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

@@ -32,6 +32,16 @@ trait ActionButtonTrait
      */
     private $target;
 
+    /**
+     *
+     * @param string $label
+     * @param string $imagePath
+     * @param string $action
+     * @param integer $display
+     * @param string $confirmation
+     * @param string $classes
+     * @param string $target
+     */
     public function __construct($label = null, $imagePath = null, $action = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $classes = null,
         $target = null)
     {

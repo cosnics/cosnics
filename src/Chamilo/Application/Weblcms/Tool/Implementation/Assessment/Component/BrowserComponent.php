@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -21,7 +21,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
 
-            $tool_actions[] = new ToolbarItem(
+            $tool_actions[] = new Button(
                 Translation :: get('Reporting'),
                 Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
                 $this->get_url(
@@ -29,7 +29,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'reporting',
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW,
                         \Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID => 2)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL);
+                Button :: DISPLAY_ICON_AND_LABEL);
         }
 
         return $tool_actions;

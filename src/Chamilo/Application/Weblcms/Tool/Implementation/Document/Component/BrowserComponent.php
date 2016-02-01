@@ -8,9 +8,11 @@ use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\Calend
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -19,71 +21,90 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
     const PARAM_FILTER = 'filter';
-    const FILTER_TODAY = 'today';
-    const FILTER_THIS_WEEK = 'week';
-    const FILTER_THIS_MONTH = 'month';
+    const FILTER_TODAY = 'Today';
+    const FILTER_THIS_WEEK = 'Week';
+    const FILTER_THIS_MONTH = 'Month';
     const ACTION_DOWNLOAD_SELECTED_PUBLICATIONS = 'download_selected_publications';
 
     public function get_tool_actions()
     {
         $toolActions = array();
-        $showActions = array();
-
-        $showActions[] = new SubButton(
-            Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                    self :: PARAM_FILTER => self :: FILTER_TODAY)),
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL);
-
-        $showActions[] = new SubButton(
-            Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                    self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL);
-
-        $showActions[] = new SubButton(
-            Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                    self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL);
-
-        $showAction = new DropdownButton(
-            Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'));
-        $showAction->setSubButtons($showActions);
-
-        $toolActions[] = $showAction;
 
         $toolActions[] = new Button(
             Translation :: get('Download'),
             Theme :: getInstance()->getCommonImagePath('Action/Save'),
             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ZIP_AND_DOWNLOAD)),
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL);
+            Button :: DISPLAY_ICON_AND_LABEL);
+
+        $showActions = array();
+
+        $filter = $this->getFilter();
+        $variable = $filter ? $filter : 'All';
+
+        $showActions[] = new SubButton(
+            Translation :: get('PeriodAll', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null)),
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == '' ? 'selected' : '');
+
+        $showActions[] = new SubButton(
+            Translation :: get('PeriodToday', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
+                    self :: PARAM_FILTER => self :: FILTER_TODAY)),
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == self :: FILTER_TODAY ? 'selected' : '');
+
+        $showActions[] = new SubButton(
+            Translation :: get('PeriodWeek', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
+                    self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == self :: FILTER_THIS_WEEK ? 'selected' : '');
+
+        $showActions[] = new SubButton(
+            Translation :: get('PeriodMonth', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
+                    self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == self :: FILTER_THIS_MONTH ? 'selected' : '');
+
+        $showAction = new DropdownButton(
+            Translation :: get('Period' . $variable, null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Period'));
+        $showAction->setSubButtons($showActions);
+
+        $toolActions[] = $showAction;
 
         return $toolActions;
+    }
+
+    protected function getFilter()
+    {
+        return $this->getRequest()->query->get(self :: PARAM_FILTER);
     }
 
     public function get_tool_conditions()
     {
         $conditions = array();
-        $filter = Request :: get(self :: PARAM_FILTER);
+        $filter = $this->getFilter();
 
         switch ($filter)
         {

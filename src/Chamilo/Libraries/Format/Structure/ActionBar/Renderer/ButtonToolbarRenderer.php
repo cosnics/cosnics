@@ -62,7 +62,7 @@ class ButtonToolBarRenderer
     {
         $html = array();
 
-        $html[] = '<div class="btn-toolbar">';
+        $html[] = '<div class="btn-toolbar btn-action-toolbar">';
 
         foreach ($this->getButtonToolBar()->getButtonGroups() as $buttonGroup)
         {
