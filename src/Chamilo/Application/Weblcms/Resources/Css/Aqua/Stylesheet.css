@@ -341,3 +341,16 @@ div.row.tool_unchecked_warning .warning-message {
 	left: 0;
 	right: 0;
 }
+
+div.user_category_description {
+	margin-top: 10px;
+}
+
+div#tool_browser_right {
+	margin-right: 215px;
+	min-height: 500px;
+}
+
+div.tool_bar_course_menu {
+	width: 200px;
+}
