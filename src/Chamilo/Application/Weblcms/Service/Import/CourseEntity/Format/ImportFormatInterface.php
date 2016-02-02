@@ -1,15 +1,15 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 
-use Chamilo\Application\Weblcms\Domain\ValueObject\ImportedCourseEntityRelation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface ImportFormatInterface
 {
+
     /**
      * Parses a file and returns ImportedCourseEntityRelation classes
      *
