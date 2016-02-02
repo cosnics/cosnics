@@ -139,10 +139,11 @@ div.chamilo-menu-container
 }
 
 .navbar-chamilo .navbar-nav .dropdown-menu li,
-.navbar-chamilo .navbar-nav .dropdown-menu li a
+.navbar-chamilo .navbar-nav .dropdown-menu li a,
+.navbar-chamilo .navbar-nav .dropdown-menu li a:hover
 {
     /*background-color: #262f52;*/
-    background-color: #2f3a66;
+    background: #2f3a66;
     height: auto;
 }
 
@@ -159,7 +160,7 @@ div.chamilo-menu-container
 
 .navbar-chamilo ul.navbar-nav li.dropdown.open > a
 {
-    background-color: #c7d6eb;
+    background: #c7d6eb;
     color: #444444;
     bottom: -1px;
     border-top: 1px solid #c7d6eb;
