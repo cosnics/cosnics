@@ -5,9 +5,6 @@
 
 @import url('Bootstrap.css');
 
-/* External CSS */
-@import url('External.css');
-
 /* Plugin CSS */
 @import url('Plugin.css');
 
@@ -23,3 +20,6 @@
 @import url('Tabs.css');
 
 @import url('Tree.css');
+
+/* Typography */
+@import url('Typography.css');
