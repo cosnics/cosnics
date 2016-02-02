@@ -33,20 +33,17 @@ trait ActionButtonTrait
     private $target;
 
     /**
+     * Initialize method as replacement for constructor due to PHP issue
+     * https://bugs.php.net/bug.php?id=65576
      *
-     * @param string $label
-     * @param string $imagePath
+     * TODO: fix this once everyone moves to PHP 5.6
+     *
      * @param string $action
-     * @param integer $display
      * @param string $confirmation
-     * @param string $classes
      * @param string $target
      */
-    public function __construct($label = null, $imagePath = null, $action = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $classes = null,
-        $target = null)
+    public function initialize($action = null, $confirmation = null, $target = null)
     {
-        parent :: __construct($label, $imagePath, $display, $classes);
-
         $this->setAction($action);
         $this->setConfirmation($confirmation);
         $this->setTarget($target);
