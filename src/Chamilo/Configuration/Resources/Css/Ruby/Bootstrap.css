@@ -1,0 +1,34 @@
+/**
+ * ACTION BAR
+ */
+.btn-action-toolbar {
+	margin-bottom: 15px;
+}
+
+.btn-action-toolbar form input[type=text] {
+	border: 1px solid #CCC;
+	padding: 5px 10px;
+}
+
+.btn-action-toolbar a, .btn-toolbar a:hover {
+	font-weight: normal !important;
+	color: black;
+}
+
+.dropdown-menu>li>a {
+	padding: 3px 32px;
+}
+
+.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
+	background-image: url("../../Images/Ruby/Background/Checkmark.png");
+	background-position: 12px center;
+	background-repeat: no-repeat;
+}
+
+.action-bar-search, .action-bar-search:hover, .action-bar-search:active,
+	.action-bar-search:focus {
+	padding: 0px;
+	background-color: white;
+	background-image: none;
+	text-align: left;
+}
