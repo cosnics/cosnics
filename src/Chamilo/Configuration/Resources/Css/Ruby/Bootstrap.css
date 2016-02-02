@@ -15,12 +15,20 @@
 	color: black;
 }
 
-.dropdown-menu > li > a {
+.dropdown-menu>li>a {
 	padding: 3px 32px;
 }
 
-.dropdown-menu > li > a.selected, .dropdown-menu > li > a:hover.selected {
+.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
 	background-image: url("../../Images/Ruby/Background/Checkmark.png");
 	background-position: 12px center;
 	background-repeat: no-repeat;
+}
+
+.action-bar-search, .action-bar-search:hover, .action-bar-search:active,
+	.action-bar-search:focus {
+	padding: 0px;
+	background-color: white;
+	background-image: none;
+	text-align: left;
 }
