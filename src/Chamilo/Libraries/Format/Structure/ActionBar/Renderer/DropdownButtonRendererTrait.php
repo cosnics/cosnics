@@ -49,7 +49,7 @@ trait DropdownButtonRendererTrait
     {
         $html = array();
 
-        $html[] = '<ul class="dropdown-menu">';
+        $html[] = '<ul class="' . implode(' ', $this->determineDropdownClasses()) . '">';
 
         foreach ($this->getButton()->getSubButtons() as $subButton)
         {
@@ -62,6 +62,22 @@ trait DropdownButtonRendererTrait
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function determineDropdownClasses()
+    {
+        $classes = array();
+
+        $classes[] = 'dropdown-menu';
+
+        $dropdownClasses = $this->getButton()->getDropdownClasses();
+
+        if (! empty($dropdownClasses))
+        {
+            $classes[] = $dropdownClasses;
+        }
+
+        return $classes;
     }
 
     /**
