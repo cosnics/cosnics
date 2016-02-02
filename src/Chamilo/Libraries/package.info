@@ -10,11 +10,12 @@
 		<version>5.0.0</version>
 		<description />
 		<pre-depends>
-			<dependency type="server">
-				<id>php</id>
-				<version operator="4">5.4</version>
-				<relation>1</relation>
-			</dependency>
+			<dependencies operator="1">
+        		<dependency type="registration">
+        			<id>Chamilo\Configuration</id>
+        			<version operator="4">5.0.0</version>
+        		</dependency>
+        	</dependencies>
 		</pre-depends>
 		<extra>
 			<core-install>1</core-install>
