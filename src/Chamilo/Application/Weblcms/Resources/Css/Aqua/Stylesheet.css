@@ -283,11 +283,12 @@ div.home_actions {
 }
 
 div.tree_menu_on_top {
-	border: 1px solid #b5cae7;
+	/*border: 1px solid #b5cae7;*/
+	background-color: #F5F5F5;
 	margin-bottom: 10px;
 	padding: 10px 10px;
-	-moz-border-radius-topleft: 15px;
-	-webkit-border-top-left-radius: 15px;
+	/*-moz-border-radius-topleft: 15px;
+	-webkit-border-top-left-radius: 15px;*/
 	/*height: 60px;*/
 }
 
