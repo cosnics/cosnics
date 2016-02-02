@@ -10,7 +10,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @author Bert De Clercq (Hogeschool Gent)
  * @author Anthony Hurst (Hogeschool Gent)
  */
-class CategoryMoverComponent extends Manager implements DelegateComponent
+class CategoryMoverComponent extends Manager
 {
 
     /**

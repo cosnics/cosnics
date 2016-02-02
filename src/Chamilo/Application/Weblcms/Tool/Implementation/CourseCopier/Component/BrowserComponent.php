@@ -25,7 +25,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /*
  * This tool is for copying information from othe current course to another @author Mattias De Pauw - Hogeschool Gent
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public $course_copier_form;

@@ -19,7 +19,7 @@ use Exception;
  *
  * @author Michael Kyndt
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     public function run()

@@ -18,7 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function get_tool_actions()

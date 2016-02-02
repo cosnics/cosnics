@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class PublicationUpdaterComponent extends Manager implements DelegateComponent
+class PublicationUpdaterComponent extends Manager
 {
 
     public function get_additional_parameters()

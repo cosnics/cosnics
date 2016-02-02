@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -23,7 +24,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
  *
  * @author Soliber
  */
-class ReportingViewerComponent extends Manager
+class ReportingViewerComponent extends Manager implements DelegateComponent
 {
 
     /**

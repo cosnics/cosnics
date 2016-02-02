@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
     const PARAM_FILTER = 'filter';
     const FILTER_TODAY = 'today';

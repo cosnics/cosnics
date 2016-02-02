@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Compone
 use Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class CategoryMoverComponent extends Manager implements DelegateComponent
+class CategoryMoverComponent extends Manager
 {
 
     public function get_additional_parameters()

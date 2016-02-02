@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Link\Component;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function get_publications()

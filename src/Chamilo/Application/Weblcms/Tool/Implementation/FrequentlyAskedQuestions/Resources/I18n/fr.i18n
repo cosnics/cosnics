@@ -3,7 +3,7 @@
 ; Language = fr
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Forum"
+TypeName = "Frequently Asked Questions"
 Forum = "Forums"
 Topics = "Sujets"
 Posts = "Messages"

@@ -22,7 +22,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
     const PARAM_FILTER = 'filter';
     const FILTER_TODAY = 'Today';

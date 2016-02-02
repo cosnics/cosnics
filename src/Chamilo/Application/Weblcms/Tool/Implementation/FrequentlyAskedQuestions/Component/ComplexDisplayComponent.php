@@ -17,7 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.tool.wiki.component
  */
-class ComplexDisplayComponent extends Manager implements DelegateComponent, FrequentlyAskedQuestionsDisplaySupport
+class ComplexDisplayComponent extends Manager , FrequentlyAskedQuestionsDisplaySupport
 {
 
     private $publication;

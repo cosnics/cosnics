@@ -9,7 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  *
  * @package application.lib.weblcms.tool.document.component
  */
-class PublisherComponent extends Manager implements DelegateComponent
+class PublisherComponent extends Manager
 {
 
     public function get_additional_parameters()

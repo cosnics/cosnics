@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Action;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;

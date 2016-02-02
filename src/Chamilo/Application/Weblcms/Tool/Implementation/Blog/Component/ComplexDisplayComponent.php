@@ -24,7 +24,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 /**
  * Represents the view component for the assessment tool.
  */
-class ComplexDisplayComponent extends Manager implements DelegateComponent, BlogDisplaySupport
+class ComplexDisplayComponent extends Manager , BlogDisplaySupport
 {
 
     private $publication;

@@ -11,6 +11,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class IntroductionPublisherComponent extends Manager implements DelegateComponent
+class IntroductionPublisherComponent extends Manager
 {
 }

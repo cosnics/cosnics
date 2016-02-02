@@ -32,7 +32,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  *
  * @package application.lib.weblcms.tool.learning_path.component
  */
-class StatisticsViewerComponent extends Manager implements DelegateComponent
+class StatisticsViewerComponent extends Manager
 {
     const PARAM_STAT = 'stats_action';
     const ACTION_DELETE_LP_ATTEMPT = 'DeleteLpAttempt';

@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @package application.lib.weblcms.tool.component
  */
-class DeleterComponent extends Manager
+class DeleterComponent extends Manager implements DelegateComponent
 {
 
     public function run()

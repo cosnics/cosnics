@@ -14,7 +14,7 @@ use phpFreeChat;
  * @package application.lib.weblcms.tool.chat.component
  */
 require_once Path :: getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     public function run()

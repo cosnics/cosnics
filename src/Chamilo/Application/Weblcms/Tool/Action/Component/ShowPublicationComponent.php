@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
-class ShowPublicationComponent extends ToggleVisibilityComponent
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+
+class ShowPublicationComponent extends ToggleVisibilityComponent implements DelegateComponent
 {
 
     public function get_hidden()

@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  * Component for emptying the course publication,publication categories and sections @author Maarten Volckaert -
  * Hogeschool Gent @author Mattias De Pauw - Hogeschool Gent
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public $course_emptier_form;

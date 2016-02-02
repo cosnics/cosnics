@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class RightsEditorComponent extends Manager implements DelegateComponent
+class RightsEditorComponent extends Manager
 {
 
     public function run()

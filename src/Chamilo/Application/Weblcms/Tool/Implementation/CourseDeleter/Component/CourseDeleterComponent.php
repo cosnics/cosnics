@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @author Mattias De Pauw - Hogeschool Gent
  */
-class CourseDeleterComponent extends Manager implements DelegateComponent
+class CourseDeleterComponent extends Manager
 {
 
     public $delete_page;

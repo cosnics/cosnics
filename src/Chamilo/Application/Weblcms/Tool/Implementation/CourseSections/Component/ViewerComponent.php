@@ -20,7 +20,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.tool.course_sections.component
  */
-class ViewerComponent extends Manager implements DelegateComponent, TableSupport
+class ViewerComponent extends Manager implements TableSupport
 {
 
     private $action_bar;

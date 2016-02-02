@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Link\Component;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager;
 
-class ReportingViewerComponent extends Manager implements DelegateComponent
+class ReportingViewerComponent extends Manager
 {
 
     public function get_additional_parameters()

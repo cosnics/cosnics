@@ -3,8 +3,6 @@
 
 @import url('Bootstrap/css/bootstrap-theme.css');
 
-@import url('Bootstrap.css');
-
 /* Plugin CSS */
 @import url('Plugin.css');
 
@@ -20,3 +18,5 @@
 @import url('Tabs.css');
 
 @import url('Tree.css');
+
+@import url('Bootstrap.css');

@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Component;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
 
-class PublicationUpdaterComponent extends Manager implements DelegateComponent
+class PublicationUpdaterComponent extends Manager
 {
 
     public function get_additional_parameters()

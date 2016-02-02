@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Compone
 use Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
+class ContentObjectUpdaterComponent extends Manager
 {
 
     public function get_additional_parameters()

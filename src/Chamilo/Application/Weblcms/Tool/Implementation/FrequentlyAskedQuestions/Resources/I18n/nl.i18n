@@ -3,7 +3,7 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Forums"
+TypeName = "Veelgestelde vragen"
 TypeNameSingle = "Forum"
 Forum = "Forums"
 Topics = "Onderwerpen"

@@ -3,8 +3,6 @@
 
 @import url('Bootstrap/css/bootstrap-theme.css');
 
-@import url('Bootstrap.css');
-
 /* Plugin CSS */
 @import url('Plugin.css');
 
@@ -23,3 +21,5 @@
 
 /* Typography */
 @import url('Typography.css');
+
+@import url('Bootstrap.css');

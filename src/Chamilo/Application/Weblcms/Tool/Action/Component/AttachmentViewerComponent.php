@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\ParameterNotDefinedException;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -20,7 +21,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  *
  * @package application.lib.weblcms.tool.component
  */
-class AttachmentViewerComponent extends Manager
+class AttachmentViewerComponent extends Manager implements DelegateComponent
 {
 
     public function run()

@@ -4,7 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Forum\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class PublisherComponent extends Manager implements DelegateComponent
+class PublisherComponent extends Manager
 {
 
     public function get_additional_parameters()

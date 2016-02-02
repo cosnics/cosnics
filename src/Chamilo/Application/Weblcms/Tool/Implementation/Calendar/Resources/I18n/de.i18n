@@ -5,8 +5,8 @@
 
 TypeName = "Kalender"
 UpcomingEvents = "Anstehende Ereignisse"
-CalendarToolBrowserComponent = "Kalenderereignisse durchsuchen"
-CalendarToolViewerComponent = "Kalenderereignis ansehen"
-CalendarToolUpdaterComponent = "Kalenderereignis bearbeiten"
-CalendarToolPublisherComponent = "Kalenderereignis veröffenlichen"
-CalendarToolIntroductionPublisherComponent = "Einleitung veröffentlichen"
+BrowserComponent = "Kalenderereignisse durchsuchen"
+ViewerComponent = "Kalenderereignis ansehen"
+UpdaterComponent = "Kalenderereignis bearbeiten"
+PublisherComponent = "Kalenderereignis veröffenlichen"
+IntroductionPublisherComponent = "Einleitung veröffentlichen"

@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.tool.course_group.component
  */
-class EditorComponent extends Manager implements DelegateComponent
+class EditorComponent extends Manager
 {
 
     public function run()

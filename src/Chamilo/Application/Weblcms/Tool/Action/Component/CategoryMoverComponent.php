@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -22,7 +23,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  *
  * @package application.lib.weblcms.tool.component
  */
-class CategoryMoverComponent extends Manager
+class CategoryMoverComponent extends Manager implements DelegateComponent
 {
 
     public function run()

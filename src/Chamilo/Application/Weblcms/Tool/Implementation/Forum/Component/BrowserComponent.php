@@ -39,7 +39,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
  *
  * @package application.lib.weblcms.tool.forum.component
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     private $action_bar;

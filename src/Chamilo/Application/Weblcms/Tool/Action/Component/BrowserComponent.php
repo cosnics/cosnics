@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\NotificationMessage;
@@ -51,7 +52,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package repository.lib.complex_display.assessment.component
  */
-class BrowserComponent extends Manager
+class BrowserComponent extends Manager implements DelegateComponent
 {
 
     private $action_bar;

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class PublicationUpdaterComponent extends Manager implements DelegateComponent
+class PublicationUpdaterComponent extends Manager
 {
 
     /**

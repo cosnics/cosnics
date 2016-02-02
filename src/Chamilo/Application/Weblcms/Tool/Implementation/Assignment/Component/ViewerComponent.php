@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     public function get_additional_parameters()

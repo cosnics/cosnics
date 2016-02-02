@@ -4,10 +4,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Description"
-DescriptionToolBrowserComponent = "Browse descriptions"
-DescriptionToolViewerComponent = "View description"
-DescriptionToolEvaluateComponent = "Evaluate description"
-DescriptionToolIntroductionPublisherComponent = "Publish introduction"
-DescriptionToolMoverComponent = "Move description"
-DescriptionToolPublisherComponent = "Publish description"
-DescriptionToolUpdaterComponent = "Update description"
+BrowserComponent = "Browse descriptions"
+ViewerComponent = "View description"
+EvaluateComponent = "Evaluate description"
+IntroductionPublisherComponent = "Publish introduction"
+MoverComponent = "Move description"
+PublisherComponent = "Publish description"
+UpdaterComponent = "Update description"

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  *
  * @package application.lib.weblcms.tool.geolocation.component
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function show_additional_information($browser)

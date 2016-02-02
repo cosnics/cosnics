@@ -24,7 +24,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  *
  * @package application.lib.weblcms.tool.forum.component
  */
-class ViewerComponent extends Manager implements DelegateComponent, ForumDisplaySupport
+class ViewerComponent extends Manager implements ForumDisplaySupport
 {
 
     private $root_content_object;
