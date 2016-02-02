@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\preview
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Preview"
+PreviewModeWarning = "Warning: preview mode"
+ViewFull = "Complete"
+ViewPreview = "Slideshow"
+ViewThumbnail = "Thumbnail"
+ViewDescription = "Description"
+ViewShort = "Short"
+ViewInline = "Inline"
+ViewForm = "Form"
+AvailableTemplates = "Available templates"
