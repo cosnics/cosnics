@@ -75,7 +75,7 @@ class CategoryItem extends BootstrapBar
             {
                 if (($child->get_id() && Rights :: get_instance()->is_allowed(
                     Rights :: VIEW_RIGHT,
-                    Manager::context(),
+                    Manager :: context(),
                     null,
                     $entities,
                     $child->get_id(),
@@ -124,10 +124,10 @@ class CategoryItem extends BootstrapBar
      *
      * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @return \Chamilo\Core\Menu\Renderer\Item\Bar\Bar
+     * @return \Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar
      */
     public function getItemRenderer(\Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer, Item $item,
-        \Chamilo\Core\Menu\Renderer\Item\Bar\BootstrapBar $parentRenderer)
+        \Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar $parentRenderer)
     {
         if (! isset($this->itemRenderers[$item->get_id()]))
         {

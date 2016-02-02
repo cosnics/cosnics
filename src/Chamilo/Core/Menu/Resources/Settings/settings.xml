@@ -7,7 +7,7 @@
 					<option name="show_sitemap" value="1" />
 				</options>
 			</setting>
-			<setting name="menu_renderer" field="select" default="Aqua">
+			<setting name="menu_renderer" field="select" default="bar">
 				<options type="dynamic" source="get_renderers" />
 			</setting>
 		</category>
