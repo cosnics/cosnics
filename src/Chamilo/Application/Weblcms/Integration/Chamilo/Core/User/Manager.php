@@ -16,7 +16,7 @@ class Manager implements UserInterface
     {
         $html = array();
 
-        $table = new HTML_Table(array('class' => 'data_table'));
+        $table = new HTML_Table(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
 
         $table->setHeaderContents(0, 0, Translation :: get('Courses'));
         $table->setCellAttributes(0, 0, array('colspan' => 2, 'style' => 'text-align: center;'));

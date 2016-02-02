@@ -2,11 +2,10 @@
 namespace Chamilo\Application\Weblcms\Tool\Action;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 
 /**
  * $Id: tool_component.class.php 216 2009-11-13 14:08:06Z kariboe $

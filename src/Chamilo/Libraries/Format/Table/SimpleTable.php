@@ -62,7 +62,7 @@ class SimpleTable extends HTML_Table
      */
     public function __construct($data_array, $cellrenderer, $actionhandler = null, $tablename)
     {
-        parent :: __construct(array('class' => 'data_table'));
+        parent :: __construct(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
 
         $this->defaultproperties = $cellrenderer->get_properties();
         $this->data_array = $data_array;
