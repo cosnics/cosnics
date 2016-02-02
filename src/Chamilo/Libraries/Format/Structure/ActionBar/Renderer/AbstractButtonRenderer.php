@@ -145,11 +145,12 @@ abstract class AbstractButtonRenderer
     {
         $button = $this->getButton();
         $label = $this->getLabel();
+        $imagePath = $button->getImagePath();
 
         $html = array();
 
         $displayLabel = $button->getDisplay() != AbstractButton :: DISPLAY_ICON && ! empty($label);
-        $displayIcon = $button->getDisplay() != AbstractButton :: DISPLAY_LABEL && ! empty($button->getImagePath());
+        $displayIcon = $button->getDisplay() != AbstractButton :: DISPLAY_LABEL && ! empty($imagePath);
 
         if ($displayIcon)
         {
