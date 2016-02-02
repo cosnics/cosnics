@@ -19,6 +19,12 @@ trait DropdownButtonTrait
 
     /**
      *
+     * @var string
+     */
+    private $dropdownClasses;
+
+    /**
+     *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
      */
     public function getSubButtons()
@@ -42,5 +48,23 @@ trait DropdownButtonTrait
     public function addSubButton(SubButton $subButton)
     {
         $this->subButtons[] = $subButton;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getDropdownClasses()
+    {
+        return $this->dropdownClasses;
+    }
+
+    /**
+     *
+     * @param string $dropdownClasses
+     */
+    public function setDropdownClasses($dropdownClasses)
+    {
+        $this->dropdownClasses = $dropdownClasses;
     }
 }
