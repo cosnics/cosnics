@@ -312,7 +312,6 @@ button: :-moz-focus-inner {
 }
 
 button, a.button {
-	margin: 0 7px 0 0;
 	background-color: #f5f5f5;
 	background-repeat: no-repeat;
 	background-position: 10px center;
