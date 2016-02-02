@@ -26,7 +26,7 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
         $linkHtml = array();
 
         $linkHtml[] = '<a';
-        $linkHtml[] = 'class="' . implode(' ', $this->determineDropdownClasses()) . '"';
+        $linkHtml[] = 'class="' . implode(' ', $this->determineDropdownActionClasses()) . '"';
         $linkHtml[] = $this->renderDropdownAttributes();
         $linkHtml[] = '>';
 
@@ -44,7 +44,7 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
      *
      * @return string[]
      */
-    public function determineDropdownClasses()
+    public function determineDropdownActionClasses()
     {
         $classes = array();
 
