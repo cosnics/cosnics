@@ -69,7 +69,7 @@ class HomeComponent extends Manager implements DelegateComponent
     {
         $html = array();
 
-        $html[] = '<div id="tool_bar" class="tool_bar tool_bar_right">';
+        $html[] = '<div id="tool_bar" class="tool_bar tool_bar_right tool_bar_course_menu">';
 
         $html[] = '<div id="tool_bar_hide_container" class="hide">';
         $html[] = '<a id="tool_bar_hide" href="#"><img src="' .
