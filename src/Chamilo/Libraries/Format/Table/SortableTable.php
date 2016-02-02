@@ -145,7 +145,10 @@ class SortableTable extends HTML_Table
     public function __construct($tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
         $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true, $allowPageNavigation = true)
     {
-        parent :: __construct(array('class' => 'data_table', 'id' => $tableName), 0, true);
+        parent :: __construct(
+            array('class' => 'table table-striped table-bordered table-hover table-responsive', 'id' => $tableName),
+            0,
+            true);
 
         $this->tableName = $tableName;
         $this->additionalParameters = array();
