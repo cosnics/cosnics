@@ -58,7 +58,7 @@ class ButtonSearchForm extends FormValidator
     private function buildForm()
     {
         $this->renderer->setFormTemplate(
-            '<div class="action-bar btn-group"><form {attributes}>{content}<div class="clear">&nbsp;</div></form></div>');
+            '<div class="action-bar btn-group pull-right"><form {attributes}>{content}<div class="clear">&nbsp;</div></form></div>');
 
         $this->addElement(
             'text',
