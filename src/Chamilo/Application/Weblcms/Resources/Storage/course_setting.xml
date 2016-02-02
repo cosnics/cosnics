@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_setting">
+	<properties>
+		<property name="id" type="integer" notnull="1" autoincrement="true" />
+		<property name="tool_id" type="integer" default="0" />
+		<property name="global_setting" type="boolean" notnull="1" default="0" />
+		<property name="name" type="text" length="255" />
+	</properties>
+	<index name="tool_id">
+		<indexproperty name="tool_id" />
+	</index>
+	<index name="global_setting">
+		<indexproperty name="global_setting" />
+	</index>
+</object>
