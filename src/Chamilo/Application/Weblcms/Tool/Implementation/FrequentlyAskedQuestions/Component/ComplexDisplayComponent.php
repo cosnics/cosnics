@@ -5,9 +5,8 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Manager;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\FrequentlyAskedQuestionsDisplaySupport;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -17,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.tool.wiki.component
  */
-class ComplexDisplayComponent extends Manager , FrequentlyAskedQuestionsDisplaySupport
+class ComplexDisplayComponent extends Manager implements FrequentlyAskedQuestionsDisplaySupport
 {
 
     private $publication;

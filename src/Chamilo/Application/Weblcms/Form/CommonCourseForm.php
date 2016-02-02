@@ -397,7 +397,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $locked_settings_supported = ($this instanceof FormLockedSettingsSupport);
 
         $table_header = array();
-        $table_header[] = '<table class="data_table">';
+        $table_header[] = '<table class="table table-striped table-bordered table-hover table-responsive">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="checkbox"></th>';

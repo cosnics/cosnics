@@ -5,15 +5,14 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Blog\Manager;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: blog_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -24,7 +23,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 /**
  * Represents the view component for the assessment tool.
  */
-class ComplexDisplayComponent extends Manager , BlogDisplaySupport
+class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
 {
 
     private $publication;

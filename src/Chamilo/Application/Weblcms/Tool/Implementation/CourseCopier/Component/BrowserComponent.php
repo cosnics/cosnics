@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Forms\CourseCop
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Manager;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;

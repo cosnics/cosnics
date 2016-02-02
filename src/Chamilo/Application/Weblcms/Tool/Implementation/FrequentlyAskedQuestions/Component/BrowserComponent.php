@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * $Id: forum_browser.class.php 216 2009-11-13 14:08:06Z kariboe $

@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;

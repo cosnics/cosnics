@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * CategoryMover component for the assignment tool.

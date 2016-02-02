@@ -77,7 +77,7 @@ abstract class LocationSelector
         $locations = $this->get_locations();
 
         $table_header = array();
-        $table_header[] = '<table class="data_table">';
+        $table_header[] = '<table class="table table-striped table-bordered table-hover table-responsive">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
 

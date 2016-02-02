@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class PublisherComponent extends Manager
 {

@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Description\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Description\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * $Id: description_publisher.class.php 216 2009-11-13 14:08:06Z kariboe $
