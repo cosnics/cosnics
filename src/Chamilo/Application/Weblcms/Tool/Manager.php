@@ -374,7 +374,7 @@ abstract class Manager extends Application
         if ($tool_shortcut && count($tools) > 0)
         {
             $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_SHORTCUT, $this, $tools);
-            $html[] = '<div style="float:right;">';
+            $html[] = '<div style="float:right; margin-top: -30px;">';
             $html[] = $renderer->toHtml();
             $html[] = '</div>';
         }

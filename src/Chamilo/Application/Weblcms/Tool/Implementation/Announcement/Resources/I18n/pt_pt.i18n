@@ -5,8 +5,8 @@
 
 TypeName = "Announcement"
 InstallTypeName = "Announcement Tool"
-AnnouncementToolBrowserComponent = "Browse announcements"
-AnnouncementToolViewerComponent = "View announcement"
-AnnouncementToolPublisherComponent = "Publish announcement"
-AnnouncementToolUpdaterComponent = "Edit announcement"
-AnnouncementToolIntroductionPublisherComponent = "Publish introduction"
+BrowserComponent = "Browse announcements"
+ViewerComponent = "View announcement"
+PublisherComponent = "Publish announcement"
+UpdaterComponent = "Edit announcement"
+IntroductionPublisherComponent = "Publish introduction"

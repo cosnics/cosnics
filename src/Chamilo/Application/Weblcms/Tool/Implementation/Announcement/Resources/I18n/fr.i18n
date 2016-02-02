@@ -5,8 +5,8 @@
 
 TypeName = "Annonces"
 InstallTypeName = "Annonces"
-AnnouncementToolBrowserComponent = "Parcourir annonces"
-AnnouncementToolViewerComponent = "Voir annonce"
-AnnouncementToolPublisherComponent = "Publier annonce"
-AnnouncementToolUpdaterComponent = "Modifier annonce"
-AnnouncementToolIntroductionPublisherComponent = "Publier le texte d'introduction"
+BrowserComponent = "Parcourir annonces"
+ViewerComponent = "Voir annonce"
+PublisherComponent = "Publier annonce"
+UpdaterComponent = "Modifier annonce"
+IntroductionPublisherComponent = "Publier le texte d'introduction"
