@@ -12,3 +12,5 @@
     - Boxes with Month text don't have padding
     - Alignment of form "Go To" is not correct
     - Table layout for calendar views
+* Not Allowed box
+ - Space between icon and text not large enough
