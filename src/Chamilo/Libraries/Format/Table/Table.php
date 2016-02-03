@@ -185,7 +185,7 @@ abstract class Table
             $table->setColumnHeader(
                 ($this->has_form_actions() ? $i + 1 : $i),
                 Security :: remove_XSS($column->get_title()),
-                $column->is_sortable(), $headerAttributes
+                $column->is_sortable(), array(), $headerAttributes
             );
         }
 
