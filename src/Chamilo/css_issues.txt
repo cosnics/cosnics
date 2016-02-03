@@ -1,0 +1,14 @@
+* Homepage
+    - Action buttons row is too small
+* Course Homepage
+    - Publish introduction row is too small
+* Forms
+    - Label text is too small
+* Publication Form
+    - Labels for two elements are shown in bold
+* Large buttons (content object creation buttons)
+    - Button is too small
+* Personal Calendar
+    - Boxes with Month text don't have padding
+    - Alignment of form "Go To" is not correct
+    - Table layout for calendar views
