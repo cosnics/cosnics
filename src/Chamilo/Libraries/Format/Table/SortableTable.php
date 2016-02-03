@@ -330,7 +330,13 @@ class SortableTable extends HTML_Table
         $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
         $this->setCellContents(0, 0, Translation :: get('NoSearchResults', null, Utilities :: COMMON_LIBRARIES));
 
-        return parent :: toHTML();
+        $html = array();
+
+        $html[] = '<div class="table-responsive">';
+        $html[] = parent :: toHTML();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -380,7 +386,9 @@ class SortableTable extends HTML_Table
             }
         }
 
+        $html[] = '<div class="table-responsive">';
         $html[] = $this->getBodyHtml();
+        $html[] = '</div>';
 
         if (! $empty_table)
         {
