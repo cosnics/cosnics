@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Table\Publication\Table;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
@@ -56,6 +57,8 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
             new DataClassPropertyTableColumn(
                 ContentObjectPublication :: class_name(), 
                 ContentObjectPublication :: PROPERTY_DISPLAY_ORDER_INDEX));
+
+        $this->add_column(new ActionsTableColumn('publication_table_actions_column'));
     }
 
     /**

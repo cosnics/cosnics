@@ -173,10 +173,20 @@ abstract class Table
         {
             $column = $column_model->get_column($i);
 
+            $headerAttributes = array();
+
+            $cssClasses = $column->getCssClasses();
+
+            if(!empty($cssClasses))
+            {
+                $headerAttributes['class'] = $cssClasses;
+            }
+
             $table->setColumnHeader(
                 ($this->has_form_actions() ? $i + 1 : $i),
                 Security :: remove_XSS($column->get_title()),
-                $column->is_sortable());
+                $column->is_sortable(), $headerAttributes
+            );
         }
 
         // store the actual direction of the sortable table in the table column
