@@ -1077,18 +1077,6 @@ div.survey-categories-header, div.survey-outline-header, div.survey-result-heade
 	background: #E69666;
 }
 
-/*
-.sortable_table_selection_controls
-{
-	margin-top: 5px;
-	padding-top: 4px;
-}
-
-.sortable_table_selection_controls button
-{
-	margin-top: -4px;
-}
-*/
 .sortable_table_selection_controls select {
 	margin-left: 10px;
 }

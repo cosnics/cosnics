@@ -70,11 +70,12 @@ class ButtonSearchForm extends FormValidator
         $this->renderer->setElementTemplate('{element} ', self :: PARAM_SIMPLE_SEARCH_QUERY);
 
         $this->addElement(
-            'style_submit_button',
+            'style_button',
             'submit',
-            '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>',
-            array('class' => 'btn btn-default'),
-            'submit');
+            null,
+            null,
+            'submit',
+            'search');
 
         $buttonElementTemplate = '{element}';
 
@@ -83,11 +84,12 @@ class ButtonSearchForm extends FormValidator
         if ($this->getQuery())
         {
             $this->addElement(
-                'style_submit_button',
+                'style_button',
                 'clear',
-                '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>',
-                array('class' => 'btn btn-default'),
-                'clear');
+                null,
+                null,
+                'clear',
+                'remove');
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
 
