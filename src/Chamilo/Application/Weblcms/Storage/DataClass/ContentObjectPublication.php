@@ -57,6 +57,8 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     const PROPERTY_ALLOW_COLLABORATION = 'allow_collaboration';
     const TYPE_FILE = 'file';
 
+    const CONTENT_OBJECT_MODIFICATION_DATE_ALIAS = 'content_object_modification_date';
+
     // added to support mailing within content object
     private $target_course_groups;
 
