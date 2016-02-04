@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\Workspace;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  *
@@ -16,6 +18,7 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'workspace_action';
     const PARAM_WORKSPACE_ID = 'workspace_id';
     const PARAM_SELECTED_WORKSPACE_ID = 'selected_workspace_id';
+    const PARAM_BROWSER_SOURCE = 'browser_source';
 
     // Actions
     const ACTION_BROWSE = 'Browser';

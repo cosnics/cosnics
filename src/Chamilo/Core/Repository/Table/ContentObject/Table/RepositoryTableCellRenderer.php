@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Table\ContentObject\Table;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -33,6 +34,14 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return Utilities :: htmlentities(
                     StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
+            case ContentObject::PROPERTY_OWNER_ID:
+                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $content_object->get_owner_id());
+                if(!$user)
+                {
+                    return Translation::get('UserUnknown', null, 'Chamilo\Core\User');
+                }
+
+                return $user->get_fullname();
             case ContentObject :: PROPERTY_CREATION_DATE :
                 return DatetimeUtilities :: format_locale_date(
                     Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),

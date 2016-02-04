@@ -4,10 +4,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeCategory = "Workspace"
+TypeName = "Workspaces"
 CreatorComponent = "Maak workspace"
 FavouriteComponent = "Favorieten"
+PublisherComponent = "Voeg toe vanuit jouw repository"
 PersonalBrowserComponent = "Mijn workspaces"
 SharedBrowserComponent = "Gedeelde workspaces"
 BrowserComponent = "Alle workspaces"
 UpdaterComponent = "Bewerk workspace"
 RightsComponent = "Configureer workspace rechten"
+ConfigureWorkspaces = "Beheer workspaces"
+CreatorId = "Eigenaar"
+Favourite = "Voeg toe als favoriet"
+FavouriteNA = "Reeds toegevoegd als favoriet"
+FavouriteSelected = "Voeg de geselecteerde toe als favoriet"
+Rights = "Configureer workspace rechten"

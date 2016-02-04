@@ -1,11 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Package;
 
+use Chamilo\Core\Menu\ItemTitles;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryApplicationItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
  *
@@ -28,7 +31,19 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
 
     public function extra()
     {
-        if (! parent :: extra())
+        $item = new RepositoryApplicationItem();
+        $item_title = new ItemTitle();
+        $item_title->set_title(Translation :: get('TypeName', null, $this->context()));
+        $item_title->set_isocode(Translation :: getInstance()->getLanguageIsocode());
+        $item_titles = new ItemTitles(new ArrayResultSet(array($item_title)));
+
+        $item->set_titles($item_titles);
+        $item->set_application($this->context());
+        $item->set_display($this->getItemDisplay());
+
+        $item->set_use_translation(1);
+
+        if (! $item->create())
         {
             return false;
         }
