@@ -34,7 +34,7 @@ class WorkspaceTable extends DataClassTable implements TableFormActionsSupport
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
                         \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE)),
-                Translation :: get('FavouriteSelected', null, Utilities :: COMMON_LIBRARIES),
+                Translation :: get('FavouriteSelected', null, Manager::context()),
                 true));
 
         $actions->add_form_action(

@@ -40,7 +40,8 @@ class WorkspaceConfigureItem extends BootstrapBar
         $urlRenderer = new Redirect(array(Application :: PARAM_CONTEXT => Manager :: context()));
 
         $html[] = '<a ' . $class . 'href="' . $urlRenderer->getUrl() . '">';
-        $title = Translation :: get('ConfigureWorkspaces');
+
+        $title = Translation :: get('ConfigureWorkspaces', array(), 'Chamilo\Core\Repository\Workspace');
 
         if ($this->getItem()->show_icon())
         {
