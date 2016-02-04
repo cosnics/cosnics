@@ -51,7 +51,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
      *
      * @return \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
      */
-    private function getWorkspaceService()
+    protected function getWorkspaceService()
     {
         if (! isset($this->workspaceService))
         {
