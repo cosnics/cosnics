@@ -523,10 +523,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $types = ContentObjectExportImplementation :: get_types_for_object($this->object->package());
 
         $html = array();
+
+        $html[] = '<div class="btn-group">';
+
         foreach ($types as $type)
         {
             $link = $this->get_content_object_exporting_url($this->object, $type);
-            $html[] = '<a href="' . $link . '">';
+            $html[] = '<a class="btn btn-default" href="' . $link . '">';
             $url = Theme :: getInstance()->getImagePath(
                 ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
                 'Export/' . $type,
@@ -535,23 +538,28 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             if (file_exists($url))
             {
-                $html[] = '<div class="create_block" style="background-image : url(' . Theme :: getInstance()->getImagePath(
+                $imagePath = Theme :: getInstance()->getImagePath(
                     ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
-                    'Export/' . $type) . '); ">' . Translation :: get(
+                    'Export/' . $type);
+                $translation = Translation :: get(
                     'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize(),
                     null,
-                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object)) . '</div>';
+                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object));
             }
             else
             {
-                $html[] = '<div class="create_block" style="background-image : url(' . Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository',
-                    'Export/' . $type) . '); ">' . Translation :: get(
-                    'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize()) . '</div>';
+                $imagePath = Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Export/' . $type);
+                $translation = Translation :: get(
+                    'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize());
             }
+
+            $html[] = '<img src="' . $imagePath . '" /> ' . $translation;
 
             $html[] = '</a>';
         }
+
+        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 

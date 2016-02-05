@@ -264,3 +264,48 @@ div.chamilo-menu-container li {
 .chamilo-menu-bar li a div.chamilo-menu-item-label-with-image {
 	padding-left: 0px;
 }
+
+/************
+ * SITEMAP  *
+ ************/
+.sitemap {
+	background-color: #15243B;
+}
+
+.sitemap h1 {
+	color: #9e021b;
+	display: block;
+	font-size: 11px;
+	clear: both;
+	padding: 0px;
+	padding-bottom: 4px;
+	margin: 0px 0px 10px 0px;
+	border-bottom: 1px dotted #264269;
+}
+
+.sitemap div.item {
+	display: block;
+	font-size: 10px;
+	clear: both;
+}
+
+.sitemap div.categories { /*width: 100%;*/
+	display: inline-block;
+	text-align: left;
+}
+
+.sitemap div.category {
+	float: left;
+	width: 100px;
+	margin-right: 15px;
+	margin-top: 19px;
+	padding: 0px 15px 0px 0px;
+	color: #264269;
+	/*border-right: 1px dotted #9e021b;*/
+	font-size: 10px;
+}
+
+.sitemap div.no_margin {
+	margin-right: 0px;
+	padding-right: 0px;
+}

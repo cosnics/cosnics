@@ -10,16 +10,20 @@ class DebugUtilities
     {
         $html = array();
 
-        $html[] = '<div class="debug">';
+        $html[] = '<div class="panel panel-info">';
+
+        if (isset($title))
+        {
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h3 class="panel-title">' . $title . '</h3>';
+            $html[] = '</div>';
+        }
+
+        $html[] = '<div class="panel-body">';
 
         $calledFrom = debug_backtrace();
         $html[] = '<strong>' . $calledFrom[$backtrace_index]['file'] . '</strong>';
         $html[] = ' (line <strong>' . $calledFrom[$backtrace_index]['line'] . '</strong>)';
-
-        if (isset($title))
-        {
-            $html[] = '<h3>' . $title . '</h3>';
-        }
 
         $html[] = ('<pre>');
 
@@ -73,6 +77,7 @@ class DebugUtilities
         }
 
         $html[] = ('</pre>');
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
