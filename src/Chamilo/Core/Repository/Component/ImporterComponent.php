@@ -132,18 +132,20 @@ class ImporterComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
+            $html[] = '<div class="btn-group">';
 
             foreach ($this->get_types() as $type => $name)
             {
 
-                $html[] = '<a href="' . $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)) . '">';
-                $html[] = '<div class="create_block" style="background-image: url(' .
-                     Theme :: getInstance()->getImagePath(Manager :: package(), 'Import/' . $type) . ');">';
+                $html[] = '<a class="btn btn-default" href="' . $this->get_url(
+                    array(self :: PARAM_IMPORT_TYPE => $type)) . '">';
+                $html[] = '<img src="' . Theme :: getInstance()->getImagePath(Manager :: package(), 'Import/' . $type) .
+                     '" /> ';
                 $html[] = $name;
-                $html[] = '</div>';
                 $html[] = '</a>';
             }
 
+            $html[] = '</div>';
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
