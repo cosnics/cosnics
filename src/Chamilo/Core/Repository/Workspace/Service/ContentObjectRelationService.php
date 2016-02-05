@@ -164,6 +164,16 @@ class ContentObjectRelationService
     }
 
     /**
+     * @param ContentObject $contentObject
+     *
+     * @return int
+     */
+    public function countWorkspacesForContentObject(ContentObject $contentObject)
+    {
+        return count($this->getWorkspaceIdentifiersForContentObject($contentObject));
+    }
+
+    /**
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @return integer[]
