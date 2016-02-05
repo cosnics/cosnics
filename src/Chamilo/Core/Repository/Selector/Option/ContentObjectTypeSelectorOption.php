@@ -102,7 +102,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
         return Theme :: getInstance()->getImagePath(
             $namespace,
             'Logo/' . ($this->get_template_registration_id() ? 'Template/' .
-                 $this->get_template_registration()->get_name() . '/' : '') . Theme :: ICON_SMALL);
+                 $this->get_template_registration()->get_name() . '/' : '') . Theme :: ICON_BIG);
     }
 
     /*
