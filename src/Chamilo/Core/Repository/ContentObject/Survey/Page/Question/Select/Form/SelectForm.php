@@ -30,14 +30,14 @@ class SelectForm extends ContentObjectForm
     const TAB_GENERAL = 'general';
     const TAB_QUESTION = 'question';
     const TAB_OPTION = 'option';
-    
+
     private static $html_editor_options = array(
         FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '75',
         FormValidatorHtmlEditorOptions :: OPTION_COLLAPSE_TOOLBAR => true);
-    
+
     /**
      * Prepare all the different tabs
-    */
+     */
     function prepareTabs()
     {
         $this->addElement(
@@ -46,8 +46,7 @@ class SelectForm extends ContentObjectForm
                 Path :: getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select',
                     true) . 'Form.js'));
-    
-    
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_QUESTION,
@@ -57,7 +56,7 @@ class SelectForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select',
                     'Tab/' . self :: TAB_QUESTION),
                 'build_question_form'));
-    
+
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_OPTION,
@@ -67,11 +66,11 @@ class SelectForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select',
                     'Tab/' . self :: TAB_OPTION),
                 'build_option_form'));
-    
+
         $this->addDefaultTab();
         $this->addMetadataTabs();
     }
-    
+
     function build_question_form()
     {
         $this->add_textfield(
@@ -79,8 +78,11 @@ class SelectForm extends ContentObjectForm
             Translation :: get('Question'),
             true,
             array('size' => '100', 'id' => 'question', 'style' => 'width: 95%'));
-        $this->add_html_editor(Select :: PROPERTY_INSTRUCTION, Translation :: get('Instruction'), false, self :: $html_editor_options);
-
+        $this->add_html_editor(
+            Select :: PROPERTY_INSTRUCTION,
+            Translation :: get('Instruction'),
+            false,
+            self :: $html_editor_options);
     }
 
     function setDefaults($defaults = array ())
@@ -265,17 +267,21 @@ class SelectForm extends ContentObjectForm
         $buttons = array();
         // TODO adding fix for multiple select question
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             'change_answer_type',
             $switch_label,
-            array('class' => 'normal switch', 'id' => 'change_answer_type'));
+            array('id' => 'change_answer_type'),
+            null,
+            'retweet');
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
             'style_button',
             'add[]',
             Translation :: get('AddSelectOption'),
-            array('class' => 'normal add', 'id' => 'add_option'));
+            array('id' => 'add_option'),
+            null,
+            'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $html_editor_options = array();

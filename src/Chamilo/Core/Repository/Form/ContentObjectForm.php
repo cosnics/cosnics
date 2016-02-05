@@ -505,10 +505,12 @@ EOT;
             }
 
             $buttons[] = $this->createElement(
-                'style_submit_button',
+                'style_button',
                 'submit',
                 Translation :: get('CompareVersions'),
-                array('class' => 'normal compare'));
+                null,
+                null,
+                'transfer');
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
     }
@@ -632,7 +634,7 @@ EOT;
                     Translation :: get('Compare', null, Utilities :: COMMON_LIBRARIES),
                     null,
                     null,
-                    'list-alt');
+                    'transfer');
                 break;
             case self :: TYPE_CREATE :
                 $buttons[] = $this->createElement(

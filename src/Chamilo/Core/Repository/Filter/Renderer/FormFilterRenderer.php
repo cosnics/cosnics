@@ -260,10 +260,12 @@ class FormFilterRenderer extends FilterRenderer
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(Manager :: context(), true) . 'Search.js'));
         $this->form_validator->addElement(
-            'style_submit_button',
+            'style_button',
             'submit',
             Translation :: get('Search', array(), Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal search'));
+            null,
+            null,
+            'search');
     }
 
     /**

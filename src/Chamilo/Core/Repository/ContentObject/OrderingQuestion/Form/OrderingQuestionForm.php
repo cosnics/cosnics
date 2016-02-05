@@ -206,7 +206,7 @@ class OrderingQuestionForm extends ContentObjectForm
             'style_button',
             'add[]',
             Translation :: get('AddItem'),
-            array('class' => 'normal add', 'id' => 'add_option'));
+            array('id' => 'add_option'), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $html_editor_options = array();

@@ -66,7 +66,7 @@ class BrowserComponent extends Manager implements TableSupport
             self :: PARAM_QUERY,
             Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
             'size="30" class="search_query"');
-        $this->get_form()->addElement('style_submit_button', 'submit', null, array('class' => 'search'));
+        $this->get_form()->addElement('style_submit_button', 'submit', null, null, null, 'search');
         $this->get_form()->setDefaults(array(self :: PARAM_QUERY => $this->get_query()));
     }
 

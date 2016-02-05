@@ -141,15 +141,19 @@ class SettingsPage extends InstallWizardPage
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             $this->getButtonName('back'),
             Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal previous'));
+            null,
+            null,
+            'chevron-left');
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             $this->getButtonName('next'),
             Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal next'));
+            null,
+            null,
+            'chevron-right');
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->setDefaultAction($this->getButtonName('submit'));
         $this->set_form_defaults();

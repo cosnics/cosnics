@@ -88,12 +88,13 @@ class ExternalObjectForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive update'));
+            null,
+            null,
+            'arrow-right');
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -109,7 +110,8 @@ class ExternalObjectForm extends FormValidator
         if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE])))
         {
             return $this->application->get_external_repository_manager_connector()->create_external_repository_object(
-                $_FILES[self :: FILE], $folder);
+                $_FILES[self :: FILE],
+                $folder);
         }
         else
         {
@@ -153,16 +155,8 @@ class ExternalObjectForm extends FormValidator
 
         $this->addElement('file', self :: FILE, Translation :: get('FileName'));
 
-        $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create'),
-            array('class' => 'positive'));
-        $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset'),
-            array('class' => 'normal empty'));
+        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('Create'));
+        $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset'));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->addElement(
@@ -183,16 +177,8 @@ class ExternalObjectForm extends FormValidator
         $this->addElement('hidden', 'folder');
         $this->setDefaults(array('folder' => Request :: get('folder')));
 
-        $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create'),
-            array('class' => 'positive'));
-        $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset'),
-            array('class' => 'normal empty'));
+        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('Create'));
+        $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset'));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

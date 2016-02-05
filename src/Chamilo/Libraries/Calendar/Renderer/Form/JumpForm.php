@@ -61,13 +61,28 @@ class JumpForm extends FormValidator
 
         $dateGroup = array();
 
-        $dateGroup[] = $this->createElement('select', self :: JUMP_DAY, null, $this->getDays(), array('class' => 'postback'));
-        $dateGroup[] = $this->createElement('select', self :: JUMP_MONTH, null, $this->getMonths(), array('class' => 'postback'));
-        $dateGroup[] = $this->createElement('select', self :: JUMP_YEAR, null, $this->getYears(), array('class' => 'postback'));
+        $dateGroup[] = $this->createElement(
+            'select',
+            self :: JUMP_DAY,
+            null,
+            $this->getDays(),
+            array('class' => 'postback'));
+        $dateGroup[] = $this->createElement(
+            'select',
+            self :: JUMP_MONTH,
+            null,
+            $this->getMonths(),
+            array('class' => 'postback'));
+        $dateGroup[] = $this->createElement(
+            'select',
+            self :: JUMP_YEAR,
+            null,
+            $this->getYears(),
+            array('class' => 'postback'));
 
         $this->addGroup($dateGroup, null, null, ' ', false);
 
-        $this->addElement('style_submit_button', 'submit', Translation :: get('Jump'), array('class' => 'normal'));
+        $this->addElement('style_button', 'submit', Translation :: get('Jump'));
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(

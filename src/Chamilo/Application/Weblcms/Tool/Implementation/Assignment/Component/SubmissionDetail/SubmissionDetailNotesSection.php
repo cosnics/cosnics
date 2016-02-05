@@ -49,7 +49,9 @@ class SubmissionDetailNotesSection extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive publish'));
+            null,
+            null,
+            'arrow-right');
         $this->addElement($save_button);
 
         $this->set_initial_note();

@@ -25,7 +25,7 @@ class RightsForm extends FormValidator
     {
         parent :: __construct('rights', 'post', $action);
         $this->form_user = $form_user;
-        
+
         $this->build_form();
         $this->setDefaults();
     }
@@ -36,18 +36,19 @@ class RightsForm extends FormValidator
         $types->add_element_type(UserEntity :: get_element_finder_type());
         $types->add_element_type(PlatformGroupEntity :: get_element_finder_type());
         $this->addElement('advanced_element_finder', self :: PROPERTY_ACCESS, null, $types);
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'positive save'));
+            'style_submit_button',
+            'submit',
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
+            null,
+            null,
+            'floppy-save');
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'normal empty'));
-        
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -57,87 +58,87 @@ class RightsForm extends FormValidator
         $targets_entities = Rights :: get_instance()->get_quota_targets_entities();
         $user_entity = UserEntity :: get_instance();
         $group_entity = PlatformGroupEntity :: get_instance();
-        
+
         foreach ($targets_entities[UserEntity :: ENTITY_TYPE] as $entity)
         {
             $default_elements->add_element($user_entity->get_element_finder_element($entity));
         }
-        
+
         foreach ($targets_entities[PlatformGroupEntity :: ENTITY_TYPE] as $entity)
         {
             $default_elements->add_element($group_entity->get_element_finder_element($entity));
         }
-        
+
         $this->getElement(self :: PROPERTY_ACCESS)->setDefaultValues($default_elements);
-        
+
         parent :: setDefaults(array());
     }
 
     public function set_rights()
     {
         $values = $this->exportValues();
-        
+
         $rights_util = Rights :: get_instance();
         $location = $rights_util->get_quota_root();
-        
+
         $targets_entities = Rights :: get_instance()->get_quota_targets_entities();
-        
+
         $location_id = $location->get_id();
-        
+
         if (! isset($values[self :: PROPERTY_ACCESS][UserEntity :: ENTITY_TYPE]))
         {
             $values[self :: PROPERTY_ACCESS][UserEntity :: ENTITY_TYPE] = array();
         }
-        
+
         if (! isset($values[self :: PROPERTY_ACCESS][PlatformGroupEntity :: ENTITY_TYPE]))
         {
             $values[self :: PROPERTY_ACCESS][PlatformGroupEntity :: ENTITY_TYPE] = array();
         }
-        
+
         foreach ($values[self :: PROPERTY_ACCESS] as $entity_type => $target_ids)
         {
             $to_delete = array_diff((array) $targets_entities[$entity_type], $target_ids);
             $to_add = array_diff($target_ids, (array) $targets_entities[$entity_type]);
-            
+
             foreach ($to_add as $target_id)
             {
                 if (! $rights_util->invert_quota_location_entity_right(
-                    Rights :: VIEW_RIGHT, 
-                    $target_id, 
-                    $entity_type, 
+                    Rights :: VIEW_RIGHT,
+                    $target_id,
+                    $entity_type,
                     $location_id))
                 {
                     return false;
                 }
             }
-            
+
             foreach ($to_delete as $target_id)
             {
                 $location_entity_right = Rights :: get_instance()->get_quota_location_entity_right(
-                    $target_id, 
+                    $target_id,
                     $entity_type);
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(
-                        RightsLocationEntityRightGroup :: class_name(), 
-                        RightsLocationEntityRightGroup :: PROPERTY_LOCATION_ENTITY_RIGHT_ID), 
+                        RightsLocationEntityRightGroup :: class_name(),
+                        RightsLocationEntityRightGroup :: PROPERTY_LOCATION_ENTITY_RIGHT_ID),
                     new StaticConditionVariable($location_entity_right->get_id()));
-                
+
                 if (! DataManager :: deletes(RightsLocationEntityRightGroup :: class_name(), $condition))
                 {
                     return false;
                 }
-                
+
                 if (! $rights_util->invert_quota_location_entity_right(
-                    Rights :: VIEW_RIGHT, 
-                    $target_id, 
-                    $entity_type, 
+                    Rights :: VIEW_RIGHT,
+                    $target_id,
+                    $entity_type,
                     $location_id))
                 {
                     return false;
                 }
             }
         }
-        
+
         return true;
     }
 }

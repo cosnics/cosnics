@@ -175,18 +175,21 @@ class PrerequisitesBuilderForm extends FormValidator
         $form_buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
         $form_buttons[] = $this->createElement(
             'style_submit_button',
             'submit_basic',
             Translation :: get('SavePrerequisites'),
-            array('class' => 'positive save'));
+            null,
+            null,
+            'floppy-save');
         $form_buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             'go_advanced',
             Translation :: get('AdvancedPrerequisites'),
-            array('class' => 'normal next'));
+            null,
+            null,
+            'chevron-right');
 
         $this->addGroup($form_buttons, 'option_buttons', null, '&nbsp;', false);
     }
@@ -342,20 +345,26 @@ class PrerequisitesBuilderForm extends FormValidator
 
         $prerequisites = $this->clo_item->get_prerequisites();
         $form_buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             'go_basic',
             Translation :: get('BasicPrerequisites'),
-            array('class' => 'normal previous'));
+            null,
+            null,
+            'chevron-left');
         $form_buttons[] = $this->createElement(
             'style_button',
             'add_group[]',
             Translation :: get('AddPrerequisiteGroup'),
-            array('class' => 'normal add', 'id' => 'add_group'));
+            array('id' => 'add_group'),
+            null,
+            'plus');
         $form_buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
             Translation :: get('SavePrerequisites'),
-            array('class' => 'positive save'));
+            null,
+            null,
+            'floppy-save');
         $this->addGroup($form_buttons, 'option_buttons', null, '&nbsp;', false);
     }
 

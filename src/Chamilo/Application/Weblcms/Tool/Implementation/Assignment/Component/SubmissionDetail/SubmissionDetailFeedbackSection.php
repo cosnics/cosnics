@@ -57,12 +57,10 @@ class SubmissionDetailFeedbackSection extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive publish'));
-        $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset'),
-            array('class' => 'normal empty'));
+            null,
+            null,
+            'arrow-right');
+        $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset'));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 

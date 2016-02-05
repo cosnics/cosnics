@@ -91,6 +91,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
             throw new \Exception(Translation :: get('NoTemplateRegistrationSelected'));
         }
     }
+
     /*
      * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_image_path()
      */
@@ -101,7 +102,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
         return Theme :: getInstance()->getImagePath(
             $namespace,
             'Logo/' . ($this->get_template_registration_id() ? 'Template/' .
-                 $this->get_template_registration()->get_name() . '/' : '') . '48');
+                 $this->get_template_registration()->get_name() . '/' : '') . Theme :: ICON_BIG);
     }
 
     /*

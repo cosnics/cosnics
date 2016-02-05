@@ -97,8 +97,9 @@ class Display extends QuestionDisplay
             'static',
             null,
             null,
-            '<a class="button normal_button select_file_button" onclick="javascript:openPopup(\'' . $link . '\');"> ' . Translation :: get(
-                'BrowseContentObjects') . '</a>');
+            '<a class="btn btn-default onclick="javascript:openPopup(\'' . $link .
+                 '\');"><span class="glyphicon glyphicon-upload"></span> ' . Translation :: get('BrowseContentObjects') .
+                 '</a>');
 
         $formvalidator->addGroup($group, '');
     }
@@ -146,8 +147,9 @@ class Display extends QuestionDisplay
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
 
             $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
-            $html[] = '<div class="with_borders"><a id="' . $hint_name . '" class="button hint_button">' . Translation :: get(
-                'GetAHint') . '</a></div>';
+            $html[] = '<div class="with_borders"><a id="' . $hint_name .
+                 '" class="btn btn-default"><span class="glyphicon glyphicon-gift"></span> ' . Translation :: get(
+                    'GetAHint') . '</a></div>';
 
             $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);

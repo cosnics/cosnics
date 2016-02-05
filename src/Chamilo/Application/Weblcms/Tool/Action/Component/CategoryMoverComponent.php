@@ -248,12 +248,13 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                     'style_submit_button',
                     'submit',
                     Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive move'));
+                    null,
+                    null,
+                    'move');
                 $buttons[] = $form->createElement(
                     'style_reset_button',
                     'reset',
-                    Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'normal empty'));
+                    Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
                 $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
                 return $form;

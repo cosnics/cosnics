@@ -194,37 +194,38 @@ class ForumPostForm extends FormValidator
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive'));
+                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
                 break;
             case self :: TYPE_EDIT :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
                     Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive update'));
+                    null,
+                    null,
+                    'arrow-right');
                 break;
             case self :: TYPE_QUOTE :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
                     Translation :: get('Quote', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive send'));
+                    null,
+                    null,
+                    'envelope');
                 break;
             default :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive'));
+                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
                 break;
         }
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 }

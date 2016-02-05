@@ -77,16 +77,11 @@ class CategoryForm extends FormValidator
         // Submit button
         // $this->addElement('submit', 'submit', 'OK');
 
-        $buttons[] = $this->createElement(
-            'style_submit_button',
-            'create',
-            Translation :: get($action_name),
-            array('class' => 'positive'));
+        $buttons[] = $this->createElement('style_submit_button', 'create', Translation :: get($action_name));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->addElement(
