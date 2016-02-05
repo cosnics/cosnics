@@ -390,7 +390,8 @@ class WorkspaceRepository
                 $limit,
                 $offset,
                 $orderProperty,
-                new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT)))
+                new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT))),
+                true
             )
         );
     }
