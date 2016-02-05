@@ -96,8 +96,6 @@ class Login extends \Chamilo\Core\Home\BlockRendition
     {
         $request = $this->getRenderer()->getApplication()->getApplicationConfiguration()->getRequest();
 
-
-
         $form = new FormValidator('formLogin', 'post');
         $renderer = & $form->defaultRenderer();
         $renderer->setElementTemplate('<div class="row">{label}<br />{element}</div>');
@@ -120,7 +118,9 @@ class Login extends \Chamilo\Core\Home\BlockRendition
             'style_submit_button',
             'submitAuth',
             Translation :: get('Login'),
-            array('class' => 'positive login'));
+            null,
+            null,
+            'log-in');
 
         if (PlatformSetting :: get('allow_registration', \Chamilo\Core\User\Manager :: context()) || PlatformSetting :: get(
             'allow_password_retrieval',
@@ -138,8 +138,9 @@ class Login extends \Chamilo\Core\Home\BlockRendition
                     'static',
                     null,
                     null,
-                    '<a href="' . htmlspecialchars($link) . '" class="button normal_button register_button">' . htmlspecialchars(
-                        Translation :: get('Reg')) . '</a>');
+                    '<a href="' . htmlspecialchars($link) .
+                         '" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> ' . htmlspecialchars(
+                            Translation :: get('Reg')) . '</a>');
             }
             if (PlatformSetting :: get('allow_password_retrieval', \Chamilo\Core\User\Manager :: context()))
             {
@@ -153,8 +154,9 @@ class Login extends \Chamilo\Core\Home\BlockRendition
                     'static',
                     null,
                     null,
-                    '<a href="' . htmlspecialchars($link) . '" class="button normal_button help_button">' . htmlspecialchars(
-                        Translation :: get('ResetPassword')) . '</a>');
+                    '<a href="' . htmlspecialchars($link) .
+                         '" class="btn btn-default"><span class="glyphicon glyphicon-question-sign"></span> ' . htmlspecialchars(
+                            Translation :: get('ResetPassword')) . '</a>');
             }
         }
 

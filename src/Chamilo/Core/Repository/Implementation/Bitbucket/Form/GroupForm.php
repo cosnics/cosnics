@@ -43,7 +43,9 @@ class GroupForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive update'));
+            null,
+            null,
+            'arrow-right');
 
         $this->addElement(
             'html',

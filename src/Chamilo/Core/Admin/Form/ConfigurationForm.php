@@ -279,13 +279,11 @@ class ConfigurationForm extends FormValidator
             $buttons[] = $this->createElement(
                 'style_submit_button',
                 'submit',
-                Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES),
-                array('class' => 'positive'));
+                Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES));
             $buttons[] = $this->createElement(
                 'style_reset_button',
                 'reset',
-                Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES),
-                array('class' => 'normal empty'));
+                Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES));
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
         else

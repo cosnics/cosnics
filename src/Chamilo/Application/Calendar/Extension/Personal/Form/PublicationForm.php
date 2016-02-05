@@ -113,7 +113,7 @@ class PublicationForm extends FormValidator
         $shares = array();
         $attributes = array();
         $attributes['search_url'] = Path :: getInstance()->getBasePath(true) .
-        'index.php?go=XmlUserGroupFeed&application=Chamilo%5CCore%5CGroup%5CAjax';
+             'index.php?go=XmlUserGroupFeed&application=Chamilo%5CCore%5CGroup%5CAjax';
         $locale = array();
         $locale['Display'] = Translation :: get('ShareWith', null, Utilities :: COMMON_LIBRARIES);
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
@@ -136,12 +136,13 @@ class PublicationForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive publish'));
+            null,
+            null,
+            'arrow-right');
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

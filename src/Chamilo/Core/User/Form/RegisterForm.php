@@ -170,12 +170,13 @@ class RegisterForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Register'),
-            array('class' => 'positive register'));
+            null,
+            null,
+            'user');
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

@@ -303,338 +303,115 @@ input.rating_question_high_value {
 	background-image: url('../../Images/Ruby/Buttons/DeactivateElement.png');
 }
 
-/*********************************************************
- * Fixes button elements in Firefox ... unbelievable :-S *
- *********************************************************/
-button: :-moz-focus-inner {
-	border: 0px;
-	padding: 0px;
+a.button {
+	background-color: #f5f5f5;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	outline-style: none;
+	font-size: 100%;
+	line-height: 100%;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	width: auto;
+	overflow: visible;
+	padding: 7px 10px 7px 36px;
+	vertical-align: middle;
 }
 
-/* button, a.button { */
-/* 	background-color: #f5f5f5; */
-/* 	background-repeat: no-repeat; */
-/* 	background-position: 10px center; */
-/* 	border: 1px solid #dedede; */
-/* 	border-top: 1px solid #eeeeee; */
-/* 	border-left: 1px solid #eeeeee; */
-/* 	outline-style: none; */
-/* 	font-size: 100%; */
-/* 	line-height: 100%; */
-/* 	text-decoration: none; */
-/* 	font-weight: bold; */
-/* 	color: #565656; */
-/* 	cursor: pointer; */
-/* 	width: auto; */
-/* 	overflow: visible; */
-/* 	padding: 7px 10px 7px 36px; */
-/* 	vertical-align: middle; */
-/* } */
-
-/* a.button { */
-/* 	padding-top: 8px; */
-/* 	padding-bottom: 8px; */
-/* 	display: inline-block; */
-/* } */
-
-/* button.last, a.last_button { */
-/* 	margin: 0px; */
-/* } */
-
-/* button.positive, a.positive_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Confirm.png); */
-/* 	color: #529214; */
-/* } */
-
-/* a.positive_button:hover, button.positive:hover { */
-/* 	background-color: #E6EFC2; */
-/* 	border: 1px solid #C6D880; */
-/* 	color: #529214; */
-/* } */
-
-/* button.positive:active, a.positive_button:active { */
-/* 	background-color: #5ca54d; */
-/* 	border: 1px solid #5ca54d; */
-/* 	color: #ffffff; */
-/* } */
-
-/* button.negative, a.negative_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Cancel.png); */
-/* 	color: #d12f19; */
-/* } */
-
-/* a.negative_button:hover, button.negative:hover { */
-/* 	background-color: #fbe3e4; */
-/* 	border: 1px solid #fbc2c4; */
-/* 	color: #d12f19; */
-/* } */
-
-/* button.negative:active, a.negative_button:active { */
-/* 	background-color: #bf382b; */
-/* 	border: 1px solid #bf382b; */
-/* 	color: #ffffff; */
-/* } */
-
-/* button.normal, a.normal_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Next.png); */
-/* } */
-
-/* a.normal_button:hover, button.normal:hover { */
-/* 	background-color: #dff4ff; */
-/* 	border: 1px solid #c2e1ef; */
-/* 	color: #336699; */
-/* } */
-
-/* button.normal:active, a.normal_button:active { */
-/* 	background-color: #6299c5; */
-/* 	border: 1px solid #6299c5; */
-/* 	color: #ffffff; */
-/* } */
-
-/* button.alert, a.alert_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Warning.png); */
-/* 	color: #996900; */
-/* } */
-
-/* a.alert_button:hover, button.alert:hover { */
-/* 	border: 1px solid #ffd89b; */
-/* 	background-color: #fff8aa; */
-/* 	color: #996900; */
-/* } */
-
-/* button.alert:active, a.alert_button:active { */
-/* 	background-color: #ffd89b; */
-/* 	border: 1px solid #ffd89b; */
-/* 	color: #ffffff; */
-/* } */
-
-/* button.calendar, a.calendar_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Calendar.png); */
-/* } */
-
-/* a.calendar_button:hover, button.calendar:hover { */
-/* 	background-color: #dff4ff; */
-/* 	border: 1px solid #c2e1ef; */
-/* 	color: #336699; */
-/* } */
-
-/* button.calendar:active, a.calendar_button:active { */
-/* 	background-color: #6299c5; */
-/* 	border: 1px solid #6299c5; */
-/* 	color: #ffffff; */
-/* } */
-
-/* button.mini, a.mini_button, button.mini:hover, a.mini_button:hover, */
-/* 	button.mini:active, a.mini_button:active { */
-/* 	background-position: center center; */
-/* 	padding: 0px; */
-/* 	margin: -3px 0px 0px -3px; */
-/* 	line-height: 16px; */
-/* 	height: 22px; */
-/* 	vertical-align: middle; */
-/* 	font-size: 0px; */
-/* 	width: 22px; */
-/* 	overflow: hidden; */
-/* 	background-color: transparent !important; */
-/* 	border: 0px solid white !important; */
-/* } */
-
-/* button.mini, a.mini_button { */
-/* 	border: 1px solid #dedede; */
-/* } */
-
-/* button.next, a.next_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Next.png); */
-/* } */
-
-/* button.previous, a.previous_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Previous.png); */
-/* } */
-
-/* button.empty, a.empty_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Empty.png); */
-/* } */
-
-/* button.select, a.select_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Select.png); */
-/* } */
-
-/* button.join, a.join_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Join.png); */
-/* } */
-
-/* button.create, a.create_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Create.png); */
-/* } */
-
-/* button.error, a.error_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Error.png); */
-/* } */
-
-/* button.warning, a.warning_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Warning.png); */
-/* } */
-
-/* button.login, a.login_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Login.png); */
-/* 	float: left; */
-/* 	margin-bottom: 7px; */
-/* } */
-
-/* button.logout, a.logout_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Logout.png); */
-/* } */
-
-/* button.search, a.search_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Search.png); */
-/* } */
-
-/* button.filter, a.filter_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Filter.png); */
-/* } */
-
-/* button.save, a.save_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Save.png); */
-/* } */
-
-/* button.update, a.update_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Update.png); */
-/* } */
-
-/* button.publish, a.publish_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Publish.png); */
-/* } */
-
-/* button.send, a.send_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Send.png); */
-/* } */
-
-/* button.import, a.import_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Import.png); */
-/* } */
-
-/* button.export, a.export_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Export.png); */
-/* } */
-
-/* button.subscribe, a.subscribe_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Subscribe.png); */
-/* } */
-
-/* button.unsubscribe, a.unsubscribe_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Unsubscribe.png); */
-/* } */
-
-/* button.move, a.move_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Move.png); */
-/* } */
-
-/* button.compare, a.compare_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Compare.png); */
-/* } */
-
-/* button.finish, a.finish_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Finish.png); */
-/* } */
-
-/* button.register, a.register_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Register.png); */
-/* 	float: left; */
-/* 	padding-bottom: 11px; */
-/* 	margin-bottom: 7px; */
-/* } */
-
-/* button.switch, a.switch_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Switch.png); */
-/* } */
-
-/* button.add, a.add_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Add.png); */
-/* } */
-
-/* button.low, a.low_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Low.png); */
-/* } */
-
-/* button.high, a.high_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/High.png); */
-/* } */
-
-/* button.refresh, a.refresh_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Refresh.png); */
-/* } */
-
-/* button.upload, a.upload_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Upload.png); */
-/* } */
-
-/* button.download, a.download_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Download.png); */
-/* } */
-
-/* button.left, a.left_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Left.png); */
-/* } */
-
-/* button.right, a.right_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Right.png); */
-/* } */
-
-/* button.start, a.start_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Start.png); */
-/* } */
-
-/* button.read, a.read_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Read.png); */
-/* } */
-
-/* button.surf, a.surf_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Surf.png); */
-/* } */
-
-/* button.help, a.help_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Help.png); */
-/* } */
-
-/* button.email, a.email_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Email.png); */
-/* } */
-
-/* button.email_go, a.email_go_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/EmailGo.png); */
-/* } */
-
-/* button.build, a.build_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Build.png); */
-/* } */
-
-/* button.quickstart, a.quickstart_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Quickstart.png); */
-/* } */
-
-/* button.continue, a.continue_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Continue.png); */
-/* } */
-
-/* button.hide, a.hide_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Hide.png); */
-/* } */
-
-/* button.loading, a.loading_button { */
-/* 	background-image: url(../../Images/Ruby/Action/LoadingMini.gif); */
-/* } */
-
-/* button.delete, a.delete_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Delete.png); */
-/* } */
-
-/* button.delete-na, a.delete-na_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/DeleteNa.png); */
-/* } */
-
-/* button.clear, a.clear_button { */
-/* 	background-image: url(../../Images/Ruby/Buttons/Clear.png); */
-/* } */
+a.button {
+	padding-top: 8px;
+	padding-bottom: 8px;
+	display: inline-block;
+}
+
+a.last_button {
+	margin: 0px;
+}
+
+a.positive_button {
+	background-image: url(../../Images/Ruby/Buttons/Confirm.png);
+	color: #529214;
+}
+
+a.positive_button:hover {
+	background-color: #E6EFC2;
+	border: 1px solid #C6D880;
+	color: #529214;
+}
+
+a.positive_button:active {
+	background-color: #5ca54d;
+	border: 1px solid #5ca54d;
+	color: #ffffff;
+}
+
+a.negative_button {
+	background-image: url(../../Images/Ruby/Buttons/Cancel.png);
+	color: #d12f19;
+}
+
+a.negative_button:hover {
+	background-color: #fbe3e4;
+	border: 1px solid #fbc2c4;
+	color: #d12f19;
+}
+
+a.negative_button:active {
+	background-color: #bf382b;
+	border: 1px solid #bf382b;
+	color: #ffffff;
+}
+
+a.normal_button {
+	background-image: url(../../Images/Ruby/Buttons/Next.png);
+}
+
+a.normal_button:hover {
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+a.normal_button:active {
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #ffffff;
+}
+
+a.alert_button {
+	background-image: url(../../Images/Ruby/Buttons/Warning.png);
+	color: #996900;
+}
+
+a.alert_button:hover {
+	border: 1px solid #ffd89b;
+	background-color: #fff8aa;
+	color: #996900;
+}
+
+a.mini_button, a.mini_button:hover,
+	a.mini_button:active {
+	background-position: center center;
+	padding: 0px;
+	margin: -3px 0px 0px -3px;
+	line-height: 16px;
+	height: 22px;
+	vertical-align: middle;
+	font-size: 0px;
+	width: 22px;
+	overflow: hidden;
+	background-color: transparent !important;
+	border: 0px solid white !important;
+}
+
+a.mini_button {
+	border: 1px solid #dedede;
+}
 
 /*IE-fix to avoid adding unwanted margins to the form*/
 div.simple_search form {

@@ -207,7 +207,9 @@ class ImporterComponent extends Manager
             'style_submit_button',
             'import_button',
             Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive import', 'id' => 'import_button'));
+            array('id' => 'import_button'),
+            null,
+            'import');
 
         if ($form->validate())
         {

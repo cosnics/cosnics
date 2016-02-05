@@ -144,9 +144,9 @@ abstract class Manager extends Application
                     'BrowseObject',
                     array('OBJECT' => $instance->get_title()),
                     Utilities :: COMMON_LIBRARIES);
-                $buttons[] = '<a class="button normal_button upload_button" style="background-image: url(' .
-                     htmlspecialchars($image) . ');" onclick="javascript:openPopup(\'' . htmlspecialchars($link) .
-                     '\');"> ' . htmlspecialchars($title) . '</a>';
+                $buttons[] = '<a class="btn btn-default" style="background-image: url(' . htmlspecialchars($image) .
+                     ');" onclick="javascript:openPopup(\'' . htmlspecialchars($link) .
+                     '\');"><span class="glyphicon glyphicon-upload"></span> ' . htmlspecialchars($title) . '</a>';
                 $available_instances ++;
             }
 

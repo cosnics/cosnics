@@ -376,7 +376,7 @@ class HotspotQuestionForm extends ContentObjectForm
             'style_button',
             'add[]',
             Translation :: get('AddHotspotOption'),
-            array('class' => 'normal add add_option'));
+            array('class' => 'add_option'), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();

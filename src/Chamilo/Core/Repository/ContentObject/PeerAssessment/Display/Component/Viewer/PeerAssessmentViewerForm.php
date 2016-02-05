@@ -36,21 +36,21 @@ class PeerAssessmentViewerForm extends FormValidator
 
     /**
      * Constructor
-     * 
+     *
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
     function __construct(ViewerComponent $viewer)
     {
         parent :: __construct(self :: FORM_NAME, 'post', $viewer->get_url());
-        
+
         $this->viewer = $viewer;
-        
+
         $this->get_users();
         $this->get_indicators();
         $root_content_object = $this->viewer->get_root_content_object();
         $assessment_type = $root_content_object->get_assessment_type();
         $this->processor = $root_content_object->get_result_processor();
-        
+
         if (count($this->users) > 0)
         {
             $this->render_overview($assessment_type);
@@ -61,8 +61,8 @@ class PeerAssessmentViewerForm extends FormValidator
     private function add_buttons()
     {
         $this->addElement(
-            'style_submit_button', 
-            FormValidator :: PARAM_SUBMIT, 
+            'style_submit_button',
+            FormValidator :: PARAM_SUBMIT,
             Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
     }
 
@@ -70,17 +70,17 @@ class PeerAssessmentViewerForm extends FormValidator
     {
         // there should be users and indicators, otherwise don't render
         $params = array(Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_USER_ATTEMPT_STATUS);
-        
+
         if (count($this->indicators) === 0 && $assessment_type != PeerAssessment :: TYPE_FEEDBACK)
             $this->viewer->redirect(Translation :: get('NoIndicators'), 1, $params);
         if (count($this->users) <= 1)
             $this->viewer->redirect(Translation :: get('OnlyOneUser'), 1, $params);
-            
+
             // TODO check for scores/feedback/both
             // TODO display images on tabs
-        
+
         $tabs = new DynamicFormTabsRenderer('', $this);
-        
+
         if ($assessment_type == PeerAssessment :: TYPE_SCORES || $assessment_type == PeerAssessment :: TYPE_BOTH)
         { // render the scores tab
             $tabs->add_tab(new DynamicFormTab('scores', Translation :: get('Scores'), null, 'render_scores_matrix'));
@@ -96,20 +96,20 @@ class PeerAssessmentViewerForm extends FormValidator
 
     /**
      * Renders the scores matrix
-     * 
+     *
      * @return string The html
      * @todo create css to style the table headers (add skewed headers, ...)
      */
     public function render_scores_matrix()
     {
         $renderer = $this->defaultRenderer();
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table peer-assessment-scores-matrix" style="width: auto">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th></th>'; // upper left cell is empty
-                                       
+
         // loop over the indicators to build the header cells
         foreach ($this->indicators as $i)
         {
@@ -120,7 +120,7 @@ class PeerAssessmentViewerForm extends FormValidator
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         // loop over the users to build the rows
         foreach ($this->users as $u)
         {
@@ -130,29 +130,29 @@ class PeerAssessmentViewerForm extends FormValidator
             {
                 $element_name = 'scores[' . $u->get_id() . '][' . $i->get_id() . ']';
                 $group[] = $this->create_textfield(
-                    $element_name, 
-                    null, 
+                    $element_name,
+                    null,
                     array('style' => 'width: 50px; text-align: center'));
             }
             $this->addGroup(
-                $group, 
-                'scores_' . $u->get_firstname() . '_' . $u->get_lastname(), 
-                $u->get_firstname() . ' ' . $u->get_lastname(), 
-                '', 
+                $group,
+                'scores_' . $u->get_firstname() . '_' . $u->get_lastname(),
+                $u->get_firstname() . ' ' . $u->get_lastname(),
+                '',
                 false);
             $renderer->setElementTemplate(
-                '<tr><td>{label}</td>{element}</tr>', 
+                '<tr><td>{label}</td>{element}</tr>',
                 'scores_' . $u->get_firstname() . '_' . $u->get_lastname());
             $renderer->setGroupElementTemplate(
-                '<td style="width: 80px; padding: 0; text-align: center">{element}</td>', 
+                '<td style="width: 80px; padding: 0; text-align: center">{element}</td>',
                 'scores_' . $u->get_firstname() . '_' . $u->get_lastname());
             if (! $this->processor->allow_empty_scores())
                 $this->addGroupRule(
-                    'scores_' . $u->get_firstname() . '_' . $u->get_lastname(), 
-                    'empty value', 
+                    'scores_' . $u->get_firstname() . '_' . $u->get_lastname(),
+                    'empty value',
                     'required');
         }
-        
+
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
@@ -160,7 +160,7 @@ class PeerAssessmentViewerForm extends FormValidator
 
     /**
      * Renders the feedback matrix
-     * 
+     *
      * @return string The html
      */
     public function render_feedback_matrix()
@@ -168,9 +168,9 @@ class PeerAssessmentViewerForm extends FormValidator
         // there should be users
         if (count($this->users) <= 1)
             return;
-        
+
         $renderer = $this->defaultRenderer();
-        
+
         $table_header = array();
         $table_header[] = '<table class="data_table peer-assessment-feedback-matrix" style="width: auto">';
         $table_header[] = '<thead>';
@@ -181,26 +181,26 @@ class PeerAssessmentViewerForm extends FormValidator
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
-        
+
         // loop over the users to build the rows
         foreach ($this->users as $u)
         {
             $group = array();
             $group[] = $this->createElement('textarea', 'feedback[' . $u->get_id() . ']');
             $this->addGroup(
-                $group, 
-                'feedback_' . $u->get_firstname() . '_' . $u->get_lastname(), 
-                $u->get_firstname() . ' ' . $u->get_lastname(), 
-                '', 
+                $group,
+                'feedback_' . $u->get_firstname() . '_' . $u->get_lastname(),
+                $u->get_firstname() . ' ' . $u->get_lastname(),
+                '',
                 false);
             $renderer->setElementTemplate(
-                '<tr><td>{label}</td>{element}</tr>', 
+                '<tr><td>{label}</td>{element}</tr>',
                 'feedback_' . $u->get_firstname() . '_' . $u->get_lastname());
             $renderer->setGroupElementTemplate(
-                '<td>{element}</td>', 
+                '<td>{element}</td>',
                 'feedback_' . $u->get_firstname() . '_' . $u->get_lastname());
         }
-        
+
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
@@ -211,13 +211,13 @@ class PeerAssessmentViewerForm extends FormValidator
         $success = true;
         $vals = $this->getSubmitValues();
         $error_message = Translation :: get('ErrorWrongScoreValue');
-        
+
         $this->get_indicators();
         $allowed_scores = $this->processor->get_allowed_scores();
-        
+
         $highest_allowed = array_pop($allowed_scores);
         $lowest_allowed = array_shift($allowed_scores);
-        
+
         foreach ($vals['scores'] as $user_id => $indicator_scores)
         {
             foreach ($indicator_scores as $indicator_id => $score)
@@ -225,7 +225,7 @@ class PeerAssessmentViewerForm extends FormValidator
                 // check format - only int allowed
                 $numeric = is_numeric($score);
                 $float = is_float(1 + $score); // convert string to float by adding int and check if it succeeded
-                
+
                 if ((! $numeric || $float) && ! empty($score))
                 {
                     $this->validation_errors[] = $error_message . Translation :: get('WrongValue') . ' ' .
@@ -233,7 +233,7 @@ class PeerAssessmentViewerForm extends FormValidator
                          $this->indicators[$indicator_id]->get_title() . "<br/>";
                     $success = false;
                 }
-                
+
                 if ($highest_allowed < $score)
                 {
                     $this->validation_errors[] = $error_message . Translation :: get('ScoreTooHigh') . ' ' .
@@ -251,18 +251,18 @@ class PeerAssessmentViewerForm extends FormValidator
             }
         }
         $success &= parent :: validate();
-        
+
         return $success;
     }
 
     function get_users()
     {
         $group = $this->viewer->get_user_group($this->viewer->get_user_id());
-        
+
         if ($group)
         {
             $user_array = $this->viewer->get_group_users($group->get_id());
-            
+
             foreach ($user_array as $user)
             {
                 $this->users[$user->get_id()] = $user;

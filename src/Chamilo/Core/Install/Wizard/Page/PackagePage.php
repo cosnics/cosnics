@@ -49,15 +49,19 @@ class PackagePage extends InstallWizardPage
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             $this->getButtonName('back'),
             Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal previous'));
+            null,
+            null,
+            'chevron-left');
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             $this->getButtonName('next'),
             Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal next'));
+            null,
+            null,
+            'chevron-right');
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->setDefaultAction($this->getButtonName('next'));
     }
@@ -84,11 +88,11 @@ class PackagePage extends InstallWizardPage
             $html[] = '<div class="package-list">';
             $html[] = '<h3>';
             $html[] = $packageType;
-            $html[] = '<img src = "' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Configuration',
-                'Form/CheckChecked') . '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Configuration',
-                'Form/CheckUnchecked') . '" class="package-list-select-none" />';
+            $html[] = '<img src = "' .
+                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/CheckChecked') .
+                 '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
+                    'Chamilo\Configuration',
+                    'Form/CheckUnchecked') . '" class="package-list-select-none" />';
             $html[] = '</h3>';
             $html[] = '<div class="package-list-items">';
             $this->addElement('html', implode(PHP_EOL, $html));

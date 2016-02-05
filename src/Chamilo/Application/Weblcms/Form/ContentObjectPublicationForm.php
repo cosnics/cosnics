@@ -305,7 +305,9 @@ class ContentObjectPublicationForm extends FormValidator
             'style_submit_button',
             self :: PARAM_SUBMIT,
             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive publish'));
+            null,
+            null,
+            'arrow-right');
 
         if (count($this->publications) == 1)
         {
@@ -332,14 +334,18 @@ class ContentObjectPublicationForm extends FormValidator
                             'style_submit_button',
                             self :: PROPERTY_PUBLISH_AND_BUILD,
                             Translation :: get('PublishAndBuild', null, Utilities :: COMMON_LIBRARIES),
-                            array('class' => 'positive build'));
+                            null,
+                            null,
+                            'pencil');
                     }
 
                     $buttons[] = $this->createElement(
                         'style_submit_button',
                         self :: PROPERTY_PUBLISH_AND_VIEW,
                         Translation :: get('PublishAndView', null, Utilities :: COMMON_LIBRARIES),
-                        array('class' => 'positive preview'));
+                        null,
+                        null,
+                        'search');
                 }
             }
         }
@@ -347,8 +353,7 @@ class ContentObjectPublicationForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_reset_button',
             self :: PARAM_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

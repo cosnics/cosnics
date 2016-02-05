@@ -45,7 +45,9 @@ class GroupImportForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Import'),
-            array('class' => 'positive import'));
+            null,
+            null,
+            'import');
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 

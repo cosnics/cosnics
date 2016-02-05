@@ -8,7 +8,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * This class represents a parameter not defined exception. Throw this if you expected an URL parameter that is not
+ * This class represents a parameter not defined exception.
+ * Throw this if you expected an URL parameter that is not
  * there
  */
 class NotAllowedException extends \Exception
@@ -54,11 +55,7 @@ class NotAllowedException extends \Exception
             Translation :: get('Pass'),
             array('size' => 20, 'onclick' => 'this.value=\'\';'));
         $form->addRule('password', Translation :: get('ThisFieldIsRequired'), 'required');
-        $form->addElement(
-            'style_submit_button',
-            'submitAuth',
-            Translation :: get('Login'),
-            array('class' => 'positive login'));
+        $form->addElement('style_submit_button', 'submitAuth', Translation :: get('Login'), null, null, 'log-in');
         $form->setDefaults(array('login' => Translation :: get('Username'), 'password' => '*******'));
 
         return $form;

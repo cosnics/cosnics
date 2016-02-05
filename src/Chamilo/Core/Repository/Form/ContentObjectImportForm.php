@@ -119,7 +119,9 @@ abstract class ContentObjectImportForm extends FormValidator
             'style_submit_button',
             'import_button',
             Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive import', 'id' => 'import_button'));
+            array('id' => 'import_button'),
+            null,
+            'import');
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 

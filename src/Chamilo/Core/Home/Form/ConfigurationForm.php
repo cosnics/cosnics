@@ -57,13 +57,11 @@ abstract class ConfigurationForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive'));
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -181,34 +179,34 @@ abstract class ConfigurationForm extends FormValidator
         }
     }
 
-//     /**
-//      * Sets default values.
-//      * Traditionally, you will want to extend this method so it sets default for your learning
-//      * object type's additional properties.
-//      *
-//      * @param array $defaults Default values for this form's parameters.
-//      */
-//     public function setDefaults($defaults = array ())
-//     {
-//         $homeblock_config = $this->homeblock_config;
-//         $homeblock_current_config = $this->homeblock->get_configuration();
+    // /**
+    // * Sets default values.
+    // * Traditionally, you will want to extend this method so it sets default for your learning
+    // * object type's additional properties.
+    // *
+    // * @param array $defaults Default values for this form's parameters.
+    // */
+    // public function setDefaults($defaults = array ())
+    // {
+    // $homeblock_config = $this->homeblock_config;
+    // $homeblock_current_config = $this->homeblock->get_configuration();
 
-//         foreach ($homeblock_config['settings'] as $category_name => $settings)
-//         {
-//             foreach ($settings as $name => $setting)
-//             {
-//                 $configuration_value = $homeblock_current_config[$name];
-//                 if (isset($configuration_value))
-//                 {
-//                     $defaults[$name] = $configuration_value;
-//                 }
-//                 else
-//                 {
-//                     $defaults[$name] = $setting['default'];
-//                 }
-//             }
-//         }
+    // foreach ($homeblock_config['settings'] as $category_name => $settings)
+    // {
+    // foreach ($settings as $name => $setting)
+    // {
+    // $configuration_value = $homeblock_current_config[$name];
+    // if (isset($configuration_value))
+    // {
+    // $defaults[$name] = $configuration_value;
+    // }
+    // else
+    // {
+    // $defaults[$name] = $setting['default'];
+    // }
+    // }
+    // }
 
-//         parent :: setDefaults($defaults);
-//     }
+    // parent :: setDefaults($defaults);
+    // }
 }
