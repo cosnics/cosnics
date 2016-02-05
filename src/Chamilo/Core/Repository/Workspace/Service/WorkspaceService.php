@@ -340,41 +340,4 @@ class WorkspaceService
         }
     }
 
-    /**
-     * @param int $contentObjectIdentifier
-     *
-     * @param int $limit
-     * @param int $offset
-     * @param OrderBy $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
-     */
-    public function getWorkspacesForContentObject($contentObjectIdentifier, $limit, $offset, $orderProperty = null)
-    {
-        if(empty($contentObjectIdentifier))
-        {
-            throw new \InvalidArgumentException('Invalid content object identifier defined');
-        }
-
-        return $this->getWorkspaceRepository()->findWorkspacesForContentObject(
-            $contentObjectIdentifier, $limit, $offset, $orderProperty
-        );
-    }
-
-    /**
-     * @param int $contentObjectIdentifier
-     *
-     * @return int
-     */
-    public function countWorkspacesForContentObject($contentObjectIdentifier)
-    {
-        if(empty($contentObjectIdentifier))
-        {
-            throw new \InvalidArgumentException('Invalid content object identifier defined');
-        }
-
-        return $this->getWorkspaceRepository()->countWorkspacesForContentObject(
-            $contentObjectIdentifier
-        );
-    }
 }
