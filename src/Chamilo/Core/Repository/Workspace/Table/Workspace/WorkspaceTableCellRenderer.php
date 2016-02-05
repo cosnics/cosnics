@@ -80,9 +80,16 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('FavouriteNa', null, Utilities :: COMMON_LIBRARIES),
-                    Theme:: getInstance()->getImagePath(Manager:: context(), 'Action/FavouriteNa'),
-                    null,
+                    Translation:: get('RemoveFavourite', null, Manager::context()),
+                    Theme:: getInstance()->getImagePath(\Chamilo\Core\Repository\Workspace\Favourite\Manager:: context(), 'Action/Delete'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
+                            \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_DELETE,
+                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
+                        )
+                    ),
                     ToolbarItem :: DISPLAY_ICON
                 )
             );
@@ -91,13 +98,14 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Favourite', null, Utilities :: COMMON_LIBRARIES),
+                    Translation:: get('Favourite', null, Manager::context()),
                     Theme:: getInstance()->getImagePath(Manager:: context(), 'Action/Favourite'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
                             \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE,
-                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id()
+                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
                         )
                     ),
                     ToolbarItem :: DISPLAY_ICON
@@ -125,12 +133,31 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation:: get('Rights', null, Utilities :: COMMON_LIBRARIES),
+                    Theme:: getInstance()->getCommonImagePath('Action/Share'),
+                    $this->get_component()->get_url(
+                        array(
+                            Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
+                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(),
+                            \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION =>
+                                \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE
+                        )
+                    ),
+                    ToolbarItem :: DISPLAY_ICON
+                )
+            );
+
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation:: get('Rights', null, Utilities :: COMMON_LIBRARIES),
                     Theme:: getInstance()->getCommonImagePath('Action/Rights'),
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
                             Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(),
+                            \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION =>
+                                \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_BROWSE
                         )
                     ),
                     ToolbarItem :: DISPLAY_ICON

@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
@@ -72,6 +73,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = $this->render_header();
+
         $html[] = $this->get_action_bar()->as_html();
         $html[] = $output;
         $html[] = ResourceManager :: get_instance()->get_resource_html(

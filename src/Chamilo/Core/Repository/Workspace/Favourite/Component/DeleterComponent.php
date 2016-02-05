@@ -36,6 +36,7 @@ class DeleterComponent extends Manager
             if (! is_array($workspaceIdentifiers))
             {
                 $workspaceIdentifiers = array($workspaceIdentifiers);
+                var_dump($workspaceIdentifiers);
             }
 
             $favouriteService = new FavouriteService(new FavouriteRepository());
@@ -68,6 +69,23 @@ class DeleterComponent extends Manager
             $message = $ex->getMessage();
         }
 
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
+        if(!isset($action))
+        {
+            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => $action));
+        }
+        else
+        {
+            $this->redirect(
+                Translation:: get(
+                    'ObjectCreated',
+                    array('OBJECT' => Translation:: get('WorkspaceUserFavourite')),
+                    Utilities :: COMMON_LIBRARIES
+                ),
+                false,
+                array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
+                array(self::PARAM_ACTION)
+            );
+        }
     }
 }

@@ -34,5 +34,5 @@ abstract class Manager extends Application
     const ACTION_FAVOURITE = 'Favourite';
 
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_FAVOURITE;
+    const DEFAULT_ACTION = self :: ACTION_BROWSE_PERSONAL;
 }

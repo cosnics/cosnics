@@ -1,7 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Component;
 
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\EntityService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -26,6 +30,14 @@ class BrowserComponent extends Manager implements TableSupport
         $html = array();
 
         $html[] = $this->render_header();
+
+        if(!$this->hasFavourites())
+        {
+            $html[] = '<div class="alert alert-info">';
+            $html[] = Translation::getInstance()->getTranslation('FavouritesInfo', null, Manager::context());
+            $html[] = '</div>';
+        }
+
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
 
@@ -39,5 +51,45 @@ class BrowserComponent extends Manager implements TableSupport
                 WorkspaceUserFavourite :: class_name(),
                 WorkspaceUserFavourite :: PROPERTY_USER_ID),
             new StaticConditionVariable($this->get_user_id()));
+    }
+
+    /**
+     * Checks if the current user has favourites
+     *
+     * @return bool
+     */
+    protected function hasFavourites()
+    {
+        return ($this->getWorkspaceService()->countWorkspaceFavouritesByUser(
+                $this->getEntityService(),
+                $this->getUser()) > 0);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Service\EntityService
+     */
+    protected function getEntityService()
+    {
+        if (! isset($this->entityService))
+        {
+            $this->entityService = new EntityService();
+        }
+
+        return $this->entityService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
+     */
+    protected function getWorkspaceService()
+    {
+        if (! isset($this->workspaceService))
+        {
+            $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
+        }
+
+        return $this->workspaceService;
     }
 }
