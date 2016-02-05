@@ -6,7 +6,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: language_install_wizard_page.class.php 225 2009-11-13 14:43:20Z vanpouckesven $
- * 
+ *
  * @package install.lib.installmanager.component.inc.wizard
  */
 /**
@@ -19,13 +19,13 @@ class IntroductionPage extends InstallWizardPage
     {
         $this->_formBuilt = true;
         $this->renderer = $this->defaultRenderer();
-        
+
         $phpVersion = phpversion();
-        
+
         $this->addElement(
-            'html', 
+            'html',
             '<div style="position: relative; width: 600px; margin-left: -300px; left: 50%; right: 50%;">');
-        
+
         if ($phpVersion >= 5.4)
         {
             $html = array();
@@ -38,40 +38,39 @@ class IntroductionPage extends InstallWizardPage
             $html[] = '<br />';
             $html[] = 'If you\'re starting Chamilo for the first time, you may want to install the platform first by clicking the button below. Alternatively, you can read the installation guide, visit chamilo.org for more information or go to the community forum if you need support.';
             $html[] = '</div>';
-            
+
             $this->addElement('html', implode(PHP_EOL, $html));
-            
+
             $buttons = array();
-            
+
             $buttons[] = $this->createElement(
-                'style_submit_button', 
-                $this->getButtonName('next'), 
-                Translation :: get('Install'), 
-                array('class' => 'positive'));
-            
+                'style_submit_button',
+                $this->getButtonName('next'),
+                Translation :: get('Install'));
+
             $buttons[] = $this->createElement(
-                'static', 
-                null, 
-                null, 
-                '<a class="button normal_button read_button" href="documentation/install.txt" target="_blank">Read the installation guide</a>');
-            
+                'static',
+                null,
+                null,
+                '<a class="btn btn-default" href="documentation/install.txt" target="_blank"><span class="glyphicon glyphicon-book" aria-hidden="true"></span> Read the installation guide</a>');
+
             $buttons[] = $this->createElement(
-                'static', 
-                null, 
-                null, 
-                '<a class="button normal_button surf_button" href="http://www.chamilo.org/" target="_blank">Visit chamilo.org</a>');
-            
+                'static',
+                null,
+                null,
+                '<a class="btn btn-default" href="http://www.chamilo.org/" target="_blank"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span> Visit chamilo.org</a>');
+
             $buttons[] = $this->createElement(
-                'static', 
-                null, 
-                null, 
-                '<a class="button normal_button help_button last_button" href="http://www.chamilo.org/forum/" target="_blank">Get support</a>');
-            
+                'static',
+                null,
+                null,
+                '<a class="btn btn-default" href="http://www.chamilo.org/forum/" target="_blank"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Get support</a>');
+
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
             $this->renderer->setElementTemplate(
-                '<div style="text-align: center; padding: 0px; margin: 0px;">{element}</div>', 
+                '<div style="text-align: center; padding: 0px; margin: 0px;">{element}</div>',
                 'buttons');
-            
+
             $this->setDefaultAction($this->getButtonName('next'));
         }
         else
@@ -84,10 +83,10 @@ class IntroductionPage extends InstallWizardPage
             $html[] = 'Please upgrade to PHP version 5.4 or higher';
             $html[] = '</a>';
             $html[] = '</div>';
-            
+
             $this->addElement('html', implode(PHP_EOL, $html));
         }
-        
+
         $this->addElement('html', '</div>');
     }
 

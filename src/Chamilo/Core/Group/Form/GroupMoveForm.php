@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: group_move_form.class.php 224 2009-11-13 14:40:30Z kariboe $
- * 
+ *
  * @package groups.lib.forms
  */
 class GroupMoveForm extends FormValidator
@@ -26,24 +26,23 @@ class GroupMoveForm extends FormValidator
     {
         parent :: __construct('group_move', 'post', $action);
         $this->group = $group;
-        
+
         $this->build_form();
-        
+
         $this->setDefaults();
     }
 
     public function build_form()
     {
         $this->addElement('select', self :: PROPERTY_LOCATION, Translation :: get('NewLocation'), $this->get_groups());
-        // $this->addElement('submit', 'group_export', Translation :: get('Ok', null , Utilities :: COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'positive move'));
-        // $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset', null , Utilities
-        // :: COMMON_LIBRARIES), array('class' => 'normal empty'));
-        
+            'style_submit_button',
+            'submit',
+            Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
+            null,
+            null,
+            'move');
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -60,7 +59,7 @@ class GroupMoveForm extends FormValidator
     public function get_groups()
     {
         $group = $this->group;
-        
+
         $group_menu = new GroupMenu($group->get_id(), null, true, true);
         $renderer = new OptionsMenuRenderer();
         $group_menu->render($renderer, 'sitemap');
@@ -69,7 +68,7 @@ class GroupMoveForm extends FormValidator
 
     /**
      * Sets default values.
-     * 
+     *
      * @param array $defaults Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())

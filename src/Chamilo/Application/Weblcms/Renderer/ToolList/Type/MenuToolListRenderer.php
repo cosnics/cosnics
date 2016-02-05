@@ -130,10 +130,12 @@ class MenuToolListRenderer extends ToolListRenderer
                 'size="18" class="search_query_no_icon" style="background-color: white;
                 border: 1px solid grey; height: 18px; margin-bottom: 10px;"');
             $form->addElement(
-                'style_submit_button',
+                'style_button',
                 'submit',
                 Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
-                array('class' => 'normal search'));
+                null,
+                null,
+                'search');
             $form->accept($renderer);
 
             $html[] = $renderer->toHtml();

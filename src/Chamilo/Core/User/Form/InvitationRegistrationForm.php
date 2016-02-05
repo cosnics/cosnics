@@ -123,16 +123,11 @@ class InvitationRegistrationForm extends FormValidator
             $this->addElement('category');
         }
 
-        $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('CreateAccount'),
-            array('class' => 'positive register'));
+        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('CreateAccount'));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

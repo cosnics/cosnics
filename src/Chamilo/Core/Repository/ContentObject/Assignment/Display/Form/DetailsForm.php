@@ -61,10 +61,12 @@ class DetailsForm extends FormValidator
         $this->add_html_editor(Note :: PROPERTY_NOTE, Translation :: get('Note'), false);
 
         $this->addElement(
-            'style_submit_button',
+            'style_button',
             null,
             Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive save'));
+            null,
+            null,
+            'floppy-save');
     }
 
     protected function getScoreChoices()

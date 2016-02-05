@@ -47,17 +47,15 @@ class CourseSectionToolSelectorForm extends FormValidator
             Translation :: get('SelectTools'),
             $this->get_tools(),
             array('style' => 'width:200px;'));
-        // $this->addElement('submit', 'course_sections', 'OK');
+
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive'));
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

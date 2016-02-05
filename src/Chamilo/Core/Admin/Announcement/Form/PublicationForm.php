@@ -95,13 +95,14 @@ class PublicationForm extends FormValidator
             'style_submit_button',
             self :: PARAM_SUBMIT,
             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive publish'));
+            null,
+            null,
+            'arrow-right');
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             self :: PARAM_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -117,12 +118,13 @@ class PublicationForm extends FormValidator
             'style_submit_button',
             self :: PARAM_SUBMIT,
             Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive update'));
+            null,
+            null,
+            'arrow-right');
         $buttons[] = $this->createElement(
             'style_reset_button',
             self :: PARAM_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

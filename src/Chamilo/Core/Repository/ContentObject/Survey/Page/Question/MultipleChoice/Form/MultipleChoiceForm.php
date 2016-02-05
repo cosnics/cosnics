@@ -57,7 +57,6 @@ class MultipleChoiceForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice',
                     true) . 'Form.js'));
 
-
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
                 self :: TAB_QUESTION,
@@ -77,11 +76,11 @@ class MultipleChoiceForm extends ContentObjectForm
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice',
                     'Tab/' . self :: TAB_OPTION),
                 'build_option_form'));
-        
+
         $this->addDefaultTab();
         $this->addMetadataTabs();
     }
-  
+
     /**
      * Add the question and instruction fields
      *
@@ -165,22 +164,28 @@ class MultipleChoiceForm extends ContentObjectForm
         $display_type_label = $content_object->get_display_type() == MultipleChoice :: DISPLAY_TYPE_SELECT ? 'SwitchToTable' : 'SwitchToSelect';
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             self :: BUTTON_CHANGE_ANSWER_TYPE . '[]',
             Translation :: get($answer_type_label),
-            array('class' => 'normal switch ' . self :: BUTTON_CHANGE_ANSWER_TYPE));
+            array('class' => self :: BUTTON_CHANGE_ANSWER_TYPE),
+            null,
+            'retweet');
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             self :: BUTTON_CHANGE_DISPLAY_TYPE . '[]',
             Translation :: get($display_type_label),
-            array('class' => 'normal switch ' . self :: BUTTON_CHANGE_DISPLAY_TYPE));
+            array('class' => self :: BUTTON_CHANGE_DISPLAY_TYPE),
+            null,
+            'retweet');
 
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             self :: BUTTON_ADD_OPTION . '[]',
             Translation :: get('AddMultipleChoiceOption'),
-            array('class' => 'normal add ' . self :: BUTTON_ADD_OPTION));
+            array('class' => self :: BUTTON_ADD_OPTION),
+            null,
+            'plus');
 
         $this->addGroup($buttons, self :: PROPERTY_OPTION_BUTTONS, null, '', false);
 
@@ -227,12 +232,14 @@ class MultipleChoiceForm extends ContentObjectForm
                 if ($number_of_options > 2)
                 {
                     $group[] = & $this->createElement(
-                        'style_submit_button',
+                        'style_button',
                         self :: BUTTON_REMOVE_OPTION . '[' . $option_number . ']',
                         Translation :: get('RemoveOption'),
                         array(
-                            'class' => 'remove_option mini negative delete ' . self :: BUTTON_REMOVE_OPTION,
-                            'id' => 'remove_' . $option_number));
+                            'class' => 'remove_option mini btn-danger ' . self :: BUTTON_REMOVE_OPTION,
+                            'id' => 'remove_' . $option_number),
+                        null,
+                        'remove');
                 }
                 else
                 {
@@ -240,7 +247,9 @@ class MultipleChoiceForm extends ContentObjectForm
                         'style_button',
                         self :: BUTTON_REMOVE_OPTION . '[' . $option_number . ']',
                         Translation :: get('RemoveOption'),
-                        array('class' => 'remove_option mini negative delete-na ' . self :: BUTTON_REMOVE_OPTION));
+                        array('class' => 'remove_option mini btn-danger ' . self :: BUTTON_REMOVE_OPTION),
+                        null,
+                        'remove');
                 }
 
                 $this->addGroup($group, self :: PROPERTY_OPTION_GROUP . '[' . $option_number . ']', null, '', false);

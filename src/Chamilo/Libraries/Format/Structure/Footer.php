@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
@@ -84,38 +83,16 @@ class Footer
     {
         $output = array();
 
+        $output[] = '</div> <!-- end of .container-fluid" -->';
+
         if ($this->getViewMode() != Page :: VIEW_MODE_HEADERLESS)
         {
-            $output[] = '<div class="clear">&nbsp;</div>';
-            $output[] = '<!-- "clearing" div to make sure that footer stays below the main and right column sections -->';
-            $output[] = '</div> <!-- end of #main" -->';
-
-            $show_sitemap = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Menu', 'show_sitemap');
-
-            if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User &&
-                 $show_sitemap == '1')
-            {
-                $output[] = '<div id="sitemap">';
-                $output[] = '<div class="categories">';
-
-                $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
-                    \Chamilo\Core\Menu\Renderer\Menu\Renderer :: TYPE_SITE_MAP,
-                    $this->getApplication()->getRequest(),
-                    $this->getApplication()->get_user());
-
-                $output[] = '<div class="clear"></div>';
-                $output[] = '</div>';
-                $output[] = '<div class="clear"></div>';
-                $output[] = '</div>';
-            }
-
-            $output[] = '<div id="footer"> <!-- start of #footer section -->';
-            $output[] = '<div id="copyright">';
-            $output[] = '<div class="logo">';
+            $output[] = '<div class="footer clearfix"> <!-- start of #footer section -->';
+            $output[] = '<div class="pull-right">';
             $output[] = '<a href="http://www.chamilo.org"><img src="' .
                  Theme :: getInstance()->getCommonImagePath('LogoFooter') . '" alt="footer"/></a>';
             $output[] = '</div>';
-            $output[] = '<div class="links">';
+            $output[] = '<div class="pull-left">';
 
             $links = array();
             $links[] = DatetimeUtilities :: format_locale_date(
@@ -206,20 +183,12 @@ class Footer
 
             $output[] = implode('&nbsp;|&nbsp;', $links);
 
-            $output[] = '</div>';
-            $output[] = '<div class="clear"></div>';
+            $output[] = '<div class="clearfix"></div>';
             $output[] = '</div>';
 
             $output[] = '   </div> <!-- end of #footer -->';
         }
-        else
-        {
-            $output[] = '<div class="clear">&nbsp;</div>';
-            $output[] = '<!-- "clearing" div to make sure that footer stays below the main and right column sections -->';
-            $output[] = '</div> <!-- end of #main-headerless" -->';
-        }
 
-        $output[] = '  </div> <!-- end of #outerframe opened in header -->';
         $output[] = ' </body>';
         $output[] = '</html>';
 
