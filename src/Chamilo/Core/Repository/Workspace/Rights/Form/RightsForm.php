@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Form;
 
+use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Platform\Translation;
@@ -12,6 +13,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -145,6 +147,31 @@ class RightsForm extends FormValidator
                      'RightsForm.js'));
 
         $this->addSaveResetButtons();
+    }
+
+    public function addSaveResetButtons()
+    {
+        $buttons = array();
+
+        $buttons[] = $this->createElement(
+            'style_submit_button',
+            'submit',
+            Translation :: get('SaveAndAddNew', null, Manager::context()),
+            array('class' => 'positive'));
+
+        $buttons[] = $this->createElement(
+            'style_submit_button',
+            'submit',
+            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'positive'));
+
+        $buttons[] = $this->createElement(
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'normal empty'));
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function setDefaults($defaults = array())

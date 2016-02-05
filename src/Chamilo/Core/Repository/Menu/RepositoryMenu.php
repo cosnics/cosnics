@@ -68,7 +68,7 @@ class RepositoryMenu extends HTML_Menu
         if (! $this->repository_manager->getWorkspace() instanceof PersonalWorkspace && $canAddContentObjects)
         {
             $add = array();
-            $add['title'] = Translation :: get('AddExisting', null, Utilities :: COMMON_LIBRARIES);
+            $add['title'] = Translation :: get('AddExisting', null, Manager::context());
             $add['url'] = $this->repository_manager->get_url(
                 array(
                     \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_WORKSPACE,

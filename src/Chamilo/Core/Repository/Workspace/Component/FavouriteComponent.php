@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  *
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class FavouriteComponent extends TabComponent
+class FavouriteComponent extends TabComponent implements DelegateComponent
 {
 
     public function build()

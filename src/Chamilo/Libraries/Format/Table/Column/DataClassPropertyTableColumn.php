@@ -33,8 +33,9 @@ class DataClassPropertyTableColumn extends TableColumn
      * @param string $property - The property or the property alias
      * @param string $title - [OPTIONAL] default translated title from property
      * @param bool $sortable - Whether or not the column is sortable
+     * @param string $cssClasses
      */
-    public function __construct($class_name, $property, $title = null, $sortable = true)
+    public function __construct($class_name, $property, $title = null, $sortable = true, $cssClasses = null)
     {
         $this->class_name = $class_name;
 
@@ -48,7 +49,7 @@ class DataClassPropertyTableColumn extends TableColumn
                 $context);
         }
 
-        parent :: __construct($property, $title, $sortable);
+        parent :: __construct($property, $title, $sortable, $cssClasses);
     }
 
     /**

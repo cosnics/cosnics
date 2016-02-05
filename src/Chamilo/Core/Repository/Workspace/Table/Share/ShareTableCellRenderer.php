@@ -41,12 +41,12 @@ class ShareTableCellRenderer extends DataClassTableCellRenderer implements Table
                 $this->get_component()->get_url(array(Manager :: PARAM_SELECTED_WORKSPACE_ID => $workspace->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Details', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Details'),
-                null,
-                ToolbarItem :: DISPLAY_ICON));
+//        $toolbar->add_item(
+//            new ToolbarItem(
+//                Translation :: get('Details', null, Utilities :: COMMON_LIBRARIES),
+//                Theme :: getInstance()->getCommonImagePath('Action/Details'),
+//                null,
+//                ToolbarItem :: DISPLAY_ICON));
 
         return $toolbar->as_html();
     }
