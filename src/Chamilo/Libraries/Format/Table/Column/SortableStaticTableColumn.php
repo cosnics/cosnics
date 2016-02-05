@@ -24,10 +24,11 @@ class SortableStaticTableColumn extends TableColumn
      *
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
+     * @param null $cssClasses
      */
-    public function __construct($name, $title = null)
+    public function __construct($name, $title = null, $cssClasses = null)
     {
-        parent :: __construct($name, $title, true);
+        parent :: __construct($name, $title, true, $cssClasses);
     }
 
     public function getConditionVariable()

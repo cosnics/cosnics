@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable;
 use Chamilo\Core\Repository\Table\ExternalLink\ExternalLinkTable;
 use Chamilo\Core\Repository\Table\Link\LinkTable;
+use Chamilo\Core\Repository\Workspace\Table\SharedIn\SharedInTable;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -425,6 +426,25 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Publications'),
                     $browser->as_html()));
         }
+
+        if ($this->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $tabName = 'shared_in';
+
+            $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = $tabName;
+
+            $browser = new SharedInTable($this);
+
+            $this->tabs->add_tab(
+                new DynamicContentTab(
+                    $tabName,
+                    Translation :: get('SharedIn'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Rights'),
+                    $browser->as_html()
+                )
+            );
+        }
+
         // EXPORT
         $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = 'export';
         $this->tabs->add_tab(

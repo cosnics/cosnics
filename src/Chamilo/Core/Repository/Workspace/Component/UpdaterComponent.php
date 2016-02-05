@@ -74,14 +74,20 @@ class UpdaterComponent extends TabComponent
     /**
      * Adds additional breadcrumbs
      *
-     * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
     {
+        $browserSource = $this->get_parameter(self::PARAM_BROWSER_SOURCE);
+
         $breadcrumb_trail->add(
             new Breadcrumb(
-                $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE)),
-                Translation :: get('BrowserComponent')));
+                $this->get_url(array(Manager :: PARAM_ACTION => $browserSource)),
+                Translation :: get($browserSource . 'Component')));
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_WORKSPACE_ID, self::PARAM_BROWSER_SOURCE);
     }
 }

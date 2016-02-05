@@ -15,7 +15,7 @@ use Chamilo\Libraries\Format\Theme;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class TabComponent extends Manager implements DelegateComponent
+abstract class TabComponent extends Manager
 {
 
     /**
@@ -37,7 +37,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $this->get_action() == self :: ACTION_CREATE,
                 false,
                 DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                DynamicVisualTab :: DISPLAY_BOTH));
 
         $this->tabsRenderer->add_tab(
             new DynamicVisualTab(
@@ -48,7 +48,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                 $this->get_action() == self :: ACTION_BROWSE,
                 false,
                 DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                DynamicVisualTab :: DISPLAY_BOTH));
 
         if ($this->get_action() == self :: ACTION_UPDATE)
         {
@@ -61,7 +61,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
                     $this->get_action() == self :: ACTION_UPDATE,
                     false,
                     DynamicVisualTab :: POSITION_LEFT,
-                    DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                    DynamicVisualTab :: DISPLAY_BOTH));
         }
 
         return $this->build();

@@ -353,3 +353,18 @@ div#tool_browser_right {
 div.tool_bar_course_menu {
 	width: 200px;
 }
+
+td.publication_table_actions_column {
+	min-width: 150px;
+	max-width: 220px;
+	width: 220px;
+}
+
+td.publication_table_status_column,
+td.publication_table_order_column
+{
+	max-width: 50px;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+}

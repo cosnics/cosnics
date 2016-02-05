@@ -43,6 +43,13 @@ abstract class TableColumn
     private $sortable;
 
     /**
+     * The CSS Classes
+     *
+     * @var string
+     */
+    protected $cssClasses;
+
+    /**
      * **************************************************************************************************************
      * Constructor *
      * **************************************************************************************************************
@@ -54,9 +61,9 @@ abstract class TableColumn
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
      * @param bool $sortable - [OPTIONAL] default null
-     * @param string $storage_unit_alias - [OPTIONAL] default null
+     * @param string $cssClasses
      */
-    public function __construct($name, $title = null, $sortable = true)
+    public function __construct($name, $title = null, $sortable = true, $cssClasses = null)
     {
         $this->set_name($name);
 
@@ -79,6 +86,7 @@ abstract class TableColumn
 
         $this->set_title($title);
         $this->set_sortable($sortable);
+        $this->setCssClasses($cssClasses);
     }
 
     /**
@@ -145,6 +153,22 @@ abstract class TableColumn
     public function set_sortable($sortable)
     {
         $this->sortable = $sortable;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCssClasses()
+    {
+        return $this->cssClasses;
+    }
+
+    /**
+     * @param string $cssClasses
+     */
+    public function setCssClasses($cssClasses)
+    {
+        $this->cssClasses = $cssClasses;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
+use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
@@ -30,21 +31,23 @@ class CreatorComponent extends TabComponent
                 $values = $form->exportValues();
 
                 $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-                $rightsService = RightsService :: getInstance();
+                $rightsService = RightsService:: getInstance();
 
                 $right = $rightsService->getAggregatedRight(
                     (int) $values[RightsForm :: PROPERTY_VIEW],
                     (int) $values[RightsForm :: PROPERTY_USE],
                     (int) $values[RightsForm :: PROPERTY_COPY],
-                    (int) $values[RightsForm :: PROPERTY_MANAGE]);
+                    (int) $values[RightsForm :: PROPERTY_MANAGE]
+                );
 
                 $success = $entityRelationService->setEntityRelations(
                     $workspace,
                     $values[RightsForm :: PROPERTY_ACCESS],
-                    $right);
+                    $right
+                );
 
                 $translation = $success ? 'RightsSet' : 'RightsNotSet';
-                $message = Translation :: get($translation);
+                $message = Translation:: get($translation);
             }
             catch (\Exception $ex)
             {
@@ -52,7 +55,10 @@ class CreatorComponent extends TabComponent
                 $message = $ex->getMessage();
             }
 
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_CREATE));
+            $action = $values['submit'] == Translation:: get('SaveAndAddNew', null, Manager::context()) ?
+                self::ACTION_CREATE : self::ACTION_BROWSE;
+
+            $this->redirect($message, !$success, array(self :: PARAM_ACTION => $action));
         }
         else
         {

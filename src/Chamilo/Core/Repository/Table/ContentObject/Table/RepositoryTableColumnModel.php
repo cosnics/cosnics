@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Table\ContentObject\Table;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
@@ -20,18 +21,32 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
         $this->add_column(
             new StaticTableColumn(
                 self :: PROPERTY_TYPE,
-                Theme :: getInstance()->getCommonImage(
+                Theme:: getInstance()->getCommonImage(
                     'Action/Category',
                     'png',
-                    Translation :: get('Type'),
+                    Translation:: get('Type'),
                     null,
-                    ToolbarItem :: DISPLAY_ICON)));
+                    ToolbarItem :: DISPLAY_ICON
+                )
+            )
+        );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_TITLE)
+        );
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_DESCRIPTION)
+        );
+
+        if (!$this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $this->add_column(
+                new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_OWNER_ID)
+            );
+        }
+
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_MODIFICATION_DATE));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_VERSION, ContentObject :: get_version_header()));
+            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_MODIFICATION_DATE)
+        );
+        $this->add_column(new StaticTableColumn(self :: PROPERTY_VERSION, ContentObject:: get_version_header()));
     }
 }
