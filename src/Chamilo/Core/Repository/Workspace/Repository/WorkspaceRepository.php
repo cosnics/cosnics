@@ -5,7 +5,9 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -334,17 +336,27 @@ class WorkspaceRepository
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer[] $entities
+     * @param int $right
+     * @param Condition $additionalCondition
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
+     * @return OrCondition
      */
-    private function getWorkspaceByUserCondition(User $user, $entities, $right)
+    private function getWorkspaceByUserCondition(User $user, $entities, $right, Condition $additionalCondition = null)
     {
         $orConditions = array();
 
         $orConditions[] = $this->getWorkspacesByCreatorCondition($user);
         $orConditions[] = $this->getSharedWorkspacesForEntitiesWithRightCondition($entities, $right);
 
-        return new OrCondition($orConditions);
+        $conditions = array();
+        $conditions[] =  new OrCondition($orConditions);
+
+        if($additionalCondition)
+        {
+            $conditions[] = $additionalCondition;
+        }
+
+        return new AndCondition($conditions);
     }
 
     /**
@@ -383,17 +395,29 @@ class WorkspaceRepository
      */
     public function findWorkspacesForUser(User $user, $entities, $right, $limit, $offset, $orderProperty = null)
     {
-        return DataManager:: retrieves(
-            Workspace:: class_name(),
-            new DataClassRetrievesParameters(
-                $this->getWorkspaceByUserCondition($user, $entities, $right),
-                $limit,
-                $offset,
-                $orderProperty,
-                new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT))),
-                true
-            )
-        );
+        return $this->retrieveWorkspacesForUser($user, $entities, $right, null, $limit, $offset, $orderProperty);
+    }
+
+    /**
+     * Finds a list of workspace to which a given user has right with the possibility to exclude workspaces
+     * based on their identifiers
+     *
+     * @param User $user
+     * @param integer[] $entities
+     * @param int $right
+     * @param int[] $excludedWorkspaceIdentifiers
+     * @param int $limit
+     * @param int $offset
+     * @param OrderBy $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function findWorkspacesForUserWithExcludedWorkspaces(
+        User $user, $entities, $right, $excludedWorkspaceIdentifiers, $limit, $offset, $orderProperty = null
+    )
+    {
+        $condition = $this->getExcludedWorkspacesCondition($excludedWorkspaceIdentifiers);
+        return $this->retrieveWorkspacesForUser($user, $entities, $right, $condition, $limit, $offset, $orderProperty);
     }
 
     /**
@@ -405,13 +429,96 @@ class WorkspaceRepository
      */
     public function countWorkspacesForUser(User $user, $entities, $right)
     {
+        return $this->countWorkspacesForUserWithCondition($user, $entities, $right);
+    }
+
+    /**
+     * Counts the number of workspaces to which a given user has right with the possibility to exclude workspaces
+     * based on their identifiers
+     *
+     * @param User $user
+     * @param integer[] $entities
+     * @param int $right
+     * @param int[] $excludedWorkspaceIdentifiers
+     *
+     * @return int
+     */
+    public function countWorkspacesForUserWithExcludedWorkspaces(
+        User $user, $entities, $right, $excludedWorkspaceIdentifiers
+    )
+    {
+        $condition = $this->getExcludedWorkspacesCondition($excludedWorkspaceIdentifiers);
+        return $this->countWorkspacesForUserWithCondition($user, $entities, $right, $condition);
+    }
+
+    /**
+     * Helper function to retrieve workspaces for a given user with a given condition
+     *
+     * @param User $user
+     * @param integer[] $entities
+     * @param int $right
+     * @param Condition $condition
+     * @param int $limit
+     * @param int $offset
+     * @param OrderBy $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    protected function retrieveWorkspacesForUser(
+        User $user, $entities, $right, Condition $condition = null, $limit = null, $offset = null, $orderProperty = null
+    )
+    {
+        return DataManager:: retrieves(
+            Workspace:: class_name(),
+            new DataClassRetrievesParameters(
+                $this->getWorkspaceByUserCondition($user, $entities, $right, $condition),
+                $limit,
+                $offset,
+                $orderProperty,
+                new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT))),
+                true
+            )
+        );
+    }
+
+    /**
+     * Helper function to count workspaces with a given condition
+     *
+     * @param User $user
+     * @param integer[] $entities
+     * @param int $right
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    protected function countWorkspacesForUserWithCondition(User $user, $entities, $right, Condition $condition = null)
+    {
         return DataManager:: count(
             Workspace:: class_name(),
             new DataClassCountParameters(
-                $this->getWorkspaceByUserCondition($user, $entities, $right),
+                $this->getWorkspaceByUserCondition($user, $entities, $right, $condition),
                 new Joins(array($this->getSharedWorkspacesJoin(Join :: TYPE_LEFT)))
             )
         );
+    }
+
+    /**
+     * Helper function to get a condition for the excluded workspaces
+     *
+     * @param int[] $excludedWorkspaceIdentifiers
+     *
+     * @return NotCondition
+     */
+    protected function getExcludedWorkspacesCondition($excludedWorkspaceIdentifiers)
+    {
+        $condition = new NotCondition(
+            new InCondition(
+                new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_ID),
+                $excludedWorkspaceIdentifiers
+            )
+        );
+
+        return $condition;
     }
 
 }

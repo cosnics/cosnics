@@ -163,6 +163,7 @@ class ShareComponent extends Manager implements TableSupport
                 Translation::getInstance()->getTranslation('ShareInformation', array('WORKSPACE_URL' => $url), Manager::context()) . '</div>';
 
             $html[] = $selectedObjectsPreview;
+            $html[] = '<br />';
             $html[] = $table->as_html();
             $html[] = $this->render_footer();
 
