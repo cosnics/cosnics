@@ -78,6 +78,11 @@ form .radio {
 	margin-bottom: 0;
 }
 
+form .radio + .radio {
+	margin-top: 5px;
+	margin-bottom: 0;
+}
+
 button.btn {
 	text-shadow: none;
 }
