@@ -237,7 +237,8 @@ div.time {
 	display: inline;
 }
 
-ul.tree-menu li div a.assessment {
+ul.tree-menu li div a.assessment, ul.tree-menu li div a.type_assessment,
+	ul.tree-menu li div a.type_assessment_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
