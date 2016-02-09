@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
 use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *

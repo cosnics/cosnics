@@ -2,8 +2,6 @@
 namespace Chamilo\Core\Repository\Workspace;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  *
