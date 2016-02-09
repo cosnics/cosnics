@@ -133,7 +133,7 @@ class Setting extends DataClass
     public static function initialize(Instance $external_instance)
     {
         $settings_file = Path :: getInstance()->namespaceToFullPath($external_instance->get_implementation()) .
-             'Resources\Settings\Settings.xml';
+             'Resources/Settings/Settings.xml';
 
         $doc = new DOMDocument();
 
