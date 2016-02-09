@@ -36,7 +36,6 @@ class DeleterComponent extends Manager
             if (! is_array($workspaceIdentifiers))
             {
                 $workspaceIdentifiers = array($workspaceIdentifiers);
-                var_dump($workspaceIdentifiers);
             }
 
             $favouriteService = new FavouriteService(new FavouriteRepository());
