@@ -251,7 +251,7 @@ class ConfigurationForm extends FormValidator
                                     (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
                                     null,
                                     $context),
-                                '<br/>',
+                                '',
                                 false);
                         }
                         elseif ($setting['field'] == 'select')
