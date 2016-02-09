@@ -71,6 +71,8 @@ class SettingsForm extends FormValidator
             $this->tabs_generator->add_tab($tab_admin);
         }
         $this->tabs_generator->render();
+
+        $this->add_checkbox_javascript();
     }
 
     public function build_configure_form()

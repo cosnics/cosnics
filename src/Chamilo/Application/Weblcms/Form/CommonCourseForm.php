@@ -483,7 +483,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                     $locked_prefix . $active_element_name,
                     '',
                     '',
-                    array('class' => 'no-iphone-style'),
+                    array('class' => 'no-toggle-style'),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
@@ -514,7 +514,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                     $locked_prefix . $visible_element_name,
                     '',
                     '',
-                    array('class' => 'no-iphone-style'),
+                    array('class' => 'no-toggle-style'),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
@@ -641,7 +641,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                 $locked_name,
                 Translation :: get('Locked'),
                 '',
-                array('class' => 'no-iphone-style'));
+                array('class' => 'no-toggle-style'));
 
             if (CourseManagementRights :: get_instance()->is_right_locked_for_base_object($this->base_object, $right_id))
             {

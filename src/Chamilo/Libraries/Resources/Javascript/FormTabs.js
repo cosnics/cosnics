@@ -4,7 +4,6 @@ $(function () {
 
 	$(document).ready(function ()
 	{
-//		$('.iphonecheckbox').iphoneStyle({ checkedLabel: 'On', uncheckedLabel: 'Off'});
 		$("#form_tabs ul").css('display', 'block');
 		$("#form_tabs h2").hide();
 		$("#form_tabs").tabs();

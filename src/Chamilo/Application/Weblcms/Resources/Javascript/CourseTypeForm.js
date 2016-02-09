@@ -9,8 +9,6 @@ $(function() {
 	}
 
 	$(document).ready(function() {
-		$('.iphone').iphoneStyle();
-		$('.iphone').setiPhoneCourseType();
 		$('.viewablecheckbox').viewableStyle();
 		$('.viewablecheckbox').setViewableStyle();
 		$(document).on('click', ':reset', reset);

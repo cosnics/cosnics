@@ -78,6 +78,22 @@ form .radio {
 	margin-bottom: 0;
 }
 
+form .radio + .radio {
+	margin-top: 5px;
+	margin-bottom: 0;
+}
+
+form .row {
+	margin: 0;
+}
+
 button.btn {
 	text-shadow: none;
+}
+
+a,
+.ui-widget-content a {
+	color: #337ab7;
+	text-decoration: none;
+	font-weight: bold;
 }

@@ -45,7 +45,6 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.scrollable.pack.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.xml2json.pack.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.json.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.iphone.checkboxes.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jsuggest.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jeditable.mini.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.query.js');
@@ -53,6 +52,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tree_menu.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.timepicker.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'phpjs.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Utilities.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Notifications.js');
