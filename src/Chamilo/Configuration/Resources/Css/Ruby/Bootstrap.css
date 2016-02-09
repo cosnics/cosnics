@@ -30,9 +30,9 @@ input.form-control[type="text"], input.form-control[type="password"] {
 	height: 28px;
 }
 
-#main h3:first-of-type {
+body h3:first-of-type {
 	margin-top: 0;
-	font-size: 15px;
+	font-size: 18px;
 	font-weight: bold;
 }
 
@@ -62,4 +62,22 @@ input.form-control[type="text"], input.form-control[type="password"] {
 .table-navigation-pagination ul.pagination {
 	margin-top: 0px;
 	margin-bottom: 0px;
+}
+
+form .label {
+	font-size: 100%;
+}
+
+form .radio input[type="radio"],
+form .radio input[type="checkbox"] {
+	margin-top: 0;
+}
+
+form .radio {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+button.btn {
+	text-shadow: none;
 }

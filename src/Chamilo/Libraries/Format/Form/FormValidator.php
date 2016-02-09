@@ -68,6 +68,10 @@ class FormValidator extends HTML_QuickForm
         // Load some custom elements and rules
         $dir = __DIR__ . '/';
 
+        $this->registerElementType('radio',
+            $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
+            'HTML_QuickForm_bootstrap_radio');
+
         $this->registerElementType(
             'datepicker',
             $dir . 'Element/HTML_QuickForm_datepicker.php',
