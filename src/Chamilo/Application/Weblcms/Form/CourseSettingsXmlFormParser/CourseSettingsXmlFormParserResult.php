@@ -65,7 +65,7 @@ class CourseSettingsXmlFormParserResult extends XmlFormParserResult
                 CourseSettingsController :: SETTING_PARAM_LOCKED_PREFIX . $element_name, 
                 Translation :: get('SettingLocked', array('SETTING' => $element_label)), 
                 '', 
-                array('class' => 'no-iphone-style'), 
+                array('class' => 'no-toggle-style'),
                 '1', 
                 '0');
         }
