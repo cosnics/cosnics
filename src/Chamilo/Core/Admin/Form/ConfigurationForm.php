@@ -293,6 +293,8 @@ class ConfigurationForm extends FormValidator
                 '<div class="warning-message">' .
                      Translation :: get('NoConfigurableSettings', array(), Utilities :: COMMON_LIBRARIES) . '</div>');
         }
+
+        $this->add_checkbox_javascript();
     }
 
     public function parse_application_settings()
