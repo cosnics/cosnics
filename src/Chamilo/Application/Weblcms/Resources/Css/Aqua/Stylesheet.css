@@ -292,6 +292,10 @@ div.tree_menu_on_top {
 	/*height: 60px;*/
 }
 
+div.tree_menu_hide_container {
+	font-size: 75%;
+}
+
 div.category_title {
 	background-color: transparent;
 	font-weight: bold;

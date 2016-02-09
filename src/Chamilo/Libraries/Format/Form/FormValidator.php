@@ -866,8 +866,11 @@ EOT;
 
         $html[] = '<script type="text/javascript">';
         $html[] = '$(document).ready(function() {';
-        $html[] = '$(\':checkbox:not(.no-iphone-style)\').iphoneStyle({ checkedLabel: \'' .
-             Translation :: get('ConfirmOn') . '\', uncheckedLabel: \'' . Translation :: get('ConfirmOff') . '\'});';
+        $html[] = '$(\':checkbox:not(.no-toggle-style)\').bootstrapToggle({';
+        $html[] = 'on: \'' . Translation :: get('ConfirmOn', array(), Utilities :: COMMON_LIBRARIES) . '\',';
+        $html[] = 'off: \'' . Translation :: get('ConfirmOff', array(), Utilities :: COMMON_LIBRARIES) . '\',';
+        $html[] = 'size: \'small\'';
+        $html[] = '});';
         $html[] = '});';
         $html[] = '</script>';
 

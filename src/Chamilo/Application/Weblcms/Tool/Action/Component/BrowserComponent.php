@@ -154,19 +154,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($this->get_parent() instanceof Categorizable)
         {
-            $html[] = '<div class="tree_menu_on_top" style="max-height:150px; overflow: auto;">';
-            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
-                 'overflow: auto; ">';
-            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
-                 '</a>';
-            $html[] = '</div>';
-            $html[] = '<div id=tree style="width:90%;overflow: auto;">';
-            $html[] = $this->publication_category_tree->render_as_tree();
-            $html[] = '</div>';
-            $html[] = ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'TreeMenu.js');
-            $html[] = '</div>';
-
             $cat_id = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
 
             if (! $cat_id || $cat_id == 0)
@@ -185,8 +172,29 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $cat_name = Translation :: get('Root');
                 }
             }
-            $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ': ' .
-                 $cat_name . '</div><br />';
+//            $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ': ' .
+//                $cat_name . '</div><br />';
+
+//            $html[] = '<div class="panel panel-default">';
+//            $html[] = '<div class="panel-heading">';
+//            $html[] = Translation :: get('CurrentCategory') . ': ' . $cat_name;
+//            $html[] = '</div>';
+//            $html[] = '<div class="panel-body">';
+            $html[] = '<div class="tree_menu_on_top" style="max-height:150px; overflow: auto;">';
+            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
+                 'overflow: auto; ">';
+            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
+                 '</a>';
+            $html[] = '</div>';
+            $html[] = '<div id=tree style="width:90%;overflow: auto;">';
+            $html[] = $this->publication_category_tree->render_as_tree();
+            $html[] = '</div>';
+            $html[] = ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'TreeMenu.js');
+            $html[] = '</div>';
+//            $html[] = '</div>';
+//
+//            $html[] = '</div>';
         }
 
         $content[] = $publication_renderer->as_html();
