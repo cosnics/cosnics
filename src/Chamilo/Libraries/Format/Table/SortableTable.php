@@ -20,10 +20,6 @@ use HTML_Table;
  */
 class SortableTable extends HTML_Table
 {
-    const DISPLAY_PER_PAGE_LIMIT = 500;
-    const DISPLAY_PER_INCREMENT = 10;
-    const DISPLAY_PER_INCREMENT_INTERVAL_LIMIT = 50;
-    const DISPLAY_ALL = 'all';
 
     /**
      *
@@ -245,7 +241,7 @@ class SortableTable extends HTML_Table
         $variableName = $this->getParameterName('per_page');
         $requestedNumberOfItemsPerPage = Request :: get($variableName);
 
-        if ($requestedNumberOfItemsPerPage == self :: DISPLAY_ALL)
+        if ($requestedNumberOfItemsPerPage == Pager :: DISPLAY_ALL)
         {
             return $this->countSourceData();
         }
@@ -326,7 +322,7 @@ class SortableTable extends HTML_Table
         $html[] = '</div>';
         $html[] = '<div class="col-md-8 table-navigation-search">';
 
-        $html[] = $this->getPageSelectForm();
+        $html[] = $this->renderNumberOfItemsPerPageSelector();
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -387,8 +383,6 @@ class SortableTable extends HTML_Table
             $html[] = '</form>';
         }
 
-        $form = $this->getPageSelectForm();
-
         if ($this->allowPageSelection || $this->allowPageNavigation)
         {
             $html[] = '<div class="row">';
@@ -402,8 +396,16 @@ class SortableTable extends HTML_Table
 
             $html[] = '</div>';
 
+            $queryParameters = array();
+            $queryParameters[$this->getParameterName('direction')] = $this->getOrderDirection();
+            $queryParameters[$this->getParameterName('per_page')] = $this->getNumberOfItemsPerPage();
+            $queryParameters[$this->getParameterName('column')] = $this->getOrderColumn();
+            $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
+
             $html[] = '<div class="col-md-8 table-navigation-pagination">';
-            $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit();
+            $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit(
+                $queryParameters,
+                $this->getParameterName('page_nr'));
             $html[] = '</div>';
 
             $html[] = '</div>';
@@ -521,93 +523,29 @@ class SortableTable extends HTML_Table
      *
      * @return string
      */
-    public function getPageSelectForm()
+    public function renderNumberOfItemsPerPageSelector()
     {
-        $result = array();
-
         if ($this->allowPageSelection)
         {
             $sourceDataCount = $this->countSourceData();
 
-            if ($sourceDataCount <= self :: DISPLAY_PER_INCREMENT)
+            if ($sourceDataCount <= Pager :: DISPLAY_PER_INCREMENT)
             {
                 return '';
             }
 
-            $result[] = '<div class="pull-right">';
-            $result[] = '<form class="form-inline" method="get" action="' . $_SERVER['PHP_SELF'] .
-                 '" style="display:inline;">';
+            $queryParameters = array();
+            $queryParameters[$this->getParameterName('direction')] = $this->getOrderDirection();
+            $queryParameters[$this->getParameterName('page_nr')] = $this->getPageNumber();
+            $queryParameters[$this->getParameterName('column')] = $this->getOrderColumn();
+            $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
-            $param = array();
-            $param[$this->getParameterName('direction')] = $this->getOrderDirection();
-            $param[$this->getParameterName('page_nr')] = $this->getPageNumber();
-            $param[$this->getParameterName('column')] = $this->getOrderColumn();
-            $param = array_merge($param, $this->getAdditionalParameters());
-
-            foreach ($param as $key => & $value)
-            {
-                if (! is_null($value))
-                {
-                    if (is_array($value))
-                    {
-                        $ser = $this->serializeArray($value, $key);
-                        $result = array_merge($result, $ser);
-                    }
-                    else
-                    {
-                        $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
-                    }
-                }
-            }
-
-            $result[] = '<select class="form-group form-control input-sm" name="' . $this->getParameterName('per_page') .
-                 '" onchange="javascript:this.form.submit();">';
-
-            // calculate the roundup for the interval
-            $sourceDataCountUpperInterval = ceil($sourceDataCount / self :: DISPLAY_PER_INCREMENT) *
-                 self :: DISPLAY_PER_INCREMENT;
-
-            $minimum = min(self :: DISPLAY_PER_INCREMENT_INTERVAL_LIMIT, $sourceDataCountUpperInterval);
-
-            for ($nr = self :: DISPLAY_PER_INCREMENT; $nr <= $minimum; $nr += self :: DISPLAY_PER_INCREMENT)
-            {
-                $result[] = '<option value="' . $nr . '" ' .
-                     ($nr == $this->getNumberOfItemsPerPage() ? 'selected="selected"' : '') . '>' . $nr . '</option>';
-            }
-
-            if ($sourceDataCount < self :: DISPLAY_PER_PAGE_LIMIT)
-            {
-                $all_text = Translation :: get('AllEntries', Utilities :: COMMON_LIBRARIES);
-                $result[] = '<option value="' . self :: DISPLAY_ALL . '" ' .
-                     ($sourceDataCount == $this->getNumberOfItemsPerPage() ? 'selected="selected"' : '') . '>' .
-                     $all_text . '</option>';
-            }
-
-            $result[] = '</select> ';
-            $result[] = Translation :: get('SelectEntriesPerPage');
-            $result[] = '<noscript>';
-            $result[] = '<button class="btn btn-default btn-sm" type="submit" value="' .
-                 Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) . '">' .
-                 Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) . '</button>';
-            $result[] = '</noscript>';
-            $result[] = '</form>';
-            $result[] = '</div>';
+            return $this->getPagerRenderer()->renderItemsPerPageSelector(
+                $queryParameters,
+                $this->getParameterName('per_page'));
         }
 
-        return implode(PHP_EOL, $result);
-    }
-
-    /**
-     * Get the table title.
-     *
-     * @return string
-     */
-    public function getTableTitle()
-    {
-        if ($this->allowPageNavigation)
-        {
-            return $this->getPagerRenderer()->renderCurrentRange();
-        }
+        return '';
     }
 
     /**

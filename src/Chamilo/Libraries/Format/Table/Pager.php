@@ -1,8 +1,19 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class Pager
 {
+    const DISPLAY_PER_PAGE_LIMIT = 500;
+    const DISPLAY_PER_INCREMENT = 10;
+    const DISPLAY_PER_INCREMENT_INTERVAL_LIMIT = 50;
+    const DISPLAY_ALL = 'all';
 
     /**
      *
@@ -165,6 +176,7 @@ class Pager
     }
 
     /**
+     *
      * @return integer
      */
     public function getCurrentRangeOffset()

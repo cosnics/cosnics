@@ -3,7 +3,20 @@ namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 
+/**
+ *
+ * @package Chamilo\Libraries\Format\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 class PagerRenderer
 {
 
@@ -40,6 +53,10 @@ class PagerRenderer
         $this->pager = $pager;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function renderCurrentRange()
     {
         $variables = array();
@@ -52,54 +69,91 @@ class PagerRenderer
 
     /**
      *
-     * @param integer $start
-     * @param integer $end
+     * @param boolean $isDisabled
+     * @param string $symbol
+     * @param string $translation
+     * @param unknown $target
      * @return string
      */
-    protected function renderPaginationBetweenStartAndEnd($start, $end, $includeRange = true)
+    protected function renderDirectionPaginationItem($queryParameters, $pageNumberParameterName, $isDisabled, $symbol,
+        $translation, $targetPage = null)
+    {
+        $html = array();
+
+        $html[] = '<li' . ($isDisabled ? ' class="disabled"' : '') . '>';
+        $symbolHtml = '<span aria-hidden="true">' . $symbol . '</span>';
+
+        if ($isDisabled)
+        {
+            $html[] = $symbolHtml;
+        }
+        else
+        {
+            $html[] = '<a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $targetPage) .
+                 '" aria-label="' . $translation . '">' . $symbolHtml . '</a>';
+        }
+
+        $html[] = '</li>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @param integer $start
+     * @param integer $end
+     * @param boolean $includeRange
+     * @return string
+     */
+    protected function renderPaginationBetweenStartAndEnd($queryParameters, $pageNumberParameterName, $start, $end,
+        $includeRange = true)
     {
         $html = array();
 
         $html[] = '<nav class="pull-right">';
         $html[] = '<ul class="pagination">';
 
-        $isFirstPage = $start == 1;
+        $isDisabled = ($this->getPager()->getCurrentPageNumber() == 1);
 
-        $html[] = '<li' . ($isFirstPage ? ' class="disabled"' : '') . '>';
-        $symbol = '<span aria-hidden="true">&laquo;</span>';
+        $html[] = $this->renderDirectionPaginationItem(
+            $queryParameters,
+            $pageNumberParameterName,
+            $isDisabled,
+            '&laquo;',
+            Translation :: get('First'),
+            1);
 
-        if ($isFirstPage)
-        {
-            $html[] = $symbol;
-        }
-        else
-        {
-            $html[] = '<a href="#" aria-label="Previous">' . $symbol . '</a>';
-        }
-
-        $html[] = '</li>';
+        $html[] = $this->renderDirectionPaginationItem(
+            $queryParameters,
+            $pageNumberParameterName,
+            $isDisabled,
+            '&lsaquo;',
+            Translation :: get('Previous'),
+            $this->getPager()->getCurrentPageNumber() - 1);
 
         for ($i = $start; $i <= $end; $i ++)
         {
-            $html[] = '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="active"' : '') .
-                 '><a href="#">' . $i . '</a></li>';
+            $html[] = '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="active"' : '') . '><a href="' .
+                 $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '">' . $i . '</a></li>';
         }
 
-        $isLastPage = $end == $this->getPager()->getNumberOfPages();
+        $isDisabled = ($this->getPager()->getCurrentPageNumber() == $this->getPager()->getNumberOfPages());
 
-        $html[] = '<li' . ($isLastPage ? ' class="disabled"' : '') . '>';
-        $symbol = '<span aria-hidden="true">&raquo;</span>';
+        $html[] = $this->renderDirectionPaginationItem(
+            $queryParameters,
+            $pageNumberParameterName,
+            $isDisabled,
+            '&rsaquo;',
+            Translation :: get('Next'),
+            $this->getPager()->getCurrentPageNumber() + 1);
 
-        if ($isLastPage)
-        {
-            $html[] = $symbol;
-        }
-        else
-        {
-            $html[] = '<a href="#" aria-label="Next">' . $symbol . '</a>';
-        }
-
-        $html[] = '</li>';
+        $html[] = $this->renderDirectionPaginationItem(
+            $queryParameters,
+            $pageNumberParameterName,
+            $isDisabled,
+            '&raquo;',
+            Translation :: get('Last'),
+            $this->getPager()->getNumberOfPages());
 
         if ($includeRange)
         {
@@ -118,19 +172,31 @@ class PagerRenderer
 
     /**
      *
+     * @param string[] $queryParameters
+     * @param string $pageNumberParameterName
+     * @param boolean $includeRange
      * @return string
      */
-    public function renderPagination($includeRange = true)
+    public function renderPagination($queryParameters = array(), $pageNumberParameterName = 'page_nr', $includeRange = true)
     {
-        return $this->renderPaginationBetweenStartAndEnd(1, $this->getPager()->getNumberOfPages());
+        return $this->renderPaginationBetweenStartAndEnd(
+            $queryParameters,
+            $pageNumberParameterName,
+            1,
+            $this->getPager()->getNumberOfPages(),
+            $includeRange);
     }
 
     /**
      *
+     * @param string[] $queryParameters
+     * @param string $itemsPerPageParameterName
      * @param integer $pageLimit
+     * @param boolean $includeRange
      * @return string
      */
-    public function renderPaginationWithPageLimit($pageLimit = 7, $includeRange = true)
+    public function renderPaginationWithPageLimit($queryParameters = array(), $pageNumberParameterName = 'page_nr', $pageLimit = 7,
+        $includeRange = true)
     {
         $currentPageNumber = $this->getPager()->getCurrentPageNumber();
 
@@ -186,6 +252,86 @@ class PagerRenderer
             $endPage = $calculatedEndPage;
         }
 
-        return $this->renderPaginationBetweenStartAndEnd($startPage, $endPage, $includeRange);
+        return $this->renderPaginationBetweenStartAndEnd(
+            $queryParameters,
+            $pageNumberParameterName,
+            $startPage,
+            $endPage,
+            $includeRange);
+    }
+
+    /**
+     *
+     * @param string[] $queryParameters
+     * @param string $itemsPerPageParameterName
+     * @return string
+     */
+    public function renderItemsPerPageSelector($queryParameters, $itemsPerPageParameterName)
+    {
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+        $buttonToolBar->addButtonGroup($buttonGroup);
+
+        $currentNumberOfItemsPerPage = $this->getPager()->getNumberOfItemsPerPage();
+        $numberOfItems = $this->getPager()->getNumberOfItems();
+
+        $dropDownButton = new DropdownButton(
+            Translation :: get('ShowNumberOfItemsPerPage', array('NUMBER' => $currentNumberOfItemsPerPage)));
+        $dropDownButton->setDropdownClasses('dropdown-menu-right');
+        $buttonGroup->addButton($dropDownButton);
+
+        // calculate the roundup for the interval
+        $sourceDataCountUpperInterval = ceil($numberOfItems / Pager :: DISPLAY_PER_INCREMENT) *
+             Pager :: DISPLAY_PER_INCREMENT;
+
+        $minimum = min(Pager :: DISPLAY_PER_INCREMENT_INTERVAL_LIMIT, $sourceDataCountUpperInterval);
+
+        for ($nr = Pager :: DISPLAY_PER_INCREMENT; $nr <= $minimum; $nr += Pager :: DISPLAY_PER_INCREMENT)
+        {
+            $dropDownButton->addSubButton(
+                new SubButton(
+                    Translation :: get('NumberOfItemsPerPage', array('NUMBER' => $nr)),
+                    null,
+                    $this->getUrl($queryParameters, $itemsPerPageParameterName, $nr),
+                    SubButton :: DISPLAY_LABEL,
+                    false,
+                    ($nr == $currentNumberOfItemsPerPage ? 'selected' : '')));
+        }
+
+        if ($numberOfItems < Pager :: DISPLAY_PER_PAGE_LIMIT)
+        {
+            $dropDownButton->addSubButton(
+                new SubButton(
+                    Translation :: get('AllItemsPerPage'),
+                    null,
+                    $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager :: DISPLAY_ALL),
+                    SubButton :: DISPLAY_LABEL,
+                    false,
+                    ($nr == $currentNumberOfItemsPerPage ? 'selected' : '')));
+        }
+
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        $html = array();
+
+        $html[] = '<div class="pull-right">';
+        $html[] = $buttonToolBarRenderer->render();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @param string[] $queryParameters
+     * @param string $variableName
+     * @param string $variableValue
+     * @return string
+     */
+    protected function getUrl($queryParameters, $variableName, $variableValue)
+    {
+        $queryParameters[$variableName] = $variableValue;
+        $action = new Redirect($queryParameters);
+        return $action->getUrl();
     }
 }
