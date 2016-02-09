@@ -189,6 +189,10 @@ span.form_required {
 	color: #f00;
 }
 
+span.form_required > img {
+	margin-top: -5px;
+}
+
 span.form_error {
 	color: #f00;
 	font-size: x-small;
