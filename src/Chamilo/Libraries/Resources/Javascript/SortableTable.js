@@ -6,7 +6,7 @@
         var result = true;
 
         if (!$('input:checked', $(this)).length > 0) {
-        	return false;
+        return false;
         }
 
         var actions = $('#actions_' + table_name);
@@ -44,7 +44,7 @@
      * Allow multiple selects
      */
     function checkboxClicked(e) {
-        var selectedTable = $(this).closest('.data_table');
+        var selectedTable = $(this).closest('.table');
         var selectedTableId = selectedTable.attr('id');
 
         var lastSelectedCheckbox = lastSelectedCheckboxes[selectedTableId];
@@ -78,12 +78,19 @@
 
     function selectAll(e, ui) {
         e.preventDefault();
-        $(':checkbox', $(this).parentsUntil('form').parent()).attr('checked', true);
+        $(':checkbox', $(this).parentsUntil('form').parent()).prop('checked', true);
+    }
+
+    function selectToggle(event, userInterface) {
+        var tableCheckbox = $(this);
+        var newState = (tableCheckbox.prop('checked') == true) ? true : false;
+
+        $('tbody :checkbox', $(this).parentsUntil('form').parent()).prop('checked', newState);
     }
 
     function selectNone(e, ui) {
         e.preventDefault();
-        $(':checkbox', $(this).parentsUntil('form').parent()).attr('checked', false);
+        $(':checkbox', $(this).parentsUntil('form').parent()).prop('checked', false);
     }
 
     function changeAction(e, ui) {
@@ -92,9 +99,10 @@
 
     $(document).ready(function() {
         $(document).on('submit', '.table_form', form_submitted);
-        $('.data_table').on('click', ':checkbox', checkboxClicked);
-        $(document).on('click', 'a.sortable_table_select_all', selectAll);
-        $(document).on('click', 'a.sortable_table_select_none', selectNone);
+        $('.table').on('click', ':checkbox', checkboxClicked);
+        // $(document).on('click', 'a.sortable_table_select_all', selectAll);
+        // $(document).on('click', 'a.sortable_table_select_none', selectNone);
+        $(document).on('click', 'input.sortableTableSelectToggle', selectToggle);
         $(document).on('change', 'form.table_form select', changeAction);
     });
 

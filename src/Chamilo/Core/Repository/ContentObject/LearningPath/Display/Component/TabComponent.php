@@ -560,13 +560,16 @@ abstract class TabComponent extends Manager implements DelegateComponent
      */
     private function render_progress_bar($percent, $step = 2)
     {
-        $done = (int) ($percent / $step);
-        $rest = (int) (100.0 / $step) - $done;
-        return '<div class="progress_information"><div class="progress_bar">' . str_repeat(
-            '<div class="done"></div>',
-            $done) . str_repeat('<div class=""></div>', $rest) . '</div><div class="progress_status">' . round(
-            $percent,
-            2) . ' %</div></div>';
+        $displayPercent = round($percent);
+
+        $html[] = '<div class="progress">';
+        $html[] = '<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="' . $displayPercent .
+             '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $displayPercent . '%; min-width: 2em;">';
+        $html[] = $displayPercent . '%';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

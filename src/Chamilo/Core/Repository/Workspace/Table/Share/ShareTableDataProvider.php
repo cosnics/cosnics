@@ -4,11 +4,10 @@ namespace Chamilo\Core\Repository\Workspace\Table\Share;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 
 /**
  *
@@ -27,6 +26,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
     private $workspaceService;
 
     /**
+     *
      * @var ContentObjectRelationService
      */
     protected $contentObjectRelationService;
@@ -43,8 +43,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
             $this->get_component()->get_user(),
             $limit,
             $offset,
-            $orderProperty
-        );
+            $orderProperty);
     }
 
     /**
@@ -56,8 +55,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
         return $this->getContentObjectRelationService()->countAvailableWorkspacesForContentObjectsAndUser(
             $this->getWorkspaceService(),
             $this->getSelectedContentObjects(),
-            $this->get_component()->get_user()
-        );
+            $this->get_component()->get_user());
     }
 
     /**
@@ -66,7 +64,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
      */
     protected function getWorkspaceService()
     {
-        if (!isset($this->workspaceService))
+        if (! isset($this->workspaceService))
         {
             $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
         }
@@ -75,33 +73,34 @@ class ShareTableDataProvider extends DataClassTableDataProvider
     }
 
     /**
+     *
      * @return ContentObjectRelationService
      */
     protected function getContentObjectRelationService()
     {
-        if (!isset($this->contentObjectRelationService))
+        if (! isset($this->contentObjectRelationService))
         {
-            $this->contentObjectRelationService =
-                new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $this->contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
         }
 
         return $this->contentObjectRelationService;
     }
 
     /**
+     *
      * @return ContentObject[]
      */
     protected function getSelectedContentObjects()
     {
-        $contentObjectIdentifiers = $this->get_component()->get_parameter(Manager::PARAM_CONTENT_OBJECT_ID);
-        if(!is_array($contentObjectIdentifiers))
+        $contentObjectIdentifiers = $this->get_component()->get_parameter(Manager :: PARAM_CONTENT_OBJECT_ID);
+        if (! is_array($contentObjectIdentifiers))
         {
             $contentObjectIdentifiers = array($contentObjectIdentifiers);
         }
 
         $contentObjects = array();
 
-        foreach($contentObjectIdentifiers as $contentObjectIdentifier)
+        foreach ($contentObjectIdentifiers as $contentObjectIdentifier)
         {
             $contentObject = new ContentObject();
             $contentObject->setId($contentObjectIdentifier);

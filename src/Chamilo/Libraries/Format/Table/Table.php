@@ -126,14 +126,7 @@ abstract class Table
      */
     public function as_html()
     {
-        $table = $this->initialize_table();
-
-        if ($this->has_form_actions())
-        {
-            $table->setTableFormActions($this->get_form_actions());
-        }
-
-        return $table->as_html();
+        return $this->initialize_table()->as_html();
     }
 
     /**
@@ -158,12 +151,12 @@ abstract class Table
             $this->get_column_model()->get_default_order_direction(),
             ! $this->prohibits_page_selection());
 
-        $table->setAdditionalParameters($this->get_parameters());
-
         if ($this->has_form_actions())
         {
-            $table->setColumnHeader(0, '', false);
+            $table->setTableFormActions($this->get_form_actions());
         }
+
+        $table->setAdditionalParameters($this->get_parameters());
 
         // refactored the column model out of the loop.
         $column_model = &$this->get_column_model();
@@ -177,7 +170,7 @@ abstract class Table
 
             $cssClasses = $column->getCssClasses();
 
-            if(!empty($cssClasses))
+            if (! empty($cssClasses))
             {
                 $headerAttributes['class'] = $cssClasses;
             }
@@ -185,8 +178,9 @@ abstract class Table
             $table->setColumnHeader(
                 ($this->has_form_actions() ? $i + 1 : $i),
                 Security :: remove_XSS($column->get_title()),
-                $column->is_sortable(), array(), $headerAttributes
-            );
+                $column->is_sortable(),
+                array(),
+                $headerAttributes);
         }
 
         // store the actual direction of the sortable table in the table column
