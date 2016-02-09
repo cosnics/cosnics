@@ -5,13 +5,11 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
-use Pager;
 
 /**
  *
@@ -60,9 +58,15 @@ class SortableTable extends HTML_Table
     /**
      * The pager object to split the data in several pages
      *
-     * @var integer
+     * @var \Chamilo\Libraries\Format\Table\Pager
      */
     private $pager;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Format\Table\PagerRenderer
+     */
+    private $pagerRenderer;
 
     /**
      * The total number of items in the table
@@ -146,7 +150,9 @@ class SortableTable extends HTML_Table
         $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true, $allowPageNavigation = true)
     {
         parent :: __construct(
-            array('class' => 'table table-striped table-bordered table-hover table-responsive', 'id' => $tableName),
+            array(
+                'class' => 'table table-striped table-bordered table-hover table-responsive table-data',
+                'id' => $tableName),
             0,
             true);
 
@@ -252,58 +258,13 @@ class SortableTable extends HTML_Table
     /**
      * Get the Pager object to split the shown data into several pages
      *
-     * @return \Pager_Common
+     * @return \Chamilo\Libraries\Format\Table\Pager
      */
     public function getPager()
     {
         if (is_null($this->pager))
         {
-            $params['mode'] = 'Sliding';
-            $params['perPage'] = $this->getNumberOfItemsPerPage();
-            $params['totalItems'] = $this->countSourceData();
-            $params['urlVar'] = $this->getParameterName('page_nr');
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Prev') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Next') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/First') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Last') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['firstPagePre'] = '';
-            $params['lastPagePre'] = '';
-            $params['firstPagePost'] = '';
-            $params['lastPagePost'] = '';
-            $params['spacesBeforeSeparator'] = '';
-            $params['spacesAfterSeparator'] = '';
-            $params['currentPage'] = $this->getPageNumber();
-
-            $query_vars = array_keys($_GET);
-            $query_vars_needed = array(
-                $this->getParameterName('column'),
-                $this->getParameterName('direction'),
-                $this->getParameterName('per_page'));
-
-            if (count($this->getAdditionalParameters()) > 0)
-            {
-                $query_vars_needed = array_merge($query_vars_needed, array_keys($this->getAdditionalParameters()));
-            }
-
-            $query_vars_exclude = array_diff($query_vars, $query_vars_needed);
-            $params['excludeVars'] = $query_vars_exclude;
-
-            $extra_variables = array();
-
-            foreach ($this->getAdditionalParameters() as $key => $value)
-            {
-                if (! is_null($value))
-                {
-                    $extra_variables[$key] = $value;
-                }
-            }
-
-            $params['extraVars'] = $extra_variables;
-            $this->pager = Pager :: factory($params);
+            $this->pager = new Pager($this->getNumberOfItemsPerPage(), $this->countSourceData(), $this->getPageNumber());
         }
 
         return $this->pager;
@@ -339,6 +300,118 @@ class SortableTable extends HTML_Table
         return implode(PHP_EOL, $html);
     }
 
+    public function renderTableHeader()
+    {
+        $html = array();
+
+        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        {
+            $tableFormActions = $this->getTableFormActions()->get_form_actions();
+            $firstFormAction = array_shift($tableFormActions);
+
+            $html[] = '<form class="table_form form-inline" method="post" action="' . $firstFormAction->get_action() .
+                 '" name="form_' . $this->tableName . '">';
+            $html[] = ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'SortableTable.js');
+        }
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-md-4 table-navigation-actions">';
+
+        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        {
+            $html[] = $this->renderActions();
+        }
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-md-8 table-navigation-search">';
+
+        $html[] = $this->getPageSelectForm();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderActions()
+    {
+        $html = array();
+
+        $html[] = '<div class="btn-toolbar">';
+        $html[] = '<div class="btn-group">';
+
+        $html[] = '<select class="form-group form-control input-sm" id="actions_' . $this->tableName . '" name="' .
+             $this->tableName . '_action_value">';
+
+        foreach ($this->getTableFormActions()->get_form_actions() as $form_action)
+        {
+            if ($form_action instanceof TableFormAction)
+            {
+                $message = $form_action->getConfirmationMessage() ? $form_action->getConfirmationMessage() : Translation :: get(
+                    'ConfirmYourSelectionAndAction',
+                    null,
+                    Utilities :: COMMON_LIBRARIES);
+
+                $html[] = '<option value="' . $form_action->get_action() . '"' .
+                     ($form_action->get_confirm() ? ' class="confirm" data-message="' . $message . '"' : '') . '>' .
+                     $form_action->get_title() . '</option>';
+            }
+        }
+
+        $html[] = '</select>';
+        $html[] = '</div>';
+
+        $submitLabel = Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES);
+
+        $html[] = '<div class="btn-group btn-group-sm">';
+        $html[] = '<button class="btn btn-default" type="submit" value="' . $submitLabel . '"/>' . $submitLabel .
+             '</button>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<input type="hidden" name="' . $this->tableName . '_namespace" value="' .
+             $this->getTableFormActions()->get_namespace() . '"/>';
+        $html[] = '<input type="hidden" name="table_name" value="' . $this->tableName . '"/>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderTableFooter()
+    {
+        $html = array();
+
+        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        {
+            $html[] = '</form>';
+        }
+
+        $form = $this->getPageSelectForm();
+
+        if ($this->allowPageSelection || $this->allowPageNavigation)
+        {
+            $html[] = '<div class="row">';
+            $html[] = '<div class="col-md-4 table-navigation-actions">';
+
+            if ($this->getTableFormActions() instanceof TableFormActions &&
+                 $this->getTableFormActions()->has_form_actions())
+            {
+                $html[] = $this->renderActions();
+            }
+
+            $html[] = '</div>';
+
+            $html[] = '<div class="col-md-8 table-navigation-pagination">';
+            $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit();
+            $html[] = '</div>';
+
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
     /**
      * Returns the complete table HTML.
      *
@@ -351,112 +424,31 @@ class SortableTable extends HTML_Table
             return $this->getEmptyTable();
         }
 
+        $html = array();
+
+        $html[] = '<div class="container-fluid">';
+
         if (! $empty_table)
         {
-            if ($this->allowPageSelection || $this->allowPageNavigation)
-            {
-                $form = $this->getPageSelectForm();
-                $nav = $this->getNavigationHtml();
-
-                $html[] = '<table style="width:100%;">';
-                $html[] = '<tr>';
-                $html[] = '<td style="width:25%;">';
-                $html[] = $form;
-                $html[] = '</td>';
-                $html[] = '<td style="text-align:center;">';
-                $html[] = $this->getTableTitle();
-                $html[] = '</td>';
-                $html[] = '<td style="text-align:right;width:25%;">';
-                $html[] = $nav;
-                $html[] = '</td>';
-                $html[] = '</tr>';
-                $html[] = '</table>';
-            }
-
-            if ($this->getTableFormActions() instanceof TableFormActions &&
-                 $this->getTableFormActions()->has_form_actions())
-            {
-                $tableFormActions = $this->getTableFormActions()->get_form_actions();
-                $firstFormAction = array_shift($tableFormActions);
-
-                $html[] = '<form method="post" action="' . $firstFormAction->get_action() . '" name="form_' .
-                     $this->tableName . '" class="table_form">';
-                $html[] = ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'SortableTable.js');
-            }
+            $html[] = $this->renderTableHeader();
         }
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-md-12">';
 
         $html[] = '<div class="table-responsive">';
         $html[] = $this->getBodyHtml();
         $html[] = '</div>';
 
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         if (! $empty_table)
         {
-            if ($this->allowPageSelection || $this->allowPageNavigation)
-            {
-                $html[] = '<table style="width:100%;">';
-                $html[] = '<tr>';
-                $html[] = '<td colspan="2">';
-            }
-
-            if ($this->getTableFormActions() instanceof TableFormActions &&
-                 $this->getTableFormActions()->has_form_actions())
-            {
-                $html[] = '<div class="sortable_table_selection_controls">';
-                $html[] = '<span class="sortable_table_selection_controls_options">';
-                $html[] = '<a href="#" class="sortable_table_select_all">' .
-                     Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES) . '</a>';
-                $html[] = '&nbsp;-&nbsp;';
-                $html[] = '<a href="#" class="sortable_table_select_none">' .
-                     Translation :: get('UnselectAll', null, Utilities :: COMMON_LIBRARIES) . '</a> ';
-                $html[] = '</span>';
-                $html[] = '<select id="actions_' . $this->tableName . '" name="' . $this->tableName . '_action_value">';
-
-                foreach ($this->getTableFormActions()->get_form_actions() as $form_action)
-                {
-                    if ($form_action instanceof TableFormAction)
-                    {
-                        $message = $form_action->getConfirmationMessage() ? $form_action->getConfirmationMessage() : Translation :: get(
-                            'ConfirmYourSelectionAndAction',
-                            null,
-                            Utilities :: COMMON_LIBRARIES);
-
-                        $html[] = '<option value="' . $form_action->get_action() . '"' .
-                             ($form_action->get_confirm() ? ' class="confirm" data-message="' . $message . '"' : '') .
-                             '>' . $form_action->get_title() . '</option>';
-                    }
-                }
-
-                $html[] = '</select>';
-                $html[] = '<input type="hidden" name="' . $this->tableName . '_namespace" value="' .
-                     $this->getTableFormActions()->get_namespace() . '"/>';
-                $html[] = '<input type="hidden" name="table_name" value="' . $this->tableName . '"/>';
-                $html[] = ' <input type="submit" value="' . Translation :: get(
-                    'Ok',
-                    null,
-                    Utilities :: COMMON_LIBRARIES) . '"/>';
-            }
-            elseif ($this->allowPageSelection || $this->allowPageNavigation)
-            {
-                $html[] = $form;
-            }
-
-            if ($this->allowPageSelection || $this->allowPageNavigation)
-            {
-                $html[] = '</td>';
-                $html[] = '<td style="text-align:right;">';
-                $html[] = $nav;
-                $html[] = '</td>';
-                $html[] = '</tr>';
-                $html[] = '</table>';
-            }
-
-            if ($this->getTableFormActions() instanceof TableFormActions &&
-                 $this->getTableFormActions()->has_form_actions())
-            {
-                $html[] = '</form>';
-            }
+            $html[] = $this->renderTableFooter();
         }
+
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -471,12 +463,23 @@ class SortableTable extends HTML_Table
         if ($this->allowPageNavigation)
         {
             $pager = $this->getPager();
-            $pager_links = $pager->getLinks();
-            $showed_items = $pager->getOffsetByPageId();
+            $pagerRenderer = new PagerRenderer($pager);
 
-            return $pager_links['first'] . ' ' . $pager_links['back'] . ' ' . $pager->getCurrentPageId() . ' / ' .
-                 $pager->numPages() . ' ' . $pager_links['next'] . ' ' . $pager_links['last'];
+            if ($pager->getNumberOfPages() > 1)
+            {
+                return $pagerRenderer->renderPaginationWithPageLimit();
+            }
         }
+    }
+
+    public function getPagerRenderer()
+    {
+        if (! isset($this->pagerRenderer))
+        {
+            $this->pagerRenderer = new PagerRenderer($this->getPager());
+        }
+
+        return $this->pagerRenderer;
     }
 
     /**
@@ -487,9 +490,8 @@ class SortableTable extends HTML_Table
     public function getBodyHtml()
     {
         $pager = $this->getPager();
-        $offset = $pager->getOffsetByPageId();
-        $from = $offset[0] - 1;
-        $table_data = $this->getSourceData($from);
+        $offset = $pager->getCurrentRangeOffset();
+        $table_data = $this->getSourceData($offset);
 
         foreach ($table_data as $index => & $row)
         {
@@ -532,7 +534,9 @@ class SortableTable extends HTML_Table
                 return '';
             }
 
-            $result[] = '<form method="get" action="' . $_SERVER['PHP_SELF'] . '" style="display:inline;">';
+            $result[] = '<div class="pull-right">';
+            $result[] = '<form class="form-inline" method="get" action="' . $_SERVER['PHP_SELF'] .
+                 '" style="display:inline;">';
 
             $param = array();
             $param[$this->getParameterName('direction')] = $this->getOrderDirection();
@@ -556,7 +560,7 @@ class SortableTable extends HTML_Table
                 }
             }
 
-            $result[] = '<select name="' . $this->getParameterName('per_page') .
+            $result[] = '<select class="form-group form-control input-sm" name="' . $this->getParameterName('per_page') .
                  '" onchange="javascript:this.form.submit();">';
 
             // calculate the roundup for the interval
@@ -573,19 +577,21 @@ class SortableTable extends HTML_Table
 
             if ($sourceDataCount < self :: DISPLAY_PER_PAGE_LIMIT)
             {
-                $all_text = Translation :: get('All', Utilities :: COMMON_LIBRARIES);
+                $all_text = Translation :: get('AllEntries', Utilities :: COMMON_LIBRARIES);
                 $result[] = '<option value="' . self :: DISPLAY_ALL . '" ' .
                      ($sourceDataCount == $this->getNumberOfItemsPerPage() ? 'selected="selected"' : '') . '>' .
                      $all_text . '</option>';
             }
 
-            $result[] = '</select>';
+            $result[] = '</select> ';
+            $result[] = Translation :: get('SelectEntriesPerPage');
             $result[] = '<noscript>';
-            $result[] = '<button class="normal" type="submit" value="' .
+            $result[] = '<button class="btn btn-default btn-sm" type="submit" value="' .
                  Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) . '">' .
                  Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) . '</button>';
             $result[] = '</noscript>';
             $result[] = '</form>';
+            $result[] = '</div>';
         }
 
         return implode(PHP_EOL, $result);
@@ -600,8 +606,7 @@ class SortableTable extends HTML_Table
     {
         if ($this->allowPageNavigation)
         {
-            $showed_items = $this->getPager()->getOffsetByPageId();
-            return $showed_items[0] . ' - ' . $showed_items[1] . ' / ' . $this->countSourceData();
+            return $this->getPagerRenderer()->renderCurrentRange();
         }
     }
 
@@ -701,6 +706,17 @@ class SortableTable extends HTML_Table
     public function setTableFormActions(TableFormActions $actions = null)
     {
         $this->tableFormActions = $actions;
+
+        if ($actions instanceof TableFormActions && $actions->has_form_actions())
+        {
+            $columnHeaderHtml = '<input type="checkbox" name="sortableTableSelectToggle" class="sortableTableSelectToggle" />';
+        }
+        else
+        {
+            $columnHeaderHtml = '';
+        }
+
+        $this->setColumnHeader(0, $columnHeaderHtml, false);
     }
 
     /**

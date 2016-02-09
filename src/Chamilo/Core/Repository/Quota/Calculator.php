@@ -603,36 +603,32 @@ class Calculator
     {
         $html = array();
 
-        $html[] = '<div class="usage_information">';
-        $html[] = '<div class="usage_bar">';
-
-        for ($i = 0; $i < 100; $i ++)
+        if ($percent >= 100)
         {
-            if ($percent > $i)
-            {
-                if ($i >= 90)
-                {
-                    $class = 'very_critical';
-                }
-                elseif ($i >= 80)
-                {
-                    $class = 'critical';
-                }
-                else
-                {
-                    $class = 'used';
-                }
-            }
-            else
-            {
-                $class = '';
-            }
-
-            $html[] = '<div class="' . $class . '"></div>';
+            $percent = 100;
         }
 
+        if ($percent >= 90)
+        {
+            $class = 'progress-bar-danger';
+        }
+        elseif ($percent >= 80)
+        {
+            $class = 'progress-bar-warning';
+        }
+        else
+        {
+            $class = 'progress-bar-success';
+        }
+
+        $displayPercent = round($percent);
+
+        $html[] = '<div class="progress">';
+        $html[] = '<div class="progress-bar progress-bar-striped ' . $class . '" role="progressbar" aria-valuenow="' .
+             $displayPercent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $displayPercent .
+             '%; min-width: 2em;">';
+        $html[] = $status . ' &ndash; ' .  $displayPercent . '%';
         $html[] = '</div>';
-        $html[] = '<div class="usage_status">' . $status . ' &ndash; ' . round($percent, 2) . ' %</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

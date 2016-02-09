@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
-use Chamilo\Application\Calendar\Actions;
 use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
@@ -235,9 +234,7 @@ abstract class TableColumnModel extends TableComponent
 
         if ($column)
         {
-            return new OrderBy(
-                $column->getConditionVariable(),
-                $order_direction);
+            return new OrderBy($column->getConditionVariable(), $order_direction);
         }
     }
 
@@ -301,9 +298,9 @@ abstract class TableColumnModel extends TableComponent
      */
     protected function addActionColumn()
     {
-        foreach($this->columns as $column)
+        foreach ($this->columns as $column)
         {
-            if($column instanceof ActionsTableColumn)
+            if ($column instanceof ActionsTableColumn)
             {
                 return;
             }
