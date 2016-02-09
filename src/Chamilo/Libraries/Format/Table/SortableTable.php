@@ -10,6 +10,12 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 /**
  *
@@ -332,41 +338,38 @@ class SortableTable extends HTML_Table
 
     public function renderActions()
     {
-        $html = array();
+        $formActions = $this->getTableFormActions()->get_form_actions();
+        $firstAction = array_shift($formActions);
 
-        $html[] = '<div class="btn-toolbar">';
-        $html[] = '<div class="btn-group">';
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+        $buttonToolBar->addButtonGroup($buttonGroup);
 
-        $html[] = '<select class="form-group form-control input-sm" id="actions_' . $this->tableName . '" name="' .
-             $this->tableName . '_action_value">';
+        $button = new SplitDropdownButton(
+            $firstAction->get_title(),
+            null,
+            $firstAction->get_action(),
+            Button :: DISPLAY_LABEL,
+            $firstAction->getConfirmation());
 
-        foreach ($this->getTableFormActions()->get_form_actions() as $form_action)
+        foreach ($formActions as $formAction)
         {
-            if ($form_action instanceof TableFormAction)
-            {
-                $message = $form_action->getConfirmationMessage() ? $form_action->getConfirmationMessage() : Translation :: get(
-                    'ConfirmYourSelectionAndAction',
+            $button->addSubButton(
+                new SubButton(
+                    $formAction->get_title(),
                     null,
-                    Utilities :: COMMON_LIBRARIES);
-
-                $html[] = '<option value="' . $form_action->get_action() . '"' .
-                     ($form_action->get_confirm() ? ' class="confirm" data-message="' . $message . '"' : '') . '>' .
-                     $form_action->get_title() . '</option>';
-            }
+                    $formAction->get_action(),
+                    Button :: DISPLAY_LABEL,
+                    $formAction->getConfirmation()));
         }
 
-        $html[] = '</select>';
-        $html[] = '</div>';
+        $buttonGroup->addButton($button);
 
-        $submitLabel = Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES);
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-        $html[] = '<div class="btn-group btn-group-sm">';
-        $html[] = '<button class="btn btn-default" type="submit" value="' . $submitLabel . '"/>' . $submitLabel .
-             '</button>';
+        $html = array();
 
-        $html[] = '</div>';
-        $html[] = '</div>';
-
+        $html[] = $buttonToolBarRenderer->render();
         $html[] = '<input type="hidden" name="' . $this->tableName . '_namespace" value="' .
              $this->getTableFormActions()->get_namespace() . '"/>';
         $html[] = '<input type="hidden" name="table_name" value="' . $this->tableName . '"/>';
