@@ -15,16 +15,17 @@
 	color: black;
 }
 
-.dropdown-menu>li>a {
-	padding: 3px 32px;
+.panel.panel-chamilo {
+	background-color: #f9f9f9;
+	box-shadow: none;
 }
 
-.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
-	background-image: url("../../Images/Ruby/Background/Checkmark.png");
-	background-position: 12px center;
-	background-repeat: no-repeat;
+input.form-control[type="text"], input.form-control[type="password"] {
+	border: 1px solid #ccc;
+	padding: 6px 12px;
 }
 
+/** Specific bootstrap fixes **/
 #trailbox {
 	height: 28px;
 }
@@ -35,14 +36,14 @@
 	font-weight: bold;
 }
 
-.panel.panel-chamilo {
-	background-color: #f9f9f9;
-	box-shadow: none;
+.dropdown-menu>li>a {
+	padding: 3px 32px;
 }
 
-input.form-control[type="text"], input.form-control[type="password"] {
-	border: 1px solid #ccc;
-	padding: 6px 12px;
+.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
+	background-image: url("../../Images/Ruby/Background/Checkmark.png");
+	background-position: 12px center;
+	background-repeat: no-repeat;
 }
 
 .action-bar-search, .action-bar-search:hover, .action-bar-search:active,

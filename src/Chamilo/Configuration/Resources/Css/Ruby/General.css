@@ -76,7 +76,7 @@ div#emulator {
 	color: #272761;
 }
 
-.error-message {
+.error-message, .fatal-message {
 	background-image: url('../../Images/Ruby/Status/ErrorMini.png');
 	background-color: #FFD1D1;
 	border: 1px solid #ff9b9d;
@@ -103,7 +103,7 @@ div#emulator {
 }
 
 .normal-message h2, .warning-message h2, .error-message h2,
-	.confirm-message h2 {
+	.fatal-message h2, .confirm-message h2 {
 	padding: 0px 0px 5px 0px;
 	margin: 0px;
 	font-size: 120%;
@@ -150,7 +150,7 @@ div#emulator {
 	background-repeat: no-repeat;
 	background-position: 10px 50%;
 	text-align: justify;
-	z-index: 1001;
+	z-index: 9999999;
 }
 
 .notification-4 {
