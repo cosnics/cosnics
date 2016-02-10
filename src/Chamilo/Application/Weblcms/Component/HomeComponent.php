@@ -40,8 +40,8 @@ class HomeComponent extends Manager implements DelegateComponent
 
         $html[] = $this->render_header();
         $html[] = '<div class="clear"></div>';
-        $html[] = $this->display_menu();
-        $html[] = '<div id="tool_browser_right">';
+//         $html[] = $this->display_menu();
+//         $html[] = '<div id="tool_browser_right">';
 
         $html[] = $renderer->as_html();
         $html[] = '<script type="text/javascript" src="' .
@@ -59,7 +59,7 @@ class HomeComponent extends Manager implements DelegateComponent
             $html[] = '<script type="text/javascript">var hide = "false";</script>';
         }
 
-        $html[] = '</div>';
+//         $html[] = '</div>';
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
