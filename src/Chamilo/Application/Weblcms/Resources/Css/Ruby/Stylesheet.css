@@ -282,14 +282,6 @@ div.home_actions {
 	margin-bottom: 10px;
 }
 
-div.tree_menu_on_top {
-	border: 1px solid #b5cae7;
-	margin-bottom: 10px;
-	padding: 10px 10px;
-	-moz-border-radius-topleft: 15px;
-	-webkit-border-top-left-radius: 15px;
-}
-
 div.publication_container {
 	margin-top: 25px;
 }
@@ -350,15 +342,6 @@ div.row.tool_unchecked_warning .warning-message {
 
 div.user_category_description {
 	margin-top: 10px;
-}
-
-div#tool_browser_right {
-	margin-right: 215px;
-	min-height: 500px;
-}
-
-div.tool_bar_course_menu {
-	width: 200px;
 }
 
 td.publication_table_actions_column {

@@ -112,9 +112,6 @@ class HomeComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
 
         $html[] = '</div>';
-        $html[] = '<script type="text/javascript" src="' .
-             htmlspecialchars(Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true)) . 'ToolBar.js' .
-             '"></script>';
         $html[] = '<div class="clear"></div>';
         return implode($html, "\n");
     }

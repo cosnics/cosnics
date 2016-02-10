@@ -31,7 +31,9 @@ ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
 }
 
 ul.tree-menu li div {
-	background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+	background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left
+		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
+		repeat-y;
 }
 
 ul.tree-menu li div.last {
@@ -39,7 +41,9 @@ ul.tree-menu li div.last {
 }
 
 ul.tree-menu li div.collapse {
-	background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+	background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left
+		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
+		repeat-y;
 }
 
 ul.tree-menu li div.lastCollapse {
@@ -47,7 +51,9 @@ ul.tree-menu li div.lastCollapse {
 }
 
 ul.tree-menu li div.expand {
-	background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+	background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left
+		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
+		repeat-y;
 }
 
 ul.tree-menu li div.lastExpand {
@@ -135,7 +141,6 @@ ul.tree-menu li div a.create {
 ul.tree-menu li div a.add {
 	background-image: url(../../Images/Ruby/Treemenu/Add.png);
 }
-
 
 ul.tree-menu li div a.manage {
 	background-image: url(../../Images/Ruby/Treemenu/Manage.png);
@@ -271,177 +276,4 @@ ul.tree-menu li div a.type_user_platform {
 
 ul.tree-menu li div a.type_group {
 	background-image: url(../../Images/Ruby/Treemenu/Group.png);
-}
-
-/*************
- * TOOL MENU *
- *************/
-div.tool_bar {
-	background-color: #F4F4F4;
-	border: 1px solid #CECECE;
-	padding: 10px;
-	position: fixed;
-	text-align: left;
-}
-
-div.tool_bar div.divider {
-	background-color: #9e021b;
-	margin: 10px 0px 10px 0px;
-	line-height: 1px;
-	height: 1px;
-	font-size: 1px;
-}
-
-div.tool_bar #tool_bar_hide_container {
-	display: none;
-	text-align: center;
-	width: 18px;
-	height: 36px;
-	position: absolute;
-	top: 50%;
-	margin-top: -18px;
-	background-repeat: no-repeat;
-	background-position: center center;
-}
-
-#tool_bar_show {
-	display: none;
-}
-
-#tool_bar_hide img {
-	margin: 10px 5px 11px 5px;
-}
-
-#tool_bar_show img {
-	margin: 10px 5px 11px 5px;
-}
-
-/***************************
- * TOOL MENU IN LEFT MODUS *
- ***************************/
-div.tool_bar_left {
-	border-left: 0px;
-	left: 0px;
-	-moz-border-radius-bottomright: 10px;
-	-moz-border-radius-topright: 10px;
-	-webkit-border-top-right-radius: 10px;
-	-webkit-border-bottom-right-radius: 10px;
-}
-
-#tool_browser_left {
-	margin-left: 180px;
-}
-
-/****************************
- * TOOL MENU IN RIGHT MODUS *
- ****************************/
-div.tool_bar_right {
-	width: 142px;
-	padding-left: 28px;
-	border-right: 0px;
-	right: 0px;
-	-moz-border-radius-bottomleft: 10px;
-	-moz-border-radius-topleft: 10px;
-	-webkit-border-bottom-left-radius: 10px;
-	-webkit-border-top-left-radius: 10px;
-}
-
-#tool_browser_right {
-	margin-right: 180px;
-}
-
-/********************************
- * TOOL MENU IN LEFT ICON MODUS *
- ********************************/
-div.tool_bar_icon_left {
-	width: 34px;
-	border-left: 0px;
-	left: 0px;
-}
-
-#tool_browser_icon_left {
-	margin-left: 54px;
-}
-
-/*********************************
- * TOOL MENU IN RIGHT ICON MODUS *
- *********************************/
-div.tool_bar_icon_right {
-	width: 16px;
-	padding-left: 28px;
-	border-right: 0px;
-	right: 0px;
-}
-
-#tool_browser_icon_right {
-	margin-right: 54px;
-}
-
-/****************************************
- * TOOL MENU IN LEFT OR LEFT ICON MODUS *
- ****************************************/
-div.tool_bar_left #tool_bar_hide_container.hide, div.tool_bar_icon_left #tool_bar_hide_container.hide
-	{
-	right: 0px;
-	margin-right: -1px;
-	background-image:
-		url(../../Images/Ruby/Action/ActionBar/LeftHideBackground.png);
-}
-
-div.tool_bar_left #tool_bar_hide_container.show, div.tool_bar_icon_left #tool_bar_hide_container.show
-	{
-	right: -18px;
-	margin-left: 0px;
-	background-image:
-		url(../../Images/Ruby/Action/ActionBar/LeftShowBackground.png);
-}
-
-/******************************************
- * TOOL MENU IN RIGHT OR RIGHT ICON MODUS *
- ******************************************/
-div.tool_bar_right #tool_bar_hide_container.hide, div.tool_bar_icon_right #tool_bar_hide_container.hide
-	{
-	left: 0px;
-	margin-left: -1px;
-	background-image:
-		url(../../Images/Ruby/Action/ActionBar/RightHideBackground.png);
-}
-
-div.tool_bar_right #tool_bar_hide_container.show, div.tool_bar_icon_right #tool_bar_hide_container.show
-	{
-	left: -18px;
-	margin-right: 0px;
-	background-image:
-		url(../../Images/Ruby/Action/ActionBar/RightShowBackground.png);
-}
-
-/**************************
- * TOOL MENU LIST OPTIONS *
- **************************/
-div.tool_menu ul {
-	padding: 0px;
-	margin: 0px;
-}
-
-div.tool_menu ul li.tool_list_menu {
-	padding: 2px 0px 4px 22px;
-	margin: 0px;
-	list-style: none;
-	background-repeat: no-repeat;
-}
-
-div.tool_menu ul li.title {
-	padding: 0px 0px 10px 0px;
-	font-weight: bold;
-}
-
-div.tool_menu ul li.tool_list_menu a {
-	top: -3px;
-	position: relative;
-}
-
-div.tool_menu div.splitter {
-	margin: 10px 0 10px 0;
-	border-bottom: 1px dotted #9e021b;
-	height: 0px;
 }

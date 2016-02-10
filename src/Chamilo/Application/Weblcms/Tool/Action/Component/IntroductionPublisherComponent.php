@@ -55,8 +55,9 @@ class IntroductionPublisherComponent extends Manager implements \Chamilo\Core\Re
             $pub->set_publication_date(time());
             $pub->set_modified_date(time());
             $pub->set_hidden(0);
-            $pub->set_email_sent(false);
+            $pub->set_email_sent(0);
             $pub->set_show_on_homepage(0);
+            $pub->set_allow_collaboration(1);
 
             $pub->ignore_display_order();
 

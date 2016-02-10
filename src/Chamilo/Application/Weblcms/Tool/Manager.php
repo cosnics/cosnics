@@ -235,16 +235,6 @@ abstract class Manager extends Application
         return implode(PHP_EOL, $html);
     }
 
-    public function render_footer()
-    {
-        $html = array();
-
-        $html[] = '</div>';
-        $html[] = parent :: render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
     /**
      * Returns the visible tools for this course
      *
@@ -291,24 +281,6 @@ abstract class Manager extends Application
 
         $course_settings_controller = CourseSettingsController :: get_instance();
 
-        $menu_layout = $course_settings_controller->get_course_setting(
-            $this->get_course(),
-            CourseSettingsConnector :: MENU_LAYOUT);
-
-        if ($menu_layout != CourseSettingsConnector :: MENU_LAYOUT_OFF && count($tools) > 0)
-        {
-            $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_MENU, $this, $tools);
-
-            $html[] = $renderer->toHtml();
-            $html[] = '<div id="tool_browser_' .
-                 ($renderer->display_menu_icons() && ! $renderer->display_menu_text() ? 'icon_' : '') .
-                 $renderer->get_menu_style() . '">';
-        }
-        else
-        {
-            $html[] = '<div id="tool_browser">';
-        }
-
         $tool_shortcut = $course_settings_controller->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: TOOL_SHORTCUT_MENU);
@@ -351,6 +323,7 @@ abstract class Manager extends Application
         if ($show_introduction_text)
         {
             $introduction_text = $this->get_introduction_text();
+
             if (! $introduction_text)
             {
                 if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
@@ -374,7 +347,7 @@ abstract class Manager extends Application
         if ($tool_shortcut && count($tools) > 0)
         {
             $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_SHORTCUT, $this, $tools);
-            $html[] = '<div style="float:right; margin-top: -30px;">';
+            $html[] = '<div class="pull-right" style="margin-top: -30px;">';
             $html[] = $renderer->toHtml();
             $html[] = '</div>';
         }

@@ -15,7 +15,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
@@ -29,7 +28,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -182,7 +180,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 //            $html[] = '<div class="panel-body">';
 
             $html[] = '<div class="publication_container row">';
-            $html[] = '<div class="tree_menu_on_top col-md-3 col-lg-2 col-sm-12">';
+            $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
 //            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
 //                 'overflow: auto; ">';
 //            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
@@ -191,8 +189,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = '<div id="tree">';
             $html[] = $this->publication_category_tree->render_as_tree();
             $html[] = '</div>';
-            $html[] = ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'TreeMenu.js');
             $html[] = '</div>';
 //            $html[] = '</div>';
 //
