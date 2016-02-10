@@ -1,10 +1,193 @@
 /*
- ### jQuery XML to JSON Plugin v1.0 - 2008-07-01 ###
+ ### jQuery XML to JSON Plugin v1.3 - 2013-02-18 ###
  * http://www.fyneworks.com/ - diego@fyneworks.com
- * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
+ * Licensed under http://en.wikipedia.org/wiki/MIT_License
  ###
  Website: http://www.fyneworks.com/jquery/xml-to-json/
-*/
-eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}(';5(10.M)(w($){$.N({11:w(j,k){5(!j)t{};w B(d,e){5(!d)t y;6 f=\'\',2=y,E=y;6 g=d.x,12=l(d.O||d.P);6 h=d.v||d.F||\'\';5(d.G){5(d.G.7>0){$.Q(d.G,w(n,a){6 b=a.x,u=l(a.O||a.P);6 c=a.v||a.F||\'\';5(b==8){t}z 5(b==3||b==4||!u){5(c.13(/^\\s+$/)){t};f+=c.H(/^\\s+/,\'\').H(/\\s+$/,\'\')}z{2=2||{};5(2[u]){5(!2[u].7)2[u]=p(2[u]);2[u][2[u].7]=B(a,R);2[u].7=2[u].7}z{2[u]=B(a)}}})}};5(d.I){5(d.I.7>0){E={};2=2||{};$.Q(d.I,w(a,b){6 c=l(b.14),C=b.15;E[c]=C;5(2[c]){5(!2[c].7)2[c]=p(2[c]);2[c][2[c].7]=C;2[c].7=2[c].7}z{2[c]=C}})}};5(2){2=$.N((f!=\'\'?A J(f):{}),2||{});f=(2.v)?(D(2.v)==\'16\'?2.v:[2.v||\'\']).17([f]):f;5(f)2.v=f;f=\'\'};6 i=2||f;5(k){5(f)i={};f=i.v||f||\'\';5(f)i.v=f;5(!e)i=p(i)};t i};6 l=w(s){t J(s||\'\').H(/-/g,"18")};6 m=w(s){t(D s=="19")||J((s&&D s=="K")?s:\'\').1a(/^((-)?([0-9]*)((\\.{0,1})([0-9]+))?$)/)};6 p=w(o){5(!o.7)o=[o];o.7=o.7;t o};5(D j==\'K\')j=$.S(j);5(!j.x)t;5(j.x==3||j.x==4)t j.F;6 q=(j.x==9)?j.1b:j;6 r=B(q,R);j=y;q=y;t r},S:w(a){6 b;T{6 c=($.U.V)?A 1c("1d.1e"):A 1f();c.1g=W}X(e){Y A L("Z 1h 1i 1j 1k 1l")};T{5($.U.V)b=(c.1m(a))?c:W;z b=c.1n(a,"v/1o")}X(e){Y A L("L 1p Z K")};t b}})})(M);',62,88,'||obj|||if|var|length||||||||||||||||||||||return|cnn|text|function|nodeType|null|else|new|parseXML|atv|typeof|att|nodeValue|childNodes|replace|attributes|String|string|Error|jQuery|extend|localName|nodeName|each|true|text2xml|try|browser|msie|false|catch|throw|XML|window|xml2json|nn|match|name|value|object|concat|_|number|test|documentElement|ActiveXObject|Microsoft|XMLDOM|DOMParser|async|Parser|could|not|be|instantiated|loadXML|parseFromString|xml|parsing'.split('|'),0,{}))
+ *//*
+ # INSPIRED BY: http://www.terracoder.com/
+ AND: http://www.thomasfrank.se/xml_to_json.html
+ AND: http://www.kawa.net/works/js/xml/objtree-e.html
+ *//*
+ This simple script converts XML (document of code) into a JSON object. It is the combination of 2
+ 'xml to json' great parsers (see below) which allows for both 'simple' and 'extended' parsing modes.
+ */
+// Avoid collisions
+;if(window.jQuery) (function($){
+
+ // Add function to jQuery namespace
+ $.extend({
+
+  // converts xml documents and xml text to json object
+  xml2json: function(xml, extended) {
+   if(!xml) return {}; // quick fail
+
+   //### PARSER LIBRARY
+   // Core function
+   function parseXML(node, simple){
+    if(!node) return null;
+    var txt = '', obj = null, att = null;
+    var nt = node.nodeType, nn = jsVar(node.localName || node.nodeName);
+    var nv = node.text || node.nodeValue || '';
+    /*DBG*/ //if(window.console) console.log(['x2j',nn,nt,nv.length+' bytes']);
+    if(node.childNodes){
+     if(node.childNodes.length>0){
+      /*DBG*/ //if(window.console) console.log(['x2j',nn,'CHILDREN',node.childNodes]);
+      $.each(node.childNodes, function(n,cn){
+       var cnt = cn.nodeType, cnn = jsVar(cn.localName || cn.nodeName);
+       var cnv = cn.text || cn.nodeValue || '';
+       /*DBG*/ //if(window.console) console.log(['x2j',nn,'node>a',cnn,cnt,cnv]);
+       if(cnt == 8){
+        /*DBG*/ //if(window.console) console.log(['x2j',nn,'node>b',cnn,'COMMENT (ignore)']);
+        return; // ignore comment node
+       }
+       else if(cnt == 3 || cnt == 4 || !cnn){
+        // ignore white-space in between tags
+        if(cnv.match(/^\s+$/)){
+         /*DBG*/ //if(window.console) console.log(['x2j',nn,'node>c',cnn,'WHITE-SPACE (ignore)']);
+         return;
+        };
+        /*DBG*/ //if(window.console) console.log(['x2j',nn,'node>d',cnn,'TEXT']);
+        txt += cnv.replace(/^\s+/,'').replace(/\s+$/,'');
+        // make sure we ditch trailing spaces from markup
+       }
+       else{
+        /*DBG*/ //if(window.console) console.log(['x2j',nn,'node>e',cnn,'OBJECT']);
+        obj = obj || {};
+        if(obj[cnn]){
+         /*DBG*/ //if(window.console) console.log(['x2j',nn,'node>f',cnn,'ARRAY']);
+
+         // http://forum.jquery.com/topic/jquery-jquery-xml2json-problems-when-siblings-of-the-same-tagname-only-have-a-textnode-as-a-child
+         if(!obj[cnn].length) obj[cnn] = myArr(obj[cnn]);
+         obj[cnn] = myArr(obj[cnn]);
+
+         obj[cnn][ obj[cnn].length ] = parseXML(cn, true/* simple */);
+         obj[cnn].length = obj[cnn].length;
+        }
+        else{
+         /*DBG*/ //if(window.console) console.log(['x2j',nn,'node>g',cnn,'dig deeper...']);
+         obj[cnn] = parseXML(cn);
+        };
+       };
+      });
+     };//node.childNodes.length>0
+    };//node.childNodes
+    if(node.attributes){
+     if(node.attributes.length>0){
+      /*DBG*/ //if(window.console) console.log(['x2j',nn,'ATTRIBUTES',node.attributes])
+      att = {}; obj = obj || {};
+      $.each(node.attributes, function(a,at){
+       var atn = jsVar(at.name), atv = at.value;
+       att[atn] = atv;
+       if(obj[atn]){
+        /*DBG*/ //if(window.console) console.log(['x2j',nn,'attr>',atn,'ARRAY']);
+
+        // http://forum.jquery.com/topic/jquery-jquery-xml2json-problems-when-siblings-of-the-same-tagname-only-have-a-textnode-as-a-child
+        //if(!obj[atn].length) obj[atn] = myArr(obj[atn]);//[ obj[ atn ] ];
+        obj[cnn] = myArr(obj[cnn]);
+
+        obj[atn][ obj[atn].length ] = atv;
+        obj[atn].length = obj[atn].length;
+       }
+       else{
+        /*DBG*/ //if(window.console) console.log(['x2j',nn,'attr>',atn,'TEXT']);
+        obj[atn] = atv;
+       };
+      });
+      //obj['attributes'] = att;
+     };//node.attributes.length>0
+    };//node.attributes
+    if(obj){
+     obj = $.extend( (txt!='' ? new String(txt) : {}),/* {text:txt},*/ obj || {}/*, att || {}*/);
+     //txt = (obj.text) ? (typeof(obj.text)=='object' ? obj.text : [obj.text || '']).concat([txt]) : txt;
+     txt = (obj.text) ? ([obj.text || '']).concat([txt]) : txt;
+     if(txt) obj.text = txt;
+     txt = '';
+    };
+    var out = obj || txt;
+    //console.log([extended, simple, out]);
+    if(extended){
+     if(txt) out = {};//new String(out);
+     txt = out.text || txt || '';
+     if(txt) out.text = txt;
+     if(!simple) out = myArr(out);
+    };
+    return out;
+   };// parseXML
+   // Core Function End
+   // Utility functions
+   var jsVar = function(s){ return String(s || '').replace(/-/g,"_"); };
+
+   // NEW isNum function: 01/09/2010
+   // Thanks to Emile Grau, GigaTecnologies S.L., www.gigatransfer.com, www.mygigamail.com
+   function isNum(s){
+    // based on utility function isNum from xml2json plugin (http://www.fyneworks.com/ - diego@fyneworks.com)
+    // few bugs corrected from original function :
+    // - syntax error : regexp.test(string) instead of string.test(reg)
+    // - regexp modified to accept  comma as decimal mark (latin syntax : 25,24 )
+    // - regexp modified to reject if no number before decimal mark  : ".7" is not accepted
+    // - string is "trimmed", allowing to accept space at the beginning and end of string
+    var regexp=/^((-)?([0-9]+)(([\.\,]{0,1})([0-9]+))?$)/
+    return (typeof s == "number") || regexp.test(String((s && typeof s == "string") ? jQuery.trim(s) : ''));
+   };
+   // OLD isNum function: (for reference only)
+   //var isNum = function(s){ return (typeof s == "number") || String((s && typeof s == "string") ? s : '').test(/^((-)?([0-9]*)((\.{0,1})([0-9]+))?$)/); };
+
+   var myArr = function(o){
+
+    // http://forum.jquery.com/topic/jquery-jquery-xml2json-problems-when-siblings-of-the-same-tagname-only-have-a-textnode-as-a-child
+    //if(!o.length) o = [ o ]; o.length=o.length;
+    if(!$.isArray(o)) o = [ o ]; o.length=o.length;
+
+    // here is where you can attach additional functionality, such as searching and sorting...
+    return o;
+   };
+   // Utility functions End
+   //### PARSER LIBRARY END
+
+   // Convert plain text to xml
+   if(typeof xml=='string') xml = $.text2xml(xml);
+
+   // Quick fail if not xml (or if this is a node)
+   if(!xml.nodeType) return;
+   if(xml.nodeType == 3 || xml.nodeType == 4) return xml.nodeValue;
+
+   // Find xml root node
+   var root = (xml.nodeType == 9) ? xml.documentElement : xml;
+
+   // Convert xml to json
+   var out = parseXML(root, true /* simple */);
+
+   // Clean-up memory
+   xml = null; root = null;
+
+   // Send output
+   return out;
+  },
+
+  // Convert text to XML DOM
+  text2xml: function(str) {
+   // NOTE: I'd like to use jQuery for this, but jQuery makes all tags uppercase
+   //return $(xml)[0];
+
+   /* prior to jquery 1.9 */
+   /*
+    var out;
+    try{
+    var xml = ((!$.support.opacity && !$.support.style))?new ActiveXObject("Microsoft.XMLDOM"):new DOMParser();
+    xml.async = false;
+    }catch(e){ throw new Error("XML Parser could not be instantiated") };
+    try{
+    if((!$.support.opacity && !$.support.style)) out = (xml.loadXML(str))?xml:false;
+    else out = xml.parseFromString(str, "text/xml");
+    }catch(e){ throw new Error("Error parsing XML string") };
+    return out;
+    */
+
+   /* jquery 1.9+ */
+   return $.parseXML(str);
+  }
+
+ }); // extend $
+
+})(jQuery);

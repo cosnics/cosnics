@@ -167,10 +167,6 @@ ul.tree-menu li div a.template {
 	background-image: url(../../Images/Aqua/Treemenu/Template.png);
 }
 
-ul.tree-menu li div a.category {
-	background-image: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png);
-}
-
 ul.tree-menu li div a.hidden {
 	background-image: url(../../Images/Aqua/Treemenu/Hidden.png);
 }
@@ -210,9 +206,17 @@ ul.tree-menu li div a.divider {
 	cursor: default;
 }
 
+ul.tree-menu li div a.category {
+	background: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png) top left no-repeat;
+}
+
+ul.tree-menu li div.collapse a.category {
+	background: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png) 0 0 no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) 0 -1px repeat-y;
+}
+
 ul.tree-menu li.current_path>div a.category, ul.tree-menu li.current>div a.category
-	{
-	background-image: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png);
+{
+	background: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div a.new_category {
@@ -220,9 +224,8 @@ ul.tree-menu li div a.new_category {
 		url(../../Images/Aqua/Treemenu/TreeFolderClosedNew.png);
 }
 
-ul.tree-menu li.current_path>div a.new_category, ul.tree-menu li.current>div a.new_category
-	{
-	background-image: url(../../Images/Aqua/Treemenu/TreeFolderOpenNew.png);
+ul.tree-menu li.current_path>div a.new_category, ul.tree-menu li.current>div a.new_category  {
+	background: url(../../Images/Aqua/Treemenu/TreeFolderOpenNew.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div a.invisible_category {
@@ -234,12 +237,15 @@ ul.tree-menu li div a.invisible_category {
 ul.tree-menu li.current_path>div a.invisible_category, ul.tree-menu li.current>div a.invisible_category
 	{
 	color: #666;
-	background-image:
-		url(../../Images/Aqua/Treemenu/TreeFolderOpenInvisible.png);
+	background: url(../../Images/Aqua/Treemenu/TreeFolderOpenInvisible.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li.current>div a {
 	text-decoration: underline;
+}
+
+ul.tree-menu li div.collapse {
+	display: block;
 }
 
 /*
