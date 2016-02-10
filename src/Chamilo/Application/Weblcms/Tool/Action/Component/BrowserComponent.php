@@ -180,13 +180,15 @@ class BrowserComponent extends Manager implements DelegateComponent
 //            $html[] = Translation :: get('CurrentCategory') . ': ' . $cat_name;
 //            $html[] = '</div>';
 //            $html[] = '<div class="panel-body">';
-            $html[] = '<div class="tree_menu_on_top" style="max-height:150px; overflow: auto;">';
+
+            $html[] = '<div class="publication_container">';
+            $html[] = '<div class="tree_menu_on_top">';
             $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
                  'overflow: auto; ">';
-            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
-                 '</a>';
+//            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
+//                 '</a>';
             $html[] = '</div>';
-            $html[] = '<div id=tree style="width:90%;overflow: auto;">';
+            $html[] = '<div id="tree">';
             $html[] = $this->publication_category_tree->render_as_tree();
             $html[] = '</div>';
             $html[] = ResourceManager :: get_instance()->get_resource_html(
@@ -199,8 +201,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $content[] = $publication_renderer->as_html();
 
-        $html[] = '<div class="clear"></div>';
-
         if (method_exists($this->get_parent(), 'show_additional_information'))
         {
             $html[] = $this->get_parent()->show_additional_information($this);
@@ -212,7 +212,10 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = Display :: warning_message(Translation :: get('ToolInvisible'));
         }
 
+        $html[] = '<div class="publication_renderer">';
         $html[] = implode(PHP_EOL, $content);
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         $html[] = $this->render_footer();
 

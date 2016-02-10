@@ -26,12 +26,11 @@ ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
 	{
 	padding-left: 18px;
 	background-repeat: no-repeat;
-	height: 18px;
 	clear: both;
 }
 
 ul.tree-menu li div {
-	background-image: url(../../Images/Aqua/Treemenu/TreeLeaf.png);
+	background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.last {
@@ -39,7 +38,7 @@ ul.tree-menu li div.last {
 }
 
 ul.tree-menu li div.collapse {
-	background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png);
+	background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastCollapse {
@@ -47,7 +46,7 @@ ul.tree-menu li div.lastCollapse {
 }
 
 ul.tree-menu li div.expand {
-	background-image: url(../../Images/Aqua/Treemenu/TreeNode.png);
+	background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastExpand {
@@ -57,12 +56,10 @@ ul.tree-menu li div.lastExpand {
 ul.tree-menu li div a {
 	clear: both;
 	display: block;
-	height: 18px;
 	padding-left: 21px;
 	background-repeat: no-repeat;
 	background-position: left top;
 	background-image: url(../../Images/Aqua/Treemenu/TreeDocument.png);
-	white-space: nowrap;
 	font-weight: bold;
 }
 
