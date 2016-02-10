@@ -181,13 +181,13 @@ class BrowserComponent extends Manager implements DelegateComponent
 //            $html[] = '</div>';
 //            $html[] = '<div class="panel-body">';
 
-            $html[] = '<div class="publication_container">';
-            $html[] = '<div class="tree_menu_on_top">';
-            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
-                 'overflow: auto; ">';
+            $html[] = '<div class="publication_container row">';
+            $html[] = '<div class="tree_menu_on_top col-md-3 col-lg-2 col-sm-12">';
+//            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
+//                 'overflow: auto; ">';
 //            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
 //                 '</a>';
-            $html[] = '</div>';
+//            $html[] = '</div>';
             $html[] = '<div id="tree">';
             $html[] = $this->publication_category_tree->render_as_tree();
             $html[] = '</div>';
@@ -212,7 +212,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = Display :: warning_message(Translation :: get('ToolInvisible'));
         }
 
-        $html[] = '<div class="publication_renderer">';
+        $html[] = '<div class="publication_renderer col-md-9 col-lg-10 col-sm-12">';
         $html[] = implode(PHP_EOL, $content);
         $html[] = '</div>';
         $html[] = '</div>';
