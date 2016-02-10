@@ -26,11 +26,11 @@ div.fill_in_the_blanks_text {
 }
 
 button.blanks_hint, a.blanks_hint_button {
-	background-image: url(../../Images/Aqua/Buttons/Hint.png);
+	background-image: url(../../Images/Aqua/Buttons/ButtonHint.png);
 }
 
 button.character_hint, a.character_hint_button {
-	background-image: url(../../Images/Aqua/Buttons/CharacterHint.png);
+	background-image: url(../../Images/Aqua/Buttons/ButtonCharacterHint.png);
 }
 
 span.inline_answer_hint {
