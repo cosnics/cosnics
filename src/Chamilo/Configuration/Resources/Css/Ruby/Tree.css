@@ -31,23 +31,23 @@ ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
 }
 
 ul.tree-menu li div {
-	background-image: url(../../Images/Ruby/Treemenu/TreeLeaf.png);
+	background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.last {
-	background-image: url(../../Images/Ruby/Treemenu/TreeLeafEnd.png);
+	background-image: url(../../Images/Aqua/Treemenu/TreeLeafEnd.png);
 }
 
 ul.tree-menu li div.collapse {
-	background-image: url(../../Images/Ruby/Treemenu/TreeNodeOpen.png);
+	background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastCollapse {
-	background-image: url(../../Images/Ruby/Treemenu/TreeNodeOpenEnd.png);
+	background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
 }
 
 ul.tree-menu li div.expand {
-	background-image: url(../../Images/Ruby/Treemenu/TreeNode.png);
+	background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
 ul.tree-menu li div.lastExpand {

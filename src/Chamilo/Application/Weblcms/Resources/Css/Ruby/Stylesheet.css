@@ -288,7 +288,17 @@ div.tree_menu_on_top {
 	padding: 10px 10px;
 	-moz-border-radius-topleft: 15px;
 	-webkit-border-top-left-radius: 15px;
-	/*height: 60px;*/
+	width: 20%;
+	float: left;
+}
+
+div.publication_renderer {
+	float: right;
+	width: 79%;
+}
+
+div.publication_container {
+	margin-top: 25px;
 }
 
 div.tree_menu_hide_container {
