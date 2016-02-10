@@ -1,0 +1,81 @@
+{% block form_row %}
+    {% spaceless %}
+        <div class="row">
+            <div class="label">
+                {{ form_label(form) }}
+            </div>
+            <div class="formw">
+                <div class="element">
+                    {{ form_widget(form) }}
+                </div>
+                <div class="form_feedback">
+                    {{ form_errors(form) }}
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    {% endspaceless %}
+{% endblock form_row %}
+
+{% block form_label %}
+    {% spaceless %}
+        {% if label is not sameas(false) %}
+            {% if not compound %}
+                {% set label_attr = label_attr|merge({'for': id}) %}
+            {% endif %}
+            {% if label is empty %}
+                {% set label = name|humanize %}
+            {% endif %}
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label }}</label>
+            {% if required %}
+                <span title="*" class="required"></span>
+            {% endif %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock form_label %}
+
+{% block button_row %}
+    {% spaceless %}
+        <div class="row">
+            <div class="formw">
+                <div class="element">
+                    {{ form_widget(form) }}
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    {% endspaceless %}
+{% endblock button_row %}
+
+{% block inline_row %}
+    {% spaceless %}
+        <div class="row">
+
+            {% if label %}
+                <div class="label">
+                    {{ label }}
+                </div>
+            {% endif %}
+
+            <div class="formw">
+                <div class="element">
+                    {% for child in children %}
+                        {{ child|raw }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    {% endspaceless %}
+{% endblock %}
+
+{% block category_widget %}
+    {% spaceless %}
+        <fieldset>
+            <legend> {{ category }} </legend>
+            {% for child in children %}
+                {{ child|raw }}
+            {% endfor %}
+        </fieldset>
+    {% endspaceless %}
+{% endblock %}
