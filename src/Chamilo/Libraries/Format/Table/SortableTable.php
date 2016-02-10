@@ -349,7 +349,7 @@ class SortableTable extends HTML_Table
             null,
             $firstAction->get_action(),
             Button :: DISPLAY_LABEL,
-            $firstAction->getConfirmation(), 'btn-sm');
+            $firstAction->getConfirmation(), 'btn-xs');
 
         foreach ($formActions as $formAction)
         {
