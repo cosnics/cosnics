@@ -380,11 +380,6 @@ class SortableTable extends HTML_Table
     {
         $html = array();
 
-        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
-        {
-            $html[] = '</form>';
-        }
-
         if ($this->allowPageSelection || $this->allowPageNavigation)
         {
             $html[] = '<div class="row">';
@@ -411,6 +406,11 @@ class SortableTable extends HTML_Table
             $html[] = '</div>';
 
             $html[] = '</div>';
+        }
+
+        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        {
+            $html[] = '</form>';
         }
 
         return implode(PHP_EOL, $html);
