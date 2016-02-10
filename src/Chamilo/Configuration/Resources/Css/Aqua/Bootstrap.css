@@ -64,6 +64,11 @@ body h3:first-of-type {
 	margin-bottom: 0px;
 }
 
+.table,
+.table-navigation-actions .btn-action-toolbar {
+	margin-bottom: 5px;
+}
+
 form .label {
 	font-size: 100%;
 }
