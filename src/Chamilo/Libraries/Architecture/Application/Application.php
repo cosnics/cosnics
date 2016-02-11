@@ -781,7 +781,7 @@ abstract class Application
                 continue;
             }
 
-            $active_applications[] = $application->get_name();
+            $active_applications[] = $application[Registration::PROPERTY_CONTEXT];
         }
         return $active_applications;
     }

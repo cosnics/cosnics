@@ -55,11 +55,12 @@ class ApplicationItemForm extends ItemForm
     {
         $items = Application :: get_active_packages();
         $applications = array();
-        
+
         foreach ($items as $item)
         {
             $applications[$item] = Translation :: get('TypeName', null, $item);
         }
+
         return $applications;
     }
 }
