@@ -402,3 +402,7 @@ table tr td.column_tool_title {
 .course-list-tab-content .list-group-item-text {
 	color: #666666;
 }
+
+.course-list-tab-content .list-group-header .list-group-item-heading {
+	margin-bottom: 0;
+}

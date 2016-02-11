@@ -339,7 +339,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         if ($title)
         {
             $html[] = '<div class="list-group-item list-group-header">';
-            $html[] = '<h4 class="list-group-item-heading">' . $title . '</h4>';
+            $html[] = '<h5 class="list-group-item-heading">' . $title . '</h5>';
             $html[] = $this->get_course_type_user_category_actions($course_type_user_category, $offset, $count);
             $html[] = '</div>';
         }
@@ -472,7 +472,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         $text_style .= $this->get_invisible_text_style();
                     }
 
-                    $html[] = '<h4 class="list-group-item-heading">' .  $locked . ' <a href="' . $url . '">' . $course->get_title() . '</a></h4>';
+                    $html[] = '<h5 class="list-group-item-heading">' .  $locked . ' <a href="' . $url . '">' . $course->get_title() . '</a></h5>';
 
 //                    $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
 //                        list-style-image: url(' . $icon .
@@ -528,7 +528,12 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     if ($this->get_new_publication_icons() && (! $course_closed || $course_admin))
                     {
-                        $html[] = $this->display_new_publication_icons($course);
+                        $whats_new_icons = $this->display_new_publication_icons($course);
+
+                        if(!empty($whats_new_icons))
+                        {
+                            $html[] = '<p class="list-group-item-text whats-new-icons">' . $whats_new_icons . '</p>';
+                        }
                     }
 
                     $html[] = '</li>';
