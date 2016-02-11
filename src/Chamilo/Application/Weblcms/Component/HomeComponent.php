@@ -13,6 +13,10 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\GlyphButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 /**
  *
@@ -95,7 +99,7 @@ class HomeComponent extends Manager implements DelegateComponent
         $buttonGroup->addButton(
             new Button(
                 Translation :: get('CourseCreate'),
-                Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                new InlineGlyph('plus'),
                 $this->get_url(
                     array(
                         Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
@@ -103,44 +107,57 @@ class HomeComponent extends Manager implements DelegateComponent
 
         $buttonGroup->addButton(
             new Button(
-                Translation :: get('CourseList'),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                Translation :: get('CourseOverviewCourseList'),
+                new InlineGlyph('list'),
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER))));
 
-        $buttonGroup->addButton(
-            new Button(
+        $manageDropDownButton = new DropdownButton(
+            Translation :: get('CourseOverviewManagement'),
+            new InlineGlyph('list-alt'));
+        $buttonGroup->addButton($manageDropDownButton);
+
+        $manageDropDownButton->addSubButton(
+            new SubButton(
                 Translation :: get('RequestList'),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))));
+                new InlineGlyph('list-alt'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST)),
+                Button :: DISPLAY_LABEL));
 
-        $buttonGroup->addButton(
-            new Button(
+        $manageDropDownButton->addSubButton(
+            new SubButton(
                 Translation :: get('UserRequestList'),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_ADMIN_REQUEST_BROWSER))));
+                new InlineGlyph('list'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_ADMIN_REQUEST_BROWSER)),
+                Button :: DISPLAY_LABEL));
 
-        $buttonGroup->addButton(
-            new Button(
+        $manageDropDownButton->addSubButton(
+            new SubButton(
                 Translation :: get('CourseCategoryManagement'),
-                Theme :: getInstance()->getCommonImagePath('Action/Move'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_CATEGORY_MANAGER))));
+                new InlineGlyph('move'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_CATEGORY_MANAGER)),
+                Button :: DISPLAY_LABEL));
 
-        $buttonGroup->addButton(
-            new Button(
+        $importDropDownButton = new DropdownButton(Translation :: get('CourseOverviewImport'), new InlineGlyph('import'));
+        $buttonGroup->addButton($importDropDownButton);
+
+        $importDropDownButton->addSubButton(
+            new SubButton(
                 Translation :: get('ImportCourseCSV'),
-                Theme :: getInstance()->getCommonImagePath('Action/Add'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSES))));
+                new InlineGlyph('import'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSES)),
+                Button :: DISPLAY_LABEL));
 
-        $buttonGroup->addButton(
-            new Button(
+        $importDropDownButton->addSubButton(
+            new SubButton(
                 Translation :: get('ImportUsersForCourseCSV'),
-                Theme :: getInstance()->getCommonImagePath('Action/Add'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSE_USERS))));
+                new InlineGlyph('import'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSE_USERS)),
+                Button :: DISPLAY_LABEL));
 
         $buttonGroup->addButton(
             new Button(
                 Translation :: get('Reporting'),
-                Theme :: getInstance()->getCommonImagePath('Action/Add'),
+                new InlineGlyph('stats'),
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REPORTING))));
 
         return $buttonGroup;
@@ -188,7 +205,7 @@ class HomeComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation :: get('CourseCreate'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                    new InlineGlyph('plus'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
@@ -200,7 +217,7 @@ class HomeComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation :: get('CourseRequest'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                    new InlineGlyph('plus'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_REQUEST,
@@ -212,7 +229,7 @@ class HomeComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation :: get('RequestList'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    new InlineGlyph('list-alt'),
                     $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))));
         }
 
@@ -221,7 +238,7 @@ class HomeComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation :: get('TypeName', null, \Chamilo\Application\Weblcms\Admin\Manager :: package()),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    new InlineGlyph('search'),
                     $this->get_url(
                         array(
                             Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Manager :: package(),
@@ -242,7 +259,7 @@ class HomeComponent extends Manager implements DelegateComponent
         $buttonGroup->addButton(
             new Button(
                 Translation :: get('SortMyCourses'),
-                Theme :: getInstance()->getCommonImagePath('Action/Reset'),
+                new InlineGlyph('refresh'),
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGER_SORT))));
 
         if (PlatformSetting :: get('show_subscribe_button_on_course_home', self :: package()))
@@ -250,7 +267,7 @@ class HomeComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation :: get('CourseSubscribe'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
+                    new InlineGlyph('log-in'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
@@ -259,7 +276,7 @@ class HomeComponent extends Manager implements DelegateComponent
             $buttonGroup->addButton(
                 new Button(
                     Translation :: get('CourseUnsubscribe'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
+                    new InlineGlyph('log-out'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,

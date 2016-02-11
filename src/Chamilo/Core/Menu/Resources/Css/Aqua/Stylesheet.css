@@ -70,7 +70,7 @@ div.chamilo-menu-container li {
 	z-index: 1001;
 	margin-top: -2px;
 	position: relative;
-	bottom: -1px;
+	bottom: -3px;
 }
 
 .chamilo-menu-bar ul li a, .chamilo-menu-bar ul li a:visited {
