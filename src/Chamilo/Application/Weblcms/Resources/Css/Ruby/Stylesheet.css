@@ -380,3 +380,29 @@ table tr td.column_icon {
 table tr td.column_tool_title {
 	vertical-align: middle;
 }
+
+/** Course List **/
+
+.course-list-tab-content {
+	padding: 30px 10px 10px;
+}
+
+.course-list-tab-content .list-group-header {
+	background-color: #F5F5F5;
+}
+
+.course-list-tab-content h4 .glyphicon {
+	font-size: 14px;
+}
+
+.course-list-tab-content .whats-new-icons {
+	margin-top: 5px;
+}
+
+.course-list-tab-content .list-group-item-text {
+	color: #666666;
+}
+
+.course-list-tab-content .list-group-header .list-group-item-heading {
+	margin-bottom: 0;
+}
