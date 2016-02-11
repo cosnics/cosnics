@@ -640,13 +640,6 @@ abstract class Manager extends Application
                         true));
             }
 
-            $html[] = '<div class="announcements level_1" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath(Introduction :: context(), 'Logo/' . Theme :: ICON_SMALL) . ');">';
-            $html[] = '<div class="title" style="border-bottom: 1px dotted #D3D3D3; width:100%;">';
-            $html[] = $introduction_text->get_content_object()->get_title();
-            $html[] = '</div><div class="clear">&nbsp;</div>';
-            $html[] = '<div class="description">';
-
             $content_object = $introduction_text->get_content_object();
 
             $rendition_implementation = ContentObjectRenditionImplementation :: factory(
@@ -655,9 +648,12 @@ abstract class Manager extends Application
                 ContentObjectRendition :: VIEW_DESCRIPTION,
                 $this);
 
-            $html[] = $rendition_implementation->render();
-
+            $html[] = '<div class="panel panel-default">';
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h3 class="panel-title">'. $introduction_text->get_content_object()->get_title() .'</h3>';
             $html[] = '</div>';
+            $html[] = '<div class="panel-body">';
+            $html[] = $rendition_implementation->render();
 
             if ($toolbar)
             {
@@ -665,7 +661,7 @@ abstract class Manager extends Application
             }
 
             $html[] = '</div>';
-            $html[] = '<br />';
+            $html[] = '</div>';
         }
 
         return implode(PHP_EOL, $html);
