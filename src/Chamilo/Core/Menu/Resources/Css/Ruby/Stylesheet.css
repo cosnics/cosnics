@@ -269,6 +269,12 @@ div.chamilo-menu-container li {
  * SITEMAP  *
  ************/
 .sitemap {
+	margin-top: 15px;
+	clear: both;
+	padding: 20px;
+	color: black;
+	text-align: center;
+	font-size: 75%;
 	background-color: #15243B;
 }
 
