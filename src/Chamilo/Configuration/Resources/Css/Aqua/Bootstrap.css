@@ -16,7 +16,6 @@ body {
 
 .btn-action-toolbar a, .btn-toolbar a:hover, .btn-group a:hover {
 	font-weight: normal !important;
-	color: black;
 }
 
 .panel.panel-chamilo {
