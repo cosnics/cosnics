@@ -125,7 +125,7 @@ class Banner
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
-            $menuRenderer = Configuration::get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
+            $menuRenderer = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
 
             $output[] = '<div class="chamilo-menu-container">';
             $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
@@ -148,10 +148,7 @@ class Banner
 
                 if ($breadcrumbtrail->size() > 0)
                 {
-                    $output[] = '<div id="trailbox">';
                     $output[] = $breadcrumbtrail->render();
-                    $output[] = '<div class="clear">&nbsp;</div>';
-                    $output[] = '</div>';
                 }
             }
         }
