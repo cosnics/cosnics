@@ -277,7 +277,7 @@ class XmlFormParser
             $element_name,
             $element_title,
             $group_elements,
-            '<br />',
+            '',
             false);
     }
 
