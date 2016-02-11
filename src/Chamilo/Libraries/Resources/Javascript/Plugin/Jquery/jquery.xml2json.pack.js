@@ -127,7 +127,7 @@
     // - regexp modified to accept  comma as decimal mark (latin syntax : 25,24 )
     // - regexp modified to reject if no number before decimal mark  : ".7" is not accepted
     // - string is "trimmed", allowing to accept space at the beginning and end of string
-    var regexp=/^((-)?([0-9]+)(([\.\,]{0,1})([0-9]+))?$)/
+    var regexp=/^((-)?([0-9]+)(([\.\,]{0,1})([0-9]+))?$)/;
     return (typeof s == "number") || regexp.test(String((s && typeof s == "string") ? jQuery.trim(s) : ''));
    };
    // OLD isNum function: (for reference only)
