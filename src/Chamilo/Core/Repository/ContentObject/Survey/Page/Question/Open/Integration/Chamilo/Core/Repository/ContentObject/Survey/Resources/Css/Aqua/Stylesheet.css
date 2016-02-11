@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+div.mini_calendar {
+	float: left;
+	width: 250px;
+	padding-right: 10px;
+}
+
+div.normal_calendar {
+	margin-left: 260px;
+}
+
+div.event_publication_info {
+	text-align: right;
+	font-style: italic;
+	margin: 1em 0;
+}
