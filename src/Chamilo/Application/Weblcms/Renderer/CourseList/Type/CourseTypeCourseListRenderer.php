@@ -528,9 +528,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     if ($this->get_new_publication_icons() && (! $course_closed || $course_admin))
                     {
-                        $html[] = '<p class="list-group-item-text whats-new-icons">';
                         $html[] = $this->display_new_publication_icons($course);
-                        $html[] = '</p>';
                     }
 
                     $html[] = '</li>';
