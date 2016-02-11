@@ -1,0 +1,128 @@
+body {
+	font-size: 13px;
+}
+
+/**************
+ * ACTION BAR *
+ **************/
+.btn-action-toolbar {
+	margin-bottom: 15px;
+}
+
+.btn-action-toolbar form input[type=text] {
+	border: 1px solid #CCC;
+	padding: 5px 10px;
+}
+
+.btn-action-toolbar a, .btn-toolbar a:hover, .btn-group a:hover {
+	font-weight: normal !important;
+	color: black;
+}
+
+.panel.panel-chamilo {
+	background-color: #f9f9f9;
+	box-shadow: none;
+}
+
+input.form-control[type="text"], input.form-control[type="password"] {
+	border: 1px solid #ccc;
+	padding: 6px 12px;
+}
+
+/** Specific bootstrap fixes **/
+#trailbox {
+	height: 28px;
+}
+
+body h3:first-of-type {
+	margin-top: 0;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.dropdown-menu>li>a {
+	padding: 3px 32px;
+}
+
+.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
+	background-image: url("../../Images/Aqua/Background/Checkmark.png");
+	background-position: 12px center;
+	background-repeat: no-repeat;
+}
+
+.action-bar-search, .action-bar-search:hover, .action-bar-search:active,
+	.action-bar-search:focus {
+	padding: 0px;
+	background-color: white;
+	background-image: none;
+	text-align: left;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px
+		rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px
+		rgba(0, 0, 0, 0.075);
+}
+
+.btn-action-toolbar .btn-group-vertical {
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.btn-action-toolbar .btn-group-vertical .btn {
+	text-align: left;
+}
+
+/*********
+ * TABLE *
+ *********/
+.table-navigation-pagination ul.pagination {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.table, .table-navigation-actions .btn-action-toolbar {
+	margin-bottom: 5px;
+}
+
+/********
+ * FORM *
+ ********/
+form .label {
+	font-size: 100%;
+}
+
+form .radio input[type="radio"], form .radio input[type="checkbox"] {
+	margin-top: 0;
+}
+
+form .radio {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+form .radio+.radio {
+	margin-top: 5px;
+	margin-bottom: 0;
+}
+
+form .row {
+	margin: 0 0 5px;
+}
+
+form.table_form .row {
+	margin-bottom: 0;
+}
+
+form.table_form .row .btn-action-toolbar {
+	margin-bottom: 5px;
+}
+
+button.btn {
+	text-shadow: none;
+}
+
+a, .ui-widget-content a {
+	color: #337ab7;
+	text-decoration: none;
+	font-weight: bold;
+}
