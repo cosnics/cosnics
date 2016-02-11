@@ -349,7 +349,8 @@ class SortableTable extends HTML_Table
             null,
             $firstAction->get_action(),
             Button :: DISPLAY_LABEL,
-            $firstAction->getConfirmation(), 'btn-xs');
+            $firstAction->getConfirmation(),
+            'btn-sm');
 
         foreach ($formActions as $formAction)
         {
@@ -430,7 +431,7 @@ class SortableTable extends HTML_Table
 
         $html = array();
 
-//         $html[] = '<div class="container-fluid">';
+        // $html[] = '<div class="container-fluid">';
 
         if (! $empty_table)
         {
@@ -452,7 +453,7 @@ class SortableTable extends HTML_Table
             $html[] = $this->renderTableFooter();
         }
 
-//         $html[] = '</div>';
+        // $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 
 /**
  *
@@ -276,7 +277,10 @@ class PagerRenderer
         $numberOfItems = $this->getPager()->getNumberOfItems();
 
         $dropDownButton = new DropdownButton(
-            Translation :: get('ShowNumberOfItemsPerPage', array('NUMBER' => $currentNumberOfItemsPerPage)));
+            Translation :: get('ShowNumberOfItemsPerPage', array('NUMBER' => $currentNumberOfItemsPerPage)),
+            null,
+            Button :: DISPLAY_LABEL,
+            'btn-sm');
         $dropDownButton->setDropdownClasses('dropdown-menu-right');
         $buttonGroup->addButton($dropDownButton);
 
@@ -307,7 +311,7 @@ class PagerRenderer
                     $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager :: DISPLAY_ALL),
                     SubButton :: DISPLAY_LABEL,
                     false,
-                    ($nr == $currentNumberOfItemsPerPage ? 'selected' : '')));
+                    ($nr == $currentNumberOfItemsPerPage ? ' selected' : '')));
         }
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
