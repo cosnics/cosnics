@@ -383,12 +383,13 @@ table tr td.column_tool_title {
 
 /** Course List **/
 
-.course-list-tab-content {
-	padding: 30px 10px 10px;
-}
-
 .course-list-tab-content .list-group-header {
 	background-color: #F5F5F5;
+}
+
+.course-list-tab-content .list-group-item:first-child {
+	border-radius: 0;
+	border-top: 0;
 }
 
 .course-list-tab-content h4 .glyphicon {

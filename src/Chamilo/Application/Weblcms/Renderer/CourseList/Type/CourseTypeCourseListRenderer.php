@@ -295,6 +295,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
     {
         $html = array();
 
+        $html[] = '<div class="list-group">';
         $html[] = $this->display_course_user_category();
 
         $course_type_user_categories = $this->retrieve_course_user_categories_for_course_type();
@@ -302,11 +303,15 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         $count = 0;
         $size = $course_type_user_categories->size();
 
+
         while ($course_type_user_category = $course_type_user_categories->next_result())
         {
             $html[] = $this->display_course_user_category($course_type_user_category, $count, $size);
             $count ++;
         }
+
+
+        $html[] = '</div>';
 
         return implode($html, "\n");
     }
@@ -334,7 +339,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $course_type_user_category_id = 0;
         }
 
-        $html[] = '<div class="list-group" id="course_user_category_' . $course_type_user_category_id . '">';
+//        $html[] = '<div id="course_user_category_' . $course_type_user_category_id . '">';
 
         if ($title)
         {
@@ -358,7 +363,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $html[] = $this->display_courses_for_course_type_user_category($course_type_user_category);
         }
 
-        $html[] = '</div>';
+//        $html[] = '</div>';
 
         return implode($html, "\n");
     }
