@@ -574,7 +574,7 @@ class ContentObjectPublicationForm extends FormValidator
             array('class' => 'entity_option_selected'));
 
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="specific_rights_selector_box">');
-        $this->addGroup($group, self :: PROPERTY_RIGHT_OPTION, '', '<br />');
+        $this->addGroup($group, self :: PROPERTY_RIGHT_OPTION, '', '');
 
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
