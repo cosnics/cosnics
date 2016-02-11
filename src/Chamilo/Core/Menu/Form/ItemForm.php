@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\DataManager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
@@ -180,8 +181,17 @@ class ItemForm extends FormValidator
 
     public static function factory($form_type, $item, $action = null)
     {
-        $class = get_class($item) . 'Form';
+        $classNameUtilities = ClassnameUtilities::getInstance();
+        $itemClass = $classNameUtilities->getClassnameFromObject($item);
 
-        return new $class($form_type, $item, $action);
+        $formName = $itemClass . 'Form';
+        $formClass = __NAMESPACE__ . '\\Item\\' . $formName;
+
+        if(class_exists($formClass))
+        {
+            return new $formClass($form_type, $item, $action);
+        }
+
+        return new self($form_type, $item, $action);
     }
 }

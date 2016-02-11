@@ -358,3 +358,25 @@ td.publication_table_order_column
 	text-align: center;
 	vertical-align: middle;
 }
+
+/** Tools Table **/
+
+table th.tools_column_toggle,
+table tr td.tools_column_toggle {
+	max-width: 150px;
+	width: 150px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+table th.column_icon,
+table tr td.column_icon {
+	max-width: 50px;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+table tr td.column_tool_title {
+	vertical-align: middle;
+}
