@@ -173,7 +173,7 @@ class BreadcrumbTrail
     public function render_breadcrumbs()
     {
         $html = array();
-        $html[] = '<ul id="breadcrumbtrail">';
+        $html[] = '<ol class="breadcrumb">';
 
         $breadcrumbtrail = $this->breadcrumbtrail;
         if (is_array($breadcrumbtrail) && count($breadcrumbtrail) > 0)
