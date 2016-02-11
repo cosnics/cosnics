@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class AbstractButtonRenderer
+abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
 {
 
     /**

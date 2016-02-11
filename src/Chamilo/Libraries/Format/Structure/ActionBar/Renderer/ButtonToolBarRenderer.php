@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *
@@ -66,8 +67,10 @@ class ButtonToolBarRenderer
 
         foreach ($this->getButtonToolBar()->getButtonGroups() as $buttonGroup)
         {
-            $buttonGroupRenderer = new ButtonGroupRenderer($buttonGroup);
-            $html[] = $buttonGroupRenderer->render();
+            $rendererClassName = __NAMESPACE__ . '\\' .
+                 ClassnameUtilities :: getInstance()->getClassnameFromObject($buttonGroup) . 'Renderer';
+            $renderer = new $rendererClassName($buttonGroup);
+            $html[] = $renderer->render($buttonGroup);
         }
 
         if ($this->getButtonToolBar()->getSearchUrl())

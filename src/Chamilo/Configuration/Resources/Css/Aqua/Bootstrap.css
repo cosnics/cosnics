@@ -1,11 +1,10 @@
-body
-{
+body {
 	font-size: 13px;
 }
 
-/**
- * ACTION BAR
- */
+/**************
+ * ACTION BAR *
+ **************/
 .btn-action-toolbar {
 	margin-bottom: 15px;
 }
@@ -64,22 +63,35 @@ body h3:first-of-type {
 		rgba(0, 0, 0, 0.075);
 }
 
+.btn-action-toolbar .btn-group-vertical {
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.btn-action-toolbar .btn-group-vertical .btn {
+	text-align: left;
+}
+
+/*********
+ * TABLE *
+ *********/
 .table-navigation-pagination ul.pagination {
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
 
-.table,
-.table-navigation-actions .btn-action-toolbar {
+.table, .table-navigation-actions .btn-action-toolbar {
 	margin-bottom: 5px;
 }
 
+/********
+ * FORM *
+ ********/
 form .label {
 	font-size: 100%;
 }
 
-form .radio input[type="radio"],
-form .radio input[type="checkbox"] {
+form .radio input[type="radio"], form .radio input[type="checkbox"] {
 	margin-top: 0;
 }
 
@@ -88,7 +100,7 @@ form .radio {
 	margin-bottom: 0;
 }
 
-form .radio + .radio {
+form .radio+.radio {
 	margin-top: 5px;
 	margin-bottom: 0;
 }
@@ -101,8 +113,7 @@ button.btn {
 	text-shadow: none;
 }
 
-a,
-.ui-widget-content a {
+a, .ui-widget-content a {
 	color: #337ab7;
 	text-decoration: none;
 	font-weight: bold;

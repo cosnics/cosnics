@@ -8,7 +8,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ButtonGroup
+class ButtonGroup extends AbstractButtonToolBarItem
 {
 
     /**
@@ -20,9 +20,12 @@ class ButtonGroup
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
+     * @param string[] $classes
      */
-    public function __construct($buttons = array())
+    public function __construct($buttons = array(), $classes = array())
     {
+        parent :: __construct($classes);
+
         $this->buttons = $buttons;
     }
 

@@ -1,28 +1,25 @@
 <?php
 namespace Chamilo\Application\Weblcms\Component;
 
-use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: home.class.php 218 2009-11-13 14:21:26Z kariboe $
  *
- * @package application.lib.weblcms.weblcms_manager.component
- */
-/**
- * Weblcms component which provides the user with a list of all courses he or she has subscribed to.
+ * @package Chamilo\Application\Weblcms\Component
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class HomeComponent extends Manager implements DelegateComponent
 {
@@ -32,279 +29,250 @@ class HomeComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $renderer = new CourseTypeCourseListRenderer($this);
-
-        $renderer->show_new_publication_icons();
-
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = '<div class="clear"></div>';
-//         $html[] = $this->display_menu();
-//         $html[] = '<div id="tool_browser_right">';
 
-        $html[] = $renderer->as_html();
-        $html[] = '<script type="text/javascript" src="' .
-             htmlspecialchars(Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true)) . 'HomeAjax.js' .
-             '"></script>';
+        $html[] = '<div class="row">';
 
-        $toolbar_state = Session :: retrieve('toolbar_state');
+        $html[] = '<div class="col-md-10">';
+        $html[] = $this->getCourseListRenderer()->as_html();
+        $html[] = '</div>';
 
-        if ($toolbar_state == 'hide')
-        {
-            $html[] = '<script type="text/javascript">var hide = "true";</script>';
-        }
-        else
-        {
-            $html[] = '<script type="text/javascript">var hide = "false";</script>';
-        }
+        $html[] = '<div class="col-md-2">';
+        $html[] = $this->renderMenu();
+        $html[] = '</div>';
 
-//         $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function display_menu()
+    /**
+     *
+     * @return \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer
+     */
+    protected function getCourseListRenderer()
     {
-        $html = array();
+        $renderer = new CourseTypeCourseListRenderer($this);
+        $renderer->show_new_publication_icons();
+        return $renderer;
+    }
 
-        $html[] = '<div id="tool_bar" class="tool_bar tool_bar_right tool_bar_course_menu">';
-
-        $html[] = '<div id="tool_bar_hide_container" class="hide">';
-        $html[] = '<a id="tool_bar_hide" href="#"><img src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/ActionBar/RightHide')) . '" /></a>';
-        $html[] = '<a id="tool_bar_show" href="#"><img src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/ActionBar/RightShow')) . '" /></a>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="tool_menu">';
-        $html[] = '<ul>';
+    /**
+     *
+     * @return string
+     */
+    protected function renderMenu()
+    {
+        $buttonToolBar = new ButtonToolBar();
 
         if ($this->get_user()->is_platform_admin())
         {
-            $html[] = '<li class="tool_list_menu title" style="font-weight: bold">' . htmlspecialchars(
-                Translation :: get('CourseManagement')) . '</li><br />';
-            $html[] = $this->display_platform_admin_course_list_links();
-            $html[] = '<div style="margin: 10px 0 10px 0; border-bottom: 1px dotted #4271B5; height: 0px;"></div>';
+            $buttonToolBar->addButtonGroup($this->buildAdminCourseManagementButtonGroup($buttonToolBar));
         }
-        else
+        elseif ($this->get_user()->is_teacher() && ($_SESSION["studentview"] != "studentenview"))
         {
-
-            $display_add_course_link = $this->get_user()->is_teacher() && ($_SESSION["studentview"] != "studentenview");
-            if ($display_add_course_link)
-            {
-                $display = $this->display_create_course_link();
-
-                if ($display)
-                {
-                    $html[] = '<li class="tool_list_menu" style="font-weight: bold">' . htmlspecialchars(
-                        Translation :: get('MenuUser')) . '</li><br />';
-                    $html[] = $display;
-                }
-            }
+            $buttonToolBar->addButtonGroup($this->buildTeacherManagementButtonGroup());
         }
 
-        $html[] = '<li class="tool_list_menu title" style="font-weight: bold">' . htmlspecialchars(
-            Translation :: get('UserCourseManagement')) . '</li><br />';
-        $html[] = $this->display_edit_course_list_links();
-        $html[] = '</ul>';
-        $html[] = '</div>';
+        $buttonToolBar->addButtonGroup($this->buildUserManagementButtonGroup());
 
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        return implode($html, "\n");
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+        return $buttonToolBarRenderer->render();
     }
 
-    public function display_create_course_link()
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
+     */
+    protected function buildAdminCourseManagementButtonGroup()
     {
-        $html = array();
+        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
 
-        $course_management_rights = CourseManagementRights :: get_instance();
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('CourseCreate'),
+                Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                $this->get_url(
+                    array(
+                        Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
+                        \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE))));
 
-        $count_direct = $count_request = 0;
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('CourseList'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER))));
 
-        $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
-        while ($course_type = $course_types->next_result())
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('RequestList'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('UserRequestList'),
+                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_ADMIN_REQUEST_BROWSER))));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('CourseCategoryManagement'),
+                Theme :: getInstance()->getCommonImagePath('Action/Move'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_CATEGORY_MANAGER))));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('ImportCourseCSV'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSES))));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('ImportUsersForCourseCSV'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSE_USERS))));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('Reporting'),
+                Theme :: getInstance()->getCommonImagePath('Action/Add'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REPORTING))));
+
+        return $buttonGroup;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
+     */
+    protected function buildTeacherManagementButtonGroup()
+    {
+        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+
+        $courseManagementRights = CourseManagementRights :: get_instance();
+
+        $countDirect = $countRequest = 0;
+
+        $courseTypes = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
+
+        while ($courseType = $courseTypes->next_result())
         {
-            if ($course_management_rights->is_allowed(
+            if ($courseManagementRights->is_allowed(
                 CourseManagementRights :: CREATE_COURSE_RIGHT,
-                $course_type->get_id(),
+                $courseType->get_id(),
                 CourseManagementRights :: TYPE_COURSE_TYPE))
             {
-                $count_direct ++;
+                $countDirect ++;
             }
-            elseif ($course_management_rights->is_allowed(
+            elseif ($courseManagementRights->is_allowed(
                 CourseManagementRights :: REQUEST_COURSE_RIGHT,
-                $course_type->get_id(),
+                $courseType->get_id(),
                 CourseManagementRights :: TYPE_COURSE_TYPE))
             {
-                $count_request ++;
+                $countRequest ++;
             }
         }
 
         if (PlatformSetting :: get('allow_course_creation_without_coursetype', 'Chamilo\Application\Weblcms'))
         {
-            $count_direct ++;
+            $countDirect ++;
         }
 
-        if ($count_direct)
+        if ($countDirect)
         {
-            $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Create')) .
-                 ')"><a style="top: -3px; position: relative;" href="' .
-                 htmlspecialchars(
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('CourseCreate'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Create'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE))) .
-                 '">' . htmlspecialchars(Translation :: get('CourseCreate')) . '</a></li>';
+                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE))));
         }
 
-        if ($count_request)
+        if ($countRequest)
         {
-            $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Create')) .
-                 ')"><a style="top: -3px; position: relative;" href="' .
-                 htmlspecialchars(
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('CourseRequest'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Create'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_REQUEST,
-                            \Chamilo\Application\Weblcms\Request\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager :: ACTION_CREATE))) .
-                 '">' . Utilities :: htmlentities(Translation :: get('CourseRequest')) . '</a></li>';
+                            \Chamilo\Application\Weblcms\Request\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager :: ACTION_CREATE))));
         }
 
         if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed())
         {
-            $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
-                 ')"><a style="top: -3px; position: relative;" href="' .
-                 htmlspecialchars($this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))) . '">' . htmlspecialchars(
-                    Translation :: get('RequestList')) . '</a></li>';
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('RequestList'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))));
         }
 
         if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: user_is_admin($this->get_user()))
         {
-            $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 Theme :: getInstance()->getCommonImagePath('Action/Browser') .
-                 ')"><a style="top: -3px; position: relative;" href="' .
-                 htmlspecialchars(
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('TypeName', null, \Chamilo\Application\Weblcms\Admin\Manager :: package()),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(
                         array(
                             Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Manager :: package(),
-                            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Manager :: ACTION_BROWSE))) .
-                 '">' .
-                 htmlspecialchars(
-                    Translation :: get('TypeName', null, \Chamilo\Application\Weblcms\Admin\Manager :: package())) .
-                 '</a></li>';
+                            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Manager :: ACTION_BROWSE))));
         }
 
-        return implode(PHP_EOL, $html);
+        return $buttonGroup;
     }
 
-    public function display_edit_course_list_links()
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup
+     */
+    protected function buildUserManagementButtonGroup()
     {
-        $html = array();
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Reset')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGER_SORT))) . '">' .
-             htmlspecialchars(Translation :: get('SortMyCourses')) . '</a></li>';
+        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('SortMyCourses'),
+                Theme :: getInstance()->getCommonImagePath('Action/Reset'),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGER_SORT))));
 
         if (PlatformSetting :: get('show_subscribe_button_on_course_home', self :: package()))
         {
-            $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Subscribe')) . ')">' .
-                 '<a style="top: -3px; position: relative;" href="' .
-                 htmlspecialchars(
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('CourseSubscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_UNSUBSCRIBED_COURSES))) .
-                 '">' . htmlspecialchars(Translation :: get('CourseSubscribe')) . '</a></li>';
-            $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe')) .
-                 ')"><a style="top: -3px; position: relative;" href="' .
-                 htmlspecialchars(
+                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_UNSUBSCRIBED_COURSES))));
+
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('CourseUnsubscribe'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
                     $this->get_url(
                         array(
                             Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_SUBSCRIBED_COURSES))) .
-                 '">' . htmlspecialchars(Translation :: get('CourseUnsubscribe')) . '</a></li>';
+                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_SUBSCRIBED_COURSES))));
         }
 
-        return implode($html, "\n");
+        return $buttonGroup;
     }
 
-    public function display_platform_admin_course_list_links()
-    {
-        $html = array();
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Create')) .
-             ')"><a style="top: -3px; position: relative;" href="' .
-             htmlspecialchars(
-                $this->get_url(
-                    array(
-                        Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                        \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE))) .
-             '">' . htmlspecialchars(Translation :: get('CourseCreate')) . '</a></li>';
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER))) . '">' .
-             htmlspecialchars(Translation :: get('CourseList')) . '</a></li>';
-
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))) . '">' .
-             htmlspecialchars(Translation :: get('RequestList')) . '</a></li>';
-
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Browser')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_ADMIN_REQUEST_BROWSER))) . '">' .
-             htmlspecialchars(Translation :: get('UserRequestList')) . '</a></li>';
-
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Move')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_CATEGORY_MANAGER))) . '">' .
-             htmlspecialchars(Translation :: get('CourseCategoryManagement')) . '</a></li>';
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Add')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSES))) . '">' .
-             htmlspecialchars(Translation :: get('ImportCourseCSV')) . '</a></li>';
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Add')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSE_USERS))) . '">' .
-             htmlspecialchars(Translation :: get('ImportUsersForCourseCSV')) . '</a></li>';
-
-        $html[] = '<li class="tool_list_menu" style="background-image: url(' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Add')) .
-             ')"><a style="top: -3px; position: relative;" href="' . htmlspecialchars(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REPORTING))) . '">' .
-             htmlspecialchars(Translation :: get('Reporting')) . '</a></li>';
-
-        return implode($html, "\n");
-    }
-
-    public function get_course_user_category_actions(CourseUserCategory $course_user_category, CourseType $course_type,
-        $offset, $count)
-    {
-        return '<a href="#" class="closeEl"><img class="visible" src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Visible')) .
-             '"/><img class="invisible" style="display: none;" src="' .
-             htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Invisible')) . '" /></a>';
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('weblcms_course_home');
-    }
-
+    /**
+     *
+     * @return boolean
+     */
     public function show_empty_courses()
     {
         return false;
