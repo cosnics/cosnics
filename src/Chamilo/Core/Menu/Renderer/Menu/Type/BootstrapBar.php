@@ -19,15 +19,15 @@ class BootstrapBar extends Renderer
 
     public function display_menu_header()
     {
-        $packagePath = Path::getInstance()->namespaceToFullPath('Chamilo\Core\Menu', true);
+        $packagePath = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Menu', true);
 
-        $theme = Theme::getInstance();
-        $cssPath = $theme->getCssPath(Manager::context());
+        $theme = Theme :: getInstance();
+        $cssPath = $theme->getCssPath(Manager :: context());
 
         $html = array();
-        $html[] = ResourceManager::get_instance()->get_resource_html($cssPath . 'BootstrapBar.css');
-        $html[] = ResourceManager::get_instance()->get_resource_html($cssPath . 'ChamiloBootstrapBar.css');
-//        $html[] = ResourceManager::get_instance()->get_resource_html($packagePath . 'Resources/Javascript/BootstrapBar.js');
+        $html[] = ResourceManager :: get_instance()->get_resource_html($cssPath . 'ChamiloBootstrapBar.css');
+        // $html[] = ResourceManager::get_instance()->get_resource_html($packagePath .
+        // 'Resources/Javascript/BootstrapBar.js');
 
         $html[] = '<nav class="navbar navbar-chamilo navbar-default">';
         $html[] = '<div class="container-fluid">';
@@ -54,6 +54,5 @@ class BootstrapBar extends Renderer
         $html[] = '</nav>';
 
         return implode(PHP_EOL, $html);
-
     }
 }

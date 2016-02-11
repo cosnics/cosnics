@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph;
 
 /**
  *
@@ -154,8 +155,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
 
         if ($displayIcon)
         {
-            $html[] = '<img src="' . htmlentities($button->getImagePath()) . '" alt="' . $label . '" title="' . $label .
-                 '"/>';
+            $html[] = $this->renderLinkContentImage();
         }
 
         if ($displayLabel)
@@ -164,5 +164,26 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderLinkContentImage()
+    {
+        $button = $this->getButton();
+        $label = $this->getLabel();
+        $imagePath = $button->getImagePath();
+
+        if ($imagePath instanceof InlineGlyph)
+        {
+            return $imagePath->render();
+        }
+        else
+        {
+            return '<img src="' . htmlentities($button->getImagePath()) . '" alt="' . $label . '" title="' . $label .
+                 '"/>';
+        }
     }
 }
