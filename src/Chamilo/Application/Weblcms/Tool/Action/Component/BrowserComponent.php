@@ -311,9 +311,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $commonActions = new ButtonGroup();
         $toolActions = new ButtonGroup();
 
-        $buttonToolBar->addButtonGroup($commonActions);
-        $buttonToolBar->addButtonGroup($toolActions);
-
         if ($this->is_allowed(WeblcmsRights :: ADD_RIGHT))
         {
 
@@ -328,7 +325,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH,
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLISH_MODE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_MODE_QUICK)),
-                    Button :: DISPLAY_ICON_AND_LABEL);
+                    Button :: DISPLAY_ICON_AND_LABEL, false, 'btn-primary');
             }
 
             // added tool dependent publish button
@@ -342,7 +339,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
-                    Button :: DISPLAY_ICON_AND_LABEL);
+                    Button :: DISPLAY_ICON_AND_LABEL, false, 'btn-primary');
             }
             else
             {
@@ -360,11 +357,14 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
-                    Button :: DISPLAY_ICON_AND_LABEL);
+                    Button :: DISPLAY_ICON_AND_LABEL, false, 'btn-primary');
             }
 
-            $commonActions->addButton($publishActions);
+            $buttonToolBar->addItem($publishActions);
         }
+
+        $buttonToolBar->addButtonGroup($commonActions);
+        $buttonToolBar->addButtonGroup($toolActions);
 
         if ($this->is_course_admin)
         {
