@@ -448,3 +448,19 @@ table tr td.column_tool_title {
 .course-list-tab-content .list-group-item.invisible-course .list-group-item-text {
 	color: #999999;
 }
+
+.tool-list-content {
+	border: 1px solid #DDDDDD;
+	border-top: none;
+	padding: 15px;
+}
+
+.tool-list-content div.row {
+	margin-bottom: 0;
+	padding-top: 0;
+}
+
+.tool-list-content .tool {
+	display: block;
+	float: none;
+}

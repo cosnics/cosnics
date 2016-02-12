@@ -139,6 +139,13 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $sections->reset();
 
+        if ($sections->size() == O)
+        {
+            return '<div class="alert alert-warning">' . Translation :: get('NoVisibleCourseSections') . '</div>';
+        }
+
+        $html[] = '<ul class="nav nav-tabs tool-list-tabs">';
+
         while ($section = $sections->next_result())
         {
             $sec_name = $section->get_type() == CourseSection :: TYPE_CUSTOM ? $section->get_name() : Translation :: get(
@@ -162,6 +169,11 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 {
                     $content = $this->show_links($section);
                     $tabs->add_tab(new DynamicContentTab($section->get_id(), $sec_name, null, $content));
+
+                    $active = '';
+                    $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+                    $html[] = '#';
+                    $html[] = '">' . $sec_name . '</a></li>';
                 }
             }
             else
@@ -179,23 +191,33 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
                 if (($section->is_visible() && (count($tools[$section->get_id()]) > 0)) || $this->is_course_admin)
                 {
+                    if($sec_name == 'Tools')
+                    {
+                        $active = 'active';
 
-                    $content = $this->display_block_header($section, $sec_name);
-                    $content .= $this->show_section_tools($section, $tools[$section->get_id()]);
-                    $content .= $this->display_block_footer($section);
+                        $content = $this->display_block_header($section, $sec_name);
+                        $content .= $this->show_section_tools($section, $tools[$section->get_id()]);
+                        $content .= $this->display_block_footer($section);
+                    }
+                    else
+                    {
+                        $active = '';
+                    }
+
                     $tabs->add_tab(new DynamicContentTab($section->get_id(), $sec_name, null, $content));
+
+                    $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+                    $html[] = '#';
+                    $html[] = '">' . $sec_name . '</a></li>';
+
                 }
             }
         }
 
-        if (count($tabs->get_tabs()) > O)
-        {
-            $html[] = $tabs->render();
-        }
-        else
-        {
-            $html[] = '<div class="warning-message">' . Translation :: get('NoVisibleCourseSections') . '</div>';
-        }
+        $html[] = '</ul>';
+        $html[] = '<div class="tool-list-content">';
+        $html[] = $content;
+        $html[] = '</div>';
 
         $html[] = '<script type="text/javascript" src="' .
              Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HomeAjax.js' . '"></script>';
@@ -306,7 +328,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         if ($publications->size() == 0)
         {
-            $html[] = '<div class="normal-message">' . Translation :: get('NoLinksAvailable') . '</div>';
+            $html[] = '<div class="alert alert-info">' . Translation :: get('NoLinksAvailable') . '</div>';
         }
 
         while ($publication = $publications->next_result())
@@ -434,23 +456,36 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
     private function show_section_tools($section, $tools)
     {
+        if (count($tools) == 0)
+        {
+            return '<div class="alert alert-info">' . Translation :: get('NoToolsAvailable') . '</div>';
+        }
+
         $parent = $this->get_parent();
 
-        $column_width = 99.9 / $this->number_of_columns;
+        $columnClass = $this->number_of_columns == 2 ? 'col-md-6 col-sm-12' : 'col-md-4 col-sm-12';
 
         $count = 0;
 
         $html = array();
 
-        if (count($tools) == 0)
-        {
-            $html[] = '<div class="normal-message">' . Translation :: get('NoToolsAvailable') . '</div>';
-        }
-
         $course_settings_controller = CourseSettingsController :: get_instance();
+
+        if($count % $this->number_of_columns == 0)
+        {
+            $html[] = '<div class="row">';
+        }
 
         foreach ($tools as $tool)
         {
+            if($count > 0 && $count % $this->number_of_columns  == 0)
+            {
+                $html[] = '</div>';
+                $html[] = '<div class="row">';
+            }
+
+            $html[] = '<div class="' . $columnClass . '">';
+
             $tool_namespace = $tool->getContext();
 
             $tool_visible = $course_settings_controller->get_course_setting(
@@ -486,12 +521,12 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             if ($section->get_type() == CourseSection :: TYPE_TOOL ||
                  $section->get_type() == CourseSection :: TYPE_DISABLED)
             {
-                $html[] = '<div id="tool_' . $tool->get_id() . '" class="tool" style="width: ' . $column_width . '%;">';
+                $html[] = '<div id="tool_' . $tool->get_id() . '" class="tool">';
                 $id = ' id="drag_' . $tool->get_id() . '"';
             }
             else
             {
-                $html[] = '<div class="tool" style="width: ' . $column_width . '%;">';
+                $html[] = '<div class="tool">';
             }
 
             // Show visibility-icon
@@ -527,11 +562,13 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '<div class="clear"></div>';
 
             $html[] = '</div>';
+            $html[] = '</div>';
 
             $count ++;
+
         }
 
-        $html[] = ' ';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
