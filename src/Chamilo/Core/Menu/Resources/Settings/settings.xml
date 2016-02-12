@@ -7,7 +7,7 @@
 					<option name="show_sitemap" value="1" />
 				</options>
 			</setting>
-			<setting name="menu_renderer" field="select" default="bar">
+			<setting name="menu_renderer" field="select" default="BootstrapBar">
 				<options type="dynamic" source="get_renderers" />
 			</setting>
 			<setting name="brand_image" field="image_uploader" />
