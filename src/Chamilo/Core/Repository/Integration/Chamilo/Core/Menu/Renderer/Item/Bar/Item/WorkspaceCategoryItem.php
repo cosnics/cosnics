@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item\CategoryItem;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Item\CategoryItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
@@ -93,7 +93,6 @@ class WorkspaceCategoryItem extends CategoryItem
             $html[] = '<div class="chamilo-menu-item-label' .
                  ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
-
 
         $html[] = '</a>';
 

@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item\BootstrapBar;
+namespace Chamilo\Core\Menu\Renderer\Item\Bar;
 
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 
@@ -10,7 +10,7 @@ use Chamilo\Core\Menu\Renderer\Item\Renderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class BootstrapBar extends Renderer
+abstract class Bar extends Renderer
 {
 
     public function isSelected()

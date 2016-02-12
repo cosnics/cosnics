@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar;
 
 /**
  *
@@ -13,16 +13,16 @@ use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class WorkspaceItem extends BootstrapBar
+class RepositoryImplementationItem extends Bar
 {
 
     public function isItemSelected()
     {
         $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
-        $currentWorkspace = $this->getMenuRenderer()->getRequest()->get(
-            \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID);
-        return ($currentContext == \Chamilo\Core\Repository\Manager :: package() &&
-             $currentWorkspace == $this->getItem()->getWorkspaceId());
+        $currentInstance = $this->getMenuRenderer()->getRequest()->get(
+            \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY);
+        return ($currentContext == $this->getItem()->get_implementation() &&
+             $currentInstance == $this->getItem()->get_instance_id());
     }
 
     public function getContent()
@@ -31,7 +31,7 @@ class WorkspaceItem extends BootstrapBar
 
         if ($selected)
         {
-            $class = 'class="active" ';
+            $class = 'class="chamilo-menu-item-current" ';
         }
         else
         {
@@ -40,15 +40,15 @@ class WorkspaceItem extends BootstrapBar
 
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: package(),
-                \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID => $this->getItem()->getWorkspaceId()));
+                Application :: PARAM_CONTEXT => $this->getItem()->get_implementation(),
+                \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $this->getItem()->get_instance_id()));
 
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = $this->getItem()->getName();
+        $title = $this->getItem()->get_name();
 
         if ($this->getItem()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo/48');
+            $imagePath = Theme :: getInstance()->getImagePath($this->getItem()->get_implementation(), 'Menu');
 
             $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
                  $title . '" />';

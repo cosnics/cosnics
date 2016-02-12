@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 abstract class Renderer
 {
     const TYPE_SITE_MAP = 'SiteMap';
-    const TYPE_BOOTSTRAP_BAR = 'BootstrapBar';
+    const TYPE_BAR = 'Bar';
 
     /**
      *

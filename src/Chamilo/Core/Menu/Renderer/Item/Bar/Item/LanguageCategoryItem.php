@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -77,7 +77,6 @@ class LanguageCategoryItem extends CategoryItem
             $html[] = '<span class="caret"></span>';
             $html[] = '</div>';
             $html[] = '</a>';
-
 
             $html[] = implode(PHP_EOL, $sub_html);
 
