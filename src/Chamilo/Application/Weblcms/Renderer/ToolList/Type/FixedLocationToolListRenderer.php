@@ -171,6 +171,16 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 continue;
             }
 
+            if($section->get_type() == CourseSection::TYPE_LINK)
+            {
+                $publications = $this->get_publication_links();
+
+                if ($publications->size() == 0)
+                {
+                    continue;
+                }
+            }
+
             if ($section->get_type() == CourseSection :: TYPE_ADMIN && ! $this->is_course_admin)
             {
                 continue;
