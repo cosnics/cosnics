@@ -12,7 +12,7 @@ use Chamilo\Core\Menu\Renderer\Menu\Renderer;
  */
 class SiteMap extends Renderer
 {
-    const TYPE = 'site_map';
+    const TYPE = 'SiteMap';
 
     public function display_menu_header()
     {
