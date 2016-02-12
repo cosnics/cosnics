@@ -12,7 +12,7 @@
 		<property name="publisher_id" type="integer" unsigned="1" notnull="1" />
 		<property name="published" type="integer" unsigned="1" notnull="1" />
 		<property name="modified" type="integer" unsigned="1" notnull="1" />
-		<property name="display_order" type="integer" unsigned="1" notnull="1" />
+		<property name="display_order" type="integer" unsigned="1" />
 		<property name="email_sent" type="boolean" notnull="1" default="0" />
 		<property name="show_on_homepage" type="boolean" notnull="1" default="0" />
 		<property name="allow_collaboration" type="boolean" notnull="1" default="0" />

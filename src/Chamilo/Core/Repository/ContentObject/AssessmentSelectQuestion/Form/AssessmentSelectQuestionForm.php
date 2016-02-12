@@ -255,17 +255,21 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             'change_answer_type',
             $switch_label,
-            array('class' => 'normal switch', 'id' => 'change_answer_type'));
+            array('id' => 'change_answer_type'),
+            null,
+            'retweet');
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
             'style_button',
             'add[]',
             Translation :: get('AddSelectOption'),
-            array('class' => 'normal add', 'id' => 'add_option'));
+            array('id' => 'add_option'),
+            null,
+            'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $html_editor_options = array();

@@ -2,13 +2,15 @@
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
- * @package common.html
+ * @package Chamilo\Libraries\Format\Structure
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class BreadcrumbTrail
 {
@@ -60,13 +62,15 @@ class BreadcrumbTrail
     {
         $this->breadcrumbtrail = array();
         $this->extra_items = array();
+
         if ($include_main_index)
         {
             $this->add(
                 new Breadcrumb(
                     Path :: getInstance()->getBasePath(true) . 'index.php',
                     $this->get_setting('site_name', 'Chamilo\Core\Admin'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'BreadcrumbHome')));
+                    null,
+                    'home'));
         }
     }
 
@@ -173,27 +177,40 @@ class BreadcrumbTrail
     public function render_breadcrumbs()
     {
         $html = array();
-        $html[] = '<ul id="breadcrumbtrail">';
+        $html[] = '<ol class="breadcrumb">';
 
         $breadcrumbtrail = $this->breadcrumbtrail;
         if (is_array($breadcrumbtrail) && count($breadcrumbtrail) > 0)
         {
             foreach ($breadcrumbtrail as $breadcrumb)
             {
+                $breadCrumbHtml = array();
+
+                $breadCrumbHtml[] = '<li>';
+                $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
+
                 if ($breadcrumb->getImage())
                 {
-                    $html[] = '<li><a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self"><img src="' .
-                         $breadcrumb->getImage() . '" title="' . $breadcrumb->get_name() . '"></a></li>';
+                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' . $breadcrumb->get_name() .
+                         '">';
+                }
+                elseif ($breadcrumb->getGlyph())
+                {
+                    $breadCrumbHtml[] = '<span class="glyphicon glyphicon-' . $breadcrumb->getGlyph() . '"></span>';
                 }
                 else
                 {
-                    $html[] = '<li><a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">' .
-                         StringUtilities :: getInstance()->truncate($breadcrumb->get_name(), 50, true) . '</a></li>';
+                    $breadCrumbHtml[] = StringUtilities :: getInstance()->truncate($breadcrumb->get_name(), 50, true);
                 }
+
+                $breadCrumbHtml[] = '</a>';
+                $breadCrumbHtml[] = '</li>';
+
+                $html[] = implode('', $breadCrumbHtml);
             }
         }
 
-        $html[] = '</ul>';
+        $html[] = '</ol>';
 
         return implode(PHP_EOL, $html);
     }

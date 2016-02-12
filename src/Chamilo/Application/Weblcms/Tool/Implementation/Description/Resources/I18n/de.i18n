@@ -4,10 +4,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Beschreibung"
-DescriptionToolBrowserComponent = "Beschreibungen durchsuchen"
-DescriptionToolViewerComponent = "Beschreibungen ansehen"
-DescriptionToolEvaluateComponent = "Beschreibungen auswerten"
-DescriptionToolIntroductionPublisherComponent = "Vorstellung veröffentlichen"
-DescriptionToolMoverComponent = "Beschreibung verschieben"
-DescriptionToolPublisherComponent = "Beschreibung veröffentlichen"
-DescriptionToolUpdaterComponent = "Beschreibung aktualisieren"
+BrowserComponent = "Beschreibungen durchsuchen"
+ViewerComponent = "Beschreibungen ansehen"
+EvaluateComponent = "Beschreibungen auswerten"
+IntroductionPublisherComponent = "Vorstellung veröffentlichen"
+MoverComponent = "Beschreibung verschieben"
+PublisherComponent = "Beschreibung veröffentlichen"
+UpdaterComponent = "Beschreibung aktualisieren"

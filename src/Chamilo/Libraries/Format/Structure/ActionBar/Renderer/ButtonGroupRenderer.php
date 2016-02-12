@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ButtonGroupRenderer
+class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
 {
 
     /**
@@ -51,11 +51,24 @@ class ButtonGroupRenderer
      *
      * @return string
      */
+    protected function getClasses()
+    {
+        $classes = $this->getButtonGroup()->getClasses();
+        $classes[] = 'action-bar';
+        $classes[] = 'btn-group';
+
+        return implode(' ', $classes);
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function render()
     {
         $html = array();
 
-        $html[] = '<div class="action-bar btn-group">';
+        $html[] = '<div class="' . $this->getClasses() . '">';
 
         foreach ($this->getButtonGroup()->getButtons() as $button)
         {

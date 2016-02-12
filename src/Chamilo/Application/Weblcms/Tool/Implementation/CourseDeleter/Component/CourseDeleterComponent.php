@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Componen
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Forms\CourseDeleterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -13,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @author Mattias De Pauw - Hogeschool Gent
  */
-class CourseDeleterComponent extends Manager implements DelegateComponent
+class CourseDeleterComponent extends Manager
 {
 
     public $delete_page;

@@ -4,3 +4,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 BrowserComponent = "Favourites"
+TypeName = "Favourites"
+FavouritesInfo = "Add your own workspaces or shared workspaces to the favourites list by clicking on the star icon next to the workspace. Favourite workspaces will be added to the menu bar."

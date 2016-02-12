@@ -61,7 +61,9 @@ class MultiPrivilegeForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Grant', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive update'));
+            null,
+            null,
+            'arrow-right');
 
         $this->addElement(
             'html',

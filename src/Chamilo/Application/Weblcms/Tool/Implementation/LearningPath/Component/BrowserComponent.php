@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function get_additional_parameters()

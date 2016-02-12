@@ -4,5 +4,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Course settings"
-CourseSettingsToolUpdaterComponent = "Edit course settings"
+UpdaterComponent = "Edit course settings"
 Unlimited = "Unlimited"

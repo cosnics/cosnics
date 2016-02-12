@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  *
@@ -11,6 +10,6 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class IntroductionPublisherComponent extends Manager implements DelegateComponent
+class IntroductionPublisherComponent extends Manager
 {
 }

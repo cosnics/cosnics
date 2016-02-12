@@ -194,6 +194,16 @@ class ConfigurationForm extends FormValidator
                                 $context),
                             ($setting['required'] == 'true'));
                     }
+                    elseif ($setting['field'] == 'image_uploader')
+                    {
+                        $this->addImageUploader(
+                            $name,
+                            Translation :: get(
+                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                null,
+                                $context),
+                            ($setting['required'] == 'true'));
+                    }
                     elseif ($setting['field'] == 'password')
                     {
                         $this->add_password(
@@ -251,7 +261,7 @@ class ConfigurationForm extends FormValidator
                                     (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
                                     null,
                                     $context),
-                                '<br/>',
+                                '',
                                 false);
                         }
                         elseif ($setting['field'] == 'select')
@@ -279,13 +289,11 @@ class ConfigurationForm extends FormValidator
             $buttons[] = $this->createElement(
                 'style_submit_button',
                 'submit',
-                Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES),
-                array('class' => 'positive'));
+                Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES));
             $buttons[] = $this->createElement(
                 'style_reset_button',
                 'reset',
-                Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES),
-                array('class' => 'normal empty'));
+                Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES));
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
         else
@@ -295,6 +303,8 @@ class ConfigurationForm extends FormValidator
                 '<div class="warning-message">' .
                      Translation :: get('NoConfigurableSettings', array(), Utilities :: COMMON_LIBRARIES) . '</div>');
         }
+
+        $this->add_checkbox_javascript();
     }
 
     public function parse_application_settings()

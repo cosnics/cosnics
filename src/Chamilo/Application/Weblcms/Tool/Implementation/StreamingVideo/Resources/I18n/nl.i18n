@@ -5,8 +5,8 @@
 
 TypeName = "Streaming videos"
 TypeNameSingle = "Streaming video"
-StreamingVideoToolBrowserComponent = "Streaming videos"
-StreamingVideoToolViewerComponent = "Bekijk streaming video"
-StreamingVideoToolIntroductionPublisherComponent = "Doorblader introductietekst"
-StreamingVideoToolPublisherComponent = "Publiceer streaming video"
-StreamingVideoToolUpdaterComponent = "Werk streaming video bij"
+BrowserComponent = "Streaming videos"
+ViewerComponent = "Bekijk streaming video"
+IntroductionPublisherComponent = "Doorblader introductietekst"
+PublisherComponent = "Publiceer streaming video"
+UpdaterComponent = "Werk streaming video bij"

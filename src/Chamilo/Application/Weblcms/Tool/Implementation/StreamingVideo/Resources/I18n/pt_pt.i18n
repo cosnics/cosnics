@@ -4,8 +4,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Streaming video"
-StreamingVideoToolBrowserComponent = "Browse streaming videos"
-StreamingVideoToolViewerComponent = "View streaming video"
-StreamingVideoToolIntroductionPublisherComponent = "Browse an introduction"
-StreamingVideoToolPublisherComponent = "Publish streaming video"
-StreamingVideoToolUpdaterComponent = "Update streaming video"
+BrowserComponent = "Browse streaming videos"
+ViewerComponent = "View streaming video"
+IntroductionPublisherComponent = "Browse an introduction"
+PublisherComponent = "Publish streaming video"
+UpdaterComponent = "Update streaming video"

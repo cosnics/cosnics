@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @package application.lib.weblcms.tool.component
  */
-class ToggleVisibilityComponent extends Manager
+class ToggleVisibilityComponent extends Manager implements DelegateComponent
 {
 
     public function run()

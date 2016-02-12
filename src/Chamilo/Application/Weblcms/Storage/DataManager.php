@@ -248,6 +248,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ContentObject :: class_name(),
             ContentObject :: PROPERTY_CREATION_DATE);
 
+        $data_class_properties[] = new FixedPropertyConditionVariable(
+            ContentObject :: class_name(),
+            ContentObject::PROPERTY_MODIFICATION_DATE,
+            ContentObjectPublication::CONTENT_OBJECT_MODIFICATION_DATE_ALIAS
+        );
+
         $properties = new DataClassProperties($data_class_properties);
 
         $parameters = new RecordRetrievesParameters(

@@ -4,11 +4,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Blog"
-BlogToolBrowserComponent = "Blogs durchsuchen"
-BlogToolViewerComponent = "Blog ansehen"
-BlogToolUpdaterComponent = "Blog bearbeiten"
-BlogToolIntroductionPublisherComponent = "Einleitung veröffentlichen"
-BlogToolCategoryMoverComponent = "Blogs verschieben"
+BrowserComponent = "Blogs durchsuchen"
+ViewerComponent = "Blog ansehen"
+UpdaterComponent = "Blog bearbeiten"
+IntroductionPublisherComponent = "Einleitung veröffentlichen"
+CategoryMoverComponent = "Blogs verschieben"
 Attachments = ""
 AuthorUnknown = ""
 BlogLayout = ""

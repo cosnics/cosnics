@@ -50,10 +50,10 @@ class ShareComponent extends Manager implements TableSupport
 
         if (empty($selectedContentObjectIdentifiers))
         {
-            throw new NoObjectSelectedException(Translation :: get('ContentObject'));
+            throw new NoObjectSelectedException(Translation:: get('ContentObject'));
         }
 
-        if (! empty($selectedWorkspaceIdentifiers))
+        if (!empty($selectedWorkspaceIdentifiers))
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
 
@@ -64,16 +64,19 @@ class ShareComponent extends Manager implements TableSupport
                     $contentObjectRelationService->createContentObjectRelation(
                         $selectedWorkspaceIdentifier,
                         $selectedContentObjectIdentifier,
-                        0);
+                        0
+                    );
                 }
             }
 
             $this->redirect(
-                Translation :: get('ContentObjectsShared'),
+                Translation:: get('ContentObjectsShared'),
                 false,
                 array(
                     self :: PARAM_ACTION => null,
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS));
+                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS
+                )
+            );
         }
         else
         {
@@ -81,12 +84,15 @@ class ShareComponent extends Manager implements TableSupport
 
             if (count($contentObjectIdentifiers) > 1)
             {
-                $contentObjects = DataManager :: retrieves(
-                    ContentObject :: class_name(),
+                $contentObjects = DataManager:: retrieves(
+                    ContentObject:: class_name(),
                     new DataClassRetrievesParameters(
                         new InCondition(
-                            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-                            $contentObjectIdentifiers)));
+                            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_ID),
+                            $contentObjectIdentifiers
+                        )
+                    )
+                );
 
                 $toolbar = new Toolbar();
 
@@ -94,26 +100,30 @@ class ShareComponent extends Manager implements TableSupport
                 {
                     $viewUrl = new Redirect(
                         array(
-                            Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
+                            Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager:: context(),
                             \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS,
-                            \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $contentObject->getId()));
+                            \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $contentObject->getId()
+                        )
+                    );
 
                     $toolbar->add_item(
                         new ToolbarItem(
                             $contentObject->get_title(),
-                            Theme :: getInstance()->getImagePath($contentObject->package(), 'Logo/16'),
+                            Theme:: getInstance()->getImagePath($contentObject->package(), 'Logo/16'),
                             $viewUrl->getUrl(),
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                             false,
                             null,
-                            '_blank'));
+                            '_blank'
+                        )
+                    );
                 }
 
                 $selectedObjectsPreviews = array();
 
                 $selectedObjectsPreviews[] = '<div class="information-box">';
                 $selectedObjectsPreviews[] = '<h3>';
-                $selectedObjectsPreviews[] = Translation :: get('SelectedContentObjects');
+                $selectedObjectsPreviews[] = Translation:: get('SelectedContentObjects');
                 $selectedObjectsPreviews[] = '</h3>';
                 $selectedObjectsPreviews[] = $toolbar->as_html();
                 $selectedObjectsPreviews[] = '</div>';
@@ -122,15 +132,17 @@ class ShareComponent extends Manager implements TableSupport
             }
             else
             {
-                $contentObject = DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
-                    array_pop($contentObjectIdentifiers));
+                $contentObject = DataManager:: retrieve_by_id(
+                    ContentObject:: class_name(),
+                    array_pop($contentObjectIdentifiers)
+                );
 
-                $renditionImplementation = ContentObjectRenditionImplementation :: factory(
+                $renditionImplementation = ContentObjectRenditionImplementation:: factory(
                     $contentObject,
                     ContentObjectRendition :: FORMAT_HTML,
                     ContentObjectRendition :: VIEW_FULL,
-                    $this);
+                    $this
+                );
                 $selectedObjectsPreview = $renditionImplementation->render();
             }
 
@@ -139,7 +151,19 @@ class ShareComponent extends Manager implements TableSupport
             $html = array();
 
             $html[] = $this->render_header();
+
+            $parameters = array();
+            $parameters[self::PARAM_CONTEXT] = Manager::context();
+            $parameters[self::PARAM_ACTION] = self::ACTION_CREATE;
+
+            $redirect = new Redirect($parameters);
+            $url = $redirect->getUrl();
+
+            $html[] = '<div class="alert alert-info" role="alert">' .
+                Translation::getInstance()->getTranslation('ShareInformation', array('WORKSPACE_URL' => $url), Manager::context()) . '</div>';
+
             $html[] = $selectedObjectsPreview;
+            $html[] = '<br />';
             $html[] = $table->as_html();
             $html[] = $this->render_footer();
 
@@ -170,11 +194,12 @@ class ShareComponent extends Manager implements TableSupport
      */
     public function getSelectedWorkspaceIdentifiers()
     {
-        if (! isset($this->selectedWorkspaceIdentifiers))
+        if (!isset($this->selectedWorkspaceIdentifiers))
         {
             $this->selectedWorkspaceIdentifiers = (array) $this->getRequest()->get(
                 Manager :: PARAM_SELECTED_WORKSPACE_ID,
-                array());
+                array()
+            );
         }
 
         return $this->selectedWorkspaceIdentifiers;
@@ -186,11 +211,12 @@ class ShareComponent extends Manager implements TableSupport
      */
     public function getSelectedContentObjectIdentifiers()
     {
-        if (! isset($this->selectedContentObjectIdentifiers))
+        if (!isset($this->selectedContentObjectIdentifiers))
         {
             $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
                 \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID,
-                array());
+                array()
+            );
         }
 
         return $this->selectedContentObjectIdentifiers;

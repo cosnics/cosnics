@@ -57,41 +57,43 @@ class ButtonSearchForm extends FormValidator
      */
     private function buildForm()
     {
-        $this->renderer->setFormTemplate(
-            '<div class="action-bar btn-group"><form {attributes}>{content}<div class="clear">&nbsp;</div></form></div>');
+        $this->renderer->setFormTemplate('<form {attributes}>{content}</form>');
+
+        $this->addElement('html', '<div class="action-bar btn-group pull-right">');
 
         $this->addElement(
             'text',
             self :: PARAM_SIMPLE_SEARCH_QUERY,
             Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
-            'class="form-control"');
+            array('class' => 'form-group form-control btn action-bar-search'));
 
-        $this->renderer->setElementTemplate(
-            '<div class="form-group">
-                <label class="sr-only">{label}</label>
-                    {element}
-            </div> ',
-            self :: PARAM_SIMPLE_SEARCH_QUERY);
+        $this->renderer->setElementTemplate('{element} ', self :: PARAM_SIMPLE_SEARCH_QUERY);
 
         $this->addElement(
-            'style_submit_button',
+            'style_button',
             'submit',
-            '<span class="glyphicon glyphicon-search" aria-hidden="true"></span>',
-            array('class' => 'btn btn-default'));
+            null,
+            null,
+            'submit',
+            'search');
 
-        $buttonElementTemplate = '<div class="form-group"><label class="sr-only">{label}</label>{element}</div> ';
+        $buttonElementTemplate = '{element}';
 
         $this->renderer->setElementTemplate($buttonElementTemplate, 'submit');
 
         if ($this->getQuery())
         {
             $this->addElement(
-                'style_submit_button',
+                'style_button',
                 'clear',
-                '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>',
-                array('class' => 'btn btn-default', 'value' => 'clear'));
+                null,
+                null,
+                'clear',
+                'remove');
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
+
+        $this->addElement('html', '</div>');
     }
 
     /**

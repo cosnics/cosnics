@@ -5,7 +5,7 @@
 
 TypeName = "Reporting"
 TypeCategory = "Course Tools"
-ReportingToolViewerComponent = "View reporting"
+ViewerComponent = "View reporting"
 Add = "Add"
 Client = "Client"
 Csv = "CSV"

@@ -2,9 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Description\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Description\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
+class ContentObjectUpdaterComponent extends Manager
 {
 
     public function get_additional_parameters()

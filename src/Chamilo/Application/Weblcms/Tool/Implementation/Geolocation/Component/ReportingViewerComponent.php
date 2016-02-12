@@ -1,14 +1,13 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
 
-class ReportingViewerComponent extends Manager implements DelegateComponent
+class ReportingViewerComponent extends Manager
 {
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

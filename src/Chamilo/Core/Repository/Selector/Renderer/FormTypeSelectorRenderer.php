@@ -89,11 +89,7 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
             $select->addOption($type, $key, $attributes);
         }
 
-        $form->addElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Select'),
-            array('class' => 'normal select'));
+        $form->addElement('style_button', 'submit', Translation :: get('Select'), null, null, 'hand-up');
 
         $html = array();
 

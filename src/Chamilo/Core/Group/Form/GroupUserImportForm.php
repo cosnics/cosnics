@@ -55,7 +55,9 @@ class GroupUserImportForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive import'));
+            null,
+            null,
+            'import');
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 

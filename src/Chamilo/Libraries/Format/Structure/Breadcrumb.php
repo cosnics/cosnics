@@ -28,15 +28,22 @@ class Breadcrumb
 
     /**
      *
+     * @var string
+     */
+    private $glyph;
+
+    /**
+     *
      * @param string $url
      * @param string $name
      * @param string $image
      */
-    public function __construct($url, $name, $image = null)
+    public function __construct($url, $name, $image = null, $glyph = null)
     {
         $this->url = $url;
         $this->name = $name;
         $this->image = $image;
+        $this->glyph = $glyph;
     }
 
     /**
@@ -91,5 +98,23 @@ class Breadcrumb
     public function setImage($image)
     {
         $this->image = $image;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getGlyph()
+    {
+        return $this->glyph;
+    }
+
+    /**
+     *
+     * @param string $glyph
+     */
+    public function setGlyph($glyph)
+    {
+        $this->glyph = $glyph;
     }
 }

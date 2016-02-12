@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
  * Toolcomponent to sent email of an alredy published publication.
  * Will only send a publication once!
  */
-class PublicationMailerComponent extends Manager
+class PublicationMailerComponent extends Manager implements DelegateComponent
 {
 
     public function run()

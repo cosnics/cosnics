@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Link\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager;
 
-class PublicationUpdaterComponent extends Manager implements DelegateComponent
+class PublicationUpdaterComponent extends Manager
 {
 
     public function get_additional_parameters()

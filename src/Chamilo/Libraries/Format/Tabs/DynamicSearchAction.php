@@ -13,11 +13,7 @@ class DynamicSearchAction extends DynamicAction
     {
         $search_form = new FormValidator('search', 'post', $url);
         $search_form->addElement('text', self :: PARAM_SIMPLE_SEARCH_QUERY, Translation :: get('Search'), 'size="20"');
-        $search_form->addElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Search'),
-            array('class' => 'normal search'));
+        $search_form->addElement('style_button', 'submit', Translation :: get('Search'), null, null, 'search');
 
         $renderer = $search_form->get_renderer();
         $renderer->setFormTemplate(

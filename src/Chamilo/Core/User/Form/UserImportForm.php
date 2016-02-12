@@ -78,14 +78,13 @@ class UserImportForm extends FormValidator
             0);
         $this->addGroup($group, 'mail', Translation :: get('SendMailToNewUser'), '&nbsp;');
 
-        // $this->addElement('submit', 'user_import', Translation :: get('Ok'));
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
             Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive import'));
-        // $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset'), array('class'
-        // => 'normal empty'));
+            null,
+            null,
+            'import');
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
@@ -290,8 +289,9 @@ class UserImportForm extends FormValidator
         }
         // 1. Check if username exists
         if (($action == 'A' &&
-             ! \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])) || ($action !=
-             'A' && \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])))
+             ! \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])) ||
+             ($action != 'A' &&
+             \Chamilo\Core\User\Storage\DataManager :: is_username_available($csvuser[User :: PROPERTY_USERNAME])))
         {
             $failures ++;
         }

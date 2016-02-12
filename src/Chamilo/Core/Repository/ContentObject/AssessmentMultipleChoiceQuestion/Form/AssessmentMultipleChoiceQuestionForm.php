@@ -240,17 +240,21 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             'change_answer_type',
             $switch_label,
-            array('class' => 'normal switch change_answer_type'));
+            array('class' => 'change_answer_type'),
+            null,
+            'retweet');
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
             'style_button',
             'add[]',
             Translation :: get('AddMultipleChoiceOption'),
-            array('class' => 'normal add add_option'));
+            array('class' => 'add_option'),
+            null,
+            'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $html_editor_options = array();

@@ -31,7 +31,7 @@ class WorkspaceItem extends BootstrapBar
 
         if ($selected)
         {
-            $class = 'class="current" ';
+            $class = 'class="active" ';
         }
         else
         {
@@ -48,7 +48,7 @@ class WorkspaceItem extends BootstrapBar
 
         if ($this->getItem()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo/16');
+            $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo/48');
 
             $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
                  $title . '" />';

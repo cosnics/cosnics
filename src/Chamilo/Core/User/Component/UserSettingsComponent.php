@@ -13,7 +13,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -115,16 +114,6 @@ class UserSettingsComponent extends ProfileComponent
 
         $html[] = $tabs->render();
 
-        $html[] = '<script type="text/javascript">';
-        $html[] = '$(document).ready(function() {';
-        $html[] = '$(\':checkbox\').iphoneStyle({ checkedLabel: \'' .
-             Translation :: get('ConfirmOn', null, Utilities :: COMMON_LIBRARIES) . '\', uncheckedLabel: \'' .
-             Translation :: get('ConfirmOff', null, Utilities :: COMMON_LIBRARIES) . '\'});';
-        $html[] = '});';
-        $html[] = '</script>';
-
         return implode(PHP_EOL, $html);
-
-        return $this->form->toHtml();
     }
 }

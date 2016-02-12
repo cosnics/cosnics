@@ -276,19 +276,18 @@ div.home_actions {
 	padding: 10px 10px 10px 10px;
 	background-repeat: no-repeat;
 	background-position: 14px 10px;
-	height: 16px;
 	line-height: 16px;
 	background-color: #F6F6F6;
 	margin-bottom: 10px;
 }
 
-div.tree_menu_on_top {
-	border: 1px solid #b5cae7;
-	margin-bottom: 10px;
-	padding: 10px 10px;
-	-moz-border-radius-topleft: 15px;
-	-webkit-border-top-left-radius: 15px;
-	/*height: 60px;*/
+div.publication_container {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+
+div.tree_menu_hide_container {
+	font-size: 75%;
 }
 
 div.category_title {
@@ -339,4 +338,106 @@ div.row.tool_unchecked_warning .warning-message {
 	margin-left: 0;
 	left: 0;
 	right: 0;
+}
+
+div.user_category_description {
+	margin-top: 10px;
+}
+
+td.publication_table_actions_column {
+	min-width: 150px;
+	max-width: 220px;
+	width: 220px;
+}
+
+td.publication_table_status_column,
+td.publication_table_order_column
+{
+	max-width: 50px;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+/** Tools Table **/
+
+table th.tools_column_toggle,
+table tr td.tools_column_toggle {
+	max-width: 150px;
+	width: 150px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+table th.column_icon,
+table tr td.column_icon {
+	max-width: 50px;
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+table tr td.column_tool_title {
+	vertical-align: middle;
+}
+
+/** Course List **/
+
+.nav.nav-tabs.course-list-tabs {
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+	border-top: 1px solid #dddddd;
+}
+
+.nav.nav-tabs.course-list-tabs li {
+	margin-bottom: -2px;
+}
+
+.nav.nav-tabs.course-list-tabs li a {
+	padding: 12px 15px;
+	font-size: 13px;
+}
+
+.nav.nav-tabs.course-list-tabs li.active a {
+	border-top: none;
+	border-radius: 0;
+}
+
+.nav.nav-tabs.course-list-tabs li.active:first-child a {
+	border-left: none;
+}
+
+.nav.nav-tabs.course-list-tabs,
+.course-list-tab-content .list-group-header {
+	background-color: #F5F5F5;
+	color: #555555;
+}
+
+.course-list-tab-content .list-group-item:first-child {
+	border-radius: 0;
+}
+
+.course-list-tab-content .list-group-item {
+	border-top: 0;
+}
+
+.course-list-tab-content .list-group-item.list-group-header {
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 2px solid #DDDDDD;
+}
+
+.course-list-tab-content .list-group-item.list-group-header:first-child {
+	border-top: none;
+}
+
+.course-list-tab-content h4 .glyphicon {
+	font-size: 14px;
+}
+
+.course-list-tab-content .list-group-item-text {
+	color: #666666;
+}
+
+.course-list-tab-content .list-group-header .list-group-item-heading {
+	margin-bottom: 0;
 }

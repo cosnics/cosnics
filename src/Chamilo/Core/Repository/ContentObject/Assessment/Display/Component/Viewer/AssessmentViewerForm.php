@@ -98,14 +98,8 @@ class AssessmentViewerForm extends FormValidator
 
     public function add_buttons()
     {
-        // $progress = round(($this->get_page_number() / $this->get_total_pages()) * 100);
-        // Display::get_progress_bar($progress)
-        // TODO: Temporary fix
         $this->get_page_number();
         $this->get_total_pages();
-        // $this->addElement('html', '<div style="float: left; padding: 7px; font-weight: bold; line-height: 100%;">' .
-        // Translation :: get('PageNumberOfTotal', array(
-        // 'CURRENT' => $this->get_page_number(), 'TOTAL' => $this->get_total_pages())) . '</div>');
 
         // Add submit button if there is at least one question
         if (count($this->questions) > 0)
@@ -114,44 +108,41 @@ class AssessmentViewerForm extends FormValidator
                 'style_submit_button',
                 'submit',
                 Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES),
-                array('class' => 'positive submit', 'style' => 'display: none;'));
+                array('style' => 'display: none;'));
         }
 
         if ($this->assessment_viewer->get_configuration()->show_feedback_after_every_page())
         {
-            // if (($this->get_page_number() <= $this->assessment_viewer->get_total_pages()))
-            // {
             $buttons[] = $this->createElement(
-                'style_submit_button',
+                'style_button',
                 'next',
                 Translation :: get('Check', null, Utilities :: COMMON_LIBRARIES),
-                array('class' => 'normal next'));
-            // }
-            // else
-            // {
-            // $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('Finish', null,
-            // Utilities :: COMMON_LIBRARIES), array(
-            // 'class' => 'positive finish'));
-            // }
+                null,
+                null,
+                'chevron-next');
         }
         else
         {
             if ($this->get_page_number() > 1)
             {
                 $buttons[] = $this->createElement(
-                    'style_submit_button',
+                    'style_button',
                     'back',
                     Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'previous'));
+                    null,
+                    null,
+                    'chevron-previous');
             }
 
             if ($this->get_page_number() < $this->get_total_pages())
             {
                 $buttons[] = $this->createElement(
-                    'style_submit_button',
+                    'style_button',
                     'next',
                     Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'next'));
+                    null,
+                    null,
+                    'chevron-next');
             }
             elseif ($submit_button)
             {

@@ -210,6 +210,10 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function display_course_types()
     {
+        $html = array();
+
+        $html[] = '<ul class="nav nav-tabs course-list-tabs">';
+
         $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
         $course_tabs = new DynamicVisualTabsRenderer($renderer_name);
 
@@ -229,6 +233,12 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                  $this->count_courses_for_course_type($course_type[CourseType :: PROPERTY_ID]) > 0)
             {
                 $course_tabs->add_tab($created_tabs[$course_type[CourseType :: PROPERTY_ID]]);
+
+                $active = $selected_course_type_id == $course_type[CourseType :: PROPERTY_ID] ? 'active' : '';
+
+                $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+                $html[] = $this->get_course_type_url($course_type[CourseType :: PROPERTY_ID]);
+                $html[] = '">' . $course_type[CourseType :: PROPERTY_TITLE] . '</a></li>';
             }
         }
 
@@ -242,7 +252,15 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         if ($this->get_parent()->show_empty_courses() || $this->count_courses_for_course_type(0) > 0)
         {
             $course_tabs->add_tab($created_tabs[0]);
+
+            $active = $selected_course_type_id == 0 ? 'active' : '';
+
+            $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+            $html[] = $this->get_course_type_url(0);
+            $html[] = '">' . Translation :: get('NoCourseType') . '</a></li>';
         }
+
+        $html[] = '</ul>';
 
         if ($course_tabs->size() > 0)
         {
@@ -254,7 +272,12 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $content = $this->display_course_user_categories_for_course_type();
             $course_tabs->set_content($content);
 
-            return $course_tabs->render();
+            $html[] = '<div class="course-list-tab-content">';
+            $html[] = $content;
+            $html[] = '</div>';
+
+            return implode(PHP_EOL, $html);
+            //return $course_tabs->render();
         }
         else
         {
@@ -272,6 +295,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
     {
         $html = array();
 
+        $html[] = '<div class="list-group">';
         $html[] = $this->display_course_user_category();
 
         $course_type_user_categories = $this->retrieve_course_user_categories_for_course_type();
@@ -279,11 +303,15 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         $count = 0;
         $size = $course_type_user_categories->size();
 
+
         while ($course_type_user_category = $course_type_user_categories->next_result())
         {
             $html[] = $this->display_course_user_category($course_type_user_category, $count, $size);
             $count ++;
         }
+
+
+        $html[] = '</div>';
 
         return implode($html, "\n");
     }
@@ -311,18 +339,18 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $course_type_user_category_id = 0;
         }
 
-        $html[] = '<div class="block user_category_block" id="course_user_category_' . $course_type_user_category_id .
-             '">';
+//        $html[] = '<div id="course_user_category_' . $course_type_user_category_id . '">';
 
         if ($title)
         {
-            $html[] = '<div class="title user_category_title">';
-            $html[] = '<div style="float: left;">' . $title . '</div>';
+            $html[] = '<div class="list-group-item list-group-header">';
+            $html[] = '<h5 class="list-group-item-heading pull-left">' . $title . '</h5>';
+            $html[] = '<div class="pull-right">';
             $html[] = $this->get_course_type_user_category_actions($course_type_user_category, $offset, $count);
-            $html[] = '<div style="clear: both;"></div></div>';
+            $html[] = '</div>';
+            $html[] = '<div class="clearfix"></div>';
+            $html[] = '</div>';
         }
-
-        $html[] = '<div class="description user_category_description">';
 
         if ($this->count_courses_for_course_type_user_category($course_type_user_category) == 0)
         {
@@ -331,14 +359,14 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 return;
             }
 
-            $html[] = '<div class="nocourses"><br />' . Translation :: get('NoCourses') . '</div><br />';
+            $html[] = '<div class="list-group-item">' . Translation :: get('NoCourses') . '</div>';
         }
         else
         {
             $html[] = $this->display_courses_for_course_type_user_category($course_type_user_category);
         }
 
-        $html[] = '</div></div>';
+//        $html[] = '</div>';
 
         return implode($html, "\n");
     }
@@ -388,7 +416,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
             $course_settings_controller = CourseSettingsController :: get_instance();
 
-            $html[] = '<ul>';
             $count = 0;
             foreach ($courses as $course_properties)
             {
@@ -406,7 +433,8 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 {
                     $locked = '';
                     $text_style = '';
-                    $html[] = '<div style="float:left;">';
+
+                    $html[] = '<div class="list-group-item">';
 
                     $icon = Theme :: getInstance()->getCommonImagePath('Action/Home');
                     $url = $this->get_course_url($course);
@@ -427,8 +455,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         }
                         else
                         {
-                            $locked = '<img style="float: left; margin-left: -30px; padding-top: 1px;" src="' .
-                                 Theme :: getInstance()->getCommonImagePath('Action/Lock') . '" />';
+                            $locked = '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>';
                         }
                     }
 
@@ -453,17 +480,31 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         $text_style .= $this->get_invisible_text_style();
                     }
 
-                    $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
-                        list-style-image: url(' . $icon .
-                         '); margin-left: 15px;' . $text_style . '">';
-                    $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
-                         $course->get_title();
-
+                    $html[] = '<h5 class="list-group-item-heading pull-left">';
+                    $html[] = $locked;
+                    $html[] = ' <a href="' . $url . '">';
+                    $html[] = $course->get_title();
                     $html[] = '</a>';
+
                     if ($this->get_new_publication_icons() && (! $course_closed || $course_admin))
                     {
                         $html[] = $this->display_new_publication_icons($course);
                     }
+
+                    $html[] = '</h5>';
+
+                    $html[] = '<div class="pull-right">';
+                    $html[] = $this->get_course_actions($course_type_user_category, $course, $count, $size);
+                    $html[] = '</div>';
+                    $html[] = '<div class="clearfix"></div>';
+
+//                    $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
+//                        list-style-image: url(' . $icon .
+//                         '); margin-left: 15px;' . $text_style . '">';
+//                    $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
+//                         $course->get_title();
+//
+//                    $html[] = '</a>';
 
                     $text = array();
 
@@ -506,20 +547,15 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     if (count($text) > 0)
                     {
-                        $html[] = '<br />' . implode(' - ', $text);
+                        $html[] = '<p class="list-group-item-text">' . implode(' - ', $text) . '</p>';
                     }
 
                     $html[] = '</li>';
                     $html[] = '</div>';
-                    $html[] = '<div style="float:right; padding-right: 20px;">';
-                    $html[] = $this->get_course_actions($course_type_user_category, $course, $count, $size);
-                    $html[] = '</div>';
-                    $html[] = '<div style="clear: both;"></div>';
 
                     $count ++;
                 }
             }
-            $html[] = '</ul>';
 
             return implode($html, "\n");
         }

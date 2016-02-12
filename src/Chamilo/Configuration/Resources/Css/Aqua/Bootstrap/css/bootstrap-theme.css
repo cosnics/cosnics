@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=8dd2aa7b075eb5bd1710)
- * Config saved to config.json and https://gist.github.com/8dd2aa7b075eb5bd1710
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=3943024d7888f2c30c17)
+ * Config saved to config.json and https://gist.github.com/3943024d7888f2c30c17
  */
 /*!
  * Bootstrap v3.3.6 (http://getbootstrap.com)
@@ -72,26 +72,26 @@ fieldset[disabled] .btn-danger {
   background-image: none;
 }
 .btn-default {
-  background-image: -webkit-linear-gradient(top, #ffffff 0%, #e0e0e0 100%);
-  background-image: -o-linear-gradient(top, #ffffff 0%, #e0e0e0 100%);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e0e0e0));
-  background-image: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
+  background-image: -webkit-linear-gradient(top, #f7f7f7 0%, #d8d8d8 100%);
+  background-image: -o-linear-gradient(top, #f7f7f7 0%, #d8d8d8 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f7f7), to(#d8d8d8));
+  background-image: linear-gradient(to bottom, #f7f7f7 0%, #d8d8d8 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff7f7f7', endColorstr='#ffd8d8d8', GradientType=0);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   background-repeat: repeat-x;
-  border-color: #dbdbdb;
+  border-color: #d3d3d3;
   text-shadow: 0 1px 0 #fff;
   border-color: #ccc;
 }
 .btn-default:hover,
 .btn-default:focus {
-  background-color: #e0e0e0;
+  background-color: #d8d8d8;
   background-position: 0 -15px;
 }
 .btn-default:active,
 .btn-default.active {
-  background-color: #e0e0e0;
-  border-color: #dbdbdb;
+  background-color: #d8d8d8;
+  border-color: #d3d3d3;
 }
 .btn-default.disabled,
 .btn-default[disabled],
@@ -111,7 +111,7 @@ fieldset[disabled] .btn-default:active,
 .btn-default.disabled.active,
 .btn-default[disabled].active,
 fieldset[disabled] .btn-default.active {
-  background-color: #e0e0e0;
+  background-color: #d8d8d8;
   background-image: none;
 }
 .btn-primary {

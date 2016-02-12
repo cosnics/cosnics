@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * $Id: course_type_select_form.class.php 2 2010-02-25 11:43:06Z Yannick &
  * Tristan $
- * 
+ *
  * @package application.lib.weblcms.course_type
  */
 class CourseTypeSelectForm extends FormValidator
@@ -34,7 +34,7 @@ class CourseTypeSelectForm extends FormValidator
     public function build_form()
     {
         $this->addElement('hidden', Course :: PROPERTY_ID);
-        
+
         $course_type_objects = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
         $course_types = array();
         $this->size = $course_type_objects->size();
@@ -49,24 +49,25 @@ class CourseTypeSelectForm extends FormValidator
                 $course_types[$course_type->get_id()] = $course_type->get_name();
             }
         }
-        
+
         $this->addElement('select', self :: SELECT_ELEMENT, Translation :: get('CourseType'), $course_types);
         $this->addRule(
-            'CourseType', 
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
+            'CourseType',
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
             'required');
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Select', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'positive update'));
+            'style_submit_button',
+            'submit',
+            Translation :: get('Select', null, Utilities :: COMMON_LIBRARIES),
+            null,
+            null,
+            'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'normal empty'));
-        
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 

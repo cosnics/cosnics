@@ -134,7 +134,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
         }
 
         $table = array();
-        $table[] = '<table id="slideshow" class="data_table">';
+        $table[] = '<table id="slideshow" class="table table-striped table-bordered table-hover table-responsive">';
         $table[] = '<thead>';
         $table[] = '<tr>';
         $table[] = '<th class="actions" style="width: 25%; text-align: left;">';

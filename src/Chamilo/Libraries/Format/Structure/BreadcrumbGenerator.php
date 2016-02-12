@@ -58,7 +58,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         $component = $this->component;
         $context = $component->package();
 
-        if (! $component instanceof NoContextComponent)
+        if (! $component instanceof NoContextComponent && !$component->get_application() instanceof Application)
         {
             $this->generate_package_breadcrumb();
 

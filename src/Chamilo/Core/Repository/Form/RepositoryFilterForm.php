@@ -108,10 +108,12 @@ class RepositoryFilterForm extends FormValidator
         }
 
         $this->addElement(
-            'style_submit_button',
+            'style_button',
             'submit',
             Translation :: get('Filter', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal filter'));
+            null,
+            null,
+            'filter');
 
         $session_filter = Session :: retrieve('filter');
         $this->setDefaults(array(self :: FILTER_TYPE => $session_filter, 'published' => 1));

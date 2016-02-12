@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Storage\DataClass\CategoryItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\DataManager;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
@@ -91,23 +92,23 @@ class ItemForm extends FormValidator
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive'));
+                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
                 break;
             case self :: TYPE_EDIT :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
                     Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive update'));
+                    null,
+                    null,
+                    'arrow-right');
                 break;
         }
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -180,8 +181,17 @@ class ItemForm extends FormValidator
 
     public static function factory($form_type, $item, $action = null)
     {
-        $class = get_class($item) . 'Form';
+        $classNameUtilities = ClassnameUtilities::getInstance();
+        $itemClass = $classNameUtilities->getClassnameFromObject($item);
 
-        return new $class($form_type, $item, $action);
+        $formName = $itemClass . 'Form';
+        $formClass = __NAMESPACE__ . '\\Item\\' . $formName;
+
+        if(class_exists($formClass))
+        {
+            return new $formClass($form_type, $item, $action);
+        }
+
+        return new self($form_type, $item, $action);
     }
 }

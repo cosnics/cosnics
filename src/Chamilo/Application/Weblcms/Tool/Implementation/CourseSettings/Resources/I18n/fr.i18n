@@ -4,5 +4,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Paramètres du cours"
-CourseSettingsToolUpdaterComponent = "Modifier les paramètres de cours"
+UpdaterComponent = "Modifier les paramètres de cours"
 Unlimited = "Illimité"

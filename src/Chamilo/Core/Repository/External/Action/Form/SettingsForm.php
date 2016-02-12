@@ -13,7 +13,7 @@ use DOMDocument;
 
 /**
  * A form to configure external repository settings.
- * 
+ *
  * @package application.common
  * @author Hans De Bisschop
  */
@@ -29,7 +29,7 @@ class SettingsForm extends FormValidator
 
     /**
      * Constructor.
-     * 
+     *
      * @param $application string The name of the application.
      * @param $form_name string The name to use in the form tag.
      * @param $method string The method to use ('post' or 'get').
@@ -38,10 +38,10 @@ class SettingsForm extends FormValidator
     public function __construct($configurer, $external_repository_id, $form_name, $method = 'post', $action = null)
     {
         parent :: __construct($form_name, $method, $action);
-        
+
         $this->configurer = $configurer;
         $this->external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            Instance :: class_name(), 
+            Instance :: class_name(),
             $external_repository_id);
         $this->configuration = $this->parse_settings();
         $this->build_form();
@@ -58,71 +58,73 @@ class SettingsForm extends FormValidator
         $this->tabs_generator = new DynamicFormTabsRenderer($this->getAttribute('name'), $this);
         $has_settings = $this->external_repository->has_settings();
         $is_platform = $this->configurer->get_user()->is_platform_admin();
-        
+
         if ($has_settings)
         {
             $tab_admin = new DynamicFormTab(
-                self :: TAB_ADMIN, 
+                self :: TAB_ADMIN,
                 Translation :: get(
                     (string) StringUtilities :: getInstance()->createString(self :: TAB_ADMIN)->upperCamelize() .
-                         'Settings'), 
-                null, 
+                         'Settings'),
+                null,
                 'build_configure_form');
             $this->tabs_generator->add_tab($tab_admin);
         }
         $this->tabs_generator->render();
+
+        $this->add_checkbox_javascript();
     }
 
     public function build_configure_form()
     {
         $external_repository = $this->external_repository;
         $configuration = $this->configuration;
-        
+
         if (count($configuration['settings']) > 0)
         {
             $categories = count($configuration['settings']);
-            
+
             foreach ($configuration['settings'] as $category_name => $settings)
             {
                 $has_settings = false;
-                
+
                 foreach ($settings as $name => $setting)
                 {
-                    
+
                     if (! $has_settings && $categories > 1)
                     {
                         $this->addElement('html', '<div class="configuration_form">');
                         $this->addElement(
-                            'html', 
+                            'html',
                             '<span class="category">' .
                                  Translation :: get(
-                                    (string) StringUtilities :: getInstance()->createString($category_name)->upperCamelize(), 
-                                    null, 
+                                    (string) StringUtilities :: getInstance()->createString($category_name)->upperCamelize(),
+                                    null,
                                     \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])) .
                                  '</span>');
                         $has_settings = true;
                     }
-                    
+
                     if ($setting['locked'] == 'true')
                     {
                         $this->addElement(
-                            'static', 
-                            $name, 
+                            'static',
+                            $name,
                             Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()), 
-                            null, 
+                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()),
+                            null,
                             \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name']));
                     }
                     elseif ($setting['field'] == 'text')
                     {
                         $this->add_textfield(
-                            $name, 
+                            $name,
                             Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(), 
-                                null, 
-                                \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])), 
+                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                null,
+                                \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])),
                             ($setting['required'] == 'true'));
-                        
+
                         $validations = $setting['validations'];
                         if ($validations)
                         {
@@ -134,15 +136,15 @@ class SettingsForm extends FormValidator
                                     {
                                         $validation['format'] = NULL;
                                     }
-                                    
+
                                     $this->addRule(
-                                        $name, 
+                                        $name,
                                         Translation :: get(
-                                            $validation['message'], 
-                                            null, 
+                                            $validation['message'],
+                                            null,
                                             \Chamilo\Core\Repository\External\Manager :: get_namespace(
-                                                $configuration['name'])), 
-                                        $validation['rule'], 
+                                                $configuration['name'])),
+                                        $validation['rule'],
                                         $validation['format']);
                                 }
                             }
@@ -151,19 +153,19 @@ class SettingsForm extends FormValidator
                     elseif ($setting['field'] == 'html_editor')
                     {
                         $this->add_html_editor(
-                            $name, 
+                            $name,
                             Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(), 
-                                \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])), 
+                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])),
                             ($setting['required'] == 'true'));
                     }
                     elseif ($setting['field'] == 'password')
                     {
                         $this->addElement(
-                            'password', 
-                            $name, 
+                            'password',
+                            $name,
                             Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(), 
+                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
                                 \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])));
                         $validations = $setting['validations'];
                         if ($validations)
@@ -176,15 +178,15 @@ class SettingsForm extends FormValidator
                                     {
                                         $validation['format'] = NULL;
                                     }
-                                    
+
                                     $this->addRule(
-                                        $name, 
+                                        $name,
                                         Translation :: get(
-                                            $validation['message'], 
-                                            null, 
+                                            $validation['message'],
+                                            null,
                                             \Chamilo\Core\Repository\External\Manager :: get_namespace(
-                                                $configuration['name'])), 
-                                        $validation['rule'], 
+                                                $configuration['name'])),
+                                        $validation['rule'],
                                         $validation['format']);
                                 }
                             }
@@ -203,7 +205,7 @@ class SettingsForm extends FormValidator
                         {
                             $options = $setting['options']['values'];
                         }
-                        
+
                         if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox')
                         {
                             $group = array();
@@ -212,65 +214,63 @@ class SettingsForm extends FormValidator
                                 if ($setting['field'] == 'checkbox')
                                 {
                                     $group[] = & $this->createElement(
-                                        $setting['field'], 
-                                        $name, 
-                                        null, 
-                                        null, 
+                                        $setting['field'],
+                                        $name,
+                                        null,
+                                        null,
                                         $option_value);
                                 }
                                 else
                                 {
                                     $group[] = & $this->createElement(
-                                        $setting['field'], 
-                                        $name, 
-                                        null, 
+                                        $setting['field'],
+                                        $name,
+                                        null,
                                         Translation :: get(
-                                            (string) StringUtilities :: getInstance()->createString($option_name)->upperCamelize()), 
+                                            (string) StringUtilities :: getInstance()->createString($option_name)->upperCamelize()),
                                         $option_value);
                                 }
                             }
                             $this->addGroup(
-                                $group, 
-                                $name, 
+                                $group,
+                                $name,
                                 Translation :: get(
-                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(), 
-                                    null, 
-                                    \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])), 
-                                '<br/>', 
+                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                    null,
+                                    \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])),
+                                '<br/>',
                                 false);
                         }
                         elseif ($setting['field'] == 'select')
                         {
                             $this->addElement(
-                                'select', 
-                                $name, 
+                                'select',
+                                $name,
                                 Translation :: get(
-                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(), 
-                                    null, 
-                                    \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])), 
+                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                    null,
+                                    \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])),
                                 $options);
                         }
                     }
                 }
-                
+
                 if ($has_settings && $categories > 1)
                 {
                     $this->addElement('html', '<div style="clear: both;"></div>');
                     $this->addElement('html', '</div>');
                 }
             }
-            
+
             $buttons = array();
             $buttons[] = $this->createElement(
-                'style_submit_button', 
-                'submit', 
-                Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES), 
-                array('class' => 'positive'));
+                'style_submit_button',
+                'submit',
+                Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES));
             $buttons[] = $this->createElement(
-                'style_reset_button', 
-                'reset', 
-                Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
-                array('class' => 'normal empty'));
+                'style_reset_button',
+                'reset',
+                Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
         else
@@ -282,35 +282,35 @@ class SettingsForm extends FormValidator
     public function parse_settings()
     {
         $external_repository = $this->external_repository;
-        
+
         $file = Path :: getInstance()->namespaceToFullPath($external_repository->get_implementation()) .
              'php/settings/settings.xml';
         $result = array();
-        
+
         if (file_exists($file))
         {
             $doc = new DOMDocument();
             $doc->load($file);
             $object = $doc->getElementsByTagname('package')->item(0);
             $name = $object->getAttribute('context');
-            
+
             // Get categories
             $categories = $doc->getElementsByTagname('category');
             $settings = array();
-            
+
             foreach ($categories as $index => $category)
             {
                 $category_name = $category->getAttribute('name');
                 $category_properties = array();
-                
+
                 // Get settings in category
                 $properties = $category->getElementsByTagname('setting');
                 $attributes = array('field', 'default', 'locked', 'user_setting');
-                
+
                 foreach ($properties as $index => $property)
                 {
                     $property_info = array();
-                    
+
                     foreach ($attributes as $index => $attribute)
                     {
                         if ($property->hasAttribute($attribute))
@@ -318,15 +318,15 @@ class SettingsForm extends FormValidator
                             $property_info[$attribute] = $property->getAttribute($attribute);
                         }
                     }
-                    
+
                     if ($property->hasChildNodes())
                     {
                         $property_options = $property->getElementsByTagname('options')->item(0);
-                        
+
                         if ($property_options)
                         {
                             $property_options_attributes = array('type', 'source');
-                            
+
                             foreach ($property_options_attributes as $index => $options_attribute)
                             {
                                 if ($property_options->hasAttribute($options_attribute))
@@ -335,7 +335,7 @@ class SettingsForm extends FormValidator
                                         $options_attribute);
                                 }
                             }
-                            
+
                             if ($property_options->getAttribute('type') == 'static' && $property_options->hasChildNodes())
                             {
                                 $options = $property_options->getElementsByTagname('option');
@@ -347,9 +347,9 @@ class SettingsForm extends FormValidator
                                 $property_info['options']['values'] = $options_info;
                             }
                         }
-                        
+
                         $property_validations = $property->getElementsByTagname('validations')->item(0);
-                        
+
                         if ($property_validations)
                         {
                             if ($property_validations->hasChildNodes())
@@ -359,8 +359,8 @@ class SettingsForm extends FormValidator
                                 foreach ($validations as $validation)
                                 {
                                     $validation_info[] = array(
-                                        'rule' => $validation->getAttribute('rule'), 
-                                        'message' => $validation->getAttribute('message'), 
+                                        'rule' => $validation->getAttribute('rule'),
+                                        'message' => $validation->getAttribute('message'),
                                         'format' => $validation->getAttribute('format'));
                                 }
                                 $property_info['validations'] = $validation_info;
@@ -369,14 +369,14 @@ class SettingsForm extends FormValidator
                     }
                     $category_properties[$property->getAttribute('name')] = $property_info;
                 }
-                
+
                 $settings[$category_name] = $category_properties;
             }
-            
+
             $result['context'] = $name;
             $result['settings'] = $settings;
         }
-        
+
         return $result;
     }
 
@@ -390,7 +390,7 @@ class SettingsForm extends FormValidator
         $is_platform = $this->configurer->get_user()->is_platform_admin();
         $external_repository = $this->external_repository;
         $configuration = $this->configuration;
-        
+
         foreach ($configuration['settings'] as $category_name => $settings)
         {
             foreach ($settings as $name => $setting)
@@ -398,19 +398,19 @@ class SettingsForm extends FormValidator
                 if ($has_settings)
                 {
                     $admin_value = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-                        $name, 
+                        $name,
                         $this->configurer->get_external_repository()->get_id());
                     $defaults[$name] = (isset($admin_value) ? $admin_value : $setting['default']);
                 }
             }
         }
-        
+
         parent :: setDefaults($defaults);
     }
 
     /**
      * Updates the configuration.
-     * 
+     *
      * @return boolean True if the update succeeded, false otherwise.
      */
     public function update_configuration()
@@ -420,7 +420,7 @@ class SettingsForm extends FormValidator
         $external_repository = $this->external_repository;
         $is_platform = $this->configurer->get_user()->is_platform_admin();
         $problems = 0;
-        
+
         foreach ($configuration['settings'] as $category_name => $settings)
         {
             foreach ($settings as $name => $setting)
@@ -428,7 +428,7 @@ class SettingsForm extends FormValidator
                 if ($setting['locked'] != 'true')
                 {
                     $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-                        $name, 
+                        $name,
                         $external_repository->get_id());
                     if ($setting instanceof \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting)
                     {
@@ -450,7 +450,7 @@ class SettingsForm extends FormValidator
                         $setting = new \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting();
                         $setting->set_external_id($external_repository->get_id());
                         $setting->set_variable($name);
-                        
+
                         if (isset($values[$name]))
                         {
                             $setting->set_value($values[$name]);
@@ -459,7 +459,7 @@ class SettingsForm extends FormValidator
                         {
                             $setting->set_value(0);
                         }
-                        
+
                         if (! $setting->create())
                         {
                             $problems ++;
@@ -468,7 +468,7 @@ class SettingsForm extends FormValidator
                 }
             }
         }
-        
+
         if ($problems > 0)
         {
             return false;

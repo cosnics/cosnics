@@ -197,7 +197,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
             'style_button',
             'add[]',
             Translation :: get('AddItem'),
-            array('class' => 'normal add', 'id' => 'add_numeric_option'));
+            array('id' => 'add_numeric_option'), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $html_editor_options = array();
@@ -325,7 +325,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
             'style_button',
             'add[]',
             Translation :: get('AddItem'),
-            array('class' => 'normal add', 'id' => 'add_numeric_option'));
+            array('id' => 'add_numeric_option'), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
         $this->addElement('category');
     }

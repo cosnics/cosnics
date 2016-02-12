@@ -1,3 +1,7 @@
+/*********************************************
+ * GENERAL STYLES FOR DISPLAYING ASSESSMENTS *
+ *********************************************/
+
 .take_assessment th.checkbox_answer {
 	width: 48px;
 }
@@ -96,6 +100,13 @@ div.question div.title div.text img {
 	margin-left: 10px;
 }
 
+div.question div.instruction {
+	margin: 0px 0px 15px 0px;
+	padding: 0px 60px;
+	color: #4171b5;
+	font-style: italic;
+}
+
 div.question div.answer {
 	padding-left: 50px;
 }
@@ -150,7 +161,7 @@ div.question div.answer div.caption {
 	margin-left: 20px;
 }
 
-#hotspot_image, .hotspot_image {
+#selected_image, .selected_image, #hotspot_image, .hotspot_image {
 	position: relative;
 }
 
@@ -230,6 +241,10 @@ div.time {
 ul.tree-menu li div a.assessment, ul.tree-menu li div a.type_assessment,
 	ul.tree-menu li div a.type_assessment_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
+}
+
+ul.tree-menu li div a.type_assessment {
+	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 
 button.hint, a.hint_button {

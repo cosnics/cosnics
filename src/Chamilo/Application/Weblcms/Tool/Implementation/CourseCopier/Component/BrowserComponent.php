@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Forms\CourseCop
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Manager;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -25,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /*
  * This tool is for copying information from othe current course to another @author Mattias De Pauw - Hogeschool Gent
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public $course_copier_form;

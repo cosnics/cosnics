@@ -2,9 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class ComplexBuilderComponent extends Manager implements DelegateComponent
+class ComplexBuilderComponent extends Manager
 {
 
     public function get_additional_parameters()

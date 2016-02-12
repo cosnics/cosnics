@@ -107,14 +107,12 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive'));
+            Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES));
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
@@ -397,23 +395,23 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $locked_settings_supported = ($this instanceof FormLockedSettingsSupport);
 
         $table_header = array();
-        $table_header[] = '<table class="data_table">';
+        $table_header[] = '<table class="table table-striped table-bordered table-hover table-responsive">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th class="checkbox"></th>';
+        $table_header[] = '<th class="column_icon"></th>';
         $table_header[] = '<th>' . Translation :: get('Tool') . '</th>';
-        $table_header[] = '<th class="checkbox">' . Translation :: get('IsToolAvailable') . '</th>';
+        $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('IsToolAvailable') . '</th>';
 
         if ($locked_settings_supported)
         {
-            $table_header[] = '<th class="checkbox">' . Translation :: get('ToolAvailableLocked') . '</th>';
+            $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('ToolAvailableLocked') . '</th>';
         }
 
-        $table_header[] = '<th class="checkbox">' . Translation :: get('IsToolVisible') . '</th>';
+        $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('IsToolVisible') . '</th>';
 
         if ($locked_settings_supported)
         {
-            $table_header[] = '<th class="checkbox">' . Translation :: get('ToolVisibleLocked') . '</th>';
+            $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('ToolVisibleLocked') . '</th>';
         }
 
         $table_header[] = '</tr>';
@@ -448,10 +446,10 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             $table_body = array();
             $table_body[] = '<tr>';
-            $table_body[] = '<td class="center"><img class="' . $tool_image . '" width="16px" height="16px" src="';
+            $table_body[] = '<td class="column_icon"><img class="' . $tool_image . '" width="16px" height="16px" src="';
             $table_body[] = $tool_image_src . '" style="vertical-align: middle;" alt="' . $tool_title . '"/></td>';
 
-            $table_body[] = '<td>' . $tool_title . '</td>';
+            $table_body[] = '<td class="column_tool_title">' . $tool_title . '</td>';
 
             $this->addElement('html', implode(PHP_EOL, $table_body));
 
@@ -460,7 +458,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $visible_element_name = $tool_element_name . '[' . CourseSetting :: COURSE_SETTING_TOOL_VISIBLE . ']';
             $locked_prefix = CourseSettingsController :: SETTING_PARAM_LOCKED_PREFIX;
 
-            $this->addElement('html', '<td><div style="margin: 0 auto; width: 75px;">');
+            $this->addElement('html', '<td class="tools_column_toggle">');
             $active_element = $this->addElement(
                 'checkbox',
                 $active_element_name,
@@ -479,19 +477,19 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             if ($locked_settings_supported)
             {
-                $this->addElement('html', '<td><div style="margin: 0 auto; width: 38px;">');
+                $this->addElement('html', '<td class="tools_column_toggle">');
                 $this->addElement(
                     'checkbox',
                     $locked_prefix . $active_element_name,
                     '',
                     '',
-                    array('class' => 'no-iphone-style'),
+                    array('class' => 'no-toggle-style'),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
             }
 
-            $this->addElement('html', '<td><div style="margin: 0 auto; width: 75px;">');
+            $this->addElement('html', '<td class="tools_column_toggle">');
             $visible_element = $this->addElement(
                 'checkbox',
                 $visible_element_name,
@@ -510,13 +508,13 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             if ($locked_settings_supported)
             {
-                $this->addElement('html', '<td><div style="margin: 0 auto; width: 38px;">');
+                $this->addElement('html', '<td class="tools_column_toggle">');
                 $this->addElement(
                     'checkbox',
                     $locked_prefix . $visible_element_name,
                     '',
                     '',
-                    array('class' => 'no-iphone-style'),
+                    array('class' => 'no-toggle-style'),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
@@ -612,7 +610,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             CourseManagementRights :: RIGHT_OPTION_SELECT,
             array('class' => 'entity_option_selected'));
 
-        $this->addGroup($group, $name, Translation :: get('Target'), '<br />');
+        $this->addGroup($group, $name, Translation :: get('Target'), '');
 
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
@@ -643,7 +641,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                 $locked_name,
                 Translation :: get('Locked'),
                 '',
-                array('class' => 'no-iphone-style'));
+                array('class' => 'no-toggle-style'));
 
             if (CourseManagementRights :: get_instance()->is_right_locked_for_base_object($this->base_object, $right_id))
             {

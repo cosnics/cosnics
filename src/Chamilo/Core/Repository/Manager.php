@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\UserView\Menu\UserViewMenu;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -25,6 +26,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -719,5 +721,21 @@ abstract class Manager extends Application
     public function get_breadcrumb_generator()
     {
         return new BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+    }
+
+    public function render_header()
+    {
+        $html = array();
+
+        $html[] = parent::render_header();
+
+        if(!$this->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $html[] = '<div class="alert alert-warning" style="font-size: 12px; font-weight: bold;">';
+            $html[] = Translation::getInstance()->get('CurrentlyWorkingInWorkspace');
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 }

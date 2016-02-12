@@ -4,7 +4,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Berichterstattung"
-ReportingToolViewerComponent = "Berichterstattung einsehen"
+ViewerComponent = "Berichterstattung einsehen"
 Add = ""
 Client = ""
 Csv = ""

@@ -7,9 +7,10 @@
 					<option name="show_sitemap" value="1" />
 				</options>
 			</setting>
-			<setting name="menu_renderer" field="select" default="Aqua">
+			<setting name="menu_renderer" field="select" default="bar">
 				<options type="dynamic" source="get_renderers" />
 			</setting>
+			<setting name="brand_image" field="image_uploader" />
 		</category>
 		<category name="rights">
 			<setting name="enable_rights" field="checkbox" default="1">

@@ -4,9 +4,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Hinweis"
-NoteToolBrowserComponent = "Hinweise durchsuchen"
+BrowserComponent = "Hinweise durchsuchen"
 DeleteSelected = "Ausgewählten Hinweis löschen"
-NoteToolViewerComponent = "Hinweis ansehen"
-NoteToolIntroductionPublisherComponent = "Einleitung veröffentlichen"
-NoteToolPublisherComponent = "Hinweis veröffentlichen"
-NoteToolUpdaterComponent = "Hinweis bearbeiten"
+ViewerComponent = "Hinweis ansehen"
+IntroductionPublisherComponent = "Einleitung veröffentlichen"
+PublisherComponent = "Hinweis veröffentlichen"
+UpdaterComponent = "Hinweis bearbeiten"

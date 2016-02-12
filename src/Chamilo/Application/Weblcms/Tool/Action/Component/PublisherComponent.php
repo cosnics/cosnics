@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  *
  * @package application.lib.weblcms.tool.announcement.component
  */
-class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, DelegateComponent
 {
 
     public function run()

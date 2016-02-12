@@ -3,10 +3,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Compone
 
 use Chamilo\Application\Weblcms\Course\Interfaces\CourseSubManagerSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  *
  * @package application.lib.weblcms.tool.course_settings.component
  */
-class UpdaterComponent extends Manager implements DelegateComponent, CourseSubManagerSupport
+class UpdaterComponent extends Manager implements CourseSubManagerSupport
 {
 
     public function run()

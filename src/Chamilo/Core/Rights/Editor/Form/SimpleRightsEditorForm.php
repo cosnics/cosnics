@@ -208,13 +208,14 @@ class SimpleRightsEditorForm extends FormValidator
             'style_submit_button',
             self :: PROPERTY_SUBMIT,
             Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive update'));
+            null,
+            null,
+            'arrow-right');
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             self :: PROPERTY_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, self :: PROPERTY_BUTTONS, null, '&nbsp;', false);
 
