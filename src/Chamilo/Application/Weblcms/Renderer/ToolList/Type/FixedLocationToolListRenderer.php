@@ -318,17 +318,32 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $parent = $this->get_parent();
         $publications = $this->get_publication_links();
 
-        $table = new HTML_Table('style="width: 100%;"');
-        $table->setColCount($this->number_of_columns);
-        $count = 0;
-
         if ($publications->size() == 0)
         {
             $html[] = '<div class="alert alert-info">' . Translation :: get('NoLinksAvailable') . '</div>';
         }
 
+        $columnClass = $this->number_of_columns == 2 ? 'col-md-6 col-sm-12' : 'col-md-4 col-sm-12';
+
+        $count = 0;
+
+        $html = array();
+
+        if($count % $this->number_of_columns == 0)
+        {
+            $html[] = '<div class="row">';
+        }
+
         while ($publication = $publications->next_result())
         {
+            if($count > 0 && $count % $this->number_of_columns  == 0)
+            {
+                $html[] = '</div>';
+                $html[] = '<div class="row">';
+            }
+
+            $html[] = '<div class="' . $columnClass . ' tool-link">';
+
             if ($publication->is_hidden() == 0)
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_HIDE_PUBLICATION;
@@ -345,15 +360,16 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             }
 
             $title = htmlspecialchars($publication->get_content_object()->get_title());
-            $row = $count / $this->number_of_columns;
-            $col = $count % $this->number_of_columns;
-            $cell_contents = array();
+
+
             if ($parent->is_allowed(WeblcmsRights :: EDIT_RIGHT) || $publication->is_visible_for_target_users())
             {
+                $html[] = '<div class="tool-link-actions">';
+
                 // Show visibility-icon
                 if ($parent->is_allowed(WeblcmsRights :: EDIT_RIGHT))
                 {
-                    $cell_contents[] = '<a href="' .
+                    $html[] = '<a href="' .
                          $parent->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $lcms_action,
@@ -365,7 +381,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 // Show delete-icon
                 if ($parent->is_allowed(WeblcmsRights :: DELETE_RIGHT))
                 {
-                    $cell_contents[] = '<a href="' .
+                    $html[] = '<a href="' .
                          $parent->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
@@ -373,7 +389,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                          '"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Delete') .
                          '" style="vertical-align: middle;" alt=""/></a>';
                 }
-                $cell_contents[] = '&nbsp;&nbsp;&nbsp;';
+
+                $html[] = '</div>';
                 // Show tool-icon + name
 
                 if ($publication->get_tool() ==
@@ -399,22 +416,19 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     $target = '';
                 }
 
-                $cell_contents[] = '<a href="' . $url . '"' . $target . $link_class . '>';
-                $cell_contents[] = '<img src="' . Theme :: getInstance()->getImagePath(
+                $html[] = '<a href="' . $url . '"' . $target . $link_class . '>';
+                $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
                     \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool()),
-                    'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
-                     Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
-                $cell_contents[] = '&nbsp;';
-                $cell_contents[] = $title;
-                $cell_contents[] = '</a>';
+                    'Logo/' . $tool_image) . '" class="tool-link-image" />' . $title;
+                $html[] = '</a>';
 
-                $table->setCellContents($row, $col, implode(PHP_EOL, $cell_contents));
-                $table->updateColAttributes($col, 'style="width: ' . floor(100 / $this->number_of_columns) . '%;"');
                 $count ++;
             }
+
+            $html[] = '</div>';
         }
 
-        $html[] = $table->toHtml();
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
