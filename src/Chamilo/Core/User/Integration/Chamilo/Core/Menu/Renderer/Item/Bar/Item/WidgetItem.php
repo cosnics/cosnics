@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Configuration\Configuration;
 
 /**
@@ -84,10 +84,9 @@ class WidgetItem extends Bar
         $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         $selected = $this->isSelected();
 
-        $html[] = '<ul>';
-
-        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
-        $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' . $this->getAccountUrl() . '">';
+        $html[] = '<li class="dropdown chamilo-account-menu-item">';
+        $html[] = '<a href="' . $this->getAccountUrl() .
+             '" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         if ($this->getItem()->show_icon())
         {
@@ -103,14 +102,19 @@ class WidgetItem extends Bar
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                     \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->getMenuRenderer()->get_user()->get_id()));
 
-            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account" src="' . $profilePhotoUrl->getUrl() . '" title="' .
-                 $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account" src="' .
+                 $profilePhotoUrl->getUrl() . '" title="' . $title . '" alt="' . $title . '" />';
+
+            // $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account"
+        // src="https://chamilo.hogent.be/application/bamaflex/php/webservices/foto_call.class.php?user_id=7638"
+        // title="' .
+            // $title . '" alt="' . $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="chamilo-menu-item-label' . ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title .
-                 '</div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
         $html[] = '</a>';
@@ -123,6 +127,10 @@ class WidgetItem extends Bar
                 \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
 
         $profileHtml = array();
+
+        $profileHtml[] = '<ul class="dropdown-menu">';
+        $profileHtml[] = '<li>';
+        // $profileHtml[] = '<a href="#">';
 
         $profileHtml[] = '<div class="chamilo-menu-item-account">';
         $profileHtml[] = '<div class="chamilo-menu-item-account-photo">';
@@ -186,10 +194,13 @@ class WidgetItem extends Bar
 
         $profileHtml[] = '<div class="clear"></div>';
 
+        // $profileHtml[] = '</a>';
+        $profileHtml[] = '</li>';
+        $profileHtml[] = '</ul>';
+
         $html[] = implode(PHP_EOL, $profileHtml);
 
         $html[] = '</li>';
-        $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
     }

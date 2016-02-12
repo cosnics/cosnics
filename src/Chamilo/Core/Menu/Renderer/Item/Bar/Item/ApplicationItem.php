@@ -40,14 +40,14 @@ class ApplicationItem extends Bar
             $url = 'index.php?application=' . $this->getItem()->get_application();
         }
 
-        if ($this->isSelected())
-        {
-            $class = 'class="chamilo-menu-item-current" ';
-        }
-        else
-        {
-            $class = '';
-        }
+        // if ($this->isSelected())
+        // {
+        // $class = 'class="chamilo-menu-item-current" ';
+        // }
+        // else
+        // {
+        // $class = '';
+        // }
 
         $html = array();
 
@@ -60,7 +60,7 @@ class ApplicationItem extends Bar
             $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         }
 
-        $html[] = '<a ' . $class . 'href="' . $url . '">';
+        $html[] = '<a href="' . $url . '">';
 
         if ($this->getItem()->show_icon())
         {

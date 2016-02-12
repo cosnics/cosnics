@@ -65,7 +65,7 @@ class CategoryItem extends Bar
 
         if ($this->getItem()->has_children())
         {
-            $sub_html[] = '<ul>';
+            $sub_html[] = '<ul class="dropdown-menu">';
 
             $entities = array();
             $entities[] = new UserEntity();
@@ -75,7 +75,7 @@ class CategoryItem extends Bar
             {
                 if (($child->get_id() && Rights :: get_instance()->is_allowed(
                     Rights :: VIEW_RIGHT,
-                    Manager::context(),
+                    Manager :: context(),
                     null,
                     $entities,
                     $child->get_id(),
@@ -89,15 +89,12 @@ class CategoryItem extends Bar
             }
 
             $sub_html[] = '</ul>';
-            $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
         }
 
         $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
 
-        $html[] = '<ul>';
-
-        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
-        $html[] = '<a ' . ($selected ? ' class="chamilo-menu-item-current"' : '') . 'href="#">';
+        $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
+        $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         if ($this->getItem()->show_icon())
         {
@@ -115,13 +112,10 @@ class CategoryItem extends Bar
                  ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
-        $html[] = '<!--[if IE 7]><!--></a><!--<![endif]-->';
-        $html[] = '<!--[if lte IE 6]><table><tr><td><![endif]-->';
-
+        $html[] = '</a>';
         $html[] = implode(PHP_EOL, $sub_html);
 
         $html[] = '</li>';
-        $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
     }

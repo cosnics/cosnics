@@ -15,7 +15,6 @@ class SettingsConnector
         $translator = Translation :: getInstance();
 
         return array(
-            Renderer :: TYPE_BAR => $translator->getTranslation('MenuBar', null, Manager :: context()),
-            Renderer :: TYPE_BOOTSTRAP_BAR => $translator->getTranslation('MenuBootstrapBar', null, Manager :: context()));
+            Renderer :: TYPE_BAR => $translator->getTranslation('MenuBootstrapBar', null, Manager :: context()));
     }
 }

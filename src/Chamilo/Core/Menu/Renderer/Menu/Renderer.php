@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Renderer\Menu;
 
 use Chamilo\Core\Menu\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,9 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 abstract class Renderer
 {
-    const TYPE_BAR = 'bar';
-    const TYPE_SITE_MAP = 'site_map';
-    const TYPE_BOOTSTRAP_BAR = 'bootstrap_bar';
+    const TYPE_SITE_MAP = 'SiteMap';
+    const TYPE_BAR = 'Bar';
 
     /**
      *
@@ -76,7 +74,7 @@ abstract class Renderer
      */
     public static function factory($type, Request $request, $user)
     {
-        $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize();
+        $class = __NAMESPACE__ . '\Type\\' . $type;
         return new $class($request, $user);
     }
 
