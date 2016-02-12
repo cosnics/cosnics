@@ -167,6 +167,9 @@ class Header
         $parameters[ResourceUtilities :: PARAM_THEME] = $theme;
         $parameters[ResourceUtilities :: PARAM_SERVER_TYPE] = $server_type;
 
+        $this->addHtmlHeader('<meta charset="utf-8">');
+        $this->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
+        $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
         $parameters[ResourceUtilities :: PARAM_TYPE] = 'css';
