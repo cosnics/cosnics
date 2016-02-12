@@ -194,6 +194,16 @@ class ConfigurationForm extends FormValidator
                                 $context),
                             ($setting['required'] == 'true'));
                     }
+                    elseif ($setting['field'] == 'image_uploader')
+                    {
+                        $this->addImageUploader(
+                            $name,
+                            Translation :: get(
+                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                null,
+                                $context),
+                            ($setting['required'] == 'true'));
+                    }
                     elseif ($setting['field'] == 'password')
                     {
                         $this->add_password(
