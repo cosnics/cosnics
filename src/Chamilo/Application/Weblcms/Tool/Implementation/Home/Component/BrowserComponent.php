@@ -19,18 +19,17 @@ class BrowserComponent extends Manager
 
         $html = array();
 
+        $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_FIXED, $this, $tools);
+
+        $html[] = $this->render_header($tools, $intro_text_allowed);
+
         if ($intro_text_allowed)
         {
-            $html[] = $this->render_header($tools, true);
             $html[] = $this->display_introduction_text($this->get_introduction_text());
         }
-        else
-        {
-            $html[] = $this->render_header($tools);
-        }
 
-        $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_FIXED, $this, $tools);
         $html[] = $renderer->toHtml();
+
         $html[] = '</div>';
         $html[] = $this->render_footer();
 
