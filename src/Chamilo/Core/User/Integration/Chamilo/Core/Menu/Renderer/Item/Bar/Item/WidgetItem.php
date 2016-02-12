@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\User\Manager;
@@ -17,7 +17,7 @@ use Chamilo\Configuration\Configuration;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class WidgetItem extends BootstrapBar
+class WidgetItem extends Bar
 {
 
     public function isItemSelected()
@@ -84,9 +84,9 @@ class WidgetItem extends BootstrapBar
         $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
         $selected = $this->isSelected();
 
-
         $html[] = '<li class="dropdown chamilo-account-menu-item">';
-        $html[] = '<a href="' . $this->getAccountUrl() . '" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = '<a href="' . $this->getAccountUrl() .
+             '" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         if ($this->getItem()->show_icon())
         {
@@ -102,17 +102,19 @@ class WidgetItem extends BootstrapBar
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                     \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->getMenuRenderer()->get_user()->get_id()));
 
-            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account" src="' . $profilePhotoUrl->getUrl() . '" title="' .
-                 $title . '" alt="' . $title . '" />';
+            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account" src="' .
+                 $profilePhotoUrl->getUrl() . '" title="' . $title . '" alt="' . $title . '" />';
 
-//            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account" src="https://chamilo.hogent.be/application/bamaflex/php/webservices/foto_call.class.php?user_id=7638" title="' .
-//                $title . '" alt="' . $title . '" />';
+            // $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account"
+        // src="https://chamilo.hogent.be/application/bamaflex/php/webservices/foto_call.class.php?user_id=7638"
+        // title="' .
+            // $title . '" alt="' . $title . '" />';
         }
 
         if ($this->getItem()->show_title())
         {
-            $html[] = '<div class="chamilo-menu-item-label' . ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title .
-                 '</div>';
+            $html[] = '<div class="chamilo-menu-item-label' .
+                 ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
         $html[] = '</a>';
@@ -126,10 +128,9 @@ class WidgetItem extends BootstrapBar
 
         $profileHtml = array();
 
-
         $profileHtml[] = '<ul class="dropdown-menu">';
         $profileHtml[] = '<li>';
-//        $profileHtml[] = '<a href="#">';
+        // $profileHtml[] = '<a href="#">';
 
         $profileHtml[] = '<div class="chamilo-menu-item-account">';
         $profileHtml[] = '<div class="chamilo-menu-item-account-photo">';
@@ -193,7 +194,7 @@ class WidgetItem extends BootstrapBar
 
         $profileHtml[] = '<div class="clear"></div>';
 
-//        $profileHtml[] = '</a>';
+        // $profileHtml[] = '</a>';
         $profileHtml[] = '</li>';
         $profileHtml[] = '</ul>';
 

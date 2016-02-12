@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Theme;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class WorkspaceConfigureItem extends BootstrapBar
+class WorkspaceConfigureItem extends Bar
 {
 
     public function isItemSelected()

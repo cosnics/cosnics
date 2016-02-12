@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Manager;
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Menu\Rights;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
@@ -18,7 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CategoryItem extends BootstrapBar
+class CategoryItem extends Bar
 {
 
     /**
@@ -124,10 +124,10 @@ class CategoryItem extends BootstrapBar
      *
      * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @return \Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar
+     * @return \Chamilo\Core\Menu\Renderer\Item\Bar\Bar
      */
     public function getItemRenderer(\Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer, Item $item,
-        \Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar $parentRenderer)
+        \Chamilo\Core\Menu\Renderer\Item\Bar\Bar $parentRenderer)
     {
         if (! isset($this->itemRenderers[$item->get_id()]))
         {

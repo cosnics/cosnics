@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 
@@ -12,7 +12,7 @@ use Chamilo\Libraries\File\Redirect;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class LanguageItem extends BootstrapBar
+class LanguageItem extends Bar
 {
 
     public function isItemSelected()

@@ -12,9 +12,9 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BootstrapBar extends Renderer
+class Bar extends Renderer
 {
-    const TYPE = 'BootstrapBar';
+    const TYPE = 'Bar';
 
     public function display_menu_header()
     {

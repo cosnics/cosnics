@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\BootstrapBar\MenuItem;
+use Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\MenuItem;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\User\Manager;

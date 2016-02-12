@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item;
+namespace Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\BootstrapBar;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ApplicationItem extends BootstrapBar
+class ApplicationItem extends Bar
 {
 
     public function isItemSelected()
@@ -40,14 +40,14 @@ class ApplicationItem extends BootstrapBar
             $url = 'index.php?application=' . $this->getItem()->get_application();
         }
 
-//        if ($this->isSelected())
-//        {
-//            $class = 'class="chamilo-menu-item-current" ';
-//        }
-//        else
-//        {
-//            $class = '';
-//        }
+        // if ($this->isSelected())
+        // {
+        // $class = 'class="chamilo-menu-item-current" ';
+        // }
+        // else
+        // {
+        // $class = '';
+        // }
 
         $html = array();
 
