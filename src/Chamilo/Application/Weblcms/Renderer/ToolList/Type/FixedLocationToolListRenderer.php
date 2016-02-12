@@ -320,7 +320,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         if ($publications->size() == 0)
         {
-            $html[] = '<div class="alert alert-info">' . Translation :: get('NoLinksAvailable') . '</div>';
+            return '<div class="alert alert-info">' . Translation :: get('NoLinksAvailable') . '</div>';
         }
 
         $columnClass = $this->number_of_columns == 2 ? 'col-md-6 col-sm-12' : 'col-md-4 col-sm-12';
