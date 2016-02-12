@@ -4,7 +4,10 @@ namespace Chamilo\Application\Survey\Mail\Component;
 use Chamilo\Application\Survey\Mail\Manager;
 use Chamilo\Application\Survey\Mail\Storage\DataClass\Mail;
 use Chamilo\Application\Survey\Mail\Table\MailTable\MailTable;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -28,7 +31,11 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
 
     private $table_type;
 
-    private $action_bar;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     private $publication_id;
 
@@ -40,31 +47,31 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $this->table_type = Request :: get(self :: PARAM_TABLE_TYPE, self :: TAB_MAILS_TO_PARTICIPANTS);
         $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         
-//         if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
-//         {
-//             throw new NotAllowedException();
-//         }
+        // if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
+        // {
+        // throw new NotAllowedException();
+        // }
         
-        $this->action_bar = $this->get_action_bar();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         
         $html = array();
         
         $html[] = $this->render_header();
-        $html[] = $this->action_bar->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->get_tabs_html();
         $html[] = $this->render_footer();
-       
+        
         return implode(PHP_EOL, $html);
     }
 
     function get_tabs_html()
     {
         $html = array();
-       
+        
         $tabs = new DynamicVisualTabsRenderer(self :: class_name());
         
         $params = $this->get_parameters();
-        $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
+        $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MAILS_TO_PARTICIPANTS;
         $tabs->add_tab(
@@ -131,65 +138,54 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         return $condition;
     }
 
-    function get_action_bar()
+    function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        
-        $action_bar->set_search_url($this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
-        
-//         if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
-//         {
-            $action_bar->add_common_action(
-                new ToolbarItem(
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar(
+                $this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
                     Translation :: get('SendMailToParticipants'), 
                     Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
                     $this->get_send_mail_url($this->publication_id, Mail :: PARTICIPANT_TYPE), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            $action_bar->add_common_action(
-                new ToolbarItem(
+            $commonActions->addButton(
+                new Button(
                     Translation :: get('SendMailToExporters'), 
                     Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
                     $this->get_send_mail_url($this->publication_id, Mail :: EXPORT_TYPE), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            $action_bar->add_common_action(
-                new ToolbarItem(
+            $commonActions->addButton(
+                new Button(
                     Translation :: get('SendMailToReporters'), 
                     Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
                     $this->get_send_mail_url($this->publication_id, Mail :: REPORTING_TYPE), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-//         }
-        
-        if ($this->get_user()->is_platform_admin())
-        {
-            $action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('SendTestMail'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
-                    $this->get_url(
-                        array(
-                            self :: PARAM_ACTION => Manager :: ACTION_TEST_MAIL, 
-                            Manager :: PARAM_PUBLICATION_ID => $this->publication_id), 
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL)));
+            
+            if ($this->get_user()->is_platform_admin())
+            {
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('SendTestMail'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
+                        $this->get_url(
+                            array(
+                                self :: PARAM_ACTION => Manager :: ACTION_TEST_MAIL, 
+                                Manager :: PARAM_PUBLICATION_ID => $this->publication_id), 
+                            ToolbarItem :: DISPLAY_ICON_AND_LABEL)));
+            }
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+            
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        return $action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
-
-//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-//     {
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
-//                 Translation :: get('BrowserComponent')));
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
-//                         Manager :: PARAM_PUBLICATION_ID => Request :: get(Manager :: PARAM_PUBLICATION_ID))), 
-//                 Translation :: get('ParticipantBrowserComponent')));
-//     }
 
     public function get_table_condition($object_table_class_name)
     {

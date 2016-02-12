@@ -18,22 +18,16 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 class BrowserComponent extends TabComponent implements TableSupport
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBarRenderer
-     */
-    private $actionBar;
-
     public function build()
     {
         $table = new EntityRelationTable($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -41,8 +35,8 @@ class BrowserComponent extends TabComponent implements TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceEntityRelation :: class_name(),
-                WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID),
+                WorkspaceEntityRelation :: class_name(), 
+                WorkspaceEntityRelation :: PROPERTY_WORKSPACE_ID), 
             new StaticConditionVariable($this->getCurrentWorkspace()->getId()));
     }
 }

@@ -5,7 +5,10 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ContentObject\RecycleBin\RecycleBinTable;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -18,11 +21,17 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: recycle_bin_browser.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib.repository_manager.component
  */
 class RecycleBinBrowserComponent extends Manager implements TableSupport
 {
+
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     /**
      * Runs this component and displays its output.
@@ -32,27 +41,29 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         $trail = BreadcrumbTrail :: get_instance();
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('RecycleBin')));
         $trail->add_help('repository recyclebin');
-
+        
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-
+        
         if (Request :: get(self :: PARAM_EMPTY_RECYCLE_BIN))
         {
             $this->empty_recycle_bin();
             $html[] = $this->display_message(htmlentities(Translation :: get('RecycleBinEmptied')));
         }
-
-        $html[] = $this->get_action_bar()->as_html();
+        
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->display_content_objects();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Display content objects in the recycle bin.
-     *
+     * 
      * @return int The number of content objects currently in the recycle bin.
      */
     private function display_content_objects()
@@ -62,7 +73,8 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * Empty the recycle bin. This function will permanently delete all objects from the recycle bin. Only objects from
+     * Empty the recycle bin.
+     * This function will permanently delete all objects from the recycle bin. Only objects from
      * current user will be deleted.
      */
     private function empty_recycle_bin()
@@ -75,32 +87,40 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
             $object->delete();
             $count ++;
         }
-
+        
         DataClassCountCache :: truncate(ContentObject :: class_name());
-
+        
         return $count;
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('EmptyRecycleBin'),
-                Theme :: getInstance()->getCommonImagePath('Treemenu/Trash'),
-                $this->get_url(array(self :: PARAM_EMPTY_RECYCLE_BIN => 1)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                true));
-
-        return $action_bar;
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('EmptyRecycleBin'), 
+                    Theme :: getInstance()->getCommonImagePath('Treemenu/Trash'), 
+                    $this->get_url(array(self :: PARAM_EMPTY_RECYCLE_BIN => 1)), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL, 
+                    true));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($commonActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)), 
                 Translation :: get('RepositoryManagerBrowserComponent')));
         $breadcrumbtrail->add_help('repository_recycle_bin_browser');
     }

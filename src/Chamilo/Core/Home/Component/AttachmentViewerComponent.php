@@ -21,7 +21,6 @@ use Chamilo\Libraries\Platform\Translation;
 class AttachmentViewerComponent extends Manager
 {
 
-    private $action_bar;
 
     public function run()
     {

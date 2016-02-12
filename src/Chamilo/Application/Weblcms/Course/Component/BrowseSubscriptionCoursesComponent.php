@@ -30,10 +30,10 @@ abstract class BrowseSubscriptionCoursesComponent extends BrowseComponent
     /**
      * Creates and returns the action bar
      * 
-     * @return \libraries\format\ActionBarRenderer
+     * @return ButtonToolBarRenderer
      */
-    protected function build_action_bar()
+    protected function getButtonToolbarRenderer()
     {
-        return $this->build_basic_action_bar();
+        return $this->getButtonToolbarRenderer();
     }
 }

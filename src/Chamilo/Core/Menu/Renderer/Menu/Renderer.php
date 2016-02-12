@@ -33,7 +33,7 @@ abstract class Renderer
 
     /**
      * The layout of the menubar
-     *
+     * 
      * @var String
      */
     protected $html;
@@ -101,7 +101,7 @@ abstract class Renderer
         {
             $this->itemService = new ItemService(new ItemRepository());
         }
-
+        
         return $this->itemService;
     }
 
@@ -112,26 +112,26 @@ abstract class Renderer
 
     /**
      * Renders the menu
-     *
+     * 
      * @return string
      */
     public function render()
     {
         $user = $this->get_user();
-
+        
         if (! $user)
         {
             return;
         }
-
+        
         $userRights = $this->getItemService()->determineRightsForUser($this->get_user());
-
+        
         $html = array();
-
+        
         $html[] = $this->display_menu_header();
-
+        
         $category_items = array();
-
+        
         foreach ($this->getRootItems() as $item)
         {
             if ($userRights[$item->get_id()])
@@ -142,9 +142,9 @@ abstract class Renderer
                 }
             }
         }
-
+        
         $html[] = $this->display_menu_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 

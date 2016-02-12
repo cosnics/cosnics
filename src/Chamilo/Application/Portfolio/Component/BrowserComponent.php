@@ -3,7 +3,10 @@ namespace Chamilo\Application\Portfolio\Component;
 
 use Chamilo\Application\Portfolio\Table\User\UserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -15,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Portfolio browser component, used to browse for other users' portfolio
- *
+ * 
  * @package application\portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -23,45 +26,45 @@ class BrowserComponent extends \Chamilo\Application\Portfolio\Manager implements
 {
 
     /**
-     * The action bar of this browser
      *
-     * @var ActionBarRenderer
+     * @var ButtonToolBarRenderer
      */
-    private $action_bar;
+    private $buttonToolbarRenderer;
 
     public function run()
     {
-        $this->action_bar = $this->get_action_bar();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $table = new UserTable($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->action_bar->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
-    /**
-     * Builds the action bar
-     *
-     * @return ActionBarRenderer
-     */
-    protected function get_action_bar()
+    protected function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('GoBackHome'),
-                Theme :: getInstance()->getCommonImagePath('Action/Home'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_HOME)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-        $action_bar->set_search_url($this->get_url());
-        return $action_bar;
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $commonActions = new ButtonGroup();
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('GoBackHome'), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Home'), 
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_HOME)), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+        
+        return $this->buttonToolbarRenderer;
     }
 
     /*
@@ -70,22 +73,22 @@ class BrowserComponent extends \Chamilo\Application\Portfolio\Manager implements
     public function get_table_condition($table_class_name)
     {
         $conditions = array();
-
-        $searchConditions = $this->action_bar->get_conditions(
+        
+        $searchConditions = $this->buttonToolbarRenderer->getConditions(
             array(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
                 new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE)));
-
+        
         if ($searchConditions)
         {
             $conditions[] = $searchConditions;
         }
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ACTIVE),
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ACTIVE), 
             new StaticConditionVariable(1));
-
+        
         return new AndCondition($conditions);
     }
 }

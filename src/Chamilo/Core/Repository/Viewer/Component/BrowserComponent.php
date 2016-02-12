@@ -211,12 +211,7 @@ class BrowserComponent extends Manager implements TableSupport
             $extra,
             $this->get_types());
 
-        if ($search_url)
-        {
-            $menu->forceCurrentUrl($search_url);
-        }
-
-        return $menu;
+                return $menu;
     }
 
     /**

@@ -6,7 +6,10 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\PersonalInstance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\PlatformInstance;
 use Chamilo\Core\Repository\Instance\Table\Instance\InstanceTable;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -25,7 +28,11 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 class BrowserComponent extends Manager implements TableSupport
 {
 
-    private $action_bar;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     private $type;
 
@@ -35,37 +42,36 @@ class BrowserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
-        $this->action_bar = $this->get_action_bar();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
-
+        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        
         $tabs = new DynamicTabsRenderer('instances');
-
+        
         $tabs->add_tab(
             new DynamicContentTab(
-                'personal_instance',
-                Translation :: get('PersonalInstance'),
-                null,
+                'personal_instance', 
+                Translation :: get('PersonalInstance'), 
+                null, 
                 $this->get_table(PersonalInstance :: class_name())));
-
+        
         if ($this->get_user()->is_platform_admin())
         {
             $tabs->add_tab(
                 new DynamicContentTab(
-                    'platform_instance',
-                    Translation :: get('PlatformInstance'),
-                    null,
+                    'platform_instance', 
+                    Translation :: get('PlatformInstance'), 
+                    null, 
                     $this->get_table(PlatformInstance :: class_name())));
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->action_bar->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $tabs->render();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -73,33 +79,41 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $this->type = $type;
         $table = new InstanceTable($this);
-
+        
         return $table->as_html();
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        $action_bar->set_search_url($this->get_url());
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('AddExternalInstance'),
-                Theme :: getInstance()->getCommonImagePath('Action/Create'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: package()),
-                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        return $action_bar;
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $commonActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('AddExternalInstance'), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: package()), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+        
+        return $this->buttonToolbarRenderer;
     }
 
     /**
@@ -108,27 +122,27 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $query = $this->action_bar->get_query();
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         $conditions = array();
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE),
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE), 
             new StaticConditionVariable($this->type));
-
+        
         if ($this->type == PersonalInstance :: class_name())
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(PersonalInstance :: class_name(), PersonalInstance :: PROPERTY_USER_ID),
+                new PropertyConditionVariable(PersonalInstance :: class_name(), PersonalInstance :: PROPERTY_USER_ID), 
                 new StaticConditionVariable($this->get_user_id()));
         }
-
+        
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TITLE),
+                new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TITLE), 
                 '*' . $query . '*');
         }
-
+        
         return new AndCondition($conditions);
     }
 

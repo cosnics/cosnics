@@ -18,22 +18,16 @@ use Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation;
 class BrowserComponent extends TabComponent implements TableSupport
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBarRenderer
-     */
-    private $actionBar;
-
     public function build()
     {
         $table = new EntityRelationTable($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $table->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -41,8 +35,8 @@ class BrowserComponent extends TabComponent implements TableSupport
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationEntityRelation :: class_name(),
-                PublicationEntityRelation :: PROPERTY_PUBLICATION_ID),
+                PublicationEntityRelation :: class_name(), 
+                PublicationEntityRelation :: PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($this->getCurrentPublication()->getId()));
     }
 }

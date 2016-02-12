@@ -11,8 +11,9 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * Enter description here . ..
- *
+ * Enter description here .
+ * ..
+ * 
  * @author admin
  */
 class StatusViewerComponent extends Manager
@@ -25,53 +26,53 @@ class StatusViewerComponent extends Manager
     {
         if (! $this->is_allowed(self :: EDIT_RIGHT))
             $this->redirect(null, null, array(self :: PARAM_ACTION => self :: ACTION_BROWSE_ATTEMPTS));
-
+        
         $this->publication_id = Request :: get(self :: PARAM_PUBLICATION);
         $this->group_id = Request :: get(self :: PARAM_GROUP);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->render_action_bar();
         $html[] = $this->render_tabs();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     private function render_tabs()
     {
         $groups = $this->get_groups($this->publication_id);
-
+        
         if ($groups)
         {
             $group_id = empty($this->group_id) ? $groups[0]->get_id() : $this->group_id;
-
+            
             $tabs = new DynamicVisualTabsRenderer();
             // loop through the groups
             foreach ($groups as $g)
             {
                 $url = $this->get_url(array(self :: PARAM_GROUP => $g->get_id()));
-
+                
                 $tab = new DynamicVisualTab('tab_' + $g->get_id(), $g->get_name(), null, $url);
-
+                
                 if ($g->get_id() == $group_id)
                 {
                     $tab->set_selected(true);
                     $tabs->set_content('tab');
                     $tabs->set_content($this->render_group($g->get_id()));
                 }
-
+                
                 $tabs->add_tab($tab);
             }
-
+            
             return $tabs->render();
         }
         else
         {
             $this->redirect(
-                Translation :: get('NoGroupsDefined'),
-                1,
+                Translation :: get('NoGroupsDefined'), 
+                1, 
                 array(self :: PARAM_ACTION => self :: ACTION_VIEW_USER_ATTEMPT_STATUS));
         }
     }
@@ -80,64 +81,64 @@ class StatusViewerComponent extends Manager
     {
         $users = $this->get_group_users($group_id);
         $attempts = $this->get_attempts($this->publication_id);
-
+        
         $html = array();
         $html[] = '<table class="data_table" style="width: auto">';
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th>' . Translation :: get('User') . '</th>';
-
+        
         foreach ($attempts as $a)
         {
             $html[] = '<th>' . $a->get_title() . '</th>';
         }
-
+        
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
-
+        
         $r = 0;
-
+        
         foreach ($users as $u)
         {
             $class = ($r ++ % 2) ? 'odd' : 'even';
-
+            
             $html[] = '<tr class="row_' . $class . '">';
             $html[] = '<td style="min-width: 200px">' . $u->get_firstname() . ' ' . $u->get_lastname() . '</td>';
-
+            
             foreach ($attempts as $a)
             {
                 $html[] = '<td style="min-width: 100px">' . $this->render_status($u, $a) . '</td>';
             }
-
+            
             $html[] = '</tr>';
         }
-
+        
         $html[] = '</tbody>';
         $html[] = '</table>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     private function render_status($user, $attempt)
     {
         $status = $this->get_user_attempt_status($user->get_id(), $attempt->get_id());
-
+        
         $html = array();
-
+        
         $html[] = '<div>' . $this->render_progress($status) . '</div>';
         $html[] = '<div>';
         $html[] = $this->render_details_link($status);
         $html[] = $this->render_closed_status($status, $attempt);
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * renders progress depending on type of PA scores/scores and feedback => the progress of the user_attempt_status
      * feedback : ok if there is a user_attempt_status and not ok if not
-     *
+     * 
      * @param type $status
      * @return string
      */
@@ -165,16 +166,16 @@ class StatusViewerComponent extends Manager
     private function render_details_link($status)
     {
         $item = new ToolbarItem(
-            Translation :: get('Details'),
+            Translation :: get('Details'), 
             Theme :: getInstance()->getCommonImagePath(
-                (($status->get_progress() > 0) ? 'Action/Details' : 'Action/DetailsNa')),
+                (($status->get_progress() > 0) ? 'Action/Details' : 'Action/DetailsNa')), 
             $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_USER_STATUS,
-                    self :: PARAM_ATTEMPT => $status->get_attempt_id(),
-                    self :: PARAM_USER => $status->get_user_id())),
+                    self :: PARAM_ACTION => self :: ACTION_VIEW_USER_STATUS, 
+                    self :: PARAM_ATTEMPT => $status->get_attempt_id(), 
+                    self :: PARAM_USER => $status->get_user_id())), 
             ToolbarItem :: DISPLAY_ICON);
-
+        
         return $item->as_html();
     }
 
@@ -185,10 +186,10 @@ class StatusViewerComponent extends Manager
         $item->set_href(
             $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_TOGGLE_CLOSE_USER_ATTEMPT,
-                    self :: PARAM_ATTEMPT => $status->get_attempt_id(),
+                    self :: PARAM_ACTION => self :: ACTION_TOGGLE_CLOSE_USER_ATTEMPT, 
+                    self :: PARAM_ATTEMPT => $status->get_attempt_id(), 
                     self :: PARAM_USER => $status->get_user_id())));
-
+        
         if ($status->get_closed() === null)
         {
             $item->set_label(Translation :: get('StatusOpen') . ' ' . Translation :: get('CloseStatus'));
@@ -211,21 +212,14 @@ class StatusViewerComponent extends Manager
                 $item->set_href(null);
             }
         }
-
+        
         return $item->as_html();
     }
 
     protected function render_action_bar()
     {
-        $action_bar = $this->get_action_bar();
-
-        // $action_bar->add_common_action(
-        // new ToolbarItem(
-        // Translation :: get('ToggleStatus'),
-        // Theme :: getInstance()->getCommonImagePath('action_setting_true_locked'),
-        // $this->get_url(
-        // array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_RESULTS))));
-        //
-        return $action_bar->as_html();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
+        return $this->buttonToolbarRenderer->render();
     }
 }

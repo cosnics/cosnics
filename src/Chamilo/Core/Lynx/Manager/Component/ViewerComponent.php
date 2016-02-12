@@ -5,7 +5,10 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Lynx\Manager\Manager;
 use Chamilo\Core\Lynx\Manager\PackageDisplay;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -16,6 +19,12 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class ViewerComponent extends Manager implements DelegateComponent
 {
+
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     private $context;
 
@@ -28,79 +37,90 @@ class ViewerComponent extends Manager implements DelegateComponent
     {
         $this->context = Request :: get(self :: PARAM_CONTEXT);
         $this->registration = \Chamilo\Configuration\Configuration :: registration($this->context);
-
+        
         BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb(
-                null,
+                null, 
                 Translation :: get(
-                    'ViewingPackage',
+                    'ViewingPackage', 
                     array('PACKAGE' => Translation :: get('TypeName', null, $this->context)))));
-
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
         $display = new PackageDisplay($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->get_action_bar()->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $display->render();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        $registration = $this->get_registration();
-
-        if (! empty($registration))
+        if (! isset($this->buttonToolbarRenderer))
         {
-            if ($registration[Registration :: PROPERTY_STATUS])
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $registration = $this->get_registration();
+            
+            if (! empty($registration))
             {
-                if (! is_subclass_of(
-                    $registration[Registration :: PROPERTY_CONTEXT] . '\Deactivator',
-                    'Chamilo\Configuration\Package\NotAllowed'))
+                if ($registration[Registration :: PROPERTY_STATUS])
                 {
-                    $action_bar->add_common_action(
-                        new ToolbarItem(
-                            Translation :: get('Deactivate', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Deactivate'),
-                            $this->get_url(
-                                array(
-                                    self :: PARAM_ACTION => self :: ACTION_DEACTIVATE,
-                                    self :: PARAM_CONTEXT => $this->context))));
+                    if (! is_subclass_of(
+                        $registration[Registration :: PROPERTY_CONTEXT] . '\Deactivator', 
+                        'Chamilo\Configuration\Package\NotAllowed'))
+                    {
+                        $commonActions->addButton(
+                            new Button(
+                                Translation :: get('Deactivate', array(), Utilities :: COMMON_LIBRARIES), 
+                                Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Deactivate'), 
+                                $this->get_url(
+                                    array(
+                                        self :: PARAM_ACTION => self :: ACTION_DEACTIVATE, 
+                                        self :: PARAM_CONTEXT => $this->context))));
+                    }
+                }
+                else
+                {
+                    if (! is_subclass_of(
+                        $registration[Registration :: PROPERTY_CONTEXT] . '\Activator', 
+                        'Chamilo\Configuration\Package\NotAllowed'))
+                    {
+                        $commonActions->addButton(
+                            new Button(
+                                Translation :: get('Activate', array(), Utilities :: COMMON_LIBRARIES), 
+                                Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Activate'), 
+                                $this->get_url(
+                                    array(
+                                        self :: PARAM_ACTION => self :: ACTION_ACTIVATE, 
+                                        self :: PARAM_CONTEXT => $this->context))));
+                    }
                 }
             }
             else
             {
-                if (! is_subclass_of(
-                    $registration[Registration :: PROPERTY_CONTEXT] . '\Activator',
-                    'Chamilo\Configuration\Package\NotAllowed'))
-                {
-                    $action_bar->add_common_action(
-                        new ToolbarItem(
-                            Translation :: get('Activate', array(), Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Activate'),
-                            $this->get_url(
-                                array(
-                                    self :: PARAM_ACTION => self :: ACTION_ACTIVATE,
-                                    self :: PARAM_CONTEXT => $this->context))));
-                }
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('Install', array(), Utilities :: COMMON_LIBRARIES), 
+                        Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Install'), 
+                        $this->get_url(
+                            array(
+                                self :: PARAM_ACTION => self :: ACTION_INSTALL, 
+                                self :: PARAM_CONTEXT => $this->context)), 
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL, 
+                        true));
             }
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        else
-        {
-            $action_bar->add_common_action(
-                new ToolbarItem(
-                    Translation :: get('Install', array(), Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Manager', 'Action/Install'),
-                    $this->get_url(
-                        array(self :: PARAM_ACTION => self :: ACTION_INSTALL, self :: PARAM_CONTEXT => $this->context)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                    true));
-        }
-
-        return $action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function get_context()

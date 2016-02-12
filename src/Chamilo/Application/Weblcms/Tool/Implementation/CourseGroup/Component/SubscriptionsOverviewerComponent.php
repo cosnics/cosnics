@@ -10,7 +10,10 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\CourseUser\CourseUsersTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\GroupUser\CourseGroupUserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -36,13 +39,17 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     const TAB_COURSE_GROUPS = 2;
     const PLATFORM_GROUP_ROOT_ID = 0;
 
-    private $action_bar;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     private $current_tab;
 
     /**
      * Temporary variable for condition building
-     *
+     * 
      * @var int
      */
     private $table_course_group_id;
@@ -53,77 +60,77 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
+        
         $this->current_tab = self :: TAB_COURSE_GROUPS;
         if (Request :: get(self :: PARAM_TAB))
         {
             $this->current_tab = Request :: get(self :: PARAM_TAB);
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-
+        
         $course_settings_controller = CourseSettingsController :: get_instance();
-
+        
         if ($course_settings_controller->get_course_setting(
-            $this->get_course(),
+            $this->get_course(), 
             \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
         {
             $html[] = $this->display_introduction_text($this->get_introduction_text());
         }
-
-        $this->action_bar = $this->get_action_bar();
-
-        $html[] = $this->action_bar->as_html();
+        
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->get_tabs();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
-
+    
     // **************************************************************************
     // TABS FUNCTIONS
     // **************************************************************************
     /**
      * Creates the tab structure.
-     *
+     * 
      * @return String HTML of the tab(s)
      */
     private function get_tabs()
     {
         $tabs = new DynamicVisualTabsRenderer('weblcms_course_user_browser');
-
+        
         // all tab
         $link = $this->get_url(array(self :: PARAM_TAB => self :: TAB_USERS));
         $tab_name = Translation :: get('User');
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_USERS,
-                $tab_name,
-                Theme :: getInstance()->getCommonImagePath('Place/Users'),
-                $link,
+                self :: TAB_USERS, 
+                $tab_name, 
+                Theme :: getInstance()->getCommonImagePath('Place/Users'), 
+                $link, 
                 $this->current_tab == self :: TAB_USERS));
-
+        
         // users tab
         $link = $this->get_url(array(self :: PARAM_TAB => self :: TAB_COURSE_GROUPS));
         $tab_name = Translation :: get('CourseGroup');
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_COURSE_GROUPS,
-                $tab_name,
-                Theme :: getInstance()->getCommonImagePath('Place/User'),
-                $link,
+                self :: TAB_COURSE_GROUPS, 
+                $tab_name, 
+                Theme :: getInstance()->getCommonImagePath('Place/User'), 
+                $link, 
                 $this->current_tab == self :: TAB_COURSE_GROUPS));
-
+        
         $tabs->set_content($this->get_tabs_content());
-
+        
         return $tabs->render();
     }
 
     /**
      * Creates the content of the selected tab.
-     *
+     * 
      * @return String HTML of the content
      */
     private function get_tabs_content()
@@ -148,35 +155,35 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     private function get_course_groups_tab()
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE),
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE), 
             new StaticConditionVariable($this->get_course_id()));
         $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID),
-            InequalityCondition :: GREATER_THAN,
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID), 
+            InequalityCondition :: GREATER_THAN, 
             new StaticConditionVariable(0));
-
-        $query = $this->action_bar->get_query();
+        
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         $query_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME),
-            '*' . $query . '*',
-            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()),
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME), 
+            '*' . $query . '*', 
+            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()), 
             true);
         $query_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_DESCRIPTION),
-            '*' . $query . '*',
-            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()),
+            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_DESCRIPTION), 
+            '*' . $query . '*', 
+            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()), 
             true);
         $conditions[] = new OrCondition($query_conditions);
-
+        
         $course_groups = DataManager :: retrieves(
-            CourseGroup :: class_name(),
+            CourseGroup :: class_name(), 
             new DataClassRetrievesParameters(new AndCondition($conditions)));
-
+        
         $html_tables = '';
         while ($course_group = $course_groups->next_result())
         {
             $this->table_course_group_id = $course_group->get_id();
-
+            
             $table = new CourseGroupUserTable($this);
             $html_tables = $html_tables . '<h4>' . $course_group->get_name() . '</h4>' . $table->as_html();
         }
@@ -198,29 +205,36 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         return $group;
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        $parameters = array();
-
-        $action_bar->set_search_url($this->get_url($parameters));
-
-        $param_export_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = self :: ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW;
-        $param_export_subscriptions_overview[self :: PARAM_TAB] = $this->current_tab;
-
-        // $show_all_url = $this->get_url();
-
-        if ($this->is_allowed(WeblcmsRights :: VIEW_RIGHT))
+        if (! isset($this->buttonToolbarRenderer))
         {
-            $action_bar->add_common_action(
-                new ToolbarItem(
-                    Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Backup'),
-                    $this->get_url($param_export_subscriptions_overview),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            $parameters = array();
+            
+            $buttonToolbar = new ButtonToolBar($this->get_url($parameters));
+            $commonActions = new ButtonGroup();
+            
+            $param_export_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = self :: ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW;
+            $param_export_subscriptions_overview[self :: PARAM_TAB] = $this->current_tab;
+            
+            // $show_all_url = $this->get_url();
+            
+            if ($this->is_allowed(WeblcmsRights :: VIEW_RIGHT))
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Backup'), 
+                        $this->get_url($param_export_subscriptions_overview), 
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            }
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
-        return $action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function get_condition()
@@ -231,7 +245,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         {
             $conditions[] = $search_condition;
         }
-
+        
         if ($conditions)
         {
             return new AndCondition($conditions);
@@ -241,27 +255,28 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 
     public function get_search_condition()
     {
-        $query = $this->action_bar->get_query();
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        
         if (isset($query) && $query != '')
         {
             if ($this->current_tab == self :: TAB_USERS)
             {
                 $conditions = array();
-
+                
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE), 
                     '*' . $query . '*');
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
                     '*' . $query . '*');
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
                     '*' . $query . '*');
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME), 
                     '*' . $query . '*');
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL),
+                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL), 
                     '*' . $query . '*');
                 return new OrCondition($conditions);
             }
@@ -281,7 +296,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 
     /**
      * Returns the condition
-     *
+     * 
      * @param string $table_class_name
      *
      * @return \libraries\storage\Condition

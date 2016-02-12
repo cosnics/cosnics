@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display;
 
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -12,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * Enter description here .
  * ..
- *
+ * 
  * @author Renaat De Muynck
  * @method PeerAssessmentDisplaySupport get_parent()
  */
@@ -45,7 +47,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_EXPORT_RESULT = 'ResultExporter';
     const EXPORT_TYPE_EXCEL = 'excel';
     const EXPORT_TYPE_CSV = 'csv';
-
+    
     /**
      *
      * @todo move to proper place
@@ -54,8 +56,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const EDIT_RIGHT = 2;
     const DEFAULT_ACTION = self :: ACTION_VIEW_USER_ATTEMPT_STATUS;
 
-    private $action_bar;
-
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
     // region PeerAssessmentDisplaySupport;
     public function get_settings($publication_id)
     {
@@ -84,7 +89,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Get the groups in which the current user is subscribed
-     *
+     * 
      * @param integer $user_id
      * @return array The groups
      * @deprecated use get_user_group() instead
@@ -92,7 +97,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function get_user_groups($user_id)
     {
         $this->display_warning_message('Deprecated, use get_user_group() instead');
-
+        
         return array($this->get_parent()->get_user_group($user_id));
     }
 
@@ -148,7 +153,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Toggles a user's closed status
-     *
+     * 
      * @param int $user_id
      * @param int $attempt_id
      * @return bool Returns true if closed, false otherwise
@@ -156,7 +161,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function toggle_attempt_status_close($user_id, $attempt_id)
     {
         $status = $this->get_user_attempt_status($user_id, $attempt_id);
-
+        
         if ($status->get_closed() === null)
         {
             return $this->close_user_attempt($user_id, $attempt_id);
@@ -189,7 +194,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * checks if a pa group has scores
-     *
+     * 
      * @param int $group_id
      * @return boolean
      */
@@ -207,9 +212,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         return $this->get_parent()->count_indicators();
     }
-
+    
     // Endregion PeerAssessmentDisplaySupport;
-
+    
     /**
      *
      * @param type $title
@@ -227,11 +232,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         {
             $image = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Logo/22');
         }
-
+        
         $html = array();
-
+        
         $class = $invisible ? ' invisible' : '';
-
+        
         $html[] = '<div class="announcements level_' . $level . '"  style="background-image: url(' . $image . ')">';
         $html[] = '<div class="title' . $class . '">';
         $html[] = $title;
@@ -247,29 +252,30 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<br />';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Gets a reference to the action bar with the default actions already added
-     *
-     * @return ActionBarRenderer Reference to the action bar
+     * 
+     * @return ButtonToolBarRenderer Reference to the action bar
      */
-    protected function get_action_bar()
+    protected function getButtonToolbarRenderer()
     {
-        if (! isset($this->action_bar))
+        if (! isset($this->buttonToolbarRenderer))
         {
-            $this->action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
+            $buttonToolbar = new ButtonToolBar();
+            $toolActions = new ButtonGroup();
+            
             $display_action = Request :: get(self :: PARAM_ACTION);
-
+            
             if (! is_null($display_action))
             {
-                $this->action_bar->add_tool_action(
-                    new ToolbarItem(
-                        Translation :: get('PeerAssessmentComplexDisplayUserAttemptStatusViewerComponent'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('PeerAssessmentComplexDisplayUserAttemptStatusViewerComponent'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
                         $this->get_url(array(self :: PARAM_ACTION => null))));
             }
             if ($this->is_allowed(self :: EDIT_RIGHT))
@@ -278,49 +284,54 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
              * @todo should not be weblcmsright
              */
             {
-
+                
                 if ($display_action != self :: ACTION_OVERVIEW_STATUS)
-                    $this->action_bar->add_tool_action(
-                        new ToolbarItem(
-                            Translation :: get('PeerAssessmentComplexDisplayStatusViewerComponent'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
+                    $toolActions->addButton(
+                        new Button(
+                            Translation :: get('PeerAssessmentComplexDisplayStatusViewerComponent'), 
+                            Theme :: getInstance()->getCommonImagePath('Action/Reporting'), 
                             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_STATUS))));
-
-                $this->action_bar->add_tool_action(
-                    new ToolbarItem(
-                        Translation :: get('ToolComplexBuilder'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Build'),
+                
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('ToolComplexBuilder'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Build'), 
                         $this->get_url($this->get_builder_params())));
             }
-
+            
             if ($display_action != self :: ACTION_OVERVIEW_RESULTS)
-                $this->action_bar->add_tool_action(
-                    new ToolbarItem(
-                        Translation :: get('PeerAssessmentComplexDisplayResultsViewerComponent'),
-                        Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('PeerAssessmentComplexDisplayResultsViewerComponent'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/ViewResults'), 
                         $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_RESULTS))));
             $settings = $this->get_settings($this->get_publication_id());
-
+            
             if ($display_action != self :: ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE &&
                  $settings->get_direct_subscribe_available())
-                $this->action_bar->add_tool_action(
-                    new ToolbarItem(
-                        Translation :: get('PeerAssessmentComplexDisplayDirectGroupSubscribeBrowserComponent'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Group'),
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('PeerAssessmentComplexDisplayDirectGroupSubscribeBrowserComponent'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Group'), 
                         $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE))));
-
-            return $this->action_bar;
+            
+            $buttonToolbar->addButtonGroup($toolActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
+        
+        return $this->buttonToolbarRenderer;
     }
 
     /**
      * Renders the action bar
-     *
+     * 
      * @return string The html representation of the action bar
      */
     protected function render_action_bar()
     {
-        return $this->get_action_bar()->as_html();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
+        return $this->buttonToolbarRenderer->render();
     }
 
     function get_application_component_path()
@@ -407,10 +418,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $peer_assessment = $this->get_root_content_object();
-
+        
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_USER_ATTEMPT_STATUS)),
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_USER_ATTEMPT_STATUS)), 
                 $peer_assessment->get_title()));
     }
 
