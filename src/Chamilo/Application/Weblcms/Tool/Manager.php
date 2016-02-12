@@ -295,6 +295,20 @@ abstract class Manager extends Application
             $shortcuts_visible = true;
         }
 
+        if ($tool_shortcut && count($tools) > 0)
+        {
+            $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_SHORTCUT, $this, $tools);
+            $html[] = '<div class="pull-right" style="margin-top: -30px;">';
+            $html[] = $renderer->toHtml();
+            $html[] = '</div>';
+        }
+
+        if ($shortcuts_visible)
+        {
+            $html[] = '<div class="clear"></div>';
+            $html[] = '</div>';
+        }
+
         $toolbar = new Toolbar();
 
         $is_subscribed = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: is_subscribed(
@@ -340,20 +354,6 @@ abstract class Manager extends Application
         {
             $html[] = '<div class="home_actions">';
             $html[] = $toolbar->as_html();
-            $html[] = '</div>';
-        }
-
-        if ($tool_shortcut && count($tools) > 0)
-        {
-            $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_SHORTCUT, $this, $tools);
-            $html[] = '<div class="pull-right" style="margin-top: -30px;">';
-            $html[] = $renderer->toHtml();
-            $html[] = '</div>';
-        }
-
-        if ($shortcuts_visible)
-        {
-            $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
         }
 

@@ -39,6 +39,7 @@ use HTML_Table;
  */
 class FixedLocationToolListRenderer extends ToolListRenderer
 {
+    const PARAM_SELECTED_TAB = 'section';
 
     /**
      * The available number of columns
@@ -150,6 +151,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         {
             $sec_name = $section->get_type() == CourseSection :: TYPE_CUSTOM ? $section->get_name() : Translation :: get(
                 $section->get_name());
+
             if (! $section->is_visible())
             {
                 if (! $this->is_course_admin)
@@ -163,53 +165,47 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 }
             }
 
-            if ($section->get_type() == CourseSection :: TYPE_LINK)
+            if ($section->get_type() == CourseSection :: TYPE_DISABLED && ($course_tool_layout < 3 ||
+                    ! $this->is_course_admin))
             {
-                if ($this->get_publication_links()->size() > 0)
-                {
-                    $content = $this->show_links($section);
-                    $tabs->add_tab(new DynamicContentTab($section->get_id(), $sec_name, null, $content));
+                continue;
+            }
 
-                    $active = '';
-                    $html[] = '<li role="presentation" class="' . $active . '"><a href="';
-                    $html[] = '#';
-                    $html[] = '">' . $sec_name . '</a></li>';
-                }
+            if ($section->get_type() == CourseSection :: TYPE_ADMIN && ! $this->is_course_admin)
+            {
+                continue;
+            }
+
+            $selectedTab = $this->get_parent()->getRequest()->get(self::PARAM_SELECTED_TAB);
+            if(isset($selectedTab) && $section->getId() == $selectedTab || !isset($selectedTab) && $section->get_type() == CourseSection::TYPE_TOOL)
+            {
+                $active = 'active';
             }
             else
             {
-                if ($section->get_type() == CourseSection :: TYPE_DISABLED && ($course_tool_layout < 3 ||
-                     ! $this->is_course_admin))
+                $active = '';
+            }
+
+            $url = $this->get_parent()->get_url(array(self::PARAM_SELECTED_TAB => $section->get_id()));
+
+            $html[] = '<li role="presentation" class="' . $active . '"><a href="';
+            $html[] = $url;
+            $html[] = '">' . $sec_name . '</a></li>';
+
+
+            if($section->getId() == $selectedTab || !isset($selectedTab) && $section->get_type() == CourseSection::TYPE_TOOL)
+            {
+                if ($section->get_type() == CourseSection :: TYPE_LINK)
                 {
-                    continue;
+                    $content = $this->show_links($section);
                 }
-
-                if ($section->get_type() == CourseSection :: TYPE_ADMIN && ! $this->is_course_admin)
+                else
                 {
-                    continue;
-                }
 
-                if (($section->is_visible() && (count($tools[$section->get_id()]) > 0)) || $this->is_course_admin)
-                {
-                    if($sec_name == 'Tools')
-                    {
-                        $active = 'active';
-
-                        $content = $this->display_block_header($section, $sec_name);
-                        $content .= $this->show_section_tools($section, $tools[$section->get_id()]);
-                        $content .= $this->display_block_footer($section);
-                    }
-                    else
-                    {
-                        $active = '';
-                    }
-
-                    $tabs->add_tab(new DynamicContentTab($section->get_id(), $sec_name, null, $content));
-
-                    $html[] = '<li role="presentation" class="' . $active . '"><a href="';
-                    $html[] = '#';
-                    $html[] = '">' . $sec_name . '</a></li>';
-
+                    $content = $this->display_block_header($section, $sec_name);
+                    $content .= $this->show_section_tools($section, $tools[$section->get_id()]);
+                    $content .= $this->display_block_footer($section);
+                    //                if (($section->is_visible() && (count($tools[$section->get_id()]) > 0)) || $this->is_course_admin)
                 }
             }
         }
