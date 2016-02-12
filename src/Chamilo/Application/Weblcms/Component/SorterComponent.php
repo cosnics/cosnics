@@ -62,7 +62,7 @@ class SorterComponent extends Manager
             $this->get_user_id());
         DataManager :: fix_course_type_user_category_rel_course_for_user($this->get_user_id());
         
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+//        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $component_action = Request :: get(self :: PARAM_COMPONENT_ACTION);
         $this->set_parameter(self :: PARAM_COMPONENT_ACTION, $component_action);
         
@@ -419,11 +419,11 @@ class SorterComponent extends Manager
     public function show_course_list()
     {
         $renderer = new CourseTypeCourseListRenderer($this);
-        
+
         $html = array();
         
         $html[] = $this->display_page_header();
-        $html[] = $this->get_actionbar($renderer)->as_html();
+        $html[] = $this->getButtonToolbarRenderer($renderer)->render();
         $html[] = '<div class="clear"></div><br />';
         $html[] = $renderer->as_html();
         $html[] = $this->render_footer();
@@ -438,7 +438,7 @@ class SorterComponent extends Manager
      *
      * @return ButtonToolBarRenderer
      */
-    public function getButtonToolbarRenderer(CourseTypeCourseListRenderer $renderer)
+    public function getButtonToolbarRenderer(CourseTypeCourseListRenderer $renderer = null)
     {
         if (! isset($this->buttonToolbarRenderer))
         {
