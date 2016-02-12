@@ -441,3 +441,9 @@ table tr td.column_tool_title {
 .course-list-tab-content .list-group-header .list-group-item-heading {
 	margin-bottom: 0;
 }
+
+.course-list-tab-content .list-group-item.invisible-course .list-group-item-heading,
+.course-list-tab-content .list-group-item.invisible-course .list-group-item-heading a,
+.course-list-tab-content .list-group-item.invisible-course .list-group-item-text {
+	color: #999999;
+}
