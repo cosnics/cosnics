@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_numeric_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Question à correspondance numérique"
+PossibleAnswer = "Réponse possible"
+Tolerance = "Tolérance"
+Options = "Options"
+ToleranceType = "Type de tolérance"
+AddItem = "Ajouter une réponse"
+Feedback = "Avis"
+Score = "Score"
+Answer = "Réponse"
+Comment = "Commentaire"
+Weight = "Poids"
+Absolute = "Absolu"
+Relative = "Relatif"
+Title = "Titre"
+Description = "Description"
+Properties = "Propriétés"
+Hint = "Aide"
