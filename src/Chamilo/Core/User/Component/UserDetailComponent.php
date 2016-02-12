@@ -58,7 +58,7 @@ class UserDetailComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = buttonToolbarRenderer->render() . '<br />';
+            $html[] = $this->buttonToolbarRenderer->render() . '<br />';
             $html[] = $this->display_user_info($user);
             $html[] = '<br />';
             $html[] = $this->display_groups($user);
@@ -236,42 +236,42 @@ class UserDetailComponent extends Manager
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
-            
+
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
-                    $this->get_user_editing_url($user), 
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                    $this->get_user_editing_url($user),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            
+
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
-                    $this->get_user_delete_url($user), 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                    $this->get_user_delete_url($user),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            
+
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ViewQuota'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation :: get('ViewQuota'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(
-                        array(self :: PARAM_ACTION => self :: ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())), 
+                        array(self :: PARAM_ACTION => self :: ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            
+
             $toolActions->addButton(
                 new Button(
-                    Translation :: get('LoginAsUser'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Login'), 
-                    $this->get_change_user_url($user), 
+                    Translation :: get('LoginAsUser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Login'),
+                    $this->get_change_user_url($user),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            
+
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
-            
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        
+
         return $this->buttonToolbarRenderer;
     }
 

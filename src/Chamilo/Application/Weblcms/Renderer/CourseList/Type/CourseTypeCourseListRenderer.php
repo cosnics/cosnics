@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Renderer\CourseList\Type;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
@@ -14,7 +14,6 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -278,7 +277,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $html[] = '</div>';
 
             return implode(PHP_EOL, $html);
-            //return $course_tabs->render();
+            // return $course_tabs->render();
         }
         else
         {
@@ -304,13 +303,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         $count = 0;
         $size = $course_type_user_categories->size();
 
-
         while ($course_type_user_category = $course_type_user_categories->next_result())
         {
             $html[] = $this->display_course_user_category($course_type_user_category, $count, $size);
             $count ++;
         }
-
 
         $html[] = '</div>';
 
@@ -340,7 +337,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $course_type_user_category_id = 0;
         }
 
-//        $html[] = '<div id="course_user_category_' . $course_type_user_category_id . '">';
+        // $html[] = '<div id="course_user_category_' . $course_type_user_category_id . '">';
 
         if ($title)
         {
@@ -367,7 +364,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $html[] = $this->display_courses_for_course_type_user_category($course_type_user_category);
         }
 
-//        $html[] = '</div>';
+        // $html[] = '</div>';
 
         return implode($html, "\n");
     }
@@ -525,8 +522,8 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     if (! $course_visible)
                     {
                         $html[] = '<p class="list-group-item-text"><span class="label label-warning">' .
-                            Translation::getInstance()->getTranslation('Invisible', null, Manager::context()) .
-                            '</span></p>';
+                             Translation :: getInstance()->getTranslation('Invisible', null, Manager :: context()) .
+                             '</span></p>';
                     }
 
                     $html[] = '</li>';
