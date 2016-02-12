@@ -259,7 +259,7 @@ class Header
         {
             $banner = new Banner($this->getApplication(), $this->getViewMode());
 
-            $html[] = $banner->toHtml();
+            $html[] = $banner->render();
         }
 
         $html[] = '<div class="container-fluid">';

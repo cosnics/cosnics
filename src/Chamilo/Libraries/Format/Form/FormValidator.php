@@ -68,7 +68,8 @@ class FormValidator extends HTML_QuickForm
         // Load some custom elements and rules
         $dir = __DIR__ . '/';
 
-        $this->registerElementType('radio',
+        $this->registerElementType(
+            'radio',
             $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
             'HTML_QuickForm_bootstrap_radio');
 
@@ -1220,5 +1221,29 @@ EOT;
             array('class' => 'normal empty'));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    public function addImageUploader($name, $label, $required)
+    {
+        $this->addElement('html', '<div class="image-uploader" id="image-uploader-' . $name . '">');
+        $this->addElement(
+            'hidden',
+            $name,
+            null,
+            ' id="' . $name . '" data-element="' . $name . '" class="image-uploader-data"');
+        $this->addElement(
+            'static',
+            null,
+            $label,
+            '<div class="thumbnail" data-element="' . $name . '"><img class="image-uploader-preview" src="' .
+                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'ImagePlaceholder') . '" /></div>');
+        $this->addElement('file', $name . '-file', null, 'class="image-uploader-file" data-element="' . $name . '"');
+
+        $this->addElement('html', '</div>');
+
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'));
     }
 }

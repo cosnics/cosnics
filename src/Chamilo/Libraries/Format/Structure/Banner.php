@@ -4,22 +4,18 @@ namespace Chamilo\Libraries\Format\Structure;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: banner.class.php 179 2009-11-12 13:51:39Z vanpouckesven $
  *
- * @package common.html
- */
-
-/**
- * Class to display the banner of a HTML-page
+ * @package Chamilo\Libraries\Format\Structure
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Banner
 {
@@ -86,9 +82,9 @@ class Banner
     /**
      * Creates the HTML output for the banner.
      */
-    public function toHtml()
+    public function render()
     {
-        $output = array();
+        $html = array();
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
         {
@@ -109,36 +105,23 @@ class Banner
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_ADMIN_USER));
             $link = $redirect->getUrl();
 
-            $output[] = '<div id="emulator">' .
+            $html[] = '<div id="emulator">' .
                  Translation :: get('LoggedInAsUser', null, \Chamilo\Core\User\Manager :: context()) . ' ' .
                  $this->getApplication()->getUser()->get_fullname() . ' <a href="' . $link . '">' .
                  Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES) . '</a></div>';
         }
 
-        $output[] = '<a name="top"></a>';
-        $output[] = '<div id="header">  <!-- header section start -->';
-        $output[] = '<div id="header1"> <!-- top of banner with institution name/hompage link -->';
-
-        $output[] = '<div class="banner"><a href="' . Path :: getInstance()->getBasePath(true) .
-             'index.php" target="_top"><span class="logo">' . PlatformSetting :: get('site_name', 'Chamilo\Core\Admin') .
-             '</span></a></div>';
+        $html[] = '<a name="top"></a>';
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
             $menuRenderer = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
 
-            $output[] = '<div class="chamilo-menu-container">';
-            $output[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
+            $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
                 $menuRenderer,
                 $this->getApplication()->getRequest(),
                 $this->getApplication()->getUser());
-            $output[] = '<div class="clear">&nbsp;</div>';
-            $output[] = '</div>';
-
-            $output[] = '<div class="clear">&nbsp;</div>';
         }
-
-        $output[] = '</div> <!-- end of #header1 -->';
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
@@ -148,14 +131,11 @@ class Banner
 
                 if ($breadcrumbtrail->size() > 0)
                 {
-                    $output[] = $breadcrumbtrail->render();
+                    $html[] = $breadcrumbtrail->render();
                 }
             }
         }
 
-        $output[] = '<div class="clear">&nbsp;</div>';
-        $output[] = '</div> <!-- end of the whole #header section -->';
-
-        return implode(PHP_EOL, $output);
+        return implode(PHP_EOL, $html);
     }
 }
