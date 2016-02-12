@@ -212,7 +212,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
     {
         $html = array();
 
-        $html[] = '<ul class="nav nav-tabs">';
+        $html[] = '<ul class="nav nav-tabs course-list-tabs">';
 
         $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
         $course_tabs = new DynamicVisualTabsRenderer($renderer_name);
@@ -344,8 +344,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         if ($title)
         {
             $html[] = '<div class="list-group-item list-group-header">';
-            $html[] = '<h5 class="list-group-item-heading">' . $title . '</h5>';
+            $html[] = '<h5 class="list-group-item-heading pull-left">' . $title . '</h5>';
+            $html[] = '<div class="pull-right">';
             $html[] = $this->get_course_type_user_category_actions($course_type_user_category, $offset, $count);
+            $html[] = '</div>';
+            $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
         }
 
@@ -477,7 +480,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         $text_style .= $this->get_invisible_text_style();
                     }
 
-                    $html[] = '<h5 class="list-group-item-heading">';
+                    $html[] = '<h5 class="list-group-item-heading pull-left">';
                     $html[] = $locked;
                     $html[] = ' <a href="' . $url . '">';
                     $html[] = $course->get_title();
@@ -489,6 +492,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     }
 
                     $html[] = '</h5>';
+
+                    $html[] = '<div class="pull-right">';
+                    $html[] = $this->get_course_actions($course_type_user_category, $course, $count, $size);
+                    $html[] = '</div>';
+                    $html[] = '<div class="clearfix"></div>';
 
 //                    $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
 //                        list-style-image: url(' . $icon .
@@ -544,10 +552,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     $html[] = '</li>';
                     $html[] = '</div>';
-                    $html[] = '<div style="float:right; padding-right: 20px;">';
-                    $html[] = $this->get_course_actions($course_type_user_category, $course, $count, $size);
-                    $html[] = '</div>';
-                    $html[] = '<div style="clear: both;"></div>';
 
                     $count ++;
                 }
