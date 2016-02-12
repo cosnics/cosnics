@@ -2,9 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class PublisherComponent extends Manager implements DelegateComponent
+class PublisherComponent extends Manager
 {
 
     public function get_additional_parameters()

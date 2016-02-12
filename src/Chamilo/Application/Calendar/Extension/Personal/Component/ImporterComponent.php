@@ -85,7 +85,9 @@ class ImporterComponent extends Manager
             'style_submit_button',
             'submit',
             Translation :: get('Import', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive import'));
+            null,
+            null,
+            'import');
 
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         return $form;

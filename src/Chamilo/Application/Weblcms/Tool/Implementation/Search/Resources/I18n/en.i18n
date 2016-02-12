@@ -6,6 +6,6 @@
 TypeName = "Search"
 TypeCategory = "Course Tools"
 ResultsFoundFor = "Results found for:"
-SearchToolSearcherComponent = "Search"
+SearcherComponent = "Search"
 SearchResult = "{COUNT} result"
 SearchResults = "{COUNT} results"

@@ -1,8 +1,8 @@
 TypeName = "Peer assessment"
 
-PeerAssessmentToolBrowserComponent = "Doorblader peer assessments"
-PeerAssessmentToolViewerComponent = "Peer assessment"
-PeerAssessmentToolPublisherComponent = "Publiceren"
+BrowserComponent = "Doorblader peer assessments"
+ViewerComponent = "Peer assessment"
+PublisherComponent = "Publiceren"
 PublishPeerAssessment="Publiceer Peer Assessment"
 TypeNameSingle = "Peer assessment"
 AllowSelfSubscribe = "Activeer instelling om zelf in te schrijven"

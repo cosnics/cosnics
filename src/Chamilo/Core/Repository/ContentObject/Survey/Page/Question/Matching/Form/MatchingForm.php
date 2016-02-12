@@ -420,7 +420,7 @@ class MatchingForm extends ContentObjectForm
             'style_button',
             'add_option[]',
             Translation :: get('AddMatchingOption'),
-            array('class' => 'normal add', 'id' => 'add_option'));
+            array('id' => 'add_option'), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();
@@ -517,7 +517,7 @@ class MatchingForm extends ContentObjectForm
             'style_button',
             'add_match[]',
             Translation :: get('AddMatch'),
-            array('class' => 'normal add', 'id' => 'add_match'));
+            array('id' => 'add_match'), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();

@@ -110,16 +110,6 @@ class ConfigurerComponent extends Manager
             $html[] = $tabs->render();
             $html[] = '</div>';
 
-            $html[] = '<script type="text/javascript">';
-            $html[] = '$(document).ready(function() {';
-            $html[] = '$(\':checkbox\').iphoneStyle({ checkedLabel: \'' .
-                 Translation :: get('ConfirmOn', array(), Utilities :: COMMON_LIBRARIES) . '\', uncheckedLabel: \'' . Translation :: get(
-                    'ConfirmOff',
-                    array(),
-                    Utilities :: COMMON_LIBRARIES) . '\'});';
-            $html[] = '});';
-            $html[] = '</script>';
-
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);

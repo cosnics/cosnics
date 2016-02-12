@@ -5,7 +5,10 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\Manager;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -14,9 +17,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 
 class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSelectorSupport
 {

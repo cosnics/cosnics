@@ -66,12 +66,13 @@ class RequestForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive update'));
+            null,
+            null,
+            'arrow-right');
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -84,7 +85,9 @@ class RequestForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Print'),
-            array('class' => 'positive update'));
+            null,
+            null,
+            'arrow-right');
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

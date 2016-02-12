@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -161,6 +163,74 @@ class ContentObjectRelationService
     {
         $workspaceIdentifiers = $this->getWorkspaceIdentifiersForContentObject($contentObject);
         return $workspaceService->getWorkspacesByIdentifiers($workspaceIdentifiers);
+    }
+
+    /**
+     * @param ContentObject $contentObject
+     *
+     * @return int
+     */
+    public function countWorkspacesForContentObject(ContentObject $contentObject)
+    {
+        return count($this->getWorkspaceIdentifiersForContentObject($contentObject));
+    }
+
+    /**
+     * Returns the available workspaces in which a given user can add the given content object
+     *
+     * @param WorkspaceService $workspaceService
+     * @param ContentObject[] $contentObjects
+     * @param User $user
+     * @param int $limit
+     * @param int $offset
+     * @param OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getAvailableWorkspacesForContentObjectsAndUser(
+        WorkspaceService $workspaceService, $contentObjects, User $user,
+        $limit = null, $offset = null, $orderBy = null
+    )
+    {
+        $workspaceIdentifiers = array();
+
+        foreach ($contentObjects as $contentObject)
+        {
+           $workspaceIdentifiers = array_merge(
+               $workspaceIdentifiers, $this->getWorkspaceIdentifiersForContentObject($contentObject)
+           );
+        }
+
+        return $workspaceService->getWorkspacesForUserWithExcludedWorkspaces(
+            $user, RightsService::RIGHT_ADD, $workspaceIdentifiers, $limit, $offset, $orderBy
+        );
+    }
+
+    /**
+     * Returns the available workspaces in which a given user can add the given content object
+     *
+     * @param WorkspaceService $workspaceService
+     * @param ContentObject[] $contentObjects
+     * @param User $user
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function countAvailableWorkspacesForContentObjectsAndUser(
+        WorkspaceService $workspaceService, $contentObjects, User $user
+    )
+    {
+        $workspaceIdentifiers = array();
+
+        foreach ($contentObjects as $contentObject)
+        {
+            $workspaceIdentifiers = array_merge(
+                $workspaceIdentifiers, $this->getWorkspaceIdentifiersForContentObject($contentObject)
+            );
+        }
+
+        return $workspaceService->countWorkspacesForUserWithExcludedWorkspaces(
+            $user, RightsService::RIGHT_ADD, $workspaceIdentifiers
+        );
     }
 
     /**

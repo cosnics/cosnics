@@ -59,6 +59,7 @@ class WorkspaceService
     /**
      *
      * @param integer $identifier
+     *
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
      */
     public function getWorkspaceByIdentifier($identifier)
@@ -69,6 +70,7 @@ class WorkspaceService
     /**
      *
      * @param integer[] $identifiers
+     *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
     public function getWorkspacesByIdentifiers($identifiers)
@@ -80,13 +82,14 @@ class WorkspaceService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $identifier
+     *
      * @return \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     public function determineWorkspaceForUserByIdentifier(User $user, $identifier = null)
     {
-        if (! is_null($identifier))
+        if (!is_null($identifier))
         {
-            if (! is_numeric($identifier))
+            if (!is_numeric($identifier))
             {
                 throw new \InvalidArgumentException();
             }
@@ -102,6 +105,7 @@ class WorkspaceService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Core\Repository\Workspace\PersonalWorkspace
      */
     public function getPersonalWorkspaceForUser(User $user)
@@ -112,6 +116,7 @@ class WorkspaceService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
     public function getWorkspacesByCreator(User $user, $limit, $offset, $orderProperty = null)
@@ -122,9 +127,16 @@ class WorkspaceService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param $right
+     * @param $limit
+     * @param $offset
+     * @param null $orderProperty
+     *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getWorkspacesForUser(User $user, $right = RightsService :: VIEW_RIGHT, $limit, $offset, $orderProperty = null)
+    public function getWorkspacesForUser(
+        User $user, $right = RightsService :: RIGHT_VIEW, $limit, $offset, $orderProperty = null
+    )
     {
         return $this->getWorkspaceRepository()->findWorkspacesForUser(
             $user,
@@ -132,22 +144,73 @@ class WorkspaceService
             $right,
             $limit,
             $offset,
-            $orderProperty);
+            $orderProperty
+        );
+    }
+
+    /**
+     * Finds a list of workspace to which a given user has right with the possibility to exclude workspaces
+     * based on their identifiers
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param $right
+     * @param array $excludedWorkspaceIdentifiers
+     * @param $limit
+     * @param $offset
+     * @param null $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
+     */
+    public function getWorkspacesForUserWithExcludedWorkspaces(
+        User $user, $right = RightsService :: RIGHT_VIEW, $excludedWorkspaceIdentifiers = array(),
+        $limit, $offset, $orderProperty = null
+    )
+    {
+        return $this->getWorkspaceRepository()->findWorkspacesForUserWithExcludedWorkspaces(
+            $user,
+            $this->getEntitiesForUser($user),
+            $right,
+            $excludedWorkspaceIdentifiers,
+            $limit,
+            $offset,
+            $orderProperty
+        );
     }
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return integer
      */
-    public function countWorkspacesForUser(User $user, $right = RightsService :: VIEW_RIGHT)
+    public function countWorkspacesForUser(User $user, $right = RightsService :: RIGHT_VIEW)
     {
         return $this->getWorkspaceRepository()->countWorkspacesForUser($user, $this->getEntitiesForUser($user), $right);
     }
 
     /**
+     * Counts the number of workspaces to which a given user has right with the possibility to exclude workspaces
+     * based on their identifiers
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $right
+     * @param int[] $excludedWorkspaceIdentifiers
+     *
+     * @return int
+     */
+    public function countWorkspacesForUserWithExcludedWorkspaces(
+        User $user, $right = RightsService :: RIGHT_VIEW, $excludedWorkspaceIdentifiers = array()
+    )
+    {
+        return $this->getWorkspaceRepository()->countWorkspacesForUserWithExcludedWorkspaces(
+            $user, $this->getEntitiesForUser($user), $right, $excludedWorkspaceIdentifiers
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return integer
      */
     public function countWorkspacesByCreator(User $user)
@@ -176,6 +239,7 @@ class WorkspaceService
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
     public function getSharedWorkspacesForUser(User $user, $limit, $offset, $orderProperty = null)
@@ -184,12 +248,14 @@ class WorkspaceService
             $this->getEntitiesForUser($user),
             $limit,
             $offset,
-            $orderProperty);
+            $orderProperty
+        );
     }
 
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return integer
      */
     public function countSharedWorkspacesForUser(User $user)
@@ -200,6 +266,7 @@ class WorkspaceService
     /**
      *
      * @param User $user
+     *
      * @return integer[]
      */
     public function getEntitiesForUser(User $user)
@@ -222,6 +289,7 @@ class WorkspaceService
     /**
      *
      * @param string[] $workspaceProperties
+     *
      * @return \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
      */
     public function createWorkspace($workspaceProperties)
@@ -229,7 +297,7 @@ class WorkspaceService
         $workspace = new Workspace();
         $this->setWorkspaceProperties($workspace, $workspaceProperties);
 
-        if (! $workspace->create())
+        if (!$workspace->create())
         {
             return false;
         }
@@ -241,13 +309,14 @@ class WorkspaceService
      *
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
      * @param string[] $workspaceProperties
+     *
      * @return boolean
      */
     public function updateWorkspace(Workspace $workspace, $workspaceProperties)
     {
         $this->setWorkspaceProperties($workspace, $workspaceProperties);
 
-        if (! $workspace->update())
+        if (!$workspace->update())
         {
             return false;
         }
@@ -258,11 +327,12 @@ class WorkspaceService
     /**
      *
      * @param \Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace $workspace
+     *
      * @return boolean
      */
     public function deleteWorkspace(Workspace $workspace)
     {
-        if (! $workspace->delete())
+        if (!$workspace->delete())
         {
             return false;
         }
@@ -287,17 +357,22 @@ class WorkspaceService
      *
      * @param EntityService $entityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
-    public function getWorkspaceFavouritesByUser(EntityService $entityService, User $user, $limit = null, $offset = null,
-        $orderProperty = null)
+    public function getWorkspaceFavouritesByUser(
+        EntityService $entityService, User $user, $limit = null, $offset = null,
+        $orderProperty = null
+    )
     {
         if (is_null($orderProperty))
         {
             $orderProperty = array(
                 new OrderBy(
-                    new PropertyConditionVariable(Workspace :: class_name(), Workspace :: PROPERTY_NAME),
-                    SORT_ASC));
+                    new PropertyConditionVariable(Workspace:: class_name(), Workspace :: PROPERTY_NAME),
+                    SORT_ASC
+                )
+            );
         }
 
         return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUser(
@@ -305,33 +380,38 @@ class WorkspaceService
             $entityService->getEntitiesForUser($user),
             $limit,
             $offset,
-            $orderProperty);
+            $orderProperty
+        );
     }
 
     /**
      *
      * @param EntityService $entityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return integer
      */
     public function countWorkspaceFavouritesByUser(EntityService $entityService, User $user)
     {
         return $this->getWorkspaceRepository()->countWorkspaceFavouritesByUser(
             $user,
-            $entityService->getEntitiesForUser($user));
+            $entityService->getEntitiesForUser($user)
+        );
     }
 
     /**
      *
      * @param integer $type
      * @param integer $typeIdentifier
+     *
      * @return \Chamilo\Core\Repository\Workspace\PersonalWorkspace|\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace
      */
     public function getWorkspaceByTypeAndTypeIdentifier($type, $typeIdentifier)
     {
         if ($type == self :: TYPE_PERSONAL)
         {
-            $user = DataManager :: retrieve_by_id(User :: class_name(), $typeIdentifier);
+            $user = DataManager:: retrieve_by_id(User:: class_name(), $typeIdentifier);
+
             return $this->getPersonalWorkspaceForUser($user);
         }
         else
@@ -339,4 +419,5 @@ class WorkspaceService
             return $this->getWorkspaceByIdentifier($typeIdentifier);
         }
     }
+
 }

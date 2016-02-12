@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     public function get_additional_parameters()

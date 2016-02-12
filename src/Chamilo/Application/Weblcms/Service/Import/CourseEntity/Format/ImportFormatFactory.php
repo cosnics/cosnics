@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -12,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class ImportFormatFactory
 {
+
     /**
      * The import formats
      *
@@ -20,6 +19,7 @@ class ImportFormatFactory
     protected $importFormats;
 
     /**
+     *
      * @param ImportFormatInterface[] $importFormats
      */
     public function __construct(array $importFormats)
@@ -40,7 +40,7 @@ class ImportFormatFactory
     {
         $importFormat = $this->getImportFormatByMimeType($file->getClientMimeType());
 
-        if(!$importFormat)
+        if (! $importFormat)
         {
             throw new \Exception(sprintf('Importing with the given format %s is not supported', $file->getMimeType()));
         }
@@ -57,9 +57,9 @@ class ImportFormatFactory
      */
     protected function getImportFormatByMimeType($mimeType)
     {
-        foreach($this->importFormats as $importFormat)
+        foreach ($this->importFormats as $importFormat)
         {
-            if($importFormat->getImportType() == $mimeType)
+            if ($importFormat->getImportType() == $mimeType)
             {
                 return $importFormat;
             }

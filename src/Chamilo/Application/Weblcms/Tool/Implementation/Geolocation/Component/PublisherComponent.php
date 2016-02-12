@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
 
 /**
@@ -9,7 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
  *
  * @package application.lib.weblcms.tool.geolocation.component
  */
-class PublisherComponent extends Manager implements DelegateComponent
+class PublisherComponent extends Manager
 {
 
     public function get_additional_parameters()

@@ -5,6 +5,6 @@
 
 TypeName = "Suchen"
 ResultsFoundFor = "Suchergebnisse"
-SearchToolSearcherComponent = "Suche"
+SearcherComponent = "Suche"
 SearchResult = ""
 SearchResults = ""

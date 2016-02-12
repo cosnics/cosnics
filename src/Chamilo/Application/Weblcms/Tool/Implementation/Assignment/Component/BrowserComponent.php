@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -18,7 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function get_tool_actions()

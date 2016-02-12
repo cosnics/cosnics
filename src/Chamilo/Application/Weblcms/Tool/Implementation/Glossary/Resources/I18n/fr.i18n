@@ -4,11 +4,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Glossaire"
-GlossaryToolBrowserComponent = "Glossaires"
-GlossaryToolViewerComponent = "Voir glossaire"
-GlossaryToolEvaluateComponent = "Evaluer"
-GlossaryToolIntroductionPublisherComponent = "Publier le texte d'introduction"
-GlossaryToolMoverComponent = "Déplacer glossaire"
-GlossaryToolPublisherComponent = "Publier glossaire"
-GlossaryToolUpdaterComponent = "Modifier glossaire"
+BrowserComponent = "Glossaires"
+ViewerComponent = "Voir glossaire"
+EvaluateComponent = "Evaluer"
+IntroductionPublisherComponent = "Publier le texte d'introduction"
+MoverComponent = "Déplacer glossaire"
+PublisherComponent = "Publier glossaire"
+UpdaterComponent = "Modifier glossaire"
 CreateItem = "Créer un élément"

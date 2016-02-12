@@ -505,10 +505,12 @@ EOT;
             }
 
             $buttons[] = $this->createElement(
-                'style_submit_button',
+                'style_button',
                 'submit',
                 Translation :: get('CompareVersions'),
-                array('class' => 'normal compare'));
+                null,
+                null,
+                'transfer');
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
     }
@@ -630,43 +632,46 @@ EOT;
                     'style_submit_button',
                     'submit_button',
                     Translation :: get('Compare', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'normal compare'));
+                    null,
+                    null,
+                    'transfer');
                 break;
             case self :: TYPE_CREATE :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive'));
+                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
                 break;
             case self :: TYPE_EDIT :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
                     Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive update'));
+                    null,
+                    null,
+                    'arrow-right');
                 break;
             case self :: TYPE_REPLY :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
                     Translation :: get('Reply', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive send'));
+                    null,
+                    null,
+                    'envelope');
                 break;
             default :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                    array('class' => 'positive'));
+                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
                 break;
         }
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -764,7 +769,8 @@ EOT;
     }
 
     /**
-     * Sets default values. Traditionally, you will want to extend this method so it sets default for your learning
+     * Sets default values.
+     * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
      *
      * @param $defaults array Default values for this form's parameters.

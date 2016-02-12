@@ -64,11 +64,7 @@ class MasteryComponent extends Manager
             $form->setDefaults(array('mastery_score' => $lp_item->get_mastery_score()));
         }
 
-        $buttons[] = $form->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('SetMasteryScore'),
-            array('class' => 'positive'));
+        $buttons[] = $form->createElement('style_submit_button', 'submit', Translation :: get('SetMasteryScore'));
         $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         return $form;

@@ -5,4 +5,4 @@
 
 TypeName = "Chat"
 FileMTimeWarning = ""
-ChatToolViewerComponent = "View chat"
+ViewerComponent = "View chat"

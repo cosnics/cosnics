@@ -1,12 +1,10 @@
-/* External CSS */
-@import url('External.css');
+/* Bootstrap */
+@import url('Bootstrap/css/bootstrap.css');
 
 /* Plugin CSS */
 @import url('Plugin.css');
 
 /* Platform CSS */
-@import url('Header.css');
-
 @import url('General.css');
 
 @import url('Form.css');
@@ -17,9 +15,7 @@
 
 @import url('Tree.css');
 
-/* Bootstrap */
-@import url('Bootstrap/css/bootstrap.css');
-
-@import url('Bootstrap/css/bootstrap-theme.css');
+/* Typography */
+@import url('Typography.css');
 
 @import url('Bootstrap.css');

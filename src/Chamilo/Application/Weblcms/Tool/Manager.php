@@ -15,11 +15,11 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Filesystem;
@@ -30,6 +30,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -37,8 +38,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * This is the base class for all tools used in applications.
@@ -235,16 +234,6 @@ abstract class Manager extends Application
         return implode(PHP_EOL, $html);
     }
 
-    public function render_footer()
-    {
-        $html = array();
-
-        $html[] = '</div>';
-        $html[] = parent :: render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
     /**
      * Returns the visible tools for this course
      *
@@ -291,24 +280,6 @@ abstract class Manager extends Application
 
         $course_settings_controller = CourseSettingsController :: get_instance();
 
-        $menu_layout = $course_settings_controller->get_course_setting(
-            $this->get_course(),
-            CourseSettingsConnector :: MENU_LAYOUT);
-
-        if ($menu_layout != CourseSettingsConnector :: MENU_LAYOUT_OFF && count($tools) > 0)
-        {
-            $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_MENU, $this, $tools);
-
-            $html[] = $renderer->toHtml();
-            $html[] = '<div id="tool_browser_' .
-                 ($renderer->display_menu_icons() && ! $renderer->display_menu_text() ? 'icon_' : '') .
-                 $renderer->get_menu_style() . '">';
-        }
-        else
-        {
-            $html[] = '<div id="tool_browser">';
-        }
-
         $tool_shortcut = $course_settings_controller->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: TOOL_SHORTCUT_MENU);
@@ -351,6 +322,7 @@ abstract class Manager extends Application
         if ($show_introduction_text)
         {
             $introduction_text = $this->get_introduction_text();
+
             if (! $introduction_text)
             {
                 if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
@@ -374,7 +346,7 @@ abstract class Manager extends Application
         if ($tool_shortcut && count($tools) > 0)
         {
             $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_SHORTCUT, $this, $tools);
-            $html[] = '<div style="float:right;">';
+            $html[] = '<div class="pull-right" style="margin-top: -30px;">';
             $html[] = $renderer->toHtml();
             $html[] = '</div>';
         }
@@ -667,13 +639,6 @@ abstract class Manager extends Application
                         true));
             }
 
-            $html[] = '<div class="announcements level_1" style="background-image: url(' .
-                 Theme :: getInstance()->getImagePath(Introduction :: context(), 'Logo/' . Theme :: ICON_SMALL) . ');">';
-            $html[] = '<div class="title" style="border-bottom: 1px dotted #D3D3D3; width:100%;">';
-            $html[] = $introduction_text->get_content_object()->get_title();
-            $html[] = '</div><div class="clear">&nbsp;</div>';
-            $html[] = '<div class="description">';
-
             $content_object = $introduction_text->get_content_object();
 
             $rendition_implementation = ContentObjectRenditionImplementation :: factory(
@@ -682,9 +647,12 @@ abstract class Manager extends Application
                 ContentObjectRendition :: VIEW_DESCRIPTION,
                 $this);
 
-            $html[] = $rendition_implementation->render();
-
+            $html[] = '<div class="panel panel-default">';
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h3 class="panel-title">' . $introduction_text->get_content_object()->get_title() . '</h3>';
             $html[] = '</div>';
+            $html[] = '<div class="panel-body">';
+            $html[] = $rendition_implementation->render();
 
             if ($toolbar)
             {
@@ -692,7 +660,7 @@ abstract class Manager extends Application
             }
 
             $html[] = '</div>';
-            $html[] = '<br />';
+            $html[] = '</div>';
         }
 
         return implode(PHP_EOL, $html);

@@ -4,11 +4,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Glossar"
-GlossaryToolBrowserComponent = "Glossare durchsuchen"
-GlossaryToolViewerComponent = "Glossar ansehen"
-GlossaryToolEvaluateComponent = "Auswerten"
-GlossaryToolIntroductionPublisherComponent = "Vorstelling veröffentlichen"
-GlossaryToolMoverComponent = "Glossar verschieben"
-GlossaryToolPublisherComponent = "Glossar veröffentlichen"
-GlossaryToolUpdaterComponent = "Glossar bearbeiten"
+BrowserComponent = "Glossare durchsuchen"
+ViewerComponent = "Glossar ansehen"
+EvaluateComponent = "Auswerten"
+IntroductionPublisherComponent = "Vorstelling veröffentlichen"
+MoverComponent = "Glossar verschieben"
+PublisherComponent = "Glossar veröffentlichen"
+UpdaterComponent = "Glossar bearbeiten"
 CreateItem = ""

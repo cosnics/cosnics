@@ -53,7 +53,9 @@ class CourseChangeCourseTypeForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('ChangeCourseType'),
-            array('class' => 'positive move'));
+            null,
+            null,
+            'move');
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

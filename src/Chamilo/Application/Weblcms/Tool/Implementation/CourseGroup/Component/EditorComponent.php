@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -19,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.tool.course_group.component
  */
-class EditorComponent extends Manager implements DelegateComponent
+class EditorComponent extends Manager
 {
 
     public function run()

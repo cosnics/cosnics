@@ -20,9 +20,9 @@ class TermsConditionsForm extends FormValidator
     public function __construct($user, $action, $type)
     {
         parent :: __construct('user_settings', 'post', $action);
-        
+
         $this->user = $user;
-        
+
         if ($type == self :: TYPE_VIEW)
         {
             $this->build_view_form();
@@ -42,21 +42,23 @@ class TermsConditionsForm extends FormValidator
         $this->add_last_modified_date();
         $this->addElement('html', '</br>');
         $this->add_accepted_date();
-        
+
         $this->addElement('category', Translation :: get('NewTermsConditions'));
         $this->addElement(
-            'textarea', 
-            'conditions', 
-            null, 
+            'textarea',
+            'conditions',
+            null,
             array('cols' => 80, 'rows' => 20, 'readonly' => '', 'style' => 'background-color: white;'));
         $this->addElement('category');
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('TermsConditionsAccept'), 
-            array('class' => 'positive register'));
-        
+            'style_submit_button',
+            'submit',
+            Translation :: get('TermsConditionsAccept'),
+            null,
+            null,
+            'user');
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -64,7 +66,7 @@ class TermsConditionsForm extends FormValidator
     {
         // show date last updated
         $date_format = '%e-%m-%Y %H:%M';
-        $date =\Strftime($date_format, Manager :: get_date_terms_and_conditions_last_modified());
+        $date = \Strftime($date_format, Manager :: get_date_terms_and_conditions_last_modified());
         $this->addElement('html', Translation :: get('TermsConditionsDate') . $date);
     }
 
@@ -74,7 +76,7 @@ class TermsConditionsForm extends FormValidator
         if ($this->user->get_terms_date() != null && $this->user->get_terms_date() > 0)
         {
             $date_format = '%e-%m-%Y %H:%M';
-            $date =\Strftime($date_format, $this->user->get_terms_date());
+            $date = \Strftime($date_format, $this->user->get_terms_date());
             $this->addElement('html', Translation :: get('TermsConditionsAcceptedDate') . $date);
         }
     }
@@ -82,21 +84,23 @@ class TermsConditionsForm extends FormValidator
     public function build_edit_form()
     {
         $this->add_last_modified_date();
-        
+
         $this->addElement('category', Translation :: get('TermsConditions'));
         $this->addElement(
-            'textarea', 
-            'conditions', 
-            null, 
+            'textarea',
+            'conditions',
+            null,
             array('cols' => 80, 'rows' => 20, 'style' => 'background-color: white;'));
         $this->addElement('category');
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('TermsConditionsEdit'), 
-            array('class' => 'positive register'));
-        
+            'style_submit_button',
+            'submit',
+            Translation :: get('TermsConditionsEdit'),
+            null,
+            null,
+            'user');
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -118,7 +122,7 @@ class TermsConditionsForm extends FormValidator
 
     /**
      * Sets default values.
-     * 
+     *
      * @param array $defaults Default values for this form's parameters.
      */
     public function setDefaults($defaults = array ())

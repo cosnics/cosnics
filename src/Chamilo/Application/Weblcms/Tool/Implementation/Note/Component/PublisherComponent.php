@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Note\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Note\Manager;
 
 /**
@@ -9,7 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Note\Manager;
  *
  * @package application.lib.weblcms.tool.note.component
  */
-class PublisherComponent extends Manager implements DelegateComponent
+class PublisherComponent extends Manager
 {
 
     public function get_additional_parameters()

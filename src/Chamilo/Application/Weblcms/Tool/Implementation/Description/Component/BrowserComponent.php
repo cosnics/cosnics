@@ -2,9 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Description\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Description\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function get_additional_parameters()

@@ -79,12 +79,11 @@ class PublicationForm extends FormValidator
             'Publish',
             null,
             Utilities :: COMMON_LIBRARIES) : Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES);
-        $buttons[] = $this->createElement('style_submit_button', 'submit', $submit, array('class' => 'positive'));
+        $buttons[] = $this->createElement('style_submit_button', 'submit', $submit);
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -158,7 +157,8 @@ class PublicationForm extends FormValidator
     }
 
     /**
-     * Sets the default values of the form. By default the publication is for everybody who has access to the tool and
+     * Sets the default values of the form.
+     * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
      */
     function setDefaults()

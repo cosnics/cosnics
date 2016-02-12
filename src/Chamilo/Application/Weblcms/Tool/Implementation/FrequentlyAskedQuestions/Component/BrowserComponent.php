@@ -2,14 +2,13 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
  * $Id: forum_browser.class.php 216 2009-11-13 14:08:06Z kariboe $
  *
  * @package application.lib.weblcms.tool.forum.component
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function get_additional_parameters()

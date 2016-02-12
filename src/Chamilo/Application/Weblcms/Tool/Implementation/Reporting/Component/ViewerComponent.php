@@ -3,15 +3,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Platform\Session\Request;
 use Exception;
 
 /**
  * $Id: reporting_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.tool.reporting.component
  */
 
@@ -19,7 +18,7 @@ use Exception;
  *
  * @author Michael Kyndt
  */
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     public function run()
@@ -28,13 +27,13 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             throw new Exception('not-allowed');
         }
-        
+
         $template_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID);
-        
+
         if (! isset($template_id))
         {
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Reporting\Viewer\Manager :: context(), 
+                \Chamilo\Core\Reporting\Viewer\Manager :: context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name(
@@ -47,11 +46,11 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $this->set_parameter(\Chamilo\Core\Reporting\Viewer\Manager :: PARAM_VIEW, $view);
             }
-            
+
             $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID, $template_id);
-            
+
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Reporting\Viewer\Manager :: context(), 
+                \Chamilo\Core\Reporting\Viewer\Manager :: context(),
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_template_by_name($template_id);
@@ -62,8 +61,8 @@ class ViewerComponent extends Manager implements DelegateComponent
     function get_additional_parameters()
     {
         return array(
-            \Chamilo\Application\Weblcms\Manager :: PARAM_USERS, 
-            \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID, 
+            \Chamilo\Application\Weblcms\Manager :: PARAM_USERS,
+            \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID,
             \Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID);
     }
 }

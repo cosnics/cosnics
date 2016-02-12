@@ -33,9 +33,9 @@ class MailForm extends FormValidator
     function __construct($parent, $user, $users, $type, $actions)
     {
         parent :: __construct(self :: FORM_NAME, 'post', $actions);
-        
+
         $this->type = $type;
-        
+
         $attributes = array();
         $attributes['search_url'] = Path :: getInstance()->getBasePath(true) . 'group/php/xml_feeds/xml_group_feed.php';
         $locale = array();
@@ -46,113 +46,114 @@ class MailForm extends FormValidator
         $attributes['locale'] = $locale;
         $attributes['defaults'] = array();
         $attributes['options'] = array('load_elements' => false);
-        
+
         $this->add_receivers(
-            self :: APPLICATION_NAME . '_opt_' . self :: PARAM_TARGET, 
-            Translation :: get('AddMailRecipientsFilter'), 
+            self :: APPLICATION_NAME . '_opt_' . self :: PARAM_TARGET,
+            Translation :: get('AddMailRecipientsFilter'),
             $attributes);
-        
+
         $defaults[self :: APPLICATION_NAME . '_opt_forever'] = 1;
         $defaults[self :: APPLICATION_NAME . '_opt_' . self :: PARAM_TARGET_OPTION] = 0;
-        
+
         $this->addElement(
-            'text', 
-            self :: FROM_ADDRESS_NAME, 
-            Translation :: get('SurveyFromEmailAddressName'), 
+            'text',
+            self :: FROM_ADDRESS_NAME,
+            Translation :: get('SurveyFromEmailAddressName'),
             array('size' => 80, 'value' => $user->get_firstname() . ' ' . $user->get_lastname()));
         $this->addRule(self :: FROM_ADDRESS_NAME, Translation :: get('ThisFieldIsRequired'), 'required');
         $this->addElement(
-            'text', 
-            self :: FROM_ADDRESS, 
-            Translation :: get('SurveyFromEmailAddress'), 
+            'text',
+            self :: FROM_ADDRESS,
+            Translation :: get('SurveyFromEmailAddress'),
             array('size' => 80, 'value' => $user->get_email()));
         $this->addRule(self :: FROM_ADDRESS, Translation :: get('ThisFieldIsRequired'), 'required');
         $this->addElement(
-            'text', 
-            self :: REPLY_ADDRESS_NAME, 
-            Translation :: get('SurveyReplyEmailAddressName'), 
+            'text',
+            self :: REPLY_ADDRESS_NAME,
+            Translation :: get('SurveyReplyEmailAddressName'),
             array('size' => 80, 'value' => $user->get_firstname() . ' ' . $user->get_lastname()));
         $this->addRule(self :: REPLY_ADDRESS_NAME, Translation :: get('ThisFieldIsRequired'), 'required');
         $this->addElement(
-            'text', 
-            self :: REPLY_ADDRESS, 
-            Translation :: get('SurveyReplyEmailAddress'), 
+            'text',
+            self :: REPLY_ADDRESS,
+            Translation :: get('SurveyReplyEmailAddress'),
             array('size' => 80, 'value' => $user->get_email()));
         $this->addRule(self :: REPLY_ADDRESS, Translation :: get('ThisFieldIsRequired'), 'required');
         $this->addElement('text', self :: EMAIL_HEADER, Translation :: get('SurveyEmailTitle'), array('size' => 80));
         $this->addRule(self :: EMAIL_HEADER, Translation :: get('ThisFieldIsRequired'), 'required');
         $this->add_html_editor(self :: EMAIL_CONTENT, Translation :: get('SurveyEmailContent'), true);
-        
+
         $this->add_warning_message(
-            'attention', 
-            Translation :: get('SurveyMailAttention'), 
-            Translation :: get('SurveyAttentionSendMailInfo'), 
+            'attention',
+            Translation :: get('SurveyMailAttention'),
+            Translation :: get('SurveyAttentionSendMailInfo'),
             false);
-        
+
         switch ($this->type)
         {
             case Mail :: PARTICIPANT_TYPE :
                 $invitees = (count($users[RightsService :: RIGHT_TAKE]) > 1) ? Translation :: get('Invitees') : Translation :: get(
                     'Invitee');
                 $this->addElement(
-                    'checkbox', 
-                    RightsService :: RIGHT_TAKE, 
-                    Translation :: get('AllInvitees'), 
+                    'checkbox',
+                    RightsService :: RIGHT_TAKE,
+                    Translation :: get('AllInvitees'),
                     ' ' . $users[RightsService :: RIGHT_TAKE] . ' ' . $invitees);
                 $not_started = (count($users[Participant :: STATUS_NOTSTARTED]) > 1) ? Translation :: get('Invitees') : Translation :: get(
                     'Invitee');
                 $this->addElement(
-                    'checkbox', 
-                    Participant :: STATUS_NOTSTARTED, 
-                    Translation :: get('SurveyNotStarted'), 
+                    'checkbox',
+                    Participant :: STATUS_NOTSTARTED,
+                    Translation :: get('SurveyNotStarted'),
                     ' ' . $users[Participant :: STATUS_NOTSTARTED] . ' ' . $not_started);
                 $started = (count($users[Participant :: STATUS_STARTED]) > 1) ? Translation :: get('Participants') : Translation :: get(
                     'Participant');
                 $this->addElement(
-                    'checkbox', 
-                    Participant :: STATUS_STARTED, 
-                    Translation :: get('SurveyStarted'), 
+                    'checkbox',
+                    Participant :: STATUS_STARTED,
+                    Translation :: get('SurveyStarted'),
                     ' ' . $users[Participant :: STATUS_STARTED] . ' ' . $started);
                 $finished = (count($users[Participant :: STATUS_FINISHED]) > 1) ? Translation :: get('Participants') : Translation :: get(
                     'Participant');
                 $this->addElement(
-                    'checkbox', 
-                    Participant :: STATUS_FINISHED, 
-                    Translation :: get('SurveyFinished'), 
+                    'checkbox',
+                    Participant :: STATUS_FINISHED,
+                    Translation :: get('SurveyFinished'),
                     ' ' . $users[Participant :: STATUS_FINISHED] . ' ' . $finished);
                 break;
             case Mail :: EXPORT_TYPE :
                 $exporters = (count($users[RightsService :: RIGHT_REPORT]) > 1) ? Translation :: get('Exporters') : Translation :: get(
                     'Exporter');
                 $this->addElement(
-                    'checkbox', 
-                    RightsService :: RIGHT_REPORT, 
-                    Translation :: get('SurveyExporters'), 
+                    'checkbox',
+                    RightsService :: RIGHT_REPORT,
+                    Translation :: get('SurveyExporters'),
                     ' ' . $users[RightsService :: RIGHT_REPORT] . ' ' . $exporters);
                 break;
-            
+
             case Mail :: REPORTING_TYPE :
                 $rapporteurs = (count($users[RightsService :: RIGHT_REPORT]) > 1) ? Translation :: get('Rapporteurs') : Translation :: get(
                     'Rapporteur');
                 $this->addElement(
-                    'checkbox', 
-                    RightsService :: RIGHT_REPORT, 
-                    Translation :: get('SurveyRapporters'), 
+                    'checkbox',
+                    RightsService :: RIGHT_REPORT,
+                    Translation :: get('SurveyRapporters'),
                     ' ' . $users[RightsService :: RIGHT_REPORT] . ' ' . $rapporteurs);
                 break;
         }
-        
+
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('SendMail', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'positive publish'));
+            'style_submit_button',
+            'submit',
+            Translation :: get('SendMail', null, Utilities :: COMMON_LIBRARIES),
+            null,
+            null,
+            'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'normal empty'));
-        
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         $this->setDefaults($defaults);
     }
@@ -160,9 +161,9 @@ class MailForm extends FormValidator
     function get_seleted_group_user_ids()
     {
         $values = $this->exportValues();
-        
+
         $user_ids = array();
-        
+
         if ($values[self :: APPLICATION_NAME . '_opt_' . self :: PARAM_TARGET_OPTION] == 0)
         {
             // there is no user filter needed
@@ -171,7 +172,7 @@ class MailForm extends FormValidator
         else
         {
             $group_ids = $values[self :: APPLICATION_NAME . '_opt_' . self :: PARAM_TARGET . '_elements']['group'];
-            
+
             if (count($group_ids))
             {
                 foreach ($group_ids as $group_id)
@@ -179,9 +180,9 @@ class MailForm extends FormValidator
                     $group_user_ids = array();
                     foreach ($group_ids as $group_id)
                     {
-                        
+
                         $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                            Group :: class_name(), 
+                            Group :: class_name(),
                             $group_id);
                         $ids = $group->get_users(true, true);
                         $group_user_ids = array_merge($group_user_ids, $ids);

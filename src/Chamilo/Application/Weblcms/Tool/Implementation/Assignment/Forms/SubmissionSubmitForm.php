@@ -21,41 +21,42 @@ class SubmissionSubmitForm extends FormValidator
     public function __construct($choices, $url = '')
     {
         parent :: __construct('assignment', 'post', $url);
-        
+
         $publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-        
+
         // Retrieving assignment
         $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+            ContentObjectPublication :: class_name(),
             $publication_id);
-        
+
         $assignment = $publication->get_content_object();
-        
+
         $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
         // Submit as
         if ($assignment->get_allow_group_submissions())
         {
             $this->addElement(
-                'select', 
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID, 
-                Translation :: get('SubmitAs'), 
+                'select',
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID,
+                Translation :: get('SubmitAs'),
                 $choices);
         }
         $this->addElement('category');
-        
+
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_submit_button', 
-            'submit', 
-            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'positive publish'));
+            'style_submit_button',
+            'submit',
+            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES),
+            null,
+            null,
+            'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button', 
-            'reset', 
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), 
-            array('class' => 'normal empty'));
+            'style_reset_button',
+            'reset',
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-        
+
         $this->setDefaults();
     }
 
@@ -63,7 +64,7 @@ class SubmissionSubmitForm extends FormValidator
     {
         $submitter_type = Request :: get(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_TYPE);
-        
+
         if ($submitter_type ==
              \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP ||
              $submitter_type ==
@@ -72,7 +73,7 @@ class SubmissionSubmitForm extends FormValidator
             $defaults[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID] = $submitter_type .
              Request :: get(Manager :: PARAM_TARGET_ID);
     }
-    
+
     parent :: setDefaults($defaults);
 }
 }

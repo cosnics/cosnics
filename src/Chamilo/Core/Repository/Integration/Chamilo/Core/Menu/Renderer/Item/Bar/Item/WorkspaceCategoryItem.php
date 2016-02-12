@@ -24,7 +24,15 @@ class WorkspaceCategoryItem extends CategoryItem
     public function isItemSelected()
     {
         $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
-        return ($currentContext == Manager :: package());
+        if ($currentContext == Manager :: package())
+        {
+            return true;
+        }
+
+        $currentWorkspace = $this->getMenuRenderer()->getRequest()->get(
+            \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID);
+
+        return isset($currentWorkspace);
     }
 
     public function render()

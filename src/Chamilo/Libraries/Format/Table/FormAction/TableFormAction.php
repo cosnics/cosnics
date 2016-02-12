@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Format\Table\FormAction;
 
+use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Platform\Translation;
+
 /**
  * This class represents a table form action
  * Refactoring from ObjectTable to split between a table based on a record and based on an object
@@ -147,5 +150,20 @@ class TableFormAction
     public function setConfirmationMessage($confirmationMessage)
     {
         $this->confirmationMessage = $confirmationMessage;
+    }
+
+    public function getConfirmation()
+    {
+        $confirmation = false;
+
+        if ($this->get_confirm() == true)
+        {
+            $confirmation = $this->getConfirmationMessage() ? $this->getConfirmationMessage() : Translation :: get(
+                'ConfirmYourSelectionAndAction',
+                null,
+                Utilities :: COMMON_LIBRARIES);
+        }
+
+        return $confirmation;
     }
 }

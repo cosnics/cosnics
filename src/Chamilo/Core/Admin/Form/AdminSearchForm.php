@@ -124,11 +124,7 @@ class AdminSearchForm extends FormValidator
             self :: PARAM_SIMPLE_SEARCH_QUERY,
             Translation :: get('Search'),
             'size="20"');
-        $this->addElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Search'),
-            array('class' => 'normal search'));
+        $this->addElement('style_submit_button', 'submit', Translation :: get('Search'), null, null, 'search');
     }
 
     /**

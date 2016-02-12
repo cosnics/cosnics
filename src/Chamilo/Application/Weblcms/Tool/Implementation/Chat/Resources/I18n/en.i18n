@@ -6,4 +6,4 @@
 TypeName = "Chat"
 TypeCategory = "Course Tools"
 FileMTimeWarning = "Time warning"
-ChatToolViewerComponent = "View chat"
+ViewerComponent = "View chat"

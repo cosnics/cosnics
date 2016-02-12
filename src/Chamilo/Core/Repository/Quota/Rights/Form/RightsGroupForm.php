@@ -61,12 +61,13 @@ class RightsGroupForm extends FormValidator
             'style_submit_button',
             'submit',
             Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive save'));
+            null,
+            null,
+            'floppy-save');
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }

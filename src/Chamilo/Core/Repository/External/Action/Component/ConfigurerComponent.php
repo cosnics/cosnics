@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\External\Action\Form\SettingsForm;
 use Chamilo\Core\Repository\External\Action\Manager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class ConfigurerComponent extends Manager
 {
@@ -28,17 +27,6 @@ class ConfigurerComponent extends Manager
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
-            $html[] = '<script type="text/javascript">';
-            $html[] = '$(document).ready(function() {';
-            $html[] = '$(\':checkbox\').iphoneStyle({ checkedLabel: \'' . Translation :: get(
-                'ConfirmOn',
-                null,
-                Utilities :: COMMON_LIBRARIES) . '\', uncheckedLabel: \'' . Translation :: get(
-                'ConfirmOff',
-                null,
-                Utilities :: COMMON_LIBRARIES) . '\'});';
-            $html[] = '});';
-            $html[] = '</script>';
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);

@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Chat\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Chat\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -14,7 +13,7 @@ use phpFreeChat;
  * @package application.lib.weblcms.tool.chat.component
  */
 require_once Path :: getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     public function run()

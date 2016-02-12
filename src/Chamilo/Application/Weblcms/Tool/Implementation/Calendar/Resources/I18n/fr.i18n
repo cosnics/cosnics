@@ -5,8 +5,8 @@
 
 TypeName = "Calendrier"
 UpcomingEvents = "Événements à venir"
-CalendarToolBrowserComponent = "Parcourir des événements du calendrier"
-CalendarToolViewerComponent = "Calendrier"
-CalendarToolUpdaterComponent = "Modifier le calendrier"
-CalendarToolPublisherComponent = "Publier un événement dans le calendrier"
-CalendarToolIntroductionPublisherComponent = "Publier une introduction"
+BrowserComponent = "Parcourir des événements du calendrier"
+ViewerComponent = "Calendrier"
+UpdaterComponent = "Modifier le calendrier"
+PublisherComponent = "Publier un événement dans le calendrier"
+IntroductionPublisherComponent = "Publier une introduction"

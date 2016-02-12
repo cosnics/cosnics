@@ -5,7 +5,7 @@
 
 TypeName = "Rapportering"
 TypeName = "Rapportering"
-ReportingToolViewerComponent = "Rapportering"
+ViewerComponent = "Rapportering"
 Add = "Voeg toe"
 Client = "Client"
 Csv = "CSV"

@@ -100,6 +100,13 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                     $date_format,
                     $publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE]);
                 break;
+            case ContentObjectPublication::PROPERTY_MODIFIED_DATE :
+                $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
+                $data = DatetimeUtilities :: format_locale_date(
+                    $date_format,
+                    $publication[ContentObjectPublication::CONTENT_OBJECT_MODIFICATION_DATE_ALIAS]
+                );
+                break;
             case ContentObjectPublication :: PROPERTY_PUBLISHER_ID :
                 $user = $this->retrieve_user($publication[ContentObjectPublication :: PROPERTY_PUBLISHER_ID]);
                 if (! $user)

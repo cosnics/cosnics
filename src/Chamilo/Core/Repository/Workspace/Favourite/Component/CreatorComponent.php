@@ -24,11 +24,12 @@ class CreatorComponent extends Manager
     public function run()
     {
         $workspaceIdentifier = $this->getRequest()->get(
-            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
+            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID
+        );
 
-        if (! $workspaceIdentifier)
+        if (!$workspaceIdentifier)
         {
-            throw new NoObjectSelectedException(Translation :: get('Workspace'));
+            throw new NoObjectSelectedException(Translation:: get('Workspace'));
         }
 
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
@@ -37,27 +38,35 @@ class CreatorComponent extends Manager
         $favouriteService = new FavouriteService(new FavouriteRepository());
         $workspaceUserFavourite = $favouriteService->createWorkspaceUserFavourite(
             $this->get_user(),
-            $workspaceIdentifier);
+            $workspaceIdentifier
+        );
 
         if ($workspaceUserFavourite instanceof WorkspaceUserFavourite)
         {
+            $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
+
             $this->redirect(
-                Translation :: get(
+                Translation:: get(
                     'ObjectCreated',
-                    array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
-                    Utilities :: COMMON_LIBRARIES),
+                    array('OBJECT' => Translation:: get('WorkspaceUserFavourite')),
+                    Utilities :: COMMON_LIBRARIES
+                ),
                 false,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
+                array(self::PARAM_ACTION)
+            );
         }
         else
         {
             $this->redirect(
-                Translation :: get(
+                Translation:: get(
                     'ObjectNotCreated',
-                    array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
-                    Utilities :: COMMON_LIBRARIES),
+                    array('OBJECT' => Translation:: get('WorkspaceUserFavourite')),
+                    Utilities :: COMMON_LIBRARIES
+                ),
                 true,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                array(self :: PARAM_ACTION => self :: ACTION_BROWSE)
+            );
         }
     }
 }

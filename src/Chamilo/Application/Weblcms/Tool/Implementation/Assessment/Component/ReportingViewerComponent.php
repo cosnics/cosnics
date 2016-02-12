@@ -2,13 +2,12 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
-class ReportingViewerComponent extends Manager implements DelegateComponent
+class ReportingViewerComponent extends Manager
 {
 
     public function run()

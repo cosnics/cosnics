@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -14,7 +13,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  *
  * @package application.lib.weblcms.tool.geolocation.component
  */
-class BrowserComponent extends Manager implements DelegateComponent
+class BrowserComponent extends Manager
 {
 
     public function show_additional_information($browser)

@@ -1,10 +1,10 @@
 @import url('Plugin/Jquery/jquery-ui.min.css');
 
-@import url('Plugin/IphoneCheckboxes/Stylesheet.css');
-
 @import url('Plugin/TextareaResizer/Stylesheet.css');
 
 @import url('Plugin/Jplayer/Stylesheet.css');
+
+@import url('Bootstrap/css/bootstrap-toggle.min.css');
 
 .ui-tabs {
 	padding: 0px;

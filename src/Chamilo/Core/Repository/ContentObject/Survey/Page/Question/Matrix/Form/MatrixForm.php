@@ -209,7 +209,8 @@ class MatrixForm extends ContentObjectForm
     }
 
     /**
-     * Adds the answer to the current learning object. This function adds the list of possible options and matches and
+     * Adds the answer to the current learning object.
+     * This function adds the list of possible options and matches and
      * the relation between the options and the matches to the question.
      */
     function add_answers()
@@ -457,15 +458,19 @@ class MatrixForm extends ContentObjectForm
 
         $buttons = array();
         $buttons[] = $this->createElement(
-            'style_submit_button',
+            'style_button',
             'change_matrix_type[]',
             $switch_label,
-            array('class' => 'normal switch change_matrix_type'));
+            array('class' => 'change_matrix_type'),
+            null,
+            'retweet');
         $buttons[] = $this->createElement(
             'style_button',
             'add_option[]',
             Translation :: get('AddMatrixOption'),
-            array('class' => 'normal add', 'id' => 'add_option'));
+            array('id' => 'add_option'),
+            null,
+            'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();
@@ -558,7 +563,7 @@ class MatrixForm extends ContentObjectForm
             'style_button',
             'add_match[]',
             Translation :: get('AddMatch'),
-            array('class' => 'normal add', 'id' => 'add_match'));
+            array('id' => 'add_match'), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();

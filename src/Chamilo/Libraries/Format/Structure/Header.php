@@ -245,31 +245,24 @@ class Header
              $this->getLanguageCode() . '">';
         $html[] = '<head>';
 
-        $html_headers = $this->getHtmlHeaders();
-        foreach ($html_headers as $index => & $html_header)
+        $htmlHeaders = $this->getHtmlHeaders();
+        foreach ($htmlHeaders as $index => $htmlHeader)
         {
-            $html[] = $html_header;
+            $html[] = $htmlHeader;
         }
 
         $html[] = '</head>';
 
-        $html[] = '<body dir="' . $this->getTextDirection() . '">' . "\n";
-        $html[] = '<!-- #outerframe container to control some general layout of all pages -->' . "\n";
-        $html[] = '<div id="outerframe">' . "\n";
+        $html[] = '<body dir="' . $this->getTextDirection() . '">';
 
         if ($this->getViewMode() != Page :: VIEW_MODE_HEADERLESS)
         {
             $banner = new Banner($this->getApplication(), $this->getViewMode());
 
-            $html[] = $banner->toHtml();
-            $html[] = '<div id="main"> <!-- start of #main wrapper for #content and #menu divs -->';
-            $html[] = '<!--   Begin Of script Output   -->';
-            $html[] = '<div id="helpbox" class="helpdialog"></div>';
-        }
-        else {
-            $html[] = '<div id="main" class="main-headerless"> <!-- start of #main-headerless wrapper -->';
+            $html[] = $banner->render();
         }
 
+        $html[] = '<div class="container-fluid">';
 
         return implode(PHP_EOL, $html);
     }

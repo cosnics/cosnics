@@ -14,7 +14,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -27,7 +27,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
@@ -50,7 +49,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * 
  * @package repository.lib.complex_display.assessment.component
  */
-class BrowserComponent extends Manager
+class BrowserComponent extends Manager implements DelegateComponent
 {
 
     /**
@@ -187,8 +186,29 @@ class BrowserComponent extends Manager
                     $cat_name = Translation :: get('Root');
                 }
             }
-            $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ': ' .
-                 $cat_name . '</div><br />';
+//            $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ': ' .
+//                $cat_name . '</div><br />';
+
+//            $html[] = '<div class="panel panel-default">';
+//            $html[] = '<div class="panel-heading">';
+//            $html[] = Translation :: get('CurrentCategory') . ': ' . $cat_name;
+//            $html[] = '</div>';
+//            $html[] = '<div class="panel-body">';
+
+            $html[] = '<div class="publication_container row">';
+            $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
+//            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
+//                 'overflow: auto; ">';
+//            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
+//                 '</a>';
+//            $html[] = '</div>';
+            $html[] = '<div id="tree">';
+            $html[] = $this->publication_category_tree->render_as_tree();
+            $html[] = '</div>';
+            $html[] = '</div>';
+//            $html[] = '</div>';
+//
+//            $html[] = '</div>';
         }
         
         $content[] = $publication_renderer->as_html();
@@ -206,7 +226,10 @@ class BrowserComponent extends Manager
             $html[] = Display :: warning_message(Translation :: get('ToolInvisible'));
         }
         
+        $html[] = '<div class="publication_renderer col-md-9 col-lg-10 col-sm-12">';
         $html[] = implode(PHP_EOL, $content);
+        $html[] = '</div>';
+        $html[] = '</div>';
         
         $html[] = $this->render_footer();
         

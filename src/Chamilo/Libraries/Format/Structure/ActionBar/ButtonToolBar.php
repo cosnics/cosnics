@@ -19,19 +19,19 @@ class ButtonToolBar
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup[]
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    private $buttonGroups;
+    private $items;
 
     /**
      *
      * @param string $searchUrl
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup[] $buttonGroups
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
      */
-    public function __construct($searchUrl = null, $buttonGroups = array())
+    public function __construct($searchUrl = null, $items = array())
     {
         $this->searchUrl = $searchUrl;
-        $this->buttonGroups = $buttonGroups;
+        $this->items = $items;
     }
 
     /**
@@ -54,28 +54,57 @@ class ButtonToolBar
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup[]
+     * @deprecated Use getButtonToolBarItems() now
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
     public function getButtonGroups()
     {
-        return $this->buttonGroups;
+        return $this->getItems();
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup[] $buttonGroups
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function setButtonGroups($buttonGroups)
+    public function getItems()
     {
-        $this->buttonGroups = $buttonGroups;
+        return $this->items;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup $button
+     * @deprecated Use setButtonToolBarItems() now
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
      */
-    public function addButtonGroup(ButtonGroup $buttonGroup)
+    public function setButtonGroups($items)
     {
-        $this->buttonGroups[] = $buttonGroup;
+        $this->setItems($items);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
+     */
+    public function setItems($items)
+    {
+        $this->items = $items;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $buttonToolBarItem
+     */
+    public function addButtonGroup($buttonToolBarItem)
+    {
+        $this->addItem($buttonToolBarItem);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $buttonToolBarItem
+     */
+    public function addItem($buttonToolBarItem)
+    {
+        $this->items[] = $buttonToolBarItem;
     }
 }

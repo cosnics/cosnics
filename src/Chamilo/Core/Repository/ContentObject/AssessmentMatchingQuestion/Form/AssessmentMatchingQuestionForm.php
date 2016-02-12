@@ -260,7 +260,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
             'style_button',
             'add_option[]',
             Translation :: get('AddMatchingQuestionOption'),
-            array('class' => 'normal add', 'id' => self :: PROPERTY_ADD_OPTION));
+            array('id' => self :: PROPERTY_ADD_OPTION), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();
@@ -393,7 +393,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
             'style_button',
             'add_match[]',
             Translation :: get('AddMatch'),
-            array('class' => 'normal add', 'id' => self :: PROPERTY_ADD_MATCH));
+            array('id' => self :: PROPERTY_ADD_MATCH), null, 'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
         $renderer = $this->defaultRenderer();

@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Table\ContentObject\Version\VersionTable;
 use Chamilo\Core\Repository\Table\ExternalLink\ExternalLinkTable;
 use Chamilo\Core\Repository\Table\Link\LinkTable;
+use Chamilo\Core\Repository\Workspace\Table\SharedIn\SharedInTable;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -434,6 +435,25 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Publications'), 
                     $browser->as_html()));
         }
+
+        if ($this->getWorkspace() instanceof PersonalWorkspace)
+        {
+            $tabName = 'shared_in';
+
+            $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = $tabName;
+
+            $browser = new SharedInTable($this);
+
+            $this->tabs->add_tab(
+                new DynamicContentTab(
+                    $tabName,
+                    Translation :: get('SharedIn'),
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Rights'),
+                    $browser->as_html()
+                )
+            );
+        }
+
         // EXPORT
         $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = 'export';
         $this->tabs->add_tab(
@@ -532,10 +552,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         $types = ContentObjectExportImplementation :: get_types_for_object($this->object->package());
         
         $html = array();
+
+        $html[] = '<div class="btn-group">';
+
         foreach ($types as $type)
         {
             $link = $this->get_content_object_exporting_url($this->object, $type);
-            $html[] = '<a href="' . $link . '">';
+            $html[] = '<a class="btn btn-default" href="' . $link . '">';
             $url = Theme :: getInstance()->getImagePath(
                 ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object), 
                 'Export/' . $type, 
@@ -544,23 +567,28 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             
             if (file_exists($url))
             {
-                $html[] = '<div class="create_block" style="background-image : url(' . Theme :: getInstance()->getImagePath(
+                $imagePath = Theme :: getInstance()->getImagePath(
                     ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object), 
-                    'Export/' . $type) . '); ">' . Translation :: get(
+                    'Export/' . $type);
+                $translation = Translation :: get(
                     'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize(), 
                     null, 
-                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object)) . '</div>';
+                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object));
             }
             else
             {
-                $html[] = '<div class="create_block" style="background-image : url(' . Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository', 
-                    'Export/' . $type) . '); ">' . Translation :: get(
-                    'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize()) . '</div>';
+                $imagePath = Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Export/' . $type);
+                $translation = Translation :: get(
+                    'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize());
             }
             
+            $html[] = '<img src="' . $imagePath . '" /> ' . $translation;
+
             $html[] = '</a>';
         }
+
+        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 

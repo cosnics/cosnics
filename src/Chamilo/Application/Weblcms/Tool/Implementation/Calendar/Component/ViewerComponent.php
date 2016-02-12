@@ -2,9 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     public function get_additional_parameters()

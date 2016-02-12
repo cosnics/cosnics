@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCatego
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -24,7 +25,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke
  */
-class RightsEditorComponent extends Manager
+class RightsEditorComponent extends Manager implements DelegateComponent
 {
     const ADDITIONAL_INFORMATION_OBJECT_SEPARATOR = '  |  ';
     const LOCATION_TYPE_OBJECT = 'Objects';

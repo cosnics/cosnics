@@ -1,29 +1,27 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
+use Chamilo\Core\Metadata\Service\InstanceService;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
+use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
+use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-// use libraries\architecture\interfaces\ComplexContentObjectSupport;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
-use Chamilo\Core\Repository\Filter\FilterData;
-use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
-use Chamilo\Core\Repository\Selector\TypeSelector;
-use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
-use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Metadata\Service\InstanceService;
-use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 
 /**
  * $Id: creator.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -35,7 +33,7 @@ use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
  * When no type is passed to this component, the user will see a dropdown list in which a content object type can be
  * selected. Afterwards, the form to create the actual content object will be displayed.
  */
-class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSelectorSupport
+class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 {
 
     /**
