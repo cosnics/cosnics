@@ -15,8 +15,6 @@ class PersonalComponent extends Manager
 
     private $user_id;
 
-    private $action_bar;
-
     /**
      * Runs this component and displays its output.
      */

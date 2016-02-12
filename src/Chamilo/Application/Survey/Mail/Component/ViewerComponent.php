@@ -7,7 +7,6 @@ use Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail;
 use Chamilo\Application\Survey\Mail\Storage\DataManager;
 use Chamilo\Application\Survey\Mail\Table\MailRecipientTable\MailRecipientTable;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
@@ -20,6 +19,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 
 class ViewerComponent extends Manager implements TableSupport
 {
@@ -31,7 +32,11 @@ class ViewerComponent extends Manager implements TableSupport
 
     private $table_type;
 
-    private $action_bar;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     private $publication_id;
 
@@ -49,17 +54,16 @@ class ViewerComponent extends Manager implements TableSupport
         $this->mail_id = Request :: get(Manager :: PARAM_PUBLICATION_MAIL_ID);
         $this->selected_tab = Request :: get(DynamicTabsRenderer :: PARAM_SELECTED_TAB);
         
-//         if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
-//         {
-//             throw new NotAllowedException();
-//         }
+        // if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
+        // {
+        // throw new NotAllowedException();
+        // }
         
-        $this->action_bar = $this->get_action_bar();
-        
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = array();
         
         $html[] = $this->render_header();
-        $html[] = $this->action_bar->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->get_tabs_html();
         $html[] = $this->render_footer();
         
@@ -73,7 +77,7 @@ class ViewerComponent extends Manager implements TableSupport
         $tabs = new DynamicVisualTabsRenderer(self :: class_name());
         
         $params = $this->get_parameters();
-        $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->action_bar->get_query();
+        $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
         $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MAIL_OVERVIEW;
         $tabs->add_tab(
@@ -258,46 +262,16 @@ class ViewerComponent extends Manager implements TableSupport
         return $condition;
     }
 
-    function get_action_bar()
+    function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        
-        $action_bar->set_search_url($this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
-        
-//         if (Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
-//         {
-//         }
-        
-//         if ($this->get_user()->is_platform_admin())
-//         {
-//         }
-        return $action_bar;
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar(
+                $this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+        return $this->buttonToolbarRenderer;
     }
-
-//     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-//     {
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE)), 
-//                 Translation :: get('BrowserComponent')));
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         \Chamilo\Application\Survey\Manager :: PARAM_ACTION => \Chamilo\Application\Survey\Manager :: ACTION_BROWSE_PARTICIPANTS, 
-//                         \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID => Request :: get(
-//                             \Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID))), 
-//                 Translation :: get('ParticipantBrowserComponent')));
-//         $breadcrumbtrail->add(
-//             new Breadcrumb(
-//                 $this->get_url(
-//                     array(
-//                         self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-//                         self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))), 
-//                 Translation :: get('BrowserComponent')));
-//     }
 
     public function get_table_condition($object_table_class_name)
     {

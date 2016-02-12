@@ -2,7 +2,10 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -28,6 +31,12 @@ class UserDetailComponent extends Manager
 {
 
     /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
+
+    /**
      * Runs this component and displays its output.
      */
     public function run()
@@ -45,12 +54,11 @@ class UserDetailComponent extends Manager
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $id);
 
-            $action_bar = $this->get_action_bar($user);
-
+            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($user);
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $action_bar->as_html() . '<br />';
+            $html[] = $this->buttonToolbarRenderer->render() . '<br />';
             $html[] = $this->display_user_info($user);
             $html[] = '<br />';
             $html[] = $this->display_groups($user);
@@ -221,39 +229,50 @@ class UserDetailComponent extends Manager
         return $table->toHtml();
     }
 
-    public function get_action_bar($user)
+    public function getButtonToolbarRenderer($user)
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
 
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_user_editing_url($user),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                    $this->get_user_editing_url($user),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->get_user_delete_url($user),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                    $this->get_user_delete_url($user),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('ViewQuota'),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('ViewQuota'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(
+                        array(self :: PARAM_ACTION => self :: ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
-        $action_bar->add_tool_action(
-            new ToolbarItem(
-                Translation :: get('LoginAsUser'),
-                Theme :: getInstance()->getCommonImagePath('Action/Login'),
-                $this->get_change_user_url($user),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            $toolActions->addButton(
+                new Button(
+                    Translation :: get('LoginAsUser'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Login'),
+                    $this->get_change_user_url($user),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
-        return $action_bar;
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
     }
 
     public function display_additional_information($user_id)

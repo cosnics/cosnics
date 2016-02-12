@@ -10,10 +10,12 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -33,15 +35,15 @@ class ViewerComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @var Publication
+     * @var ButtonToolBarRenderer
      */
-    private $publication;
+    private $buttonToolbarRenderer;
 
     /**
      *
-     * @var \libraries\format\ActionBarRenderer
+     * @var Publication
      */
-    private $action_bar;
+    private $publication;
 
     /**
      * Runs this component and displays its output.
@@ -49,27 +51,28 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
         if ($id)
         {
             $this->publication = DataManager :: retrieve_by_id(Publication :: class_name(), $id);
-
+            
             if (! $this->can_view())
             {
                 throw new NotAllowedException();
             }
-
+            
             $output = $this->get_publication_as_html();
-
+            
             $html = array();
-
+            
             $html[] = $this->render_header();
-            $html[] = $this->get_action_bar()->as_html() . '<br />';
+            $html[] = $this->buttonToolbarRenderer()->render() . '<br />';
             $html[] = '<div id="action_bar_browser">';
             $html[] = $output;
             $html[] = '</div>';
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
         else
@@ -85,11 +88,11 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function can_view()
     {
         $user = $this->get_user();
-
+        
         $is_target = $this->publication->is_target($user);
         $is_publisher = ($this->publication->get_publisher() == $user->get_id());
         $is_platform_admin = $user->is_platform_admin();
-
+        
         if (! $is_target && ! $is_publisher && ! $is_platform_admin)
         {
             return false;
@@ -110,25 +113,24 @@ class ViewerComponent extends Manager implements DelegateComponent
         $content_object_properties = $content_object->get_properties();
         BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb(null, $content_object_properties['default_properties']['title']));
-
+        
         $html = array();
-
+        
         $html[] = ContentObjectRenditionImplementation :: launch(
-            $content_object,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_FULL,
+            $content_object, 
+            ContentObjectRendition :: FORMAT_HTML, 
+            ContentObjectRendition :: VIEW_FULL, 
             $this);
-
+        
         $html[] = $this->render_info();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function render_info()
     {
-        $action_bar = $this->get_action_bar();
         $html = array();
-
+        
         $html[] = '<div class="event_publication_info">';
         $html[] = htmlentities(Translation :: get('PublishedOn', null, Utilities :: COMMON_LIBRARIES)) . ' ' .
              $this->render_publication_date();
@@ -137,7 +139,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = htmlentities(Translation :: get('SharedWith', null, Utilities :: COMMON_LIBRARIES)) . ' ' .
              $this->render_publication_targets();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -165,48 +167,48 @@ class ViewerComponent extends Manager implements DelegateComponent
         {
             $users = $this->publication->get_target_users();
             $group_ids = $this->publication->get_target_groups();
-
+            
             if (count($users) + count($group_ids) == 1)
             {
                 if (count($users) == 1)
                 {
                     $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                        \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                        \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
                         (int) $users[0]);
                     return $user->get_firstname() . ' ' . $user->get_lastname();
                 }
                 else
                 {
                     $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                        Group :: class_name(),
+                        Group :: class_name(), 
                         $group_ids[0]);
                     return $group->get_name();
                 }
             }
-
+            
             $target_list = array();
             $target_list[] = '<select>';
-
+            
             foreach ($users as $index => $user_id)
             {
                 $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
                     (int) $users[0]);
                 $target_list[] = '<option>' . $user->get_firstname() . ' ' . $user->get_lastname() . '</option>';
             }
-
+            
             $condition = new InCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
+                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID), 
                 $group_ids);
             $groups = \Chamilo\Core\Group\Storage\DataManager :: retrieves(
-                Group :: class_name(),
+                Group :: class_name(), 
                 new DataClassRetrievesParameters($condition));
-
+            
             while ($group = $groups->next_result())
             {
                 $target_list[] = '<option>' . $group->get_name() . '</option>';
             }
-
+            
             $target_list[] = '</select>';
             return implode(PHP_EOL, $target_list);
         }
@@ -214,53 +216,59 @@ class ViewerComponent extends Manager implements DelegateComponent
 
     /**
      *
-     * @return \libraries\format\ActionBarRenderer
+     * @return ButtonToolBarRenderer
      */
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        if (! isset($this->action_bar))
+        if (! isset($this->buttonToolbarRenderer))
         {
-            $this->action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+            
             $edit_url = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_EDIT,
+                    self :: PARAM_ACTION => self :: ACTION_EDIT, 
                     self :: PARAM_PUBLICATION_ID => $this->publication->get_id()));
-
+            
             $delete_url = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_DELETE,
+                    self :: PARAM_ACTION => self :: ACTION_DELETE, 
                     self :: PARAM_PUBLICATION_ID => $this->publication->get_id()));
-
+            
             $ical_url = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_EXPORT,
+                    self :: PARAM_ACTION => self :: ACTION_EXPORT, 
                     self :: PARAM_PUBLICATION_ID => $this->publication->get_id()));
-
-            $this->action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('ExportIcal'),
-                    Theme :: getInstance()->getCommonImagePath('Export/Csv'),
+            
+            $toolActions->addButton(
+                new Button(
+                    Translation :: get('ExportIcal'), 
+                    Theme :: getInstance()->getCommonImagePath('Export/Csv'), 
                     $ical_url));
-
+            
             $user = $this->get_user();
-
+            
             if ($user->is_platform_admin() || $this->publication->get_publisher() == $user->get_id())
             {
-                $this->action_bar->add_common_action(
-                    new ToolbarItem(
-                        Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
                         $edit_url));
-                $this->action_bar->add_common_action(
-                    new ToolbarItem(
-                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
                         $delete_url));
             }
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
-        return $this->action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -272,8 +280,8 @@ class ViewerComponent extends Manager implements DelegateComponent
     {
         return $this->get_url(
             array(
-                Application :: PARAM_ACTION => Manager :: ACTION_VIEW_ATTACHMENT,
-                self :: PARAM_PUBLICATION_ID => $this->publication->get_id(),
+                Application :: PARAM_ACTION => Manager :: ACTION_VIEW_ATTACHMENT, 
+                self :: PARAM_PUBLICATION_ID => $this->publication->get_id(), 
                 self :: PARAM_OBJECT => $attachment->get_id()));
     }
 }

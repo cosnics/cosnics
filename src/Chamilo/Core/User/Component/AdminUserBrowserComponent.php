@@ -5,7 +5,10 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Table\Admin\AdminUserTable;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -19,7 +22,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: admin_user_browser.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- *
+ * 
  * @package user.lib.user_manager.component
  */
 class AdminUserBrowserComponent extends Manager implements TableSupport
@@ -29,48 +32,53 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
 
     private $menu_breadcrumbs;
 
-    private $action_bar;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-
+        
         $this->firstletter = Request :: get(self :: PARAM_FIRSTLETTER);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->get_action_bar()->as_html() . '<br />';
+        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
         $html[] = $this->get_user_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function get_user_html()
     {
         $table = new AdminUserTable($this);
-
+        
         $html = array();
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';
-
+        
         return implode($html, "\n");
     }
 
     public function get_parameters()
     {
         $parameters = parent :: get_parameters();
-        if (isset($this->action_bar))
+        if (isset($this->buttonToolbarRenderer))
         {
-            $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->get_action_bar()->get_query();
+            $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         }
         return $parameters;
     }
@@ -87,44 +95,49 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
         $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME);
         $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE);
         $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL);
-
+        
         // get conditions
-        return $this->get_action_bar()->get_conditions($search_properties);
+        return $this->buttonToolbarRenderer->getConditions($search_properties);
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        if (! isset($this->action_bar))
+        if (! isset($this->buttonToolbarRenderer))
         {
-            $this->action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-            $this->action_bar->set_search_url($this->get_url(parent :: get_parameters()));
-
+            
+            $buttonToolbar = new ButtonToolBar($this->get_url(parent :: get_parameters()));
+            $commonActions = new ButtonGroup();
+            
             if ($this->get_user()->is_platform_admin())
             {
-                $this->action_bar->add_common_action(
-                    new ToolbarItem(
-                        Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Add'),
-                        $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_CREATE_USER)),
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Add'), 
+                        $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_CREATE_USER)), 
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-                $this->action_bar->add_tool_action(
-                    new ToolBarItem(
-                        Translation :: get('Report'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
-                        $this->get_reporting_url(),
+                
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('Report'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Reporting'), 
+                        $this->get_reporting_url(), 
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
-
-            $this->action_bar->add_common_action(
-                new ToolbarItem(
-                    Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(),
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
-        return $this->action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

@@ -6,8 +6,10 @@ use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Table\Vocabulary\VocabularyTable;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -32,11 +34,10 @@ class BrowserComponent extends Manager implements TableSupport
 {
 
     /**
-     * The action bar of this browser
      *
-     * @var ActionBarRenderer
+     * @var ButtonToolBarRenderer
      */
-    private $action_bar;
+    private $buttonToolbarRenderer;
 
     /**
      * Executes this controller
@@ -47,20 +48,20 @@ class BrowserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
+        
         if (! $this->getSelectedElementId())
         {
             throw new NoObjectSelectedException(Translation :: get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
-
+        
         $content = $this->getContent();
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $content;
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -68,7 +69,8 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $table = new VocabularyTable($this);
         $userId = $this->getSelectedUserId();
-
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
         if ($userId != 0)
         {
             $user = DataManager :: retrieve_by_id(User :: class_name(), $userId);
@@ -78,44 +80,51 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $breadcrumbTitle = Translation :: get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
         }
-
+        
         BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb($this->get_url(array(Manager :: PARAM_USER_ID => $userId)), $breadcrumbTitle));
-
+        
         $html = array();
-
-        $html[] = $this->get_action_bar()->as_html();
+        
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Builds the action bar
-     *
-     * @return ActionBarRenderer
+     * 
+     * @return ButtonToolBarRenderer
      */
-    protected function get_action_bar()
+    protected function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        $action_bar->set_search_url($this->get_url());
-
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Create'),
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_CREATE,
-                        \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId(),
-                        self :: PARAM_USER_ID => $this->getSelectedUserId()))));
-
-        return $action_bar;
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $commonActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
+                    $this->get_url(
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
+                            \Chamilo\Core\Metadata\Element\Manager :: PARAM_ELEMENT_ID => $this->getSelectedElementId(), 
+                            self :: PARAM_USER_ID => $this->getSelectedUserId()))));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+        
+        return $this->buttonToolbarRenderer;
     }
 
     /**
      * Returns the condition
-     *
+     * 
      * @param string $table_class_name
      *
      * @return \libraries\storage\Condition
@@ -123,27 +132,27 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         $conditions = array();
-
-        $searchCondition = $this->get_action_bar()->get_conditions(
+        
+        $searchCondition = $this->buttonToolbarRenderer->getConditions(
             array(new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_VALUE)));
-
+        
         if ($searchCondition)
         {
             $conditions[] = $searchCondition;
         }
-
+        
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID),
-            ComparisonCondition :: EQUAL,
+            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_ELEMENT_ID), 
+            ComparisonCondition :: EQUAL, 
             new StaticConditionVariable($this->getSelectedElementId()));
-
+        
         $userId = $this->getSelectedUserId();
-
+        
         $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_USER_ID),
-            ComparisonCondition :: EQUAL,
+            new PropertyConditionVariable(Vocabulary :: class_name(), Vocabulary :: PROPERTY_USER_ID), 
+            ComparisonCondition :: EQUAL, 
             new StaticConditionVariable($userId));
-
+        
         return new AndCondition($conditions);
     }
 }

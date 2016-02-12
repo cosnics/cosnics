@@ -41,7 +41,7 @@ class LanguageCategoryItem extends CategoryItem
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
 
-                $sub_html[] = '<ul>';
+                $sub_html[] = '<ul class="dropdown-menu language-selector">';
 
                 $currentLanguage = LocalSetting :: getInstance()->get('platform_language');
 
@@ -69,20 +69,18 @@ class LanguageCategoryItem extends CategoryItem
                 $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
             }
 
-            $html[] = '<ul>';
+            $html[] = '<li class="dropdown">';
 
-            $html[] = '<li>';
-            $html[] = '<a href="#">';
-
-            $html[] = '<div class="chamilo-menu-item-label">' . $currentLanguage . '</div>';
-
-            $html[] = '<!--[if IE 7]><!--></a><!--<![endif]-->';
-            $html[] = '<!--[if lte IE 6]><table><tr><td><![endif]-->';
+            $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+            $html[] = '<div class="chamilo-menu-item-label">';
+            $html[] = $currentLanguage;
+            $html[] = '<span class="caret"></span>';
+            $html[] = '</div>';
+            $html[] = '</a>';
 
             $html[] = implode(PHP_EOL, $sub_html);
 
             $html[] = '</li>';
-            $html[] = '</ul>';
         }
 
         return implode(PHP_EOL, $html);

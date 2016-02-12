@@ -5,8 +5,10 @@ use Chamilo\Core\Metadata\Relation\Manager;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Relation\Table\Relation\RelationTable;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -25,11 +27,10 @@ class BrowserComponent extends Manager implements TableSupport
 {
 
     /**
-     * The action bar of this browser
      *
-     * @var ActionBarRenderer
+     * @var ButtonToolBarRenderer
      */
-    private $action_bar;
+    private $buttonToolbarRenderer;
 
     /**
      * Executes this controller
@@ -40,13 +41,13 @@ class BrowserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $this->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -55,46 +56,52 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function as_html()
     {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = array();
-
-        $this->action_bar = $this->get_action_bar();
-        $html[] = $this->action_bar->as_html();
-
+        
+        $html[] = $this->buttonToolbarRenderer->render();
+        
         $table = new RelationTable($this);
         $html[] = $table->as_html();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Builds the action bar
-     *
-     * @return ActionBarRenderer
+     * 
+     * @return ButtonToolBarRenderer
      */
-    protected function get_action_bar()
+    protected function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        $action_bar->set_search_url($this->get_url());
-
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Create'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
-
-        return $action_bar;
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $commonActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+        
+        return $this->buttonToolbarRenderer;
     }
 
     /**
      * Returns the condition
-     *
+     * 
      * @param string $table_class_name
      *
      * @return \libraries\storage\Condition
      */
     public function get_table_condition($table_class_name)
     {
-        return $this->action_bar->get_conditions(
+        return $this->buttonToolbarRenderer->getConditions(
             array(new PropertyConditionVariable(Relation :: class_name(), Relation :: PROPERTY_NAME)));
     }
 }

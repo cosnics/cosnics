@@ -4,12 +4,12 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Ba
 use Chamilo\Core\Menu\Renderer\Item\Bar\Item\CategoryItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\Workspace\Manager;
+use Chamilo\Core\Menu\Renderer\Item\Renderer;
 
 /**
  *
@@ -46,7 +46,7 @@ class WorkspaceCategoryItem extends CategoryItem
             $entityService,
             $this->getMenuRenderer()->get_user());
 
-        $sub_html[] = '<ul>';
+        $sub_html[] = '<ul class="dropdown-menu">';
 
         if ($workspaces->size())
         {
@@ -69,15 +69,11 @@ class WorkspaceCategoryItem extends CategoryItem
         $sub_html[] = Renderer :: toHtml($this->getMenuRenderer(), $configurationItem, $this);
 
         $sub_html[] = '</ul>';
-        $sub_html[] = '<!--[if lte IE 6]></td></tr></table></a><![endif]-->';
-
-        $html[] = '<ul>';
 
         $selected = $this->isSelected();
-        $class = $selected ? 'class="chamilo-menu-item-current" ' : '';
 
-        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
-        $html[] = '<a ' . $class . 'href="#">';
+        $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
+        $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
         $title = Translation :: get('Workspaces');
 
@@ -98,13 +94,11 @@ class WorkspaceCategoryItem extends CategoryItem
                  ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
-        $html[] = '<!--[if IE 7]><!--></a><!--<![endif]-->';
-        $html[] = '<!--[if lte IE 6]><table><tr><td><![endif]-->';
+        $html[] = '</a>';
 
         $html[] = implode(PHP_EOL, $sub_html);
 
         $html[] = '</li>';
-        $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
     }

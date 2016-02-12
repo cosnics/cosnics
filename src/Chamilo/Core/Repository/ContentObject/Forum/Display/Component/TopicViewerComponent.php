@@ -7,7 +7,6 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopi
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -25,6 +24,10 @@ use HTML_Table;
 use Pager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 
 /**
  * $Id: topic_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -33,8 +36,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class TopicViewerComponent extends Manager implements DelegateComponent
 {
-
-    private $action_bar;
 
     /**
      * Posts of a topic.
@@ -78,6 +79,11 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     private $total_number_of_items;
 
     /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
+    /**
      * The default number of objects per page.
      */
     const DEFAULT_PER_PAGE = 5;
@@ -93,7 +99,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
         if (! $this->is_locked)
         {
-            $this->action_bar = $this->get_action_bar();
+            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         }
 
         $trail = BreadcrumbTrail :: get_instance();
@@ -157,9 +163,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
         $html[] = '<a name="top"></a>';
 
-        if ($this->action_bar)
+        if ($this->buttonToolbarRenderer)
         {
-            $html[] = $this->action_bar->as_html();
+            $html[] = $this->buttonToolbarRenderer->render();
         }
 
         $html[] = '<div class="clear"></div><br />';
@@ -423,37 +429,41 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         return $toolbar->as_html();
     }
 
-    /**
-     * Gets the action bar for the topic viewer.
-     *
-     * @return \libraries\format\ActionBarRenderer
-     */
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-        $parameters = array();
-        $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_FORUM_POST;
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('ReplyOnTopic', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic'),
-                Theme :: getInstance()->getCommonImagePath('Action/Reply'),
-                $this->get_url($parameters),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $par = array();
+            $buttonToolbar = new ButtonToolBar($this->get_url($par));
+            $commonActions = new ButtonGroup();
 
-        $par = array();
-        $par[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-        $par[self :: PARAM_ACTION] = self :: ACTION_VIEW_TOPIC;
+            $parameters = array();
+            $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+            $parameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_FORUM_POST;
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('ReplyOnTopic', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Reply'),
+                    $this->get_url($parameters),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
-        $action_bar->set_search_url($this->get_url($par));
-        $show_all_item = new ToolbarItem(
-            Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url($par),
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL);
-        $action_bar->add_common_action($show_all_item);
+            $par = array();
+            $par[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+            $par[self :: PARAM_ACTION] = self :: ACTION_VIEW_TOPIC;
 
-        return $action_bar;
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url($par),
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+            $buttonToolbar->addButtonGroup($commonActions);
+
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->buttonToolbarRenderer;
     }
 
     /**
@@ -477,9 +487,9 @@ class TopicViewerComponent extends Manager implements DelegateComponent
      */
     public function get_search_condition()
     {
-        if ($this->action_bar)
+        if ($this->buttonToolbarRenderer)
         {
-            $query = $this->action_bar->get_query();
+            $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
             if (isset($query) && $query != '')
             {
                 $conditions = array();

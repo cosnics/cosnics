@@ -8,7 +8,10 @@ use Chamilo\Core\Group\Table\GroupRelUser\GroupRelUserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -28,15 +31,19 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: viewer.class.php 224 2009-11-13 14:40:30Z kariboe $
- *
+ * 
  * @package group.lib.group_manager.component
  */
 class ViewerComponent extends Manager implements TableSupport
 {
 
-    private $group;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
-    private $ab;
+    private $group;
 
     private $root_group;
 
@@ -52,21 +59,22 @@ class ViewerComponent extends Manager implements TableSupport
             $this->group = $this->retrieve_group($id);
             $this->root_group = $this->retrieve_groups(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
+                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID), 
                     new StaticConditionVariable(0)))->next_result();
             $group = $this->group;
-
+            
             if (! $this->get_user()->is_platform_admin())
             {
                 throw new NotAllowedException();
             }
-
+            
             $html = array();
-
+            
             $html[] = $this->render_header();
-            $this->ab = $this->get_action_bar();
-            $html[] = $this->ab->as_html() . '<br />';
-
+            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+            
+            $html[] = $this->buttonToolbarRenderer->render() . '<br />';
+            
             $html[] = '<div class="clear"></div><div class="content_object" style="background-image: url(' .
                  Theme :: getInstance()->getCommonImagePath('Place/Group') . ');">';
             $html[] = '<div class="title">' . Translation :: get('Details') . '</div>';
@@ -75,21 +83,21 @@ class ViewerComponent extends Manager implements TableSupport
                  $group->get_description();
             $html[] = '<div class="clear">&nbsp;</div>';
             $html[] = '</div>';
-
+            
             $html[] = '<div class="content_object" style="background-image: url(' .
                  Theme :: getInstance()->getCommonImagePath('Place/Users') . ');">';
             $html[] = '<div class="title">' . Translation :: get('Users', null, \Chamilo\Core\User\Manager :: context()) .
                  '</div>';
-
+            
             $parameters = $this->get_parameters();
             $parameters[self :: PARAM_GROUP_ID] = $id;
-            $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->ab->get_query();
+            $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
             $table = new GroupRelUserTable($this);
             $html[] = $table->as_html();
             $html[] = '</div>';
-
+            
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
         else
@@ -102,134 +110,143 @@ class ViewerComponent extends Manager implements TableSupport
     public function get_condition()
     {
         $conditions = array();
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID), 
             new StaticConditionVariable(Request :: get(self :: PARAM_GROUP_ID)));
-
-        $query = $this->ab->get_query();
-
+        
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME), 
                 '*' . $query . '*');
             $condition = new OrCondition($or_conditions);
-
+            
             $users = \Chamilo\Core\User\Storage\DataManager :: retrieves(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
                 new DataClassRetrievesParameters($condition));
-
+            
             while ($user = $users->next_result())
             {
                 $userconditions[] = new EqualityCondition(GroupRelUser :: PROPERTY_USER_ID, $user->get_id());
             }
-
+            
             if (count($userconditions))
                 $conditions[] = new OrCondition($userconditions);
             else
                 $conditions[] = new EqualityCondition(GroupRelUser :: PROPERTY_USER_ID, 0);
         }
-
+        
         $condition = new AndCondition($conditions);
-
+        
         return $condition;
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
         $group = $this->group;
-
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
-        $action_bar->set_search_url($this->get_url(array(self :: PARAM_GROUP_ID => $group->get_id())));
-
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(array(self :: PARAM_GROUP_ID => $group->get_id())),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->get_group_editing_url($group),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-        if ($this->group != $this->root_group)
+        if (! isset($this->buttonToolbarRenderer))
         {
-            $action_bar->add_common_action(
-                new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                    $this->get_group_delete_url($group),
+            $buttonToolbar = new ButtonToolBar($this->get_url(array(self :: PARAM_GROUP_ID => $group->get_id())));
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(array(self :: PARAM_GROUP_ID => $group->get_id())), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        }
-
-        $action_bar->add_tool_action(
-            new ToolbarItem(
-                Translation :: get('AddUsers', null, \Chamilo\Core\User\Manager :: context()),
-                Theme :: getInstance()->getCommonImagePath('Action/Subscribe'),
-                $this->get_group_suscribe_user_browser_url($group),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group->get_id()));
-        $users = $this->retrieve_group_rel_users($condition);
-        $visible = ($users->size() > 0);
-
-        if ($visible)
-        {
-            $toolbar_data[] = array(
-                'href' => $this->get_group_emptying_url($group),
-                'label' => Translation :: get('Truncate'),
-                'img' => Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
-                'display' => Utilities :: TOOLBAR_DISPLAY_ICON_AND_LABEL);
-
-            $action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('Truncate'),
-                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
-                    $this->get_group_emptying_url($group),
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                    $this->get_group_editing_url($group), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        }
-        else
-        {
-            $toolbar_data[] = array(
-                'label' => Translation :: get('TruncateNA'),
-                'img' => Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
-                'display' => Utilities :: TOOLBAR_DISPLAY_ICON_AND_LABEL);
-            $action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('TruncateNA'),
-                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'),
-                    null,
+            
+            if ($this->group != $this->root_group)
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                        $this->get_group_delete_url($group), 
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            }
+            
+            $toolActions->addButton(
+                new Button(
+                    Translation :: get('AddUsers', null, \Chamilo\Core\User\Manager :: context()), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Subscribe'), 
+                    $this->get_group_suscribe_user_browser_url($group), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID), 
+                new StaticConditionVariable($group->get_id()));
+            $users = $this->retrieve_group_rel_users($condition);
+            $visible = ($users->size() > 0);
+            
+            if ($visible)
+            {
+                $toolbar_data[] = array(
+                    'href' => $this->get_group_emptying_url($group), 
+                    'label' => Translation :: get('Truncate'), 
+                    'img' => Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'), 
+                    'display' => Utilities :: TOOLBAR_DISPLAY_ICON_AND_LABEL);
+                
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('Truncate'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'), 
+                        $this->get_group_emptying_url($group), 
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            }
+            else
+            {
+                $toolbar_data[] = array(
+                    'label' => Translation :: get('TruncateNA'), 
+                    'img' => Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'), 
+                    'display' => Utilities :: TOOLBAR_DISPLAY_ICON_AND_LABEL);
+                
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('TruncateNA'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'), 
+                        null, 
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            }
+            
+            $toolActions->addButton(
+                new Button(
+                    Translation :: get('Metadata', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Metadata'), 
+                    $this->get_group_metadata_url($group), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+            
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
-        $action_bar->add_tool_action(
-            new ToolbarItem(
-                Translation :: get('Metadata', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Metadata'),
-                $this->get_group_metadata_url($group),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-        return $action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS)),
+                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS)), 
                 Translation :: get('BrowserComponent')));
         $breadcrumbtrail->add_help('group general');
     }

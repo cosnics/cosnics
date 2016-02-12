@@ -29,22 +29,12 @@ abstract class Bar extends Renderer
     {
         $html = array();
 
-        $selected = $this->isSelected();
+        $selected = $this->isItemSelected();
 
-        if ($this->getItem()->get_parent() == 0)
-        {
-            $html[] = '<ul>';
-        }
-
-        $html[] = '<li' . ($selected ? ' class="chamilo-menu-item-current"' : '') . '>';
+        $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = $this->getContent();
 
         $html[] = '</li>';
-
-        if ($this->getItem()->get_parent() == 0)
-        {
-            $html[] = '</ul>';
-        }
 
         return implode(PHP_EOL, $html);
     }

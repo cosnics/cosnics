@@ -4,7 +4,10 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Table\Approval\UserApprovalTable;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -19,83 +22,94 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: admin_user_browser.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- *
+ * 
  * @package user.lib.user_manager.component
  */
 class UserApprovalBrowserComponent extends Manager implements TableSupport
 {
 
-    private $ab;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-
-        $this->ab = $this->get_action_bar();
-
+        
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->ab->as_html() . '<br />';
+        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
         $html[] = $this->get_user_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function get_user_html()
     {
         $parameters = $this->get_parameters(true);
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->ab->get_query();
-
+        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        
         $table = new UserApprovalTable($this);
-
+        
         $html = array();
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';
-
+        
         return implode($html, "\n");
     }
 
     public function get_table_condition($object_table_class_name)
     {
-        $query = $this->ab->get_query();
-
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME), 
                 '*' . $query . '*');
             return new OrCondition($or_conditions);
         }
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
-        $action_bar->set_search_url($this->get_url());
-
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        return $action_bar;
+        if (! isset($this->buttonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar($this->get_url());
+            $commonActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

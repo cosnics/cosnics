@@ -4,17 +4,18 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\PeerAssessmentGraph;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Enter description here .
@@ -115,7 +116,7 @@ class UserResultsViewerComponent extends Manager
     {
         $settings = $this->get_settings($this->get_publication_id());
 
-        $action_bar = $this->get_action_bar();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
         if ($settings->get_enable_user_results_export())
         {
@@ -123,8 +124,10 @@ class UserResultsViewerComponent extends Manager
                  $this->get_user()->get_id() != Request :: get(self :: PARAM_USER))
                 return;
 
-            $action_bar->add_common_action(
-                new ToolbarItem(
+            $buttonToolbar = $this->buttonToolbarRenderer->getButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $commonActions->addButton(
+                new Button(
                     Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Export/Ods'),
                     $this->get_url(
@@ -135,7 +138,9 @@ class UserResultsViewerComponent extends Manager
                             self :: PARAM_ATTEMPT => Request :: get(self :: PARAM_ATTEMPT)))));
         }
 
-        return $action_bar->as_html();
+        $buttonToolbar->addButtonGroup($commonActions);
+
+        return $this->buttonToolbarRenderer->render();
     }
 
     private function render()

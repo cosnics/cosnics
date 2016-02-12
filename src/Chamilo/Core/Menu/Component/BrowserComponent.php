@@ -9,7 +9,10 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\LinkItem;
 use Chamilo\Core\Menu\Table\Item\ItemBrowserTable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -31,7 +34,11 @@ use Chamilo\Libraries\Utilities\Utilities;
 class BrowserComponent extends Manager implements DelegateComponent, TableSupport
 {
 
-    private $action_bar;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     public function run()
     {
@@ -41,17 +48,18 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
 
     public function show_navigation_item_list()
     {
-        $this->action_bar = $this->get_action_bar();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
         $this->parent = Request :: get(self :: PARAM_PARENT);
-
+        
         $parameters = $this->get_parameters(true);
-
+        
         $table = new ItemBrowserTable($this, $parameters, $this->get_condition());
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->action_bar->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = '<div style="float: left; width: 12%; overflow:auto;">';
         $html[] = $this->get_menu()->render_as_tree();
         $html[] = '</div>';
@@ -59,53 +67,68 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $html[] = $table->as_html();
         $html[] = '</div>';
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        $action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('AddApplicationItem'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_APPLICATION),
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_CREATE,
-                        self :: PARAM_TYPE => ApplicationItem :: class_name())),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('AddCategoryItem'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_CATEGORY),
-                $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_CREATE,
-                        self :: PARAM_TYPE => CategoryItem :: class_name())),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-        $action_bar->add_common_action(
-            new ToolbarItem(
-                Translation :: get('AddLinkItem'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_LINK),
-                $this->get_url(
-                    array(self :: PARAM_ACTION => self :: ACTION_CREATE, self :: PARAM_TYPE => LinkItem :: class_name())),
-                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-        $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
-
-        if ($setting == 1)
+        if (! isset($this->buttonToolbarRenderer))
         {
-            $action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)),
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('AddApplicationItem'), 
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_APPLICATION), 
+                    $this->get_url(
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
+                            self :: PARAM_TYPE => ApplicationItem :: class_name())), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('AddCategoryItem'), 
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_CATEGORY), 
+                    $this->get_url(
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
+                            self :: PARAM_TYPE => CategoryItem :: class_name())), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $commonActions->addButton(
+                new Button(
+                    Translation :: get('AddLinkItem'), 
+                    Theme :: getInstance()->getImagePath('Chamilo\Core\Menu', 'Types/' . Item :: TYPE_LINK), 
+                    $this->get_url(
+                        array(
+                            self :: PARAM_ACTION => self :: ACTION_CREATE, 
+                            self :: PARAM_TYPE => LinkItem :: class_name())), 
+                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+            
+            if ($setting == 1)
+            {
+                $toolActions->addButton(
+                    new Button(
+                        
+                        Translation :: get('Rights', null, Utilities :: COMMON_LIBRARIES), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
+                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)), 
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            }
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+            
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
-        return $action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function get_condition()
@@ -113,7 +136,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $condition = null;
         $parent = (isset($this->parent) ? $this->parent : 0);
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT),
+            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT), 
             new StaticConditionVariable($parent));
         return $condition;
     }

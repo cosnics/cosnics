@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -103,5 +104,33 @@ class ButtonToolBarRenderer
         }
 
         return $this->searchForm;
+    }
+
+    /**
+     * Returns the search query conditions
+     *
+     * @param array $properties
+     * @return Condition
+     * @uses Utilities :: query_to_condition() (deprecated)
+     */
+    public function getConditions($properties = array ())
+    {
+        // check input parameter
+        if (! is_array($properties))
+        {
+            $properties = array($properties);
+        }
+
+        // get query
+        $query = $this->getSearchForm()->getQuery();
+
+        // only process if we have a search query and properties
+        if (isset($query) && count($properties))
+        {
+            $search_conditions = Utilities :: query_to_condition($query, $properties);
+
+            $condition = $search_conditions;
+        }
+        return $condition;
     }
 }

@@ -4,11 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager\BuilderWizard;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Php\Lib\Manager\BuilderWizardPage;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 
 abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 {
@@ -26,7 +28,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
     const ACTION_DELETE_GROUP = 'GroupDeleter';
     const ACTION_BROWSE = 'Browser';
     const ACTION_EDIT_SETTINGS = 'SettingsEditor';
-
+    
     /**
      *
      * @todo move to proper place
@@ -34,12 +36,18 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
     const VIEW_RIGHT = 1;
     const EDIT_RIGHT = 2;
 
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
+
     private $wizard;
 
     function __construct($user, $parent)
     {
         parent :: __construct($user, $parent);
-
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $this->wizard = new BuilderWizard($this);
         // if (method_exists($this->get_parent(), 'get_parent'))
         // $this->init_wizard();
@@ -49,7 +57,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
     {
         $root_content_object = $this->get_root_content_object();
         $assessment_type = $root_content_object->get_assessment_type();
-
+        
         if (($assessment_type == PeerAssessment :: TYPE_BOTH || $assessment_type == PeerAssessment :: TYPE_SCORES) &&
              ! $this->publication_has_scores())
         {
@@ -62,7 +70,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
             $wizard_page->set_completed(count($this->get_indicators()));
             $this->wizard->add_page($wizard_page);
         }
-
+        
         $wizard_page = new BuilderWizardPage();
         $wizard_page->set_id(self :: ACTION_EDIT_ATTEMPT);
         $wizard_page->set_title('PeerAssessmentBuilderAttemptCreatorComponent');
@@ -70,7 +78,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         $wizard_page->set_show_menu(false);
         $wizard_page->set_completed(count($this->get_attempts($this->get_publication_id())));
         $this->wizard->add_page($wizard_page);
-
+        
         $wizard_page = new BuilderWizardPage();
         $wizard_page->set_id(self :: ACTION_BROWSE_ATTEMPTS);
         $wizard_page->set_title('PeerAssessmentBuilderAttemptBrowserComponent');
@@ -78,7 +86,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         $wizard_page->set_repeats(true);
         $wizard_page->set_completed(count($this->get_attempts($this->get_publication_id())));
         $this->wizard->add_page($wizard_page);
-
+        
         $wizard_page = new BuilderWizardPage();
         $wizard_page->set_id(self :: ACTION_CREATE_GROUP);
         $wizard_page->set_title('PeerAssessmentBuilderGroupCreatorComponent');
@@ -86,7 +94,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         $wizard_page->set_show_menu(false);
         $wizard_page->set_completed(count($this->get_groups($this->get_publication_id())));
         $this->wizard->add_page($wizard_page);
-
+        
         $wizard_page = new BuilderWizardPage();
         $wizard_page->set_id(self :: ACTION_BROWSE_GROUPS);
         $wizard_page->set_title('PeerAssessmentBuilderGroupBrowserComponent');
@@ -94,7 +102,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
         $wizard_page->set_repeats(true);
         $wizard_page->set_completed(count($this->get_groups($this->get_publication_id())));
         $this->wizard->add_page($wizard_page);
-
+        
         if (! $this->publication_has_scores())
         {
             $wizard_page = new BuilderWizardPage();
@@ -107,7 +115,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
                 $this->get_settings($this->get_publication_id())->get_min_group_members() === null ? false : true);
             $this->wizard->add_page($wizard_page);
         }
-
+        
         $complete = count($this->get_indicators());
         $complete &= count($this->get_groups($this->get_publication_id()));
         $complete &= count($this->get_attempts($this->get_publication_id()));
@@ -121,10 +129,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
     function render_footer()
     {
         $html = array();
-
+        
         $html[] = $this->wizard->display(Request :: get(self :: PARAM_ACTION), self :: DEFAULT_ACTION);
         $html[] = parent :: render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -134,63 +142,71 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
     function render_header()
     {
         $html = array();
-
+        
         $html[] = parent :: render_header();
         $html[] = $this->wizard->display(Request :: get(self :: PARAM_ACTION), self :: DEFAULT_ACTION);
-
+        
         return implode(PHP_EOL, $html);
     }
 
-    function get_action_bar()
+    function getButtonToolbarRenderer()
     {
         $repository_context = $this->get_parent() instanceof \Chamilo\Core\Repository\Component\BuilderComponent;
-
-        $this->action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
-        $display_action = Request :: get(self :: PARAM_ACTION);
-
-        if (! $repository_context)
+        
+        if (! isset($this->buttonToolbarRenderer))
         {
-            if ($display_action != self :: ACTION_EDIT_SETTINGS && ! $this->publication_has_scores())
-                $this->action_bar->add_tool_action(
-                    new ToolbarItem(
-                        Translation :: get('PeerAssessmentBuilderSettingsEditorComponent'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Config'),
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_SETTINGS))));
-            if ($display_action != self :: ACTION_BROWSE_ATTEMPTS)
-                $this->action_bar->add_tool_action(
-                    new ToolbarItem(
-                        Translation :: get('PeerAssessmentBuilderAttemptBrowserComponent'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Period'),
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_ATTEMPTS))));
-            if ($display_action != self :: ACTION_BROWSE_GROUPS)
-                $this->action_bar->add_tool_action(
-                    new ToolbarItem(
-                        Translation :: get('PeerAssessmentBuilderGroupCreatorComponent'),
-                        Theme :: getInstance()->getCommonImagePath('Treemenu/Group'),
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS))));
-
-            if ($display_action != self :: ACTION_BROWSE && ! $this->publication_has_scores())
+            $buttonToolbar = new ButtonToolBar();
+            $toolActions = new ButtonGroup();
+            
+            $display_action = Request :: get(self :: PARAM_ACTION);
+            
+            if (! $repository_context)
             {
-                $root_content_object = $this->get_root_content_object();
-                $assessment_type = $root_content_object->get_assessment_type();
-                if ($assessment_type == PeerAssessment :: TYPE_BOTH || $assessment_type == PeerAssessment :: TYPE_SCORES)
+                if ($display_action != self :: ACTION_EDIT_SETTINGS && ! $this->publication_has_scores())
+                    $toolActions->addButton(
+                        new Button(
+                            Translation :: get('PeerAssessmentBuilderSettingsEditorComponent'), 
+                            Theme :: getInstance()->getCommonImagePath('Action/Config'), 
+                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_SETTINGS))));
+                if ($display_action != self :: ACTION_BROWSE_ATTEMPTS)
+                    $toolActions->addButton(
+                        new Button(
+                            Translation :: get('PeerAssessmentBuilderAttemptBrowserComponent'), 
+                            Theme :: getInstance()->getCommonImagePath('Action/Period'), 
+                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_ATTEMPTS))));
+                if ($display_action != self :: ACTION_BROWSE_GROUPS)
+                    $toolActions->addButton(
+                        new Button(
+                            Translation :: get('PeerAssessmentBuilderGroupCreatorComponent'), 
+                            Theme :: getInstance()->getCommonImagePath('Treemenu/Group'), 
+                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS))));
+                
+                if ($display_action != self :: ACTION_BROWSE && ! $this->publication_has_scores())
                 {
-                    $this->action_bar->add_tool_action(
-                        new ToolbarItem(
-                            Translation :: get('PeerAssessmentBuilderBrowserComponent'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Build'),
-                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
+                    $root_content_object = $this->get_root_content_object();
+                    $assessment_type = $root_content_object->get_assessment_type();
+                    if ($assessment_type == PeerAssessment :: TYPE_BOTH ||
+                         $assessment_type == PeerAssessment :: TYPE_SCORES)
+                    {
+                        $toolActions->addButton(
+                            new Button(
+                                Translation :: get('PeerAssessmentBuilderBrowserComponent'), 
+                                Theme :: getInstance()->getCommonImagePath('Action/Build'), 
+                                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
+                    }
                 }
+                
+                $toolActions->addButton(
+                    new Button(
+                        Translation :: get('ToolComplexDisplay'), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                        $this->get_url($this->get_complex_display_params())));
             }
-
-            $this->action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('ToolComplexDisplay'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url($this->get_complex_display_params())));
+            $buttonToolbar->addButtonGroup(toolActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-        return $this->action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     function get_complex_display_params()
@@ -301,7 +317,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 
     /**
      * Get the groups in which the current user is subscribed
-     *
+     * 
      * @param integer $user_id
      * @return array The groups
      * @deprecated use get_user_group() instead
@@ -309,7 +325,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
     public function get_user_groups($user_id)
     {
         $this->display_warning_message('Deprecated, use get_user_group() instead');
-
+        
         return array($this->get_parent()->get_parent()->get_user_group($user_id));
     }
 
@@ -330,7 +346,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
 
     /**
      * checks if a pa group has scores
-     *
+     * 
      * @param int $group_id
      * @return boolean
      */

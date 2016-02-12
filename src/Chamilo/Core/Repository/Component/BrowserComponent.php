@@ -13,7 +13,10 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -32,7 +35,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: browser.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib.repository_manager.component
  */
 /**
@@ -44,41 +47,46 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     private $form;
 
-    private $action_bar;
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    private $buttonToolbarRenderer;
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        
         if (! RightsService :: getInstance()->canViewContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
-
+        
         $trail = BreadcrumbTrail :: get_instance();
-
+        
         $output = $this->get_content_objects_html();
-
-        $query = $this->get_action_bar()->get_query();
+        
+        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
             $trail->add(
                 new Breadcrumb(
-                    $this->get_url(),
+                    $this->get_url(), 
                     Translation :: get('SearchResultsFor', null, Utilities :: COMMON_LIBRARIES) . ' ' . $query));
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-
-        $html[] = $this->get_action_bar()->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $output;
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Faq.js');
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -94,7 +102,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_renderer()
     {
         $renderer = Request :: get(self :: PARAM_RENDERER);
-
+        
         if ($renderer && in_array($renderer, $this->get_available_renderers()))
         {
             return $renderer;
@@ -109,168 +117,116 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_available_renderers()
     {
         return array(
-            ContentObjectRenderer :: TYPE_TABLE,
-            ContentObjectRenderer :: TYPE_GALLERY,
+            ContentObjectRenderer :: TYPE_TABLE, 
+            ContentObjectRenderer :: TYPE_GALLERY, 
             ContentObjectRenderer :: TYPE_SLIDESHOW);
     }
 
-    public function get_action_bar()
+    public function getButtonToolbarRenderer()
     {
-        if (! isset($this->action_bar))
+        if (! isset($this->buttonToolbarRenderer))
         {
-            $this->action_bar = new ActionBarRenderer(ActionBarRenderer :: TYPE_HORIZONTAL);
-
+            $buttonToolbar = new ButtonToolBar();
+            $commonActions = new ButtonGroup();
+            $toolActions = new ButtonGroup();
+            
             if ($this->has_filter_type())
             {
                 $filter_type = $this->get_filter_type();
                 $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id(
                     (int) $filter_type);
-
-                $this->action_bar->add_common_action(
-                    new ToolbarItem(
+                
+                $commonActions->addButton(
+                    new Button(
                         Translation :: get(
-                            'CreateObjectType',
-                            array('TYPE' => $template_registration->get_template()->translate('TypeName'))),
-                        Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                            'CreateObjectType', 
+                            array('TYPE' => $template_registration->get_template()->translate('TypeName'))), 
+                        Theme :: getInstance()->getCommonImagePath('Action/Create'), 
                         $this->get_url(
                             array(
-                                Application :: PARAM_ACTION => self :: ACTION_CREATE_CONTENT_OBJECTS,
-                                TypeSelector :: PARAM_SELECTION => $filter_type)),
+                                Application :: PARAM_ACTION => self :: ACTION_CREATE_CONTENT_OBJECTS, 
+                                TypeSelector :: PARAM_SELECTION => $filter_type)), 
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
-
+            
             $renderers = $this->get_available_renderers();
-
+            
             if (count($renderers) > 1)
             {
                 foreach ($renderers as $renderer)
                 {
-                    $this->action_bar->add_common_action(
-                        new ToolbarItem(
+                    $commonActions->addButton(
+                        new Button(
                             Translation :: get(
                                 (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize() .
-                                     'View',
-                                    null,
-                                    Utilities :: COMMON_LIBRARIES),
+                                     'View', 
+                                    null, 
+                                    Utilities :: COMMON_LIBRARIES), 
                             Theme :: getInstance()->getImagePath(
-                                'Chamilo\Core\Repository',
-                                'View/' . StringUtilities :: getInstance()->createString($renderer)->upperCamelize()),
-                            $this->get_url(array(self :: PARAM_RENDERER => $renderer)),
+                                'Chamilo\Core\Repository', 
+                                'View/' . StringUtilities :: getInstance()->createString($renderer)->upperCamelize()), 
+                            $this->get_url(array(self :: PARAM_RENDERER => $renderer)), 
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL));
                 }
             }
-
-            $this->action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('ManageCategories'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Category'),
-                    $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)),
+            
+            $toolActions->addButton(
+                new Button(
+                    Translation :: get('ManageCategories'), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Category'), 
+                    $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-            // $currentCategoryIdentifier = FilterData :: get_instance($this->getWorkspace())->get_filter_property(
-            // FilterData :: FILTER_CATEGORY);
-
-            // $this->action_bar->add_tool_action(
-            // new ToolbarItem(
-            // Translation :: get('AddCategory', null, Utilities :: COMMON_LIBRARIES),
-            // Theme :: getInstance()->getCommonImagePath('Action/Add'),
-            // $this->get_url(
-            // array(
-            // self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager ::
-            // ACTION_CREATE_CATEGORY,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
-            // FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
-            // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-            // if ($currentCategoryIdentifier)
-            // {
-            // $this->action_bar->add_tool_action(
-            // new ToolbarItem(
-            // Translation :: get('EditCategory', null, Utilities :: COMMON_LIBRARIES),
-            // Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-            // $this->get_url(
-            // array(
-            // self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager ::
-            // ACTION_UPDATE_CATEGORY,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
-            // FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
-            // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-            // $this->action_bar->add_tool_action(
-            // new ToolbarItem(
-            // Translation :: get('MoveCategory', null, Utilities :: COMMON_LIBRARIES),
-            // Theme :: getInstance()->getCommonImagePath('Action/Move'),
-            // $this->get_url(
-            // array(
-            // self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager ::
-            // ACTION_MOVE_CATEGORY,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
-            // FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
-            // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
-            // $this->action_bar->add_tool_action(
-            // new ToolbarItem(
-            // Translation :: get('DeleteCategory', null, Utilities :: COMMON_LIBRARIES),
-            // Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-            // $this->get_url(
-            // array(
-            // self :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_ACTION => \Chamilo\Configuration\Category\Manager ::
-            // ACTION_DELETE_CATEGORY,
-            // \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID => $currentCategoryIdentifier,
-            // FilterData :: FILTER_CATEGORY => $currentCategoryIdentifier)),
-            // ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            // }
-
-            $this->action_bar->add_tool_action(
-                new ToolbarItem(
-                    Translation :: get('ExportCategory'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Backup'),
+            
+            $toolActions->addButton(
+                new Button(
+                    Translation :: get('ExportCategory'), 
+                    Theme :: getInstance()->getCommonImagePath('Action/Backup'), 
                     $this->get_url(
                         array(
-                            Application :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS,
+                            Application :: PARAM_ACTION => self :: ACTION_EXPORT_CONTENT_OBJECTS, 
                             FilterData :: FILTER_CATEGORY => FilterData :: get_instance($this->getWorkspace())->get_filter_property(
-                                FilterData :: FILTER_CATEGORY))),
+                                FilterData :: FILTER_CATEGORY))), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+            
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
-        return $this->action_bar;
+        
+        return $this->buttonToolbarRenderer;
     }
 
     public function get_condition()
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE), 
             new StaticConditionVariable(ContentObject :: STATE_NORMAL));
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID), 
             new StaticConditionVariable($this->get_user_id()));
-
+        
         $types = DataManager :: get_active_helper_types();
-
+        
         foreach ($types as $type)
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
+                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE), 
                     new StaticConditionVariable($type)));
         }
-
+        
         $filter_condition_renderer = ConditionFilterRenderer :: factory(
-            FilterData :: get_instance($this->getWorkspace()),
+            FilterData :: get_instance($this->getWorkspace()), 
             $this->getWorkspace());
         $filter_condition = $filter_condition_renderer->render();
-
+        
         if ($filter_condition instanceof Condition)
         {
             $conditions[] = $filter_condition;
         }
-
+        
         return new AndCondition($conditions);
     }
 
@@ -288,8 +244,8 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         return parent :: get_additional_parameters(
             array(
-                self :: PARAM_RENDERER,
-                ContentObject :: PROPERTY_PARENT_ID,
+                self :: PARAM_RENDERER, 
+                ContentObject :: PROPERTY_PARENT_ID, 
                 \Chamilo\Configuration\Category\Manager :: PARAM_CATEGORY_ID));
     }
 

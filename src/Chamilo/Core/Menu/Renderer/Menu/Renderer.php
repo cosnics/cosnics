@@ -3,7 +3,6 @@ namespace Chamilo\Core\Menu\Renderer\Menu;
 
 use Chamilo\Core\Menu\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,9 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 abstract class Renderer
 {
-    const TYPE_BAR = 'bar';
-    const TYPE_SITE_MAP = 'site_map';
-    const TYPE_BOOTSTRAP_BAR = 'bootstrap_bar';
+    const TYPE_SITE_MAP = 'SiteMap';
+    const TYPE_BAR = 'Bar';
 
     /**
      *
@@ -33,7 +31,7 @@ abstract class Renderer
 
     /**
      * The layout of the menubar
-     *
+     * 
      * @var String
      */
     protected $html;
@@ -76,7 +74,7 @@ abstract class Renderer
      */
     public static function factory($type, Request $request, $user)
     {
-        $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize();
+        $class = __NAMESPACE__ . '\Type\\' . $type;
         return new $class($request, $user);
     }
 
@@ -101,7 +99,7 @@ abstract class Renderer
         {
             $this->itemService = new ItemService(new ItemRepository());
         }
-
+        
         return $this->itemService;
     }
 
@@ -112,26 +110,26 @@ abstract class Renderer
 
     /**
      * Renders the menu
-     *
+     * 
      * @return string
      */
     public function render()
     {
         $user = $this->get_user();
-
+        
         if (! $user)
         {
             return;
         }
-
+        
         $userRights = $this->getItemService()->determineRightsForUser($this->get_user());
-
+        
         $html = array();
-
+        
         $html[] = $this->display_menu_header();
-
+        
         $category_items = array();
-
+        
         foreach ($this->getRootItems() as $item)
         {
             if ($userRights[$item->get_id()])
@@ -142,9 +140,9 @@ abstract class Renderer
                 }
             }
         }
-
+        
         $html[] = $this->display_menu_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
