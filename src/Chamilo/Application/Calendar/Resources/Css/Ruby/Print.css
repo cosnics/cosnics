@@ -1,0 +1,102 @@
+/*****************************************************
+ *  CALENDAR TABLE STYLES                            *
+ *****************************************************/
+#footer, #header, .calendar_visual_tabs, .mini_calendar,
+	.dynamic-visual-tabs-header, .tabs-header, li.dynamic_visual_tab,
+	.clear, .event-legend-container, .event-mini-calendar {
+	display: none !important;
+}
+
+.calendar_table {
+	width: 100%;
+	font-size: 10px;
+	border-spacing: 0px;
+	border: 1px solid black;
+}
+
+.calendar_table tr {
+	margin: 0px;
+	padding: 0px;
+}
+
+.calendar_table td {
+	border: 1px solid black;
+	margin: 0px;
+	padding: 2px;
+	vertical-align: top;
+	width: 13%;
+}
+
+.calendar_table .week_hours {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: center;
+	vertical-align: middle;
+	width: auto;
+}
+
+.calendar_table th {
+	width: 13%;
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	border: 1px solid black;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 2px;
+}
+
+div.event {
+	margin: 1px;
+	font-size: 90%;
+}
+
+.calendar_navigation {
+	width: 100%;
+	border: 0px solid transparent;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.mini_calendar td {
+	height: 30px;
+}
+
+.calendar_navigation td {
+	height: 10px;
+}
+
+.year_calendar_table {
+	width: 100%;
+}
+
+.navigation-previous, .navigation-next {
+	display: none;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.disabled_month {
+	color: white !important;
+	font-style: italic;
+}
+
+table {
+	page-break-inside: auto
+}
+
+tr {
+	page-break-inside: avoid;
+	page-break-after: auto
+}
+
+thead {
+	display: table-header-group
+}
+
+tfoot {
+	display: table-footer-group
+}
