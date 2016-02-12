@@ -387,6 +387,7 @@ table tr td.column_tool_title {
 	padding: 30px 10px 10px;
 }
 
+.nav.nav-tabs.course-list-tabs,
 .course-list-tab-content .list-group-header {
 	background-color: #F5F5F5;
 }
