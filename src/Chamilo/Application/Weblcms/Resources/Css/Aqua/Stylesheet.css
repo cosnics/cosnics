@@ -471,3 +471,12 @@ table tr td.column_tool_title {
 	display: block;
 	float: none;
 }
+
+.tool-list-content .tool-link .tool-link-actions {
+	display: inline;
+	margin-right: 15px;
+}
+
+.tool-list-content .tool-link .tool-link-image {
+	margin-right: 10px;
+}
