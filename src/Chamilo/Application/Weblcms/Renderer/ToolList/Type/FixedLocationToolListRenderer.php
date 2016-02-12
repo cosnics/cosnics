@@ -506,7 +506,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_VISIBLE;
                 $visible_image = 'Action/Invisible';
                 $tool_image = Theme :: ICON_MEDIUM . 'Na';
-                $link_class = ' class="invisible"';
+                $link_class = ' class="invisible-tool"';
             }
 
             $title = Translation :: get('TypeName', null, $tool_namespace);
