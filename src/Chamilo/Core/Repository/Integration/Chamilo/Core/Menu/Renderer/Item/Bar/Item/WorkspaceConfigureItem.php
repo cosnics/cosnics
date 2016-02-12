@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Libraries\Platform\Translation;
@@ -40,6 +40,7 @@ class WorkspaceConfigureItem extends Bar
         $urlRenderer = new Redirect(array(Application :: PARAM_CONTEXT => Manager :: context()));
 
         $html[] = '<a ' . $class . 'href="' . $urlRenderer->getUrl() . '">';
+
         $title = Translation :: get('ConfigureWorkspaces', array(), 'Chamilo\Core\Repository\Workspace');
 
         if ($this->getItem()->show_icon())

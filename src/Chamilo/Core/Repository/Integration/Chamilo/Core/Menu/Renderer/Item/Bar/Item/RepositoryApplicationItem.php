@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\Menu\Renderer\Item\BootstrapBar\Item\ApplicationItem;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Item\ApplicationItem;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -21,7 +21,6 @@ class RepositoryApplicationItem extends ApplicationItem
 
         $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
 
-        return ($currentContext == $this->getItem()->get_application() && !isset($currentWorkspace));
+        return ($currentContext == $this->getItem()->get_application() && ! isset($currentWorkspace));
     }
-
 }

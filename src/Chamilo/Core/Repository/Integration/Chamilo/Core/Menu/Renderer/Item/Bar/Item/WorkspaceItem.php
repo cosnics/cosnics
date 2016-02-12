@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Ba
 
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 
 /**
  *
@@ -31,7 +31,7 @@ class WorkspaceItem extends Bar
 
         if ($selected)
         {
-            $class = 'class="current" ';
+            $class = 'class="active" ';
         }
         else
         {
@@ -48,7 +48,7 @@ class WorkspaceItem extends Bar
 
         if ($this->getItem()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo/16');
+            $imagePath = Theme :: getInstance()->getImagePath(\Chamilo\Core\Repository\Manager :: package(), 'Logo/48');
 
             $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
                  $title . '" />';
