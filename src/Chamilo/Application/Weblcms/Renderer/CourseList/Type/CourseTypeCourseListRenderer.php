@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
@@ -432,11 +433,15 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                 if ($course_admin || $course_visible)
                 {
                     $locked = '';
-                    $text_style = '';
+                    $invisbleClass = '';
 
-                    $html[] = '<div class="list-group-item">';
+                    if (! $course_visible)
+                    {
+                        $invisbleClass = 'invisible-course';
+                    }
 
-                    $icon = Theme :: getInstance()->getCommonImagePath('Action/Home');
+                    $html[] = '<div class="list-group-item ' . $invisbleClass . '">';
+
                     $url = $this->get_course_url($course);
 
                     $course_access = $course_settings_controller->get_course_setting(
@@ -447,37 +452,12 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     if ($course_closed)
                     {
-                        $icon = Theme :: getInstance()->getCommonImagePath('Action/Lock');
-
                         if (! $course_admin)
                         {
                             $url = null;
                         }
-                        else
-                        {
-                            $locked = '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>';
-                        }
-                    }
 
-                    if ($course_admin)
-                    {
-                        if ($course_visible)
-                        {
-                            $icon = Theme :: getInstance()->getImagePath(
-                                \Chamilo\Core\User\Manager :: context(),
-                                'Logo/16');
-                        }
-                        else
-                        {
-                            $icon = Theme :: getInstance()->getImagePath(
-                                \Chamilo\Core\User\Manager :: context(),
-                                'Logo/16Na');
-                        }
-                    }
-
-                    if (! $course_visible)
-                    {
-                        $text_style .= $this->get_invisible_text_style();
+                        $locked = '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>';
                     }
 
                     $html[] = '<h5 class="list-group-item-heading pull-left">';
@@ -497,14 +477,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     $html[] = $this->get_course_actions($course_type_user_category, $course, $count, $size);
                     $html[] = '</div>';
                     $html[] = '<div class="clearfix"></div>';
-
-//                    $html[] = $locked . '<li style="list-style: none; margin-bottom: 5px;
-//                        list-style-image: url(' . $icon .
-//                         '); margin-left: 15px;' . $text_style . '">';
-//                    $html[] = '<a style="top: -2px; position: relative; ' . $text_style . '" href="' . $url . '">' .
-//                         $course->get_title();
-//
-//                    $html[] = '</a>';
 
                     $text = array();
 
@@ -550,6 +522,13 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         $html[] = '<p class="list-group-item-text">' . implode(' - ', $text) . '</p>';
                     }
 
+                    if (! $course_visible)
+                    {
+                        $html[] = '<p class="list-group-item-text"><span class="label label-warning">' .
+                            Translation::getInstance()->getTranslation('Invisible', null, Manager::context()) .
+                            '</span></p>';
+                    }
+
                     $html[] = '</li>';
                     $html[] = '</div>';
 
@@ -559,11 +538,6 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
             return implode($html, "\n");
         }
-    }
-
-    public function get_invisible_text_style()
-    {
-        return "color: #999;";
     }
 
     /**
