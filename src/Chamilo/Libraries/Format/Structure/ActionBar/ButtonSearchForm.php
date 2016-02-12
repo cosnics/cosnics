@@ -59,7 +59,7 @@ class ButtonSearchForm extends FormValidator
     {
         $this->renderer->setFormTemplate('<form {attributes}>{content}</form>');
 
-        $this->addElement('html', '<div class="action-bar btn-group pull-right">');
+        $this->addElement('html', '<div class="action-bar input-group pull-right">');
 
         $this->addElement(
             'text',
@@ -68,6 +68,8 @@ class ButtonSearchForm extends FormValidator
             array('class' => 'form-group form-control btn action-bar-search'));
 
         $this->renderer->setElementTemplate('{element} ', self :: PARAM_SIMPLE_SEARCH_QUERY);
+
+        $this->addElement('html', '<div class="input-group-btn">');
 
         $this->addElement(
             'style_button',
@@ -93,6 +95,7 @@ class ButtonSearchForm extends FormValidator
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
 
+        $this->addElement('html', '</div>');
         $this->addElement('html', '</div>');
     }
 
