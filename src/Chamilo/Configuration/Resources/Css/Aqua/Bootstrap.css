@@ -18,27 +18,6 @@ body {
 	font-weight: normal !important;
 }
 
-.panel.panel-chamilo {
-	background-color: #f9f9f9;
-	box-shadow: none;
-}
-
-input.form-control[type="text"], input.form-control[type="password"] {
-	border: 1px solid #ccc;
-	padding: 6px 12px;
-}
-
-/** Specific bootstrap fixes **/
-#trailbox {
-	height: 28px;
-}
-
-body h3:first-of-type {
-	margin-top: 0;
-	font-size: 18px;
-	font-weight: bold;
-}
-
 .dropdown-menu>li>a {
 	padding: 3px 32px;
 }
@@ -72,6 +51,23 @@ body h3:first-of-type {
 }
 
 /*********
+ * PANEL *
+ *********/
+.panel.panel-chamilo {
+	background-color: #f9f9f9;
+	box-shadow: none;
+}
+
+/****************************
+ * SPECIFIC BOOTSTRAP FIXES *
+ ****************************/
+body h3:first-of-type {
+	margin-top: 0;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+/*********
  * TABLE *
  *********/
 .table-navigation-pagination ul.pagination {
@@ -86,6 +82,11 @@ body h3:first-of-type {
 /********
  * FORM *
  ********/
+input.form-control[type="text"], input.form-control[type="password"] {
+	border: 1px solid #ccc;
+	padding: 6px 12px;
+}
+
 form .label {
 	font-size: 100%;
 }
@@ -124,4 +125,11 @@ a, .ui-widget-content a {
 	color: #337ab7;
 	text-decoration: none;
 	font-weight: bold;
+}
+
+/***************
+ * BREADCRUMBS *
+ ***************/
+ol.breadcrumb a {
+	font-weight: normal;
 }
