@@ -43,6 +43,8 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
 
 /**
  * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -186,29 +188,31 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $cat_name = Translation :: get('Root');
                 }
             }
-//            $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ': ' .
-//                $cat_name . '</div><br />';
-
-//            $html[] = '<div class="panel panel-default">';
-//            $html[] = '<div class="panel-heading">';
-//            $html[] = Translation :: get('CurrentCategory') . ': ' . $cat_name;
-//            $html[] = '</div>';
-//            $html[] = '<div class="panel-body">';
-
+            // $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ':
+            // ' .
+            // $cat_name . '</div><br />';
+            
+            // $html[] = '<div class="panel panel-default">';
+            // $html[] = '<div class="panel-heading">';
+            // $html[] = Translation :: get('CurrentCategory') . ': ' . $cat_name;
+            // $html[] = '</div>';
+            // $html[] = '<div class="panel-body">';
+            
             $html[] = '<div class="publication_container row">';
             $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
-//            $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
-//                 'overflow: auto; ">';
-//            $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation :: get('ShowAll') .
-//                 '</a>';
-//            $html[] = '</div>';
+            // $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
+            // 'overflow: auto; ">';
+            // $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation ::
+            // get('ShowAll') .
+            // '</a>';
+            // $html[] = '</div>';
             $html[] = '<div id="tree">';
             $html[] = $this->publication_category_tree->render_as_tree();
             $html[] = '</div>';
             $html[] = '</div>';
-//            $html[] = '</div>';
-//
-//            $html[] = '</div>';
+            // $html[] = '</div>';
+            //
+            // $html[] = '</div>';
         }
         
         $content[] = $publication_renderer->as_html();
