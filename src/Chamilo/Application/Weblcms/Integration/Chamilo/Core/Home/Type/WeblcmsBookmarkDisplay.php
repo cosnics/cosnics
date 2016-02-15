@@ -84,7 +84,7 @@ class WeblcmsBookmarkDisplay extends NewBlock implements ConfigurableInterface
 
     public function isEmpty()
     {
-        return $this->get_bookmarks()->size() == 0;
+        return $this->getBookmarks()->size() == 0;
     }
 
     public function getBookmarks()
