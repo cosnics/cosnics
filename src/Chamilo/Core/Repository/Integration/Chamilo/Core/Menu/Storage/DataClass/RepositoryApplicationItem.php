@@ -16,4 +16,17 @@ class RepositoryApplicationItem extends ApplicationItem
     {
         return ApplicationItem::get_table_name();
     }
+
+    /**
+     * @inheritdoc
+     *
+     * Override needed because the database table parent is Item, not ApplicationItem.
+     * See Chamilo\Libraries\Storage\DataManager\Doctrine\Database Create function
+     *
+     * @return string
+     */
+    public static function parent_class_name()
+    {
+        return get_parent_class(ApplicationItem :: class_name());
+    }
 }
