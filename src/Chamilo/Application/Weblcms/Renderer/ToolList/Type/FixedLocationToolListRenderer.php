@@ -13,7 +13,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseToolRelCourseSection;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -25,7 +24,6 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use HTML_Table;
 
 /**
  * $Id: fixed_location_tool_list_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -34,7 +32,8 @@ use HTML_Table;
  */
 
 /**
- * Tool list renderer which displays all course tools on a fixed location. Disabled tools will be shown in a disabled
+ * Tool list renderer which displays all course tools on a fixed location.
+ * Disabled tools will be shown in a disabled
  * looking way.
  */
 class FixedLocationToolListRenderer extends ToolListRenderer
@@ -166,12 +165,12 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             }
 
             if ($section->get_type() == CourseSection :: TYPE_DISABLED && ($course_tool_layout < 3 ||
-                    ! $this->is_course_admin))
+                 ! $this->is_course_admin))
             {
                 continue;
             }
 
-            if($section->get_type() == CourseSection::TYPE_LINK)
+            if ($section->get_type() == CourseSection :: TYPE_LINK)
             {
                 $publications = $this->get_publication_links();
 
@@ -186,8 +185,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 continue;
             }
 
-            $selectedTab = $this->get_parent()->getRequest()->get(self::PARAM_SELECTED_TAB);
-            if(isset($selectedTab) && $section->getId() == $selectedTab || !isset($selectedTab) && $section->get_type() == CourseSection::TYPE_TOOL)
+            $selectedTab = $this->get_parent()->getRequest()->get(self :: PARAM_SELECTED_TAB);
+            if (isset($selectedTab) && $section->getId() == $selectedTab ||
+                 ! isset($selectedTab) && $section->get_type() == CourseSection :: TYPE_TOOL)
             {
                 $active = 'active';
             }
@@ -196,14 +196,14 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $active = '';
             }
 
-            $url = $this->get_parent()->get_url(array(self::PARAM_SELECTED_TAB => $section->get_id()));
+            $url = $this->get_parent()->get_url(array(self :: PARAM_SELECTED_TAB => $section->get_id()));
 
             $html[] = '<li role="presentation" class="' . $active . '"><a href="';
             $html[] = $url;
             $html[] = '">' . $sec_name . '</a></li>';
 
-
-            if($section->getId() == $selectedTab || !isset($selectedTab) && $section->get_type() == CourseSection::TYPE_TOOL)
+            if ($section->getId() == $selectedTab ||
+                 ! isset($selectedTab) && $section->get_type() == CourseSection :: TYPE_TOOL)
             {
                 if ($section->get_type() == CourseSection :: TYPE_LINK)
                 {
@@ -215,7 +215,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     $content = $this->display_block_header($section, $sec_name);
                     $content .= $this->show_section_tools($section, $tools[$section->get_id()]);
                     $content .= $this->display_block_footer($section);
-                    //                if (($section->is_visible() && (count($tools[$section->get_id()]) > 0)) || $this->is_course_admin)
+                    // if (($section->is_visible() && (count($tools[$section->get_id()]) > 0)) ||
+                    // $this->is_course_admin)
                 }
             }
         }
@@ -339,14 +340,14 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $html = array();
 
-        if($count % $this->number_of_columns == 0)
+        if ($count % $this->number_of_columns == 0)
         {
             $html[] = '<div class="row">';
         }
 
         while ($publication = $publications->next_result())
         {
-            if($count > 0 && $count % $this->number_of_columns  == 0)
+            if ($count > 0 && $count % $this->number_of_columns == 0)
             {
                 $html[] = '</div>';
                 $html[] = '<div class="row">';
@@ -370,7 +371,6 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             }
 
             $title = htmlspecialchars($publication->get_content_object()->get_title());
-
 
             if ($parent->is_allowed(WeblcmsRights :: EDIT_RIGHT) || $publication->is_visible_for_target_users())
             {
@@ -491,14 +491,14 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $course_settings_controller = CourseSettingsController :: get_instance();
 
-        if($count % $this->number_of_columns == 0)
+        if ($count % $this->number_of_columns == 0)
         {
             $html[] = '<div class="row">';
         }
 
         foreach ($tools as $tool)
         {
-            if($count > 0 && $count % $this->number_of_columns  == 0)
+            if ($count > 0 && $count % $this->number_of_columns == 0)
             {
                 $html[] = '</div>';
                 $html[] = '<div class="row">';
@@ -585,7 +585,6 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '</div>';
 
             $count ++;
-
         }
 
         $html[] = '</div>';

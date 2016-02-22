@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Package;
 
 use Chamilo\Core\Menu\ItemTitles;
-use Chamilo\Core\Menu\Storage\DataClass\ApplicationItem;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryApplicationItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\RepositoryImplementationCategoryItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass\WorkspaceCategoryItem;
-use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
