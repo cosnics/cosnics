@@ -61,8 +61,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
     {
         $id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $id);
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        
+
         if ($id)
         {
             $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
@@ -77,7 +76,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             }
             
             $this->object = $object;
-            
+
+            $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->object);
+
             if (! RightsService :: getInstance()->canViewContentObject(
                 $this->get_user(), 
                 $this->object, 
@@ -148,7 +149,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             
             if ($this->getButtonToolbarRenderer($object))
             {
-                $html[] = '<br />' . $this->buttonToolbarRenderer()->render();
+                $html[] = '<br />' . $this->buttonToolbarRenderer->render();
             }
             
             $html[] = $display->render();
