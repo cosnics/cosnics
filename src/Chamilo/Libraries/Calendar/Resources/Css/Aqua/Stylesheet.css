@@ -2,7 +2,7 @@
 	margin-right: 2px;
 	display: block;
 	vertical-align: middle;
-	border-left: 7px solid red;
+	border-left: 14px solid red;
 	padding: 2px 4px;
 }
 
@@ -223,4 +223,89 @@ h4 .calendar-event-range {
 	font-style: italic;
 	font-weight: normal;
 	font-size: 11px;
+}
+
+/*****************************
+ * BOOTSTRAP CALENDAR STYLES *
+ *****************************/
+.table-calendar-current-time {
+	margin-left: 15px;
+}
+
+.table-calendar, .table-calendar-mini {
+	width: 100%;
+	border-spacing: 0px;
+}
+
+.table-calendar {
+	border-top: 1px solid #dadada;
+}
+
+.table-calendar thead tr th {
+	line-height: 35px;
+	text-transform: uppercase;
+	text-align: center;
+	color: dimgray;
+	padding: 10px 0px;
+	width: 13%;
+}
+
+.table-calendar tbody tr {
+	margin: 0px;
+	padding: 0px;
+}
+
+.table-calendar tbody td {
+	border: 1px solid #dadada;
+	margin: 0px;
+	padding: 2px;
+	height: 60px;
+	vertical-align: top;
+	width: 13%;
+}
+
+.table-calendar td.table-calendar-highlight {
+	background-color: #fef6e8;
+}
+
+.table-calendar td.table-calendar-weekend {
+	background-color: #f9f9f9;
+}
+
+.table-calendar td.table-calendar-disabled-month {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+	filter: alpha(opacity = 40);
+	-moz-opacity: 0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;
+}
+
+.table-calendar-mini {
+	border: 0px solid white;
+}
+
+.table-calendar-mini thead tr th {
+	display: none;
+	line-height: normal;
+}
+
+.table-calendar-mini tbody tr td {
+	border: 0px solid white;
+	text-align: center;
+	vertical-align: middle;
+	height: 26px;
+}
+
+.table-calendar-mini tbody tr td.table-calendar-contains-events {
+	border:1px solid black;
+}
+
+.table-calendar-mini a, .table-calendar-mini a:hover,
+	.table-calendar-mini a:visited {
+	color: black;
+	font-weight: normal;
+}
+
+.table-calendar-mini-navigation {
+	text-align: center;
 }

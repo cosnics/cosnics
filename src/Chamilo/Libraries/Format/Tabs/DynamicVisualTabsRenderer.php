@@ -36,17 +36,16 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
 
         $html = array();
 
-        // $html[] = '<a name="top"></a>';
-        $html[] = '<div id="' . $this->get_name() . '_tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">';
+        $html[] = '<ul class="nav nav-tabs dynamic-visual-tabs">';
 
-        // Tab headers
-        $html[] = '<ul id="' . $this->get_name() .
-             '_visual_tabs" style="display: block;" class="tabs-header ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">';
         foreach ($tabs as $key => $tab)
         {
             $html[] = $tab->header();
         }
+
         $html[] = '</ul>';
+        $html[] = '<div class="dynamic-visual-tab-content">';
+        $html[] = '<div class="list-group-item">';
 
         return implode(PHP_EOL, $html);
     }
@@ -54,17 +53,9 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
     public function footer()
     {
         $html = array();
-        $html[] = '</div>';
 
-        // $html[] = '<script type="text/javascript">
-        // $("#' . $this->get_name() . '_visual_tabs").dynamic_tabs( {
-        // cycle : false,
-        // follow : false,
-        // nextButton : ">>",
-        // prevButton : "<<"
-        // });
-        // </script>
-        // ';
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -84,7 +75,6 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
     {
         $html = array();
         $html[] = $this->header();
-        $html[] = self :: body_header();
 
         return implode(PHP_EOL, $html);
     }
@@ -93,7 +83,6 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
     {
         $html = array();
 
-        $html[] = self :: body_footer();
         $html[] = $this->footer();
 
         return implode(PHP_EOL, $html);

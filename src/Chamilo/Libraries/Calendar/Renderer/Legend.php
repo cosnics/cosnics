@@ -177,9 +177,11 @@ class Legend
         {
             $visibleSources = 0;
 
-            $result[] = '<fieldset class="event-legend-container" name="test">';
-            $result[] = '<legend class="event-legend-label">' . Translation :: get('Legend') . '</legend>';
-            $result[] = '<div class="event-legend">';
+            $result[] = '<div class="panel panel-default table-calendar-legend">';
+            $result[] = '<div class="panel-heading">';
+            $result[] = '<h4 class="panel-title">' . Translation :: get('Legend') . '</h4>';
+            $result[] = '</div>';
+            $result[] = '<div class="panel-body">';
 
             $sources = $this->getSources();
 
@@ -215,8 +217,7 @@ class Legend
             }
 
             $result[] = '</div>';
-            $result[] = '<div class="clear"><</div>';
-            $result[] = '</fieldset>';
+            $result[] = '</div>';
 
             if ($this->getDataProvider()->supportsVisibility())
             {

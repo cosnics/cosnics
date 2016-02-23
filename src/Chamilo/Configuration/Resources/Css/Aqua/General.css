@@ -1304,7 +1304,6 @@ div.reporting_center {
 /************************
  * APPLICATION SELECTER *
  ************************/
-
 div.create_block {
 	background-repeat: no-repeat;
 	background-position: center 10px;
@@ -1408,7 +1407,7 @@ a.cda_link {
 	color: #222222 /*{fcContent}*/;
 }
 
-.highlight {
+span.highlight {
 	color: #B1071C;
 }
 

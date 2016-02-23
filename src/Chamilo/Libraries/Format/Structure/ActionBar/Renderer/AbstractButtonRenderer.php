@@ -158,6 +158,11 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
             $html[] = $this->renderLinkContentImage();
         }
 
+        if ($displayIcon && $displayLabel)
+        {
+            $html[] = '&nbsp;';
+        }
+
         if ($displayLabel)
         {
             $html[] = '<span>' . $label . '</span>';
