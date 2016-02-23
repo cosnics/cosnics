@@ -11,6 +11,9 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph;
 
 /**
  *
@@ -118,23 +121,42 @@ class MiniMonthRenderer extends TableRenderer
             $tableDate = $nextTableDate;
         }
 
-        $parameters = $this->getDataProvider()->getDisplayParameters();
-        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+        $html = array();
 
-        $redirect = new Redirect($parameters);
-        $calendar->addCalendarNavigation($redirect->getUrl());
-        $calendar->addNavigationLinks($redirect->getUrl());
+        $html[] = '<div class="panel panel-default">';
+        $html[] = $this->renderNavigation();
+        $calendar->addNavigationLinks($this->determineNavigationUrl());
+        $html[] = $calendar->render();
+        $html[] = '</div>';
 
-        if (! is_null($this->getMarkPeriod()))
-        {
-            $calendar->markPeriod($this->getMarkPeriod());
-        }
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Adds a navigation bar to the calendar
+     *
+     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
+     */
+    public function renderNavigation()
+    {
+        $urlFormat = $this->determineNavigationUrl();
+        $previousTime = strtotime('-1 Month', $this->getDisplayTime());
+        $nextTime = strtotime('+1 Month', $this->getDisplayTime());
+
+        $todayUrl = str_replace(Calendar :: TIME_PLACEHOLDER, time(), $urlFormat);
+        $previousUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $previousTime, $urlFormat);
+        $nextUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $nextTime, $urlFormat);
 
         $html = array();
 
-        $html[] = $calendar->render();
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventMarker.js');
+        $html[] = '<div class="panel-heading table-calendar-mini-navigation">';
+        $html[] = '<a href="' . $previousUrl . '"><span class="glyphicon glyphicon-chevron-left pull-left"></span></a>';
+        $html[] = '<a href="' . $nextUrl . '"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>';
+        $html[] = '<h4 class="panel-title">';
+        $html[] = Translation :: get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities :: COMMON_LIBRARIES) .
+             ' ' . date('Y', $this->getDisplayTime());
+        $html[] = '</h4>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

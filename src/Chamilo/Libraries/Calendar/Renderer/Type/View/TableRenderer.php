@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Calendar\Table\Calendar;
 
 /**
  *
@@ -31,6 +33,15 @@ abstract class TableRenderer extends ViewRenderer
         }
 
         return $this->calendar;
+    }
+
+    public function determineNavigationUrl()
+    {
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
     }
 
     public function setCalendar(\Chamilo\Libraries\Calendar\Table\Calendar $calendar)

@@ -50,6 +50,6 @@ class InlineGlyph
      */
     public function render()
     {
-        return '<span class="glyphicon glyphicon-' . $this->getType() . '"/></span>&nbsp;';
+        return '<span class="glyphicon glyphicon-' . $this->getType() . '"/></span>';
     }
 }
