@@ -29,7 +29,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      */
-    public function __construct($displayTime)
+    public function __construct($displayTime, $classes = array())
     {
         if (is_null($displayTime))
         {
@@ -41,7 +41,9 @@ abstract class Calendar extends HTML_Table
         }
         $this->eventsToShow = array();
 
-        parent :: HTML_Table(array('class' => 'calendar_table calendar-container', 'cellspacing' => 0));
+        $classes[] = 'table-calendar';
+
+        parent :: HTML_Table(array('class' => implode(' ', $classes), 'cellspacing' => 0));
     }
 
     /**

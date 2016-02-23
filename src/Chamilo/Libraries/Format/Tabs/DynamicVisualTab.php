@@ -208,20 +208,20 @@ class DynamicVisualTab extends DynamicTab
      */
     public function header()
     {
+        $classes = array();
+
         if ($this->get_selected() == true)
         {
-            $classes = 'ui-state-default ui-corner-top ui-tabs-active ui-state-active dynamic_visual_tab';
+            $classes[] = 'active';
         }
-        else
-        {
-            $classes = 'ui-state-default ui-corner-top';
-        }
+
+        $classes[] = 'pull-' . $this->get_position();
 
         $html = array();
-        $html[] = '<li class="' . $classes . '" style="float: ' . $this->get_position() . ';">';
+        $html[] = '<li class="' . implode(' ', $classes) . '">';
 
         $link = array();
-        $link[] = '<a class="ui-tabs-anchor"';
+        $link[] = '<a';
 
         if ($this->get_link() && $this->get_target() == self :: TARGET_WINDOW)
         {
@@ -249,7 +249,6 @@ class DynamicVisualTab extends DynamicTab
         $link[] = '>';
 
         $html[] = implode(' ', $link);
-        $html[] = '<span class="category">';
 
         if ($this->get_image() && $this->get_display() != self :: DISPLAY_TEXT)
         {
@@ -263,7 +262,6 @@ class DynamicVisualTab extends DynamicTab
             $html[] = '<span class="title">' . $this->get_name() . '</span>';
         }
 
-        $html[] = '</span>';
         $html[] = '</a>';
         $html[] = '</li>';
         return implode(PHP_EOL, $html);
