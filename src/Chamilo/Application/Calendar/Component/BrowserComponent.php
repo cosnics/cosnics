@@ -53,7 +53,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $tabs->render();
+        $html[] = $this->getCalendarHtml();
+        // $html[] = $tabs->render();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -77,12 +78,12 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $html = array();
 
-        $html[] = '<div class="mini_calendar">';
-        $html[] = $this->renderSidebar();
-        $html[] = '</div>';
-        $html[] = '<div class="normal_calendar">';
+        // $html[] = '<div class="mini_calendar">';
+        // $html[] = $this->renderSidebar();
+        // $html[] = '</div>';
+        // $html[] = '<div class="normal_calendar">';
         $html[] = $this->renderNormalCalendar();
-        $html[] = '</div>';
+        // $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
