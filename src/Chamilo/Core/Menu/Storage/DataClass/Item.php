@@ -215,20 +215,6 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
                 $parent);
         }
 
-        $location = Rights :: get_instance()->get_location_by_identifier(
-            \Chamilo\Core\Menu\Manager :: context(),
-            Rights :: TYPE_ITEM,
-            $this->get_id());
-
-        if ($location)
-        {
-            return $location->move($parent_id);
-        }
-        else
-        {
-            return false;
-        }
-
         foreach ($this->get_titles()->get_titles() as $title)
         {
             if ($title->get_id())
@@ -245,6 +231,20 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
                     return false;
                 }
             }
+        }
+
+        $location = Rights :: get_instance()->get_location_by_identifier(
+            \Chamilo\Core\Menu\Manager :: context(),
+            Rights :: TYPE_ITEM,
+            $this->get_id());
+
+        if ($location)
+        {
+            return $location->move($parent_id);
+        }
+        else
+        {
+            return false;
         }
 
         return true;
