@@ -133,14 +133,18 @@ class HotpotatoesForm extends ContentObjectForm
         $filename = Filesystem :: create_unique_name(
             Path :: getInstance()->getPublicStoragePath(Hotpotatoes :: package()) . $owner,
             $_FILES['file']['name']);
+
         $filename_split = explode('.', $filename);
         unset($filename_split[count($filename_split) - 1]);
         $file = implode('.', $filename_split);
 
         $hotpot_path = Path :: getInstance()->getPublicStoragePath(Hotpotatoes :: package()) . $owner . '/';
         $real_path = $hotpot_path . Filesystem :: create_unique_name($hotpot_path, $file) . '/';
+
         if (! is_dir($real_path))
-            Filesystem :: create_dir($real_path);
+        {
+            Filesystem:: create_dir($real_path);
+        }
 
         $full_path = $real_path . $filename;
 
