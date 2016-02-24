@@ -24,6 +24,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -721,7 +722,7 @@ abstract class Manager extends Application
                     self :: PARAM_ACTION => self :: ACTION_VIEW_REPORTING_TEMPLATE,
                     self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID),
                     self :: PARAM_TEMPLATE_NAME => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate :: class_name()));
-            return new ToolbarItem(
+            return new Button(
                 Translation :: get('AccessDetails'),
                 Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
                 $url);
