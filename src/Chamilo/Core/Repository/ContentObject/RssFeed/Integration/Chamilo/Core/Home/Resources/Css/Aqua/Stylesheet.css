@@ -13,3 +13,15 @@ div.event_publication_info {
 	font-style: italic;
 	margin: 1em 0;
 }
+
+li.rss_feed_item {
+	background-repeat: no-repeat;
+	padding-left: 25px;
+	list-style-type: none;
+}
+
+ul.rss_feeds {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}

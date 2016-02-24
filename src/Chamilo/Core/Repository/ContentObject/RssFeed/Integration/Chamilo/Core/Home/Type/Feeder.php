@@ -39,7 +39,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
                 'Chamilo\Core\Repository\ContentObject\RssFeed',
                 'Logo/' . Theme :: ICON_MINI);
             $html[] = '<div class="tool_menu">';
-            $html[] = '<ul>';
+            $html[] = '<ul class="rss_feeds">';
 
             $count_valid = 0;
 
@@ -52,13 +52,14 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
                 $count_valid ++;
 
-                $html[] = '<li class="tool_list_menu" style="background-image: url(' . $icon . ')"><a href="' . htmlentities(
+                $html[] = '<li class="rss_feed_item" style="background-image: url(' . $icon . ')"><a href="' . htmlentities(
                     $item['link']) . '" ' . $target . '>' . $item['title'] . '</a></li>';
             }
 
             $html[] = '</ul>';
             $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
+            $html[] = '<br />';
         }
 
         if (! $feed || $count_valid == 0)
