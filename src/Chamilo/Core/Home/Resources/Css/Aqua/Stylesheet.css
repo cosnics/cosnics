@@ -382,8 +382,6 @@ div#portal-block-container div#list div#components div.no-matches {
 }
 
 div#portal-block-container div#list div#components div.component {
-	width: 64px;
-	height: 64px;
 	background-color: #BBBBBB;
 	border: 1px solid #D8D8D8;
 	float: left;
@@ -415,8 +413,6 @@ div#portal-block-container div#list div#components div.component div.button:hove
 
 div#portal-block-container div#list div#components div.component div.content
 	{
-	width: 64px;
-	height: 64px;
 	background-image: url(../../Images/Aqua/Block/Background.png);
 	background-position: top center;
 	background-repeat: no-repeat;
