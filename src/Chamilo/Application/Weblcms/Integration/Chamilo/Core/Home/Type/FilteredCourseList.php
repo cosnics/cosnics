@@ -67,18 +67,6 @@ class FilteredCourseList extends Block implements ConfigurableInterface
         $this->loadSettings();
     }
 
-    public function toHtml($view = '')
-    {
-        if ($this->getCourseListRenderer()->get_courses()->size() > 0)
-        {
-            return parent :: toHtml($view);
-        }
-        else
-        {
-            return '';
-        }
-    }
-
     public function getCourseListRenderer()
     {
         if (! isset($this->courseListRenderer))
