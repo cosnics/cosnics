@@ -108,7 +108,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $html = array();
         
         $html[] = parent :: render_header();
-        $html[] = $this->buttonToolbarRenderer->as_html();
+        $html[] = $this->buttonToolbarRenderer->render();
         $html[] = '<div id="action_bar_browser">';
         $html[] = $this->html;
         
@@ -156,12 +156,12 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
             
             if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
             {
-                $commonActions->addButton(new Button($this->get_access_details_toolbar_item($this)));
+                $commonActions->addButton($this->get_access_details_toolbar_item($this));
             }
             
             if (method_exists($this->get_parent(), 'get_tool_actions'))
             {
-                $toolActions->addButton(new Button($this->get_parent()->get_tool_actions()));
+                $toolActions->setButtons($this->get_parent()->get_tool_actions());
             }
             
             $buttonToolbar->addButtonGroup($commonActions);
