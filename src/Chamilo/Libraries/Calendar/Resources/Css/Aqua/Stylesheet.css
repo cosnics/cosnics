@@ -1,0 +1,311 @@
+.event-source-identifier {
+	margin-right: 2px;
+	display: block;
+	vertical-align: middle;
+	border-left: 14px solid red;
+	padding: 2px 4px;
+}
+
+.event-source-identifier-framed {
+	border: 1px solid #7f7f7f;
+}
+
+.event-source-identifier-0 {
+	border-color: #c61a3b;
+}
+
+.event-source-identifier-1, .event-source-identifier-19,
+	.event-source-identifier-37, .event-source-identifier-55,
+	.event-source-identifier-73 {
+	border-color: #DEDE78;
+}
+
+.event-source-identifier-2, .event-source-identifier-20,
+	.event-source-identifier-38, .event-source-identifier-56,
+	.event-source-identifier-74 {
+	border-color: #78DE78;
+}
+
+.event-source-identifier-3, .event-source-identifier-21,
+	.event-source-identifier-39, .event-source-identifier-57,
+	.event-source-identifier-75 {
+	border-color: #789ADE;
+}
+
+.event-source-identifier-4, .event-source-identifier-22,
+	.event-source-identifier-40, .event-source-identifier-58,
+	.event-source-identifier-76 {
+	border-color: #DE78DE;
+}
+
+.event-source-identifier-5, .event-source-identifier-23,
+	.event-source-identifier-41, .event-source-identifier-59,
+	.event-source-identifier-77 {
+	border-color: #DEBC78;
+}
+
+.event-source-identifier-6, .event-source-identifier-24,
+	.event-source-identifier-42, .event-source-identifier-60,
+	.event-source-identifier-78 {
+	border-color: #9ADE78;
+}
+
+.event-source-identifier-7, .event-source-identifier-25,
+	.event-source-identifier-43, .event-source-identifier-61,
+	.event-source-identifier-79 {
+	border-color: #DF7979;
+}
+
+.event-source-identifier-8, .event-source-identifier-26,
+	.event-source-identifier-44, .event-source-identifier-62,
+	.event-source-identifier-80 {
+	border-color: #78BCDE;
+}
+
+.event-source-identifier-9, .event-source-identifier-27,
+	.event-source-identifier-45, .event-source-identifier-63,
+	.event-source-identifier-81 {
+	border-color: #BC78DE;
+}
+
+.event-source-identifier-10, .event-source-identifier-28,
+	.event-source-identifier-46, .event-source-identifier-64,
+	.event-source-identifier-82 {
+	border-color: #BCDE78;
+}
+
+.event-source-identifier-11, .event-source-identifier-29,
+	.event-source-identifier-47, .event-source-identifier-65,
+	.event-source-identifier-83 {
+	border-color: #DE78BC;
+}
+
+.event-source-identifier-12, .event-source-identifier-30,
+	.event-source-identifier-48, .event-source-identifier-66,
+	.event-source-identifier-84 {
+	border-color: #78DE9A;
+}
+
+.event-source-identifier-13, .event-source-identifier-31,
+	.event-source-identifier-49, .event-source-identifier-67,
+	.event-source-identifier-85 {
+	border-color: #DE9A78;
+}
+
+.event-source-identifier-14, .event-source-identifier-32,
+	.event-source-identifier-50, .event-source-identifier-68,
+	.event-source-identifier-86 {
+	border-color: #78DEBC;
+}
+
+.event-source-identifier-15, .event-source-identifier-33,
+	.event-source-identifier-51, .event-source-identifier-69,
+	.event-source-identifier-87 {
+	border-color: #7878DE;
+}
+
+.event-source-identifier-16, .event-source-identifier-34,
+	.event-source-identifier-52, .event-source-identifier-70,
+	.event-source-identifier-88 {
+	border-color: #DE789A;
+}
+
+.event-source-identifier-17, .event-source-identifier-35,
+	.event-source-identifier-53, .event-source-identifier-71,
+	.event-source-identifier-89 {
+	border-color: #9A78DE;
+}
+
+.event-source-identifier-18, .event-source-identifier-36,
+	.event-source-identifier-54, .event-source-identifier-72,
+	.event-source-identifier-90 {
+	border-color: #78DEDE;
+}
+
+.event-source-identifier-19, .event-source-identifier-20,
+	.event-source-identifier-21, .event-source-identifier-22,
+	.event-source-identifier-23, .event-source-identifier-24,
+	.event-source-identifier-25, .event-source-identifier-26,
+	.event-source-identifier-27, .event-source-identifier-28,
+	.event-source-identifier-29, .event-source-identifier-30,
+	.event-source-identifier-31, .event-source-identifier-32,
+	.event-source-identifier-33, .event-source-identifier-34,
+	.event-source-identifier-35, .event-source-identifier-36 {
+	background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,
+		255, 255, 1) 2px, rgba(255, 255, 255, 1) 4px);
+}
+
+.event-source-identifier-37, .event-source-identifier-38,
+	.event-source-identifier-39, .event-source-identifier-40,
+	.event-source-identifier-41, .event-source-identifier-42,
+	.event-source-identifier-43, .event-source-identifier-44,
+	.event-source-identifier-45, .event-source-identifier-46,
+	.event-source-identifier-47, .event-source-identifier-48,
+	.event-source-identifier-49, .event-source-identifier-50,
+	.event-source-identifier-51, .event-source-identifier-52,
+	.event-source-identifier-53, .event-source-identifier-54 {
+	background-image: radial-gradient(white 15%, transparent 16%),
+		radial-gradient(white 15%, transparent 16%);
+	background-size: 14px 14px;
+	background-position: 0 0, 7px 7px;
+}
+
+.event-source-identifier-55, .event-source-identifier-56,
+	.event-source-identifier-57, .event-source-identifier-58,
+	.event-source-identifier-59, .event-source-identifier-60,
+	.event-source-identifier-61, .event-source-identifier-62,
+	.event-source-identifier-63, .event-source-identifier-64,
+	.event-source-identifier-65, .event-source-identifier-66,
+	.event-source-identifier-67, .event-source-identifier-68,
+	.event-source-identifier-69, .event-source-identifier-70,
+	.event-source-identifier-71, .event-source-identifier-72 {
+	background-image: linear-gradient(45deg, white 25%, transparent 25%, transparent 75%,
+		white 75%, white),
+		linear-gradient(-45deg, white 25%, transparent 25%, transparent 75%,
+		white 75%, white);
+	background-size: 7px 7px;
+}
+
+.event-source-identifier-73, .event-source-identifier-74,
+	.event-source-identifier-75, .event-source-identifier-76,
+	.event-source-identifier-77, .event-source-identifier-78,
+	.event-source-identifier-79, .event-source-identifier-80,
+	.event-source-identifier-81, .event-source-identifier-82,
+	.event-source-identifier-83, .event-source-identifier-84,
+	.event-source-identifier-85, .event-source-identifier-86,
+	.event-source-identifier-87, .event-source-identifier-88,
+	.event-source-identifier-89, .event-source-identifier-90 {
+	background-image: linear-gradient(transparent 50%, rgba(255, 255, 255, 1)
+		50%);
+	background-size: 4px 4px;
+}
+
+.event-source-identifier-faded {
+	opacity: 0.5;
+	color: grey;
+}
+
+.event-legend-container {
+	clear: none;
+	margin: 20px 2px 2px 2px;
+	padding: 10px;
+	border: 1px solid #ebebeb;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-radius-topright: 10px;
+	border-radius-bottomleft: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+}
+
+.event-legend-container .event-legend-label {
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #4271B5;
+	padding: 0px 5px 0px 5px;
+}
+
+.event-legend {
+	clear: both;
+}
+
+.event-legend .event {
+	float: left;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.event-hidden {
+	display: none;
+}
+
+h4 .calendar-event-range {
+	font-style: italic;
+	font-weight: normal;
+	font-size: 11px;
+}
+
+/*****************************
+ * BOOTSTRAP CALENDAR STYLES *
+ *****************************/
+.table-calendar-current-time {
+	margin-left: 15px;
+}
+
+.table-calendar, .table-calendar-mini {
+	width: 100%;
+	border-spacing: 0px;
+}
+
+.table-calendar {
+	border-top: 1px solid #dadada;
+}
+
+.table-calendar thead tr th {
+	line-height: 35px;
+	text-transform: uppercase;
+	text-align: center;
+	color: dimgray;
+	padding: 10px 0px;
+	width: 13%;
+}
+
+.table-calendar tbody tr {
+	margin: 0px;
+	padding: 0px;
+}
+
+.table-calendar tbody td {
+	border: 1px solid #dadada;
+	margin: 0px;
+	padding: 2px;
+	height: 60px;
+	vertical-align: top;
+	width: 13%;
+}
+
+.table-calendar td.table-calendar-highlight {
+	background-color: #fef6e8;
+}
+
+.table-calendar td.table-calendar-weekend {
+	background-color: #f9f9f9;
+}
+
+.table-calendar td.table-calendar-disabled-month {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+	filter: alpha(opacity = 40);
+	-moz-opacity: 0.4;
+	-khtml-opacity: 0.4;
+	opacity: 0.4;
+}
+
+.table-calendar-mini {
+	border: 0px solid white;
+}
+
+.table-calendar-mini thead tr th {
+	display: none;
+	line-height: normal;
+}
+
+.table-calendar-mini tbody tr td {
+	border: 0px solid white;
+	text-align: center;
+	vertical-align: middle;
+	height: 26px;
+}
+
+.table-calendar-mini tbody tr td.table-calendar-contains-events {
+	border:1px solid black;
+}
+
+.table-calendar-mini a, .table-calendar-mini a:hover,
+	.table-calendar-mini a:visited {
+	color: black;
+	font-weight: normal;
+}
+
+.table-calendar-mini-navigation {
+	text-align: center;
+}
