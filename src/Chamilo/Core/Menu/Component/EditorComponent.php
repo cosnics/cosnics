@@ -46,7 +46,10 @@ class EditorComponent extends Manager implements DelegateComponent
 
             foreach ($item->get_default_property_names() as $property)
             {
-                $item->set_default_property($property, $values[$property]);
+                if(array_key_exists($property, $values))
+                {
+                    $item->set_default_property($property, $values[$property]);
+                }
             }
 
             foreach ($item->get_additional_property_names() as $property)
