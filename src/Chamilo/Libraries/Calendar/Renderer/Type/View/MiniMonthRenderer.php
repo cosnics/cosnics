@@ -7,13 +7,9 @@ use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph;
 
 /**
  *
@@ -126,7 +122,12 @@ class MiniMonthRenderer extends TableRenderer
         $html[] = '<div class="panel panel-default">';
         $html[] = $this->renderNavigation();
         $calendar->addNavigationLinks($this->determineNavigationUrl());
+
+        $html[] = '<div class="table-calendar-mini-container">';
         $html[] = $calendar->render();
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
