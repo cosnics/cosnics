@@ -64,8 +64,8 @@
 .installation-step-collapsed {
 	clear: none;
 	float: left;
-	height: 22px;
-	width: 22px;
+	height: 42px;
+	width: 42px;
 	padding: 10px;
 	margin-right: 1em;
 	overflow: hidden;
@@ -127,7 +127,6 @@ div.package-list-item, div.package-list-item-core, div.package-list-item-selecte
 	color: #212467;
 	background-position: 8px 4px;
 	background-repeat: no-repeat;
-	height: 22px;
 	cursor: pointer;
 	font-size: 12px;
 	line-height: 22px;

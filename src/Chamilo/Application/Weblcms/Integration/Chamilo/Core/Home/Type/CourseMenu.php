@@ -24,7 +24,7 @@ class CourseMenu extends Block
 
     public function isTeacher()
     {
-        return $this->getUser()->isTeacher();
+        return parent::getUser()->isTeacher();
     }
 
     public function displayContent()

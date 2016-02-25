@@ -4,6 +4,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "23"
+TypeCategory = "External Repositories"
 DeleteSuccesfull = "Delete succesful"
 DeleteFailed = "Delete failed"
 ExportSuccesfull = "Export succesful"
