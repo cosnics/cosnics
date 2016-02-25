@@ -73,7 +73,7 @@ class CourseMenu extends Block
         return implode(PHP_EOL, $result);
     }
 
-    public function getUser()
+    public function getCreateCourseMenu()
     {
         if (! $this->isTeacher())
         {
