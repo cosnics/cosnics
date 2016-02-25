@@ -82,7 +82,7 @@ class CourseTypeCourseList extends Block implements ConfigurableInterface
             // $courseType);
             $this->courseRenderer = new FilteredCourseListRenderer(
                 $this,
-                '_blank',
+                $this->getLinkTarget(),
                 $this->getCourseTypeId());
         }
         return $this->courseRenderer;
