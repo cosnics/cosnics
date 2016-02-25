@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
@@ -24,7 +25,7 @@ class CourseMenu extends Block
 
     public function isTeacher()
     {
-        return parent::getUser()->isTeacher();
+        return parent::getUser()->get_status(User::STATUS_TEACHER);
     }
 
     public function displayContent()
