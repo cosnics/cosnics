@@ -28,7 +28,7 @@
         // Determine visibility icon
         var img = $(this).attr("src");
         var imgtag = $(this);
-        var pos = $(this).hasClass('invisible');
+        var pos = $(this).hasClass('invisible-tool');
 
         // Determine tool icon
         var tool_img = $(".tool_image", parent);
@@ -37,7 +37,7 @@
         // Determine tool text class
         var tool_text = $("#tool_text", parent);
 
-        var isInvisible = tool_text.hasClass('invisible');
+        var isInvisible = tool_text.hasClass('invisible-tool');
         
         if (isInvisible) {
         var new_visible = 1;
@@ -60,14 +60,14 @@
             // imgtag.attr('src', new_img);
 
             if (!isInvisible) {
-            tool_text.addClass('invisible');
+            tool_text.addClass('invisible-tool');
             var new_src = src.replace('New', '');
             new_src = new_src.replace('.png', 'Na.png');
             console.log(new_src);
             var new_parent = $('div.disabledblock');
             imgtag.attr('src', is_visible.replace('Visible.png', 'Invisible.png'));
             } else {
-            tool_text.removeClass('invisible');
+            tool_text.removeClass('invisible-tool');
             var new_src = src.replace('Na.png', '.png');
             var new_parent = $('div.toolblock:first');
             imgtag.attr('src', is_visible.replace('Invisible.png', 'Visible.png'));
