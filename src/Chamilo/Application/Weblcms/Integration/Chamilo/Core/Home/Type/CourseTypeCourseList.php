@@ -25,22 +25,20 @@ class CourseTypeCourseList extends Block implements ConfigurableInterface
 
     private $courseType;
 
-    public function toHtml($view = '')
-    {
-        if ($this->getCourseRenderer()->get_courses()->size() > 0)
-        {
-            return parent :: toHtml($view);
-        }
-        else
-        {
-            return '';
-        }
-    }
+//    public function toHtml($view = '')
+//    {
+//        if ($this->getCourseRenderer()->get_courses()->size() > 0)
+//        {
+//            return parent :: toHtml($view);
+//        }
+//        else
+//        {
+//            return '';
+//        }
+//    }
 
     function displayContent()
     {
-        $configuration = $this->get_configuration();
-
         $html = array();
         $renderer = $this->getCourseRenderer();
 
@@ -84,7 +82,7 @@ class CourseTypeCourseList extends Block implements ConfigurableInterface
             // $courseType);
             $this->courseRenderer = new FilteredCourseListRenderer(
                 $this,
-                $this->get_link_target(),
+                '_blank',
                 $this->getCourseTypeId());
         }
         return $this->courseRenderer;
