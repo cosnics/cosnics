@@ -23,6 +23,10 @@ class MiniMonthCalendar extends MonthCalendar
         parent :: __construct($displayTime, array('table-calendar-mini'));
     }
 
+    /**
+     *
+     * @param unknown $urlFormat
+     */
     public function addNavigationLinks($urlFormat)
     {
         $day = $this->getStartTime();
@@ -44,6 +48,10 @@ class MiniMonthCalendar extends MonthCalendar
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::addEvents()
+     */
     public function addEvents()
     {
         $events = $this->getEventsToShow();
@@ -56,24 +64,38 @@ class MiniMonthCalendar extends MonthCalendar
             $row = $cellMapping[$cellMappingKey][0];
             $column = $cellMapping[$cellMappingKey][1];
 
-            $attributes = $this->getCellAttributes($row, $column);
-            $classes = isset($attributes['class']) ? array($attributes['class']) : array();
-            $classes[] = 'table-calendar-contains-events';
-
-            $this->updateCellAttributes($row, $column, 'class="' . implode(' ', $classes) . '"');
-
-            // foreach ($items as $index => $item)
-            // {
-            // $cellContent = $this->getCellContents($row, $column);
-            // $cellContent .= $item;
-            // $this->setCellContents($row, $column, $cellContent);
-            // }
+            $this->setCellContents(
+                $row,
+                $column,
+                '<span class="badge">' . $this->getCellContents($row, $column) . '</span>');
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Table\Type\MonthCalendar::render()
+     */
     public function render()
     {
         $this->addEvents();
         return $this->toHtml();
+    }
+
+    /**
+     *
+     * @param integer $tableDate
+     * @return string
+     */
+    protected function determineCellContent($tableDate)
+    {
+        $cellContent = parent :: determineCellContent($tableDate);
+
+        // Is current table date today?
+        if (date('Ymd', $tableDate) == date('Ymd'))
+        {
+            $cellContent = '<span class="badge">' . $cellContent . '</span>';
+        }
+
+        return $cellContent;
     }
 }

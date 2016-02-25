@@ -181,7 +181,7 @@ class Legend
             $result[] = '<div class="panel-heading">';
             $result[] = '<h4 class="panel-title">' . Translation :: get('Legend') . '</h4>';
             $result[] = '</div>';
-            $result[] = '<div class="panel-body">';
+            $result[] = '<ul class="list-group">';
 
             $sources = $this->getSources();
 
@@ -199,13 +199,10 @@ class Legend
                     $sourceClasses = $this->getSourceClasses($source);
                 }
 
-                $result[] = '<div class="event">';
-                $result[] = '<div data-source="' . $source . '" class="' . $sourceClasses . '">';
-
+                $result[] = '<li class="list-group-item">';
+                $result[] = '<span data-source="' . $source . '" class="' . $sourceClasses . '"></span>';
                 $result[] = $source;
-
-                $result[] = '</div>';
-                $result[] = '</div>';
+                $result[] = '</li>';
 
                 if ($this->getDataProvider()->supportsVisibility())
                 {
@@ -216,7 +213,7 @@ class Legend
                 }
             }
 
-            $result[] = '</div>';
+            $result[] = '</ul>';
             $result[] = '</div>';
 
             if ($this->getDataProvider()->supportsVisibility())

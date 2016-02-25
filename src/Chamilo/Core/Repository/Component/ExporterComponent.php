@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Table\Export\ExportTable;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -91,17 +92,21 @@ class ExporterComponent extends Manager
                     {
                         if (count($content_object_ids))
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CONTENT_OBJECT_ID,
-                                $this->get_export_types_cache($export_type),
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CONTENT_OBJECT_ID,
+                                    $this->get_export_types_cache($export_type),
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
+                                 '</a>';
                         }
                         else
                         {
-                            $table_row[] = '<a href="' . $this->get_content_objects_exporting_url(
-                                self :: PARAM_CATEGORY_ID,
-                                $category_ids,
-                                $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') . '</a>';
+                            $table_row[] = '<a href="' .
+                                 $this->get_content_objects_exporting_url(
+                                    self :: PARAM_CATEGORY_ID,
+                                    $category_ids,
+                                    $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
+                                 '</a>';
                         }
                     }
                     else
@@ -117,24 +122,24 @@ class ExporterComponent extends Manager
 
                 $table_data[] = $table_row;
 
-                $export_table = new ExportTable($table_data);
-                $export_table->setColumnHeader(0, '', false);
-                $export_table->setColumnHeader(1, Translation :: get('Type'), false);
-                $export_table->setColumnHeader(2, Translation :: get('ShortCount'), false);
+                $headers = array();
+                $headers[] = new StaticTableColumn('');
+                $headers[] = new StaticTableColumn(Translation :: get('Type'));
+                $headers[] = new StaticTableColumn(Translation :: get('ShortCount'));
+
+                $export_table = new ExportTable($table_data, $headers);
 
                 foreach (ContentObjectExport :: get_types() as $key => $export_type)
                 {
-                    $export_table->setColumnHeader(
-                        $key + 3,
+                    $headers[] = new StaticTableColumn(
                         Translation :: get(
-                            'ImportType' . StringUtilities :: getInstance()->createString($export_type)->upperCamelize()),
-                        false);
+                            'ImportType' . StringUtilities :: getInstance()->createString($export_type)->upperCamelize()));
                 }
 
                 $html = array();
 
                 $html[] = $this->render_header();
-                $html[] = $export_table->as_html();
+                $html[] = $export_table->toHtml();
                 $html[] = $this->render_footer();
 
                 return implode(PHP_EOL, $html);
