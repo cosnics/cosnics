@@ -32,7 +32,7 @@ class CourseMenu extends Block
     {
         $html = array();
         $html[] = '<div class="tool_menu">';
-        $html[] = '<ul>';
+        $html[] = '<ul style="padding: 0; margin: 0">';
         $html[] = '{$ADMIN_MENU}';
         $html[] = '{$USER_MENU}';
         $html[] = '</ul>';
@@ -40,7 +40,7 @@ class CourseMenu extends Block
 
         $target = $this->getLinkTarget();
 
-        $template = '<li class="tool_list_menu" style="background-image: url({$IMG})">
+        $template = '<li class="rss_feed_icon" style="background-repeat: no-repeat; list-style-type: none; padding-left: 25px; margin: 0; background-image: url({$IMG})">
         <a style="top: -3px; position: relative;" href="{$HREF}" target="' . $target .
              '">{$TEXT}</a></li>';
 
