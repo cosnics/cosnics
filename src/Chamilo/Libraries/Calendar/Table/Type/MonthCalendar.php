@@ -75,20 +75,28 @@ class MonthCalendar extends Calendar
         return $endTime;
     }
 
-    /**
-     * Builds the table
-     */
-    private function buildTable()
+    protected function getFirstTableDate($firstDay)
     {
-        $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
-        $firstDayNr = date('w', $firstDay) == 0 ? 6 : date('w', $firstDay) - 1;
+        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+
+        if ($setting == 'sunday')
+        {
+            return strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
+        }
+        else
+        {
+            return strtotime('Next Monday', strtotime('-1 Week', $firstDay));
+        }
+    }
+
+    protected function setHeader()
+    {
         $header = $this->getHeader();
 
         $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
-            $firstTableDate = strtotime('Next Sunday', strtotime('-1 Week', $firstDay));
             $header->addRow(
                 array(
                     Translation :: get('SundayShort', null, Utilities :: COMMON_LIBRARIES),
@@ -101,7 +109,6 @@ class MonthCalendar extends Calendar
         }
         else
         {
-            $firstTableDate = strtotime('Next Monday', strtotime('-1 Week', $firstDay));
             $header->addRow(
                 array(
                     Translation :: get('MondayShort', null, Utilities :: COMMON_LIBRARIES),
@@ -114,48 +121,80 @@ class MonthCalendar extends Calendar
         }
 
         $header->setRowType(0, 'th');
+    }
 
-        $tableDate = $firstTableDate;
+    /**
+     * Builds the table
+     */
+    private function buildTable()
+    {
+        $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
+        $tableDate = $this->getFirstTableDate($firstDay);
         $cell = 0;
+
         while (date('Ym', $tableDate) <= date('Ym', $this->getDisplayTime()))
         {
             do
             {
-                $cellContents = date('j', $tableDate);
                 $row = intval($cell / 7);
                 $column = $cell % 7;
-                $this->setCellContents($row, $column, $cellContents);
+
                 $this->cellMapping[date('Ymd', $tableDate)] = array($row, $column);
-                $class = array();
 
-                // Is current table date today?
-                if (date('Ymd', $tableDate) == date('Ymd'))
+                $classes = $this->determineCellClasses($tableDate);
+
+                if (count($classes) > 0)
                 {
-                    $class[] = 'table-calendar-highlight';
+                    $this->updateCellAttributes($row, $column, 'class="' . implode(' ', $classes) . '"');
                 }
 
-                // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
-                if (date('w', $tableDate) % 6 == 0)
-                {
-                    $class[] = 'table-calendar-weekend';
-                }
-
-                // Is current table date in this month or another one?
-                if (date('Ym', $tableDate) != date('Ym', $this->getDisplayTime()))
-                {
-                    $class[] = 'table-calendar-disabled-month';
-                }
-
-                if (count($class) > 0)
-                {
-                    $this->updateCellAttributes($row, $column, 'class="' . implode(' ', $class) . '"');
-                }
+                $this->setCellContents($row, $column, $this->determineCellContent($tableDate));
 
                 $cell ++;
                 $tableDate = strtotime('+1 Day', $tableDate);
             }
             while ($cell % 7 != 0);
         }
+    }
+
+    /**
+     *
+     * @param integer $tableDate
+     * @return string[]
+     */
+    protected function determineCellClasses($tableDate)
+    {
+        $classes = array();
+
+        // Is current table date today?
+        if (date('Ymd', $tableDate) == date('Ymd'))
+        {
+            $classes[] = 'table-calendar-highlight';
+        }
+
+        // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
+        if (date('w', $tableDate) % 6 == 0)
+        {
+            $classes[] = 'table-calendar-weekend';
+        }
+
+        // Is current table date in this month or another one?
+        if (date('Ym', $tableDate) != date('Ym', $this->getDisplayTime()))
+        {
+            $classes[] = 'table-calendar-disabled-month';
+        }
+
+        return $classes;
+    }
+
+    /**
+     *
+     * @param integer $tableDate
+     * @return string
+     */
+    protected function determineCellContent($tableDate)
+    {
+        return date('j', $tableDate);
     }
 
     /**
@@ -181,12 +220,20 @@ class MonthCalendar extends Calendar
         }
     }
 
+    /**
+     *
+     * @return string
+     */
     public function render()
     {
         $this->addEvents();
         return $this->toHtml();
     }
 
+    /**
+     *
+     * @return integer[]
+     */
     public function getCellMapping()
     {
         return $this->cellMapping;

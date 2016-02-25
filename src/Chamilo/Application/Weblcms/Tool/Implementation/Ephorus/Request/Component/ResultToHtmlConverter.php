@@ -34,7 +34,7 @@ class ResultToHtmlConverter
 
     public function convert_to_html($request_id)
     {
-        $this->xslt_path = realpath(__DIR__ . '/../../../../resources/xslt');
+        $this->xslt_path = realpath(__DIR__ . '/../Resources/Xslt');
         $html = $this->get_html($request_id);
 
         return $html;

@@ -1,125 +1,117 @@
-.event-source-identifier {
-	margin-right: 2px;
-	display: block;
-	vertical-align: middle;
-	border-left: 14px solid red;
-	padding: 2px 4px;
-}
-
 .event-source-identifier-framed {
 	border: 1px solid #7f7f7f;
 }
 
 .event-source-identifier-0 {
-	border-color: #c61a3b;
+	background-color: #c61a3b;
 }
 
 .event-source-identifier-1, .event-source-identifier-19,
 	.event-source-identifier-37, .event-source-identifier-55,
 	.event-source-identifier-73 {
-	border-color: #DEDE78;
+	background-color: #DEDE78;
 }
 
 .event-source-identifier-2, .event-source-identifier-20,
 	.event-source-identifier-38, .event-source-identifier-56,
 	.event-source-identifier-74 {
-	border-color: #78DE78;
+	background-color: #78DE78;
 }
 
 .event-source-identifier-3, .event-source-identifier-21,
 	.event-source-identifier-39, .event-source-identifier-57,
 	.event-source-identifier-75 {
-	border-color: #789ADE;
+	background-color: #789ADE;
 }
 
 .event-source-identifier-4, .event-source-identifier-22,
 	.event-source-identifier-40, .event-source-identifier-58,
 	.event-source-identifier-76 {
-	border-color: #DE78DE;
+	background-color: #DE78DE;
 }
 
 .event-source-identifier-5, .event-source-identifier-23,
 	.event-source-identifier-41, .event-source-identifier-59,
 	.event-source-identifier-77 {
-	border-color: #DEBC78;
+	background-color: #DEBC78;
 }
 
 .event-source-identifier-6, .event-source-identifier-24,
 	.event-source-identifier-42, .event-source-identifier-60,
 	.event-source-identifier-78 {
-	border-color: #9ADE78;
+	background-color: #9ADE78;
 }
 
 .event-source-identifier-7, .event-source-identifier-25,
 	.event-source-identifier-43, .event-source-identifier-61,
 	.event-source-identifier-79 {
-	border-color: #DF7979;
+	background-color: #DF7979;
 }
 
 .event-source-identifier-8, .event-source-identifier-26,
 	.event-source-identifier-44, .event-source-identifier-62,
 	.event-source-identifier-80 {
-	border-color: #78BCDE;
+	background-color: #78BCDE;
 }
 
 .event-source-identifier-9, .event-source-identifier-27,
 	.event-source-identifier-45, .event-source-identifier-63,
 	.event-source-identifier-81 {
-	border-color: #BC78DE;
+	background-color: #BC78DE;
 }
 
 .event-source-identifier-10, .event-source-identifier-28,
 	.event-source-identifier-46, .event-source-identifier-64,
 	.event-source-identifier-82 {
-	border-color: #BCDE78;
+	background-color: #BCDE78;
 }
 
 .event-source-identifier-11, .event-source-identifier-29,
 	.event-source-identifier-47, .event-source-identifier-65,
 	.event-source-identifier-83 {
-	border-color: #DE78BC;
+	background-color: #DE78BC;
 }
 
 .event-source-identifier-12, .event-source-identifier-30,
 	.event-source-identifier-48, .event-source-identifier-66,
 	.event-source-identifier-84 {
-	border-color: #78DE9A;
+	background-color: #78DE9A;
 }
 
 .event-source-identifier-13, .event-source-identifier-31,
 	.event-source-identifier-49, .event-source-identifier-67,
 	.event-source-identifier-85 {
-	border-color: #DE9A78;
+	background-color: #DE9A78;
 }
 
 .event-source-identifier-14, .event-source-identifier-32,
 	.event-source-identifier-50, .event-source-identifier-68,
 	.event-source-identifier-86 {
-	border-color: #78DEBC;
+	background-color: #78DEBC;
 }
 
 .event-source-identifier-15, .event-source-identifier-33,
 	.event-source-identifier-51, .event-source-identifier-69,
 	.event-source-identifier-87 {
-	border-color: #7878DE;
+	background-color: #7878DE;
 }
 
 .event-source-identifier-16, .event-source-identifier-34,
 	.event-source-identifier-52, .event-source-identifier-70,
 	.event-source-identifier-88 {
-	border-color: #DE789A;
+	background-color: #DE789A;
 }
 
 .event-source-identifier-17, .event-source-identifier-35,
 	.event-source-identifier-53, .event-source-identifier-71,
 	.event-source-identifier-89 {
-	border-color: #9A78DE;
+	background-color: #9A78DE;
 }
 
 .event-source-identifier-18, .event-source-identifier-36,
 	.event-source-identifier-54, .event-source-identifier-72,
 	.event-source-identifier-90 {
-	border-color: #78DEDE;
+	background-color: #78DEDE;
 }
 
 .event-source-identifier-19, .event-source-identifier-20,
@@ -182,7 +174,6 @@
 
 .event-source-identifier-faded {
 	opacity: 0.5;
-	color: grey;
 }
 
 .event-legend-container {
@@ -235,6 +226,7 @@ h4 .calendar-event-range {
 .table-calendar, .table-calendar-mini {
 	width: 100%;
 	border-spacing: 0px;
+	table-layout: fixed;
 }
 
 .table-calendar {
@@ -255,10 +247,10 @@ h4 .calendar-event-range {
 	padding: 0px;
 }
 
-.table-calendar tbody td {
+.table-calendar tbody tr td {
 	border: 1px solid #dadada;
 	margin: 0px;
-	padding: 2px;
+	padding: 4px;
 	height: 60px;
 	vertical-align: top;
 	width: 13%;
@@ -268,16 +260,16 @@ h4 .calendar-event-range {
 	background-color: #fef6e8;
 }
 
+.table-calendar td.table-calendar-disabled-month a {
+	color: #999999;
+}
+
 .table-calendar td.table-calendar-weekend {
 	background-color: #f9f9f9;
 }
 
-.table-calendar td.table-calendar-disabled-month {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
-	filter: alpha(opacity = 40);
-	-moz-opacity: 0.4;
-	-khtml-opacity: 0.4;
-	opacity: 0.4;
+.table-calendar-mini-container {
+	padding: 10px;
 }
 
 .table-calendar-mini {
@@ -294,10 +286,7 @@ h4 .calendar-event-range {
 	text-align: center;
 	vertical-align: middle;
 	height: 26px;
-}
-
-.table-calendar-mini tbody tr td.table-calendar-contains-events {
-	border:1px solid black;
+	padding: 2px;
 }
 
 .table-calendar-mini a, .table-calendar-mini a:hover,
@@ -306,6 +295,66 @@ h4 .calendar-event-range {
 	font-weight: normal;
 }
 
+.table-calendar-mini span.badge {
+	min-width: 29px;
+}
+
+.table-calendar-mini td.table-calendar-disabled-month span.badge {
+	background-color: #c9c9c9;
+}
+
+.table-calendar-mini tbody tr td span.badge a {
+	font-weight: bold;
+	color: white;
+}
+
 .table-calendar-mini-navigation {
 	text-align: center;
+	background-color: white;
+}
+
+.table-calendar-mini-navigation span.glyphicon {
+	color: #333333;
+}
+
+.table-calendar-mini tbody tr td.table-calendar-highlight {
+	background-color: transparent;
+}
+
+.table-calendar-mini tbody tr td.table-calendar-highlight span.badge {
+	background-color: #337ab7;
+}
+
+.table-calendar-legend .event-source-identifier {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	margin-right: 15px;
+	border-radius: 5px;
+}
+
+.table-calendar-legend .list-group {
+	margin: 5px 0px;
+}
+
+.table-calendar-legend .list-group-item {
+	border: 0px solid white;
+	padding: 5px 15px;
+}
+
+.table-calendar .event-source-identifier {
+	display: block;
+	vertical-align: middle;
+	padding: 2px 4px;
+	white-space: nowrap;
+	overflow: hidden;
+	border-radius: 5px;
+	margin-bottom: 4px;
+	color: white;
+}
+
+.table-calendar .event-source-identifier a
+{
+	color: white;
+	font-weight: normal;
 }
