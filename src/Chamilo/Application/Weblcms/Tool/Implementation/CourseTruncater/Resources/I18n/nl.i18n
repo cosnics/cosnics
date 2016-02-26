@@ -1,0 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_truncater
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Cursus leegmaken"
+EmptyConfirmationQuestion = "Ben je zeker dat je deze cursus wilt wissen?"
+AllSelectedObjectsRemoved = "Alle geselecteerde objecten zijn gewist"
+NotAllSelectedObjectsRemoved = "Niet alle geselecteerde objecten zijn gewist"
+EmptyThisCourse = "Maak cursus leeg"
+EmptyThisCourseInformation = "Selectie verwijderen"
+SelectAItem = "Selecteer minstens 1 item"
+Course = "Cursus"
+Publications = "Publicatie"
+NoPublications = "Er zijn geen publicaties en secties in deze cursus"
+SelectPublications = "Selecteer publicatie"
+CategoryTypeName = "Categorie type naam"
+CourseSections = "Cursus tabs"
+CourseAdministration = "Cursus beheer"
+PublicationCategories = "Publicatie categorie"
+ContentObjectNotImported = "Object niet geimporteerd"
+CourseDeleteFailed = "Cursus niet verwijderd"
+Other = "Andere"
