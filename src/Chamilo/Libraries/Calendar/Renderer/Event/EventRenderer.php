@@ -42,7 +42,7 @@ abstract class EventRenderer
     {
         $this->renderer = $renderer;
         $this->event = $event;
-        $this->configuration = $configuration ?  : new Configuration();
+        $this->configuration = $configuration ?: new Configuration();
     }
 
     /**
@@ -101,11 +101,11 @@ abstract class EventRenderer
 
     public function getEventClasses()
     {
-        $eventClasses = 'event';
+        $eventClasses = 'event-container';
 
         if (! $this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
         {
-            $eventClasses .= ' event-hidden';
+            $eventClasses = ' event-container-hidden';
         }
 
         return $eventClasses;

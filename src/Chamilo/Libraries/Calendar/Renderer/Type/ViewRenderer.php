@@ -11,6 +11,9 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -50,6 +53,12 @@ abstract class ViewRenderer extends Renderer
 
     /**
      *
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     */
+    private $viewActions;
+
+    /**
+     *
      * @var string
      */
     private $linkTarget;
@@ -59,16 +68,36 @@ abstract class ViewRenderer extends Renderer
      * @param CalendarRendererProviderInterface $dataProvider
      * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
      * @param integer $display_time
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
      * @param string $link_target
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $linkTarget = '')
+        $viewActions = array(), $linkTarget = '')
     {
         parent :: __construct($dataProvider);
 
         $this->legend = $legend;
         $this->displayTime = $displayTime;
+        $this->viewActions = $viewActions;
         $this->linkTarget = $linkTarget;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     */
+    public function getViewActions()
+    {
+        return $this->viewActions;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
+     */
+    public function setViewActions($viewActions)
+    {
+        $this->viewActions = $viewActions;
     }
 
     /**
@@ -203,7 +232,9 @@ abstract class ViewRenderer extends Renderer
             $tabs[] = new DynamicVisualTab(
                 $type,
                 Translation :: get($type . 'View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Type/' . $type),
+                Theme :: getInstance()->getImagePath(
+                    'Chamilo\Libraries\Calendar\Renderer',
+                    'Renderer/Tab/Type/' . $type),
                 str_replace(self :: MARKER_TYPE, $type, $typeUrl),
                 false,
                 false,
@@ -222,5 +253,45 @@ abstract class ViewRenderer extends Renderer
             DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
 
         return $tabs;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton
+     */
+    public function renderTypeButton()
+    {
+        $rendererTypes = array(
+            ViewRenderer :: TYPE_MONTH,
+            ViewRenderer :: TYPE_WEEK,
+            ViewRenderer :: TYPE_DAY,
+            ViewRenderer :: TYPE_LIST);
+
+        $displayParameters = $this->getDataProvider()->getDisplayParameters();
+        $currentRendererType = $displayParameters[self :: PARAM_TYPE];
+
+        $button = new DropdownButton(
+            Translation :: get($currentRendererType . 'View', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getImagePath(
+                'Chamilo\Libraries\Calendar\Renderer',
+                'Renderer/Tab/Type/' . $currentRendererType));
+        $button->setDropdownClasses('dropdown-menu-right');
+
+        foreach ($rendererTypes as $rendererType)
+        {
+            $displayParameters[self :: PARAM_TYPE] = $rendererType;
+            $typeUrl = new Redirect($displayParameters);
+
+            $button->addSubButton(
+                new SubButton(
+                    Translation :: get($rendererType . 'View', null, Utilities :: COMMON_LIBRARIES),
+                    null,
+                    $typeUrl->getUrl(),
+                    SubButton :: DISPLAY_LABEL,
+                    false,
+                    $currentRendererType == $rendererType ? 'selected' : ''));
+        }
+
+        return $button;
     }
 }
