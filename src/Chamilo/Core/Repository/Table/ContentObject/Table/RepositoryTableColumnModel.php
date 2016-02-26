@@ -16,6 +16,9 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
     const PROPERTY_TYPE = 'type';
     const PROPERTY_VERSION = 'version';
 
+    const DEFAULT_ORDER_COLUMN_INDEX = 3;
+    const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
+
     public function initialize_columns()
     {
         $this->add_column(

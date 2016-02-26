@@ -200,7 +200,7 @@ class Hotpotatoes extends ContentObject implements Versionable
 
         foreach ($entries as $entry)
         {
-            $filename = substr($entry, strlen($dir) + 1); // +1 to remove the final \
+            $filename = substr($entry, strlen($dir));
             $full_new_path = $full_path . $filename;
             $new_path = substr($full_new_path, strlen($hotpot_path));
 
