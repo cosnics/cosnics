@@ -3,7 +3,8 @@ namespace Chamilo\Application\Calendar\Extension\Google;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
@@ -17,7 +18,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
      */
     public function get()
     {
-        $tabs = array();
+        $buttonGroup = new ButtonGroup();
 
         $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager :: context();
         $accessToken = LocalSetting :: getInstance()->get('token', $configurationContext);
@@ -31,15 +32,12 @@ class Actions extends \Chamilo\Application\Calendar\Actions
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
 
-            $tabs[] = new DynamicVisualTab(
-                'GoogleCalendarLogin',
-                Translation :: get('GoogleCalendarLogin'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_LOGIN),
-                $link,
-                false,
-                false,
-                DynamicVisualTab :: POSITION_RIGHT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('GoogleCalendarLogin'),
+                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_LOGIN),
+                    $link,
+                    Button :: DISPLAY_ICON));
         }
         else
         {
@@ -50,17 +48,14 @@ class Actions extends \Chamilo\Application\Calendar\Actions
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
 
-            $tabs[] = new DynamicVisualTab(
-                'GoogleCalendarLogout',
-                Translation :: get('GoogleCalendarLogout'),
-                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_LOGOUT),
-                $link,
-                false,
-                false,
-                DynamicVisualTab :: POSITION_RIGHT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+            $buttonGroup->addButton(
+                new Button(
+                    Translation :: get('GoogleCalendarLogout'),
+                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . Manager :: ACTION_LOGOUT),
+                    $link,
+                    Button :: DISPLAY_ICON));
         }
 
-        return $tabs;
+        return array($buttonGroup);
     }
 }

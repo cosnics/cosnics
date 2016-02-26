@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Calendar;
 
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
@@ -13,30 +12,6 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Actions
 {
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer
-     */
-    private $dynamicVisualTabsRenderer;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer $dynamicVisualTabsRenderer
-     */
-    public function __construct(DynamicVisualTabsRenderer $dynamicVisualTabsRenderer)
-    {
-        $this->dynamicVisualTabsRenderer = $dynamicVisualTabsRenderer;
-    }
-
-    /**
-     *
-     * @return \libraries\architecture\application\Application
-     */
-    public function getDynamicVisualTabsRenderer()
-    {
-        return $this->dynamicVisualTabsRenderer;
-    }
 
     /**
      *

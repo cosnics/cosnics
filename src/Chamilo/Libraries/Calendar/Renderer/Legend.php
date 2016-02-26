@@ -154,11 +154,11 @@ class Legend
      */
     public function getSourceClasses($source = null, $fade = false)
     {
-        $classes = 'event-source-identifier event-source-identifier-' . $this->addSource($source);
+        $classes = 'event-container-source event-container-source-' . $this->addSource($source);
 
         if ($fade)
         {
-            $classes .= ' event-source-identifier-faded';
+            $classes .= ' event-container-source-faded';
         }
 
         return $classes;
@@ -200,8 +200,10 @@ class Legend
                 }
 
                 $result[] = '<li class="list-group-item">';
-                $result[] = '<span data-source="' . $source . '" class="' . $sourceClasses . '"></span>';
+                $result[] = '<div class="event-source">';
+                $result[] = '<span data-source="' . $source . '" class="event-container ' . $sourceClasses . '"></span>';
                 $result[] = $source;
+                $result[] = '</div>';
                 $result[] = '</li>';
 
                 if ($this->getDataProvider()->supportsVisibility())

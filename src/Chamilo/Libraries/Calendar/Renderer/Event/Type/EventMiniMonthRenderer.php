@@ -30,13 +30,6 @@ class EventMiniMonthRenderer extends EventRenderer
 
         $eventClasses = $this->getEventClasses();
 
-        if (($startDate < $fromDate || $startDate > $toDate))
-        {
-            $eventClasses .= ' event_fade';
-        }
-
-        $eventClasses .= ' event-mini-calendar';
-
         $html[] = '<div class="' . $eventClasses . '" style="display: none;">';
         $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses(
             $this->getEvent()->getSource(),

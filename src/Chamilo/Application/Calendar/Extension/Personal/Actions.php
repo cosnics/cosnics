@@ -3,7 +3,8 @@ namespace Chamilo\Application\Calendar\Extension\Personal;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -16,7 +17,7 @@ class Actions extends \Chamilo\Application\Calendar\Actions
      */
     public function get()
     {
-        $tabs = array();
+        $buttonGroup = new ButtonGroup();
 
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
@@ -25,15 +26,12 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $redirect = new Redirect($parameters);
         $link = $redirect->getUrl();
 
-        $tabs[] = new DynamicVisualTab(
-            'Publish',
-            Translation :: get('AddEvent'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Publish'),
-            $link,
-            false,
-            false,
-            DynamicVisualTab :: POSITION_RIGHT,
-            DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('AddEvent'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/Publish'),
+                $link,
+                Button :: DISPLAY_ICON));
 
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
@@ -42,16 +40,13 @@ class Actions extends \Chamilo\Application\Calendar\Actions
         $redirect = new Redirect($parameters);
         $link = $redirect->getUrl();
 
-        $tabs[] = new DynamicVisualTab(
-            'ImportIcal',
-            Translation :: get('ImportIcal'),
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/ImportIcal'),
-            $link,
-            false,
-            false,
-            DynamicVisualTab :: POSITION_RIGHT,
-            DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('ImportIcal'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/ImportIcal'),
+                $link,
+                Button :: DISPLAY_ICON));
 
-        return $tabs;
+        return array($buttonGroup);
     }
 }

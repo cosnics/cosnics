@@ -48,6 +48,7 @@ class WeekRenderer extends TableRenderer
      * @param \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface $dataProvider
      * @param \Chamilo\Libraries\Calendar\Renderer\Legend $legend
      * @param integer $displayTime
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $viewActions
      * @param string $linkTarget
      * @param integer $hourStep
      * @param integer $startHour
@@ -55,14 +56,14 @@ class WeekRenderer extends TableRenderer
      * @param boolean $hideOtherHours
      */
     public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
+        $viewActions = array(), $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
     {
         $this->hourStep = $hourStep;
         $this->startHour = $startHour;
         $this->endHour = $endHour;
         $this->hideOtherHours = $hideOtherHours;
 
-        parent :: __construct($dataProvider, $legend, $displayTime, $linkTarget);
+        parent :: __construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
     }
 
     /**
