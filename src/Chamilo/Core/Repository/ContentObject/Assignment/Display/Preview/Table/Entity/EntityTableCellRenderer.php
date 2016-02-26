@@ -10,4 +10,14 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table
  */
 class EntityTableCellRenderer extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableCellRenderer
 {
+    /**
+     * {@inheritDoc}
+     * @see \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableCellRenderer::isEntity()
+     */
+    protected function isEntity($entityId, $userId)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

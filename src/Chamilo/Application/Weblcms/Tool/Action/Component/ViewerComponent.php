@@ -108,7 +108,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $html = array();
         
         $html[] = parent :: render_header();
-        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $this->getButtonToolbarRenderer()->render();
         $html[] = '<div id="action_bar_browser">';
         $html[] = $this->html;
         
