@@ -40,6 +40,12 @@ class ViewRendererFactory
 
     /**
      *
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     */
+    private $actions;
+
+    /**
+     *
      * @var string
      */
     private $linkTarget;
@@ -53,12 +59,13 @@ class ViewRendererFactory
      * @param string $linkTarget
      */
     public function __construct($rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend,
-        $displayTime, $linkTarget = '')
+        $displayTime, $actions = array(), $linkTarget = '')
     {
         $this->rendererType = $rendererType;
         $this->dataProvider = $dataProvider;
         $this->legend = $legend;
         $this->displayTime = $displayTime;
+        $this->actions = $actions;
         $this->linkTarget = $linkTarget;
     }
 
@@ -136,6 +143,24 @@ class ViewRendererFactory
 
     /**
      *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $actions
+     */
+    public function setActions($actions)
+    {
+        $this->actions = $actions;
+    }
+
+    /**
+     *
      * @return string
      */
     public function getLinkTarget()
@@ -173,6 +198,7 @@ class ViewRendererFactory
             $this->getDataProvider(),
             $this->getLegend(),
             $this->getDisplayTime(),
+            $this->getActions(),
             $this->getLinkTarget());
     }
 }

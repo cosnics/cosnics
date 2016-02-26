@@ -51,6 +51,7 @@ class Day extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInter
             $dataProvider,
             $calendarLegend,
             $time,
+            array(),
             $this->getLinkTarget(),
             $this->getBlock()->getSetting(self :: CONFIGURATION_HOUR_STEP, 1),
             $this->getBlock()->getSetting(self :: CONFIGURATION_TIME_START, 8),

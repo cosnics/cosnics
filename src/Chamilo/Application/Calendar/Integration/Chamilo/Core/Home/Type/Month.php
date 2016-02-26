@@ -29,7 +29,7 @@ class Month extends \Chamilo\Core\Home\BlockRendition
         $calendarLegend = new Legend($dataProvider);
 
         $time = Request :: get('time') ? intval(Request :: get('time')) : time();
-        $minimonthcalendar = new MiniMonthRenderer($dataProvider, $calendarLegend, $time, $this->getLinkTarget());
+        $minimonthcalendar = new MiniMonthRenderer($dataProvider, $calendarLegend, $time, array(), $this->getLinkTarget());
         return $minimonthcalendar->render();
     }
 }

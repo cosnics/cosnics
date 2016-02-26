@@ -4,6 +4,10 @@ namespace Chamilo\Application\Calendar\Component;
 use Chamilo\Application\Calendar\Manager;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\User\Component\UserSettingsComponent;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
@@ -11,9 +15,13 @@ use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -47,8 +55,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->setCurrentRendererTime($this->getJumpForm()->getTime());
         }
 
-        $tabs = $this->getTabs();
-        $tabs->set_content($this->getCalendarHtml());
+//         $tabs = $this->getTabs();
+//         $tabs->set_content($this->getCalendarHtml());
 
         $html = array();
 
@@ -78,12 +86,9 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $html = array();
 
-        // $html[] = '<div class="mini_calendar">';
-        // $html[] = $this->renderSidebar();
-        // $html[] = '</div>';
-        // $html[] = '<div class="normal_calendar">';
+        $html[] = '<div class="row">';
         $html[] = $this->renderNormalCalendar();
-        // $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -138,7 +143,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->getCurrentRendererType(),
             $dataProvider,
             $calendarLegend,
-            $this->getCurrentRendererTime());
+            $this->getCurrentRendererTime(),
+            $this->getViewActions());
         $renderer = $rendererFactory->getRenderer();
 
         if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY ||
@@ -152,6 +158,86 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $renderer->render();
+    }
+
+    protected function getViewActions()
+    {
+        $actions = array();
+
+        $actions[] = $this->getGeneralActions();
+
+        $extensionRegistrations = Configuration :: registrations_by_type(
+            \Chamilo\Application\Calendar\Manager :: package() . '\Extension');
+
+        foreach ($extensionRegistrations as $extensionRegistration)
+        {
+            $actionRendererClass = $extensionRegistration[Registration :: PROPERTY_CONTEXT] . '\Actions';
+            $actionRenderer = new $actionRendererClass();
+            $extensionActions = $actionRenderer->get($this);
+
+            foreach ($extensionActions as $extensionAction)
+            {
+                $actions[] = $extensionAction;
+            }
+        }
+
+        return $actions;
+    }
+
+    protected function getGeneralActions()
+    {
+        $buttonGroup = new ButtonGroup();
+
+        $printUrl = new Redirect(
+            array(
+                self :: PARAM_CONTEXT => self :: package(),
+                self :: PARAM_ACTION => self :: ACTION_PRINT,
+                ViewRenderer :: PARAM_TYPE => $this->getCurrentRendererType(),
+                ViewRenderer :: PARAM_TIME => $this->getCurrentRendererTime()));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get(self :: ACTION_PRINT . 'Component'),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/' . self :: ACTION_PRINT),
+                $printUrl->getUrl(),
+                Button :: DISPLAY_ICON));
+
+        $iCalUrl = new Redirect(
+            array(Application :: PARAM_CONTEXT => self :: package(), self :: PARAM_ACTION => Manager :: ACTION_ICAL));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('ICalExternal'),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalExternal'),
+                $iCalUrl->getUrl(),
+                Button :: DISPLAY_ICON));
+
+        $availabilityUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => self :: package(),
+                self :: PARAM_ACTION => Manager :: ACTION_AVAILABILITY));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('AvailabilityComponent'),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Availability'),
+                $availabilityUrl->getUrl(),
+                Button :: DISPLAY_ICON));
+
+        $settingsUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
+                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_USER_SETTINGS,
+                UserSettingsComponent :: PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'));
+
+        $buttonGroup->addButton(
+            new Button(
+                Translation :: get('ConfigComponent'),
+                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Configuration'),
+                $settingsUrl->getUrl(),
+                Button :: DISPLAY_ICON));
+
+        return $buttonGroup;
     }
 
     public function getMiniMonthMarkPeriod()

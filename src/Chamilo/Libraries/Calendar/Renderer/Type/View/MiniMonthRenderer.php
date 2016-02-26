@@ -36,12 +36,12 @@ class MiniMonthRenderer extends TableRenderer
      * @param string $linkTarget
      * @param int $markPeriod
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
         $linkTarget = '', $markPeriod = null)
     {
         $this->markPeriod = $markPeriod;
 
-        parent :: __construct($dataProvider, $legend, $displayTime, $linkTarget);
+        parent :: __construct($dataProvider, $legend, $displayTime, $actions, $linkTarget);
     }
 
     /**

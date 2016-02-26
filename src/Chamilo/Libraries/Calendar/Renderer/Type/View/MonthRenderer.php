@@ -76,7 +76,28 @@ class MonthRenderer extends TableRenderer
         $html = array();
 
         $html[] = '<div class="col-md-9 col-lg-10">';
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-md-4">';
+        $html[] = '<div class="pull-left">';
         $html[] = $this->renderNavigation();
+        $html[] = '</div>';
+
+        $html[] = '<div class="table-calendar-current-time pull-left">';
+        $html[] = '<h4>';
+        $html[] = Translation :: get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities :: COMMON_LIBRARIES) .
+             ' ' . date('Y', $this->getDisplayTime());
+        $html[] = '</h4>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-md-8">';
+        $html[] = '<div class="pull-right">';
+        $html[] = $this->renderViewActions();
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = $calendar->render();
         $html[] = '</div>';
 
@@ -90,6 +111,31 @@ class MonthRenderer extends TableRenderer
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
+    public function renderViewActions()
+    {
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+
+        $buttonToolBar->addItem($this->renderTypeButton());
+
+        foreach ($this->getViewActions() as $viewAction)
+        {
+            $buttonToolBar->addItem($viewAction);
+        }
+
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        return $buttonToolbarRenderer->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function renderMiniMonth()
     {
         $renderer = new MiniMonthRenderer(
@@ -135,25 +181,6 @@ class MonthRenderer extends TableRenderer
             new Button(Translation :: get('Next'), new InlineGlyph('triangle-right'), $nextUrl, Button :: DISPLAY_ICON));
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        $html = array();
-
-        $html[] = '<div class="col-md-4">';
-        $html[] = '<div class="pull-left">';
-        $html[] = $buttonToolbarRenderer->render();
-        $html[] = '</div>';
-
-        $html[] = '<div class="table-calendar-current-time pull-left">';
-        $html[] = '<h4>';
-        $html[] = Translation :: get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities :: COMMON_LIBRARIES) .
-             ' ' . date('Y', $this->getDisplayTime());
-        $html[] = '</h4>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-md-8">';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $buttonToolbarRenderer->render();
     }
 }
