@@ -54,19 +54,6 @@ class FilteredCourseList extends Block implements ConfigurableInterface
      * **************************************************************************************************************
      */
 
-    /**
-     * Constructs the
-     *
-     * @param mixed $parent
-     * @param Block $block_info
-     */
-    public function __construct($renderer, $block)
-    {
-        parent :: __construct($renderer, $block);
-
-        $this->loadSettings();
-    }
-
     public function getCourseListRenderer()
     {
         if (! isset($this->courseListRenderer))
@@ -88,6 +75,8 @@ class FilteredCourseList extends Block implements ConfigurableInterface
      */
     public function displayContent()
     {
+        $this->loadSettings();
+
         $html = array();
 
         $renderer = $this->getCourseListRenderer();
@@ -122,6 +111,8 @@ class FilteredCourseList extends Block implements ConfigurableInterface
      */
     public function getTitle()
     {
+        $this->loadSettings();
+
         $course_type_id = $this->getCourseTypeId();
 
         if ($course_type_id > 0)
@@ -191,7 +182,9 @@ class FilteredCourseList extends Block implements ConfigurableInterface
      */
     private function loadSettings()
     {
-        $this->courseTypeId = $this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE);
+        $courseTypeIds = json_decode($this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE));
+        $this->courseTypeId = $courseTypeIds[0];
+
         // TODO: Fix this?
         $this->userCourseCategoryId = null;
     }
