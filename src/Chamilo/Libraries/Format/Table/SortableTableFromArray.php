@@ -117,9 +117,9 @@ class SortableTableFromArray extends SortableTable
      */
     public function toHtml()
     {
-        $table = $this->initializeTable();
+        $this->initializeTable();
 
-        return $table->toHtml();
+        return parent::toHtml();
     }
 
     /**
@@ -145,8 +145,6 @@ class SortableTableFromArray extends SortableTable
         {
             $this->setColumnHeader($key, $tableColumn->get_title(), $tableColumn->is_sortable());
         }
-
-        return $this;
     }
 
     /**
