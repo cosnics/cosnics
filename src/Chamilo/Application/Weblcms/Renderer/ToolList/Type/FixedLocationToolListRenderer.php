@@ -217,6 +217,12 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     $content .= $this->display_block_footer($section);
                     // if (($section->is_visible() && (count($tools[$section->get_id()]) > 0)) ||
                     // $this->is_course_admin)
+
+                    if($course_tool_layout >= 3)
+                    {
+                        // Temporary fix untill we move back to dynamic tabs
+                        $content .= '<div class="removed-tools" style="display: none;"></div>';
+                    }
                 }
             }
         }
@@ -491,18 +497,18 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $course_settings_controller = CourseSettingsController :: get_instance();
 
-        if ($count % $this->number_of_columns == 0)
-        {
+//        if ($count % $this->number_of_columns == 0)
+//        {
             $html[] = '<div class="row">';
-        }
+//        }
 
         foreach ($tools as $tool)
         {
-            if ($count > 0 && $count % $this->number_of_columns == 0)
-            {
-                $html[] = '</div>';
-                $html[] = '<div class="row">';
-            }
+//            if ($count > 0 && $count % $this->number_of_columns == 0)
+//            {
+//                $html[] = '</div>';
+//                $html[] = '<div class="row">';
+//            }
 
             $html[] = '<div class="' . $columnClass . '">';
 
