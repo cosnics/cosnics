@@ -28,7 +28,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function render_menu()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $extra = $this->get_menu_items();
         if ($this->buttonToolbarRenderer->getSearchForm()->getQuery() && count($extra) > 0)
         {
@@ -68,6 +67,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function run()
     {
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
         $html = array();
