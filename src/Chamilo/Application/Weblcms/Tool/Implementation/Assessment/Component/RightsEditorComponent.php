@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 class RightsEditorComponent extends Manager implements DelegateComponent
 {

@@ -8,6 +8,8 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Export\Zip\ZipContentObjectExport;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
@@ -58,5 +60,13 @@ class DownloadSelectedPublicationsComponent extends Manager
 
         $exporter = ContentObjectExportController :: factory($parameters);
         $exporter->download();
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

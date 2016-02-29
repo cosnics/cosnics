@@ -12,6 +12,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -263,5 +265,13 @@ class ZipAndDownloadComponent extends Manager
         }
 
         return $category_folder_mapping;
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

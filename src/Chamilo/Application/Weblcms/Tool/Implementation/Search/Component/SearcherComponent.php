@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Search\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -275,5 +276,13 @@ class SearcherComponent extends Manager
         $condition = new AndCondition($conditions);
         
         return $condition;
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

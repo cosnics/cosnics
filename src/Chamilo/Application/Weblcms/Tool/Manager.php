@@ -25,6 +25,8 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -903,5 +905,28 @@ abstract class Manager extends Application
             \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
+    }
+
+    /**
+     * Adds a breadcrumb to the browser component
+     *
+     * @param BreadcrumbTrail $breadcrumbTrail
+     */
+    protected function addBrowserBreadcrumb(BreadcrumbTrail $breadcrumbTrail)
+    {
+        $breadcrumbTrail->add(
+            new Breadcrumb(
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
+                Translation::getInstance()->getTranslation('BrowserComponent', array(), $this->context())
+            )
+        );
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

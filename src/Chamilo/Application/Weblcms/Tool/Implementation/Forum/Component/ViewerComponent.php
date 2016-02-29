@@ -67,6 +67,11 @@ class ViewerComponent extends Manager implements ForumDisplaySupport
         return $this->root_content_object;
     }
 
+    public function get_additional_parameters()
+    {
+        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+    }
+
     public function forum_topic_viewed($complex_topic_id)
     {
         $parameters = array();

@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\ContentObject\AssessmentOpenQuestion\Storage\DataClass\AssessmentOpenQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -193,5 +194,13 @@ class DocumentSaverComponent extends Manager
         $params[self :: PARAM_ASSESSMENT] = Request :: get(self :: PARAM_ASSESSMENT);
         $params[self :: PARAM_USER_ASSESSMENT] = Request :: get(self :: PARAM_USER_ASSESSMENT);
         $this->redirect(Translation :: get($message), false, $params);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

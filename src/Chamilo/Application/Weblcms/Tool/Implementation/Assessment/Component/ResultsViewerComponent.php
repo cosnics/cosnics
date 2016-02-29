@@ -215,4 +215,12 @@ class ResultsViewerComponent extends Manager implements TableSupport
     {
         return $this->publication;
     }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
+    }
 }

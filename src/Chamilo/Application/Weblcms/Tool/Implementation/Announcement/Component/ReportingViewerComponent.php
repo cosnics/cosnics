@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Announcement\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Announcement\Manager;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 class ReportingViewerComponent extends Manager
 {
@@ -12,5 +13,13 @@ class ReportingViewerComponent extends Manager
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_COMPLEX_ID,
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

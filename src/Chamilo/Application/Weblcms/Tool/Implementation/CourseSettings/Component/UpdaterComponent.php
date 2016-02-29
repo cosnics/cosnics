@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseSettings\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -55,5 +56,13 @@ class UpdaterComponent extends Manager implements CourseSubManagerSupport
     public function redirect_after_quick_update($succes, $message)
     {
         $this->redirect_after_quick_create($succes, $message);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

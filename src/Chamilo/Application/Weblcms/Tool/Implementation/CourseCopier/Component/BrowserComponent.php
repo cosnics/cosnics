@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Manager;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -316,5 +317,13 @@ class BrowserComponent extends Manager
         }
 
         return $success;
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

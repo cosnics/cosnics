@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\AssessmentR
 use Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter\QuestionResult;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -158,5 +159,13 @@ class RawExportResultsComponent extends Manager
         }
 
         return $question_results;
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }
