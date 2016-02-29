@@ -29,10 +29,11 @@ class Filtered extends Basic
 
             foreach ($this->get_template()->get_blocks() as $key => $block)
             {
-                $title = Translation :: get(
-                    ClassnameUtilities :: getInstance()->getClassnameFromObject($block),
+                $title = Translation:: get(
+                    ClassnameUtilities:: getInstance()->getClassnameFromObject($block),
                     null,
-                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($block));
+                    ClassnameUtilities:: getInstance()->getNamespaceFromObject($block)
+                );
 
                 if ($block instanceof FilteredBlock)
                 {
@@ -42,16 +43,18 @@ class Filtered extends Basic
                 }
 
                 $html[] = '<h2>';
-                $html[] = '<img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent($block->context(), 1),
-                    ClassnameUtilities :: getInstance()->getClassnameFromObject($block)) . '"/> ';
+                $html[] = '<img style="vertical-align: middle;" src="' . Theme:: getInstance()->getImagePath(
+                        $this->getBlockNamespace($block),
+                        ClassnameUtilities:: getInstance()->getClassnameFromObject($block)
+                    ) . '"/> ';
                 $html[] = $title;
                 $html[] = '</h2>';
-                $html[] = BlockRenditionImplementation :: launch(
+                $html[] = BlockRenditionImplementation:: launch(
                     $this,
                     $block,
                     $this->get_format(),
-                    $this->determine_current_block_view($key));
+                    $this->determine_current_block_view($key)
+                );
             }
 
             return implode(PHP_EOL, $html);
@@ -71,21 +74,23 @@ class Filtered extends Basic
                 $html[] = $current_block->get_form($url)->toHtml();
             }
 
-            $html[] = $rendered_block = BlockRenditionImplementation :: launch(
+            $html[] = $rendered_block = BlockRenditionImplementation:: launch(
                 $this,
                 $current_block,
                 $this->get_format(),
-                $this->determine_current_block_view($current_block_id));
+                $this->determine_current_block_view($current_block_id)
+            );
 
             if ($this->get_template()->count_blocks() > 1)
             {
                 $tabs = new DynamicVisualTabsRenderer(
-                    ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template(), true),
-                    implode(PHP_EOL, $html));
+                    ClassnameUtilities:: getInstance()->getClassnameFromObject($this->get_template(), true),
+                    implode(PHP_EOL, $html)
+                );
 
                 $context_parameters = $this->get_context()->get_parameters();
 
-                $trail = BreadcrumbTrail :: get_instance();
+                $trail = BreadcrumbTrail:: get_instance();
 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {
@@ -93,10 +98,11 @@ class Filtered extends Basic
 
                     $is_current_block = $key == $this->determine_current_block_id() ? true : false;
 
-                    $title = Translation :: get(
-                        ClassnameUtilities :: getInstance()->getClassnameFromObject($block),
+                    $title = Translation:: get(
+                        ClassnameUtilities:: getInstance()->getClassnameFromObject($block),
                         null,
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($block));
+                        ClassnameUtilities:: getInstance()->getNamespaceFromObject($block)
+                    );
 
                     if ($is_current_block)
                     {
@@ -107,11 +113,14 @@ class Filtered extends Basic
                         new DynamicVisualTab(
                             $key,
                             $title,
-                            Theme :: getInstance()->getImagePath(
-                                ClassnameUtilities :: getInstance()->getNamespaceParent($block->context(), 1),
-                                ClassnameUtilities :: getInstance()->getClassnameFromObject($block)),
+                            Theme:: getInstance()->getImagePath(
+                                $this->getBlockNamespace($block),
+                                ClassnameUtilities:: getInstance()->getClassnameFromObject($block)
+                            ),
                             $this->get_context()->get_url($block_parameters),
-                            $is_current_block));
+                            $is_current_block
+                        )
+                    );
                 }
 
                 return $tabs->render();
