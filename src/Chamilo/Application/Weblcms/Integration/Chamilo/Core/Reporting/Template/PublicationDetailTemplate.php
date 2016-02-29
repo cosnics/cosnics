@@ -31,8 +31,12 @@ class PublicationDetailTemplate extends ReportingTemplate
         $this->pid = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
         
         $this->add_reporting_block($this->get_publication_access());
-        
-        $this->add_breadcrumbs();
+
+        $currentTool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
+        if($currentTool == 'Reporting')
+        {
+            $this->add_breadcrumbs();
+        }
     }
 
     public function get_publication_access()

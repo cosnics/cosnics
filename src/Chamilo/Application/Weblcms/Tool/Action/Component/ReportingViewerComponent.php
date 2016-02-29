@@ -35,9 +35,6 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
         $classname = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME, $classname);
 
-        $trail = BreadcrumbTrail :: get_instance();
-        $trail->add(new Breadcrumb($this->get_url(), Translation :: get('ReportingViewerComponent')));
-
         $factory = new ApplicationFactory(
             \Chamilo\Core\Reporting\Viewer\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
