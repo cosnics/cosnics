@@ -72,7 +72,7 @@ class NewDocuments extends NewBlock
         return $html;
     }
 
-    private function get_new_documents_icon()
+    private function getNewDocumentsIcon()
     {
         return Theme :: getInstance()->getImagePath(
             \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_DOCUMENT),

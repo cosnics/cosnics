@@ -196,7 +196,7 @@ class BrowserComponent extends Manager
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD_SELECTED_PUBLICATIONS)),
                 Translation :: get('DownloadSelected'),
-                true));
+                false));
     }
 
     /**
