@@ -108,9 +108,4 @@ class CreatorComponent extends Manager
             }
         }
     }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('weblcms_course_group_creator');
-    }
 }

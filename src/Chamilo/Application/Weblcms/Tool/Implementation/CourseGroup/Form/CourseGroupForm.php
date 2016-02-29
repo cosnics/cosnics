@@ -1524,7 +1524,7 @@ class CourseGroupForm extends FormValidator
         $content_object_publication->set_category_id($category_id);
         $content_object_publication->set_tool($tool);
         $content_object_publication->set_course_id($course_group->get_course_code());
-        $content_object_publication->set_parent_id('0');
+        $content_object_publication->set_category_id(0);
         $content_object_publication->set_publisher_id($forum->get_owner_id());
 
         $content_object_publication->set_content_object($forum);

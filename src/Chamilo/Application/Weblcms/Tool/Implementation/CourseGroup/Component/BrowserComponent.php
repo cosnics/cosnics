@@ -38,7 +38,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
  * 
  * @package application.lib.weblcms.tool.course_group.component
  */
-class BrowserComponent extends Manager implements TableSupport, DelegateComponent
+class BrowserComponent extends Manager implements TableSupport
 {
 
     /**
