@@ -127,14 +127,14 @@ class ExporterComponent extends Manager
                 $headers[] = new StaticTableColumn(Translation :: get('Type'));
                 $headers[] = new StaticTableColumn(Translation :: get('ShortCount'));
 
-                $export_table = new ExportTable($table_data, $headers);
-
                 foreach (ContentObjectExport :: get_types() as $key => $export_type)
                 {
                     $headers[] = new StaticTableColumn(
                         Translation :: get(
                             'ImportType' . StringUtilities :: getInstance()->createString($export_type)->upperCamelize()));
                 }
+
+                $export_table = new ExportTable($table_data, $headers);
 
                 $html = array();
 

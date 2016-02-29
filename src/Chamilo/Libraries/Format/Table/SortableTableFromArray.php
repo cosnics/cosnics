@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Table;
 /**
  * Sortable table which can be used for data available in an array
  */
-class SortableTableFromArray
+class SortableTableFromArray extends SortableTable
 {
 
     /**
@@ -81,10 +81,18 @@ class SortableTableFromArray
      * @param boolean $enableSorting
      * @param boolean $allowPageNavigation
      */
-    public function __construct($tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
-        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true,
-        $allowPageNavigation = true)
+    public function __construct(
+        $tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
+        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true,
+        $enableSorting = true,
+        $allowPageNavigation = true
+    )
     {
+        parent::__construct(
+            $tableName, array($this, 'countData'), array($this, 'getData'), $defaultOrderColumn,
+            $defaultPerPage, $defaultOrderDirection, $allowPageSelection, true
+        );
+
         $this->tableData = $tableData;
         $this->tableColumns = $tableColumns;
         $this->additionalParameters = $additionalParameters;
@@ -97,7 +105,7 @@ class SortableTableFromArray
         $this->enableSorting = $enableSorting;
         $this->allowPageNavigation = $allowPageNavigation;
 
-        if (! $allowPageSelection)
+        if (!$allowPageSelection)
         {
             $this->defaultPerPage = count($tableData);
         }
@@ -110,6 +118,7 @@ class SortableTableFromArray
     public function toHtml()
     {
         $table = $this->initializeTable();
+
         return $table->toHtml();
     }
 
@@ -119,24 +128,25 @@ class SortableTableFromArray
      */
     protected function initializeTable()
     {
-        $table = new SortableTable(
-            $this->getTableName(),
-            array($this, 'countData'),
-            array($this, 'getData'),
-            $this->getDefaultOrderColumn(),
-            $this->getDefaultPerPage(),
-            $this->getDefaultOrderDirection(),
-            $this->getAllowPageSelection(),
-            $this->getAllowPageNavigation());
+//        $table = new SortableTable(
+//            $this->getTableName(),
+//            array($this, 'countData'),
+//            array($this, 'getData'),
+//            $this->getDefaultOrderColumn(),
+//            $this->getDefaultPerPage(),
+//            $this->getDefaultOrderDirection(),
+//            $this->getAllowPageSelection(),
+//            $this->getAllowPageNavigation()
+//        );
 
-        $table->setAdditionalParameters($this->getAdditionalParameters());
+        $this->setAdditionalParameters($this->getAdditionalParameters());
 
         foreach ($this->getTableColumns() as $key => $tableColumn)
         {
-            $table->setColumnHeader($key, $tableColumn->get_title(), $tableColumn->is_sortable());
+            $this->setColumnHeader($key, $tableColumn->get_title(), $tableColumn->is_sortable());
         }
 
-        return $table;
+        return $this;
     }
 
     /**
@@ -145,6 +155,7 @@ class SortableTableFromArray
      * @param integer $count
      * @param integer $orderColumn
      * @param integer $orderDirection
+     *
      * @return string[]
      */
     public function getData($offset, $count, $orderColumn, $orderDirection)
@@ -153,7 +164,7 @@ class SortableTableFromArray
 
         if ($this->getEnableSorting())
         {
-            $content = TableSort :: sort_table($content, $orderColumn, $orderDirection);
+            $content = TableSort:: sort_table($content, $orderColumn, $orderDirection);
         }
 
         if ($this->getAllowPageSelection())
@@ -236,7 +247,7 @@ class SortableTableFromArray
 
     /**
      *
-     * @param multitype:\Chamilo\Libraries\Format\Table\string $additionalParameters
+     * @param multitype :\Chamilo\Libraries\Format\Table\string $additionalParameters
      */
     public function setAdditionalParameters($additionalParameters)
     {
