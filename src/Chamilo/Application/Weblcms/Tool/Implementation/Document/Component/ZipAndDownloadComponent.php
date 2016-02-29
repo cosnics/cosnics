@@ -59,7 +59,7 @@ class ZipAndDownloadComponent extends Manager
         $course_name = $this->get_course()->get_title();
         $this->zip_name = $course_name . ' - ' . Translation :: get("Document");
 
-        $category_id = $parent->get_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY);
+        $category_id = $this->getRequest()->get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY);
         if (! isset($category_id) || $category_id == 0 || strlen($category_id) == 0)
         {
             $category_id = 0;
@@ -80,7 +80,7 @@ class ZipAndDownloadComponent extends Manager
 
         $category_folder_mapping = $this->create_folder_structure($category_id, $is_course_admin);
 
-        $target_path = array_shift($category_folder_mapping);
+        $target_path = current($category_folder_mapping);
         foreach ($category_folder_mapping as $category_id => $dir)
         {
             // if we have access, retrieve the publications in the current
