@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -50,5 +51,13 @@ class BrowserComponent extends Manager
     public function get_additional_parameters()
     {
         return array(self :: PARAM_BROWSE_PUBLICATION_TYPE);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

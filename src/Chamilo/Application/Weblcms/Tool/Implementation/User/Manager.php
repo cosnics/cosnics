@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -115,5 +118,20 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: distinct(
             CourseEntityRelation :: class_name(),
             new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation :: PROPERTY_ENTITY_ID));
+    }
+
+    /**
+     * Adds a breadcrumb to the browser component
+     *
+     * @param BreadcrumbTrail $breadcrumbTrail
+     */
+    protected function addBrowserBreadcrumb(BreadcrumbTrail $breadcrumbTrail)
+    {
+        $breadcrumbTrail->add(
+            new Breadcrumb(
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
+                Translation::getInstance()->getTranslation('UnsubscribeBrowserComponent', array(), $this->context())
+            )
+        );
     }
 }

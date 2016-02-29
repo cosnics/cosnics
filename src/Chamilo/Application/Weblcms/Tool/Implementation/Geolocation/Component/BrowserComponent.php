@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -53,5 +54,13 @@ class BrowserComponent extends Manager
     public function get_additional_parameters()
     {
         return array(self :: PARAM_BROWSE_PUBLICATION_TYPE);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

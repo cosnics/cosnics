@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Forms\CourseTruncaterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Manager;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -285,5 +286,13 @@ class BrowserComponent extends Manager
             }
         }
         return false;
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -98,5 +99,13 @@ class DeleterComponent extends Manager
             $message,
             $failures !== 0,
             array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => null, 'tool_action' => null));
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

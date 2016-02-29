@@ -113,4 +113,12 @@ class PublicationUpdaterComponent extends Manager
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
         }
     }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
+    }
 }

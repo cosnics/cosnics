@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Description\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Description\Manager;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 class BrowserComponent extends Manager
 {
@@ -26,5 +27,13 @@ class BrowserComponent extends Manager
         $html[] = parent :: render_header($visible_tools, $show_introduction_text);
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

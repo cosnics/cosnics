@@ -40,7 +40,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
  * @author Stijn Van Hoecke
  * @package application.lib.weblcms.tool.user.component
  */
-class UnsubscribeBrowserComponent extends Manager implements TableSupport, DelegateComponent
+class UnsubscribeBrowserComponent extends Manager implements TableSupport
 {
     const TAB_ALL = 1;
     const TAB_USERS = 2;
@@ -571,4 +571,5 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
     {
         return $this->get_course()->is_course_admin($user);
     }
+
 }

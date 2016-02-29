@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -105,5 +106,13 @@ class ResultsDeleterComponent extends Manager
         {
             $this->delete_user_assessment_results($assessment_attempt);
         }
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Forms\CourseDeleterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseDeleter\Manager;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -69,5 +70,13 @@ class CourseDeleterComponent extends Manager
                 array(
                     \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_WEBLCMS_HOME));
         }
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

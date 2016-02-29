@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Rights\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 class RightsEditorComponent extends Manager
 {
@@ -31,5 +32,13 @@ class RightsEditorComponent extends Manager
     public function get_additional_parameters()
     {
         array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }

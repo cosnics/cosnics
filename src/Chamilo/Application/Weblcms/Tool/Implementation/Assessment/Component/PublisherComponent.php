@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Publisher;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -91,5 +92,13 @@ class PublisherComponent extends Manager
         return array(
             \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID,
             \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 }

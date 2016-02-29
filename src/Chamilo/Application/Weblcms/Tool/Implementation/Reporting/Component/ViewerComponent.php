@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Exception;
 
@@ -64,5 +65,13 @@ class ViewerComponent extends Manager
             \Chamilo\Application\Weblcms\Manager :: PARAM_USERS,
             \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID,
             \Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID);
+    }
+
+    /**
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+
     }
 }
