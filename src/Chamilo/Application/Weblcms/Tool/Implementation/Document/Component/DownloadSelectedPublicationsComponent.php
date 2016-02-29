@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Export\Zip\ZipContentObjectExport;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -24,7 +25,16 @@ class DownloadSelectedPublicationsComponent extends Manager
 
     public function run()
     {
-        $publications_ids = $this->getRequest()->get('publication');
+        $publications_ids = $this->getRequest()->get(self::PARAM_PUBLICATION_ID);
+
+        if (!isset($publication_ids))
+        {
+            throw new NoObjectSelectedException(
+                Translation::getInstance()->getTranslation(
+                    'ContentObjectPublication', array(), 'Chamilo\Application\Weblcms'
+                )
+            );
+        }
 
         $content_object_ids = array();
 
