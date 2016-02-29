@@ -182,7 +182,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface
      */
     private function loadSettings()
     {
-        $courseTypeIds = json_decode($this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE)); 
+        $courseTypeIds = json_decode($this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE));
         $this->courseTypeId = $courseTypeIds[0];
 
         // TODO: Fix this?
