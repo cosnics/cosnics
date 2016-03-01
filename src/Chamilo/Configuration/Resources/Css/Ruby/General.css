@@ -131,10 +131,6 @@ div#emulator {
 	padding: 10px 0px 10px 36px;
 }
 
-.notification_mini .close_message {
-	display: none;
-}
-
 .notification h2 {
 	padding: 0px 0px 5px 0px;
 	margin: 0px;
@@ -1092,8 +1088,7 @@ a.help-modal-close {
 	display: inline-block;
 }
 
-.close_message, .close_normal_message, .close_error_message,
-	.close_warning_message {
+close_normal_message, .close_error_message, .close_warning_message {
 	float: right;
 	width: 16px;
 	height: 16px;
@@ -1103,10 +1098,6 @@ a.help-modal-close {
 	right: 10px;
 	margin-top: -8px;
 	cursor: pointer;
-}
-
-.close_message {
-	background: url(../../Images/Ruby/Action/CloseMessage.png) no-repeat;
 }
 
 .close_normal_message {
@@ -1304,7 +1295,6 @@ div.reporting_center {
 /************************
  * APPLICATION SELECTER *
  ************************/
-
 div.create_block {
 	background-repeat: no-repeat;
 	background-position: center 10px;

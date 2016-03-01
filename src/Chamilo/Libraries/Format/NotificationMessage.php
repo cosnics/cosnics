@@ -10,10 +10,10 @@ namespace Chamilo\Libraries\Format;
  */
 class NotificationMessage
 {
-    const TYPE_ERROR = 1;
-    const TYPE_WARNING = 2;
-    const TYPE_CONFIRM = 3;
-    const TYPE_NORMAL = 4;
+    const TYPE_SUCCESS = 'success';
+    const TYPE_INFO = 'info';
+    const TYPE_WARNING = 'warning';
+    const TYPE_DANGER = 'danger';
 
     /**
      *
@@ -32,7 +32,7 @@ class NotificationMessage
      * @param string $type
      * @param string $message
      */
-    public function __construct($message, $type = self :: TYPE_NORMAL)
+    public function __construct($message, $type = self :: TYPE_INFO)
     {
         $this->type = $type;
         $this->message = $message;
@@ -81,11 +81,11 @@ class NotificationMessage
     public function to_html()
     {
         $html = array();
-        $html[] = '<div class="notification notification-' . $this->type . '">';
+        $html[] = '<div class="alert  alert-' . $this->type . ' . alert-dismissible" . role="alert">';
+        $html[] = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
         $html[] = $this->message;
-        $html[] = '<div class="close_message" id="closeMessage"></div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -95,7 +95,7 @@ class NotificationMessage
      * @param string $message
      * @return string
      */
-    public static function create($message, $type = self :: TYPE_NORMAL)
+    public static function create($message, $type = self :: TYPE_INFO)
     {
         return new self($message, $type);
     }
@@ -107,7 +107,7 @@ class NotificationMessage
      */
     public static function confirm($message)
     {
-        return self :: create($message, self :: TYPE_CONFIRM);
+        return self :: create($message, self :: TYPE_SUCCESS);
     }
 
     /**
@@ -117,7 +117,7 @@ class NotificationMessage
      */
     public static function normal($message)
     {
-        return self :: create($message, self :: TYPE_NORMAL);
+        return self :: create($message, self :: TYPE_INFO);
     }
 
     /**
@@ -137,6 +137,6 @@ class NotificationMessage
      */
     public static function error($message)
     {
-        return self :: create($message, self :: TYPE_ERROR);
+        return self :: create($message, self :: TYPE_DANGER);
     }
 }

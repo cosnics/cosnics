@@ -119,7 +119,7 @@ div#emulator {
 	margin-left: 1px;
 	background-repeat: no-repeat;
 	background-position: 10px 50%;
-	padding: 10px 36px 10px 36px;
+	/* 	padding: 10px 36px 10px 36px; */
 	text-align: justify;
 	position: relative;
 }
@@ -129,10 +129,6 @@ div#emulator {
 	width: 0px;
 	height: 16px;
 	padding: 10px 0px 10px 36px;
-}
-
-.notification_mini .close_message {
-	display: none;
 }
 
 .notification h2 {
@@ -1092,8 +1088,7 @@ a.help-modal-close {
 	display: inline-block;
 }
 
-.close_message, .close_normal_message, .close_error_message,
-	.close_warning_message {
+.close_normal_message, .close_error_message, .close_warning_message {
 	float: right;
 	width: 16px;
 	height: 16px;
@@ -1103,10 +1098,6 @@ a.help-modal-close {
 	right: 10px;
 	margin-top: -8px;
 	cursor: pointer;
-}
-
-.close_message {
-	background: url(../../Images/Aqua/Action/CloseMessage.png) no-repeat;
 }
 
 .close_normal_message {
