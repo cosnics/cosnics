@@ -116,7 +116,7 @@ abstract class FullTableRenderer extends TableRenderer
     {
         $html = array();
 
-        $html[] = '<div class="col-md-9 col-lg-10">';
+        $html[] = '<div class="col-md-9 col-lg-10 table-calendar-main">';
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-md-4">';
@@ -141,7 +141,7 @@ abstract class FullTableRenderer extends TableRenderer
         $html[] = $this->renderFullCalendar();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-md-3 col-lg-2">';
+        $html[] = '<div class="col-md-3 col-lg-2 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth();
         $html[] = $this->getLegend()->render();
         $html[] = '</div>';

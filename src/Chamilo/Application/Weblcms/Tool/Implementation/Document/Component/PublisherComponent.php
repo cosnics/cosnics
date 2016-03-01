@@ -2,9 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: document_publisher.class.php 216 2009-11-13 14:08:06Z kariboe $

@@ -263,15 +263,14 @@ class WeekCalendar extends Calendar
         {
             $classes[] = 'table-calendar-weekend';
         }
+        elseif ($hour % 2 == 0)
+        {
+            $classes[] = 'table-calendar-alternate';
+        }
 
         if ($hour < $workingStart || $hour >= $workingEnd)
         {
             $classes[] = 'table-calendar-disabled';
-        }
-
-        if ($hour % 2 == 0)
-        {
-            $classes[] = 'table-calendar-alternate';
         }
 
         return $classes;

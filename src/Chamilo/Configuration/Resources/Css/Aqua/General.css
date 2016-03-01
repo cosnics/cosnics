@@ -9,13 +9,6 @@ body {
 	background-color: white;
 }
 
-div#emulator {
-	width: 100%;
-	height: 20px;
-	text-align: center;
-	background-color: lightblue;
-}
-
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -196,6 +189,11 @@ div#emulator {
 
 .warning-banner .action-bar {
 	float: left;
+}
+
+.warning-emulator
+{
+	margin: 0px;
 }
 
 /*****************************************************
