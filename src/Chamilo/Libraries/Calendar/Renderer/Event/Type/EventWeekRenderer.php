@@ -26,9 +26,14 @@ class EventWeekRenderer extends EventRenderer
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
 
-        $html[] = '<div class="' . $this->getEventClasses() . '">';
-        $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource()) .
-             '">';
+        $eventClasses = $this->getEventClasses($startDate);
+        $sourceClasses = $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource());
+        $eventClasses = implode(' ', array($eventClasses, $sourceClasses));
+
+        $html = array();
+
+        $html[] = '<div class="' . $eventClasses . '">';
+        $html[] = '<div class="event-data">';
 
         if ($startDate >= $configuration->getStartDate() && $startDate <= $tableEndDate &&
              ($startDate != $configuration->getStartDate() || $endDate < $tableEndDate))
