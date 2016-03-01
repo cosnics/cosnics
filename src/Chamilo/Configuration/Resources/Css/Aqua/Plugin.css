@@ -1,0 +1,51 @@
+@import url('Plugin/Jquery/jquery-ui.min.css');
+
+@import url('Plugin/TextareaResizer/Stylesheet.css');
+
+@import url('Plugin/Jplayer/Stylesheet.css');
+
+@import url('Bootstrap/css/bootstrap-toggle.min.css');
+
+.ui-tabs {
+	padding: 0px;
+}
+
+.ui-tabs .ui-tabs-panel {
+	border: 1px solid #ebebeb;
+	background-color: #FAFCFC;
+	padding: 0px;
+}
+
+.ui-tabs .ui-tabs-nav {
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+}
+
+.ui-widget {
+	font-family: Ubuntu, verdana, sans-serif;
+}
+
+.ui-widget-content {
+	border: 0px;
+	background-image: none;
+	background-color: transparent;
+}
+
+.ui-widget-header {
+	border-width: 0px;
+	background-image: none;
+	background-color: transparent;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default {
+	border: 0px solid #c5dbec;
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus,
+	.ui-widget-content .ui-state-focus {
+	border: 0px solid #79b7e7;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active {
+	border: 1px solid #ebebeb;
+}

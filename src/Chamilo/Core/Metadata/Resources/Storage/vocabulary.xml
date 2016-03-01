@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="vocabulary">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="element_id" unsigned="1" type="integer" notnull="1" />
+		<property name="user_id" unsigned="1" type="integer" notnull="1" />
+		<property name="value" type="text" length="1000" notnull="1" />
+		<property name="default_value" length="1" type="integer" notnull="1" />
+	</properties>
+</object>

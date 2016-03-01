@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\course
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+SectionTools = "Outils"
+SectionAdministration = "Administration"
+SectionLinks = "Liens"
+SectionDisabled = "Déactivé"
+CourseManagerQuickCreateComponent = "Créer un cours"
+Typename = "Cours"
+SelectCourseType = "Sélectionner un type de cours"
+CourseType = "Type de cours"
+SelectAValidCourseType = "Sélectionner un type de cours valable"
+ThisFieldIsRequired = "Champ obligatoire"
+Title = "Titre"
+VisualCode = "Code visuel"
