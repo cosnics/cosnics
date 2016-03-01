@@ -8,7 +8,7 @@ use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -167,18 +167,18 @@ class MonthRenderer extends TableRenderer
         $buttonGroup = new ButtonGroup();
 
         $buttonToolBar->addItem(
-            new Button(Translation :: get('Today'), new InlineGlyph('home'), $todayUrl, Button :: DISPLAY_ICON));
+            new Button(Translation :: get('Today'), new BootstrapGlyph('home'), $todayUrl, Button :: DISPLAY_ICON));
 
         $buttonToolBar->addItem($buttonGroup);
 
         $buttonGroup->addButton(
             new Button(
                 Translation :: get('Previous'),
-                new InlineGlyph('triangle-left'),
+                new BootstrapGlyph('triangle-left'),
                 $previousUrl,
                 Button :: DISPLAY_ICON));
         $buttonGroup->addButton(
-            new Button(Translation :: get('Next'), new InlineGlyph('triangle-right'), $nextUrl, Button :: DISPLAY_ICON));
+            new Button(Translation :: get('Next'), new BootstrapGlyph('triangle-right'), $nextUrl, Button :: DISPLAY_ICON));
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         return $buttonToolbarRenderer->render();

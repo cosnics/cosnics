@@ -192,6 +192,7 @@ h4 .calendar-event-range {
 
 .table-calendar {
 	border-top: 1px solid #dadada;
+	margin-bottom: 15px;
 }
 
 .table-calendar thead tr th {

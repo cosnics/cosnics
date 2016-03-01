@@ -10,15 +10,12 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class Actions
+interface ActionsInterface
 {
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Tabs\DynamicVisualTab[]
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function get(Application $application)
-    {
-        return array();
-    }
+    public function get(Application $application);
 }
