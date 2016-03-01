@@ -8,7 +8,7 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class InlineGlyph
+abstract class InlineGlyph
 {
 
     /**
@@ -50,6 +50,12 @@ class InlineGlyph
      */
     public function render()
     {
-        return '<span class="glyphicon glyphicon-' . $this->getType() . '"/></span>';
+        return '<span class="' . $this->getClassNames() . '"></span>';
     }
+
+    /**
+     *
+     * @return string
+     */
+    abstract public function getClassNames();
 }

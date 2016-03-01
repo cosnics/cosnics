@@ -22,6 +22,9 @@ use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 /**
  *
@@ -55,8 +58,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->setCurrentRendererTime($this->getJumpForm()->getTime());
         }
 
-//         $tabs = $this->getTabs();
-//         $tabs->set_content($this->getCalendarHtml());
+        // $tabs = $this->getTabs();
+        // $tabs->set_content($this->getCalendarHtml());
 
         $html = array();
 
@@ -198,31 +201,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         $buttonGroup->addButton(
             new Button(
                 Translation :: get(self :: ACTION_PRINT . 'Component'),
-                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/' . self :: ACTION_PRINT),
-                $printUrl->getUrl(),
-                Button :: DISPLAY_ICON));
+                new BootstrapGlyph('print'),
+                $printUrl->getUrl()));
 
         $iCalUrl = new Redirect(
             array(Application :: PARAM_CONTEXT => self :: package(), self :: PARAM_ACTION => Manager :: ACTION_ICAL));
 
         $buttonGroup->addButton(
-            new Button(
-                Translation :: get('ICalExternal'),
-                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/ICalExternal'),
-                $iCalUrl->getUrl(),
-                Button :: DISPLAY_ICON));
-
-        $availabilityUrl = new Redirect(
-            array(
-                Application :: PARAM_CONTEXT => self :: package(),
-                self :: PARAM_ACTION => Manager :: ACTION_AVAILABILITY));
-
-        $buttonGroup->addButton(
-            new Button(
-                Translation :: get('AvailabilityComponent'),
-                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Availability'),
-                $availabilityUrl->getUrl(),
-                Button :: DISPLAY_ICON));
+            new Button(Translation :: get('ICalExternal'), new BootstrapGlyph('globe'), $iCalUrl->getUrl()));
 
         $settingsUrl = new Redirect(
             array(
@@ -230,12 +216,24 @@ class BrowserComponent extends Manager implements DelegateComponent
                 Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_USER_SETTINGS,
                 UserSettingsComponent :: PARAM_CONTEXT => 'Chamilo\Libraries\Calendar'));
 
-        $buttonGroup->addButton(
-            new Button(
-                Translation :: get('ConfigComponent'),
-                Theme :: getInstance()->getImagePath(self :: package(), 'Tab/Configuration'),
-                $settingsUrl->getUrl(),
-                Button :: DISPLAY_ICON));
+        $splitDropdownButton = new SplitDropdownButton(
+            Translation :: get('ConfigComponent'),
+            new BootstrapGlyph('cog'),
+            $settingsUrl->getUrl());
+        $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
+
+        $availabilityUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => self :: package(),
+                self :: PARAM_ACTION => Manager :: ACTION_AVAILABILITY));
+
+        $splitDropdownButton->addSubButton(
+            new SubButton(
+                Translation :: get('AvailabilityComponent'),
+                new BootstrapGlyph('ok-circle'),
+                $availabilityUrl->getUrl()));
+
+        $buttonGroup->addButton($splitDropdownButton);
 
         return $buttonGroup;
     }

@@ -1,6 +1,9 @@
 /* Bootstrap */
 @import url('Bootstrap/css/bootstrap.css');
 
+/* Font Awesome */
+@import url('FontAwesome/css/font-awesome.css');
+
 /* Plugin CSS */
 @import url('Plugin.css');
 

@@ -14,6 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 
 /**
  *
@@ -272,9 +273,7 @@ abstract class ViewRenderer extends Renderer
 
         $button = new DropdownButton(
             Translation :: get($currentRendererType . 'View', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getImagePath(
-                'Chamilo\Libraries\Calendar\Renderer',
-                'Renderer/Tab/Type/' . $currentRendererType));
+            new BootstrapGlyph('calendar'));
         $button->setDropdownClasses('dropdown-menu-right');
 
         foreach ($rendererTypes as $rendererType)
