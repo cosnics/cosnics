@@ -10,11 +10,10 @@ use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Export\Zip\ZipContentObjectExport;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * Will retrieve the selected publications and return a downloadable zip
