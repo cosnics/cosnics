@@ -164,8 +164,8 @@ class BreadcrumbTrail
         $html = array();
 
         $html[] = $this->render_breadcrumbs();
-        $html[] = $this->render_help();
-        $html[] = $this->render_extra();
+        // $html[] = $this->render_help();
+        // $html[] = $this->render_extra();
 
         return implode(PHP_EOL, $html);
     }
