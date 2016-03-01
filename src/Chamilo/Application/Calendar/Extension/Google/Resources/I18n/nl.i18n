@@ -3,7 +3,7 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Google Calendar"
-SourceName = "Google Calendar - {CALENDAR}"
-GoogleCalendarLogin = "Inloggen bij Google Calendar"
+TypeName = "Google"
+SourceName = "Google - {CALENDAR}"
+GoogleCalendarLogin = "Inloggen"
 TypeCategory = "Calendar Extensions"

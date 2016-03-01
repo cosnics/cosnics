@@ -28,11 +28,13 @@ class EventMonthRenderer extends EventRenderer
         $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
         $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
 
-        $eventClasses = $this->getEventClasses($startDate, $fromDate, $toDate);
+        $eventClasses = $this->getEventClasses($startDate);
         $sourceClasses = $this->getRenderer()->getLegend()->getSourceClasses(
             $this->getEvent()->getSource(),
             (($startDate < $fromDate || $startDate > $toDate) ? true : false));
         $eventClasses = implode(' ', array($eventClasses, $sourceClasses));
+
+        $html = array();
 
         $html[] = '<div class="' . $eventClasses . '">';
         $html[] = '<div class="event-data">';
