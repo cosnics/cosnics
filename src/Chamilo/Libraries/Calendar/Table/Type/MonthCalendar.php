@@ -181,7 +181,7 @@ class MonthCalendar extends Calendar
         // Is current table date in this month or another one?
         if (date('Ym', $tableDate) != date('Ym', $this->getDisplayTime()))
         {
-            $classes[] = 'table-calendar-disabled-month';
+            $classes[] = 'table-calendar-disabled';
         }
 
         return $classes;

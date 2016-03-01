@@ -4,10 +4,7 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
-use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\DayCalendar;
-use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -16,7 +13,7 @@ use Chamilo\Libraries\File\Redirect;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DayRenderer extends TableRenderer
+class DayRenderer extends FullTableRenderer
 {
 
     /**
@@ -55,8 +52,8 @@ class DayRenderer extends TableRenderer
      * @param integer $endHour
      * @param boolean $hideOtherHours
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
-        $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+        $viewActions = array(), $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
     {
         $this->hourStep = $hourStep;
         $this->startHour = $startHour;
@@ -149,14 +146,15 @@ class DayRenderer extends TableRenderer
             $this->getHourStep(),
             $this->getStartHour(),
             $this->getEndHour(),
-            $this->getHideOtherHours());
+            $this->getHideOtherHours(),
+            array('table-calendar-day'));
     }
 
     /**
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
-    public function render()
+    public function renderFullCalendar()
     {
         $calendar = $this->getCalendar();
 
@@ -195,15 +193,15 @@ class DayRenderer extends TableRenderer
             $tableDate = $nextTableDate;
         }
 
-        $parameters = $this->getDataProvider()->getDisplayParameters();
-        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+        return $calendar->render();
+    }
 
-        $redirect = new Redirect($parameters);
-        $calendar->addCalendarNavigation($redirect->getUrl());
-
-        $html = array();
-        $html[] = $calendar->render();
-        $html[] = $this->getLegend()->render();
-        return implode(PHP_EOL, $html);
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::renderTitle()
+     */
+    public function renderTitle()
+    {
+        return date('l d F Y', $this->getDisplayTime());
     }
 }

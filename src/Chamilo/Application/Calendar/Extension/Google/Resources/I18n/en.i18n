@@ -3,7 +3,7 @@
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Google Calendar"
-SourceName = "Google Calendar - {CALENDAR}"
-GoogleCalendarLogin = "Google Calendar login"
+TypeName = "Google"
+SourceName = "Google - {CALENDAR}"
+GoogleCalendarLogin = "Login"
 TypeCategory = "Calendar Extensions"
