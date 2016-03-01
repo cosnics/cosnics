@@ -58,6 +58,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Notifications.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Help.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Visit.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'SortableTable.js');
 
         return $assets;
     }

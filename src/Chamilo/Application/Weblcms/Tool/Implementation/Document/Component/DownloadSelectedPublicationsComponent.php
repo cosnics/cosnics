@@ -8,6 +8,8 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
 use Chamilo\Core\Repository\Common\Export\Zip\ZipContentObjectExport;
+use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -27,7 +29,7 @@ class DownloadSelectedPublicationsComponent extends Manager
     {
         $publications_ids = $this->getRequest()->get(self::PARAM_PUBLICATION_ID);
 
-        if (!isset($publication_ids))
+        if (!isset($publications_ids))
         {
             throw new NoObjectSelectedException(
                 Translation::getInstance()->getTranslation(
@@ -40,10 +42,14 @@ class DownloadSelectedPublicationsComponent extends Manager
 
         foreach ($publications_ids as $publication_id)
         {
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publication_with_content_object(
-                $publication_id);
+            $publication =
+                \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_content_object_publication_with_content_object(
+                    $publication_id
+                );
 
-            if ($this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $publication))
+            if ($this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $publication) &&
+                $publication[ContentObject::PROPERTY_TYPE] != Page::class_name()
+            )
             {
                 $content_object_ids[] = $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID];
             }
@@ -52,12 +58,14 @@ class DownloadSelectedPublicationsComponent extends Manager
         if (count($content_object_ids) == 0)
         {
             $this->redirect(
-                Translation :: get("NoFileSelected"),
+                Translation:: get("NoFileSelected"),
                 true,
                 array(),
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID
+                )
+            );
         }
 
         $parameters = new ExportParameters(
@@ -66,9 +74,10 @@ class DownloadSelectedPublicationsComponent extends Manager
             ContentObjectExport :: FORMAT_ZIP,
             $content_object_ids,
             array(),
-            ZipContentObjectExport :: TYPE_FLAT);
+            ZipContentObjectExport :: TYPE_FLAT
+        );
 
-        $exporter = ContentObjectExportController :: factory($parameters);
+        $exporter = ContentObjectExportController:: factory($parameters);
         $exporter->download();
     }
 

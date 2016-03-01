@@ -312,8 +312,6 @@ class SortableTable extends HTML_Table
 
             $html[] = '<form class="table_form form-inline" method="post" action="' . $firstFormAction->get_action() .
                  '" name="form_' . $this->tableName . '">';
-            $html[] = ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'SortableTable.js');
         }
 
         $html[] = '<div class="row">';
@@ -411,6 +409,7 @@ class SortableTable extends HTML_Table
 
         if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
         {
+            $html[] = '<input type="submit" name="Submit" value="Submit" style="display:none;" />';
             $html[] = '</form>';
         }
 
