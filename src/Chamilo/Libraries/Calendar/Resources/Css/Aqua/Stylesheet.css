@@ -201,7 +201,6 @@ h4 .calendar-event-range {
 	text-align: center;
 	color: dimgray;
 	padding: 10px 0px;
-	width: 13%;
 }
 
 .table-calendar tbody tr {
@@ -215,14 +214,29 @@ h4 .calendar-event-range {
 	padding: 4px;
 	height: 60px;
 	vertical-align: top;
-	width: 13%;
+}
+
+.table-calendar tbody tr td.table-calendar-alternate {
+	background-color: #f8fbff;
+}
+
+.table-calendar-month tbody tr td, .table-calendar-month thead tr th {
+	width: 14.28571428%
+}
+
+.table-calendar-week tbody tr td, .table-calendar-week thead tr th {
+	width: 13.57142857%
+}
+
+.table-calendar-day tbody tr td, .table-calendar-day thead tr th {
+	width: 95%
 }
 
 .table-calendar td.table-calendar-highlight {
 	background-color: #fef6e8;
 }
 
-.table-calendar td.table-calendar-disabled-month, .table-calendar td.table-calendar-disabled-month a
+.table-calendar td.table-calendar-disabled, .table-calendar td.table-calendar-disabled a
 	{
 	color: #999999;
 	text-decoration: none;
@@ -230,6 +244,25 @@ h4 .calendar-event-range {
 
 .table-calendar td.table-calendar-weekend {
 	background-color: #f9f9f9;
+}
+
+.table-calendar tbody tr td.table-calendar-alternate.table-calendar-weekend
+	{
+	background-color: #f8fafc;
+}
+
+.table-calendar-week thead tr th.table-calendar-week-hours,
+	.table-calendar-week tbody tr td.table-calendar-week-hours,
+	.table-calendar-day thead tr th.table-calendar-day-hours,
+	.table-calendar-day tbody tr td.table-calendar-day-hours {
+	width: 5%;
+}
+
+.table-calendar-week tbody tr td.table-calendar-week-hours,
+	.table-calendar-day tbody tr td.table-calendar-day-hours {
+	text-align: right;
+	padding: 4px 10px;
+	color: dimgray;
 }
 
 .table-calendar-mini-container {
@@ -264,7 +297,7 @@ h4 .calendar-event-range {
 	min-width: 29px;
 }
 
-.table-calendar-mini td.table-calendar-disabled-month span.badge {
+.table-calendar-mini td.table-calendar-disabled span.badge {
 	background-color: #c9c9c9;
 }
 
@@ -328,8 +361,7 @@ h4 .calendar-event-range {
 }
 
 .table-calendar .event-container-source, .table-calendar .event-container-source a,
-	.table-calendar td.table-calendar-disabled-month .event-container-source a
-	{
+	.table-calendar td.table-calendar-disabled .event-container-source a {
 	color: white;
 	font-weight: normal;
 	text-decoration: none;

@@ -2,10 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use HTML_Table;
 
 /**
  * A tabular representation of a day calendar
@@ -55,7 +53,8 @@ class DayCalendar extends Calendar
      * @param int $endHour
      * @param boolean $hideOtherHours
      */
-    public function __construct($displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
+    public function __construct($displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false,
+        $classes = array())
     {
         $this->navigationHtml = '';
         $this->hourStep = $hourStep;
@@ -63,7 +62,7 @@ class DayCalendar extends Calendar
         $this->endHour = $endHour;
         $this->hideOtherHours = $hideOtherHours;
 
-        parent :: __construct($displayTime);
+        parent :: __construct($displayTime, $classes);
         $this->buildTable();
     }
 
@@ -180,11 +179,15 @@ class DayCalendar extends Calendar
         $yearWeek = date('W', $this->getDisplayTime());
 
         $header = $this->getHeader();
-        $header->addRow(
-            array(
-                Translation :: get('Day', null, Utilities :: COMMON_LIBRARIES) . ' ' . $yearDay . ', ' .
-                     Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES) . ' ' . $yearWeek));
         $header->setRowType(0, 'th');
+        $header->setHeaderContents(0, 0, '');
+        $header->updateCellAttributes(0, 0, 'class="table-calendar-day-hours"');
+
+        $header->setHeaderContents(
+            0,
+            1,
+            Translation :: get(date('l', $this->getDisplayTime()) . 'Short', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+                 date('d/m', $this->getDisplayTime()));
 
         $startHour = 0;
         $endHour = 24;
@@ -193,6 +196,24 @@ class DayCalendar extends Calendar
         {
             $startHour = $this->getStartHour();
             $endHour = $this->getEndHour();
+        }
+
+        for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
+        {
+            $rowId = ($hour / $this->getHourStep()) - $startHour;
+            $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
+            $this->setCellContents($rowId, 0, $cellContent);
+
+            $classes = array();
+
+            $classes[] = 'table-calendar-day-hours';
+
+            if ($hour % 2 == 0)
+            {
+                $classes[] = 'table-calendar-alternate';
+            }
+
+            $this->updateCellAttributes($rowId, 0, 'class="' . implode(' ', $classes) . '"');
         }
 
         for ($hour = $startHour; $hour < $endHour; $hour += $this->getHourStep())
@@ -208,21 +229,13 @@ class DayCalendar extends Calendar
                 date('Y', $this->getDisplayTime()));
 
             $tableEndDate = strtotime('+' . $this->getHourStep() . ' hours', $tableStartDate);
-            $this->setCellContents($rowId, 0, $this->getCellIdentifier($hour));
+            $this->setCellContents($rowId, 1, '');
 
-            // Highlight current hour
-            if (date('Y-m-d') == date('Y-m-d', $this->getDisplayTime()))
-            {
-                if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
-                {
-                    $this->updateCellAttributes($rowId, 0, 'class="highlight"');
-                }
-            }
+            $classes = $this->determineCellClasses($hour);
 
-            // Is current table hour during working hours?
-            if ($hour < $this->getStartHour() || $hour >= $this->getEndHour())
+            if (count($classes) > 0)
             {
-                $this->updateCellAttributes($rowId, 0, 'class="disabled_month"');
+                $this->updateCellAttributes($rowId, 1, 'class="' . implode(' ', $classes) . '"');
             }
         }
     }
@@ -230,12 +243,33 @@ class DayCalendar extends Calendar
     /**
      *
      * @param integer $hour
-     * @return string
+     * @return string[]
      */
-    public function getCellIdentifier($hour)
+    protected function determineCellClasses($hour)
     {
-        return $hour . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES) . ' - ' .
-             ($hour + $this->getHourStep()) . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES);
+        $classes = array();
+
+        // Highlight current hour
+        if (date('Y-m-d') == date('Y-m-d', $this->getDisplayTime()))
+        {
+            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
+            {
+                $classes[] = 'table-calendar-highlight';
+            }
+        }
+
+        // Is current table hour during working hours?
+        if ($hour < $this->getStartHour() || $hour >= $this->getEndHour())
+        {
+            $classes[] = 'table-calendar-disabled';
+        }
+
+        if ($hour % 2 == 0)
+        {
+            $classes[] = 'table-calendar-alternate';
+        }
+
+        return $classes;
     }
 
     /**
@@ -265,62 +299,17 @@ class DayCalendar extends Calendar
 
             foreach ($items as $index => $item)
             {
-                $cellContent = $this->getCellContents($row, 0);
+                $cellContent = $this->getCellContents($row, 1);
                 $cellContent .= $item;
-                $this->setCellContents($row, 0, $cellContent);
+                $this->setCellContents($row, 1, $cellContent);
             }
         }
     }
 
     /**
-     * Adds a navigation bar to the calendar
-     *
-     * @param string $url_format The -TIME- in this string will be replaced by a timestamp
-     */
-    public function addCalendarNavigation($urlFormat)
-    {
-        $prev = strtotime('-1 Day', $this->getDisplayTime());
-        $next = strtotime('+1 Day', $this->getDisplayTime());
-
-        $navigation = new HTML_Table('class="' . $this->getNavigationClasses() . '"');
-        $navigation->updateCellAttributes(0, 0, 'class="navigation-previous" style="text-align: left;"');
-        $navigation->updateCellAttributes(0, 1, 'class="navigation-title" style="text-align: center;"');
-        $navigation->updateCellAttributes(0, 2, 'class="navigation-next" style="text-align: right;"');
-        $navigation->setCellContents(
-            0,
-            0,
-            '<a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $urlFormat)) . '"><img src="' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Prev')) .
-                 '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
-        $navigation->setCellContents(0, 1, date('l d F Y', $this->getDisplayTime()));
-        $navigation->setCellContents(
-            0,
-            2,
-            ' <a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $next, $urlFormat)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Next')) .
-                 '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
-
-        $this->navigationHtml = $navigation->toHtml();
-    }
-
-    public function getNavigationClasses()
-    {
-        return 'calendar_navigation';
-    }
-
-    /**
-     * Returns a html-representation of this monthcalendar
      *
      * @return string
      */
-    public function toHtml()
-    {
-        $html = array();
-        $html[] = $this->navigationHtml;
-        $html[] = parent :: toHtml();
-        return implode(PHP_EOL, $html);
-    }
-
     public function render()
     {
         $this->addEvents();

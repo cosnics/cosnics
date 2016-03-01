@@ -4,10 +4,9 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
-use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -16,7 +15,7 @@ use Chamilo\Libraries\File\Redirect;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class WeekRenderer extends TableRenderer
+class WeekRenderer extends FullTableRenderer
 {
 
     /**
@@ -149,14 +148,15 @@ class WeekRenderer extends TableRenderer
             $this->getHourStep(),
             $this->getStartHour(),
             $this->getEndHour(),
-            $this->getHideOtherHours());
+            $this->getHideOtherHours(),
+            array('table-calendar-week'));
     }
 
     /**
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
      */
-    public function render()
+    public function renderFullCalendar()
     {
         $calendar = $this->getCalendar();
         $fromDate = strtotime('Last Monday', strtotime('+1 Day', strtotime(date('Y-m-d', $this->getDisplayTime()))));
@@ -194,15 +194,19 @@ class WeekRenderer extends TableRenderer
             $tableDate = $nextTableDate;
         }
 
-        $parameters = $this->getDataProvider()->getDisplayParameters();
-        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+        return $calendar->render();
+    }
 
-        $redirect = new Redirect($parameters);
-        $calendar->addCalendarNavigation($redirect->getUrl());
+    /**
+     *
+     * @return string
+     */
+    public function renderTitle()
+    {
+        $weekNumber = date('W', $this->getDisplayTime());
 
-        $html = array();
-        $html[] = $calendar->render();
-        $html[] = $this->getLegend()->render();
-        return implode(PHP_EOL, $html);
+        return Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES) . ' ' . $weekNumber . ' : ' .
+             date('l d M Y', $this->getCalendar()->getStartTime()) . ' - ' .
+             date('l d M Y', strtotime('+6 Days', $this->getCalendar()->getStartTime()));
     }
 }
