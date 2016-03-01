@@ -51,6 +51,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.simplemodal.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tree_menu.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.timepicker.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'AngularJS/angular.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'phpjs.js');
