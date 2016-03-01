@@ -2,11 +2,9 @@
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use HTML_Table;
 
 /**
  * A tabular representation of a week calendar
@@ -18,11 +16,6 @@ use HTML_Table;
  */
 class WeekCalendar extends Calendar
 {
-
-    /**
-     * The navigation links
-     */
-    private $navigationHtml;
 
     /**
      * The number of hours for one table cell.
@@ -53,15 +46,15 @@ class WeekCalendar extends Calendar
      * @param int $displayTime A time in the week to be displayed
      * @param int $hourStep The number of hours for one table cell. Defaults to 2.
      */
-    public function __construct($displayTime, $hourStep = 2, $startHour = 0, $endHour = 24, $hideOtherHours = false)
+    public function __construct($displayTime, $hourStep = 2, $startHour = 0, $endHour = 24, $hideOtherHours = false,
+        $classes = array())
     {
-        $this->navigationHtml = '';
         $this->hourStep = $hourStep;
         $this->startHour = $startHour;
         $this->endHour = $endHour;
         $this->hideOtherHours = $hideOtherHours;
 
-        parent :: __construct($displayTime);
+        parent :: __construct($displayTime, $classes);
         $this->buildTable();
     }
 
@@ -183,12 +176,12 @@ class WeekCalendar extends Calendar
         $header = $this->getHeader();
         $header->setRowType(0, 'th');
         $header->setHeaderContents(0, 0, '');
-        $header->updateCellAttributes(0, 0, 'class="week_hours"');
+        $header->updateCellAttributes(0, 0, 'class="table-calendar-week-hours"');
 
         $weekNumber = date('W', $this->getDisplayTime());
         // Go 1 week back end them jump to the next monday to reach the first day of this week
         $firstDay = $this->getStartTime();
-        $lastDay = $this->getEndTime;
+        $lastDay = $this->getEndTime();
 
         $workingStart = $this->getStartHour();
         $workingEnd = $this->getEndHour();
@@ -202,14 +195,24 @@ class WeekCalendar extends Calendar
             $end = $workingEnd;
         }
 
-        for ($hour = $start; $hour < $end; $hour += $this->hourStep)
+        for ($hour = $start; $hour < $end; $hour += $this->getHourStep())
         {
-            $cellContent = $hour . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES) . ' - ' .
-                 ($hour + $this->hourStep) . Translation :: get('h', null, Utilities :: COMMON_LIBRARIES);
-            $this->setCellContents(($hour / $this->hourStep) - $start, 0, $cellContent);
+            $rowId = ($hour / $this->getHourStep()) - $start;
+            $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
+            $this->setCellContents($rowId, 0, $cellContent);
+
+            $classes = array();
+
+            $classes[] = 'table-calendar-week-hours';
+
+            if ($hour % 2 == 0)
+            {
+                $classes[] = 'table-calendar-alternate';
+            }
+
+            $this->updateCellAttributes($rowId, 0, 'class="' . implode(' ', $classes) . '"');
         }
 
-        $this->updateColAttributes(0, 'class="week_hours"');
         $dates[] = '';
         $today = date('Y-m-d');
 
@@ -219,41 +222,59 @@ class WeekCalendar extends Calendar
             $header->setHeaderContents(
                 0,
                 $day + 1,
-                Translation :: get(date('l', $week_day) . 'Long', null, Utilities :: COMMON_LIBRARIES) . '<br/>' .
-                     date('Y-m-d', $week_day));
+                Translation :: get(date('l', $week_day) . 'Short', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+                     date('d/m', $week_day));
 
-            for ($hour = $start; $hour < $end; $hour += $this->hourStep)
+            for ($hour = $start; $hour < $end; $hour += $this->getHourStep())
             {
-                $row = ($hour / $this->hourStep) - $start;
-                $class = array();
+                $row = ($hour / $this->getHourStep()) - $start;
 
-                if ($today == date('Y-m-d', $week_day))
-                {
-                    if (date('H') >= $hour && date('H') < $hour + $this->hourStep)
-                    {
-                        $class[] = 'highlight';
-                    }
-                }
+                $classes = $this->determineCellClasses($today, $week_day, $hour, $workingStart, $workingEnd);
 
-                // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
-                if (date('w', $week_day) % 6 == 0)
+                if (count($classes) > 0)
                 {
-                    $class[] = 'weekend';
-                }
-
-                if (count($class) > 0)
-                {
-                    $this->updateCellAttributes($row, $day + 1, 'class="' . implode(' ', $class) . '"');
-                }
-
-                if ($hour < $workingStart || $hour >= $workingEnd)
-                {
-                    $this->updateCellAttributes($row, $day + 1, 'class="disabled_month"');
+                    $this->updateCellAttributes($row, $day + 1, 'class="' . implode(' ', $classes) . '"');
                 }
 
                 $this->setCellContents($row, $day + 1, '');
             }
         }
+    }
+
+    /**
+     *
+     * @param integer $hour
+     * @return string[]
+     */
+    protected function determineCellClasses($today, $week_day, $hour, $workingStart, $workingEnd)
+    {
+        $classes = array();
+
+        if ($today == date('Y-m-d', $week_day))
+        {
+            if (date('H') >= $hour && date('H') < $hour + $this->getHourStep())
+            {
+                $class[] = 'table-calendar-highlight';
+            }
+        }
+
+        // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
+        if (date('w', $week_day) % 6 == 0)
+        {
+            $classes[] = 'table-calendar-weekend';
+        }
+
+        if ($hour < $workingStart || $hour >= $workingEnd)
+        {
+            $classes[] = 'table-calendar-disabled';
+        }
+
+        if ($hour % 2 == 0)
+        {
+            $classes[] = 'table-calendar-alternate';
+        }
+
+        return $classes;
     }
 
     /**
@@ -297,54 +318,6 @@ class WeekCalendar extends Calendar
                 $this->setCellContents($row, $column, $cellContent);
             }
         }
-    }
-
-    /**
-     * Adds a navigation bar to the calendar
-     *
-     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
-     */
-    public function addCalendarNavigation($urlFormat)
-    {
-        $weekNumber = date('W', $this->getDisplayTime());
-        $prev = strtotime('-1 Week', $this->getDisplayTime());
-        $next = strtotime('+1 Week', $this->getDisplayTime());
-        $navigation = new HTML_Table('class="calendar_navigation"');
-        $navigation->updateCellAttributes(0, 0, 'class="navigation-previous" style="text-align: left;"');
-        $navigation->updateCellAttributes(0, 1, 'class="navigation-title" style="text-align: center;"');
-        $navigation->updateCellAttributes(0, 2, 'class="navigation-next" style="text-align: right;"');
-        $navigation->setCellContents(
-            0,
-            0,
-            '<a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $urlFormat)) . '"><img src="' .
-                 htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Prev')) .
-                 '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
-        $navigation->setCellContents(
-            0,
-            1,
-            htmlentities(Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES)) . ' ' . $weekNumber . ' : ' .
-                 date('l d M Y', $this->getStartTime()) . ' - ' .
-                 date('l d M Y', strtotime('+6 Days', $this->getStartTime())));
-        $navigation->setCellContents(
-            0,
-            2,
-            ' <a href="' . htmlspecialchars(str_replace(Calendar :: TIME_PLACEHOLDER, $next, $urlFormat)) .
-                 '"><img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Next')) .
-                 '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
-        $this->navigationHtml = $navigation->toHtml();
-    }
-
-    /**
-     * Returns a html-representation of this monthcalendar
-     *
-     * @return string
-     */
-    public function toHtml()
-    {
-        $html = array();
-        $html[] = $this->navigationHtml;
-        $html[] = parent :: toHtml();
-        return implode(PHP_EOL, $html);
     }
 
     public function render()
