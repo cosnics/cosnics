@@ -58,14 +58,10 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->setCurrentRendererTime($this->getJumpForm()->getTime());
         }
 
-        // $tabs = $this->getTabs();
-        // $tabs->set_content($this->getCalendarHtml());
-
         $html = array();
 
         $html[] = $this->render_header();
         $html[] = $this->getCalendarHtml();
-        // $html[] = $tabs->render();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -174,13 +170,16 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         foreach ($extensionRegistrations as $extensionRegistration)
         {
-            $actionRendererClass = $extensionRegistration[Registration :: PROPERTY_CONTEXT] . '\Actions';
-            $actionRenderer = new $actionRendererClass();
-            $extensionActions = $actionRenderer->get($this);
-
-            foreach ($extensionActions as $extensionAction)
+            if ($extensionRegistration[Registration :: PROPERTY_STATUS] == 1)
             {
-                $actions[] = $extensionAction;
+                $actionRendererClass = $extensionRegistration[Registration :: PROPERTY_CONTEXT] . '\Actions';
+                $actionRenderer = new $actionRendererClass();
+                $extensionActions = $actionRenderer->get($this);
+
+                foreach ($extensionActions as $extensionAction)
+                {
+                    $actions[] = $extensionAction;
+                }
             }
         }
 
