@@ -36,13 +36,10 @@ class AvailabilityComponent extends Manager
         }
         else
         {
-            $tabs = $this->getTabs();
-            $tabs->set_content($form->toHtml());
-
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $tabs->render();
+            $html[] = $form->toHtml();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
