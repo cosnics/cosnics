@@ -20,7 +20,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $html[] = '(function(){';
         $html[] = '     var rssFeedRendererApp = angular.module(\'rssFeedRendererApp\', []);';
         $html[] = '     rssFeedRendererApp.value(\'rssFeedUrl\', \'' . $object->get_url() . '\');';
-        $html[] = '     rssFeedRendererApp.value(\'numberOfEntries\', \'' . 10 . '\');';
+        $html[] = '     rssFeedRendererApp.value(\'numberOfEntries\', \'' . $object->get_number_of_entries() . '\');';
         $html[] = '})();';
         $html[] = '</script>';
 

@@ -14,6 +14,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 class RssFeed extends ContentObject implements Versionable, Includeable
 {
     const PROPERTY_URL = 'url';
+    const PROPERTY_NUMBER_OF_ENTRIES = 'number_of_entries';
 
     public static function get_type_name()
     {
@@ -30,9 +31,19 @@ class RssFeed extends ContentObject implements Versionable, Includeable
         return $this->set_additional_property(self :: PROPERTY_URL, $url);
     }
 
+    public function get_number_of_entries()
+    {
+        return $this->get_additional_property(self :: PROPERTY_NUMBER_OF_ENTRIES);
+    }
+
+    public function set_number_of_entries($numberOfEntries)
+    {
+        $this->set_additional_property(self :: PROPERTY_NUMBER_OF_ENTRIES, $numberOfEntries);
+    }
+
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_URL);
+        return array(self :: PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES);
     }
 
     public static function get_searchable_property_names()
