@@ -1,12 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\RenditionImplementation;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
 {
@@ -40,11 +39,9 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = '})();';
         $html[] = '</script>';
 
-        $html[] = ResourceManager::get_instance()->get_resource_html(
-            Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
-            'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js'
-        );
-
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
+                 'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js');
 
         $target = $this->getLinkTarget();
         $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
@@ -55,14 +52,15 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = '<div ng-app="rssFeedRendererApp" ng-controller="MainController as main">';
         $html[] = '<ul class="rss_feeds">';
 
-        $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item"' .
-                  'style="background-image: url(' . $icon . ')">';
+        $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item"' . 'style="background-image: url(' .
+             $icon . ')">';
         $html[] = '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';
         $html[] = '</li>';
 
         $html[] = '</ul>';
 
-        $html[] = '<span style="font-weight: bold;" ng-show="main.feedEntries.length == 0">' . Translation :: get('NoFeedsFound') . '</span>';
+        $html[] = '<span style="font-weight: bold;" ng-show="main.feedEntries.length == 0">' .
+             Translation :: get('NoFeedsFound') . '</span>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

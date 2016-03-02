@@ -237,9 +237,9 @@ a.invisible:link, a.invisible:visited {
 	padding: 10px 0;
 }
 
-p, blockquote, ol, ul {
-	font-size: 12px;
-}
+/* p, blockquote, ol, ul { */
+/* 	font-size: 12px; */
+/* } */
 
 /*****************************************************
  *  SOME MORE GENERAL STYLES                         *
