@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Storage;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -35,13 +34,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function copy_publications_and_categories($courses_ids, $publications_ids, $categories_ids)
     {
-        $category_parent_ids_mapping = self::copy_categories($courses_ids, $categories_ids);
-        if (!$category_parent_ids_mapping)
+        $category_parent_ids_mapping = self :: copy_categories($courses_ids, $categories_ids);
+        if (! $category_parent_ids_mapping)
         {
             return false;
         }
 
-        $success = self::copy_publications($courses_ids, $publications_ids, $category_parent_ids_mapping);
+        $success = self :: copy_publications($courses_ids, $publications_ids, $category_parent_ids_mapping);
 
         return $success;
     }
@@ -56,7 +55,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function copy_publications_to_root($courses_ids, $publications_ids)
     {
-        return self::copy_publications($courses_ids, $publications_ids, array());
+        return self :: copy_publications($courses_ids, $publications_ids, array());
     }
 
     /**
@@ -74,30 +73,27 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         foreach ($publications_ids as $id)
         {
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                ContentObjectPublication:: class_name(), $id
-            );
+            $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
+                ContentObjectPublication :: class_name(),
+                $id);
 
-            $possible_publication_class =
-                'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() . '\\Storage\\DataClass\\Publication';
+            $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() .
+                 '\\Storage\\DataClass\\Publication';
             $publication_extension_exists = class_exists($possible_publication_class);
 
             if ($publication_extension_exists)
             {
-                $datamanager_class =
-                    'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() . '\\Storage\\DataManager';
+                $datamanager_class = 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() .
+                     '\\Storage\\DataManager';
 
-                $publication_extension = $datamanager_class:: retrieve(
+                $publication_extension = $datamanager_class :: retrieve(
                     $possible_publication_class,
                     new DataClassRetrieveParameters(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                $possible_publication_class, $possible_publication_class::PROPERTY_PUBLICATION_ID
-                            ),
-                            new StaticConditionVariable($publication->get_id())
-                        )
-                    )
-                );
+                                $possible_publication_class,
+                                $possible_publication_class :: PROPERTY_PUBLICATION_ID),
+                            new StaticConditionVariable($publication->get_id()))));
             }
 
             $parent = $publication->get_category_id();
@@ -113,7 +109,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 }
 
                 $result = $publication->create();
-                if (!($result instanceof RightsLocation))
+                if (! ($result instanceof RightsLocation))
                 {
                     $success = false;
                 }
@@ -153,35 +149,32 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_ID
-            ), $categories_ids
-        );
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_ID),
+            $categories_ids);
         $order_by = array();
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_PARENT
-            )
-        );
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_PARENT));
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class_name(), ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
-            )
-        );
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_DISPLAY_ORDER));
 
-        $categories = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            ContentObjectPublicationCategory:: class_name(),
-            new DataClassRetrievesParameters($condition, null, null, $order_by)
-        );
+        $categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
+            ContentObjectPublicationCategory :: class_name(),
+            new DataClassRetrievesParameters($condition, null, null, $order_by));
 
         while ($category = $categories->next_result())
         {
             $parent_id = $category->get_parent();
-//            if (!$category->get_allow_change())
-//            {
-//                continue; // Because the course groups are not copied this won't copy their corresponding folders
-//            }
+            // if (!$category->get_allow_change())
+            // {
+            // continue; // Because the course groups are not copied this won't copy their corresponding folders
+            // }
 
             $old_id = $category->get_id();
 
@@ -196,7 +189,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     $category->set_parent($category_parent_ids_mapping[$course_code][$parent_id]);
                 }
 
-                if (!$category->create())
+                if (! $category->create())
                 {
                     $success = false;
                 }
@@ -205,7 +198,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
         }
 
-        if (!$success)
+        if (! $success)
         {
             return false;
         }

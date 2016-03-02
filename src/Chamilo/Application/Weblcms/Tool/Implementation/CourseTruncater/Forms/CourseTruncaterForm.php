@@ -8,11 +8,6 @@ use Chamilo\Application\Weblcms\Tool\Form\PublicationSelectorForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -23,9 +18,13 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class CourseTruncaterForm extends FormValidator
 {
+
     private $parent;
+
     private $publications;
+
     private $categories;
+
     private $course_sections;
 
     /**
@@ -47,7 +46,7 @@ class CourseTruncaterForm extends FormValidator
     }
 
     /**
-     *Builds the form
+     * Builds the form
      */
     public function buildForm()
     {
@@ -57,54 +56,60 @@ class CourseTruncaterForm extends FormValidator
         $this->addElement('html', '<h3>' . Translation :: get('Publications') . '</h3>');
 
         $this->addElement('html', '<div id="categories" style="display: none;">');
-        foreach($this->categories as $category)
+        foreach ($this->categories as $category)
         {
-            $tool = $category[ContentObjectPublicationCategory::PROPERTY_TOOL];
+            $tool = $category[ContentObjectPublicationCategory :: PROPERTY_TOOL];
             $label = '';
-            $id = 'categories[' . $category[ContentObjectPublicationCategory::PROPERTY_ID] . ']';
+            $id = 'categories[' . $category[ContentObjectPublicationCategory :: PROPERTY_ID] . ']';
 
-            $this->addElement('checkbox', $id, $label, $category[ContentObjectPublicationCategory::PROPERTY_NAME]);
+            $this->addElement('checkbox', $id, $label, $category[ContentObjectPublicationCategory :: PROPERTY_NAME]);
             $defaults[$id] = true;
-            if(!array_key_exists($tool, $translations))
+            if (! array_key_exists($tool, $translations))
             {
                 $translations[$tool] = Translation :: get(
-                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool)
-                );
+                    'TypeName',
+                    null,
+                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool));
             }
         }
 
         $this->addElement('html', '</div><div id="publications" style="display: none;">');
         foreach ($this->publications as $publication)
         {
-            $tool = $publication[ContentObjectPublication::PROPERTY_TOOL];
+            $tool = $publication[ContentObjectPublication :: PROPERTY_TOOL];
             $label = "";
-            $id = 'publications[' . $publication[ContentObjectPublication::PROPERTY_ID] . ']';
+            $id = 'publications[' . $publication[ContentObjectPublication :: PROPERTY_ID] . ']';
 
-            $this->addElement('checkbox', $id, $label, $publication[ContentObject::PROPERTY_TITLE]);
+            $this->addElement('checkbox', $id, $label, $publication[ContentObject :: PROPERTY_TITLE]);
             $defaults[$id] = true;
-            if(!array_key_exists($tool, $translations))
+            if (! array_key_exists($tool, $translations))
             {
                 $translations[$tool] = Translation :: get(
-                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool)
-                );
+                    'TypeName',
+                    null,
+                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool));
             }
         }
 
         $this->addFormRule(array('PublicationSelectionMaintenanceWizardPage', 'count_selected_publications'));
 
         $this->addElement('html', '</div>');
-        $publication_selector_form = new PublicationSelectorForm($this->publications, $this->categories,
-            $this->parent->get_course()->get_title(), true, $translations);
+        $publication_selector_form = new PublicationSelectorForm(
+            $this->publications,
+            $this->categories,
+            $this->parent->get_course()->get_title(),
+            true,
+            $translations);
         $this->addElement('html', $publication_selector_form->render());
         $this->addElement('checkbox', 'content_object_categories', Translation :: get('PublicationCategories'));
 
-        if(count($this->course_sections) > 0)
+        if (count($this->course_sections) > 0)
         {
             $this->addElement('html', '<h3>' . Translation :: get('CourseSections') . '</h3>');
-            foreach($this->course_sections as $course_section)
+            foreach ($this->course_sections as $course_section)
             {
-                $id = 'course_sections[' . $course_section[CourseSection::PROPERTY_ID] . ']';
-                $this->addElement('checkbox', $id, $course_section[CourseSection::PROPERTY_NAME]);
+                $id = 'course_sections[' . $course_section[CourseSection :: PROPERTY_ID] . ']';
+                $this->addElement('checkbox', $id, $course_section[CourseSection :: PROPERTY_NAME]);
                 $defaults[$id] = true;
             }
         }
@@ -116,12 +121,14 @@ class CourseTruncaterForm extends FormValidator
         $this->addElement('html', '<h3>' . Translation :: get('EmptyThisCourseInformation') . '</h3>');
         $this->addElement('checkbox', 'confirm', Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES));
         $this->addRule(
-            'confirm', Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 'required'
-        );
+            'confirm',
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            'required');
         $prevnext = array();
         $prevnext[] = $this->createElement(
-            'submit', $this->parent->get_url(), Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES)
-        );
+            'submit',
+            $this->parent->get_url(),
+            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));
     }
