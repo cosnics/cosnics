@@ -311,7 +311,7 @@ class CourseGroupForm extends FormValidator
         {
             case 1 :
 
-                $tool = 'document';
+                $tool = 'Document';
                 $group_document_id = 0;
 
                 $course_group_document_category = $this->create_category($course_group, $tool, $group_document_id);
@@ -373,7 +373,7 @@ class CourseGroupForm extends FormValidator
         {
             case 1 :
 
-                $tool = 'forum';
+                $tool = 'Forum';
                 $group_forum_id = 0;
 
                 $course_group_forum_category = $this->create_category($course_group, $tool, $group_forum_id);
@@ -417,7 +417,7 @@ class CourseGroupForm extends FormValidator
 
     public function create_course_group_forum_in_category($forum_category, $course_group)
     {
-        $tool = 'forum';
+        $tool = 'Forum';
         $content_object_publication = $this->publish_forum($tool, $forum_category->get_id(), $course_group);
         $rights = array();
         $rights[] = WeblcmsRights :: VIEW_RIGHT;
