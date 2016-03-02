@@ -23,27 +23,6 @@ abstract class FullTableRenderer extends TableRenderer
      *
      * @return string
      */
-    public function renderViewActions()
-    {
-        $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-
-        $buttonToolBar->addItem($this->renderTypeButton());
-
-        foreach ($this->getViewActions() as $viewAction)
-        {
-            $buttonToolBar->addItem($viewAction);
-        }
-
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        return $buttonToolbarRenderer->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
     public function renderMiniMonth()
     {
         $renderer = new MiniMonthRenderer(
