@@ -61,7 +61,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = $this->getCalendarHtml();
+        $html[] = '<div class="row">';
+        $html[] = $this->renderNormalCalendar();
+        $html[] = '</div>';
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -75,21 +77,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->jumpForm;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getCalendarHtml()
-    {
-        $html = array();
-
-        $html[] = '<div class="row">';
-        $html[] = $this->renderNormalCalendar();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 
     protected function getCalendarDataProvider()
