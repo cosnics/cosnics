@@ -36,7 +36,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
         $html[] = '(function(){';
         $html[] = '     var rssFeedRendererApp = angular.module(\'rssFeedRendererApp\', []);';
         $html[] = '     rssFeedRendererApp.value(\'rssFeedUrl\', \'' . $content_object->get_url() . '\');';
-        $html[] = '     rssFeedRendererApp.value(\'numberOfEntries\', \'' . 10 . '\');';
+        $html[] = '     rssFeedRendererApp.value(\'numberOfEntries\', \'' . $content_object->get_number_of_entries() . '\');';
         $html[] = '})();';
         $html[] = '</script>';
 
