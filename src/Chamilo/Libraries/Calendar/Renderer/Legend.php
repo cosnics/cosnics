@@ -189,18 +189,21 @@ class Legend
 
             foreach ($sources as $source)
             {
+                $sourceClasses = $this->getSourceClasses($source);
+
                 if ($this->getDataProvider()->supportsVisibility())
                 {
                     $isSourceVisible = $this->getDataProvider()->isSourceVisible($source);
-                    $sourceClasses = $this->getSourceClasses($source, ! $isSourceVisible);
+                    $eventClasses = ! $isSourceVisible ? ' event-container-source-faded' : '';
                 }
                 else
                 {
-                    $sourceClasses = $this->getSourceClasses($source);
+
+                    $eventClasses = '';
                 }
 
                 $result[] = '<li class="list-group-item">';
-                $result[] = '<div class="event-source">';
+                $result[] = '<div class="event-source' . $eventClasses . '">';
                 $result[] = '<span data-source="' . $source . '" class="event-container ' . $sourceClasses . '"></span>';
                 $result[] = $source;
                 $result[] = '</div>';
@@ -223,8 +226,6 @@ class Legend
                 $result[] = '<script type="text/javascript">';
                 $result[] = 'var calendarVisibilityContext = ' .
                      json_encode($this->getDataProvider()->getVisibilityContext()) . ';';
-                $result[] = 'var calendarVisibilityData = ' . json_encode($this->getDataProvider()->getVisibilityData()) .
-                     ';';
                 $result[] = '</script>';
 
                 $result[] = ResourceManager :: get_instance()->get_resource_html(

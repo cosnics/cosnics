@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
@@ -19,7 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ListRenderer extends ViewRenderer
+class ListRenderer extends FullRenderer
 {
 
     /**
@@ -68,71 +67,46 @@ class ListRenderer extends ViewRenderer
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @return integer
      */
-    public function render()
+    protected function getStartTime()
     {
-        $html = array();
-
-        $html = array();
-
-        $html[] = '<div class="col-md-12 col-lg-10 table-list-main">';
-
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-md-4">';
-        $html[] = '<div class="pull-left">';
-        $html[] = $this->renderNavigation();
-        $html[] = '</div>';
-
-        $html[] = '<div class="table-calendar-current-time pull-left">';
-        $html[] = '<h4>';
-        $html[] = $this->renderTitle();
-        $html[] = '</h4>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-md-8">';
-        $html[] = '<div class="pull-right">';
-        $html[] = $this->renderViewActions();
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = $this->renderEvents();
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-md-12 col-lg-2 table-list-sidebar">';
-        // $html[] = $this->renderMiniMonth();
-        $html[] = $this->getLegend()->render();
-        $html[] = '</div>';
-
-        $html[] = '<div class="clearfix"></div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->getDisplayTime();
     }
 
-    private function renderEvents()
+    /**
+     *
+     * @return integer
+     */
+    protected function getEndTime()
+    {
+        return strtotime('+6 Months', $this->getStartTime());
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderFullCalendar()
     {
         $startTime = $this->getDisplayTime();
-        $endTime = strtotime('+6 Months', $startTime);
-        $events = $this->getEvents($startTime, $endTime);
+        $endTime = $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
 
         $html = array();
 
         if (count($events) > 0)
         {
-            $html[] = '<table class="table-calendar table-calendar-list">';
-            $html[] = '<tbody>';
+            $html[] = '<div class="table-calendar-list">';
 
             foreach ($events as $dateKey => $dateEvents)
             {
-                $html[] = '<tr>';
+                $html[] = '<div class="row">';
 
-                $html[] = '<td class="table-calendar-list-date">';
+                $html[] = '<div class="col-xs-12 table-calendar-list-date">';
                 $html[] = date('D, d M', $dateKey);
-                $html[] = '</td>';
+                $html[] = '</div>';
 
-                $html[] = '<td class="table-calendar-list-events">';
+                $html[] = '<div class="col-xs-12 table-calendar-list-events">';
                 $html[] = '<ul class="list-group">';
 
                 foreach ($dateEvents as $dateEvent)
@@ -145,13 +119,12 @@ class ListRenderer extends ViewRenderer
                 }
 
                 $html[] = '</ul>';
-                $html[] = '</td>';
+                $html[] = '</div>';
 
-                $html[] = '</tr>';
+                $html[] = '</div>';
             }
 
-            $html[] = '</tbody>';
-            $html[] = '</table>';
+            $html[] = '</div>';
         }
         else
         {
@@ -187,9 +160,6 @@ class ListRenderer extends ViewRenderer
      */
     public function renderTitle()
     {
-        $startTime = $this->getDisplayTime();
-        $endTime = strtotime('+6 Months', $startTime);
-
-        return date('d M Y', $startTime) . ' - ' . date('d M Y', $endTime);
+        return date('d M Y', $this->getStartTime()) . ' - ' . date('d M Y', $this->getEndTime());
     }
 }

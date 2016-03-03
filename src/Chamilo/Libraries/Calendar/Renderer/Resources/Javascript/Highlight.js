@@ -2,12 +2,14 @@ $(function() {
 
     function switchVisibility(calendarEvent) {
         var ajaxUri = getPath('WEB_PATH') + 'index.php';
+        var eventContainer = $('span.event-container', $(calendarEvent));
+        var eventClasses = eventContainer.attr('class').split(" ");
+        var eventSourceClass = determineEventSourceClass(eventClasses);
 
         var parameters = {
             'application' : calendarVisibilityContext,
-            'go' : 'calendar_event_visibility',
-            'source' : $(calendarEvent).data('source'),
-            'data' : calendarVisibilityData
+            'go' : 'CalendarEventVisibility',
+            'source' : eventContainer.data('source')
         };
 
         var response = $.ajax({
@@ -20,19 +22,49 @@ $(function() {
             var typeClass = $(calendarEvent).attr('class');
             var typeClasses = typeClass.split(" ");
 
-            var eventBox = $('.normal_calendar .calendar-container .' + typeClasses[1]).parent().toggleClass('event-hidden');
+            var eventBoxes = $('.table-calendar .' + eventSourceClass);
+
+            $(eventBoxes).each(function(index, item) {
+                var eventBox = $(item);
+                if (eventBox.parent().hasClass('list-event-item-data')) {
+                var listItem = eventBox.parent().parent().parent();
+                listItem.toggleClass('event-container-hidden');
+
+                var visibleListItems = $('.list-group-item:visible', listItem.parent());
+
+                listItem.parent().parent().parent().show();
+
+                if (visibleListItems.length == 0) {
+                listItem.parent().parent().parent().hide();
+                }
+
+                } else {
+                eventBox.toggleClass('event-container-hidden');
+                }
+            });
 
             $(calendarEvent).toggleClass('disabled');
-            $(calendarEvent).toggleClass('event-source-identifier-faded');
+            $(calendarEvent).toggleClass('event-container-source-faded');
             }
         });
     }
 
+    function determineEventSourceClass(eventClasses) {
+        var eventClass = '';
+
+        $.each(eventClasses, function(index, value) {
+
+            if (value.indexOf('event-container-source-') > -1 && value != 'event-container-source-faded') {
+            eventClass = value;
+            }
+        });
+
+        return eventClass;
+    }
+
     $(document).ready(function() {
 
-        var originalColor = $('.event-legend-container .event-source-identifier').first().parent().css("border-top-color");
-
-        $(document).on('click', '.event-legend-container .event-source-identifier', function(event) {
+        $(document).on('click', '.table-calendar-legend .event-source', function(event) {
             switchVisibility(this);
         });
     });

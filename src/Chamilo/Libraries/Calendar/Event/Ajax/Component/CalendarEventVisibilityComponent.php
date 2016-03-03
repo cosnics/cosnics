@@ -78,7 +78,6 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
             $visibility = new $visibilityClass();
             $visibility->setUserId($this->get_user_id());
             $visibility->setSource($source);
-            $this->setVisibility($visibility, $data);
 
             if ($visibility->create())
             {
@@ -104,11 +103,4 @@ abstract class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calen
      * @return \Chamilo\Libraries\Calendar\Event\Visibility
      */
     abstract function retrieveVisibility(Condition $condition);
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Calendar\Event\Visibility $visibility
-     * @param string[] $data
-     */
-    abstract function setVisibility(Visibility $visibility = null, $data = array());
 }

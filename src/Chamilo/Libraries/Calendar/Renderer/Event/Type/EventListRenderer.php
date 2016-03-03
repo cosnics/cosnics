@@ -24,7 +24,6 @@ class EventListRenderer extends EventRenderer
      */
     public function render()
     {
-        // $configuration = $this->getConfiguration();
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
 
@@ -34,118 +33,24 @@ class EventListRenderer extends EventRenderer
 
         $html = array();
 
-        $html[] = '<div>';
+        $html[] = '<div class="row">';
 
-        $html[] = '<div class="list-event-item-data pull-left">';
+        $html[] = '<div class="col-xs-1">';
         $html[] = '<span class="' . $eventClasses . '"></span>';
+        $html[] = '</div>';
 
-        // if ($startDate >= $configuration->getStartDate() &&
-        // $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
-        // $startDate != $configuration->getStartDate())
-        // {
-        // $html[] = date('H:i', $startDate);
-        // }
-        // elseif ($startDate < $configuration->getStartDate())
-        // {
-        // $html[] = '&larr;';
-        // }
+        $html[] = '<div class="col-xs-3 list-event-item-time">';
+        $html[] = $this->getRange();
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-7 list-event-item-data">';
 
         $html[] = '<a href="' . $this->getEvent()->getUrl() . '">';
         $html[] = htmlspecialchars($this->getEvent()->getTitle());
         $html[] = '</a>';
         $html[] = '</div>';
 
-        $html[] = '<div class="list-event-item-time pull-right">';
-        $html[] = $this->getRange();
         $html[] = '</div>';
-
-        $html[] = '<div class="clearfix"></div>';
-
-        $html[] = '</div>';
-
-        // if ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
-        // $startDate < $configuration->getStartDate())
-        // {
-        // $html[] = date('H:i', $endDate);
-        // }
-        // elseif ($startDate != $endDate && $endDate > strtotime('+1 Day', $configuration->getStartDate()))
-        // {
-        // $html[] = '&rarr;';
-        // }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Gets a html representation of an event for a list renderer
-     *
-     * @return string
-     */
-    // public function render()
-    // {
-    // $html = array();
-
-    // $html[] = '<div class="row">';
-
-    // $html[] = '<div class="col-lg-6">';
-    // $html[] = $this->getTitle();
-    // $html[] = '</div>';
-
-    // $html[] = '<div class="col-lg-6">';
-    // $html[] = $this->getRange();
-    // $html[] = '</div>';
-
-    // $html[] = '</div>';
-
-    // $html[] = '<div class="' . $this->getEventClasses() . '">';
-    // $html[] = '<div class="' .
-    // $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource()) .
-    // '">';
-    // $html[] = $this->getActions();
-    // $html[] = '<h4>';
-    // $html[] = $this->getTitle();
-    // $html[] = $this->getRange();
-    // $html[] = '</h4>';
-    // $html[] = $this->getContent();
-    // $html[] = $this->getLocation();
-    // $html[] = '</div>';
-    // $html[] = '</div>';
-
-    // return implode(PHP_EOL, $html);
-    // }
-    public function getTitle()
-    {
-        // var_dump($this->getEvent());
-        $html = array();
-
-        $html[] = '<a href="' . html_entity_decode($this->getEvent()->getUrl()) . '">';
-        $html[] = htmlentities($this->getEvent()->getTitle());
-        $html[] = '</a>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->getEvent()->getContent();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        $html = array();
-
-        if ($this->getEvent()->getLocation())
-        {
-            $html[] = $this->getEvent()->getLocation();
-        }
 
         return implode(PHP_EOL, $html);
     }
