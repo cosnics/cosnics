@@ -96,11 +96,23 @@ class ListRenderer extends FullRenderer
 
         if (count($events) > 0)
         {
-            $html[] = '<div class="table-calendar-list">';
+            $html[] = '<div class="table-calendar table-calendar-list">';
 
             foreach ($events as $dateKey => $dateEvents)
             {
-                $html[] = '<div class="row">';
+                $hiddenEvents = 0;
+
+                foreach ($dateEvents as $dateEvent)
+                {
+                    if (! $this->isSourceVisible($dateEvent->getSource()))
+                    {
+                        $hiddenEvents ++;
+                    }
+                }
+
+                $allEventsAreHidden = ($hiddenEvents == count($dateEvents));
+
+                $html[] = '<div class="row' . ($allEventsAreHidden ? ' event-container-hidden' : '') . '">';
 
                 $html[] = '<div class="col-xs-12 table-calendar-list-date">';
                 $html[] = date('D, d M', $dateKey);

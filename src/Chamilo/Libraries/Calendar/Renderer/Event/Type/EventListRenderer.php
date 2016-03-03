@@ -26,14 +26,25 @@ class EventListRenderer extends EventRenderer
     {
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
+        $event = $this->getEvent();
+        $legend = $this->getRenderer()->getLegend();
 
-        $eventClasses = $this->getEventClasses($startDate);
-        $sourceClasses = $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource());
-        $eventClasses = implode(' ', array($eventClasses, $sourceClasses));
+        $sourceClasses = $legend->getSourceClasses($event->getSource());
+        $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
         $html = array();
 
-        $html[] = '<div class="row">';
+        if (! $this->getRenderer()->isSourceVisible($event->getSource()))
+        {
+            $rowClasses = ' event-container-hidden';
+        }
+        else
+        {
+            $rowClasses = '';
+        }
+
+        $html[] = '<div class="row' . $rowClasses . '" data-source-key="' . $legend->addSource($event->getSource()) .
+             '">';
 
         $html[] = '<div class="col-xs-1">';
         $html[] = '<span class="' . $eventClasses . '"></span>';
@@ -45,8 +56,8 @@ class EventListRenderer extends EventRenderer
 
         $html[] = '<div class="col-xs-7 list-event-item-data">';
 
-        $html[] = '<a href="' . $this->getEvent()->getUrl() . '">';
-        $html[] = htmlspecialchars($this->getEvent()->getTitle());
+        $html[] = '<a href="' . $event->getUrl() . '">';
+        $html[] = htmlspecialchars($event->getTitle());
         $html[] = '</a>';
         $html[] = '</div>';
 

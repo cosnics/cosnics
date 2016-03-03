@@ -80,7 +80,7 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = $this->renderFullCalendar();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-md-3 col-lg-2 table-calendar-sidebar">';
+        $html[] = '<div class="col-xs-12 col-lg-2 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth();
         $html[] = $this->getLegend()->render();
         $html[] = '</div>';
