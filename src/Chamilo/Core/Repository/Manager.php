@@ -21,6 +21,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
@@ -143,6 +144,7 @@ abstract class Manager extends Application
     const ACTION_BATCH_EDIT_CONTENT_OBJECT_METADATA = 'MetadataBatchEditor';
     const ACTION_LINK_SCHEMAS = 'SchemaLinker';
     const ACTION_LINK_PROVIDERS = 'ProviderLinker';
+    const ACTION_IMPACT_VIEW_RECYCLE = 'ImpactViewRecycler';
 
     // Tabs
     const TABS_FILTER = 'advanced_filter';
@@ -378,9 +380,10 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_DELETE_CONTENT_OBJECTS,
-                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
-                self :: PARAM_DELETE_RECYCLED => 1));
+                self :: PARAM_ACTION => self :: ACTION_IMPACT_VIEW_RECYCLE,
+                self :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id()
+            )
+        );
     }
 
     /**
