@@ -153,6 +153,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html[] = $this->buttonToolbarRenderer->render();
 
+        $html[] = '<div class="publication_container row">';
+
         if ($this->get_parent() instanceof Categorizable)
         {
             $cat_id = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
@@ -183,7 +185,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             // $html[] = '</div>';
             // $html[] = '<div class="panel-body">';
 
-            $html[] = '<div class="publication_container row">';
             $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
             // $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
             // 'overflow: auto; ">';
@@ -213,7 +214,16 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = Display :: warning_message(Translation :: get('ToolInvisible'));
         }
 
-        $html[] = '<div class="publication_renderer col-md-9 col-lg-10 col-sm-12">';
+        if ($this->get_parent() instanceof Categorizable)
+        {
+            $columnClasses = 'col-md-9 col-lg-10 col-sm-12';
+        }
+        else
+        {
+            $columnClasses = 'col-xs-12';
+        }
+
+        $html[] = '<div class="publication_renderer ' . $columnClasses . '">';
         $html[] = implode(PHP_EOL, $content);
         $html[] = '</div>';
         $html[] = '</div>';
