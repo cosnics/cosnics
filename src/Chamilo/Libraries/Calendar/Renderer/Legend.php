@@ -204,7 +204,8 @@ class Legend
 
                 $result[] = '<li class="list-group-item">';
                 $result[] = '<div class="event-source' . $eventClasses . '">';
-                $result[] = '<span data-source="' . $source . '" class="event-container ' . $sourceClasses . '"></span>';
+                $result[] = '<span data-source-key="' . $this->addSource($source) . '" data-source="' . $source .
+                     '" class="event-container ' . $sourceClasses . '"></span>';
                 $result[] = $source;
                 $result[] = '</div>';
                 $result[] = '</li>';
