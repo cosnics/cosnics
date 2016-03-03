@@ -1,15 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 
 /**
  *
@@ -99,19 +97,8 @@ class MiniMonthRenderer extends ViewRenderer
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
-                    if (! $calendar->containsEventsForTime($tableDate))
-                    {
-                        $marker = '<br /><div class="event_marker" style="width: 14px; height: 15px;"><img src="' . htmlspecialchars(
-                            Theme :: getInstance()->getCommonImagePath('Action/Marker')) . '"/></div>';
-                        $calendar->addEvent($tableDate, $marker);
-                    }
-
-                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
-                    $configuration->setStartDate($tableDate);
-
-                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
-
-                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
+                    $this->getLegend()->addSource($event->getSource());
+                    $calendar->addEvent($tableDate, $event->getTitle());
                 }
             }
 
