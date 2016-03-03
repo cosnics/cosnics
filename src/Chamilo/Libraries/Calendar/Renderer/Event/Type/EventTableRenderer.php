@@ -75,7 +75,8 @@ abstract class EventTableRenderer extends EventRenderer
     {
         $html = array();
 
-        $html[] = '<div class="' . $this->determineEventClasses() . '">';
+        $html[] = '<div class="' . $this->determineEventClasses() . '" data-source-key="' .
+             $this->getRenderer()->getLegend()->addSource($this->getEvent()->getSource()) . '">';
         $html[] = '<div class="event-data">';
 
         return implode(PHP_EOL, $html);
