@@ -6,6 +6,8 @@ use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Manager;
 
 /**
  * Description of impact_view_table_column_model
@@ -20,11 +22,25 @@ class ImpactViewTableColumnModel extends DataClassTableColumnModel implements Ta
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_TITLE)
+        );
 
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_CATEGORY));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_SAFE_DELETE));
+            new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_TYPE)
+        );
+
+        $this->add_column(
+            new StaticTableColumn(
+                self :: COLUMN_CATEGORY,
+                Translation::getInstance()->getTranslation('Category', array(), Manager::context())
+            )
+        );
+
+        $this->add_column(
+            new StaticTableColumn(
+                self :: COLUMN_SAFE_DELETE,
+                Translation::getInstance()->getTranslation('SafeDelete', array(), Manager::context())
+            )
+        );
     }
 }
