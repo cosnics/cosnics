@@ -22,6 +22,23 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     }
 
     /**
+     * Displays the title of the feed or the generic title if no object selected
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        $content_object = $this->getObject();
+
+        if($content_object)
+        {
+            return $content_object->get_title();
+        }
+
+        return parent::getTitle();
+    }
+
+    /**
      * Returns the html to display when the block is configured.
      *
      * @return string
