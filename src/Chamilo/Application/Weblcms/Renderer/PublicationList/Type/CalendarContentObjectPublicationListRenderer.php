@@ -2,29 +2,28 @@
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
+use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
-use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
-use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Join;
 
 /**
  * Renderer to display events in a week calendar
@@ -105,13 +104,7 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         }
 
         $html = array();
-        $html[] = '<div class="mini_calendar">';
-        $html[] = $mini_month_calendar->render();
-        $html[] = $this->form->render();
-        $html[] = $this->list_views();
-
-        $html[] = '</div>';
-        $html[] = '<div class="normal_calendar">';
+        $html[] = '<div class="row">';
 
         $view = $this->getView();
 
@@ -219,38 +212,5 @@ class CalendarContentObjectPublicationListRenderer extends ContentObjectPublicat
         }
 
         return $targets;
-    }
-
-    public function list_views()
-    {
-        $toolbar = new Toolbar(Toolbar :: TYPE_VERTICAL);
-
-        $type_url = $this->get_url(array(ViewRenderer :: PARAM_TYPE => ViewRenderer :: MARKER_TYPE));
-        $today_url = $this->get_url(
-            array(ViewRenderer :: PARAM_TYPE => $this->getView(), ViewRenderer :: PARAM_TIME => time()));
-
-        $renderer_types = array(
-            ViewRenderer :: TYPE_MONTH,
-            ViewRenderer :: TYPE_WEEK,
-            ViewRenderer :: TYPE_DAY,
-            ViewRenderer :: TYPE_YEAR,
-            ViewRenderer :: TYPE_LIST);
-
-        $renderer_type_items = ViewRenderer :: getToolbarItems($renderer_types, $type_url, $today_url);
-
-        foreach ($renderer_type_items as $renderer_type_item)
-        {
-            $toolbar->add_item($renderer_type_item);
-        }
-
-        $html = array();
-        $html[] = '<div class="content_object" style="padding: 10px;">';
-        $html[] = '<div class="description">';
-
-        $html[] = $toolbar->as_html();
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 }
