@@ -34,6 +34,7 @@ class HtmlInlineVideoRenditionImplementation extends HtmlInlineRenditionImplemen
         $html[] = '	<param name="url" value="' . $url . '" />';
         $html[] = '	<param name="height" value="' . $height . '" />';
         $html[] = '	<param name="width" value="' . $width . '" />';
+        $html[] = '	<param name="allowFullScreen" value="true" />';
         $html[] = '	<embed  autosize="true"
                             autostart="true"
                             height="' . $height . '"
