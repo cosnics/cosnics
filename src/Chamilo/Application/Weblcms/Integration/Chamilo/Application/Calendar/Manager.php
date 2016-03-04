@@ -20,6 +20,7 @@ use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
 use Chamilo\Application\Calendar\Architecture\InternalCalendar;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 
 /**
  *
@@ -92,11 +93,11 @@ class Manager extends InternalCalendar
         }
 
         $conditions = array();
-        $conditions[] = new EqualityCondition(
+        $conditions[] = new InCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_TOOL),
-            new StaticConditionVariable('calendar'));
+            array('Calendar', 'Assignment'));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
@@ -107,9 +108,9 @@ class Manager extends InternalCalendar
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_COURSE_ID),
             $course_ids);
-        $subselect_condition = new EqualityCondition(
+        $subselect_condition = new InCondition(
             new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-            new StaticConditionVariable(CalendarEvent :: class_name()));
+            array(CalendarEvent :: class_name(), Assignment :: class_name()));
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
@@ -119,6 +120,7 @@ class Manager extends InternalCalendar
             $subselect_condition,
             null,
             \Chamilo\Core\Repository\Storage\DataManager :: get_instance());
+
         return new AndCondition($conditions);
     }
 
