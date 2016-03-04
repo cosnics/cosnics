@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Category\Component;
 use Chamilo\Configuration\Category\Form\CategoryForm;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -26,6 +27,12 @@ class UpdaterComponent extends Manager
     public function run()
     {
         $category_id = Request :: get(self :: PARAM_CATEGORY_ID);
+
+        if(!$this->get_parent()->allowed_to_edit_category($category_id))
+        {
+            throw new NotAllowedException();
+        }
+
         $user = $this->get_user();
 
         $category_class_name = get_class($this->get_parent()->get_category());

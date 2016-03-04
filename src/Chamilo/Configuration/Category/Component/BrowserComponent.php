@@ -133,13 +133,18 @@ class BrowserComponent extends Manager implements TableSupport
             $buttonToolbar = new ButtonToolBar(
                 $this->get_url(array(self :: PARAM_CATEGORY_ID => $this->get_category_id())));
             $commonActions = new ButtonGroup();
-            
-            $commonActions->addButton(
-                new Button(
-                    Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
-                    $this->get_create_category_url(Request :: get(self :: PARAM_CATEGORY_ID)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+
+            if($this->get_parent()->allowed_to_add_category($this->get_category_id()))
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation:: get('Add', null, Utilities :: COMMON_LIBRARIES),
+                        Theme:: getInstance()->getCommonImagePath('Action/Add'),
+                        $this->get_create_category_url(Request:: get(self :: PARAM_CATEGORY_ID)),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
             
             $commonActions->addButton(
                 new Button(

@@ -196,6 +196,11 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         return true;
     }
 
+    public function allowed_to_add_category($parent_category_id)
+    {
+        return true;
+    }
+
     /*
      * (non-PHPdoc) @see \configuration\category\CategorySupport::get_category_parameters()
      */
