@@ -1,12 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -125,7 +124,6 @@ class EventParser
             $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
             $parameters[Application :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
             $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE] = ContentObjectPublicationListRenderer :: TYPE_CALENDAR;
             $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $this->getPublication()->get_course_id();
             $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $this->getPublication()->get_tool();
             $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $this->getPublication()->get_id();
