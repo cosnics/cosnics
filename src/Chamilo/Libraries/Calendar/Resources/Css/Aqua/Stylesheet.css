@@ -262,29 +262,6 @@ h4 .calendar-event-range {
 	width: 5%;
 }
 
-.table-calendar-list tbody tr {
-	border: 0px solid white;
-	border-bottom: 1px dashed #dadada;
-}
-
-.table-calendar-list tbody tr td {
-	border: 0px solid white;
-	height: auto;
-}
-
-.table-calendar-list tbody td.table-calendar-list-date {
-	width: 10%;
-	font-weight: bold;
-	vertical-align: middle;
-	font-size: 12px;
-	padding: 10px;
-}
-
-.table-calendar-list tbody td.table-calendar-list-events {
-	width: 90%;
-	padding: 5px;
-}
-
 .table-calendar-week tbody tr td.table-calendar-week-hours,
 	.table-calendar-day tbody tr td.table-calendar-day-hours {
 	text-align: right;
@@ -351,8 +328,8 @@ h4 .calendar-event-range {
 	background-color: #337ab7;
 }
 
-.table-calendar .event-container, .table-calendar-legend .event-container
-	{
+.table-calendar .event-container, .table-calendar-legend .event-container,
+	.table-calendar-list .event-container {
 	vertical-align: middle;
 	border-radius: 5px;
 }
@@ -385,8 +362,8 @@ h4 .calendar-event-range {
 	padding: 5px 15px;
 }
 
-.table-calendar .event-data, .table-calendar-legend .list-group-item .event-source
-	{
+.table-calendar .event-data, .table-calendar-legend .list-group-item .event-source,
+	.table-calendar-list .event-data {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -400,15 +377,36 @@ h4 .calendar-event-range {
 	/* 	font-size: 12px; */
 }
 
-.event-container-hidden {
-	display: none;
-}
-
 .event-container-source-faded {
 	opacity: 0.5;
 }
 
-.table-calendar-list tbody tr td a {
+.table-calendar-list {
+	padding: 0px 15px;
+}
+
+.table-calendar-list>.row {
+	border-bottom: 1px dashed #dadada;
+	margin-bottom: 0px;
+	padding: 5px 0px;
+}
+
+.table-calendar-list>.row:last-child {
+	border-bottom: 0px dashed #dadada;
+}
+
+.table-calendar-list .table-calendar-list-date {
+	font-weight: bold;
+	font-size: 12px;
+	padding: 5px 15px 5px 15px;
+	height: 30px;
+}
+
+.table-calendar-list .table-calendar-list-events .row {
+	padding-bottom: 5px;
+}
+
+.table-calendar-list a {
 	font-weight: normal;
 	text-decoration: none;
 	color: black;
@@ -421,7 +419,7 @@ h4 .calendar-event-range {
 
 .table-calendar-list .list-group .list-group-item {
 	border: 0px solid white;
-	padding: 4px;
+	padding: 0px 15px;
 }
 
 .table-calendar-list .list-group .list-group-item:hover {
@@ -431,16 +429,23 @@ h4 .calendar-event-range {
 
 .table-calendar-list .list-group .list-group-item .list-event-item-data
 	{
-	width: 80%;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	height: 20px;
 }
 
 .table-calendar-list .list-group .list-group-item .list-event-item-time
 	{
-	padding-left: 20px;
 	color: dimgray;
 	font-size: 12px;
-	width: 20%;
+	height: 20px;
+}
+
+.event-container-hidden {
+	display: none !important;
+}
+
+.table-list-sidebar, .table-calendar-sidebar {
+	padding-top: 5px;
 }

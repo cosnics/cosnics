@@ -4,7 +4,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Document\Component;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
-use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -170,19 +169,6 @@ class BrowserComponent extends Manager
         return $conditions;
     }
 
-    public function convert_content_object_publication_to_calendar_event($publication, $from_time, $to_time)
-    {
-        $calendar_event = ContentObject :: factory(CalendarEvent :: class_name());
-
-        $calendar_event->set_title($publication[ContentObject :: PROPERTY_TITLE]);
-        $calendar_event->set_description($publication[ContentObject :: PROPERTY_DESCRIPTION]);
-        $calendar_event->set_start_date($publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]);
-        $calendar_event->set_end_date($publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]);
-        $calendar_event->set_frequency(CalendarEvent :: FREQUENCY_NONE);
-
-        return $calendar_event;
-    }
-
     public function get_additional_parameters()
     {
         return array(self :: PARAM_BROWSE_PUBLICATION_TYPE);
@@ -200,10 +186,10 @@ class BrowserComponent extends Manager
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }

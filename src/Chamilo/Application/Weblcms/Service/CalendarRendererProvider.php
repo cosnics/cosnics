@@ -1,17 +1,18 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service;
 
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
-use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Application\Weblcms\Renderer\PublicationList\Type\CalendarContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
+use Chamilo\Libraries\Calendar\Renderer\Interfaces\VisibilitySupport;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -26,20 +27,19 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @var \Chamilo\Application\Weblcms\Renderer\PublicationList\Type\CalendarContentObjectPublicationListRenderer
+     * @var \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
      */
     private $renderer;
 
     /**
      *
-     * @param \Chamilo\Application\Weblcms\Renderer\PublicationList\Type\CalendarContentObjectPublicationListRenderer $renderer
+     * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
      * @param \Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository $dataProviderRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $dataUser
      * @param \Chamilo\Core\User\Storage\DataClass\User $viewingUser
      * @param string[] $displayParameters;
      */
-    public function __construct(CalendarContentObjectPublicationListRenderer $renderer, User $dataUser,
-        User $viewingUser, $displayParameters)
+    public function __construct(BrowserComponent $renderer, User $dataUser, User $viewingUser, $displayParameters)
     {
         $this->renderer = $renderer;
 
@@ -48,7 +48,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @return \Chamilo\Application\Weblcms\Renderer\PublicationList\Type\CalendarContentObjectPublicationListRenderer
+     * @return \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent
      */
     public function getRenderer()
     {
@@ -57,9 +57,9 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     /**
      *
-     * @param \Chamilo\Application\Weblcms\Renderer\PublicationList\Type\CalendarContentObjectPublicationListRenderer $renderer
+     * @param \Chamilo\Application\Weblcms\Tool\Action\Component\BrowserComponent $renderer
      */
-    public function setRenderer(CalendarContentObjectPublicationListRenderer $renderer)
+    public function setRenderer(BrowserComponent $renderer)
     {
         $this->renderer = $renderer;
     }
@@ -77,7 +77,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             $actions[] = new ToolbarItem(
                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                $this->getRenderer()->get_tool_browser()->get_url(
+                $this->getRenderer()->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $event->getId())),
@@ -86,7 +86,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             $actions[] = new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                $this->getRenderer()->get_tool_browser()->get_url(
+                $this->getRenderer()->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE,
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $event->getId())),
@@ -113,17 +113,19 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
         {
 
             if (method_exists(
-                $this->getRenderer()->get_tool_browser()->get_parent(),
+                $this->getRenderer()->get_parent(),
                 'convert_content_object_publication_to_calendar_event'))
             {
-                $object = $this->getRenderer()->get_tool_browser()->get_parent()->convert_content_object_publication_to_calendar_event(
+                $object = $this->getRenderer()->get_parent()->convert_content_object_publication_to_calendar_event(
                     $publication,
                     $startTime,
                     $endTime);
             }
             else
             {
-                $object = $this->getRenderer()->get_content_object_from_publication($publication);
+                $class = $publication[ContentObject :: PROPERTY_TYPE];
+                $object = new $class($publication);
+                $object->set_id($publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
             }
 
             $publicationObject = new ContentObjectPublication();

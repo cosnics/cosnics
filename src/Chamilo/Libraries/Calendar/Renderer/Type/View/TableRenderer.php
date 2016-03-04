@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
-
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Type\View
@@ -10,7 +8,7 @@ use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class TableRenderer extends ViewRenderer
+trait TableRenderer
 {
 
     /**

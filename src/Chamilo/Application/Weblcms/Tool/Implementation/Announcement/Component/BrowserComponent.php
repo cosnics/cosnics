@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Announcement\Component;
 
-use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Announcement\Manager;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
@@ -28,47 +27,44 @@ class BrowserComponent extends Manager
 
     public function get_tool_actions()
     {
-        if ($this->get_browser_type() != ContentObjectPublicationListRenderer :: TYPE_CALENDAR)
-        {
-            $toolActions = array();
-            $showActions = array();
+        $toolActions = array();
+        $showActions = array();
 
-            $showActions[] = new SubButton(
-                Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                        self :: PARAM_FILTER => self :: FILTER_TODAY)),
-                Button :: DISPLAY_ICON_AND_LABEL);
+        $showActions[] = new SubButton(
+            Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
+                    self :: PARAM_FILTER => self :: FILTER_TODAY)),
+            Button :: DISPLAY_ICON_AND_LABEL);
 
-            $showActions[] = new SubButton(
-                Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                        self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
-                Button :: DISPLAY_ICON_AND_LABEL);
+        $showActions[] = new SubButton(
+            Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
+                    self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
+            Button :: DISPLAY_ICON_AND_LABEL);
 
-            $showActions[] = new SubButton(
-                Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                        self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
-                Button :: DISPLAY_ICON_AND_LABEL);
+        $showActions[] = new SubButton(
+            Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
+                    self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
+            Button :: DISPLAY_ICON_AND_LABEL);
 
-            $showAction = new DropdownButton(
-                Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'));
-            $showAction->setSubButtons($showActions);
+        $showAction = new DropdownButton(
+            Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'));
+        $showAction->setSubButtons($showActions);
 
-            $toolActions[] = $showAction;
+        $toolActions[] = $showAction;
 
-            return $toolActions;
-        }
+        return $toolActions;
     }
 
     public function get_tool_conditions()
@@ -143,10 +139,10 @@ class BrowserComponent extends Manager
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }
