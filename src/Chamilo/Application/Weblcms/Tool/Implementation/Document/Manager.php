@@ -58,7 +58,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_GALLERY;
         $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_SLIDESHOW;
         $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_LIST;
-        $browser_types[] = ContentObjectPublicationListRenderer :: TYPE_CALENDAR;
         return $browser_types;
     }
 

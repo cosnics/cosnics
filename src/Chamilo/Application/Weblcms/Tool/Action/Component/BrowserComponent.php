@@ -11,12 +11,10 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCatego
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -58,31 +56,166 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     private $buttonToolbarRenderer;
 
-    private $introduction_text;
-
-    private $publication_category_tree;
+    private $introductionText;
 
     private $publications;
 
-    private $is_course_admin;
+    /**
+     *
+     * @var boolean
+     */
+    private $isCourseAdmin;
 
     public function run()
     {
+        $this->checkAuthorization();
+
+        $content = array();
+
+        $content[] = $this->renderToolHeader();
+        $content[] = '<div class="publication_container row">';
+
+        $renderedPublications = $this->renderPublications();
+
+        if ($this->get_parent() instanceof Categorizable)
+        {
+            $content[] = $this->renderCategories($renderedPublications);
+        }
+        else
+        {
+            $content[] = '<div class="publication_renderer col-xs-12">';
+            $content[] = $renderedPublications;
+            $content[] = '</div>';
+        }
+
+        $content[] = '</div>';
+
+        $html = array();
+
+        $html[] = $this->render_header();
+        $html[] = implode(PHP_EOL, $content);
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderToolHeader()
+    {
+        $html = array();
+
+        $html[] = $this->renderIntroduction();
+        $html[] = $this->getButtonToolbarRenderer()->render();
+
+        if ($this->get_publication_count() > 0 &&
+             $this->get_parent()->get_tool_registration()->get_section_type() == CourseSection :: TYPE_DISABLED)
+        {
+            $html[] = Display :: warning_message(Translation :: get('ToolInvisible'));
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @throws NotAllowedException
+     */
+    public function checkAuthorization()
+    {
         // set if we are browsing as course admin, used for displaying the
         // additional tabs and actions
-        $this->is_course_admin = $this->get_course()->is_course_admin($this->get_user());
-
         if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT))
         {
             throw new NotAllowedException();
         }
+    }
 
-        $this->introduction_text = $this->get_parent()->get_introduction_text();
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+    public function getIntroductionText()
+    {
+        if (! isset($this->introductionText))
+        {
+            $this->introductionText = $this->get_parent()->get_introduction_text();
+        }
 
-        $this->publication_category_tree = new PublicationCategoriesTree($this);
+        return $this->introductionText;
+    }
 
-        $publication_renderer = ContentObjectPublicationListRenderer :: factory(
+    /**
+     *
+     * @return string
+     */
+    public function renderIntroduction()
+    {
+        $course_settings_controller = CourseSettingsController :: get_instance();
+
+        if ($course_settings_controller->get_course_setting(
+            $this->get_course(),
+            \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
+        {
+            return $this->get_parent()->display_introduction_text($this->getIntroductionText());
+        }
+    }
+
+    public function renderCategories($renderedPublications)
+    {
+        $publicationCategoryTree = new PublicationCategoriesTree($this);
+
+        $html = array();
+
+        $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
+
+        $categoryId = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
+
+        if (! $categoryId || $categoryId == 0)
+        {
+            $categoryName = Translation :: get('Root');
+        }
+        else
+        {
+            $category = $this->retrieve_category($categoryId);
+            if ($category)
+            {
+                $categoryName = $category->get_name();
+            }
+            else
+            {
+                $categoryName = Translation :: get('Root');
+            }
+        }
+
+        $html[] = '<div id="tree">';
+        $html[] = $publicationCategoryTree->render_as_tree();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="publication_renderer col-md-9 col-lg-10 col-sm-12">';
+        $html[] = $renderedPublications;
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isCourseAdmin()
+    {
+        if (! isset($this->isCourseAdmin))
+        {
+            $this->isCourseAdmin = $this->get_course()->is_course_admin($this->get_user());
+        }
+
+        return $this->isCourseAdmin;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderPublications()
+    {
+        $publicationRenderer = ContentObjectPublicationListRenderer :: factory(
             $this->get_parent()->get_browser_type(),
             $this);
 
@@ -93,6 +226,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         if (method_exists($this->get_parent(), 'get_additional_form_actions'))
         {
             $additional_form_actions = $this->get_parent()->get_additional_form_actions();
+
             foreach ($additional_form_actions as $form_action)
             {
                 $actions->add_form_action($form_action);
@@ -125,112 +259,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                     false));
         }
 
-        $publication_renderer->set_actions($actions);
-        if ($this->get_parent()->get_browser_type() == ContentObjectPublicationListRenderer :: TYPE_GALLERY ||
-             $this->get_parent()->get_browser_type() == ContentObjectPublicationListRenderer :: TYPE_SLIDESHOW)
-        {
-            $messages = Session :: retrieve(Application :: PARAM_MESSAGES);
-            $messages[Application :: PARAM_MESSAGE_TYPE][] = NotificationMessage :: TYPE_WARNING;
-            $messages[Application :: PARAM_MESSAGE][] = Translation :: get('BrowserWarningPreview');
+        $publicationRenderer->set_actions($actions);
 
-            Session :: register(Application :: PARAM_MESSAGES, $messages);
-        }
-
-        $html = array();
-
-        $html[] = $this->render_header();
-
-        $content = array();
-
-        $course_settings_controller = CourseSettingsController :: get_instance();
-
-        if ($course_settings_controller->get_course_setting(
-            $this->get_course(),
-            \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
-        {
-            $html[] = $this->get_parent()->display_introduction_text($this->introduction_text);
-        }
-
-        $html[] = $this->buttonToolbarRenderer->render();
-
-        $html[] = '<div class="publication_container row">';
-
-        if ($this->get_parent() instanceof Categorizable)
-        {
-            $cat_id = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
-
-            if (! $cat_id || $cat_id == 0)
-            {
-                $cat_name = Translation :: get('Root');
-            }
-            else
-            {
-                $category = $this->retrieve_category($cat_id);
-                if ($category)
-                {
-                    $cat_name = $category->get_name();
-                }
-                else
-                {
-                    $cat_name = Translation :: get('Root');
-                }
-            }
-            // $html[] = '<div style="color: #797268; font-weight: bold;">' . Translation :: get('CurrentCategory') . ':
-            // ' .
-            // $cat_name . '</div><br />';
-
-            // $html[] = '<div class="panel panel-default">';
-            // $html[] = '<div class="panel-heading">';
-            // $html[] = Translation :: get('CurrentCategory') . ': ' . $cat_name;
-            // $html[] = '</div>';
-            // $html[] = '<div class="panel-body">';
-
-            $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
-            // $html[] = '<div id="tree_menu_hide_container" class="tree_menu_hide_container" style="float: right;' .
-            // 'overflow: auto; ">';
-            // $html[] = '<a id="tree_menu_action_hide" class="tree_menu_hide" href="#">' . Translation ::
-            // get('ShowAll') .
-            // '</a>';
-            // $html[] = '</div>';
-            $html[] = '<div id="tree">';
-            $html[] = $this->publication_category_tree->render_as_tree();
-            $html[] = '</div>';
-            $html[] = '</div>';
-            // $html[] = '</div>';
-            //
-            // $html[] = '</div>';
-        }
-
-        $content[] = $publication_renderer->as_html();
-
-        if (method_exists($this->get_parent(), 'show_additional_information'))
-        {
-            $html[] = $this->get_parent()->show_additional_information($this);
-        }
-
-        if ($this->get_publication_count() > 0 &&
-             $this->get_parent()->get_tool_registration()->get_section_type() == CourseSection :: TYPE_DISABLED)
-        {
-            $html[] = Display :: warning_message(Translation :: get('ToolInvisible'));
-        }
-
-        if ($this->get_parent() instanceof Categorizable)
-        {
-            $columnClasses = 'col-md-9 col-lg-10 col-sm-12';
-        }
-        else
-        {
-            $columnClasses = 'col-xs-12';
-        }
-
-        $html[] = '<div class="publication_renderer ' . $columnClasses . '">';
-        $html[] = implode(PHP_EOL, $content);
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = $this->render_footer();
-
-        return implode(PHP_EOL, $html);
+        return $publicationRenderer->as_html();
     }
 
     /**
@@ -378,7 +409,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $commonActions->addButton($publishActions);
             }
 
-            if ($this->is_course_admin)
+            if ($this->isCourseAdmin())
             {
                 $commonActions->addButton(
                     new Button(
@@ -392,7 +423,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         Button :: DISPLAY_ICON_AND_LABEL));
             }
 
-            if ($this->is_course_admin && $this->get_parent() instanceof Categorizable)
+            if ($this->isCourseAdmin() && $this->get_parent() instanceof Categorizable)
             {
                 $commonActions->addButton(
                     new Button(
@@ -406,7 +437,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $course_settings_controller = CourseSettingsController :: get_instance();
 
-            if (! $this->introduction_text && $this->is_course_admin && $course_settings_controller->get_course_setting(
+            if (! $this->getIntroductionText() && $this->isCourseAdmin() && $course_settings_controller->get_course_setting(
                 $this->get_course(),
                 CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT))
             {
@@ -433,7 +464,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $publicationType = $this->get_publication_type();
             $publicationsActions = array();
 
-            if ($this->is_course_admin)
+            if ($this->isCourseAdmin())
             {
                 $publicationsActions[] = new SubButton(
                     Translation :: get('AllPublications'),
@@ -489,16 +520,16 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $browser_types = $this->get_parent()->get_available_browser_types();
 
-            $browserTypeActions = new DropdownButton(
-                Translation :: get(
-                    $this->get_parent()->get_browser_type() . 'View',
-                    null,
-                    Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('View/' . $this->get_parent()->get_browser_type()));
-            $toolActions->addButton($browserTypeActions);
-
             if (count($browser_types) > 1)
             {
+                $browserTypeActions = new DropdownButton(
+                    Translation :: get(
+                        $this->get_parent()->get_browser_type() . 'View',
+                        null,
+                        Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('View/' . $this->get_parent()->get_browser_type()));
+                $toolActions->addButton($browserTypeActions);
+
                 foreach ($browser_types as $browser_type)
                 {
                     if ($this->get_parent()->get_browser_type() != $browser_type)
@@ -737,7 +768,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $type = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE);
         if (! $type)
         {
-            if ($this->is_course_admin)
+            if ($this->isCourseAdmin())
             {
                 $type = \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL;
             }
