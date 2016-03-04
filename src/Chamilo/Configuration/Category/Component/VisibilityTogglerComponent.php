@@ -47,7 +47,13 @@ class VisibilityTogglerComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $bool = $this->toggle_category_visibility($id);
+                if(!$this->get_parent()->allowed_to_change_category_visibility($id))
+                {
+                    $bool = false;
+                    continue;
+                }
+
+                $bool &= $this->toggle_category_visibility($id);
             }
 
             if (count($ids) == 1)

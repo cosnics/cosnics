@@ -1103,6 +1103,7 @@ class CourseGroupForm extends FormValidator
         $this->rights = array();
         $this->rights[] = WeblcmsRights :: VIEW_RIGHT;
         $this->rights[] = WeblcmsRights :: ADD_RIGHT;
+        $this->rights[] = WeblcmsRights :: MANAGE_CATEGORIES_RIGHT;
 
         $course_group = $this->course_group;
         $course_code = $course_group->get_course_code();

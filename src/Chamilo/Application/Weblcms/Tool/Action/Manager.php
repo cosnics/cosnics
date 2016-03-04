@@ -59,11 +59,13 @@ abstract class Manager extends Application implements NoContextComponent
      * @param $right int
      * @param ContentObjectPublication $publication
      *
-     * @return boolean True if the current user has the right
+     * @param null $category_id
+     *
+     * @return bool True if the current user has the right
      */
-    public function is_allowed($right, $publication = null)
+    public function is_allowed($right, $publication = null, $category_id = null)
     {
-        return $this->get_parent()->is_allowed($right, $publication);
+        return $this->get_parent()->is_allowed($right, $publication, $category_id);
     }
 
     /**
