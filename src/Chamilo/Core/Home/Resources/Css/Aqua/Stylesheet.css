@@ -400,7 +400,8 @@ div.general_mode {
 
 .portal-action {
 	margin: 0px 3px;
-	color: dimgray;
+	color: black;
+	opacity: 0.5;
 }
 
 .portal-nav-tabs {
@@ -415,4 +416,8 @@ div.general_mode {
 .portal-nav-tabs li.active a {
 	border-radius: 0px;
 	border-top: 1px solid white;
+}
+
+.portal-block .panel-title {
+	color: #555555;
 }

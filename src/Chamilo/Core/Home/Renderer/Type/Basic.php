@@ -172,63 +172,64 @@ class Basic extends Renderer
         }
         $html[] = '</ul>';
 
-//         if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
-//         {
-//             $style = (! $userHomeAllowed && ! $generalMode && $user->is_platform_admin()) ? ' style="display:block;"' : '';
+        // if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
+        // {
+        // $style = (! $userHomeAllowed && ! $generalMode && $user->is_platform_admin()) ? ' style="display:block;"' :
+        // '';
 
-//             $html[] = '<div id="tab_actions" ' . $style . '>';
+        // $html[] = '<div id="tab_actions" ' . $style . '>';
 
-//             if ($userHomeAllowed || $generalMode)
-//             {
-//                 $html[] = '<a class="addTab" href="#"><img src="' . htmlspecialchars(
-//                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddTab')) . '" />&nbsp;' .
-//                      htmlspecialchars(Translation :: get('NewTab')) . '</a>';
-//                 $html[] = '<a class="addColumn" href="#"><img src="' . htmlspecialchars(
-//                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddColumn')) . '" />&nbsp;' .
-//                      htmlspecialchars(Translation :: get('NewColumn')) . '</a>';
-//                 $html[] = '<a class="addEl" href="#"><img src="' . htmlspecialchars(
-//                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddBlock')) . '" />&nbsp;' .
-//                      htmlspecialchars(Translation :: get('NewBlock')) . '</a>';
+        // if ($userHomeAllowed || $generalMode)
+        // {
+        // $html[] = '<a class="addTab" href="#"><img src="' . htmlspecialchars(
+        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddTab')) . '" />&nbsp;' .
+        // htmlspecialchars(Translation :: get('NewTab')) . '</a>';
+        // $html[] = '<a class="addColumn" href="#"><img src="' . htmlspecialchars(
+        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddColumn')) . '" />&nbsp;' .
+        // htmlspecialchars(Translation :: get('NewColumn')) . '</a>';
+        // $html[] = '<a class="addEl" href="#"><img src="' . htmlspecialchars(
+        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddBlock')) . '" />&nbsp;' .
+        // htmlspecialchars(Translation :: get('NewBlock')) . '</a>';
 
-//                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
+        // $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
 
-//                 if ($homeUserIdentifier != '0')
-//                 {
-//                     $html[] = '<a onclick="return confirm(\'' .
-//                          Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' .
-//                          $redirect->getUrl() . '"><img src="' . htmlspecialchars(
-//                             Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Reset')) . '" />&nbsp;' .
-//                          htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
-//                 }
-//             }
+        // if ($homeUserIdentifier != '0')
+        // {
+        // $html[] = '<a onclick="return confirm(\'' .
+        // Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' .
+        // $redirect->getUrl() . '"><img src="' . htmlspecialchars(
+        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Reset')) . '" />&nbsp;' .
+        // htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
+        // }
+        // }
 
-//             if (! $generalMode && $user->is_platform_admin())
-//             {
-//                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME));
+        // if (! $generalMode && $user->is_platform_admin())
+        // {
+        // $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME));
 
-//                 $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
-//                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Configure')) . '" />&nbsp;' .
-//                      htmlspecialchars(Translation :: get('ConfigureDefault')) . '</a>';
-//             }
-//             elseif ($generalMode && $user->is_platform_admin())
-//             {
-//                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL));
+        // $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
+        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Configure')) . '" />&nbsp;' .
+        // htmlspecialchars(Translation :: get('ConfigureDefault')) . '</a>';
+        // }
+        // elseif ($generalMode && $user->is_platform_admin())
+        // {
+        // $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL));
 
-//                 $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
+        // $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
 
-//                 $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
-//                     Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Home')) . '" />&nbsp;' .
-//                      htmlspecialchars(Translation :: get($title)) . '</a>';
-//             }
+        // $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
+        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Home')) . '" />&nbsp;' .
+        // htmlspecialchars(Translation :: get($title)) . '</a>';
+        // }
 
-//             $html[] = '</div>';
-//         }
+        // $html[] = '</div>';
+        // }
 
         foreach ($tabs as $tabKey => $tab)
         {
-            $html[] = '<div class="row portal-tab" data-element-id="' . $tab->get_id() . '" style="display: ' . (((! isset(
-                $currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) || $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') .
-                 ';">';
+            $html[] = '<div class="row portal-tab" data-element-id="' . $tab->get_id() . '" style="display: ' .
+                 (((! isset($currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) ||
+                 $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') . ';">';
 
             $columns = $this->getElements(Column :: class_name(), $tab->get_id());
 
