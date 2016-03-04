@@ -1,0 +1,11 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\admin
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Tussenbeheerder"
+BrowserComponent = "Cursuslijst"
+CreatorComponent = "Instellen"
+EntityComponent = "Tussenbeheerders"
+TargetComponent = "Rechten"
+TypeCategory = "Weblcms Extensions"
