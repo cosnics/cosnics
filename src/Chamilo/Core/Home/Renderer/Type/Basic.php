@@ -224,9 +224,9 @@ class Basic extends Renderer
             $html[] = '</div>';
         }
 
-        $html[] = '<div style="font-size: 0px; clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';
-        $html[] = '<div style="clear: both; height: 0px; line-height: 0px;">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
 
         foreach ($tabs as $tabKey => $tab)
         {
