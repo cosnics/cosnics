@@ -17,105 +17,6 @@ div.manage ul.toolbar li, div.manage ul.toolbar_horizontal li {
 	display: inline;
 }
 
-div.portal_row {
-	text-align: justify;
-	clear: both;
-	min-height: 5px;
-}
-
-div.portal_column { /*padding:15px;*/
-	text-align: justify;
-	float: left;
-	min-height: 5px;
-}
-
-div.portal-block {
-	background-color: #f6f6f6;
-	text-align: justify;
-	/*margin-bottom: 35px;*/
-	margin: 0px 0px 1em 0px;
-	padding: 15px;
-	background-position: 15px 15px;
-	background-repeat: no-repeat;
-	clear: both;
-	position: relative;
-}
-
-div.portal-block div.title {
-	font-family: Ubuntu, verdana, sans-serif;
-	font-weight: bold;
-	font-size: 16px;
-	width: 100%;
-	margin-bottom: 10px;
-	color: #565656;
-	clear: both;
-	position: relative;
-	cursor: move;
-	line-height: 16px;
-}
-
-div.portal-block div.title a {
-	display: none;
-	float: right;
-	font-weight: normal;
-	font-size: 11px;
-	text-decoration: none;
-	color: #000066;
-	cursor: pointer;
-	margin-left: 4px;
-}
-
-div.portal-block div.title input.block-title {
-	padding-top: 1px;
-	padding-right: 2px;
-	padding-bottom: 1px;
-	padding-left: 2px;
-	border: 1px dotted black;
-	background-color: #FAF1E3;
-}
-
-div.portal-block div.description {
-	width: 100%;
-	clear: both;
-}
-
-div.portal-block div.description_contains {
-	width: 100%;
-	border-bottom: 1px dotted #D3D3D3;
-	padding-bottom: 0.3em;
-	margin-bottom: 0.3em;
-	clear: both;
-}
-
-div.portal-block div.extra {
-	width: 100%;
-	clear: both;
-}
-
-div.portal-block div.extra div.more {
-	float: left;
-}
-
-div.portal-block div.extra div.forum {
-	float: right;
-}
-
-div.portal-block-badge {
-	background-color: white;
-	border: 0 none;
-	bottom: 0px;
-	color: white;
-	/* 	font-family: iconFont; */
-	/* 	font-size: 16px; */
-	line-height: 16px;
-	position: absolute;
-	right: 17px;
-	width: 36px;
-	height: 21px;
-	padding-top: 5px;
-	text-align: center;
-}
-
 div.empty_portal_column {
 	background-color: #faf1e3;
 	margin: 0px 0px 1em 0px;
@@ -488,4 +389,30 @@ div.general_mode {
 	z-index: 20000000;
 	margin: 0px -1%;
 	text-transform: uppercase;
+}
+
+/******************
+ * BOOTSTRAP HOME *
+ ******************/
+.portal-action-hidden {
+	display: none;
+}
+
+.portal-action {
+	margin: 0px 3px;
+	color: dimgray;
+}
+
+.portal-nav-tabs {
+	margin-left: -15px;
+	margin-right: -15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	background-color: #F5F5F5;
+	margin-bottom: 15px;
+}
+
+.portal-nav-tabs li.active a {
+	border-radius: 0px;
+	border-top: 1px solid white;
 }
