@@ -61,7 +61,7 @@ body {
 /****************************
  * SPECIFIC BOOTSTRAP FIXES *
  ****************************/
-body h3:first-of-type {
+body h3#page-title {
 	margin-top: 0;
 	font-size: 18px;
 	font-weight: bold;
