@@ -235,6 +235,13 @@ div.deleteColumn {
 	margin-right: auto;
 }
 
+span.remove-tab {
+	opacity: 0.75;
+	margin-left: 5px;
+	margin-right: -5px;
+	font-size: 11px;
+}
+
 /*****************************************************
  *  STYLES NEEDED FOR JQUERY FUNCTIONALITY           *
  *****************************************************/
