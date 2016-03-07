@@ -12,7 +12,7 @@ $(function() {
     }
 
     $(document).ready(function() {
-        $(document).on('click', '.portal-nav-tabs li:not(.active,.portal-actions)', showTab);
+        $(document).on('click', '.portal-nav-tabs li.portal-nav-tab:not(.active)', showTab);
     });
 
 });
