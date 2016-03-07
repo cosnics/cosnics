@@ -421,3 +421,13 @@ div.general_mode {
 .portal-block .panel-title {
 	color: #555555;
 }
+
+.portal-nav-tabs .btn-action-toolbar {
+	margin-bottom: 0px;
+}
+
+.portal-nav-tabs .btn-action-toolbar .btn {
+	border: 0px solid #F5F5F5;
+	background-color: transparent;
+	padding: 10px 15px;
+}

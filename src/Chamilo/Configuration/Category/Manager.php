@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Configuration\Category;
 
-use Chamilo\Configuration\Category\Interfaces\CategorySupport;
 use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
 use Chamilo\Configuration\Category\Interfaces\ImpactViewSupport;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -120,10 +119,11 @@ abstract class Manager extends Application
     }
 
     /**
+     *
      * @return Application | CategorySupport
      */
     public function get_parent()
     {
-        return parent::get_parent();
+        return parent :: get_parent();
     }
 }

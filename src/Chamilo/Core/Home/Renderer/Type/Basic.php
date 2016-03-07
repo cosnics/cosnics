@@ -16,6 +16,12 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 /**
  *
@@ -144,19 +150,23 @@ class Basic extends Renderer
         {
             $tab_id = $tab->get_id();
 
+            $listItem = array();
+
+            $listItem[] = '<li';
+
             if (($tab_id == $currentTabIdentifier) || (count($tabs) == 1) ||
                  (! isset($currentTabIdentifier) && $tabKey == 0))
             {
-                $class = 'active';
-            }
-            else
-            {
-                $class = '';
+                $listItem[] = 'class="active"';
             }
 
-            $html[] = '<li class="' . $class . '" id="tab_select_' . $tab->get_id() . '"><a class="tabTitle" href="' .
-                 htmlspecialchars($this->get_home_tab_viewing_url($tab)) . '">' . htmlspecialchars($tab->getTitle()) .
-                 '</a>';
+            $listItem[] = 'id="tab_select_' . $tab->get_id() . '"';
+            $listItem[] = '>';
+
+            $html[] = implode(' ', $listItem);
+
+            $html[] = '<a class="tabTitle" href="' . htmlspecialchars($this->get_home_tab_viewing_url($tab)) . '">' .
+                 htmlspecialchars($tab->getTitle()) . '</a>';
 
             $isUser = $this->get_user() instanceof User;
             $homeAllowed = $isUser && ($userHomeAllowed || ($this->get_user()->is_platform_admin()) && $generalMode);
@@ -170,66 +180,80 @@ class Basic extends Renderer
 
             $html[] = '</li>';
         }
+
+        if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
+        {
+            $buttonToolBar = new ButtonToolBar();
+
+            $style = (! $userHomeAllowed && ! $generalMode && $user->is_platform_admin()) ? ' style="display:block;"' : '';
+
+            if ($userHomeAllowed || $generalMode)
+            {
+                $splitDropdownButton = new SplitDropdownButton(
+                    Translation :: get('NewBlock'),
+                    new BootstrapGlyph('plus'),
+                    '#');
+
+                $buttonToolBar->addItem($splitDropdownButton);
+
+                $splitDropdownButton->addSubButton(
+                    new SubButton(Translation :: get('NewColumn'), null, '#', SubButton :: DISPLAY_LABEL));
+                $splitDropdownButton->addSubButton(
+                    new SubButton(Translation :: get('NewTab'), null, '#', SubButton :: DISPLAY_LABEL));
+
+                // $html[] = '<a class="addTab" href="#"><img src="' . htmlspecialchars(
+                // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddTab')) . '" />&nbsp;' .
+                // htmlspecialchars(Translation :: get('NewTab')) . '</a>';
+                // $html[] = '<a class="addColumn" href="#"><img src="' . htmlspecialchars(
+                // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddColumn')) . '" />&nbsp;' .
+                // htmlspecialchars() . '</a>';
+                // $html[] = '<a class="addEl" href="#"><img src="' . htmlspecialchars(
+                // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddBlock')) . '" />&nbsp;' .
+                // htmlspecialchars() . '</a>';
+
+                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
+
+                if ($homeUserIdentifier != '0')
+                {
+                    $splitDropdownButton->addSubButton(
+                        new SubButton(Translation :: get('ResetHomepage'), null, '#', SubButton :: DISPLAY_LABEL, true));
+
+                    // $html[] = '<a onclick="return confirm(\'' .
+                    // Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' .
+                    // $redirect->getUrl() . '"><img src="' . htmlspecialchars(
+                    // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Reset')) . '" />&nbsp;' .
+                    // htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
+                }
+            }
+
+            if (! $generalMode && $user->is_platform_admin())
+            {
+                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME));
+
+                $buttonToolBar->addItem(
+                    new Button(Translation :: get('ConfigureDefault'), new BootstrapGlyph('wrench'), $redirect->getUrl()));
+            }
+            elseif ($generalMode && $user->is_platform_admin())
+            {
+                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL));
+
+                $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
+
+                $buttonToolBar->addItem(
+                    new Button(Translation :: get($title), new BootstrapGlyph('home'), $redirect->getUrl()));
+            }
+
+            $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+            $html[] = '<li class="pull-right">' . $buttonToolBarRenderer->render() . '</li>';
+        }
+
         $html[] = '</ul>';
-
-        // if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
-        // {
-        // $style = (! $userHomeAllowed && ! $generalMode && $user->is_platform_admin()) ? ' style="display:block;"' :
-        // '';
-
-        // $html[] = '<div id="tab_actions" ' . $style . '>';
-
-        // if ($userHomeAllowed || $generalMode)
-        // {
-        // $html[] = '<a class="addTab" href="#"><img src="' . htmlspecialchars(
-        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddTab')) . '" />&nbsp;' .
-        // htmlspecialchars(Translation :: get('NewTab')) . '</a>';
-        // $html[] = '<a class="addColumn" href="#"><img src="' . htmlspecialchars(
-        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddColumn')) . '" />&nbsp;' .
-        // htmlspecialchars(Translation :: get('NewColumn')) . '</a>';
-        // $html[] = '<a class="addEl" href="#"><img src="' . htmlspecialchars(
-        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddBlock')) . '" />&nbsp;' .
-        // htmlspecialchars(Translation :: get('NewBlock')) . '</a>';
-
-        // $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
-
-        // if ($homeUserIdentifier != '0')
-        // {
-        // $html[] = '<a onclick="return confirm(\'' .
-        // Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' .
-        // $redirect->getUrl() . '"><img src="' . htmlspecialchars(
-        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Reset')) . '" />&nbsp;' .
-        // htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
-        // }
-        // }
-
-        // if (! $generalMode && $user->is_platform_admin())
-        // {
-        // $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME));
-
-        // $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
-        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Configure')) . '" />&nbsp;' .
-        // htmlspecialchars(Translation :: get('ConfigureDefault')) . '</a>';
-        // }
-        // elseif ($generalMode && $user->is_platform_admin())
-        // {
-        // $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL));
-
-        // $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
-
-        // $html[] = '<a href="' . $redirect->getUrl() . '"><img src="' . htmlspecialchars(
-        // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Home')) . '" />&nbsp;' .
-        // htmlspecialchars(Translation :: get($title)) . '</a>';
-        // }
-
-        // $html[] = '</div>';
-        // }
 
         foreach ($tabs as $tabKey => $tab)
         {
-            $html[] = '<div class="row portal-tab" data-element-id="' . $tab->get_id() . '" style="display: ' .
-                 (((! isset($currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) ||
-                 $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') . ';">';
+            $html[] = '<div class="row portal-tab" data-element-id="' . $tab->get_id() . '" style="display: ' . (((! isset(
+                $currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) || $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') .
+                 ';">';
 
             $columns = $this->getElements(Column :: class_name(), $tab->get_id());
 
