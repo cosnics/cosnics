@@ -155,8 +155,7 @@ class Basic extends Renderer
             }
 
             $html[] = '<li class="' . $class . '" id="tab_select_' . $tab->get_id() . '"><a class="tabTitle" href="' .
-                 htmlspecialchars($this->get_home_tab_viewing_url($tab)) . '">' . htmlspecialchars($tab->getTitle()) .
-                 '</a>';
+                 htmlspecialchars($this->get_home_tab_viewing_url($tab)) . '">' . htmlspecialchars($tab->getTitle());
 
             $isUser = $this->get_user() instanceof User;
             $homeAllowed = $isUser && ($userHomeAllowed || ($this->get_user()->is_platform_admin()) && $generalMode);
@@ -164,9 +163,12 @@ class Basic extends Renderer
 
             if ($isUser && $homeAllowed && ! $isAnonymous)
             {
-                $html[] = '<a class="deleteTab"><img src="' . htmlspecialchars(
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/DeleteTab')) . '" /></a>';
+                $html[] = '<span class="glyphicon glyphicon-remove remove-tab"></span>';
+//                $html[] = ' <img src="' . htmlspecialchars(
+//                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/DeleteTab')) . '" />';
             }
+
+            $html[] = '</a>';
 
             $html[] = '</li>';
         }
