@@ -19,11 +19,4 @@ interface UserPictureProviderInterface
      * @return mixed
      */
     public function downloadUserPicture(User $user);
-
-    /**
-     * Returns the name for the picture provider
-     *
-     * @return string
-     */
-    public static function getName();
 }

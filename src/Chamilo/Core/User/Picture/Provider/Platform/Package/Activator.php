@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\User\Picture\Provider\DefaultUserPictureProvider\Package;
+namespace Chamilo\Core\User\Picture\Provider\Platform\Package;
 
 use Chamilo\Configuration\Package\NotAllowed;
 

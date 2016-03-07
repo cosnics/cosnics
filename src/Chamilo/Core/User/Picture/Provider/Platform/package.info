@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
 	<package>
-		<name>Default User Picture Provider</name>
+		<name>Platform User Picture Provider</name>
 		<code>UserPictureProvider</code>
-		<context>Chamilo\Core\User\Picture\Provider\DefaultUserPictureProvider</context>
+		<context>Chamilo\Core\User\Picture\Provider\Platform</context>
 		<type>Chamilo\Core\User\Picture\Provider</type>
 		<category>core</category>
 		<authors />
