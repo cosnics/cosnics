@@ -33,7 +33,7 @@ class PreviewComponent extends Manager
         $html = array();
 
         $html[] = parent :: render_header();
-        $html[] = '<br /><div style="border: 1px solid #FFD89B;" class="warning-banner">';
+        $html[] = '<br /><div style="border: 1px solid #FFD89B;" class="row warning-banner bg-warning text-warning">';
         $html[] = Translation :: get('PreviewModeWarning');
         $html[] = '</div>';
 

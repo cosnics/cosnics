@@ -12,16 +12,14 @@ use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -103,6 +101,10 @@ class Basic extends Renderer
         }
     }
 
+    /**
+     *
+     * @return integer
+     */
     private function determineHomeUserIdentifier()
     {
         if (! isset($this->homeUserIdentifier))
@@ -129,10 +131,13 @@ class Basic extends Renderer
         return $this->homeUserIdentifier;
     }
 
+    /**
+     *
+     * @see \Chamilo\Core\Home\Renderer\Renderer::render()
+     */
     public function render()
     {
         $currentTabIdentifier = $this->getCurrentTabIdentifier();
-        $homeUserIdentifier = $this->determineHomeUserIdentifier();
         $user = $this->get_user();
 
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
@@ -140,12 +145,41 @@ class Basic extends Renderer
 
         if (($generalMode && $user instanceof User && $user->is_platform_admin()))
         {
-            $html[] = '<div class="general_mode">' . Translation :: get('HomepageInGeneralMode') . '</div>';
+            $html[] = '<div class="row danger-banner text-danger bg-danger">' .
+                 Translation :: get('HomepageInGeneralMode') . '</div>';
         }
 
+        $html[] = $this->renderTabs();
+        $html[] = $this->renderPackageContainer();
+        $html[] = $this->renderContent();
+
+        if ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)))
+        {
+            $html[] = '<script type="text/javascript" src="' .
+                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
+        }
+
+        $html[] = '<script type="text/javascript" src="' .
+             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' . '"></script>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderTabs()
+    {
         $tabs = $this->getElements(Tab :: class_name());
+        $currentTabIdentifier = $this->getCurrentTabIdentifier();
+        $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+
+        $html = array();
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
+
         foreach ($tabs as $tabKey => $tab)
         {
             $tab_id = $tab->get_id();
@@ -160,13 +194,12 @@ class Basic extends Renderer
                 $listItem[] = 'class="active"';
             }
 
-            $listItem[] = 'id="tab_select_' . $tab->get_id() . '"';
+            $listItem[] = ' data-tab-id="' . $tab->get_id() . '"';
             $listItem[] = '>';
 
             $html[] = implode(' ', $listItem);
 
-            $html[] = '<a class="tabTitle" href="' . htmlspecialchars($this->get_home_tab_viewing_url($tab)) . '">' .
-                 htmlspecialchars($tab->getTitle()) . '</a>';
+            $html[] = '<a class="portal-action-tab-title" href="#">' . htmlspecialchars($tab->getTitle());
 
             $isUser = $this->get_user() instanceof User;
             $homeAllowed = $isUser && ($userHomeAllowed || ($this->get_user()->is_platform_admin()) && $generalMode);
@@ -174,9 +207,7 @@ class Basic extends Renderer
 
             if ($isUser && $homeAllowed && ! $isAnonymous)
             {
-                $html[] = '<span class="glyphicon glyphicon-remove remove-tab"></span>';
-//                $html[] = ' <img src="' . htmlspecialchars(
-//                    Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/DeleteTab')) . '" />';
+                $html[] = '<span class="glyphicon glyphicon-remove portal-action-tab-delete"></span>';
             }
 
             $html[] = '</a>';
@@ -184,48 +215,206 @@ class Basic extends Renderer
             $html[] = '</li>';
         }
 
+        $html[] = $this->renderButtons();
+
+        $html[] = '</ul>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderPackageContainer()
+    {
+        $html = array();
+
+        $html[] = '<div class="row portal-package-container hidden">';
+
+        // Packages List
+        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="panel panel-primary">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<div class="pull-right">';
+        $html[] = '<a href="#" class="portal-action portal-package-hide"><span class="glyphicon glyphicon-remove"></span></a>';
+        $html[] = '</div>';
+        $html[] = '<h3 class="panel-title">' . Translation :: get('BrowseBlocks') . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
+
+        $html[] = '<form class="form-inline package-search">';
+        $html[] = '<div class="form-group">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>';
+        $html[] = '<input type="text" class="form-control" id="portal-package-name" placeholder="' .
+             Translation :: get('SearchForWidgets') . '">';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="form-group">';
+        $html[] = '<div class="input-group">';
+        $html[] = '<select class="form-control" id="portal-package-context">';
+        $html[] = '</select>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</form>';
+
+        $html[] = '<div class="row portal-package-blocks">';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderContent()
+    {
+        $tabs = $this->getElements(Tab :: class_name());
+        $currentTabIdentifier = $this->getCurrentTabIdentifier();
+
+        $html = array();
+
+        foreach ($tabs as $tabKey => $tab)
+        {
+            $isCurrentTab = ((! isset($currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) ||
+                 $currentTabIdentifier == $tab->get_id());
+
+            $html[] = '<div class="row portal-tab ' . ($isCurrentTab ? 'show' : 'hidden') . '" data-element-id="' .
+                 $tab->get_id() . '">';
+
+            $columns = $this->getElements(Column :: class_name(), $tab->get_id());
+
+            foreach ($columns as $columnKey => $column)
+            {
+                $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' portal-column" data-tab-id="' .
+                     $tab->get_id() . '" data-element-id="' . $column->get_id() . '">';
+
+                $blocks = $this->getElements(Block :: class_name(), $column->get_id());
+
+                foreach ($blocks as $block)
+                {
+                    $blockRendition = BlockRendition :: factory($this, $block);
+
+                    if ($blockRendition->isVisible())
+                    {
+                        $html[] = $blockRendition->toHtml();
+                    }
+                }
+
+                $html[] = $this->renderEmptyColumn($column->get_id(), (count($blocks) > 0));
+
+                $html[] = '</div>';
+            }
+
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @param integer $columnId
+     * @param boolean $isEmpty
+     * @return string
+     */
+    public function renderEmptyColumn($columnId, $isEmpty = false)
+    {
+        $html = array();
+
+        $html[] = '<div class="panel panel-default portal-column-empty ' . ($isEmpty ? 'hidden' : 'show') . '">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<div class="pull-right">';
+
+        $glyph = new BootstrapGlyph('remove');
+        $delete_text = Translation :: get('Delete');
+
+        $html[] = '<a href="#" class="portal-action portal-action-column-delete" data-column-id="' . $columnId .
+             ' title="' . $delete_text . '">';
+        $html[] = $glyph->render() . '</a>';
+
+        $html[] = '</div>';
+        $html[] = '<h3 class="panel-title">' . Translation :: get('EmptyColumnTitle') . '</h3>';
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+        $html[] = Translation :: get('EmptyColumnBody');
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderButtons()
+    {
+        $user = $this->get_user();
+        $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+        $homeUserIdentifier = $this->determineHomeUserIdentifier();
+
+        $html = array();
+
         if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
         {
             $buttonToolBar = new ButtonToolBar();
-
-            $style = (! $userHomeAllowed && ! $generalMode && $user->is_platform_admin()) ? ' style="display:block;"' : '';
 
             if ($userHomeAllowed || $generalMode)
             {
                 $splitDropdownButton = new SplitDropdownButton(
                     Translation :: get('NewBlock'),
                     new BootstrapGlyph('plus'),
-                    '#');
+                    '#',
+                    SubButton :: DISPLAY_ICON_AND_LABEL,
+                    false,
+                    'portal-add-block');
 
                 $buttonToolBar->addItem($splitDropdownButton);
 
                 $splitDropdownButton->addSubButton(
-                    new SubButton(Translation :: get('NewColumn'), null, '#', SubButton :: DISPLAY_LABEL));
+                    new SubButton(
+                        Translation :: get('NewColumn'),
+                        null,
+                        '#',
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'portal-add-column'));
                 $splitDropdownButton->addSubButton(
-                    new SubButton(Translation :: get('NewTab'), null, '#', SubButton :: DISPLAY_LABEL));
-
-                // $html[] = '<a class="addTab" href="#"><img src="' . htmlspecialchars(
-                // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddTab')) . '" />&nbsp;' .
-                // htmlspecialchars(Translation :: get('NewTab')) . '</a>';
-                // $html[] = '<a class="addColumn" href="#"><img src="' . htmlspecialchars(
-                // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddColumn')) . '" />&nbsp;' .
-                // htmlspecialchars() . '</a>';
-                // $html[] = '<a class="addEl" href="#"><img src="' . htmlspecialchars(
-                // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/AddBlock')) . '" />&nbsp;' .
-                // htmlspecialchars() . '</a>';
+                    new SubButton(
+                        Translation :: get('NewTab'),
+                        null,
+                        '#',
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'portal-add-tab'));
 
                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
 
                 if ($homeUserIdentifier != '0')
                 {
                     $splitDropdownButton->addSubButton(
-                        new SubButton(Translation :: get('ResetHomepage'), null, '#', SubButton :: DISPLAY_LABEL, true));
-
-                    // $html[] = '<a onclick="return confirm(\'' .
-                    // Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES) . '\');" href="' .
-                    // $redirect->getUrl() . '"><img src="' . htmlspecialchars(
-                    // Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/Reset')) . '" />&nbsp;' .
-                    // htmlspecialchars(Translation :: get('ResetHomepage')) . '</a>';
+                        new SubButton(
+                            Translation :: get('ResetHomepage'),
+                            null,
+                            '#',
+                            SubButton :: DISPLAY_LABEL,
+                            true,
+                            false,
+                            'portal-reset'));
                 }
             }
 
@@ -242,68 +431,24 @@ class Basic extends Renderer
 
                 $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
 
-                $buttonToolBar->addItem(
-                    new Button(Translation :: get($title), new BootstrapGlyph('home'), $redirect->getUrl()));
+                if ($splitDropdownButton)
+                {
+                    $splitDropdownButton->addSubButton(
+                        new SubButton(
+                            Translation :: get($title),
+                            new BootstrapGlyph('home'),
+                            $redirect->getUrl(),
+                            SubButton :: DISPLAY_LABEL));
+                }
+                else
+                {
+                    $buttonToolBar->addItem(
+                        new Button(Translation :: get($title), new BootstrapGlyph('home'), $redirect->getUrl()));
+                }
             }
 
             $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-            $html[] = '<li class="pull-right">' . $buttonToolBarRenderer->render() . '</li>';
-        }
-
-        $html[] = '</ul>';
-
-        foreach ($tabs as $tabKey => $tab)
-        {
-            $html[] = '<div class="row portal-tab" data-element-id="' . $tab->get_id() . '" style="display: ' . (((! isset(
-                $currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) || $currentTabIdentifier == $tab->get_id()) ? 'block' : 'none') .
-                 ';">';
-
-            $columns = $this->getElements(Column :: class_name(), $tab->get_id());
-
-            foreach ($columns as $columnKey => $column)
-            {
-                $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' portal-block" data-tab-id="' .
-                     $tab->get_id() . '" data-element-id="' . $column->get_id() . '">';
-
-                $blocks = $this->getElements(Block :: class_name(), $column->get_id());
-
-                foreach ($blocks as $block)
-                {
-                    $blockRendition = BlockRendition :: factory($this, $block);
-
-                    if ($blockRendition->isVisible())
-                    {
-                        $html[] = $blockRendition->toHtml();
-                    }
-                }
-
-                $footer_style = (count($blocks) > 0) ? 'style="display:none;"' : '';
-                $html[] = '<div class="empty_portal_column" ' . $footer_style . '>';
-                $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
-                $html[] = '<div class="deleteColumn"><a href="#"><img src="' .
-                     htmlspecialchars(Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/RemoveColumn')) .
-                     '" /></a></div>';
-                // $html[] = '<div class="clearfix"></div>';
-                $html[] = '</div>';
-
-                $html[] = '</div>';
-            }
-
-            $html[] = '</div>';
-            // $html[] = '<div class="clearfix"></div>';
-        }
-
-        // $html[] = '<div class="clearfix"></div>';
-
-        if ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)))
-        {
-            $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
-        }
-        else
-        {
-            $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' . '"></script>';
+            $html[] = '<li class="pull-right portal-actions">' . $buttonToolBarRenderer->render() . '</li>';
         }
 
         return implode(PHP_EOL, $html);

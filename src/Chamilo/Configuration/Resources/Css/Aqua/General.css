@@ -170,12 +170,8 @@ body {
 	color: #006600;
 }
 
-.warning-banner {
+.warning-banner, .danger-banner {
 	border-bottom: 1px solid #ffd89b;
-	background-color: #fff8aa;
-	color: #996900;
-	position: relative;
-	margin: -10px -10px 20px -10px;
 	padding: 10px;
 	z-index: 9999;
 	text-align: center;
@@ -183,17 +179,16 @@ body {
 	text-transform: uppercase;
 }
 
-.warning-banner .actions {
+.danger-banner {
+	border-bottom: 1px solid #FF9B9D;
+}
+
+.warning-banner .actions, .danger-banner .actions {
 	float: right;
 }
 
-.warning-banner .action-bar {
+.warning-banner .action-bar, .danger-banner .action-bar {
 	float: left;
-}
-
-.warning-emulator
-{
-	margin: 0px;
 }
 
 /*****************************************************

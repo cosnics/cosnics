@@ -303,20 +303,16 @@ class BlockRendition
                 $glyphVisible = new BootstrapGlyph('chevron-down');
                 $textVisible = Translation :: get('ShowBlock');
 
-                $html[] = '<a href="' . htmlspecialchars($this->getBlockVisibilityLink($this->getBlock())) .
-                     '" class="portal-action show-block' .
-                     (! $this->getBlock()->isVisible() ? '' : ' portal-action-hidden') . '" title="' . $textVisible .
-                     '">';
+                $html[] = '<a href="#" class="portal-action portal-action-block-show' .
+                     (! $this->getBlock()->isVisible() ? '' : ' hidden') . '" title="' . $textVisible . '">';
                 $html[] = $glyphVisible->render();
                 $html[] = '</a>';
 
                 $glyphVisible = new BootstrapGlyph('chevron-up');
                 $textVisible = Translation :: get('HideBlock');
 
-                $html[] = '<a href="' . htmlspecialchars($this->getBlockVisibilityLink($this->getBlock())) .
-                     '" class="portal-action hide-block' .
-                     (! $this->getBlock()->isVisible() ? ' portal-action-hidden' : '') . '" title="' . $textVisible .
-                     '">';
+                $html[] = '<a href="#" class="portal-action portal-action-block-hide' .
+                     (! $this->getBlock()->isVisible() ? ' hidden' : '') . '" title="' . $textVisible . '">';
                 $html[] = $glyphVisible->render();
                 $html[] = '</a>';
             }
@@ -326,8 +322,8 @@ class BlockRendition
                 $glyph = new BootstrapGlyph('wrench');
                 $configure_text = Translation :: get('Configure');
 
-                $html[] = '<a href="' . htmlspecialchars($this->getBlockConfiguringLink($this->getBlock())) .
-                     '" class="portal-action configure-block" title="' . $configure_text . '">';
+                $html[] = '<a href="#" class="portal-action portal-action-block-configure" title="' . $configure_text .
+                     '">';
                 $html[] = $glyph->render() . '</a>';
             }
 
@@ -336,8 +332,7 @@ class BlockRendition
                 $glyph = new BootstrapGlyph('remove');
                 $delete_text = Translation :: get('Delete');
 
-                $html[] = '<a href="' . htmlspecialchars($this->getBlockDeletingLink($this->getBlock())) .
-                     '" class="portal-action delete-block" title="' . $delete_text . '">';
+                $html[] = '<a href="#" class="portal-action portal-action-block-delete" title="' . $delete_text . '">';
                 $html[] = $glyph->render() . '</a>';
             }
         }
