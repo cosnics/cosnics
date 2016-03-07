@@ -1097,6 +1097,7 @@ $(function() {
         $(document).on('click', "a.portal-add-block:not(.dropdown-toggle)", displayBlockScreen);
         $(document).on('click', "a.portal-package-hide", hideBlockScreen);
         $(document).on('click', ".portal-package-blocks a", __NEWaddBlock);
+        $(document).on('click', "a.portal-add-column", __NEWaddColumn);
     }
 
     function displayBlockScreen(e, ui) {
@@ -1192,4 +1193,35 @@ $(function() {
         });
     }
 
+    function __NEWaddColumn(event, interface) {
+        var tab, tabId;
+
+        tab = $(".portal-tab:visible");
+        tabId = tab.data('element-id');
+
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'ColumnAdd',
+            'tab' : tabId
+        };
+
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters,
+            async : false
+        }).success(function(json) {
+            var columnHtml, newWidths;
+
+            newWidths = json.properties.width;
+
+            // $("div.portal_column", tab).each(function(i) {
+            // var newWidth = newWidths[this.id] + '%';
+            // this.style.width = newWidth;
+            // });
+
+            tab.append(json.properties.html);
+        });
+
+    }
 });

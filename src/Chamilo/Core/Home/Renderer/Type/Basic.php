@@ -191,7 +191,11 @@ class Basic extends Renderer
             if (($tab_id == $currentTabIdentifier) || (count($tabs) == 1) ||
                  (! isset($currentTabIdentifier) && $tabKey == 0))
             {
-                $listItem[] = 'class="active"';
+                $listItem[] = 'class="portal-nav-tab active"';
+            }
+            else
+            {
+                $listItem[] = 'class="portal-nav-tab"';
             }
 
             $listItem[] = ' data-tab-id="' . $tab->get_id() . '"';
