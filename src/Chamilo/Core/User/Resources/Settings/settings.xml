@@ -63,6 +63,9 @@
 				</options>
 			</setting>
 			<setting name="personal_data_placeholder" field="text" default="???" />
+			<setting name="user_picture_provider" field="select" default="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
+				<options type="dynamic" source="getUserPictureProviders" />
+			</setting>
 		</category>
 		<category name="personalisation">
 			<setting name="allow_user_change_platform_timezone" field="checkbox" default="1">

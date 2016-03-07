@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User;
 
+use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
@@ -27,5 +28,16 @@ class SettingsConnector
     {
         $date_format = '%e-%m-%Y';
         return array(\Strftime($date_format, Manager :: get_date_terms_and_conditions_last_modified()));
+    }
+
+    /**
+     * Returns the available user picture providers
+     *
+     * @return array
+     */
+    public function getUserPictureProviders()
+    {
+        $userPictureProviderFactory = new UserPictureProviderFactory();
+        return $userPictureProviderFactory->getAvailablePictureProviders();
     }
 }
