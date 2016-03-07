@@ -63,7 +63,7 @@
 				</options>
 			</setting>
 			<setting name="personal_data_placeholder" field="text" default="???" />
-			<setting name="user_picture_provider" field="select" default="Chamilo\Core\User\Picture\Provider\DefaultUserPictureProvider\UserPictureProvider">
+			<setting name="user_picture_provider" field="select" default="Chamilo\Core\User\Picture\Provider\Platform\UserPictureProvider">
 				<options type="dynamic" source="getUserPictureProviders" />
 			</setting>
 		</category>

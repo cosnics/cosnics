@@ -52,7 +52,8 @@ class UserPictureProviderFactory
 
             if (class_exists($pictureProviderClass))
             {
-                $pictureProviders[$pictureProviderClass] = $pictureProviderClass::getName();
+                $pictureProviders[$pictureProviderClass] =
+                    Translation::getInstance()->getTranslation('TypeName', array(), $package['context']);
             }
         }
 

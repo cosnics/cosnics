@@ -1,10 +1,9 @@
 <?php
 
-namespace Chamilo\Core\User\Picture\Provider\DefaultUserPictureProvider;
+namespace Chamilo\Core\User\Picture\Provider\Platform;
 
 use Chamilo\Core\User\Picture\UserPictureProviderInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -39,15 +38,5 @@ class UserPictureProvider implements UserPictureProviderInterface
         $response->send();
 
         exit;
-    }
-
-    /**
-     * Returns the name for the picture provider
-     *
-     * @return string
-     */
-    public static function getName()
-    {
-        return Translation::getInstance()->getTranslation('DefaultUserPictureProvider', array(), 'Chamilo\Core\User');
     }
 }
