@@ -67,7 +67,7 @@ abstract class Manager extends Application
         $page->setViewMode(Page :: VIEW_MODE_HEADERLESS);
 
         $html[] = $page->getHeader()->toHtml();
-        $html[] = '<div class="warning-banner">';
+        $html[] = '<div class="row warning-banner bg-warning text-warning">';
 
         $translation = Translation :: get('PreviewModeWarning', null, $this->get_content_object()->package() . '\Display');
 

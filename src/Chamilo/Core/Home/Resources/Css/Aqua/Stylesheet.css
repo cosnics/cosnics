@@ -136,13 +136,6 @@ div.deleteColumn {
 	margin-right: auto;
 }
 
-span.remove-tab {
-	opacity: 0.75;
-	margin-left: 5px;
-	margin-right: -5px;
-	font-size: 11px;
-}
-
 /*****************************************************
  *  STYLES NEEDED FOR JQUERY FUNCTIONALITY           *
  *****************************************************/
@@ -401,10 +394,6 @@ div.general_mode {
 /******************
  * BOOTSTRAP HOME *
  ******************/
-.portal-action-hidden {
-	display: none;
-}
-
 .portal-action {
 	margin: 0px 3px;
 	color: black;
@@ -437,4 +426,40 @@ div.general_mode {
 	border: 0px solid #F5F5F5;
 	background-color: transparent;
 	padding: 10px 15px;
+}
+
+.portal-action-tab-delete {
+	opacity: 0.75;
+	margin-left: 10px;
+	font-size: 11px;
+}
+
+.portal-action.portal-package-hide {
+	color: white;
+}
+
+.portal-package-blocks a.btn {
+	overflow: hidden;
+	text-align: left;
+}
+
+.portal-package-blocks a.btn img {
+	margin-right: 5px;
+}
+
+#portal-package-context img {
+	margin-right: 15px;
+}
+
+#portal-package-context option {
+	padding: 5px;
+}
+
+.package-search {
+	margin-bottom: 5px;
+}
+
+.portal-package-blocks a.btn {
+	margin-top: 10px;
+	text-decoration: none;
 }
