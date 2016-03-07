@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Glossary">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Glossary</translation>
+			<translation language="nl">Woordenlijst</translation>
+			<translation language="fr">Glossaire</translation>
+			<translation language="de">Glossar</translation>
+		</variable>
+	</translations>
+</template>
