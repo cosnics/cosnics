@@ -290,6 +290,8 @@ class Basic extends Renderer
 
         $html = array();
 
+        $html[] = '<div class="portal-tabs">';
+
         foreach ($tabs as $tabKey => $tab)
         {
             $isCurrentTab = ((! isset($currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) ||
@@ -325,6 +327,8 @@ class Basic extends Renderer
             $html[] = '</div>';
         }
 
+        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -338,17 +342,12 @@ class Basic extends Renderer
     {
         $html = array();
 
-        $html[] = '<div class="panel panel-default portal-column-empty ' . ($isEmpty ? 'hidden' : 'show') . '">';
+        $html[] = '<div class="panel panel-warning portal-column-empty ' . ($isEmpty ? 'hidden' : 'show') . '">';
         $html[] = '<div class="panel-heading">';
         $html[] = '<div class="pull-right">';
-
-        $glyph = new BootstrapGlyph('remove');
-        $delete_text = Translation :: get('Delete');
-
         $html[] = '<a href="#" class="portal-action portal-action-column-delete" data-column-id="' . $columnId .
-             ' title="' . $delete_text . '">';
-        $html[] = $glyph->render() . '</a>';
-
+             '" title="' . Translation :: get('Delete') . '">';
+        $html[] = '<span class="glyphicon glyphicon-remove"></span></a>';
         $html[] = '</div>';
         $html[] = '<h3 class="panel-title">' . Translation :: get('EmptyColumnTitle') . '</h3>';
         $html[] = '</div>';
