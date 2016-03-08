@@ -14,9 +14,8 @@ interface UserPictureProviderInterface
     /**
      * Downloads the user picture
      *
-     * @param User $user
-     *
-     * @return mixed
+     * @param User $targetUser
+     * @param User $requestUser
      */
-    public function downloadUserPicture(User $user);
+    public function downloadUserPicture(User $targetUser, User $requestUser);
 }

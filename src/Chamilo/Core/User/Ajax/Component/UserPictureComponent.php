@@ -5,7 +5,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Picture\UserPictureProviderFactory;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  *
@@ -29,7 +28,7 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
         $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::get_instance());
         $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
 
-        return $userPictureProvider->downloadUserPicture($user);
+        return $userPictureProvider->downloadUserPicture($user, $this->getUser());
     }
 
     /**

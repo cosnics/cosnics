@@ -14,15 +14,14 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class UserPictureProvider implements UserPictureProviderInterface
 {
     /**
-     * Returns the user picture
+     * Downloads the user picture
      *
-     * @param User $user
-     *
-     * @return mixed
+     * @param User $targetUser
+     * @param User $requestUser
      */
-    public function downloadUserPicture(User $user)
+    public function downloadUserPicture(User $targetUser, User $requestUser)
     {
-        $file = $user->get_full_picture_path();
+        $file = $targetUser->get_full_picture_path();
 
         $type = exif_imagetype($file);
         $mime = image_type_to_mime_type($type);
