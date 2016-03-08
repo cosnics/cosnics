@@ -4,7 +4,7 @@ $(function() {
         var tab = $(this);
         var tabId = tab.data('tab-id');
 
-        $('.portal-nav-tabs li').removeClass('active');
+        $('.portal-nav-tabs li.active').removeClass('active');
         tab.addClass('active');
 
         $('.portal-tab.show').switchClass('show', 'hidden');
