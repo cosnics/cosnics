@@ -211,7 +211,8 @@ class Basic extends Renderer
 
             if ($isUser && $homeAllowed && ! $isAnonymous)
             {
-                $html[] = '<span class="glyphicon glyphicon-remove portal-action-tab-delete"></span>';
+                $html[] = '<span class="glyphicon glyphicon-remove portal-action-tab-delete ' .
+                     (count($tabs) > 1 ? 'show' : 'hidden') . '"></span>';
             }
 
             $html[] = '</a>';
@@ -319,7 +320,7 @@ class Basic extends Renderer
                     }
                 }
 
-                $html[] = $this->renderEmptyColumn($column->get_id(), (count($blocks) > 0));
+                $html[] = $this->renderEmptyColumn($column->get_id(), (count($blocks) > 0), (count($columns) == 1));
 
                 $html[] = '</div>';
             }
@@ -338,15 +339,15 @@ class Basic extends Renderer
      * @param boolean $isEmpty
      * @return string
      */
-    public function renderEmptyColumn($columnId, $isEmpty = false)
+    public function renderEmptyColumn($columnId, $isEmpty = false, $isOnlyColumn = false)
     {
         $html = array();
 
         $html[] = '<div class="panel panel-warning portal-column-empty ' . ($isEmpty ? 'hidden' : 'show') . '">';
         $html[] = '<div class="panel-heading">';
         $html[] = '<div class="pull-right">';
-        $html[] = '<a href="#" class="portal-action portal-action-column-delete" data-column-id="' . $columnId .
-             '" title="' . Translation :: get('Delete') . '">';
+        $html[] = '<a href="#" class="portal-action portal-action-column-delete ' . ($isOnlyColumn ? 'hidden' : 'show') .
+             '" data-column-id="' . $columnId . '" title="' . Translation :: get('Delete') . '">';
         $html[] = '<span class="glyphicon glyphicon-remove"></span></a>';
         $html[] = '</div>';
         $html[] = '<h3 class="panel-title">' . Translation :: get('EmptyColumnTitle') . '</h3>';

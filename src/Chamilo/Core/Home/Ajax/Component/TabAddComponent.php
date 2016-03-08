@@ -64,7 +64,7 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $content[] = '<div class="panel panel-warning portal-column-empty show">';
         $content[] = '<div class="panel-heading">';
         $content[] = '<div class="pull-right">';
-        $content[] = '<a href="#" class="portal-action portal-action-column-delete" data-column-id="21" title="' .
+        $content[] = '<a href="#" class="portal-action portal-action-column-delete hidden" data-column-id="21" title="' .
              Translation :: get('Delete') . '">';
         $content[] = '<span class="glyphicon glyphicon-remove"></span></a>';
         $content[] = '</div>';

@@ -90,7 +90,7 @@ class ColumnAddComponent extends \Chamilo\Core\Home\Ajax\Manager
 
             $glyph = new BootstrapGlyph('remove');
 
-            $html[] = '<a href="#" class="portal-action portal-action-column-delete" data-column-id="' .
+            $html[] = '<a href="#" class="portal-action portal-action-column-delete show" data-column-id="' .
                  $newColumn->get_id() . ' title="' . Translation :: get('Delete') . '">';
             $html[] = $glyph->render() . '</a>';
 

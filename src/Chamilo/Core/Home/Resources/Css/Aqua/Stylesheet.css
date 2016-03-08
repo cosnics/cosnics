@@ -463,3 +463,7 @@ div.general_mode {
 	margin-top: 10px;
 	text-decoration: none;
 }
+
+.portal-action-tab-delete.show {
+	display: inline-block !important;
+}

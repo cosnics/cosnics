@@ -28,16 +28,16 @@ class TabDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
-        
-        if ($user_id === false)
+        $userId = DataManager :: determine_user_id();
+
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
+
         $tab = DataManager :: retrieve_by_id(Tab :: class_name(), intval($this->getPostDataValue(self :: PARAM_TAB)));
-        
-        if ($tab->getUserId() == $user_id && $tab->canBeDeleted())
+
+        if ($tab->getUserId() == $userId && $tab->canBeDeleted())
         {
             if ($tab->delete())
             {
