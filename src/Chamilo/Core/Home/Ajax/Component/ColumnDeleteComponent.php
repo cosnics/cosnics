@@ -28,18 +28,18 @@ class ColumnDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
-        
-        if ($user_id === false)
+        $userId = DataManager :: determine_user_id();
+
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
+
         $column = DataManager :: retrieve_by_id(
-            Column :: class_name(), 
+            Column :: class_name(),
             intval($this->getPostDataValue(self :: PARAM_COLUMN)));
-        
-        if ($column->getUserId() == $user_id)
+
+        if ($column->getUserId() == $userId)
         {
             if ($column->delete())
             {
