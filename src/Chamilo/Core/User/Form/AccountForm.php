@@ -197,7 +197,7 @@ class AccountForm extends FormValidator
         {
             $this->addElement('category', Translation :: get('ChangePassword'));
 
-            $password_requirements = Authentication :: factory($this->user->get_auth_source())->get_password_requirements();
+            $password_requirements = Authentication :: factory($this->user->get_auth_source())->getPasswordRequirements();
             if (! is_null($password_requirements))
             {
                 $this->add_warning_message('password_requirements', null, $password_requirements);
