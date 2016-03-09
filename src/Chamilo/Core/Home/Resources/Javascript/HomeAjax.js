@@ -38,6 +38,9 @@ $(function()
         $(document).on('click', ".portal-action-tab-delete", deleteTab);
         $(document).on('click', ".portal-action-block-show", showBlock);
         $(document).on('click', ".portal-action-block-hide", hideBlock);
+        
+        $(document).on('input', "#portal-package-name", filterComponents);
+        $(document).on('change', "#portal-package-context", filterComponents);
     }
     
     function getAvailableBlocks()
@@ -86,7 +89,7 @@ $(function()
         for ( var i in ordering)
         {
             var availablePackage = $('<option></option>');
-            availablePackage.attr('data-context', i);
+            availablePackage.attr('value', i);
             
             packageImage = $('<img />');
             packageImage.prop('src', availableBlocks[i].image);
@@ -134,7 +137,7 @@ $(function()
         }
     }
     
-    function addBlock(event, interface)
+    function addBlock(e, ui)
     {
         e.preventDefault();
         
@@ -167,7 +170,7 @@ $(function()
                 });
     }
     
-    function addColumn(event, interface)
+    function addColumn(e, ui)
     {
         e.preventDefault();
         
@@ -573,5 +576,34 @@ $(function()
             url : ajaxUri,
             data : parameters
         });
+    }
+    
+    function filterComponents(e, ui)
+    {
+        var searchText = $('#portal-package-name').val();
+        var searchContext = $('#portal-package-context').val();
+        
+        $('.portal-package-blocks div a.btn')
+                .each(
+                        function(i)
+                        {
+                            var component = $(this);
+                            var block = component.data('block');
+                            var title = component.prop('title');
+                            
+                            var isInSelectedContext = (searchContext.length == 0 || (searchContext.length > 0 && block
+                                    .indexOf(searchContext) != -1));
+                            var isTitleInQuery = (searchText.length == 0 || (searchText.length > 0 && title
+                                    .indexOf(searchText) != -1));
+                            
+                            if (isInSelectedContext && isTitleInQuery)
+                            {
+                                component.parent().show();
+                            }
+                            else
+                            {
+                                component.parent().hide();
+                            }
+                        });
     }
 });
