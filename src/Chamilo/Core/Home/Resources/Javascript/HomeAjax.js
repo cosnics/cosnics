@@ -14,6 +14,8 @@ $(function()
         
         bindPortalActions();
         makeColumnsResizable();
+        makeBlocksSortable();
+        makeTabsSortable();
     });
     
     function initialize()
@@ -474,5 +476,102 @@ $(function()
     {
         e.preventDefault();
         toggleBlock(this);
+    }
+    
+    function makeBlocksSortable()
+    {
+        try
+        {
+            $(".portal-column").sortable("destroy");
+        }
+        catch (error)
+        {
+        }
+        
+        $(".portal-column").sortable({
+            handle : '.panel-heading',
+            cancel : 'a,input',
+            opacity : 0.8,
+            forcePlaceholderSize : true,
+            cursor : 'move',
+            placeholder : 'portal-block-sortable-helper',
+            scroll : true,
+            connectWith : '.portal-column',
+            update : blocksSortableUpdate
+        });
+    }
+    
+    function blocksSortableUpdate(e, ui)
+    {
+        var column, order;
+        column = $(this).data('element-id');
+        order = $(this).sortable("serialize", {
+            key : "order[]",
+            attribute : "data-element-id",
+            expression : /([0-9]+)/
+        });
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'BlockSort',
+            'column' : column,
+            'order' : order
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters
+        });
+    }
+    
+    function makeTabsSortable()
+    {
+        try
+        {
+            $(".portal-nav-tabs").sortable("destroy");
+        }
+        catch (error)
+        {
+        }
+        
+        $(".portal-nav-tabs").sortable({
+            cancel : 'span.portal-action-tab-delete',
+            opacity : 0.8,
+            forcePlaceholderSize : true,
+            cursor : 'move',
+            placeholder : 'bg-info',
+            helper : function(event, element)
+            {
+                var tab = $(element);
+                tab.width(tab.width() + 2);
+                return tab;
+            },
+            scroll : true,
+            update : tabsSortableUpdate
+        });
+    }
+    
+    function tabsSortableUpdate(e, ui)
+    {
+        var column, order;
+        column = $(this).data('element-id');
+        order = $(this).sortable("serialize", {
+            key : "order[]",
+            attribute : "data-tab-id",
+            expression : /([0-9]+)/
+        });
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'TabSort',
+            'order' : order
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters
+        });
     }
 });

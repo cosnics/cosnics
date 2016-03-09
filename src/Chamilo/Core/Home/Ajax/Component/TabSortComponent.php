@@ -22,48 +22,33 @@ class TabSortComponent extends \Chamilo\Core\Home\Ajax\Manager
         return array(self :: PARAM_ORDER);
     }
 
-    public function get_tabs()
-    {
-        $element_data = explode('&', $this->getPostDataValue(self :: PARAM_ORDER));
-        $elements = array();
-        
-        foreach ($element_data as $element)
-        {
-            $element_split = explode('=', $element);
-            $elements[] = $element_split[1];
-        }
-        
-        return $elements;
-    }
-
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
         $user_id = DataManager :: determine_user_id();
-        
+
         if ($user_id === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
-        $tabs = $this->get_tabs();
-        
+
+        parse_str($this->getPostDataValue(self :: PARAM_ORDER), $tabs);
+
         $errors = 0;
-        $i = 1;
-        
-        foreach ($tabs as $tab_id)
+
+        foreach ($tabs[self :: PARAM_ORDER] as $sortOrder => $tabId)
         {
-            $tab = DataManager :: retrieve_by_id(Tab :: class_name(), intval($tab_id));
-            $tab->set_sort($i);
+            $tab = DataManager :: retrieve_by_id(Tab :: class_name(), intval($tabId));
+            $tab->setSort($sortOrder);
+
             if (! $tab->update())
             {
                 $errors ++;
             }
-            $i ++;
         }
-        
+
         if ($errors > 0)
         {
             JsonAjaxResult :: error(409, Translation :: get('OneOrMoreTabsNotUpdated'));

@@ -24,60 +24,43 @@ class BlockSortComponent extends \Chamilo\Core\Home\Ajax\Manager
         return array(self :: PARAM_COLUMN, self :: PARAM_ORDER);
     }
 
-    public function get_blocks()
-    {
-        $block_data = explode('&', $this->getPostDataValue(self :: PARAM_ORDER));
-        $blocks = array();
-        
-        foreach ($block_data as $block)
-        {
-            $block_split = explode('=', $block);
-            $blocks[] = $block_split[1];
-        }
-        
-        return $blocks;
-    }
-
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
-        
-        if ($user_id === false)
+        $userId = DataManager :: determine_user_id();
+
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
-        $column_data = explode('_', $this->getPostDataValue(self :: PARAM_COLUMN));
-        $blocks = $this->get_blocks();
-        
-        $column = DataManager :: retrieve_by_id(Column :: class_name(), intval($column_data[2]));
-        
-        if ($column->getUserId() == $user_id)
+
+        $columnId = $this->getPostDataValue(self :: PARAM_COLUMN);
+        parse_str($this->getPostDataValue(self :: PARAM_ORDER), $blocks);
+
+        $column = DataManager :: retrieve_by_id(Column :: class_name(), $columnId);
+
+        if ($column->getUserId() == $userId)
         {
             $errors = 0;
-            $i = 1;
-            
-            foreach ($blocks as $block_id)
+
+            foreach ($blocks[self :: PARAM_ORDER] as $sortOrder => $blockId)
             {
-                $block = DataManager :: retrieve_by_id(Block :: class_name(), intval($block_id));
-                
+                $block = DataManager :: retrieve_by_id(Block :: class_name(), intval($blockId));
+
                 if ($block)
                 {
                     $block->setParentId($column->get_id());
-                    $block->setSort($i);
-                    
+                    $block->setSort($sortOrder);
+
                     if (! $block->update())
                     {
                         $errors ++;
                     }
-                    
-                    $i ++;
                 }
             }
-            
+
             if ($errors > 0)
             {
                 JsonAjaxResult :: error(409, Translation :: get('OneOrMoreBlocksNotUpdated'));
