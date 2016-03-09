@@ -46,13 +46,23 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     {
         $content_object = $this->getObject();
 
+        $blockId = $this->getBlock()->getId();
+        $id = 'rss_' . $blockId;
+
         $html = array();
 
         $html[] = '<script type="text/javascript">';
         $html[] = '(function(){';
-        $html[] = '     var rssFeedRendererApp = angular.module(\'rssFeedRendererApp\', []);';
-        $html[] = '     rssFeedRendererApp.value(\'rssFeedUrl\', \'' . $content_object->get_url() . '\');';
-        $html[] = '     rssFeedRendererApp.value(\'numberOfEntries\', \'' . $content_object->get_number_of_entries() . '\');';
+        $html[] = '     try {';
+        $html[] = '         var rssFeedRendererApp' . $blockId . ' = angular.module(\'rssFeedRendererApp\')';
+        $html[] = '     } catch(e) {';
+        $html[] = '         var rssFeedRendererApp' . $blockId . ' = angular.module(\'rssFeedRendererApp\', []);';
+        $html[] = '     }';
+        $html[] = '     rssFeedRendererApp' . $blockId . '.value(\'rssFeedUrl\', \'' . $content_object->get_url() . '\');';
+        $html[] = '     rssFeedRendererApp' . $blockId . '.value(\'numberOfEntries\', \'' . $content_object->get_number_of_entries() . '\');';
+        $html[] = '     angular.element(\'#' . $id . '\').ready(function() {';
+        $html[] = '         angular.bootstrap(\'#' . $id . '\', [\'rssFeedRendererApp\']);';
+        $html[] = '     });';
         $html[] = '})();';
         $html[] = '</script>';
 
@@ -66,7 +76,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
             'Chamilo\Core\Repository\ContentObject\RssFeed',
             'Logo/' . Theme :: ICON_MINI);
 
-        $html[] = '<div ng-app="rssFeedRendererApp" ng-controller="MainController as main">';
+        $html[] = '<div id="' . $id . '" ng-controller="MainController as main">';
         $html[] = '<ul class="rss_feeds">';
 
         $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item"' . 'style="background-image: url(' .
