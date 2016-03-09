@@ -46,19 +46,20 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     {
         $content_object = $this->getObject();
 
-        $id = 'rss_' . $this->getBlock()->getId();
+        $blockId = $this->getBlock()->getId();
+        $id = 'rss_' . $blockId;
 
         $html = array();
 
         $html[] = '<script type="text/javascript">';
         $html[] = '(function(){';
         $html[] = '     try {';
-        $html[] = '         var rssFeedRendererApp = angular.module(\'rssFeedRendererApp\')';
+        $html[] = '         var rssFeedRendererApp' . $blockId . ' = angular.module(\'rssFeedRendererApp\')';
         $html[] = '     } catch(e) {';
-        $html[] = '         var rssFeedRendererApp = angular.module(\'rssFeedRendererApp\', []);';
+        $html[] = '         var rssFeedRendererApp' . $blockId . ' = angular.module(\'rssFeedRendererApp\', []);';
         $html[] = '     }';
-        $html[] = '     rssFeedRendererApp.value(\'rssFeedUrl\', \'' . $content_object->get_url() . '\');';
-        $html[] = '     rssFeedRendererApp.value(\'numberOfEntries\', \'' . $content_object->get_number_of_entries() . '\');';
+        $html[] = '     rssFeedRendererApp' . $blockId . '.value(\'rssFeedUrl\', \'' . $content_object->get_url() . '\');';
+        $html[] = '     rssFeedRendererApp' . $blockId . '.value(\'numberOfEntries\', \'' . $content_object->get_number_of_entries() . '\');';
         $html[] = '     angular.element(\'#' . $id . '\').ready(function() {';
         $html[] = '         angular.bootstrap(\'#' . $id . '\', [\'rssFeedRendererApp\']);';
         $html[] = '     });';
