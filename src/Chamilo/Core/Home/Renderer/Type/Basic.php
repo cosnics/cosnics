@@ -262,6 +262,7 @@ class Basic extends Renderer
         $html[] = '<div class="form-group">';
         $html[] = '<div class="input-group">';
         $html[] = '<select class="form-control" id="portal-package-context">';
+        $html[] = '<option value="">' . Translation :: get('AllPackages') . '</option>';
         $html[] = '</select>';
         $html[] = '</div>';
         $html[] = '</div>';
