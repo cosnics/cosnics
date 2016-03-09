@@ -34,6 +34,8 @@ $(function()
         $(document).on('click', ".portal-action-block-delete", deleteBlock);
         $(document).on('click', ".portal-action-column-delete", deleteColumn);
         $(document).on('click', ".portal-action-tab-delete", deleteTab);
+        $(document).on('click', ".portal-action-block-show", showBlock);
+        $(document).on('click', ".portal-action-block-hide", hideBlock);
     }
     
     function getAvailableBlocks()
@@ -57,11 +59,13 @@ $(function()
     
     function displayBlockScreen(e, ui)
     {
+        e.preventDefault();
         $(".portal-package-container").switchClass('hidden', 'show');
     }
     
     function hideBlockScreen(e, ui)
     {
+        e.preventDefault();
         $(".portal-package-container").switchClass('show', 'hidden');
     }
     
@@ -130,6 +134,8 @@ $(function()
     
     function addBlock(event, interface)
     {
+        e.preventDefault();
+        
         var column, columnId, order, isEmpty;
         
         column = $(".portal-tab:visible .portal-column:last");
@@ -161,6 +167,8 @@ $(function()
     
     function addColumn(event, interface)
     {
+        e.preventDefault();
+        
         var tab, tabId;
         
         tab = $(".portal-tab:visible");
@@ -197,6 +205,8 @@ $(function()
     
     function addTab(e, ui)
     {
+        e.preventDefault();
+        
         var parameters = {
             'application' : ajaxContext,
             'go' : 'TabAdd'
@@ -220,6 +230,8 @@ $(function()
     
     function deleteBlock(e, ui)
     {
+        e.preventDefault();
+        
         var block = $(this).parent().parent().parent();
         var blockId = block.data('element-id');
         var columnId = block.data('column-id');
@@ -247,6 +259,8 @@ $(function()
     
     function deleteColumn(e, ui)
     {
+        e.preventDefault();
+        
         var column = $(this).parent().parent().parent().parent();
         var columnId = column.data('element-id');
         var tabId = column.data('tab-id');
@@ -283,6 +297,8 @@ $(function()
     
     function deleteTab(e, ui)
     {
+        e.preventDefault();
+        
         var tab = $(this).parent().parent();
         var tabId = tab.data('tab-id');
         
@@ -338,7 +354,7 @@ $(function()
         }
         
         var containerWidth = $('.portal-tabs').width();
-        var gridWidth = ((containerWidth / 12) - 30);
+        var gridWidth = ((containerWidth + 30) / 12);
         
         $(".portal-column").resizable({
             handles : 'e',
@@ -352,6 +368,111 @@ $(function()
     
     function columnResizableStopped(e, ui)
     {
+        var column = $(this);
+        var columnId = column.data('element-id');
         
+        var proposedColumnWidth = getColumnGridValue(column.width());
+        var currentColumnWidth = column.data('element-width');
+        
+        var totalColumnWidth = determineTotalColumnWidth($('.portal-tab:visible').data('element-id'));
+        var proposedTotalColumnWidth = totalColumnWidth - currentColumnWidth + proposedColumnWidth;
+        
+        if (proposedTotalColumnWidth > 12)
+        {
+            proposedColumnWidth = proposedColumnWidth - (proposedTotalColumnWidth - 12);
+        }
+        
+        column.css({
+            width : "",
+            height : ""
+        });
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'ColumnWidth',
+            'column' : columnId,
+            'width' : proposedColumnWidth
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters
+        }).success(function(json)
+        {
+            if (json.result_code == 200)
+            {
+                column.removeClass(function(index, css)
+                {
+                    return (css.match(/(^|\s)col-md-\S+/g) || []).join(' ');
+                });
+                
+                column.addClass('col-md-' + proposedColumnWidth);
+            }
+        });
+    }
+    
+    function determineTotalColumnWidth(tabId)
+    {
+        var totalWidth = 0;
+        
+        $('.portal-tab[data-element-id="' + tabId + '"] .portal-column').each(function(i)
+        {
+            var currentColumn = $(this);
+            var currentWidth = currentColumn.data('element-width');
+            
+            totalWidth += currentWidth;
+        });
+        
+        return totalWidth;
+    }
+    
+    function getColumnGridValue(currentWidth)
+    {
+        var containerWidth = $('.portal-tabs').width();
+        var gridWidth = ((containerWidth + 30) / 12);
+        
+        return Math.round((currentWidth + 30) / gridWidth);
+    }
+    
+    function toggleBlock(blockNode)
+    {
+        var block = $(blockNode).parent().parent().parent();
+        var visibility = $('.portal-block-content', block).hasClass('hidden');
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'BlockVisibility',
+            'block' : block.data('element-id'),
+            'visibility' : visibility
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters
+        }).success(function(json)
+        {
+            if (json.result_code == 200)
+            {
+                $('.portal-block-content', block).toggleClass('hidden');
+                $('.panel-heading', block).toggleClass('panel-heading-without-content');
+                
+                $('.portal-action-block-show', block).toggleClass('hidden');
+                $('.portal-action-block-hide', block).toggleClass('hidden');
+            }
+        });
+    }
+    
+    function hideBlock(e, ui)
+    {
+        e.preventDefault();
+        toggleBlock(this);
+    }
+    
+    function showBlock(e, ui)
+    {
+        e.preventDefault();
+        toggleBlock(this);
     }
 });

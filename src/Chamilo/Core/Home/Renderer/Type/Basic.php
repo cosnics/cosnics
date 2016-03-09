@@ -306,7 +306,8 @@ class Basic extends Renderer
             foreach ($columns as $columnKey => $column)
             {
                 $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' portal-column" data-tab-id="' .
-                     $tab->get_id() . '" data-element-id="' . $column->get_id() . '">';
+                     $tab->get_id() . '" data-element-id="' . $column->get_id() . '" data-element-width="' .
+                     $column->getWidth() . '">';
 
                 $blocks = $this->getElements(Block :: class_name(), $column->get_id());
 

@@ -159,8 +159,8 @@ div.deleteColumn {
 }
 
 .ui-state-highlight {
-	border: 1px dashed #c0c0c0;
-	background-color: #F2F2F2;
+	border: 1px dashed #c0c0c0 !important;
+	background-color: #F2F2F2 !important;
 }
 
 /********************************************
@@ -398,6 +398,7 @@ div.general_mode {
 	margin: 0px 3px;
 	color: black;
 	opacity: 0.5;
+	text-decoration: none;
 }
 
 .portal-nav-tabs {
@@ -466,4 +467,9 @@ div.general_mode {
 
 .portal-action-tab-delete.show {
 	display: inline-block !important;
+}
+
+.portal-tabs .panel-heading-without-content {
+	border-bottom: 0px solid white;
+	border-radius: 3px;
 }

@@ -28,24 +28,21 @@ class ColumnWidthComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
-        
-        if ($user_id === false)
+        $userId = DataManager :: determine_user_id();
+
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
-        $column_data = explode('_', $this->getPostDataValue(self :: PARAM_COLUMN));
-        $column_width = $this->getPostDataValue(self :: PARAM_WIDTH);
-        $column_width = str_replace('%', '', $column_width);
-        $column_width = min(100, $column_width);
-        $column_width = $column_width . '%';
-        
-        $column = DataManager :: retrieve_by_id(Column :: class_name(), intval($column_data[2]));
-        
-        if ($column->getUserId() == $user_id)
+
+        $columnId = $this->getPostDataValue(self :: PARAM_COLUMN);
+        $columnWidth = $this->getPostDataValue(self :: PARAM_WIDTH);
+
+        $column = DataManager :: retrieve_by_id(Column :: class_name(), $columnId);
+
+        if ($column->getUserId() == $userId)
         {
-            $column->setWidth((int) $column_width);
+            $column->setWidth((int) $columnWidth);
             if ($column->update())
             {
                 JsonAjaxResult :: success();
