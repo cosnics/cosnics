@@ -120,8 +120,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements C
 
             $href = htmlspecialchars($this->getPublicationLink($publication));
             $title = htmlspecialchars($content_object->get_title());
-            $target = $this->getView() == self :: WIDGET_VIEW ? ' target="_blank" ' : '';
-            $link = '<a href="' . $href . '"' . $target . '>' . $title . '</a>';
+            $link = '<a href="' . $href . '">' . $title . '</a>';
 
             $data[] = array($icon, $link);
         }
@@ -131,11 +130,11 @@ class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements C
         $headers[] = new StaticTableColumn('');
 
         $table = new SortableTable($data, $headers, array(), 0, 20, SORT_ASC, 'announcements', false, false, false);
-//         $table->setAttribute('class', 'data_table invisible_table');
-//         $table->setColumnHeader(0, null, false);
-//         $table->getHeader()->setColAttributes(0, 'class="action invisible"');
-//         $table->setColumnHeader(1, null, false);
-//         $table->getHeader()->setColAttributes(1, 'class="invisible"');
+        // $table->setAttribute('class', 'data_table invisible_table');
+        // $table->setColumnHeader(0, null, false);
+        // $table->getHeader()->setColAttributes(0, 'class="action invisible"');
+        // $table->setColumnHeader(1, null, false);
+        // $table->getHeader()->setColAttributes(1, 'class="invisible"');
 
         $html[] = $table->toHtml();
 

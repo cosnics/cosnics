@@ -100,10 +100,6 @@ class Block extends \Chamilo\Core\Home\BlockRendition
         {
             return '';
         }
-        if ($view)
-        {
-            $this->setView($view);
-        }
 
         $html = array();
         $html[] = $this->renderHeader();
