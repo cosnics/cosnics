@@ -12,7 +12,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
     public function __construct($renderer, $block)
     {
-        parent :: __construct($renderer, $block, Translation :: get('Feeder'));
+        parent:: __construct($renderer, $block, Translation:: get('Feeder'));
     }
 
     public function isVisible()
@@ -29,7 +29,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     {
         $content_object = $this->getObject();
 
-        if($content_object)
+        if ($content_object)
         {
             return $content_object->get_title();
         }
@@ -46,49 +46,29 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     {
         $content_object = $this->getObject();
 
-        $blockId = $this->getBlock()->getId();
-        $id = 'rss_' . $blockId;
-
         $html = array();
-
-        $html[] = '<script type="text/javascript">';
-        $html[] = '(function(){';
-        $html[] = '     try {';
-        $html[] = '         var rssFeedRendererApp' . $blockId . ' = angular.module(\'rssFeedRendererApp\')';
-        $html[] = '     } catch(e) {';
-        $html[] = '         var rssFeedRendererApp' . $blockId . ' = angular.module(\'rssFeedRendererApp\', []);';
-        $html[] = '     }';
-        $html[] = '     rssFeedRendererApp' . $blockId . '.value(\'rssFeedUrl\', \'' . $content_object->get_url() . '\');';
-        $html[] = '     rssFeedRendererApp' . $blockId . '.value(\'numberOfEntries\', \'' . $content_object->get_number_of_entries() . '\');';
-        $html[] = '     angular.element(\'#' . $id . '\').ready(function() {';
-        $html[] = '         angular.bootstrap(\'#' . $id . '\', [\'rssFeedRendererApp\']);';
-        $html[] = '     });';
-        $html[] = '})();';
-        $html[] = '</script>';
-
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
-                 'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js');
 
         $target = $this->getLinkTarget();
         $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
-        $icon = Theme :: getInstance()->getImagePath(
+        $icon = Theme:: getInstance()->getImagePath(
             'Chamilo\Core\Repository\ContentObject\RssFeed',
-            'Logo/' . Theme :: ICON_MINI);
+            'Logo/' . Theme :: ICON_MINI
+        );
 
-        $html[] = '<div id="' . $id . '" ng-controller="MainController as main">';
+        $html[] = '<rss-feed-renderer rss-feed-url="' . $content_object->get_url() . '" number-of-entries="' .
+            $content_object->get_number_of_entries() . '">';
         $html[] = '<ul class="rss_feeds">';
 
         $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item"' . 'style="background-image: url(' .
-             $icon . ')">';
+            $icon . ')">';
         $html[] = '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';
         $html[] = '</li>';
 
         $html[] = '</ul>';
 
         $html[] = '<span style="font-weight: bold;" ng-show="main.feedEntries.length == 0">' .
-             Translation :: get('NoFeedsFound') . '</span>';
-        $html[] = '</div>';
+            Translation:: get('NoFeedsFound') . '</span>';
+        $html[] = '</rss-feed-renderer>';
 
         return implode(PHP_EOL, $html);
     }
