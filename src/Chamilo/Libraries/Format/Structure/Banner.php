@@ -105,7 +105,7 @@ class Banner
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_ADMIN_USER));
             $link = $redirect->getUrl();
 
-            $html[] = '<div class="row warning-banner bg-warning text-warning">' .
+            $html[] = '<div class="warning-banner bg-warning text-warning">' .
                  Translation :: get('LoggedInAsUser', null, \Chamilo\Core\User\Manager :: context()) . ' ' .
                  $this->getApplication()->getUser()->get_fullname() . ' <a href="' . $link . '">' .
                  Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES) . '</a></div>';
