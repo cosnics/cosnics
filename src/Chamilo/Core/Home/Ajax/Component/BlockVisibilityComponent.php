@@ -13,13 +13,14 @@ use Chamilo\Libraries\Platform\Translation;
 class BlockVisibilityComponent extends \Chamilo\Core\Home\Ajax\Manager
 {
     const PARAM_BLOCK = 'block';
+    const PARAM_VISIBILITY = 'visibility';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_BLOCK);
+        return array(self :: PARAM_BLOCK, self :: PARAM_VISIBILITY);
     }
 
     /*
@@ -27,28 +28,21 @@ class BlockVisibilityComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
-        
-        if ($user_id === false)
+        $userId = DataManager :: determine_user_id();
+
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
-        $block_data = explode('_', $this->getPostDataValue(self :: PARAM_BLOCK));
-        
-        $block = DataManager :: retrieve_by_id(Block :: class_name(), intval($block_data[2]));
-        
-        if ($block->getUserId() == $user_id)
+
+        $blockId = $this->getPostDataValue(self :: PARAM_BLOCK);
+
+        $block = DataManager :: retrieve_by_id(Block :: class_name(), $blockId);
+
+        if ($block->getUserId() == $userId)
         {
-            if ($block->isVisible())
-            {
-                $block->setVisibility(false);
-            }
-            else
-            {
-                $block->setVisibility(true);
-            }
-            
+            $block->setVisibility(($this->getPostDataValue(self :: PARAM_VISIBILITY) == 'false' ? false : true));
+
             if ($block->update())
             {
                 JsonAjaxResult :: success();

@@ -105,7 +105,7 @@ abstract class EventRenderer
 
         if (! $this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
         {
-            $eventClasses = ' event-container-hidden';
+            $eventClasses .= ' event-container-hidden';
         }
 
         return $eventClasses;

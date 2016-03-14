@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
-
 /**
  *
  * @package Chamilo\Libraries\Calendar\Renderer\Event\Type
@@ -10,64 +8,89 @@ use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class EventMonthRenderer extends EventRenderer
+class EventMonthRenderer extends EventTableRenderer
 {
 
     /**
-     * Gets a html representation of an event for a month renderer
      *
-     * @return string
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixDate()
      */
-    public function render()
+    public function showPrefixDate()
     {
         $configuration = $this->getConfiguration();
+        $startDate = $this->getEvent()->getStartDate();
 
+        return ($startDate >= $configuration->getStartDate() &&
+             $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
+             $startDate != $configuration->getStartDate());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPrefixSymbol()
+     */
+    public function showPrefixSymbol()
+    {
+        return ($this->getEvent()->getStartDate() < $this->getConfiguration()->getStartDate());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPrefixSymbol()
+     */
+    public function getPrefixSymbol()
+    {
+        return $this->getSymbol('chevron-left');
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixDate()
+     */
+    public function showPostfixDate()
+    {
+        $configuration = $this->getConfiguration();
+        $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
+
+        return ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
+             $startDate < $configuration->getStartDate());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::showPostfixSymbol()
+     */
+    public function showPostfixSymbol()
+    {
+        $configuration = $this->getConfiguration();
+        $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
+
+        return ($startDate != $endDate && $endDate > strtotime('+1 Day', $configuration->getStartDate()));
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::getPostfixSymbol()
+     */
+    public function getPostfixSymbol()
+    {
+        return $this->getSymbol('chevron-right');
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Event\Type\EventTableRenderer::isFadedEvent()
+     */
+    public function isFadedEvent()
+    {
         $startDate = $this->getEvent()->getStartDate();
         $endDate = $this->getEvent()->getEndDate();
 
         $fromDate = strtotime(date('Y-m-1', $this->getRenderer()->getDisplayTime()));
         $toDate = strtotime('-1 Second', strtotime('Next Month', $fromDate));
 
-        $eventClasses = $this->getEventClasses($startDate);
-        $sourceClasses = $this->getRenderer()->getLegend()->getSourceClasses(
-            $this->getEvent()->getSource(),
-            (($startDate < $fromDate || $startDate > $toDate) ? true : false));
-        $eventClasses = implode(' ', array($eventClasses, $sourceClasses));
-
-        $html = array();
-
-        $html[] = '<div class="' . $eventClasses . '">';
-        $html[] = '<div class="event-data">';
-
-        if ($startDate >= $configuration->getStartDate() &&
-             $startDate <= strtotime('+1 Day', $configuration->getStartDate()) &&
-             $startDate != $configuration->getStartDate())
-        {
-            $html[] = date('H:i', $startDate);
-        }
-        elseif ($startDate < $configuration->getStartDate())
-        {
-            $html[] = '&larr;';
-        }
-
-        $html[] = '<a href="' . $this->getEvent()->getUrl() . '">';
-        $html[] = htmlspecialchars($this->getEvent()->getTitle());
-        $html[] = '</a>';
-
-        if ($startDate != $endDate && $endDate < strtotime('+1 Day', $configuration->getStartDate()) &&
-             $startDate < $configuration->getStartDate())
-        {
-            $html[] = date('H:i', $endDate);
-        }
-        elseif ($startDate != $endDate && $endDate > strtotime('+1 Day', $configuration->getStartDate()))
-        {
-            $html[] = '&rarr;';
-        }
-
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return (($startDate < $fromDate || $startDate > $toDate) ? true : false);
     }
 }

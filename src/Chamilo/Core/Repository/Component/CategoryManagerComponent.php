@@ -296,4 +296,9 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
             $this->get_categories_condition($child_category->get_id(), $conditions);
         }
     }
+
+    public function allowed_to_add_category($parent_category_id)
+    {
+        return true;
+    }
 }

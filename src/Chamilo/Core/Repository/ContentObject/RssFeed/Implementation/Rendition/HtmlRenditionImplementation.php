@@ -10,29 +10,6 @@ use Chamilo\Libraries\Platform\Translation;
 class HtmlRenditionImplementation extends RenditionImplementation
 {
     /**
-     * Helper function to add javascript initialization
-     */
-    protected function addJavascriptInitialization()
-    {
-        $object = $this->get_content_object();
-
-        $html[] = '<script type="text/javascript">';
-        $html[] = '(function(){';
-        $html[] = '     var rssFeedRendererApp = angular.module(\'rssFeedRendererApp\', []);';
-        $html[] = '     rssFeedRendererApp.value(\'rssFeedUrl\', \'' . $object->get_url() . '\');';
-        $html[] = '     rssFeedRendererApp.value(\'numberOfEntries\', \'' . $object->get_number_of_entries() . '\');';
-        $html[] = '})();';
-        $html[] = '</script>';
-
-        $html[] = ResourceManager::get_instance()->get_resource_html(
-            Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
-            'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js'
-        );
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
      * Renders RSS Feeds
      *
      * @return string
@@ -42,15 +19,21 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $object = $this->get_content_object();
         $html = array();
 
+        $html[] = ResourceManager::get_instance()->get_resource_html(
+            Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
+            'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js'
+        );
+
+        $html[] = '<div ng-app="rssFeedRendererApp">';
+
         $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
         $html[] = '<div class="title">' . Translation :: get('Description') . '</div>';
         $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . htmlentities($object->get_url()) . '">' .
             htmlentities($object->get_url()) . '</a></div>';
         $html[] = '</div>';
 
-        $html[] = $this->addJavascriptInitialization();
-
-        $html[] = '<div ng-app="rssFeedRendererApp" ng-controller="MainController as main">';
+        $html[] = '<rss-feed-renderer rss-feed-url="' . $object->get_url() . '" number-of-entries="' .
+            $object->get_number_of_entries() . '">';
 
         $html[] = '<div class="content_object" ng-repeat="entry in main.feedEntries" style="background-image: url(' .
             Theme :: getInstance()->getCommonImagePath('ContentObject/RssFeedItem') . ');">';
@@ -59,6 +42,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="{{ entry.link }}">{{ entry.link }}</a></div>';
         $html[] = '</div>';
 
+        $html[] = '</rss-feed-renderer>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

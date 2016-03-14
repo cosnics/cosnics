@@ -18,13 +18,4 @@ class CalendarEventVisibilityComponent extends \Chamilo\Libraries\Calendar\Event
     {
         return DataManager :: retrieve(Visibility :: class_name(), new DataClassRetrieveParameters($condition));
     }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Event\Ajax\Component\CalendarEventVisibilityComponent::setVisibility()
-     */
-    public function setVisibility(\Chamilo\Libraries\Calendar\Event\Visibility $visibility = null, $data = array())
-    {
-        return $visibility;
-    }
 }

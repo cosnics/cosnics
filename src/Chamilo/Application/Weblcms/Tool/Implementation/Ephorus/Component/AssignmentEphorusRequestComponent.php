@@ -64,7 +64,7 @@ class AssignmentEphorusRequestComponent extends EphorusRequestComponent
             $request->set_process_type(Request :: PROCESS_TYPE_CHECK_AND_INVISIBLE);
             $request->set_course_id($this->get_course_id());
             $request->set_content_object_id($tracker->get_content_object_id());
-            $request->set_author_id($tracker->get_submitter_id());
+            $request->set_author_id($tracker->get_user_id());
             $request->set_request_user_id($this->get_user_id());
             $requests[] = $request;
         }

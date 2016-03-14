@@ -440,6 +440,9 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL,
                     false));
 
+            $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($toolActions);
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 

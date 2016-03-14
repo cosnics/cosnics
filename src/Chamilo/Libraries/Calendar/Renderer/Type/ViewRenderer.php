@@ -6,15 +6,19 @@ use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
+use Chamilo\Libraries\Calendar\Table\Calendar;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 
 /**
  *
@@ -272,7 +276,7 @@ abstract class ViewRenderer extends Renderer
         $currentRendererType = $displayParameters[self :: PARAM_TYPE];
 
         $button = new DropdownButton(
-            Translation :: get($currentRendererType . 'View', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get($currentRendererType . 'View'),
             new BootstrapGlyph('calendar'));
         $button->setDropdownClasses('dropdown-menu-right');
 
@@ -283,7 +287,7 @@ abstract class ViewRenderer extends Renderer
 
             $button->addSubButton(
                 new SubButton(
-                    Translation :: get($rendererType . 'View', null, Utilities :: COMMON_LIBRARIES),
+                    Translation :: get($rendererType . 'View'),
                     null,
                     $typeUrl->getUrl(),
                     SubButton :: DISPLAY_LABEL,
@@ -292,5 +296,39 @@ abstract class ViewRenderer extends Renderer
         }
 
         return $button;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function determineNavigationUrl()
+    {
+        $parameters = $this->getDataProvider()->getDisplayParameters();
+        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+
+        $redirect = new Redirect($parameters);
+        return $redirect->getUrl();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderViewActions()
+    {
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+
+        $buttonToolBar->addItem($this->renderTypeButton());
+
+        foreach ($this->getViewActions() as $viewAction)
+        {
+            $buttonToolBar->addItem($viewAction);
+        }
+
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        return $buttonToolbarRenderer->render();
     }
 }

@@ -60,5 +60,7 @@ class CategoryTable extends DataClassTable implements TableFormActionsSupport
                         array(Manager :: PARAM_ACTION => Manager :: ACTION_TOGGLE_CATEGORY_VISIBILITY)),
                     Translation :: get('ToggleVisibility', null, Utilities :: COMMON_LIBRARIES)));
         }
+
+        return $actions;
     }
 }

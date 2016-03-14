@@ -119,4 +119,9 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
     {
         return true;
     }
+
+    public function allowed_to_add_category($parent_category_id)
+    {
+        return true;
+    }
 }

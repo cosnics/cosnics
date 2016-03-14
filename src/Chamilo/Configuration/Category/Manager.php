@@ -117,4 +117,13 @@ abstract class Manager extends Application
 
         return array_merge($parameters, $this->get_application()->get_category_parameters());
     }
+
+    /**
+     *
+     * @return Application | CategorySupport
+     */
+    public function get_parent()
+    {
+        return parent :: get_parent();
+    }
 }

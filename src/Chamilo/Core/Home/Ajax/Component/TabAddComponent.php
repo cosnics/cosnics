@@ -5,7 +5,6 @@ use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -30,57 +29,64 @@ class TabAddComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
-        
-        if ($user_id === false)
+        $userId = DataManager :: determine_user_id();
+
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
-        
+
         $tab = new Tab();
         $tab->setTitle(Translation :: get('NewTab'));
-        $tab->setUserId($user_id);
+        $tab->setUserId($userId);
+
         if (! $tab->create())
         {
             JsonAjaxResult :: general_error(Translation :: get('TabNotAdded'));
         }
-        
+
         $column = new Column();
         $column->setParentId($tab->get_id());
         $column->setTitle(Translation :: get('NewColumn'));
-        $column->setSort('1');
-        $column->setWidth(100);
-        $column->setUserId($user_id);
+        $column->setWidth(12);
+        $column->setUserId($userId);
+
         if (! $column->create())
         {
             JsonAjaxResult :: general_error(Translation :: get('TabColumnNotAdded'));
         }
-        
-        $html[] = '<div class="portal_tab" id="portal_tab_' . $tab->getId() . '" style="display: none;">';
-        $html[] = '<div class="portal_column" id="portal_column_' . $column->getId() . '" style="width: ' .
-             $column->getWidth() . '%;">';
-        
-        $html[] = '<div class="empty_portal_column" style="display:block;">';
-        $html[] = htmlspecialchars(Translation :: get('EmptyColumnText'));
-        $img = Theme :: getInstance()->getImagePath('Chamilo\Core\Home', 'Action/RemoveColumn');
-        $html[] = '<div class="deleteColumn"><a href="#"><img src="' . $img . '" alt="' .
-             Translation :: get('RemoveColumn') . '"/></a></div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-        
-        $html[] = '</div>';
-        $html[] = '</div>';
-        
+
+        $content = array();
+
+        $content[] = '<div class="row portal-tab show" data-element-id="' . $tab->get_id() . '">';
+        $content[] = '<div class="col-xs-12 col-md-' . $column->get_id() . ' portal-column" data-tab-id="' .
+             $tab->get_id() . '" data-element-id="' . $column->get_id() . '">';
+        $content[] = '<div class="panel panel-warning portal-column-empty show">';
+        $content[] = '<div class="panel-heading">';
+        $content[] = '<div class="pull-right">';
+        $content[] = '<a href="#" class="portal-action portal-action-column-delete hidden" data-column-id="21" title="' .
+             Translation :: get('Delete') . '">';
+        $content[] = '<span class="glyphicon glyphicon-remove"></span></a>';
+        $content[] = '</div>';
+        $content[] = '<h3 class="panel-title">' . Translation :: get('EmptyColumnTitle') . '</h3>';
+        $content[] = '</div>';
+        $content[] = '<div class="panel-body">';
+        $content[] = Translation :: get('EmptyColumnBody');
+        $content[] = '</div>';
+        $content[] = '</div>';
+        $content[] = '</div>';
+        $content[] = '</div>';
+
         $title = array();
-        $title[] = '<li class="normal" id="tab_select_' . $tab->getId() . '">';
-        $title[] = '<a class="tabTitle" href="#">' . $tab->getTitle() . '</a>';
-        $title[] = '<a class="deleteTab"><img src="' . Theme :: getInstance()->getImagePath(
-            'Chamilo\Core\Home', 
-            'Action/DeleteTab') . '" /></a>';
+
+        $title[] = '<li class="portal-nav-tab active" data-tab-id="' . $tab->getId() . '">';
+        $title[] = '<a class="portal-action-tab-title" href="#">' . $tab->getTitle();
+        $title[] = '<span class="glyphicon glyphicon-remove portal-action-tab-delete"></span>';
+        $title[] = '</a>';
         $title[] = '</li>';
-        
+
         $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_HTML, implode(PHP_EOL, $html));
+        $result->set_property(self :: PROPERTY_HTML, implode(PHP_EOL, $content));
         $result->set_property(self :: PROPERTY_TITLE, implode(PHP_EOL, $title));
         $result->display();
     }

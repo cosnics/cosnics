@@ -28,7 +28,7 @@ class MoverComponent extends Manager
         $direction = Request :: get(self :: PARAM_DIRECTION);
         $user = $this->get_user();
 
-        if (! isset($user) || ! isset($category_id))
+        if (! isset($user) || ! isset($category_id) || !$this->get_parent()->allowed_to_edit_category($category_id))
         {
             throw new NotAllowedException();
         }

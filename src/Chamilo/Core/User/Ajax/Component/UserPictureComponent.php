@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\User\Ajax\Component;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Core\User\Picture\UserPictureProviderFactory;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  *
@@ -14,25 +16,29 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
 {
 
+    /**
+     * Runs this component
+     *
+     * @throws \Exception
+     */
     public function run()
     {
+        $user = $this->getUserFromRequest();
+
+        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::get_instance());
+        $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
+
+        return $userPictureProvider->downloadUserPicture($user, $this->getUser());
+    }
+
+    /**
+     * @return User
+     */
+    protected function getUserFromRequest()
+    {
         $userId = $this->getRequest()->query->get(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID);
-        $user = DataManager :: retrieve_by_id(\Chamilo\Core\User\Storage\DataClass\User :: class_name(), $userId);
+        $user = DataManager:: retrieve_by_id(\Chamilo\Core\User\Storage\DataClass\User:: class_name(), $userId);
 
-        $file = $user->get_full_picture_path();
-
-        $type = exif_imagetype($file);
-        $mime = image_type_to_mime_type($type);
-        $size = filesize($file);
-
-        $response = new StreamedResponse();
-        $response->headers->add(array('Content-Type' => $mime, 'Content-Length' => $size));
-        $response->setCallback(function () use($file)
-        {
-            readfile($file);
-        });
-
-        $response->send();
-        exit;
+        return $user;
     }
 }

@@ -113,19 +113,20 @@ class ContentObjectPublicationForm extends FormValidator
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $action
      * @param boolean $is_course_admin
+     *
      * @throws NoObjectSelectedException
      */
     public function __construct(User $user, $form_type, $publications, $course, $action, $is_course_admin)
     {
-        parent :: __construct('content_object_publication_form', 'post', $action);
+        parent:: __construct('content_object_publication_form', 'post', $action);
 
         if (count($publications) <= 0)
         {
-            throw new NoObjectSelectedException(Translation :: get('Publication'));
+            throw new NoObjectSelectedException(Translation:: get('Publication'));
         }
         else
         {
-            $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
+            $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService:: getInstance();
 
             // set collaborate right for course admins if we are owner of each
             // content object to share
@@ -178,7 +179,7 @@ class ContentObjectPublicationForm extends FormValidator
     {
         $publications = $this->publications;
 
-        $defaults[ContentObjectPublication :: PROPERTY_CATEGORY_ID] = Request :: get(Manager :: PARAM_CATEGORY);
+        $defaults[ContentObjectPublication :: PROPERTY_CATEGORY_ID] = Request:: get(Manager :: PARAM_CATEGORY);
         $defaults[self :: PROPERTY_FOREVER] = 1;
         $defaults[self :: PROPERTY_INHERIT] = self :: INHERIT_TRUE;
         $defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ALL;
@@ -199,22 +200,24 @@ class ContentObjectPublicationForm extends FormValidator
                 }
 
                 $defaults[ContentObjectPublication :: PROPERTY_HIDDEN] = $first_publication->is_hidden();
-                $defaults[ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE] = $first_publication->get_show_on_homepage();
+                $defaults[ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE] =
+                    $first_publication->get_show_on_homepage();
             }
 
             $right_defaults = $this->set_right_defaults($first_publication);
-            if (! empty($right_defaults))
+            if (!empty($right_defaults))
             {
                 $defaults = array_merge($defaults, $right_defaults);
             }
 
-            $force_collaborate = PlatformSetting :: get('force_collaborate', Manager :: package()) === 1 ? true : false;
+            $force_collaborate = PlatformSetting:: get('force_collaborate', Manager:: package()) === 1 ? true : false;
 
-            if ($this->collaborate_possible && ! $force_collaborate)
+            if ($this->collaborate_possible && !$force_collaborate)
             {
-                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting :: getInstance()->get(
+                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting:: getInstance()->get(
                     'collaborate_default',
-                    Manager :: package());
+                    Manager:: package()
+                );
             }
             else
             {
@@ -223,7 +226,7 @@ class ContentObjectPublicationForm extends FormValidator
             }
         }
 
-        parent :: setDefaults($defaults);
+        parent:: setDefaults($defaults);
     }
 
     /**
@@ -235,12 +238,13 @@ class ContentObjectPublicationForm extends FormValidator
     {
         $right_defaults = array();
 
-        $location = WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        $location = WeblcmsRights:: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights :: TYPE_PUBLICATION,
             $publication->get_id(),
-            $publication->get_course_id());
+            $publication->get_course_id()
+        );
 
-        if (! $location)
+        if (!$location)
         {
             return;
         }
@@ -254,9 +258,10 @@ class ContentObjectPublicationForm extends FormValidator
         {
             $right_defaults[self :: PROPERTY_INHERIT] = self :: INHERIT_FALSE;
 
-            $selected_entities = CourseManagementRights :: retrieve_rights_location_rights_for_location(
+            $selected_entities = CourseManagementRights:: retrieve_rights_location_rights_for_location(
                 $location,
-                WeblcmsRights :: VIEW_RIGHT)->as_array();
+                WeblcmsRights :: VIEW_RIGHT
+            )->as_array();
 
             if (count($selected_entities) == 1)
             {
@@ -264,13 +269,16 @@ class ContentObjectPublicationForm extends FormValidator
                 if ($selected_entity->get_entity_type() == 0 && $selected_entity->get_entity_id() == 0)
                 {
                     $right_defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ALL;
+
                     return $right_defaults;
                 }
 
                 if ($selected_entity->get_entity_type() == 1 &&
-                     $selected_entity->get_entity_id() == Session :: get_user_id())
+                    $selected_entity->get_entity_id() == Session:: get_user_id()
+                )
                 {
                     $right_defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ME;
+
                     return $right_defaults;
                 }
             }
@@ -304,48 +312,53 @@ class ContentObjectPublicationForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button',
             self :: PARAM_SUBMIT,
-            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+            Translation:: get('Publish', null, Utilities :: COMMON_LIBRARIES),
             null,
             null,
-            'arrow-right');
+            'arrow-right'
+        );
 
         if (count($this->publications) == 1)
         {
             $first_publication = $this->publications[0];
             $contentObject = $first_publication->get_content_object();
 
-            $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
-            $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+            $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService:: getInstance();
+            $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService:: getInstance();
 
             $canEditContentObject = $repositoryRightsService->canEditContentObject($this->user, $contentObject);
             $canEditPublicationContentObject = $weblcmsRightsService->canEditPublicationContentObject(
                 $this->user,
                 $this->course,
-                $first_publication->get_default_properties());
+                $first_publication->get_default_properties()
+            );
 
             if ($first_publication)
             {
-                if ($contentObject instanceof ComplexContentObjectSupport && ! $first_publication->is_identified())
+                if ($contentObject instanceof ComplexContentObjectSupport && !$first_publication->is_identified())
                 {
-                    if (\Chamilo\Core\Repository\Builder\Manager :: exists($contentObject->package()) &&
-                         ($canEditContentObject || $canEditPublicationContentObject))
+                    if (\Chamilo\Core\Repository\Builder\Manager:: exists($contentObject->package()) &&
+                        ($canEditContentObject || $canEditPublicationContentObject)
+                    )
                     {
                         $buttons[] = $this->createElement(
                             'style_submit_button',
                             self :: PROPERTY_PUBLISH_AND_BUILD,
-                            Translation :: get('PublishAndBuild', null, Utilities :: COMMON_LIBRARIES),
+                            Translation:: get('PublishAndBuild', null, Utilities :: COMMON_LIBRARIES),
                             null,
                             null,
-                            'pencil');
+                            'pencil'
+                        );
                     }
 
                     $buttons[] = $this->createElement(
                         'style_submit_button',
                         self :: PROPERTY_PUBLISH_AND_VIEW,
-                        Translation :: get('PublishAndView', null, Utilities :: COMMON_LIBRARIES),
+                        Translation:: get('PublishAndView', null, Utilities :: COMMON_LIBRARIES),
                         null,
                         null,
-                        'search');
+                        'search'
+                    );
                 }
             }
         }
@@ -353,7 +366,8 @@ class ContentObjectPublicationForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_reset_button',
             self :: PARAM_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+            Translation:: get('Reset', null, Utilities :: COMMON_LIBRARIES)
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -368,7 +382,8 @@ class ContentObjectPublicationForm extends FormValidator
         $this->addElement(
             'checkbox',
             ContentObjectPublication :: PROPERTY_EMAIL_SENT,
-            Translation :: get('SendByEMail'));
+            Translation:: get('SendByEMail')
+        );
     }
 
     /**
@@ -381,13 +396,15 @@ class ContentObjectPublicationForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button',
             self :: PARAM_SUBMIT,
-            Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive update'));
+            Translation:: get('Update', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'positive update')
+        );
         $buttons[] = $this->createElement(
             'style_reset_button',
             self :: PARAM_RESET,
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation:: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'normal empty')
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -405,27 +422,31 @@ class ContentObjectPublicationForm extends FormValidator
      */
     public function build_basic_form()
     {
-        $tool = DataManager :: retrieve_course_tool_by_name($this->get_tool());
+        $tool = DataManager:: retrieve_course_tool_by_name($this->get_tool());
 
-        if ($this->is_course_admin || WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
-            WeblcmsRights :: ADD_RIGHT,
-            $tool->get_id(),
-            WeblcmsRights :: TYPE_COURSE_MODULE,
-            $this->get_course_id()))
+        if ($this->is_course_admin || WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
+                WeblcmsRights :: ADD_RIGHT,
+                $tool->get_id(),
+                WeblcmsRights :: TYPE_COURSE_MODULE,
+                $this->get_course_id(),
+                $this->user->getId()
+            )
+        )
         {
-            $this->categories[0] = Translation :: get('Root', null, Utilities :: COMMON_LIBRARIES);
+            $this->categories[0] = Translation:: get('Root', null, Utilities :: COMMON_LIBRARIES);
         }
 
         $this->get_categories(0);
 
-        if (count($this->categories) > 1 || ! $this->categories[0])
+        if (count($this->categories) > 1 || !$this->categories[0])
         {
             // More than one category -> let user select one
             $this->addElement(
                 'select',
                 ContentObjectPublication :: PROPERTY_CATEGORY_ID,
-                Translation :: get('Category', null, Utilities :: COMMON_LIBRARIES),
-                $this->categories);
+                Translation:: get('Category', null, Utilities :: COMMON_LIBRARIES),
+                $this->categories
+            );
         }
         else
         {
@@ -439,30 +460,34 @@ class ContentObjectPublicationForm extends FormValidator
         $this->addElement(
             'checkbox',
             ContentObjectPublication :: PROPERTY_HIDDEN,
-            Translation :: get('Hidden', null, Utilities :: COMMON_LIBRARIES));
+            Translation:: get('Hidden', null, Utilities :: COMMON_LIBRARIES)
+        );
 
         $this->addElement(
             'checkbox',
             ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE,
-            Translation :: get('ShowOnHomepage'));
+            Translation:: get('ShowOnHomepage')
+        );
 
-        $force_collaborate = PlatformSetting :: get('force_collaborate', Manager :: package()) === 1 ? true : false;
+        $force_collaborate = PlatformSetting:: get('force_collaborate', Manager:: package()) === 1 ? true : false;
 
         // collaborate right for course admins if we are owner of each content
         // object to share
-        if ($this->collaborate_possible && ! $force_collaborate)
+        if ($this->collaborate_possible && !$force_collaborate)
         {
             $this->addElement(
                 'checkbox',
                 ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION,
-                Translation :: get('CourseAdminCollaborate'));
+                Translation:: get('CourseAdminCollaborate')
+            );
         }
         else
         {
             $this->addElement(
                 'hidden',
                 ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION,
-                Translation :: get('CourseAdminCollaborate'));
+                Translation:: get('CourseAdminCollaborate')
+            );
         }
     }
 
@@ -479,32 +504,42 @@ class ContentObjectPublicationForm extends FormValidator
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory :: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_COURSE),
-            new StaticConditionVariable($this->get_course_id()));
+                ContentObjectPublicationCategory:: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_COURSE
+            ),
+            new StaticConditionVariable($this->get_course_id())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory :: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_TOOL),
-            new StaticConditionVariable($this->get_tool()));
+                ContentObjectPublicationCategory:: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_TOOL
+            ),
+            new StaticConditionVariable($this->get_tool())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory :: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_PARENT),
-            new StaticConditionVariable($parent_id));
+                ContentObjectPublicationCategory:: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_PARENT
+            ),
+            new StaticConditionVariable($parent_id)
+        );
         $condition = new AndCondition($conditions);
 
-        $cats = DataManager :: retrieves(
-            ContentObjectPublicationCategory :: class_name(),
-            new DataClassRetrievesParameters($condition));
+        $cats = DataManager:: retrieves(
+            ContentObjectPublicationCategory:: class_name(),
+            new DataClassRetrievesParameters($condition)
+        );
 
         while ($cat = $cats->next_result())
         {
-            if ($this->is_course_admin || WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
-                WeblcmsRights :: ADD_RIGHT,
-                $cat->get_id(),
-                WeblcmsRights :: TYPE_COURSE_CATEGORY,
-                $this->get_course_id()))
+            if ($this->is_course_admin || WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
+                    WeblcmsRights :: ADD_RIGHT,
+                    $cat->get_id(),
+                    WeblcmsRights :: TYPE_COURSE_CATEGORY,
+                    $this->get_course_id(),
+                    $this->user->getId()
+                )
+            )
             {
                 $this->categories[$cat->get_id()] = str_repeat('--', $this->level) . ' ' . $cat->get_name();
                 $this->level ++;
@@ -523,55 +558,61 @@ class ContentObjectPublicationForm extends FormValidator
         // Add the inheritance option
         $group = array();
 
-        $group[] = & $this->createElement(
+        $group[] = &$this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('InheritRights'),
+            Translation:: get('InheritRights'),
             self :: INHERIT_TRUE,
-            array('class' => 'inherit_rights_selector'));
+            array('class' => 'inherit_rights_selector')
+        );
         // $inherit_group[] = & $this->createElement('html',;
 
-        $group[] = & $this->createElement(
+        $group[] = &$this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('UseSpecificRights'),
+            Translation:: get('UseSpecificRights'),
             self :: INHERIT_FALSE,
-            array('class' => 'specific_rights_selector'));
+            array('class' => 'specific_rights_selector')
+        );
 
         $this->addGroup(
             $group,
             self :: PROPERTY_INHERIT,
-            Translation :: get('PublishFor', null, Utilities :: COMMON_LIBRARIES),
-            '<br />');
+            Translation:: get('PublishFor', null, Utilities :: COMMON_LIBRARIES),
+            '<br />'
+        );
 
         $this->addElement('html', '<div class="right">');
 
         // Add the rights options
         $group = array();
 
-        $group[] = & $this->createElement(
+        $group[] = &$this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('Everyone'),
+            Translation:: get('Everyone'),
             self :: RIGHT_OPTION_ALL,
-            array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
+            array('class' => 'other_option_selected')
+        );
+        $group[] = &$this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('OnlyForMe'),
+            Translation:: get('OnlyForMe'),
             self :: RIGHT_OPTION_ME,
-            array('class' => 'other_option_selected'));
-        $group[] = & $this->createElement(
+            array('class' => 'other_option_selected')
+        );
+        $group[] = &$this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('SelectSpecificEntities'),
+            Translation:: get('SelectSpecificEntities'),
             self :: RIGHT_OPTION_SELECT,
-            array('class' => 'entity_option_selected'));
+            array('class' => 'entity_option_selected')
+        );
 
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="specific_rights_selector_box">');
         $this->addGroup($group, self :: PROPERTY_RIGHT_OPTION, '', '');
@@ -591,8 +632,10 @@ class ContentObjectPublicationForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'));
+            ResourceManager:: get_instance()->get_resource_html(
+                Path:: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'
+            )
+        );
     }
 
     /**
@@ -625,11 +668,13 @@ class ContentObjectPublicationForm extends FormValidator
             // always mail publication last! we need the publication id and
             // rights created to get the targets...
             if ($this->form_type == self :: TYPE_CREATE &&
-                 $this->exportValue(ContentObjectPublication :: PROPERTY_EMAIL_SENT))
+                $this->exportValue(ContentObjectPublication :: PROPERTY_EMAIL_SENT)
+            )
             {
                 $this->mail_publication($publication);
             }
         }
+
         return $succes;
     }
 
@@ -643,14 +688,14 @@ class ContentObjectPublicationForm extends FormValidator
         $values = $this->exportValues();
 
         $category = $values[ContentObjectPublication :: PROPERTY_CATEGORY_ID];
-        if (! $category)
+        if (!$category)
         {
             $category = 0;
         }
 
-        if ($category > 0 && ! array_key_exists($category, $this->categories))
+        if ($category > 0 && !array_key_exists($category, $this->categories))
         {
-            throw new \Exception(Translation :: get("PublicationInSelectedCategoryNotAllowed"));
+            throw new \Exception(Translation:: get("PublicationInSelectedCategoryNotAllowed"));
         }
 
         if ($values[self :: PROPERTY_FOREVER] != 0)
@@ -659,8 +704,8 @@ class ContentObjectPublicationForm extends FormValidator
         }
         else
         {
-            $from = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_FROM_DATE]);
-            $to = DatetimeUtilities :: time_from_datepicker($values[self :: PROPERTY_TO_DATE]);
+            $from = DatetimeUtilities:: time_from_datepicker($values[self :: PROPERTY_FROM_DATE]);
+            $to = DatetimeUtilities:: time_from_datepicker($values[self :: PROPERTY_TO_DATE]);
         }
 
         $publication->set_category_id($category);
@@ -670,7 +715,9 @@ class ContentObjectPublicationForm extends FormValidator
         $publication->set_modified_date(time());
         $publication->set_hidden($values[ContentObjectPublication :: PROPERTY_HIDDEN] ? 1 : 0);
         $publication->set_show_on_homepage($values[ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE] ? 1 : 0);
-        $publication->set_allow_collaboration($values[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] ? 1 : 0);
+        $publication->set_allow_collaboration(
+            $values[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] ? 1 : 0
+        );
     }
 
     /**
@@ -683,36 +730,38 @@ class ContentObjectPublicationForm extends FormValidator
     {
         $values = $this->exportValues();
 
-        $location = WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        $location = WeblcmsRights:: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights :: TYPE_PUBLICATION,
             $publication->get_id(),
-            $publication->get_course_id());
+            $publication->get_course_id()
+        );
 
-        if (! $location)
+        if (!$location)
         {
-            throw new ObjectNotExistException(Translation :: get('RightsLocation'));
+            throw new ObjectNotExistException(Translation:: get('RightsLocation'));
         }
 
         if ($category_changed)
         {
-            $new_parent_id = WeblcmsRights :: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+            $new_parent_id = WeblcmsRights:: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                 WeblcmsRights :: TYPE_COURSE_CATEGORY,
                 $publication->get_category_id(),
-                $publication->get_course_id());
+                $publication->get_course_id()
+            );
             $location->move($new_parent_id);
         }
 
-        if (! $location->clear_right(WeblcmsRights :: VIEW_RIGHT))
+        if (!$location->clear_right(WeblcmsRights :: VIEW_RIGHT))
         {
             return false;
         }
 
         if ($values[self :: PROPERTY_INHERIT] == self :: INHERIT_TRUE)
         {
-            if (! $location->inherits())
+            if (!$location->inherits())
             {
                 $location->inherit();
-                if (! $location->update())
+                if (!$location->update())
                 {
                     return false;
                 }
@@ -723,7 +772,7 @@ class ContentObjectPublicationForm extends FormValidator
             if ($location->inherits())
             {
                 $location->disinherit();
-                if (! $location->update())
+                if (!$location->update())
                 {
                     return false;
                 }
@@ -732,22 +781,24 @@ class ContentObjectPublicationForm extends FormValidator
             $option = $values[self :: PROPERTY_RIGHT_OPTION];
             $location_id = $location->get_id();
 
-            $weblcms_rights = WeblcmsRights :: get_instance();
+            $weblcms_rights = WeblcmsRights:: get_instance();
 
             switch ($option)
             {
                 case self :: RIGHT_OPTION_ALL :
-                    if (! $weblcms_rights->invert_location_entity_right(WeblcmsRights :: VIEW_RIGHT, 0, 0, $location_id))
+                    if (!$weblcms_rights->invert_location_entity_right(WeblcmsRights :: VIEW_RIGHT, 0, 0, $location_id))
                     {
                         return false;
                     }
                     break;
                 case self :: RIGHT_OPTION_ME :
-                    if (! $weblcms_rights->invert_location_entity_right(
+                    if (!$weblcms_rights->invert_location_entity_right(
                         WeblcmsRights :: VIEW_RIGHT,
-                        Session :: get_user_id(),
+                        Session:: get_user_id(),
                         CourseUserEntity :: ENTITY_TYPE,
-                        $location_id))
+                        $location_id
+                    )
+                    )
                     {
                         return false;
                     }
@@ -757,11 +808,13 @@ class ContentObjectPublicationForm extends FormValidator
                     {
                         foreach ($target_ids as $target_id)
                         {
-                            if (! $weblcms_rights->invert_location_entity_right(
+                            if (!$weblcms_rights->invert_location_entity_right(
                                 WeblcmsRights :: VIEW_RIGHT,
                                 $target_id,
                                 $entity_type,
-                                $location_id))
+                                $location_id
+                            )
+                            )
                             {
                                 return false;
                             }
@@ -786,12 +839,12 @@ class ContentObjectPublicationForm extends FormValidator
         $tool = $publication->get_tool();
         $link = $this->get_course_viewer_link($publication);
 
-        $body = Translation :: get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
-             $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
+        $body = Translation:: get('NewPublicationMailDescription') . ' ' . $this->course->get_title() . ' : <a href="' .
+            $link . '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $this->course->get_visual_code() . ' - ' . $this->course->get_title() .
-             ' - ' . Translation :: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
+            ' - ' . Translation:: get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
 
         // get targets
         $target_email = array();
@@ -799,7 +852,7 @@ class ContentObjectPublicationForm extends FormValidator
         // Add the publisher to the email address
         $target_email[] = $user->get_email();
 
-        $target_users = DataManager :: get_publication_target_users($publication);
+        $target_users = DataManager:: get_publication_target_users($publication);
 
         foreach ($target_users as $target_user)
         {
@@ -809,15 +862,17 @@ class ContentObjectPublicationForm extends FormValidator
         // safety check: filter any dubbles
         $unique_email = array_unique($target_email);
 
-        $site_name = PlatformSetting :: get('site_name');
+        $site_name = PlatformSetting:: get('site_name');
 
-        $mail = Mail :: factory(
-            '[' . $site_name . '] ' . Translation :: get(
+        $mail = Mail:: factory(
+            '[' . $site_name . '] ' . Translation:: get(
                 'NewPublicationMailSubject',
-                array('COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())),
+                array('COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
+            ),
             '',
             '',
-            array(Mail :: NAME => $user->get_fullname(), Mail :: EMAIL => $user->get_email()));
+            array(Mail :: NAME => $user->get_fullname(), Mail :: EMAIL => $user->get_email())
+        );
 
         $doc = new DOMDocument();
         $doc->loadHTML($body);
@@ -832,16 +887,18 @@ class ContentObjectPublicationForm extends FormValidator
             $id = $element->attributes->getNamedItem('source')->value;
             if ($type == self :: TYPE_FILE)
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
-                    $id);
+                $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
+                    ContentObject:: class_name(),
+                    $id
+                );
 
                 if ($object->is_image())
                 {
                     $mail_embedded_object = new MailEmbeddedObject(
                         $object->get_filename(),
                         $object->get_mime_type(),
-                        $object->get_full_path());
+                        $object->get_full_path()
+                    );
 
                     $index = $mail->add_embedded_image($mail_embedded_object);
 
@@ -851,17 +908,21 @@ class ContentObjectPublicationForm extends FormValidator
                     $element->parentNode->replaceChild($elem, $element);
                 }
                 else
+                {
                     $element->parentNode->removeChild($element);
+                }
             }
             else
+            {
                 $element->parentNode->removeChild($element);
+            }
         }
 
         $body = $doc->saveHTML();
 
         if ($content_object->has_attachments())
         {
-            $body .= '<br ><br >' . Translation :: get('AttachmentWarning', array('LINK' => $link));
+            $body .= '<br ><br >' . Translation:: get('AttachmentWarning', array('LINK' => $link));
         }
 
         $mail->set_message($body);
@@ -888,11 +949,11 @@ class ContentObjectPublicationForm extends FormValidator
             }
         }
 
-        if (PlatformSetting :: get('log_mails', Manager :: package()))
+        if (PlatformSetting:: get('log_mails', Manager:: package()))
         {
-            $dir = Path :: getInstance()->getLogPath() . 'mail';
+            $dir = Path:: getInstance()->getLogPath() . 'mail';
 
-            if (! file_exists($dir) and ! is_dir($dir))
+            if (!file_exists($dir) and !is_dir($dir))
             {
                 mkdir($dir);
             }
@@ -914,7 +975,7 @@ class ContentObjectPublicationForm extends FormValidator
      */
     public function get_tool()
     {
-        return Request :: get(Manager :: PARAM_TOOL);
+        return Request:: get(Manager :: PARAM_TOOL);
     }
 
     /**
@@ -924,21 +985,23 @@ class ContentObjectPublicationForm extends FormValidator
      */
     public function get_course_id()
     {
-        return Request :: get(Manager :: PARAM_COURSE);
+        return Request:: get(Manager :: PARAM_COURSE);
     }
 
     private function get_course_viewer_link($publication)
     {
         $parameters = array();
 
-        $parameters[Manager :: PARAM_CONTEXT] = Manager :: package();
+        $parameters[Manager :: PARAM_CONTEXT] = Manager:: package();
         $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_COURSE;
         $parameters[Manager :: PARAM_COURSE] = $this->course->get_id();
         $parameters[Manager :: PARAM_TOOL] = $publication->get_tool();
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication->get_id();
 
         $redirect = new Redirect($parameters);
+
         return $redirect->getUrl();
     }
 

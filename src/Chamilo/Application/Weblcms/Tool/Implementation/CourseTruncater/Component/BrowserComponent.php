@@ -1,20 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Component;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Forms\CourseTruncaterForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Manager;
+use Chamilo\Application\Weblcms\Tool\Service\PublicationSelectorDataMapper;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /*
  * Component for emptying the course publication,publication categories and sections @author Maarten Volckaert -
@@ -23,68 +15,80 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class BrowserComponent extends Manager
 {
 
-    public $course_emptier_form;
+    protected $course_truncater_form;
 
     /**
-     * checks whether the user has the rights if so create empty form if validate delete selected publications section.
+     * checks whether the user has the rights if so create empty form if
+     * validate delete selected publications section.
      */
     public function run()
     {
+        $course_id = $this->get_course_id();
+
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
 
-        $sections_founded = false;
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseSection :: class_name(), CourseSection :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
+        $count_custom_course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: count_custom_course_sections_from_course(
+            $course_id);
 
-        $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            CourseSection :: class_name(),
-            new DataClassRetrievesParameters($condition));
-
-        $common_sections = array(
-            CourseSection :: TYPE_TOOL,
-            CourseSection :: TYPE_DISABLED,
-            CourseSection :: TYPE_LINK,
-            CourseSection :: TYPE_ADMIN);
-
-        while ($course_section = $course_sections->next_result())
-        {
-            if (! in_array($course_section->get_type(), $common_sections))
-            {
-                $sections_founded = true;
-            }
-        }
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
-        if (\Chamilo\Application\Weblcms\Storage\DataManager :: count_content_object_publications($condition) == 0 &&
-             ! $sections_founded)
+        if (\Chamilo\Application\Weblcms\Course\Storage\DataManager :: count_course_content_object_publications(
+            $course_id) == 0 && $count_custom_course_sections == 0)
         {
             throw new \Exception(Translation :: get('NoPublications'));
         }
 
-        $this->course_emptier_form = new CourseTruncaterForm($this);
-        $this->course_emptier_form->buildForm();
+        $publicationSelectorDataMapper = new PublicationSelectorDataMapper();
 
-        if ($this->course_emptier_form->validate())
+        $publications = $publicationSelectorDataMapper->getContentObjectPublicationsForPublicationSelector($course_id);
+        $categories = $publicationSelectorDataMapper->getContentObjectPublicationCategoriesForPublicationSelector(
+            $course_id);
+
+        if ($count_custom_course_sections > 0)
         {
-            $values = $this->course_emptier_form->exportValues();
+            $course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: retrieve_custom_course_sections_as_array(
+                $course_id);
+        }
+        else
+        {
+            $course_sections = array();
+        }
+
+        $this->course_truncater_form = new CourseTruncaterForm($this, $publications, $categories, $course_sections);
+        $this->course_truncater_form->buildForm();
+
+        if ($this->course_truncater_form->validate())
+        {
+            $values = $this->course_truncater_form->exportValues();
 
             if (isset($values['publications']) || isset($values["course_sections"]) ||
                  $values['content_object_categories'] == 1)
             {
-                // always first delete the publications before deleting the categories
+                $publications_ids = array_keys($values['publications']);
+                $delete_categories = $values['content_object_categories'];
+                $categories_ids = array_keys($values['categories']);
+                $course_sections_ids = array_keys($values['course_sections']);
 
-                $succes_publications = $this->empty_publications($values);
-                $succes_sections = $this->empy_sections($values);
-                $succes_categories = $this->empty_categories($values);
+                $success = true;
+                if (count($course_sections_ids) > 0)
+                {
+                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: delete_course_sections(
+                        $course_sections_ids);
+                }
+                if ($delete_categories == 1 && count($categories_ids) > 0)
+                {
+                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: delete_publications_and_categories(
+                        $publications_ids,
+                        $categories_ids);
+                }
+                else
+                {
+                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: delete_publications(
+                        $publications_ids);
+                }
 
-                if ($succes_publications && $succes_sections && $succes_categories)
+                if ($success)
                 {
                     $this->redirect(
                         Translation :: get('AllSelectedObjectsRemoved'),
@@ -103,7 +107,7 @@ class BrowserComponent extends Manager
 
                 $html[] = $this->render_header();
                 $html[] = Display :: error_message(Translation :: get('SelectAItem'));
-                $html[] = $this->course_emptier_form->toHtml();
+                $html[] = $this->course_truncater_form->toHtml();
                 $html[] = $this->render_footer();
 
                 return implode(PHP_EOL, $html);
@@ -114,7 +118,7 @@ class BrowserComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->course_emptier_form->toHtml();
+            $html[] = $this->course_truncater_form->toHtml();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -122,177 +126,10 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * delete the selected publications
      *
-     * @param type $values
-     * @return succes
-     */
-    public function empty_publications($values)
-    {
-        $publication_ids = array_keys($values['publications']);
-
-        $succes = true;
-
-        foreach ($publication_ids as $id)
-        {
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                ContentObjectPublication :: class_name(),
-                $id);
-
-            if (! $publication->delete())
-            {
-                $succes = false;
-            }
-        }
-        return $succes;
-    }
-
-    /**
-     * delete the selected sections
-     *
-     * @param type $values
-     * @return succes
-     */
-    public function empy_sections($values)
-    {
-        $succes = true;
-
-        $course_section_ids = array_keys($values['course_sections']);
-        $condition = new InCondition(
-            new PropertyConditionVariable(CourseSection :: class_name(), CourseSection :: PROPERTY_ID),
-            $course_section_ids);
-
-        $course_sections = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            CourseSection :: class_name(),
-            new DataClassRetrievesParameters($condition));
-
-        while ($course_section = $course_sections->next_result())
-        {
-            if (! $course_section->delete())
-            {
-                $succes = false;
-            }
-        }
-        return $succes;
-    }
-
-    /**
-     * delete the selected categories
-     *
-     * @param type $values
-     * @return succes
-     */
-    public function empty_categories($values)
-    {
-        $succes = true;
-
-        if ($values['content_object_categories'] == 1)
-        {
-            $condition = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ContentObjectPublicationCategory :: class_name(),
-                    ContentObjectPublicationCategory :: PROPERTY_COURSE),
-                new StaticConditionVariable($this->get_course_id()));
-
-            $categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-                ContentObjectPublicationCategory :: class_name(),
-                new DataClassRetrievesParameters($condition));
-
-            while ($category = $categories->next_result())
-            {
-                if (! $category->get_allow_change() || ! $this->allowed_to_delete_category($category->get_id()))
-                {
-                    continue;
-                }
-
-                if (! $category->delete())
-                {
-                    $succes = false;
-                }
-            }
-        }
-
-        return $succes;
-    }
-
-    /**
-     * checks whether a category can be deleted
-     *
-     * @param int $category_id
-     * @return boolean
-     */
-    private function allowed_to_delete_category($category_id)
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_CATEGORY_ID),
-            new StaticConditionVariable($category_id));
-        $condition = new AndCondition($conditions);
-        $count = \Chamilo\Application\Weblcms\Storage\DataManager :: count_content_object_publications($condition);
-
-        if ($count > 0)
-        {
-            return false;
-        }
-
-        return ! $this->have_subcategories_publications($category_id);
-    }
-
-    /**
-     * checks if a category has subcategory's
-     *
-     * @param int $category_id
-     *
-     * @return boolean
-     */
-    private function have_subcategories_publications($category_id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory :: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_PARENT),
-            new StaticConditionVariable($category_id));
-
-        $subcategries = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            ContentObjectPublicationCategory :: class_name(),
-            new DataClassRetrievesParameters($condition));
-
-        while ($cat = $subcategries->next_result())
-        {
-            $conditions = array();
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
-                    ContentObjectPublication :: PROPERTY_COURSE_ID),
-                new StaticConditionVariable($this->get_course_id()));
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
-                    ContentObjectPublication :: PROPERTY_CATEGORY_ID),
-                new StaticConditionVariable($cat->get_id()));
-            $condition = new AndCondition($conditions);
-            $count = \Chamilo\Application\Weblcms\Storage\DataManager :: count_content_object_publications($condition);
-
-            if ($count > 0 || $this->have_subcategories_publications($cat->get_id()))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }

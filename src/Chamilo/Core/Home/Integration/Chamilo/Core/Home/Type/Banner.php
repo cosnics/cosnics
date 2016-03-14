@@ -43,20 +43,11 @@ class Banner extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         $title = $this->displayTitle();
 
-        if ($this->getView() == self :: BLOCK_VIEW)
-        { // i.e. in widget view it is the portal configuration that decides to show/hide
-            $description_style = $this->getBlock()->isVisible() ? '' : ' style="display: none"';
-        }
-        else
-        {
-            $description_style = '';
-        }
-
         $html = array();
         $html[] = '<div class="portal-block portal_banner" id="portal_block_' . $block_id .
              '" style="background-image: url(' . $icon_url . ');">';
         $html[] = $title;
-        $html[] = '<div class="entry-content description"' . $description_style . '">';
+        $html[] = '<div class="entry-content description"">';
 
         return implode(PHP_EOL, $html);
     }

@@ -90,7 +90,7 @@ class SortableTableFromArray extends SortableTable
     {
         parent::__construct(
             $tableName, array($this, 'countData'), array($this, 'getData'), $defaultOrderColumn,
-            $defaultPerPage, $defaultOrderDirection, $allowPageSelection, true
+            $defaultPerPage, $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
         );
 
         $this->tableData = $tableData;

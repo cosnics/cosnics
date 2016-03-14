@@ -2,8 +2,13 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -13,63 +18,160 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ListRenderer extends ViewRenderer
+class ListRenderer extends FullRenderer
 {
 
     /**
      *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer::getEvents()
      */
-    public function render()
+    public function getEvents($startTime, $endTime)
     {
-        $html = array();
+        $events = parent :: getEvents($startTime, $endTime);
 
-        $html[] = '<div class="calendar-container">';
+        $structuredEvents = array();
 
-        // Upcoming events: range from now until 6 months in the future
-        $upcomingEvents = $this->getEvents(time(), strtotime('+6 Months', time()));
-        $html[] = $this->renderEvents($upcomingEvents, 'UpcomingEvents');
+        foreach ($events as $event)
+        {
+            $startDate = $event->getStartDate();
+            $dateKey = mktime(0, 0, 0, date('n', $startDate), date('j', $startDate), date('Y', $startDate));
 
-        // Recent events: range from one months ago until now
-        $recentEvents = $this->getEvents(strtotime('-2 Months', time()), time());
-        $html[] = $this->renderEvents($recentEvents, 'RecentEvents');
+            if (! isset($structuredEvents[$dateKey]))
+            {
+                $structuredEvents[$dateKey] = array();
+            }
 
-        $html[] = '</div>';
+            $structuredEvents[$dateKey][] = $event;
+        }
 
-        $html[] = $this->getLegend()->render();
+        ksort($structuredEvents);
 
-        return implode(PHP_EOL, $html);
+        foreach ($structuredEvents as $dateKey => &$dateEvents)
+        {
+            usort($dateEvents, array($this, "orderEvents"));
+        }
+
+        return $structuredEvents;
     }
 
-    private function renderEvents($events, $type)
+    /**
+     *
+     * @param \Chamilo\Libraries\Calendar\Event\Event $eventLeft
+     * @param \Chamilo\Libraries\Calendar\Event\Event $eventRight
+     * @return integer
+     */
+    public function orderEvents($eventLeft, $eventRight)
     {
-        $output = array();
+        return strcmp($eventLeft->getStartDate(), $eventRight->getStartDate());
+    }
 
-        $output[] = '<h3>' . Translation :: get($type) . '</h3>';
+    /**
+     *
+     * @return integer
+     */
+    protected function getStartTime()
+    {
+        return $this->getDisplayTime();
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    protected function getEndTime()
+    {
+        return strtotime('+6 Months', $this->getStartTime());
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderFullCalendar()
+    {
+        $startTime = $this->getDisplayTime();
+        $endTime = $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
+
+        $html = array();
 
         if (count($events) > 0)
         {
+            $html[] = '<div class="table-calendar table-calendar-list">';
 
-            $htmlEvents = array();
-
-            foreach ($events as $index => $event)
+            foreach ($events as $dateKey => $dateEvents)
             {
-                $eventRendererFactory = new EventRendererFactory($this, $event);
-                $htmlEvents[$event->getStartDate()][] = $eventRendererFactory->render();
+                $hiddenEvents = 0;
+
+                foreach ($dateEvents as $dateEvent)
+                {
+                    if (! $this->isSourceVisible($dateEvent->getSource()))
+                    {
+                        $hiddenEvents ++;
+                    }
+                }
+
+                $allEventsAreHidden = ($hiddenEvents == count($dateEvents));
+
+                $html[] = '<div class="row' . ($allEventsAreHidden ? ' event-container-hidden' : '') . '">';
+
+                $html[] = '<div class="col-xs-12 table-calendar-list-date">';
+                $html[] = date('D, d M', $dateKey);
+                $html[] = '</div>';
+
+                $html[] = '<div class="col-xs-12 table-calendar-list-events">';
+                $html[] = '<ul class="list-group">';
+
+                foreach ($dateEvents as $dateEvent)
+                {
+                    $eventRendererFactory = new EventRendererFactory($this, $dateEvent);
+
+                    $html[] = '<li class="list-group-item ">';
+                    $html[] = $eventRendererFactory->render();
+                    $html[] = '</li>';
+                }
+
+                $html[] = '</ul>';
+                $html[] = '</div>';
+
+                $html[] = '</div>';
             }
 
-            ksort($htmlEvents);
-
-            foreach ($htmlEvents as $time => $content)
-            {
-                $output[] = implode(PHP_EOL, $content);
-            }
+            $html[] = '</div>';
         }
         else
         {
-            $output[] = Display :: normal_message(Translation :: get('No' . $type), true);
+            $html[] = Display :: normal_message(Translation :: get('NoUpcomingEvents'), true);
         }
 
-        return implode('', $output);
+        return implode('', $html);
+    }
+
+    /**
+     * Adds a navigation bar to the calendar
+     *
+     * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
+     */
+    public function renderNavigation()
+    {
+        $urlFormat = $this->determineNavigationUrl();
+        $todayUrl = str_replace(Calendar :: TIME_PLACEHOLDER, time(), $urlFormat);
+
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+
+        $buttonToolBar->addItem(
+            new Button(Translation :: get('Today'), new BootstrapGlyph('home'), $todayUrl, Button :: DISPLAY_ICON));
+
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+        return $buttonToolbarRenderer->render();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::renderTitle()
+     */
+    public function renderTitle()
+    {
+        return date('d M Y', $this->getStartTime()) . ' - ' . date('d M Y', $this->getEndTime());
     }
 }

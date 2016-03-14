@@ -21,6 +21,7 @@ class HtmlInlineSwfRenditionImplementation extends HtmlInlineRenditionImplementa
 
         $html[] = '<param name="movie" value="' . $url . '" />';
         $html[] = '<param name="quality" value="high" />';
+        $html[] = '<param name="allowFullScreen" value="true" />';
 
         $html[] = '<embed   src="' . $url . '"
                             quality="high"
@@ -28,6 +29,7 @@ class HtmlInlineSwfRenditionImplementation extends HtmlInlineRenditionImplementa
                             width="' . $parameters[self :: PARAM_WIDTH] . '"
                             height="' . $parameters[self :: PARAM_HEIGHT] . '"
                             type="application/x-shockwave-flash"
+                            allowFullScreen="true"
                             pluginspage="http://www.macromedia.com/go/getflashplayer">';
         $html[] = '</embed>';
         $html[] = '</object>';
