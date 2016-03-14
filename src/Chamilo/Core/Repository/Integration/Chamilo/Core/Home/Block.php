@@ -123,7 +123,7 @@ class Block extends \Chamilo\Core\Home\BlockRendition
      *
      * @return string
      */
-    public function display_content()
+    public function displayContent()
     {
         $content_object = $this->get_object();
 
@@ -141,10 +141,10 @@ class Block extends \Chamilo\Core\Home\BlockRendition
      *
      * @return string
      */
-    public function get_title()
+    public function getTitle()
     {
-        $content_object = $this->get_object();
-        return empty($content_object) ? $this->get_default_title() : $content_object->get_title();
+        $content_object = $this->getObject();
+        return empty($content_object) ? $this->getDefaultTitle() : $content_object->get_title();
     }
 
     // BASIC TEMPLATING FUNCTIONS.

@@ -2,12 +2,12 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
 
 class Login extends \Chamilo\Core\Home\BlockRendition
 {

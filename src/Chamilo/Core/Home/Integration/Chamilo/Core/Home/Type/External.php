@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -13,7 +14,8 @@ use Chamilo\Libraries\Platform\Translation;
  * @author laurent.opprecht@unige.ch
  * @package home.block
  */
-class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
+class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
+    StaticBlockTitleInterface
 {
     const CONFIGURATION_SCROLLING = 'scrolling';
     const CONFIGURATION_HEIGHT = 'height';

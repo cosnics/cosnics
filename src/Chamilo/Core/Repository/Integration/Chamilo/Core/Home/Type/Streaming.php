@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * Block to display streaming media.
@@ -14,7 +15,7 @@ use Chamilo\Core\Home\Architecture\ConfigurableInterface;
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
  */
-class Streaming extends Block implements ConfigurableInterface
+class Streaming extends Block implements ConfigurableInterface, StaticBlockTitleInterface
 {
 
     /**
