@@ -108,7 +108,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             Translation :: get('SelectBox'),
             FillInBlanksQuestion :: TYPE_SELECT,
             array('class' => 'type_' . FillInBlanksQuestion :: TYPE_SELECT . '_option_selector'));
-        $this->addElement('group', null, Translation :: get('UseSelectBox'), $type_options, '<br />', false);
+        $this->addElement('group', null, Translation :: get('UseSelectBox'), $type_options, '', false);
 
         // show inline
         $this->addElement(

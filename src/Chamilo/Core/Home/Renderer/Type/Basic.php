@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\Home\Renderer\Type;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Home\BlockRendition;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Column;
@@ -337,12 +339,24 @@ class Basic extends Renderer
      */
     public function renderContent()
     {
+        $angularConnectorService = new AngularConnectorService(Configuration::get_instance());
+        $modules = $angularConnectorService->getAngularModules();
+        $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
+
         $tabs = $this->getElements(Tab :: class_name());
         $currentTabIdentifier = $this->getCurrentTabIdentifier();
 
         $html = array();
 
-        $html[] = '<div class="portal-tabs">';
+        $html[] = $angularConnectorService->loadAngularModules();
+
+        $html[] = '<script type="text/javascript">';
+        $html[] = '(function(){';
+        $html[] = '    var homeApp = angular.module(\'homeApp\', [' . $moduleString . ']);';
+        $html[] = '})();';
+        $html[] = '</script>';
+
+        $html[] = '<div class="portal-tabs" ng-app="homeApp">';
 
         foreach ($tabs as $tabKey => $tab)
         {

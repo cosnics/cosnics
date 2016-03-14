@@ -116,19 +116,22 @@ abstract class Renderer
     public function render()
     {
         $user = $this->get_user();
-        
-        if (! $user)
+
+        if (! $user && !$this->isMenuAvailableAnonymously())
         {
             return;
         }
-        
-        $userRights = $this->getItemService()->determineRightsForUser($this->get_user());
+
+        $userRights = array();
+
+        if($user)
+        {
+            $userRights = $this->getItemService()->determineRightsForUser($user);
+        }
         
         $html = array();
         
         $html[] = $this->display_menu_header();
-        
-        $category_items = array();
         
         foreach ($this->getRootItems() as $item)
         {
@@ -144,6 +147,14 @@ abstract class Renderer
         $html[] = $this->display_menu_footer();
         
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns whether or not the menu is available for anonymous users
+     */
+    public function isMenuAvailableAnonymously()
+    {
+        return false;
     }
 
     abstract public function display_menu_header();

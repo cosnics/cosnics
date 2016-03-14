@@ -79,7 +79,7 @@ class RatingForm extends ContentObjectForm
             Translation :: get('Rating'), 
             1, 
             array('onclick' => 'javascript:show_controls(\'buttons\')'));
-        $this->addGroup($elem, 'type', Translation :: get('SurveyRatingType'), '<br />', false);
+        $this->addGroup($elem, 'type', Translation :: get('SurveyRatingType'), '', false);
         
         $this->addElement('html', '<div style="margin-left: 25px; display: block;" id="buttons">');
         $ratings[] = $this->createElement(

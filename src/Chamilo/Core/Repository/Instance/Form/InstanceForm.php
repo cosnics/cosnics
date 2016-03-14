@@ -248,7 +248,7 @@ class InstanceForm extends FormValidator
                                     $option_value);
                             }
                         }
-                        $this->addGroup($group, $name, $label, '<br/>', false);
+                        $this->addGroup($group, $name, $label, '', false);
                     }
                     elseif ($setting['field'] == 'select')
                     {
