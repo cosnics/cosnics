@@ -78,7 +78,7 @@ class ChoiceForm extends ContentObjectForm
             Translation :: get('Other'), 
             Choice :: TYPE_OTHER, 
             array('onclick' => 'javascript:timewindow_show(\'repeat_timewindow\')'));
-        $this->addGroup($choices, null, Translation :: get('QuestionType'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('QuestionType'), '', false);
         
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="repeat_timewindow">');
         $yes_no_elements = array();
@@ -95,7 +95,7 @@ class ChoiceForm extends ContentObjectForm
             '', 
             array('style' => 'width:300px', 'maxlength' => 50));
         
-        $this->addGroup($yes_no_elements, Choice :: PROPERTY_QUESTION_TYPE, '', '<br/>', false);
+        $this->addGroup($yes_no_elements, Choice :: PROPERTY_QUESTION_TYPE, '', '', false);
         
         $this->addElement('html', '</div>');
         $this->addElement(

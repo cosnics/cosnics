@@ -581,7 +581,7 @@ class ContentObjectPublicationForm extends FormValidator
             $group,
             self :: PROPERTY_INHERIT,
             Translation:: get('PublishFor', null, Utilities :: COMMON_LIBRARIES),
-            '<br />'
+            ''
         );
 
         $this->addElement('html', '<div class="right">');

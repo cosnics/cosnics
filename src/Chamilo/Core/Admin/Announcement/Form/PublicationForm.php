@@ -177,7 +177,7 @@ class PublicationForm extends FormValidator
             $group,
             self :: PROPERTY_RIGHT_OPTION,
             Translation :: get('PublishFor', null, Utilities :: COMMON_LIBRARIES),
-            '<br />');
+            '');
 
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();

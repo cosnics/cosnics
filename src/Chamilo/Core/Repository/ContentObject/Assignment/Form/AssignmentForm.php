@@ -121,7 +121,7 @@ class AssignmentForm extends ContentObjectForm
             null,
             Translation :: get('InvisibleOthers'),
             0);
-        $this->addGroup($choices, null, Translation :: get('VisibilitySubmissions'), '<br/>', false);
+        $this->addGroup($choices, null, Translation :: get('VisibilitySubmissions'), '', false);
 
         // Assignment type
         $choices = array();
@@ -137,7 +137,7 @@ class AssignmentForm extends ContentObjectForm
             null,
             Translation :: get('Group'),
             1);
-        $this->addGroup($choices, null, Translation :: get('AssignmentType'), '<br/>', false);
+        $this->addGroup($choices, null, Translation :: get('AssignmentType'), '', false);
 
         // Allow late submissions
         $choices = array();
@@ -153,7 +153,7 @@ class AssignmentForm extends ContentObjectForm
             null,
             Translation :: get('AllowLateNo'),
             0);
-        $this->addGroup($choices, null, Translation :: get('AllowLateSubmissions'), '<br/>', false);
+        $this->addGroup($choices, null, Translation :: get('AllowLateSubmissions'), '', false);
 
         // Allowed content types for submissions
         $types = $this->get_allowed_content_object_types();
@@ -229,7 +229,7 @@ class AssignmentForm extends ContentObjectForm
             null,
             Translation :: get('AfterSubmission'),
             1);
-        $this->addGroup($choices, null, Translation :: get('VisibiltyFeedback'), '<br/>', false);
+        $this->addGroup($choices, null, Translation :: get('VisibiltyFeedback'), '', false);
 
         $this->addElement('category');
     }

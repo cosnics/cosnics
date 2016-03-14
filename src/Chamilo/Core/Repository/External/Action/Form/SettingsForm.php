@@ -238,7 +238,7 @@ class SettingsForm extends FormValidator
                                     (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
                                     null,
                                     \Chamilo\Core\Repository\External\Manager :: get_namespace($configuration['name'])),
-                                '<br/>',
+                                '',
                                 false);
                         }
                         elseif ($setting['field'] == 'select')
