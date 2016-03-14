@@ -10,6 +10,11 @@
     margin-bottom: 0;
 }
 
+.navbar.navbar-chamilo.navbar-no-items .navbar-brand
+{
+    padding-top: 0;
+}
+
 .navbar.navbar-chamilo .container-fluid
 {
     background-color: #262F52;

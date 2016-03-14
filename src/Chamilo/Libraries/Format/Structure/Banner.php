@@ -113,7 +113,7 @@ class Banner
 
         $html[] = '<a name="top"></a>';
 
-        if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
+        if ($this->getApplication() instanceof Application)
         {
             $menuRenderer = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
 

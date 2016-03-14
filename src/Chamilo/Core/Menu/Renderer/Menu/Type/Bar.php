@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Renderer\Menu\Type;
 
 use Chamilo\Core\Menu\Renderer\Menu\Renderer;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 
@@ -20,7 +21,14 @@ class Bar extends Renderer
     {
         $html = array();
 
-        $html[] = '<nav class="navbar navbar-chamilo navbar-default">';
+        $class = 'navbar navbar-chamilo navbar-default';
+
+        if(!$this->get_user() instanceof User)
+        {
+            $class .= ' navbar-no-items';
+        }
+
+        $html[] = '<nav class="' . $class . '">';
         $html[] = '<div class="container-fluid">';
         $html[] = '<div class="navbar-header">';
 
@@ -64,5 +72,13 @@ class Bar extends Renderer
         }
 
         return '<a class="navbar-brand" href="#"><img alt="' . $siteName . '" src="' . $brandSource . '"></a>';
+    }
+
+    /**
+     * Returns whether or not the menu is available for anonymous users
+     */
+    public function isMenuAvailableAnonymously()
+    {
+        return true;
     }
 }
