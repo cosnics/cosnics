@@ -26,14 +26,23 @@ abstract class ConfigurationForm extends FormValidator
 
     /**
      *
+     * @var boolean
+     */
+    private $hasStaticTitle;
+
+    /**
+     *
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param boolean $hasStaticTitle
      * @param string $action
      */
-    public function __construct(Block $block)
+    public function __construct(Block $block, $hasStaticTitle)
     {
         parent :: __construct('block', 'post', '');
 
         $this->block = $block;
+        $this->hasStaticTitle = $hasStaticTitle;
+
         $this->buildForm();
         $this->setDefaults();
     }
@@ -47,8 +56,22 @@ abstract class ConfigurationForm extends FormValidator
         return $this->block;
     }
 
+    /**
+     *
+     * @return boolean
+     */
+    public function getHasStaticTitle()
+    {
+        return $this->hasStaticTitle;
+    }
+
     public function buildForm()
     {
+        if (! $this->hasStaticTitle)
+        {
+            $this->add_textfield(Block :: PROPERTY_TITLE, Translation :: get('Title'));
+        }
+
         $this->addSettings();
 
         $this->addElement('hidden', Block :: PROPERTY_ID, $this->getBlock()->get_id());
@@ -76,4 +99,18 @@ abstract class ConfigurationForm extends FormValidator
     }
 
     abstract function addSettings();
+
+    /**
+     *
+     * @see HTML_QuickForm::setDefaults()
+     */
+    public function setDefaults($defaults = array())
+    {
+        if (! $this->hasStaticTitle)
+        {
+            $defaults[Block :: PROPERTY_TITLE] = $this->getBlock()->getTitle();
+        }
+
+        parent :: setDefaults($defaults);
+    }
 }

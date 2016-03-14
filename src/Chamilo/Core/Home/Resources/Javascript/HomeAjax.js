@@ -684,54 +684,41 @@ $(function()
             'block' : blockId
         };
         
-        var response = $.ajax({
-            type : "POST",
-            url : ajaxUri,
-            data : parameters,
-            async : false
-        }).success(
-                function(json)
-                {
-                    if (json.result_code == 200)
-                    {
-                        var portalBlockForm = $('.portal-block-form', block);
-                        var contentIsHidden = $('.portal-action-block-hide', block).hasClass('hidden');
-                        
-                        block.removeClass('panel-default').addClass('panel-info');
-                        $('.portal-action', block).hide();
-                        portalBlockForm.toggleClass('hidden');
-                        
-                        if (!contentIsHidden)
-                        {
-                            $('.portal-block-content', block).toggleClass('hidden');
-                        }
-                        else
-                        {
-                            $('.panel-heading', block).removeClass('panel-heading-without-content');
-                        }
-                        
-                        $('.panel-heading .panel-title', block).prepend(
-                                $('<span class="panel-title-configuration">'
-                                        + getTranslation('ConfiguringBlock', null, translationContext) + '</span>'));
-                        
-                        $('.panel-body', portalBlockForm).append(json.properties.form);
-                    }
-                });
+        var portalBlockForm = $('.portal-block-form', block);
+        var contentIsHidden = $('.portal-action-block-hide', block).hasClass('hidden');
+        
+        block.removeClass('panel-default').addClass('panel-info');
+        $('.portal-action', block).hide();
+        portalBlockForm.toggleClass('hidden');
+        
+        if (!contentIsHidden)
+        {
+            $('.portal-block-content', block).toggleClass('hidden');
+        }
+        else
+        {
+            $('.panel-heading', block).removeClass('panel-heading-without-content');
+        }
+        
+        $('.panel-heading .panel-title', block).prepend(
+                $('<span class="panel-title-configuration">'
+                        + getTranslation('ConfiguringBlock', null, translationContext) + '</span>'));
+        
     }
     
     function cancelBlockConfiguration(e, ui)
     {
         e.preventDefault();
         
-        var portalBlockForm = $(this).parent().parent().parent().parent().parent().parent();
+        var form = $(this).parent().parent().parent().parent();
+        var portalBlockForm = form.parent().parent();
         var panel = portalBlockForm.parent();
         var block = panel.parent();
         var contentIsHidden = $('.portal-action-block-hide', block).hasClass('hidden');
         
+        $(':reset', form).trigger("click");
         panel.removeClass('panel-info').addClass('panel-default');
-        $('.portal-action', block).show();
         portalBlockForm.toggleClass('hidden');
-        $('.panel-body', portalBlockForm).html('');
         
         if (!contentIsHidden)
         {
@@ -742,6 +729,7 @@ $(function()
             $('.panel-heading', block).addClass('panel-heading-without-content');
         }
         
+        $('.portal-action', block).show();
         $('.panel-title-configuration', block).remove();
     }
     

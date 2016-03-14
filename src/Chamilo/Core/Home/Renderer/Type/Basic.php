@@ -176,44 +176,6 @@ class Basic extends Renderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderTabTitlePanel()
-    {
-        $html = array();
-
-        $html[] = '<div class="row portal-tab-panel hidden">';
-
-        $html[] = '<div class="col-xs-12">';
-        $html[] = '<div class="panel panel-primary">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<a href="#" class="portal-tab-panel-hide"><span class="glyphicon glyphicon-remove"></span></a>';
-        $html[] = '</div>';
-        $html[] = '<h3 class="panel-title">' . Translation :: get('EditTabTitle') . '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body">';
-
-        $html[] = '<form class="form-inline portal-action-tab-form">';
-        $html[] = '<div class="form-group">';
-        $html[] = '<input type="text" class="form-control portal-action-tab-title" data-tab-id="" placeholder="' .
-             Translation :: get('EnterTabTitle') . '" />';
-        $html[] = '</div>';
-
-        $html[] = '<button type="submit" class="btn btn-primary portal-tab-title-save">' . Translation :: get('Save') .
-             '</button>';
-
-        $html[] = '</form>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
     /**
      *
      * @return string
@@ -279,6 +241,44 @@ class Basic extends Renderer
         return implode(PHP_EOL, $html);
     }
 
+    public function renderTabTitlePanel()
+    {
+        $html = array();
+
+        $html[] = '<div class="row portal-tab-panel hidden">';
+
+        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="panel panel-primary">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<div class="pull-right">';
+        $html[] = '<a href="#" class="portal-tab-panel-hide"><span class="glyphicon glyphicon-remove"></span></a>';
+        $html[] = '</div>';
+        $html[] = '<h3 class="panel-title">' . Translation :: get('EditTabTitle') . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
+
+        $html[] = '<form class="form-inline portal-action-tab-form">';
+        $html[] = '<div class="form-group">';
+        $html[] = '<input type="text" class="form-control portal-action-tab-title" data-tab-id="" placeholder="' .
+             Translation :: get('EnterTabTitle') . '" />';
+        $html[] = '</div>';
+
+        $html[] = '<button type="submit" class="btn btn-primary portal-tab-title-save">' . Translation :: get('Save') .
+             '</button>';
+
+        $html[] = '</form>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
     /**
      *
      * @return string
@@ -339,7 +339,7 @@ class Basic extends Renderer
      */
     public function renderContent()
     {
-        $angularConnectorService = new AngularConnectorService(Configuration::get_instance());
+        $angularConnectorService = new AngularConnectorService(Configuration :: get_instance());
         $modules = $angularConnectorService->getAngularModules();
         $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 

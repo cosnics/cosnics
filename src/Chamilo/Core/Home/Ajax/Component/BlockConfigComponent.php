@@ -58,6 +58,11 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                     $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
                 }
 
+                if (isset($postedValues[Block :: PROPERTY_TITLE]))
+                {
+                    $block->setTitle($postedValues[Block :: PROPERTY_TITLE]);
+                }
+
                 if (! $block->update())
                 {
                     JsonAjaxResult :: general_error();
