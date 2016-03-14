@@ -262,7 +262,7 @@ class Kernel
         {
             if (! $authenticationValidator->validate() && ! Authentication :: anonymous_user_exists())
             {
-                throw new NotAllowedException();
+                throw new NotAllowedException(true);
             }
         }
 

@@ -16,45 +16,10 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class FullTableRenderer extends TableRenderer
+abstract class FullTableRenderer extends FullRenderer
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function renderViewActions()
-    {
-        $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-
-        $buttonToolBar->addItem($this->renderTypeButton());
-
-        foreach ($this->getViewActions() as $viewAction)
-        {
-            $buttonToolBar->addItem($viewAction);
-        }
-
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        return $buttonToolbarRenderer->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderMiniMonth()
-    {
-        $renderer = new MiniMonthRenderer(
-            $this->getDataProvider(),
-            $this->getLegend(),
-            $this->getDisplayTime(),
-            null,
-            null);
-
-        return $renderer->render();
-    }
+    use \Chamilo\Libraries\Calendar\Renderer\Type\View\TableRenderer;
 
     /**
      * Adds a navigation bar to the calendar
@@ -94,60 +59,5 @@ abstract class FullTableRenderer extends TableRenderer
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         return $buttonToolbarRenderer->render();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderFullCalendar();
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function renderTitle();
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Calendar\Renderer\Renderer::render()
-     */
-    public function render()
-    {
-        $html = array();
-
-        $html[] = '<div class="col-md-9 col-lg-10 table-calendar-main">';
-
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-md-4">';
-        $html[] = '<div class="pull-left">';
-        $html[] = $this->renderNavigation();
-        $html[] = '</div>';
-
-        $html[] = '<div class="table-calendar-current-time pull-left">';
-        $html[] = '<h4>';
-        $html[] = $this->renderTitle();
-        $html[] = '</h4>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-md-8">';
-        $html[] = '<div class="pull-right">';
-        $html[] = $this->renderViewActions();
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = $this->renderFullCalendar();
-        $html[] = '</div>';
-
-        $html[] = '<div class="col-md-3 col-lg-2 table-calendar-sidebar">';
-        $html[] = $this->renderMiniMonth();
-        $html[] = $this->getLegend()->render();
-        $html[] = '</div>';
-
-        $html[] = '<div class="clearfix"></div>';
-
-        return implode(PHP_EOL, $html);
     }
 }

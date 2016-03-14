@@ -28,13 +28,13 @@ use Exception;
 
 /**
  * $Id: content_object_publication_list_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.browser
  */
 
 /**
  * This is a generic renderer for a set of learning object publications.
- * 
+ *
  * @package application.weblcms.tool
  * @author Bart Mollet
  * @author Tim De Pauw
@@ -42,18 +42,12 @@ use Exception;
 abstract class ContentObjectPublicationListRenderer
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    
+
     // Types
     const TYPE_LIST = 'List';
     const TYPE_TABLE = 'Table';
     const TYPE_GALLERY = 'GalleryTable';
     const TYPE_SLIDESHOW = 'Slideshow';
-    const TYPE_CALENDAR = 'Calendar';
-    const TYPE_MONTH = 'Month';
-    const TYPE_MINI_MONTH = 'Mini_month_calendar';
-    const TYPE_WEEK = 'Week';
-    const TYPE_YEAR = 'Year';
-    const TYPE_DAY = 'Day';
     const TOOL_TYPE_ANNOUNCEMENT = 'Announcement';
 
     protected $tool_browser;
@@ -69,7 +63,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Constructor.
-     * 
+     *
      * @param $tool_browser PublicationBrowser The tool_browser to associate this list renderer with.
      * @param $parameters array The parameters to pass to the renderer.
      */
@@ -91,7 +85,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the title of the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -102,22 +96,22 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the description of the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
     public function render_description($publication)
     {
         $content_object_publication_description_renderer = new ContentObjectPublicationDescriptionRenderer(
-            $this, 
+            $this,
             $publication);
-        
+
         return $content_object_publication_description_renderer->render();
     }
 
     /**
      * Renders information about the repo_viewer of the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -125,7 +119,7 @@ abstract class ContentObjectPublicationListRenderer
     {
         $user = $this->tool_browser->get_parent()->get_user_info(
             $publication[ContentObjectPublication :: PROPERTY_PUBLISHER_ID]);
-        
+
         if ($user)
         {
             return $user->get_fullname();
@@ -138,7 +132,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the date when the given publication was published.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -149,7 +143,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the users and course_groups the given publication was published for.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -158,11 +152,11 @@ abstract class ContentObjectPublicationListRenderer
         try
         {
             $target_entities = WeblcmsRights :: get_instance()->get_target_entities(
-                WeblcmsRights :: VIEW_RIGHT, 
-                Manager :: context(), 
-                $publication[ContentObjectPublication :: PROPERTY_ID], 
-                WeblcmsRights :: TYPE_PUBLICATION, 
-                $this->get_course_id(), 
+                WeblcmsRights :: VIEW_RIGHT,
+                Manager :: context(),
+                $publication[ContentObjectPublication :: PROPERTY_ID],
+                WeblcmsRights :: TYPE_PUBLICATION,
+                $this->get_course_id(),
                 WeblcmsRights :: TREE_TYPE_COURSE);
         }
         catch (Exception $exception)
@@ -175,7 +169,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the time period in which the given publication is active.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -186,7 +180,7 @@ abstract class ContentObjectPublicationListRenderer
         {
             return htmlentities(Translation :: get('Forever', null, Utilities :: COMMON_LIBRARIES));
         }
-        
+
         return htmlentities(
             Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
                  $this->format_date($publication[ContentObjectPublication :: PROPERTY_FROM_DATE]) . ' ' .
@@ -196,7 +190,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders general publication information about the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -207,7 +201,7 @@ abstract class ContentObjectPublicationListRenderer
             $email_icon = ' - <img src="' . Theme :: getInstance()->getCommonImagePath('Action/Email') . '" alt=""' .
                  'style="vertical-align: middle;" title="' . Translation :: get('SentByEmail') . '"/>';
         }
-        
+
         $html = array();
         $html[] = htmlentities(Translation :: get('PublishedOn', null, Utilities :: COMMON_LIBRARIES)) . ' ' .
              $this->render_publication_date($publication);
@@ -215,28 +209,28 @@ abstract class ContentObjectPublicationListRenderer
              $this->render_repository_viewer($publication);
         $html[] = htmlentities(Translation :: get('For', null, Utilities :: COMMON_LIBRARIES)) . ' ' .
              $this->render_publication_targets($publication) . $email_icon;
-        
+
         if ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] != 0 ||
              $publication[ContentObjectPublication :: PROPERTY_TO_DATE] != 0)
         {
             $html[] = '(' . $this->render_publication_period($publication) . ')';
         }
-        
+
         $publication_modified = $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] >
              $publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE];
         $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(), 
+            ContentObject :: class_name(),
             $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-        
+
         $content_object_modified = $content_object->get_modification_date() >
              $publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE];
-        
+
         if ($publication_modified || $content_object_modified)
         {
             $html[] = '<br />';
             $html[] = '<span class="highlight">';
             $html[] = htmlentities(Translation :: get('LastModifiedOn'));
-            
+
             if ($content_object_modified && $publication_modified)
             {
                 if ($content_object->get_modification_date() >
@@ -257,16 +251,16 @@ abstract class ContentObjectPublicationListRenderer
             {
                 $html[] = $this->format_date($publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]);
             }
-            
+
             $html[] = '</span> ';
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Renders the means to move the given publication up one place.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @param $first boolean True if the publication is the first in the list it is a part of.
      * @return string The HTML rendering.
@@ -278,9 +272,9 @@ abstract class ContentObjectPublicationListRenderer
             $up_img = 'Action/Up';
             $up_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_UP, 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]), 
-                array(), 
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_UP,
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
+                array(),
                 true);
             $up_link = '<a href="' . $up_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath($up_img) .
                  '" alt=""/></a>';
@@ -294,7 +288,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the means to move the given publication down one place.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @param $last boolean True if the publication is the last in the list it is a part of.
      * @return string The HTML rendering.
@@ -306,9 +300,9 @@ abstract class ContentObjectPublicationListRenderer
             $down_img = 'Action/Down';
             $down_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_DOWN, 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]), 
-                array(), 
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_DOWN,
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
+                array(),
                 true);
             $down_link = '<a href="' . $down_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath(
                 $down_img) . '"  alt=""/></a>';
@@ -322,7 +316,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the means to toggle visibility for the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -330,15 +324,15 @@ abstract class ContentObjectPublicationListRenderer
     {
         $visibility_url = $this->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]), 
-            array(), 
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY,
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
+            array(),
             true);
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
             $visibility_img = 'Action/Invisible';
         }
-        
+
         elseif ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
              $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
         {
@@ -356,7 +350,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the means to edit the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -364,9 +358,9 @@ abstract class ContentObjectPublicationListRenderer
     {
         $edit_url = $this->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]), 
-            array(), 
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE,
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
+            array(),
             true);
         $edit_link = '<a href="' . $edit_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath(
             'Action/Edit') . '"  alt=""/></a>';
@@ -381,7 +375,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the means to delete the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -389,9 +383,9 @@ abstract class ContentObjectPublicationListRenderer
     {
         $delete_url = $this->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE, 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]), 
-            array(), 
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE,
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
+            array(),
             true);
         $delete_link = '<a href="' . $delete_url . '" onclick="return confirm(\'' .
              addslashes(htmlentities(Translation :: get('ConfirmYourChoice'))) . '\');"><img src="' .
@@ -401,16 +395,16 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the means to give feedback to the given publication
-     * 
+     *
      * @param $publication ContentObjectPublication The publication
      */
     public function render_feedback_action($publication)
     {
         $feedback_url = $this->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => 'view'), 
-            array(), 
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => 'view'),
+            array(),
             true);
         $feedback_link = '<a href="' . $feedback_url . '"><img src="' . Theme :: getInstance()->getCommonImagePath(
             'Action/Browser') . '" alt=""/></a>';
@@ -419,7 +413,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the means to move the given publication to another category.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The HTML rendering.
      */
@@ -427,30 +421,30 @@ abstract class ContentObjectPublicationListRenderer
     {
         if ($this->get_tool_browser() instanceof Categorizable)
         {
-            
+
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory :: class_name(), 
-                    ContentObjectPublicationCategory :: PROPERTY_COURSE), 
+                    ContentObjectPublicationCategory :: class_name(),
+                    ContentObjectPublicationCategory :: PROPERTY_COURSE),
                 new StaticConditionVariable($this->tool_browser->get_parent()->get_course_id()));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublicationCategory :: class_name(), 
-                    ContentObjectPublicationCategory :: PROPERTY_TOOL), 
+                    ContentObjectPublicationCategory :: class_name(),
+                    ContentObjectPublicationCategory :: PROPERTY_TOOL),
                 new StaticConditionVariable($this->tool_browser->get_parent()->get_tool_id()));
-            
+
             $count = DataManager :: count(
-                ContentObjectPublicationCategory :: class_name(), 
+                ContentObjectPublicationCategory :: class_name(),
                 new AndCondition($conditions));
-            
+
             $count ++;
             if ($count > 1)
             {
                 $url = $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY, 
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]), 
-                    array(), 
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]),
+                    array(),
                     true);
                 $link = '<a href="' . $url . '"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Move') .
                      '"  alt=""/></a>';
@@ -469,7 +463,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the attachements of a publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The rendered HTML.
      */
@@ -488,8 +482,8 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $html[] = '<li><a href="' . $this->tool_browser->get_url(
                         array(
-                            Manager :: PARAM_PUBLICATION => $publication[ContentObjectPublication :: PROPERTY_ID], 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW_ATTACHMENT, 
+                            Manager :: PARAM_PUBLICATION => $publication[ContentObjectPublication :: PROPERTY_ID],
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW_ATTACHMENT,
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_OBJECT_ID => $attachment->get_id())) .
                          '"><img src="' . $attachment->get_icon_path(Theme :: ICON_MINI) . '" alt="' . htmlentities(
                             Translation :: get(ContentObject :: type_to_class($attachment->get_type()) . 'TypeName')) .
@@ -504,7 +498,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders publication actions for the given publication.
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @param $first boolean True if the publication is the first in the list it is a part of.
      * @param $last boolean True if the publication is the last in the list it is a part of.
@@ -519,7 +513,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Renders the icon for the given publication
-     * 
+     *
      * @param $publication ContentObjectPublication The publication.
      * @return string The rendered HTML.
      */
@@ -530,7 +524,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Returns the content object for a given publication
-     * 
+     *
      * @param mixed[] $publication
      *
      * @return ContentObject
@@ -540,13 +534,13 @@ abstract class ContentObjectPublicationListRenderer
         $class = $publication[ContentObject :: PROPERTY_TYPE];
         $content_object = new $class($publication);
         $content_object->set_id($publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-        
+
         return $content_object;
     }
 
     /**
      * Checks if a publication is visible for target users
-     * 
+     *
      * @param $publication
      * @return bool
      */
@@ -560,7 +554,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Formats the given date in a human-readable format.
-     * 
+     *
      * @param $date int A UNIX timestamp.
      * @return string The formatted date.
      */
@@ -580,7 +574,7 @@ abstract class ContentObjectPublicationListRenderer
         {
             $object_table_order = $this->tool_browser->get_default_order_property();
         }
-        
+
         return $this->tool_browser->get_publications($offset, $max_objects, $object_table_order);
     }
 
@@ -595,7 +589,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Returns the value of the given renderer parameter.
-     * 
+     *
      * @param $name string The name of the parameter.
      * @return mixed The value of the parameter.
      */
@@ -606,7 +600,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Sets the value of the given renderer parameter.
-     * 
+     *
      * @param $name string The name of the parameter.
      * @param $value mixed The new value for the parameter.
      */
@@ -617,7 +611,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      * Returns the output of the list renderer as HTML.
-     * 
+     *
      * @return string The HTML.
      */
     abstract public function as_html();
@@ -659,11 +653,11 @@ abstract class ContentObjectPublicationListRenderer
         $rgb['r'] = substr($color_number, 0, 3) % 255;
         $rgb['g'] = substr($color_number, 2, 3) % 255;
         $rgb['b'] = substr($color_number, 4, 3) % 255;
-        
+
         $rgb['fr'] = round(($rgb['r'] + 234) / 2);
         $rgb['fg'] = round(($rgb['g'] + 234) / 2);
         $rgb['fb'] = round(($rgb['b'] + 234) / 2);
-        
+
         return $rgb;
     }
 
@@ -671,13 +665,13 @@ abstract class ContentObjectPublicationListRenderer
     {
         $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
              'ContentObjectPublicationListRenderer';
-        
+
         if (! class_exists($class))
         {
             throw new Exception(
                 Translation :: get('ContentObjectPublicationListRendererTypeDoesNotExist', array('type' => $type)));
         }
-        
+
         return new $class($tool_browser);
     }
 
@@ -705,7 +699,7 @@ abstract class ContentObjectPublicationListRenderer
     {
         $va_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_ID);
         $course_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_COURSE_ID);
-        
+
         if (isset($va_id) && isset($course_id))
         {
             if ($course_id == $this->get_course_id())
@@ -720,7 +714,7 @@ abstract class ContentObjectPublicationListRenderer
     {
         $va_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_ID);
         $course_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_COURSE_ID);
-        
+
         if (isset($va_id) && isset($course_id))
         {
             if ($course_id == $this->get_course_id())
@@ -757,104 +751,104 @@ abstract class ContentObjectPublicationListRenderer
     {
         $publication_id = $publication[ContentObjectPublication :: PROPERTY_ID];
         $publication_type = $this->get_publication_type();
-        
+
         $content_object = $this->get_content_object_from_publication($publication);
-        
+
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-        
+
         // quick-win: (re)send mail after publication
         // currently only mail button for announcements; this outer check can be removed, but then all
         // tools must have a <ToolName>PublicationMailerComponent class
         // (see: application/weblcms/tool/announcement/php/lib/component/publication_mailer.class.php)
         if ($publication[ContentObjectPublicationCategory :: PROPERTY_TOOL] == self :: TOOL_TYPE_ANNOUNCEMENT)
         {
-            
+
             if (! $publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
             // && RightsUtilities :: is_allowed(EmailRights :: MAIL_ALLOWED, EmailRights :: LOCATION, EmailRights ::
             // TYPE))
             {
                 $email_url = $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id, 
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MAIL_PUBLICATION));
-                
+
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('SendByEMail'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Email'), 
-                        $email_url, 
-                        ToolbarItem :: DISPLAY_ICON, 
+                        Translation :: get('SendByEMail'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Email'),
+                        $email_url,
+                        ToolbarItem :: DISPLAY_ICON,
                         true));
             }
             else
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('SendByEMail'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/EmailNa'), 
-                        null, 
-                        ToolbarItem :: DISPLAY_ICON, 
+                        Translation :: get('SendByEMail'),
+                        Theme :: getInstance()->getCommonImagePath('Action/EmailNa'),
+                        null,
+                        ToolbarItem :: DISPLAY_ICON,
                         true));
             }
         }
-        
+
         $details_url = $this->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id, 
+                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW));
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Details', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Details'), 
-                $details_url, 
+                Translation :: get('Details', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Details'),
+                $details_url,
                 ToolbarItem :: DISPLAY_ICON));
-        
+
         if ($content_object instanceof ComplexContentObjectSupport)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('DisplayComplex'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_complex_display_url($publication_id), 
+                    Translation :: get('DisplayComplex'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_complex_display_url($publication_id),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
         $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
-        
+
         $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
         $canEditPublicationContentObject = $weblcmsRightsService->canEditPublicationContentObject(
-            $this->get_user(), 
-            $this->tool_browser->get_application()->get_course(), 
+            $this->get_user(),
+            $this->tool_browser->get_application()->get_course(),
             $publication);
-        
+
         if ($canEditContentObject || $canEditPublicationContentObject)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditContentObject', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                    Translation :: get('EditContentObject', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_CONTENT_OBJECT, 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)), 
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_CONTENT_OBJECT,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         $has_edit_right = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $publication);
-        
+
         if ($has_edit_right)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'), 
+                    Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION, 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)), 
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             if ($content_object instanceof ComplexContentObjectSupport && ($content_object->get_owner_id() ==
                  $this->get_tool_browser()->get_user_id()))
             {
@@ -862,29 +856,29 @@ abstract class ContentObjectPublicationListRenderer
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Build'), 
-                            $this->get_complex_builder_url($publication_id), 
+                            Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Build'),
+                            $this->get_complex_builder_url($publication_id),
                             ToolbarItem :: DISPLAY_ICON));
-                    
+
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Preview'), 
-                            $this->get_complex_display_url($publication_id), 
+                            Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                            $this->get_complex_display_url($publication_id),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 else
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'), 
-                            $this->get_complex_display_url($publication_id), 
+                            Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'),
+                            $this->get_complex_display_url($publication_id),
                             ToolbarItem :: DISPLAY_ICON));
                 }
             }
-            
+
             // quick-win: correct implementation of moving up and down.
             // Move publications up and down with the arrow buttons.
             // assuming this methods gets called only once per row in the table:
@@ -902,66 +896,66 @@ abstract class ContentObjectPublicationListRenderer
             $direction = $ascending ? 1 : - 1;
             $true_up = \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION_UP * $direction;
             $true_down = \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION_DOWN * $direction;
-            
+
             if ($show_move)
             {
                 if (! $first_row)
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Up'), 
+                            Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Up'),
                             $this->get_url(
                                 array(
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE, 
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id, 
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => $true_up, 
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type)), 
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => $true_up,
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type)),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 else
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('Action/UpNa'), 
-                            null, 
+                            Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/UpNa'),
+                            null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
-                
+
                 if (! $last_row)
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Down'), 
+                            Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/Down'),
                             $this->get_url(
                                 array(
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE, 
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id, 
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => $true_down, 
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type)), 
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => $true_down,
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type)),
                             ToolbarItem :: DISPLAY_ICON));
                 }
                 else
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES), 
-                            Theme :: getInstance()->getCommonImagePath('Action/DownNa'), 
-                            null, 
+                            Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getCommonImagePath('Action/DownNa'),
+                            null,
                             ToolbarItem :: DISPLAY_ICON));
                 }
             }
-            
+
             $visibility_url = $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY, 
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id, 
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY,
+                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => $publication_type));
-            
+
             // New functionality in old code
-            
+
             if ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
                  $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
             {
@@ -986,17 +980,17 @@ abstract class ContentObjectPublicationListRenderer
                     $visibility_image = 'Action/Period';
                 }
             }
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get($variable, null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath($visibility_image), 
+                    Translation :: get($variable, null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath($visibility_image),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION, 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)), 
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
                 $visibility_image = 'Action/Invisible';
@@ -1005,25 +999,25 @@ abstract class ContentObjectPublicationListRenderer
             {
                 $visibility_image = 'Action/Visible';
             }
-            
+
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Visible', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath($visibility_image), 
-                    $visibility_url, 
+                    Translation :: get('Visible', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath($visibility_image),
+                    $visibility_url,
                     ToolbarItem :: DISPLAY_ICON));
-            
+
             // Move the publication
             if ($this->get_tool_browser()->get_parent() instanceof Categorizable)
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Move'), 
+                        Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Move'),
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY, 
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)), 
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY,
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                         ToolbarItem :: DISPLAY_ICON));
             }
         }
@@ -1032,38 +1026,38 @@ abstract class ContentObjectPublicationListRenderer
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
+                    Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Rights'),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS, 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)), 
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON));
         }
-        
+
         if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT, $publication))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE, 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)), 
-                    ToolbarItem :: DISPLAY_ICON, 
-                    true, 
-                    null, 
-                    null, 
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
+                    ToolbarItem :: DISPLAY_ICON,
+                    true,
+                    null,
+                    null,
                     Translation :: get('ConfirmDeletePublication', null, 'Chamilo\Application\Weblcms')));
         }
-        
+
         if (method_exists($this->get_tool_browser()->get_parent(), 'add_content_object_publication_actions'))
         {
             // $content_object_publication_actions =
             $this->get_tool_browser()->get_parent()->add_content_object_publication_actions($toolbar, $publication);
         }
-        
+
         return $toolbar;
     }
 

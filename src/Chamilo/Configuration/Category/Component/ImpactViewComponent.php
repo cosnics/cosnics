@@ -46,9 +46,15 @@ class ImpactViewComponent extends Manager
 
             foreach ($category_ids as $category_id)
             {
+                if(!$this->get_parent()->allowed_to_delete_category($category_id))
+                {
+                    $failures ++;
+                }
+
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
-                    new StaticConditionVariable($category_id));
+                    new StaticConditionVariable($category_id)
+                );
                 $category = $this->get_parent()->retrieve_categories($condition)->next_result();
 
                 if (is_null($category))
@@ -57,7 +63,7 @@ class ImpactViewComponent extends Manager
                     continue;
                 }
 
-                if (! $category->delete())
+                if (!$category->delete())
                 {
                     $failures ++;
                 }

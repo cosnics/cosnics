@@ -18,64 +18,50 @@ class EventListRenderer extends EventRenderer
 {
 
     /**
-     * Gets a html representation of an event for a list renderer
+     * Gets a html representation of an event for a month renderer
      *
      * @return string
      */
     public function render()
     {
+        $startDate = $this->getEvent()->getStartDate();
+        $endDate = $this->getEvent()->getEndDate();
+        $event = $this->getEvent();
+        $legend = $this->getRenderer()->getLegend();
+
+        $sourceClasses = $legend->getSourceClasses($event->getSource());
+        $eventClasses = implode(' ', array('event-container', $sourceClasses));
+
         $html = array();
 
-        $html[] = '<div class="' . $this->getEventClasses() . '">';
-        $html[] = '<div class="' . $this->getRenderer()->getLegend()->getSourceClasses($this->getEvent()->getSource()) .
-             '">';
-        $html[] = $this->getActions();
-        $html[] = '<h4>';
-        $html[] = $this->getTitle();
-        $html[] = $this->getRange();
-        $html[] = '</h4>';
-        $html[] = $this->getContent();
-        $html[] = $this->getLocation();
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function getTitle()
-    {
-        $html = array();
-
-        $html[] = '<a href="' . html_entity_decode($this->getEvent()->getUrl()) . '">';
-        $html[] = htmlentities($this->getEvent()->getTitle());
-        $html[] = '</a>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->getEvent()->getContent();
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        $html = array();
-
-        if ($this->getEvent()->getLocation())
+        if (! $this->getRenderer()->isSourceVisible($event->getSource()))
         {
-            $html[] = '<h4>';
-            $html[] = Translation :: get('Location') . ': ' . $this->getEvent()->getLocation();
-            $html[] = '</h4>';
+            $rowClasses = ' event-container-hidden';
         }
+        else
+        {
+            $rowClasses = '';
+        }
+
+        $html[] = '<div class="row' . $rowClasses . '" data-source-key="' . $legend->addSource($event->getSource()) .
+             '">';
+
+        $html[] = '<div class="col-xs-1">';
+        $html[] = '<span class="' . $eventClasses . '"></span>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-3 list-event-item-time">';
+        $html[] = $this->getRange();
+        $html[] = '</div>';
+
+        $html[] = '<div class="col-xs-7 list-event-item-data">';
+
+        $html[] = '<a href="' . $event->getUrl() . '">';
+        $html[] = htmlspecialchars($event->getTitle());
+        $html[] = '</a>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -92,10 +78,13 @@ class EventListRenderer extends EventRenderer
 
         if ($this->getEvent()->getEndDate() != '')
         {
+            if (date('Y m d', $this->getEvent()->getStartDate()) == date('Y m d', $this->getEvent()->getEndDate()))
+            {
+                $dateFormat = Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES);
+            }
+
             $html[] = '<div class="calendar-event-range">' . htmlentities(
-                Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                     DatetimeUtilities :: format_locale_date($dateFormat, $this->getEvent()->getStartDate()) . ' ' .
-                     Translation :: get('Until', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+                DatetimeUtilities :: format_locale_date($dateFormat, $this->getEvent()->getStartDate()) . ' - ' .
                      DatetimeUtilities :: format_locale_date($dateFormat, $this->getEvent()->getEndDate())) . '</div>';
         }
         else

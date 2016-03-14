@@ -195,8 +195,8 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                 // show extra part in header to indicate that we're viewing as
                 // another user
                 $user = $this->get_user_info($va_id);
-                $html[] = '<div class="warning-banner warning-emulator">' . Translation :: get('ViewingAsUser') . ' ' .
-                     $user->get_firstname() . ' ' . $user->get_lastname() . ' <a href="' .
+                $html[] = '<div class="row warning-banner bg-warning text-warning">' . Translation :: get('ViewingAsUser') .
+                     ' ' . $user->get_firstname() . ' ' . $user->get_lastname() . ' <a href="' .
                      $this->get_url(
                         array(
                             self :: PARAM_TOOL => 'User',  // replace,

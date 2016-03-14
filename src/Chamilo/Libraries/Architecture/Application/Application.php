@@ -241,7 +241,7 @@ abstract class Application
             {
                 $title = $breadcrumbtrail->get_last()->get_name();
                 
-                $html[] = '<h3 title="' . strip_tags($title) . '">' . $title . '</h3>';
+                $html[] = '<h3 id="page-title" title="' . strip_tags($title) . '">' . $title . '</h3>';
                 $html[] = '<div class="clear">&nbsp;</div>';
             }
         }

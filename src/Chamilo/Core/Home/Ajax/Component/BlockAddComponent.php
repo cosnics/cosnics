@@ -55,7 +55,7 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
             JsonAjaxResult :: not_allowed();
         }
 
-        $column_data = explode('_', $this->getPostDataValue(self :: PARAM_COLUMN));
+        $columnId = $this->getPostDataValue(self :: PARAM_COLUMN);
         $blocks = $this->unserialize_jquery($this->getPostDataValue(self :: PARAM_ORDER));
 
         $block = $this->getPostDataValue(self :: PARAM_BLOCK);
@@ -63,21 +63,35 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $blockType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($block);
 
         $block = new Block();
-        $block->setParentId($column_data[2]);
+        $block->setParentId($columnId);
         $block->setTitle(Translation :: get($blockType, null, $context));
-
         $block->setContext($context);
         $block->setBlockType($blockType);
-        $block->setVisibility(true);
+        $block->setVisibility(1);
         $block->setUserId($userId);
-        $block->create();
 
-        $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
-        $renderer = $rendererFactory->getRenderer();
-        $html = BlockRendition :: factory($renderer, $block)->toHtml();
+        if ($block->create())
+        {
+            $block->setSort(0);
 
-        $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_BLOCK, $html);
-        $result->display();
+            if ($block->update())
+            {
+                $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
+                $renderer = $rendererFactory->getRenderer();
+                $html = BlockRendition :: factory($renderer, $block)->toHtml();
+
+                $result = new JsonAjaxResult(200);
+                $result->set_property(self :: PROPERTY_BLOCK, $html);
+                $result->display();
+            }
+            else
+            {
+                JsonAjaxResult :: error(500);
+            }
+        }
+        else
+        {
+            JsonAjaxResult :: error(500);
+        }
     }
 }

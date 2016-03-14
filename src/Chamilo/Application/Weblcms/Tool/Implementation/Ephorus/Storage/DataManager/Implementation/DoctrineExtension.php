@@ -62,25 +62,34 @@ class DoctrineExtension
         $query .= $this->create_by_assignment_base_query($params->get_condition());
 
         $order_by = $params->get_order_by();
-        $ob = 'ORDER BY ';
 
-        if ($order_by != null)
+        if($order_by)
         {
-            $order_by = $order_by[0];
+            $ob = 'ORDER BY ';
 
-            $ob .= ConditionVariableTranslator :: render($order_by->get_property()) . ' ';
+            if ($order_by != null)
+            {
+                $order_by = $order_by[0];
 
-            if ($order_by->get_direction() == SORT_ASC)
-            {
-                $ob .= 'ASC';
+                $ob .= ConditionVariableTranslator:: render($order_by->get_property()) . ' ';
+
+                if ($order_by->get_direction() == SORT_ASC)
+                {
+                    $ob .= 'ASC';
+                }
+                else
+                {
+                    $ob .= 'DESC';
+                }
             }
-            else
-            {
-                $ob .= 'DESC';
-            }
+
+            $query .= ' ' . $ob;
         }
 
-        $query .= ' ' . $ob;
+        if($params->get_offset() && $params->get_count())
+        {
+            $query .= ' LIMIT ' . $params->get_offset() . ',' . $params->get_count();
+        }
 
         return new DataClassResultSet($this->query($query), ContentObject :: class_name());
     }
@@ -131,7 +140,7 @@ class DoctrineExtension
         $ast_table = AssignmentSubmission :: get_table_name();
         $ast_alias = $tdm->get_alias(AssignmentSubmission :: get_table_name());
         $ast_cid = $tdm->escape_column_name(AssignmentSubmission :: PROPERTY_CONTENT_OBJECT_ID, $ast_alias);
-        $ast_sid = $tdm->escape_column_name(AssignmentSubmission :: PROPERTY_SUBMITTER_ID, $ast_alias);
+        $ast_sid = $tdm->escape_column_name(AssignmentSubmission :: PROPERTY_USER_ID, $ast_alias);
 
         $query = $ast_table . ' ' . $ast_alias . ' JOIN ' . $rco_table . ' ' . $rco_alias . ' ON ' . $rco_id . '=' .
              $ast_cid . ' JOIN ' . $usr_table . ' ' . $usr_alias . ' ON ' . $usr_id . '=' . $ast_sid . ' LEFT JOIN ' .

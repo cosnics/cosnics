@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class NotAllowedException extends \Exception
 {
 
-    public function __construct($show_login_form = true)
+    public function __construct($show_login_form = false)
     {
         Session :: register('request_uri', $_SERVER['REQUEST_URI']);
 

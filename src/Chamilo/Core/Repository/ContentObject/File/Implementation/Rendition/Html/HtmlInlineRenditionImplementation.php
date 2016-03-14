@@ -6,6 +6,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 {
+    const DEFAULT_HEIGHT = 768;
+    const DEFAULT_WIDTH = 1024;
+
     const PARAM_WIDTH = 'width';
     const PARAM_HEIGHT = 'height';
     const PARAM_BORDER = 'border';
@@ -30,6 +33,9 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
                  (string) StringUtilities :: getInstance()->createString($document_type)->upperCamelize() .
                  'RenditionImplementation';
         }
+
+//        $parameters[self :: PARAM_HEIGHT] = $parameters[self :: PARAM_HEIGHT] ? $parameters[self :: PARAM_HEIGHT] : self::DEFAULT_HEIGHT;
+//        $parameters[self :: PARAM_WIDTH] = $parameters[self :: PARAM_WIDTH] ? $parameters[self :: PARAM_WIDTH] : self::DEFAULT_WIDTH;
 
         $rendition = new $class($this->get_context(), $this->get_content_object());
         return $rendition->render($parameters);

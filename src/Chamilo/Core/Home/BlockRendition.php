@@ -14,6 +14,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 
 /**
  *
@@ -24,11 +25,6 @@ class BlockRendition
     const PARAM_ACTION = 'block_action';
     const BLOCK_LIST_SIMPLE = 'simple';
     const BLOCK_LIST_ADVANCED = 'advanced';
-
-    // display the block view for integration into chamil's home page
-    const BLOCK_VIEW = 'block_view';
-    // display the widget view for integration into a third party application such as a portal
-    const WIDGET_VIEW = 'widget_view';
     const BLOCK_PROPERTY_ID = 'id';
     const BLOCK_PROPERTY_NAME = 'name';
     const BLOCK_PROPERTY_IMAGE = 'image';
@@ -48,8 +44,6 @@ class BlockRendition
     private $block;
 
     private $configuration;
-
-    private $view = self :: BLOCK_VIEW;
 
     /**
      *
@@ -108,23 +102,6 @@ class BlockRendition
     {
         $this->renderer = $renderer;
         $this->block = $block;
-    }
-
-    /**
-     * The type of view: block or widget.
-     * Block - default - is for integration into Chamilo's homepage. Widget is for
-     * integration into a third party application - i.e. external portal.
-     *
-     * @return string
-     */
-    public function getView()
-    {
-        return $this->view;
-    }
-
-    public function setView($view)
-    {
-        $this->view = $view;
     }
 
     /**
@@ -238,11 +215,6 @@ class BlockRendition
             return '';
         }
 
-        if ($view)
-        {
-            $this->setView($view);
-        }
-
         $html = array();
         $html[] = $this->renderHeader();
         $html[] = $this->displayContent();
@@ -253,37 +225,24 @@ class BlockRendition
 
     public function renderHeader()
     {
-        $block_id = $this->getBlock()->get_id();
-        $icon_url = $this->getIcon();
-
-        $title = $this->displayTitle();
-
-        if ($this->getView() == self :: BLOCK_VIEW)
-        { // i.e. in widget view it is the portal configuration that decides to show/hide
-            $description_style = $this->getBlock()->isVisible() ? '' : ' style="display: none"';
-        }
-        else
-        {
-            $description_style = '';
-        }
-
         $html = array();
-        $html[] = '<div class="portal-block" id="portal_block_' . $block_id . '">';
-        $html[] = $title;
-        $html[] = '<div class="entry-content description"' . $description_style . '>';
+        $html[] = '<div class="panel panel-default portal-block" data-column-id="' . $this->getBlock()->getParentId() .
+             '" data-element-id="' . $this->getBlock()->get_id() . '">';
+        $html[] = $this->displayTitle();
+        $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+        $html[] = '<div class="panel-body">';
 
         return implode(PHP_EOL, $html);
     }
 
     public function displayTitle()
     {
-        $title = htmlspecialchars($this->getTitle());
-        $actions = $this->displayActions();
-
         $html = array();
-        $html[] = '<div class="title"><div style="float: left;" class="entry-title">' . $title . '</div>';
-        $html[] = $actions;
-        $html[] = '<div style="clear: both;"></div>';
+
+        $html[] = '<div class="panel-heading' . ($this->getBlock()->isVisible() ? '' : ' panel-heading-without-content') .
+             '">';
+        $html[] = '<div class="pull-right">' . $this->displayActions() . '</div>';
+        $html[] = '<h3 class="panel-title">' . htmlspecialchars($this->getTitle()) . '</h3>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -291,11 +250,6 @@ class BlockRendition
 
     public function displayActions()
     {
-        if ($this->getView() != self :: BLOCK_VIEW)
-        {
-            return '';
-        }
-
         $html = array();
 
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
@@ -303,68 +257,74 @@ class BlockRendition
         if ($this->getUser() instanceof User && ($userHomeAllowed || $this->getUser()->is_platform_admin()) &&
              ! $this->getUser()->is_anonymous_user())
         {
-            if ($this->isDeletable())
+            if ($this->isHidable())
             {
-                $delete_text = Translation :: get('Delete');
-                $html[] = '<a href="' . htmlspecialchars($this->getBlockDeletingLink($this->getBlock())) .
-                     '" class="deleteEl" title="' . $delete_text . '">';
-                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Delete')) .
-                     '" alt="' . $delete_text . '" title="' . $delete_text . '"/></a>';
+                $glyphVisible = new BootstrapGlyph('chevron-down');
+                $textVisible = Translation :: get('ShowBlock');
+
+                $html[] = '<a href="#" class="portal-action portal-action-block-show' .
+                     (! $this->getBlock()->isVisible() ? '' : ' hidden') . '" title="' . $textVisible . '">' .
+                     $glyphVisible->render() . '</a>';
+
+                $glyphVisible = new BootstrapGlyph('chevron-up');
+                $textVisible = Translation :: get('HideBlock');
+
+                $html[] = '<a href="#" class="portal-action portal-action-block-hide' .
+                     (! $this->getBlock()->isVisible() ? ' hidden' : '') . '" title="' . $textVisible . '">' .
+                     $glyphVisible->render() . '</a>';
             }
 
             if ($this->isConfigurable())
             {
+                $glyph = new BootstrapGlyph('wrench');
                 $configure_text = Translation :: get('Configure');
-                $html[] = '<a href="' . htmlspecialchars($this->getBlockConfiguringLink($this->getBlock())) .
-                     '" class="configEl" title="' . $configure_text . '">';
-                $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Config')) .
-                     '" alt="' . $configure_text . '" title="' . $configure_text . '"/></a>';
+
+                $html[] = '<a href="#" class="portal-action portal-action-block-configure" title="' . $configure_text .
+                     '">' . $glyph->render() . '</a>';
             }
 
-            if ($this->isHidable())
+            if ($this->isDeletable())
             {
-                $toggle_visibility_text = Translation :: get('ToggleVisibility');
-                $html[] = '<a href="' . htmlspecialchars($this->getBlockVisibilityLink($this->getBlock())) .
-                     '" class="closeEl" title="' . $toggle_visibility_text . '">';
-                $html[] = '<img class="visible"' . ($this->getBlock()->isVisible() ? '' : ' style="display: none;"') .
-                     ' src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Visible')) .
-                     '" alt="' . $toggle_visibility_text . '" title="' . $toggle_visibility_text . '"/>';
-                $html[] = '<img class="invisible"' . ($this->getBlock()->isVisible() ? ' style="display: none;"' : '') .
-                     ' src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Invisible')) .
-                     '" alt="' . $toggle_visibility_text . '" title="' . $toggle_visibility_text . '"/></a>';
-            }
+                $glyph = new BootstrapGlyph('remove');
+                $delete_text = Translation :: get('Delete');
 
-            $drag_text = Translation :: get('Drag');
-            $html[] = '<a href="#" id="drag_block_' . $this->getBlock()->get_id() . '" class="dragEl" title="' .
-                 $drag_text . '">';
-            $html[] = '<img src="' . htmlspecialchars(Theme :: getInstance()->getCommonImagePath('Action/Drag')) .
-                 '" alt="' . $drag_text . '" title="' . $drag_text . '"/></a>';
+                $html[] = '<a href="#" class="portal-action portal-action-block-delete" title="' . $delete_text . '">' .
+                     $glyph->render() . '</a>';
+            }
         }
 
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function displayContent()
     {
         return '';
     }
 
+    /**
+     *
+     * @return string
+     */
     public function renderFooter()
     {
         $html = array();
 
-        $html[] = '<div style="clear: both;"></div>';
         $html[] = '</div>';
-
-        $icon_url = $this->getIcon();
-
-        $html[] = '<div class="portal-block-badge"><img src="' . $icon_url . '" /></div>';
-
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @param Block $block
+     * @return string
+     */
     public function getBlockVisibilityLink(Block $block)
     {
         return $this->getManipulationLink(

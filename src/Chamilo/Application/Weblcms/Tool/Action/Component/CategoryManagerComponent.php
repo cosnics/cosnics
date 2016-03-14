@@ -29,7 +29,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
     public function run()
     {
-        if (!$this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights :: MANAGE_CATEGORIES_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -74,8 +74,25 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         return $category;
     }
 
+    /**
+     * Checks if a new category can be added
+     *
+     * @param int $parent_category_id
+     *
+     * @return bool
+     */
+    public function allowed_to_add_category($parent_category_id)
+    {
+        return $this->is_allowed(WeblcmsRights :: MANAGE_CATEGORIES_RIGHT, null, $parent_category_id);
+    }
+
     public function allowed_to_delete_category($category_id)
     {
+        if(!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
+        {
+            return false;
+        }
+
         $category = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
             ContentObjectPublicationCategory:: class_name(),
             $category_id
@@ -98,8 +115,15 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         return !$this->have_subcategories_publications($category_id);
     }
 
+
+
     public function allowed_to_edit_category($category_id)
     {
+        if(!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
+        {
+            return false;
+        }
+
         $category = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
             ContentObjectPublicationCategory:: class_name(),
             $category_id
@@ -242,7 +266,8 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
      */
     public function allowed_to_change_category_visibility($category_id)
     {
-        return true;
+        return $this->get_course()->is_course_admin($this->getUser()) ||
+            $this->getUser()->is_platform_admin();
     }
 
     /*

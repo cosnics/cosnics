@@ -3,10 +3,6 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\Rendition
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {

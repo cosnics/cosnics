@@ -4,6 +4,7 @@ namespace Chamilo\Configuration\Category\Component;
 use Chamilo\Configuration\Category\Form\CategoryForm;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Menu\CategoryMenu;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -23,6 +24,12 @@ class CreatorComponent extends Manager
     public function run()
     {
         $category_id = Request :: get(self :: PARAM_CATEGORY_ID);
+
+        if(!$this->get_parent()->allowed_to_add_category($category_id))
+        {
+            throw new NotAllowedException();
+        }
+
         $this->set_parameter(self :: PARAM_CATEGORY_ID, $category_id);
         $trail = BreadcrumbTrail :: get_instance();
         $trail->add_help('category_manager_creator');

@@ -4,11 +4,14 @@ namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\NotificationMessage;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -16,6 +19,12 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
 {
     const SLIDESHOW_INDEX = 'slideshow';
     const SLIDESHOW_AUTOPLAY = 'autoplay';
+
+    public function __construct($tool_browser, $parameters = array())
+    {
+        parent :: __construct($tool_browser, $parameters);
+        $this->addWarning();
+    }
 
     public function as_html()
     {
@@ -181,5 +190,14 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
 
         $html[] = implode(PHP_EOL, $table);
         return implode(PHP_EOL, $html);
+    }
+
+    public function addWarning()
+    {
+        $messages = Session :: retrieve(Application :: PARAM_MESSAGES);
+        $messages[Application :: PARAM_MESSAGE_TYPE][] = NotificationMessage :: TYPE_WARNING;
+        $messages[Application :: PARAM_MESSAGE][] = Translation :: get('BrowserWarningPreview');
+
+        Session :: register(Application :: PARAM_MESSAGES, $messages);
     }
 }

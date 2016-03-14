@@ -34,12 +34,12 @@ class ParentChangerComponent extends Manager
 
         $ids = $this->getRequest()->get(self :: PARAM_CATEGORY_ID);
 
-        if (! $user)
+        if (!$user)
         {
             throw new NotAllowedException();
         }
 
-        if (! is_array($ids))
+        if (!is_array($ids))
         {
             $ids = array($ids);
         }
@@ -51,14 +51,16 @@ class ParentChangerComponent extends Manager
             $selected_category = $this->get_parent()->retrieve_categories(
                 new EqualityCondition(
                     new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
-                    new StaticConditionVariable($ids[0])),
+                    new StaticConditionVariable($ids[0])
+                ),
                 null,
                 null,
-                array())->next_result();
+                array()
+            )->next_result();
 
-            if (! $selected_category)
+            if (!$selected_category)
             {
-                throw new ObjectNotExistException(Translation :: get('Category'), $ids[0]);
+                throw new ObjectNotExistException(Translation:: get('Category'), $ids[0]);
             }
 
             $parent = $selected_category->get_parent();
@@ -69,34 +71,46 @@ class ParentChangerComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $categories[] = $this->get_parent()->retrieve_categories(
-                    new EqualityCondition(
-                        new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
-                        new StaticConditionVariable($id)),
-                    null,
-                    null,
-                    array())->next_result();
+                if ($this->get_parent()->allowed_to_edit_category($id))
+                {
+                    $categories[] = $this->get_parent()->retrieve_categories(
+                        new EqualityCondition(
+                            new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_ID),
+                            new StaticConditionVariable($id)
+                        ),
+                        null,
+                        null,
+                        array()
+                    )->next_result();
+                }
             }
             $form = $this->get_move_form($categories, $parent);
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail:: get_instance();
             $trail->add_help('category_manager_parent_changer');
-            $this->set_parameter(self :: PARAM_CATEGORY_ID, Request :: get(self :: PARAM_CATEGORY_ID));
+            $this->set_parameter(self :: PARAM_CATEGORY_ID, Request:: get(self :: PARAM_CATEGORY_ID));
 
             if (count($ids) > 1)
             {
-                $trail->add(new Breadcrumb($this->get_url(), Translation :: get('ParentChangerComponent')));
+                $trail->add(new Breadcrumb($this->get_url(), Translation:: get('ParentChangerComponent')));
             }
             else
             {
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(),
-                        Translation :: get('MoveCategory', array('CATEGORY' => $categories[0]->get_name()))));
+                        Translation:: get('MoveCategory', array('CATEGORY' => $categories[0]->get_name()))
+                    )
+                );
             }
 
             if ($form->validate())
             {
                 $new_parent = $form->exportValue('category');
+
+                if(!$this->get_parent()->allowed_to_add_category($new_parent))
+                {
+                    throw new NotAllowedException();
+                }
 
                 foreach ($categories as $category)
                 {
@@ -109,11 +123,13 @@ class ParentChangerComponent extends Manager
                 $this->clean_display_order_old_parent($parent);
 
                 $this->redirect(
-                    Translation :: get($success ? 'CategoryMoved' : 'CategoryNotMoved'),
+                    Translation:: get($success ? 'CategoryMoved' : 'CategoryNotMoved'),
                     ($success ? false : true),
                     array(
                         self :: PARAM_ACTION => self :: ACTION_BROWSE_CATEGORIES,
-                        self :: PARAM_CATEGORY_ID => $parent));
+                        self :: PARAM_CATEGORY_ID => $parent
+                    )
+                );
             }
             else
             {
@@ -131,17 +147,22 @@ class ParentChangerComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = Display :: error_message(
-                Translation :: get('NoObjectSelected', null, Utilities :: COMMON_LIBRARIES));
+            $html[] = Display:: error_message(
+                Translation:: get('NoObjectSelected', null, Utilities :: COMMON_LIBRARIES)
+            );
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }
     }
 
-    private $tree;
+    private
+        $tree;
 
-    public function get_move_form($categories, $current_parent)
+    public
+    function get_move_form(
+        $categories, $current_parent
+    )
     {
         foreach ($categories as $category)
         {
@@ -149,7 +170,9 @@ class ParentChangerComponent extends Manager
         }
 
         if ($current_parent != 0)
-            $this->tree[0] = Translation :: get('Root');
+        {
+            $this->tree[0] = Translation:: get('Root');
+        }
 
         $this->build_category_tree(0, $selected_categories, $current_parent);
         $form = new FormValidator(
@@ -158,7 +181,10 @@ class ParentChangerComponent extends Manager
             $this->get_url(
                 array(
                     self :: PARAM_ACTION => self :: ACTION_CHANGE_CATEGORY_PARENT,
-                    self :: PARAM_CATEGORY_ID => Request :: get(self :: PARAM_CATEGORY_ID))));
+                    self :: PARAM_CATEGORY_ID => Request:: get(self :: PARAM_CATEGORY_ID)
+                )
+            )
+        );
 
         foreach ($categories as $category)
         {
@@ -167,29 +193,38 @@ class ParentChangerComponent extends Manager
         $form->addElement(
             'static',
             null,
-            Translation :: get(
+            Translation:: get(
                 'ObjectSelected',
-                array('OBJECT' => Translation :: get(count($selected_categories) > 1 ? 'Categories' : 'Category')),
-                Utilities :: COMMON_LIBRARIES),
-            implode('<br>', $category_names));
+                array('OBJECT' => Translation:: get(count($selected_categories) > 1 ? 'Categories' : 'Category')),
+                Utilities :: COMMON_LIBRARIES
+            ),
+            implode('<br>', $category_names)
+        );
 
         $form->addElement(
             'select',
             'category',
-            Translation :: get('Category', null, Utilities :: COMMON_LIBRARIES),
-            $this->tree);
-        $form->addElement('submit', 'submit', Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES));
+            Translation:: get('Category', null, Utilities :: COMMON_LIBRARIES),
+            $this->tree
+        );
+        $form->addElement('submit', 'submit', Translation:: get('Ok', null, Utilities :: COMMON_LIBRARIES));
+
         return $form;
     }
 
-    private $level = 1;
+    private
+        $level = 1;
 
-    public function build_category_tree($parent_id, $selected_categories, $current_parent)
+    public
+    function build_category_tree(
+        $parent_id, $selected_categories, $current_parent
+    )
     {
         $category_class_name = get_class($this->get_parent()->get_category());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_PARENT),
-            new StaticConditionVariable($parent_id));
+            new StaticConditionVariable($parent_id)
+        );
 
         $categories = $this->get_parent()->retrieve_categories($condition, null, null, array());
 
@@ -212,12 +247,16 @@ class ParentChangerComponent extends Manager
         }
     }
 
-    public function clean_display_order_old_parent($parent)
+    public
+    function clean_display_order_old_parent(
+        $parent
+    )
     {
         $category_class_name = get_class($this->get_parent()->get_category());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_PARENT),
-            new StaticConditionVariable($parent));
+            new StaticConditionVariable($parent)
+        );
 
         $categories = $this->get_parent()->retrieve_categories(
             $condition,
@@ -225,7 +264,10 @@ class ParentChangerComponent extends Manager
             null,
             array(
                 new OrderBy(
-                    new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_DISPLAY_ORDER))));
+                    new PropertyConditionVariable($category_class_name, PlatformCategory :: PROPERTY_DISPLAY_ORDER)
+                )
+            )
+        );
 
         $i = 1;
 
