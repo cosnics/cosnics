@@ -229,6 +229,15 @@ class BlockRendition
         $html[] = '<div class="panel panel-default portal-block" data-column-id="' . $this->getBlock()->getParentId() .
              '" data-element-id="' . $this->getBlock()->get_id() . '">';
         $html[] = $this->displayTitle();
+
+        if ($this->isConfigurable())
+        {
+            $html[] = '<div class="portal-block-form hidden">';
+            $html[] = '<div class="panel-body">';
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
         $html[] = '<div class="panel-body">';
 

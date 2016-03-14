@@ -28,9 +28,9 @@ class BlockConfigFormComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
+        $userId = DataManager :: determine_user_id();
 
-        if ($user_id === false)
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
@@ -45,7 +45,7 @@ class BlockConfigFormComponent extends \Chamilo\Core\Home\Ajax\Manager
         {
             $form = new $formClassName($block);
 
-            if ($block->getUserId() == $user_id)
+            if ($block->getUserId() == $userId)
             {
                 $result = new JsonAjaxResult(200);
                 $result->set_property(self :: PROPERTY_FORM, $form->toHtml());

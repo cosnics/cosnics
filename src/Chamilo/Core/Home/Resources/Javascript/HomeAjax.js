@@ -1,5 +1,3 @@
-/*global $, addBlock, bindIcons, blocksDraggable, tabsDroppable, columnsResizable, columnsSortable, confirm, document, editTab, filterComponents, jQuery, showAllComponents, tabsSortable */
-
 $(function()
 {
     
@@ -38,14 +36,20 @@ $(function()
         $(document).on('click', ".portal-action-tab-delete", deleteTab);
         $(document).on('click', ".portal-action-block-show", showBlock);
         $(document).on('click', ".portal-action-block-hide", hideBlock);
+        $(document).on('click', ".portal-action-block-configure", configureBlock);
+        $(document).on('click', ".portal-block-form .btn[name=submit]", saveBlockConfiguration);
+        $(document).on('click', ".portal-block-form .btn[name=cancel]", cancelBlockConfiguration);
         
         $(document).on('input', "#portal-package-name", filterComponents);
         $(document).on('change', "#portal-package-context", filterComponents);
+        
+        $(document).on('dblclick', ".portal-nav-tabs .portal-action-tab-title", displayTabTitlePanel);
+        $(document).on('click', ".portal-tab-panel .portal-tab-panel-hide", hideTabTitlePanel);
+        $(document).on('click', ".portal-tab-panel .portal-tab-title-save", saveTabTitle);
     }
     
     function getAvailableBlocks()
     {
-        
         var parameters = {
             'application' : ajaxContext,
             'go' : 'block_list'
@@ -65,13 +69,13 @@ $(function()
     function displayBlockScreen(e, ui)
     {
         e.preventDefault();
-        $(".portal-package-container").switchClass('hidden', 'show');
+        $(".portal-package-container").removeClass('hidden').addClass('show');
     }
     
     function hideBlockScreen(e, ui)
     {
         e.preventDefault();
-        $(".portal-package-container").switchClass('show', 'hidden');
+        $(".portal-package-container").removeClass('show').addClass('hidden');
     }
     
     function renderAvailablePackages()
@@ -164,8 +168,8 @@ $(function()
                     if (json.result_code == 200)
                     {
                         column.prepend(json.properties.block);
-                        $('.portal-column[data-element-id="' + columnId + '"] .portal-column-empty').switchClass(
-                                'show', 'hidden');
+                        $('.portal-column[data-element-id="' + columnId + '"] .portal-column-empty')
+                                .removeClass('show').addClass('hidden');
                     }
                 });
     }
@@ -203,7 +207,7 @@ $(function()
                     });
                     
                     tab.append(json.properties.html);
-                    $(".portal-tab:visible .portal-action-column-delete").switchClass('hidden', 'show');
+                    $(".portal-tab:visible .portal-action-column-delete").removeClass('hidden').addClass('show');
                 });
         
     }
@@ -225,11 +229,11 @@ $(function()
         {
             
             $('.portal-nav-tabs li.active').removeClass('active');
-            $('.portal-tab.show').switchClass('show', 'hidden');
+            $('.portal-tab.show').removeClass('show').addClass('hidden');
             
             $(".portal-tabs .portal-tab:last").after(json.properties.html);
             $(".portal-nav-tabs .portal-nav-tab:last").after(json.properties.title);
-            $(".portal-action-tab-delete").switchClass('hidden', 'show');
+            $(".portal-action-tab-delete").removeClass('hidden').addClass('show');
         });
     }
     
@@ -237,28 +241,34 @@ $(function()
     {
         e.preventDefault();
         
-        var block = $(this).parent().parent().parent();
-        var blockId = block.data('element-id');
-        var columnId = block.data('column-id');
+        var deleteIsConfirmed = confirm(getTranslation('ConfirmBlockDelete', null, translationContext));
         
-        var parameters = {
-            'application' : ajaxContext,
-            'go' : 'BlockDelete',
-            'block' : blockId
-        };
-        
-        var response = $.ajax({
-            type : "POST",
-            url : ajaxUri,
-            data : parameters
-        });
-        
-        $('.portal-block[data-element-id="' + blockId + '"]').remove();
-        var isEmpty = $('.portal-column[data-element-id="' + columnId + '"] .portal-block:visible').length == 0;
-        
-        if (isEmpty)
+        if (deleteIsConfirmed)
         {
-            $('.portal-column[data-element-id="' + columnId + '"] .portal-column-empty').switchClass('hidden', 'show');
+            var block = $(this).parent().parent().parent();
+            var blockId = block.data('element-id');
+            var columnId = block.data('column-id');
+            
+            var parameters = {
+                'application' : ajaxContext,
+                'go' : 'BlockDelete',
+                'block' : blockId
+            };
+            
+            var response = $.ajax({
+                type : "POST",
+                url : ajaxUri,
+                data : parameters
+            });
+            
+            $('.portal-block[data-element-id="' + blockId + '"]').remove();
+            var isEmpty = $('.portal-column[data-element-id="' + columnId + '"] .portal-block:visible').length == 0;
+            
+            if (isEmpty)
+            {
+                $('.portal-column[data-element-id="' + columnId + '"] .portal-column-empty').removeClass('hidden')
+                        .addClass('show');
+            }
         }
     }
     
@@ -293,7 +303,7 @@ $(function()
                     
                     if (columnCount == 1)
                     {
-                        $(".portal-tab:visible .portal-action-column-delete").switchClass('show', 'hidden');
+                        $(".portal-tab:visible .portal-action-column-delete").removeClass('show').addClass('hidden');
                     }
                 }
             });
@@ -340,7 +350,7 @@ $(function()
                         
                         if ($(".portal-tab").length == 1)
                         {
-                            $(".portal-action-tab-delete").switchClass('show', 'hidden');
+                            $(".portal-action-tab-delete").removeClass('show').addClass('hidden');
                         }
                     }
                 });
@@ -491,6 +501,8 @@ $(function()
         {
         }
         
+        $('.portal-tabs .panel-heading').css('cursor', 'move');
+        
         $(".portal-column").sortable({
             handle : '.panel-heading',
             cancel : 'a,input',
@@ -539,7 +551,7 @@ $(function()
         }
         
         $(".portal-nav-tabs").sortable({
-            cancel : 'span.portal-action-tab-delete',
+            cancel : 'span.portal-action-tab-delete,.portal-actions',
             opacity : 0.8,
             forcePlaceholderSize : true,
             cursor : 'move',
@@ -605,5 +617,171 @@ $(function()
                                 component.parent().hide();
                             }
                         });
+    }
+    
+    function displayTabTitlePanel(e, ui)
+    {
+        e.preventDefault();
+        $('.portal-tab-panel').removeClass('hidden').addClass('show');
+        
+        var tab = $(this).parent();
+        
+        $('.portal-tab-panel input.portal-action-tab-title').val(tab.data('tab-title'));
+        $('.portal-tab-panel input.portal-action-tab-title').data('tab-id', tab.data('tab-id'));
+    }
+    
+    function hideTabTitlePanel(e, ui)
+    {
+        e.preventDefault();
+        $('.portal-tab-panel').removeClass('show').addClass('hidden');
+    }
+    
+    function saveTabTitle(e, ui)
+    {
+        e.preventDefault();
+        
+        var form = $(this).parent();
+        var inputField = $('input.portal-action-tab-title', form);
+        var tabId = inputField.data('tab-id');
+        var tabTitle = inputField.val();
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'TabEdit',
+            'tab' : tabId,
+            'title' : tabTitle
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters,
+            async : false
+        }).success(function(json)
+        {
+            if (json.result_code == 200)
+            {
+                var tab = $('.portal-nav-tab[data-tab-id="' + tabId + '"]');
+                tab.data('tab-title', tabTitle);
+                
+                $('a.portal-action-tab-title span.portal-nav-tab-title', tab).html(tabTitle);
+            }
+        });
+        
+        hideTabTitlePanel(e, ui);
+    }
+    
+    function configureBlock(e, ui)
+    {
+        e.preventDefault();
+        
+        var block = $(this).parent().parent().parent();
+        blockId = block.data('element-id');
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'BlockConfigForm',
+            'block' : blockId
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters,
+            async : false
+        }).success(
+                function(json)
+                {
+                    if (json.result_code == 200)
+                    {
+                        var portalBlockForm = $('.portal-block-form', block);
+                        var contentIsHidden = $('.portal-action-block-hide', block).hasClass('hidden');
+                        
+                        block.removeClass('panel-default').addClass('panel-info');
+                        $('.portal-action', block).hide();
+                        portalBlockForm.toggleClass('hidden');
+                        
+                        if (!contentIsHidden)
+                        {
+                            $('.portal-block-content', block).toggleClass('hidden');
+                        }
+                        else
+                        {
+                            $('.panel-heading', block).removeClass('panel-heading-without-content');
+                        }
+                        
+                        $('.panel-heading .panel-title', block).prepend(
+                                $('<span class="panel-title-configuration">'
+                                        + getTranslation('ConfiguringBlock', null, translationContext) + '</span>'));
+                        
+                        $('.panel-body', portalBlockForm).append(json.properties.form);
+                    }
+                });
+    }
+    
+    function cancelBlockConfiguration(e, ui)
+    {
+        e.preventDefault();
+        
+        var portalBlockForm = $(this).parent().parent().parent().parent().parent().parent();
+        var panel = portalBlockForm.parent();
+        var block = panel.parent();
+        var contentIsHidden = $('.portal-action-block-hide', block).hasClass('hidden');
+        
+        panel.removeClass('panel-info').addClass('panel-default');
+        $('.portal-action', block).show();
+        portalBlockForm.toggleClass('hidden');
+        $('.panel-body', portalBlockForm).html('');
+        
+        if (!contentIsHidden)
+        {
+            $('.portal-block-content', block).toggleClass('hidden');
+        }
+        else
+        {
+            $('.panel-heading', block).addClass('panel-heading-without-content');
+        }
+        
+        $('.panel-title-configuration', block).remove();
+    }
+    
+    function saveBlockConfiguration(e, ui)
+    {
+        e.preventDefault();
+        
+        var form = $(this).parent().parent().parent().parent();
+        var block = form.parent().parent().parent();
+        var blockId = block.data('element-id');
+        
+        var submittedData = {};
+        
+        $(':input', form).each(function(index)
+        {
+            var inputElement = $(this);
+            if (inputElement.attr('type') != 'radio' || inputElement.prop('checked') == true)
+            {
+                submittedData[inputElement.attr('name')] = inputElement.val();
+            }
+        });
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'BlockConfig',
+            'block' : blockId,
+            'data' : submittedData
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters,
+            async : false
+        }).success(function(json)
+        {
+            if (json.result_code == 200)
+            {
+                block.before(json.properties.block).remove();
+            }
+        });
     }
 });
