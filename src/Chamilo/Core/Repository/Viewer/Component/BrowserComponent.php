@@ -213,6 +213,51 @@ class BrowserComponent extends Manager implements TableSupport
 
                 return $menu;
     }
+    
+//     /**
+//      * Workspace menu
+//      */
+//     public function get_workspace($allow_shared = true)
+//     {
+//         $url = $this->get_url($this->get_parameters()) . '&' .  \Chamilo\Core\RepositoryManager :: PARAM_CATEGORY_TYPE . '=%s';
+    
+//         $extra = array();
+    
+//         if ($this->get_query())
+//         {
+//             $search_url = '#';
+//             $search = array();
+    
+//             if ($this->is_shared_object_browser())
+//             {
+//                 $search['title'] = Translation :: get('SharedSearchResults');
+//             }
+//             else
+//             {
+//                 $search['title'] = Translation :: get('SearchResults', null, Utilities :: COMMON_LIBRARIES);
+//             }
+    
+//             $search['url'] = $search_url;
+//             $search['class'] = 'search_results';
+//             $extra[] = $search;
+//         }
+//         else
+//         {
+//             $search_url = null;
+//         }
+    
+//         $menu = new PersonalWorkspaceTable(
+//             $this,
+//             $this->get_user_id(),
+//             new PersonalWorkspace($this->get_user()),
+//             Request :: get(self :: PROPERTY_CATEGORY) ? Request :: get(self :: PROPERTY_CATEGORY) : 0,
+//             $url,
+//             $extra,
+//             $this->get_types());
+    
+//         return $menu;
+//     }
+    
 
     /**
      *
