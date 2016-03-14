@@ -862,13 +862,6 @@ class ContentObjectPublicationForm extends FormValidator
         // safety check: filter any dubbles
         $unique_email = array_unique($target_email);
 
-        var_dump(Translation:: get(
-            'NewPublicationMailSubject',
-            array('COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
-        ));
-
-        exit;
-
         $mail = Mail:: factory(
             Translation:: get(
                 'NewPublicationMailSubject',
