@@ -32,7 +32,7 @@ class SystemAnnouncementsForm extends ConfigurationForm
             $group,
             SystemAnnouncements :: CONFIGURATION_SHOW_EMPTY,
             Translation :: get('ShowWhenEmpty'),
-            '<br/>',
+            '',
             false);
     }
 

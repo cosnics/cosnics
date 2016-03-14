@@ -58,7 +58,7 @@ class CalendarEventForm extends ContentObjectForm
             $start_date, 
             CalendarEvent :: PROPERTY_START_DATE, 
             Translation :: get('StartDate'), 
-            '<br />', 
+            '',
             false);
         $this->get_renderer()->setGroupElementTemplate('{element}', CalendarEvent :: PROPERTY_START_DATE);
         
@@ -68,7 +68,7 @@ class CalendarEventForm extends ContentObjectForm
             CalendarEvent :: PROPERTY_END_DATE, 
             null, 
             'id="end_date" style="width:120px;"');
-        $this->addGroup($end_date, CalendarEvent :: PROPERTY_END_DATE, Translation :: get('EndDate'), '<br />', false);
+        $this->addGroup($end_date, CalendarEvent :: PROPERTY_END_DATE, Translation :: get('EndDate'), '', false);
         $this->get_renderer()->setGroupElementTemplate('{element}', CalendarEvent :: PROPERTY_END_DATE);
         
         // frequency

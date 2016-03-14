@@ -138,7 +138,7 @@ abstract class ConfigurationForm extends FormValidator
                                 $name,
                                 Translation :: get(
                                     (string) StringUtilities :: getInstance()->createString($name)->upperCamelize()),
-                                '<br/>',
+                                '',
                                 false);
                         }
                         elseif ($setting['field'] == 'select')

@@ -593,7 +593,7 @@ EOT;
             Translation :: get('LimitedPeriod'),
             0,
             array('id' => 'limited', 'onclick' => 'javascript:timewindow_show(\'forever_timewindow\')'));
-        $this->addGroup($choices, null, Translation :: get($element_label), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get($element_label), '', false);
         $this->addElement('html', '<div style="margin-left:25px;display:block;" id="forever_timewindow">');
         $this->add_timewindow($fromName, $toName, '', '');
         $this->addElement('html', '</div>');

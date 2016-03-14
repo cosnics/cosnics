@@ -139,7 +139,7 @@ class CourseGroupForm extends FormValidator
             Translation :: get('NewParentGroup'),
             self :: OPTION_PARENT_GROUP_NEW,
             array('id' => self :: PARENT_GROUP_NEW));
-        $this->addGroup($choices, null, Translation :: get('ParentGroupType'), '<br/>', false);
+        $this->addGroup($choices, null, Translation :: get('ParentGroupType'), '', false);
 
         $this->addElement('html', '<div id="parent_group_list">');
         $this->addElement(
