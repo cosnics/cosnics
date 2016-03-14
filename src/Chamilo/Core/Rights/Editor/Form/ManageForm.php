@@ -134,7 +134,7 @@ class ManageForm extends FormValidator
             self :: INHERIT_FALSE,
             array('class' => 'specific_rights_selector'));
 
-        $this->addGroup($group, self :: PROPERTY_INHERIT, null, '<br />');
+        $this->addGroup($group, self :: PROPERTY_INHERIT, null, '');
 
         $this->addElement('category');
     }
@@ -192,7 +192,7 @@ class ManageForm extends FormValidator
             self :: RIGHT_OPTION_SELECT,
             array('class' => 'entity_option_selected'));
 
-        $this->addGroup($group, self :: PROPERTY_RIGHT_OPTION, '', '<br />');
+        $this->addGroup($group, self :: PROPERTY_RIGHT_OPTION, '', '');
         $this->get_renderer()->setElementTemplate($element_template, self :: PROPERTY_RIGHT_OPTION);
 
         // Add the advanced element finder

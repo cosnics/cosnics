@@ -581,7 +581,7 @@ class ContentObjectPublicationForm extends FormValidator
             $group,
             self :: PROPERTY_INHERIT,
             Translation:: get('PublishFor', null, Utilities :: COMMON_LIBRARIES),
-            '<br />'
+            ''
         );
 
         $this->addElement('html', '<div class="right">');
@@ -862,10 +862,8 @@ class ContentObjectPublicationForm extends FormValidator
         // safety check: filter any dubbles
         $unique_email = array_unique($target_email);
 
-        $site_name = PlatformSetting:: get('site_name');
-
         $mail = Mail:: factory(
-            '[' . $site_name . '] ' . Translation:: get(
+            Translation:: get(
                 'NewPublicationMailSubject',
                 array('COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
             ),

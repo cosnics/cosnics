@@ -66,7 +66,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
             Translation :: get('Rating'),
             1,
             array('onclick' => 'javascript:show_controls(\'buttons\')'));
-        $this->addGroup($elem, 'type', Translation :: get('Type', null, Utilities :: COMMON_LIBRARIES), '<br />', false);
+        $this->addGroup($elem, 'type', Translation :: get('Type', null, Utilities :: COMMON_LIBRARIES), '', false);
 
         $this->addElement('html', '<div style="margin-left: 25px; display: block;" id="buttons">');
         $ratings[] = $this->createElement(
@@ -165,7 +165,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
             Translation :: get('Rating'),
             1,
             array('onclick' => 'javascript:show_controls(\'buttons\')'));
-        $this->addGroup($elem, 'type', Translation :: get('Type', null, Utilities :: COMMON_LIBRARIES), '<br />', false);
+        $this->addGroup($elem, 'type', Translation :: get('Type', null, Utilities :: COMMON_LIBRARIES), '', false);
 
         $this->addElement('html', '<div style="margin-left: 25px; display: block;" id="buttons">');
         $ratings[] = $this->createElement(

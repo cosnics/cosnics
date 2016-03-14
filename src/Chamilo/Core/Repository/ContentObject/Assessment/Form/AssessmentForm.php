@@ -77,7 +77,7 @@ class AssessmentForm extends ContentObjectForm
             array(
                 'onclick' => 'javascript:window_show(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self :: LIMITED_ATTEMPTS));
-        $this->addGroup($choices, null, Translation :: get('MaximumAttempts'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('MaximumAttempts'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: UNLIMITED_ATTEMPTS . '_window">');
@@ -102,7 +102,7 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('LimitedQuestionsOnOnePage'),
             1,
             array('onclick' => 'javascript:window_show(\'' . self :: ALL_QUESTIONS . '_window\')'));
-        $this->addGroup($choices, null, Translation :: get('QuestionsPerPage'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('QuestionsPerPage'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: ALL_QUESTIONS . '_window">');
@@ -127,7 +127,7 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('Limited'),
             1,
             array('onclick' => 'javascript:window_show(\'' . self :: UNLIMITED_TIME . '_window\')'));
-        $this->addGroup($choices, null, Translation :: get('MaximumTimeAllowedMinutes'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('MaximumTimeAllowedMinutes'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: UNLIMITED_TIME . '_window">');
@@ -152,7 +152,7 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('RandomQuestions'),
             1,
             array('onclick' => 'javascript:window_show(\'' . self :: RANDOM_QUESTIONS . '_window\')'));
-        $this->addGroup($choices, null, Translation :: get('AmountOfRandomQuestions'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('AmountOfRandomQuestions'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: RANDOM_QUESTIONS . '_window">');
@@ -254,7 +254,7 @@ class AssessmentForm extends ContentObjectForm
             array(
                 'onclick' => 'javascript:window_show(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self :: LIMITED_ATTEMPTS));
-        $this->addGroup($choices, null, Translation :: get('MaximumAttempts'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('MaximumAttempts'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: UNLIMITED_ATTEMPTS . '_window">');
@@ -279,7 +279,7 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('LimitedQuestionsOnOnePage'),
             1,
             array('onclick' => 'javascript:window_show(\'' . self :: ALL_QUESTIONS . '_window\')'));
-        $this->addGroup($choices, null, Translation :: get('QuestionsPerPage'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('QuestionsPerPage'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: ALL_QUESTIONS . '_window">');
@@ -304,7 +304,7 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('Limited'),
             1,
             array('onclick' => 'javascript:window_show(\'' . self :: UNLIMITED_TIME . '_window\')'));
-        $this->addGroup($choices, null, Translation :: get('MaximumTimeAllowedMinutes'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('MaximumTimeAllowedMinutes'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: UNLIMITED_TIME . '_window">');
@@ -329,7 +329,7 @@ class AssessmentForm extends ContentObjectForm
             Translation :: get('RandomQuestions'),
             1,
             array('onclick' => 'javascript:window_show(\'' . self :: RANDOM_QUESTIONS . '_window\')'));
-        $this->addGroup($choices, null, Translation :: get('AmountOfRandomQuestions'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('AmountOfRandomQuestions'), '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="' . self :: RANDOM_QUESTIONS . '_window">');

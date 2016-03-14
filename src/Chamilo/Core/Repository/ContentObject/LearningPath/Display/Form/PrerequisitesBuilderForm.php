@@ -170,7 +170,7 @@ class PrerequisitesBuilderForm extends FormValidator
                 $sibling->get_complex_content_object_item()->get_id());
         }
 
-        $this->addGroup($choices, $prerequisite, Translation :: get('Steps'), '<br />', false);
+        $this->addGroup($choices, $prerequisite, Translation :: get('Steps'), '', false);
         $form_buttons = array();
         $form_buttons[] = $this->createElement(
             'style_reset_button',

@@ -49,7 +49,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
                 $type_label, 
                 $type_id);
         }
-        $this->addGroup($choices, null, Translation :: get('OpenQuestionQuestionType'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('OpenQuestionQuestionType'), '', false);
         
         $html_editor_options = array();
         $html_editor_options['width'] = '595';
@@ -90,7 +90,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
                 $type_label, 
                 $type_id);
         }
-        $this->addGroup($choices, null, Translation :: get('OpenQuestionQuestionType'), '<br />', false);
+        $this->addGroup($choices, null, Translation :: get('OpenQuestionQuestionType'), '', false);
         
         $html_editor_options = array();
         $html_editor_options['width'] = '595';
