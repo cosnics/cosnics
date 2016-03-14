@@ -241,23 +241,36 @@ class Basic extends Renderer
         return implode(PHP_EOL, $html);
     }
 
-    public function renderTabTitlePanel()
+    public function renderPanel($rowClass, $actionClass, $title, $content)
     {
         $html = array();
 
-        $html[] = '<div class="row portal-tab-panel hidden">';
+        $html[] = '<div class="row ' . $rowClass . ' hidden">';
 
         $html[] = '<div class="col-xs-12">';
         $html[] = '<div class="panel panel-primary">';
 
         $html[] = '<div class="panel-heading">';
         $html[] = '<div class="pull-right">';
-        $html[] = '<a href="#" class="portal-tab-panel-hide"><span class="glyphicon glyphicon-remove"></span></a>';
+        $html[] = '<a href="#" class="' . $actionClass . '"><span class="glyphicon glyphicon-remove"></span></a>';
         $html[] = '</div>';
-        $html[] = '<h3 class="panel-title">' . Translation :: get('EditTabTitle') . '</h3>';
+        $html[] = '<h3 class="panel-title">' . $title . '</h3>';
         $html[] = '</div>';
 
         $html[] = '<div class="panel-body">';
+        $html[] = $content;
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderTabTitlePanel()
+    {
+        $html = array();
 
         $html[] = '<form class="form-inline portal-action-tab-form">';
         $html[] = '<div class="form-group">';
@@ -270,13 +283,11 @@ class Basic extends Renderer
 
         $html[] = '</form>';
 
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->renderPanel(
+            'portal-tab-panel',
+            'portal-tab-panel-hide',
+            Translation :: get('EditTabTitle'),
+            implode(PHP_EOL, $html));
     }
 
     /**
@@ -286,21 +297,6 @@ class Basic extends Renderer
     public function renderPackageContainer()
     {
         $html = array();
-
-        $html[] = '<div class="row portal-package-container hidden">';
-
-        // Packages List
-        $html[] = '<div class="col-xs-12">';
-        $html[] = '<div class="panel panel-primary">';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<a href="#" class="portal-action portal-package-hide"><span class="glyphicon glyphicon-remove"></span></a>';
-        $html[] = '</div>';
-        $html[] = '<h3 class="panel-title">' . Translation :: get('BrowseBlocks') . '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body">';
 
         $html[] = '<form class="form-inline package-search">';
         $html[] = '<div class="form-group">';
@@ -324,13 +320,11 @@ class Basic extends Renderer
         $html[] = '<div class="row portal-package-blocks">';
         $html[] = '</div>';
 
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $this->renderPanel(
+            'portal-package-container',
+            'portal-action portal-package-hide',
+            Translation :: get('BrowseBlocks'),
+            implode(PHP_EOL, $html));
     }
 
     /**
