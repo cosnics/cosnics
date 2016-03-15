@@ -187,4 +187,25 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         }
         return true;
     } // end func onQuickFormEvent
+
+    /**
+     * Returns the radio element in HTML
+     *
+     * @since     1.0
+     * @access    public
+     * @return    string
+     */
+    function toHtml()
+    {
+        $html = array();
+
+        $html[] = '<div class="checkbox">';
+        $html[] = '<label>';
+        $html[] = HTML_QuickForm_input::toHtml() ;
+        $html[] = $this->_text;
+        $html[] = '</label>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
 }

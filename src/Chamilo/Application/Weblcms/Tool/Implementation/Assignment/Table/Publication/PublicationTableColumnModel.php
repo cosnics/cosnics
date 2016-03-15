@@ -26,7 +26,7 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
      */
     public function initialize_columns()
     {
-        parent :: initialize_columns();
+        parent :: initialize_columns(false);
 
         $this->add_column(
             new DataClassPropertyTableColumn(Assignment :: class_name(), Assignment :: PROPERTY_END_TIME, null, false));
@@ -40,5 +40,7 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
                 null,
                 false),
             1);
+
+        $this->addActionsColumn();
     }
 }
