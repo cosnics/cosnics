@@ -176,7 +176,7 @@ class HomeService
             $homeUserIdentifier = $this->determineHomeUserIdentifier($user);
             $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
 
-            if ($userHomeAllowed && $this->get_user() instanceof User)
+            if ($userHomeAllowed && $user instanceof User)
             {
                 if ($this->countElementsByUserIdentifier($homeUserIdentifier) == 0)
                 {
