@@ -169,7 +169,7 @@ class HomeService
      * @param string $type
      * @param integer $parentIdentifier
      */
-    public function getElements(User $user, $type, $parentIdentifier = 0)
+    public function getElements(User $user = null, $type, $parentIdentifier = 0)
     {
         if (! isset($this->elements))
         {
@@ -207,7 +207,7 @@ class HomeService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return integer
      */
-    public function determineHomeUserIdentifier(User $user)
+    public function determineHomeUserIdentifier(User $user = null)
     {
         if (! isset($this->homeUserIdentifier))
         {
@@ -265,13 +265,13 @@ class HomeService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @return boolean
      */
-    public function userHasMultipleTabs(User $user)
+    public function userHasMultipleTabs(User $user = null)
     {
         $tabs = $this->getElements($user, Tab :: class_name());
         return count($tabs) > 1;
     }
 
-    public function tabByUserAndIdentifierHasMultipleColumns(User $user, $tabIdentifier)
+    public function tabByUserAndIdentifierHasMultipleColumns(User $user = null, $tabIdentifier)
     {
         $columns = $this->getElements($user, Column :: class_name(), $tabIdentifier);
         return count($columns) > 1;
