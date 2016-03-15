@@ -12,9 +12,9 @@ class PortalHome extends \Chamilo\Core\Home\BlockRendition
     {
         $html = PlatformSetting :: get('portal_home');
         $html = $html ? $html : Translation :: get('ConfigurePortalHomeFirst');
-        
+
         $renderer = new ContentObjectResourceRenderer($this, $html);
-        
+
         return $renderer->run();
     }
 

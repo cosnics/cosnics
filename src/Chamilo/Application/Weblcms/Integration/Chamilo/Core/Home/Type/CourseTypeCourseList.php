@@ -4,13 +4,13 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Application\Weblcms\Renderer\CourseList\Type\FilteredCourseListRenderer;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * This class represents a block that shows courses of a specific type
@@ -25,18 +25,17 @@ class CourseTypeCourseList extends Block implements ConfigurableInterface
 
     private $courseType;
 
-//    public function toHtml($view = '')
-//    {
-//        if ($this->getCourseRenderer()->get_courses()->size() > 0)
-//        {
-//            return parent :: toHtml($view);
-//        }
-//        else
-//        {
-//            return '';
-//        }
-//    }
-
+    // public function toHtml($view = '')
+    // {
+    // if ($this->getCourseRenderer()->get_courses()->size() > 0)
+    // {
+    // return parent :: toHtml($view);
+    // }
+    // else
+    // {
+    // return '';
+    // }
+    // }
     function displayContent()
     {
         $html = array();
@@ -61,7 +60,7 @@ class CourseTypeCourseList extends Block implements ConfigurableInterface
         return implode(PHP_EOL, $html);
     }
 
-    function get_title()
+    function getTitle()
     {
         $courseType = $this->courseType;
         if ($courseType && ! is_null($courseType))
@@ -70,7 +69,7 @@ class CourseTypeCourseList extends Block implements ConfigurableInterface
         }
         else
         {
-            return parent :: get_title();
+            return parent :: getTitle();
         }
     }
 

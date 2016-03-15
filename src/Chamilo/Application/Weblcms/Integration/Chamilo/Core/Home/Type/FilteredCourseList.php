@@ -4,17 +4,18 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * This class represents a block to show the course list filtered in a given course type and optionally a given category
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FilteredCourseList extends Block implements ConfigurableInterface
+class FilteredCourseList extends Block implements ConfigurableInterface, StaticBlockTitleInterface
 {
     const CONFIGURATION_SHOW_NEW_ICONS = 'show_new_icons';
     const CONFIGURATION_COURSE_TYPE = 'course_type';
@@ -53,7 +54,6 @@ class FilteredCourseList extends Block implements ConfigurableInterface
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
     public function getCourseListRenderer()
     {
         if (! isset($this->courseListRenderer))
@@ -186,7 +186,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface
         $this->courseTypeId = $courseTypeIds[0];
 
         // TODO: Fix this?
-        $this->userCourseCategoryId =  $courseTypeIds[1];
+        $this->userCourseCategoryId = $courseTypeIds[1];
     }
 
     /**

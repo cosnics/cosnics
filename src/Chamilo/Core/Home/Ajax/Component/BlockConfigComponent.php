@@ -32,9 +32,9 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
+        $userId = DataManager :: determine_user_id();
 
-        if ($user_id === false)
+        if ($userId === false)
         {
             JsonAjaxResult :: not_allowed();
         }
@@ -44,7 +44,7 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
 
         $block = DataManager :: retrieve_by_id(Block :: class_name(), $block);
 
-        if ($block->getUserId() == $user_id)
+        if ($block->getUserId() == $userId)
         {
             $postedValues = $this->getPostDataValue(self :: PARAM_DATA);
 
@@ -56,6 +56,11 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                 foreach ($blockRendition->getConfigurationVariables() as $configurationVariable)
                 {
                     $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
+                }
+
+                if (isset($postedValues[Block :: PROPERTY_TITLE]))
+                {
+                    $block->setTitle($postedValues[Block :: PROPERTY_TITLE]);
                 }
 
                 if (! $block->update())

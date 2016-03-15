@@ -1,9 +1,7 @@
 <?php
-
 namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Home\Interfaces\AngularConnectorInterface;
 
 /**
  * Services that connects to the several home integration packages and connects their angular functionality
@@ -13,6 +11,7 @@ use Chamilo\Core\Home\Interfaces\AngularConnectorInterface;
  */
 class AngularConnectorService
 {
+
     /**
      * List of available angular connectors
      *
@@ -27,20 +26,20 @@ class AngularConnectorService
      */
     public function __construct(Configuration $configuration = null)
     {
-        if(!$configuration)
+        if (! $configuration)
         {
-            $configuration = Configuration::get_instance();
+            $configuration = Configuration :: get_instance();
         }
 
         $this->angularConnectors = array();
 
         $homeIntegrationPackages = $configuration->getIntegrationRegistrations('Chamilo\Core\Home');
-        foreach($homeIntegrationPackages as $homeIntegrationPackage)
+        foreach ($homeIntegrationPackages as $homeIntegrationPackage)
         {
             $packageContext = $homeIntegrationPackage['context'];
             $class = $packageContext . '\\AngularConnector';
 
-            if(class_exists($class))
+            if (class_exists($class))
             {
                 $this->angularConnectors[] = new $class();
             }
@@ -56,7 +55,7 @@ class AngularConnectorService
     {
         $html = array();
 
-        foreach($this->angularConnectors as $angularConnector)
+        foreach ($this->angularConnectors as $angularConnector)
         {
             $html[] = $angularConnector->loadAngularModules();
         }
@@ -73,7 +72,7 @@ class AngularConnectorService
     {
         $angularModules = array();
 
-        foreach($this->angularConnectors as $angularConnector)
+        foreach ($this->angularConnectors as $angularConnector)
         {
             $angularModules = array_merge($angularModules, $angularConnector->getAngularModules());
         }

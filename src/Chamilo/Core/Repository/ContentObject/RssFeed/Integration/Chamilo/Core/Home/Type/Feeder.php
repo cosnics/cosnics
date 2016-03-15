@@ -2,17 +2,17 @@
 namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 
-class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
+class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
+    StaticBlockTitleInterface
 {
 
     public function __construct($renderer, $block)
     {
-        parent:: __construct($renderer, $block, Translation:: get('Feeder'));
+        parent :: __construct($renderer, $block, Translation :: get('Feeder'));
     }
 
     public function isVisible()
@@ -34,7 +34,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
             return $content_object->get_title();
         }
 
-        return parent::getTitle();
+        return parent :: getTitle();
     }
 
     /**
@@ -50,24 +50,23 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         $target = $this->getLinkTarget();
         $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
-        $icon = Theme:: getInstance()->getImagePath(
+        $icon = Theme :: getInstance()->getImagePath(
             'Chamilo\Core\Repository\ContentObject\RssFeed',
-            'Logo/' . Theme :: ICON_MINI
-        );
+            'Logo/' . Theme :: ICON_MINI);
 
         $html[] = '<rss-feed-renderer rss-feed-url="' . $content_object->get_url() . '" number-of-entries="' .
-            $content_object->get_number_of_entries() . '">';
+             $content_object->get_number_of_entries() . '">';
         $html[] = '<ul class="rss_feeds">';
 
         $html[] = '<li ng-repeat="entry in main.feedEntries" class="rss_feed_item"' . 'style="background-image: url(' .
-            $icon . ')">';
+             $icon . ')">';
         $html[] = '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';
         $html[] = '</li>';
 
         $html[] = '</ul>';
 
         $html[] = '<span style="font-weight: bold;" ng-show="main.feedEntries.length == 0">' .
-            Translation:: get('NoFeedsFound') . '</span>';
+             Translation :: get('NoFeedsFound') . '</span>';
         $html[] = '</rss-feed-renderer>';
 
         return implode(PHP_EOL, $html);

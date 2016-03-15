@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 
 /**
  * A "Static" block.
@@ -14,7 +15,7 @@ use Chamilo\Core\Home\Architecture\ConfigurableInterface;
  * @package home.block
  */
 class StaticContent extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements
-    ConfigurableInterface
+    ConfigurableInterface, StaticBlockTitleInterface
 {
 
     /**

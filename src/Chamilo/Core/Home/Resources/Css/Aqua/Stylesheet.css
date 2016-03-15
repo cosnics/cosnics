@@ -1,46 +1,3 @@
-/*****************************************************
- *  STYLES NEEDED FOR JQUERY FUNCTIONALITY           *
- *****************************************************/
-.droppable-active {
-	opacity: 1.0;
-}
-
-.droppable-hover {
-	outline: 1px dotted black;
-}
-
-/**
- * 
- */
-#home-modal-overlay {
-	background-color: black;
-	cursor: wait;
-}
-
-#home-modal-container {
-	position: fixed;
-	width: 50%;
-	height: 50%;
-	padding: 10px;
-	background-color: #FFFFFF;
-	border: 1px solid black;
-}
-
-a.home-modal-close {
-	background: url(../../Images/Aqua/Action/CloseForm.png) no-repeat;
-	width: 16px;
-	height: 16px;
-	display: inline;
-	z-index: 3200;
-	position: absolute;
-	top: 5px;
-	right: 5px;
-	cursor: pointer;
-}
-
-/******************
- * BOOTSTRAP HOME *
- ******************/
 .portal-action {
 	margin: 0px 3px;
 	color: black;
@@ -74,6 +31,16 @@ a.home-modal-close {
 	border: 0px solid #F5F5F5;
 	background-color: transparent;
 	padding: 10px 15px;
+	color: black;
+	text-decoration: none;
+}
+
+.portal-nav-tabs .btn-action-toolbar .btn.dropdown-toggle {
+	padding: 10px 0px;
+}
+
+.portal-nav-tabs .btn-action-toolbar .btn.dropdown-toggle:hover {
+	background-color: transparent;
 }
 
 .portal-action-tab-delete {
@@ -83,8 +50,14 @@ a.home-modal-close {
 	display: inline-block;
 }
 
-.portal-action.portal-package-hide {
+.portal-action.portal-package-hide, .portal-tab-panel .portal-tab-panel-hide
+	{
 	color: white;
+}
+
+.portal-tab-panel .portal-tab-panel-hide {
+	opacity: 0.5;
+	text-decoration: none;
 }
 
 .portal-package-blocks a.btn {
@@ -120,10 +93,6 @@ a.home-modal-close {
 .portal-tabs .panel-heading-without-content {
 	border-bottom: 0px solid white;
 	border-radius: 3px;
-}
-
-.portal-tabs .panel-heading {
-	cursor: move;
 }
 
 .ui-state-highlight, .portal-block-sortable-helper,

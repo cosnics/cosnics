@@ -15,6 +15,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 
 /**
  *
@@ -23,8 +24,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 class BlockRendition
 {
     const PARAM_ACTION = 'block_action';
-    const BLOCK_LIST_SIMPLE = 'simple';
-    const BLOCK_LIST_ADVANCED = 'advanced';
     const BLOCK_PROPERTY_ID = 'id';
     const BLOCK_PROPERTY_NAME = 'name';
     const BLOCK_PROPERTY_IMAGE = 'image';
@@ -166,6 +165,11 @@ class BlockRendition
         return $this instanceof ConfigurableInterface;
     }
 
+    public function hasStaticTitle()
+    {
+        return $this instanceof StaticBlockTitleInterface;
+    }
+
     /**
      * Returns true if the block is to be displayed, false otherwise.
      * By default do not show on home page when user is
@@ -229,6 +233,25 @@ class BlockRendition
         $html[] = '<div class="panel panel-default portal-block" data-column-id="' . $this->getBlock()->getParentId() .
              '" data-element-id="' . $this->getBlock()->get_id() . '">';
         $html[] = $this->displayTitle();
+
+        if ($this->isConfigurable())
+        {
+            $html[] = '<div class="portal-block-form hidden">';
+            $html[] = '<div class="panel-body">';
+
+            $formClassName = $this->getBlock()->getContext() . '\Integration\Chamilo\Core\Home\Form\\' .
+                 $this->getBlock()->getBlockType() . 'Form';
+
+            if (class_exists($formClassName))
+            {
+                $form = new $formClassName($this->getBlock(), $this->hasStaticTitle());
+                $html[] = $form->toHtml();
+            }
+
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
         $html[] = '<div class="panel-body">';
 
