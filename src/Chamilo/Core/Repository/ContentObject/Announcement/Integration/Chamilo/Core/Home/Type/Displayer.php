@@ -1,12 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Announcement\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
-class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
+class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
+    StaticBlockTitleInterface
 {
 
     public function __construct($renderer, $block)

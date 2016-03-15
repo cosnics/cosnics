@@ -145,21 +145,30 @@ class Basic extends Renderer
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
         $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
 
-        if (($generalMode && $user instanceof User && $user->is_platform_admin()))
+        $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)));
+        $isGeneralMode = ($generalMode && $user instanceof User && $user->is_platform_admin());
+
+        if ($isGeneralMode)
         {
             $html[] = '<div class="row danger-banner text-danger bg-danger">' .
                  Translation :: get('HomepageInGeneralMode') . '</div>';
         }
 
-        $html[] = $this->renderTabs();
-        $html[] = $this->renderPackageContainer();
-        $html[] = $this->renderContent();
-
-        if ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)))
+        if ($isEditable)
         {
             $html[] = '<script type="text/javascript" src="' .
                  Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
         }
+
+        $html[] = $this->renderTabs();
+
+        if ($isEditable)
+        {
+            $html[] = $this->renderTabTitlePanel();
+        }
+
+        $html[] = $this->renderPackageContainer();
+        $html[] = $this->renderContent();
 
         $html[] = '<script type="text/javascript" src="' .
              Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' . '"></script>';
@@ -201,11 +210,14 @@ class Basic extends Renderer
             }
 
             $listItem[] = ' data-tab-id="' . $tab->get_id() . '"';
+            $listItem[] = ' data-tab-title="' . $tab->getTitle() . '"';
             $listItem[] = '>';
 
             $html[] = implode(' ', $listItem);
 
-            $html[] = '<a class="portal-action-tab-title" href="#">' . htmlspecialchars($tab->getTitle());
+            $html[] = '<a class="portal-action-tab-title" href="#">';
+
+            $html[] = '<span class="portal-nav-tab-title">' . htmlspecialchars($tab->getTitle()) . '</span>';
 
             $isUser = $this->get_user() instanceof User;
             $homeAllowed = $isUser && ($userHomeAllowed || ($this->get_user()->is_platform_admin()) && $generalMode);
@@ -225,6 +237,44 @@ class Basic extends Renderer
         $html[] = $this->renderButtons();
 
         $html[] = '</ul>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderTabTitlePanel()
+    {
+        $html = array();
+
+        $html[] = '<div class="row portal-tab-panel hidden">';
+
+        $html[] = '<div class="col-xs-12">';
+        $html[] = '<div class="panel panel-primary">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<div class="pull-right">';
+        $html[] = '<a href="#" class="portal-tab-panel-hide"><span class="glyphicon glyphicon-remove"></span></a>';
+        $html[] = '</div>';
+        $html[] = '<h3 class="panel-title">' . Translation :: get('EditTabTitle') . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
+
+        $html[] = '<form class="form-inline portal-action-tab-form">';
+        $html[] = '<div class="form-group">';
+        $html[] = '<input type="text" class="form-control portal-action-tab-title" data-tab-id="" placeholder="' .
+             Translation :: get('EnterTabTitle') . '" />';
+        $html[] = '</div>';
+
+        $html[] = '<button type="submit" class="btn btn-primary portal-tab-title-save">' . Translation :: get('Save') .
+             '</button>';
+
+        $html[] = '</form>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -289,7 +339,7 @@ class Basic extends Renderer
      */
     public function renderContent()
     {
-        $angularConnectorService = new AngularConnectorService(Configuration::get_instance());
+        $angularConnectorService = new AngularConnectorService(Configuration :: get_instance());
         $modules = $angularConnectorService->getAngularModules();
         $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 
@@ -401,7 +451,8 @@ class Basic extends Renderer
                     '#',
                     SubButton :: DISPLAY_ICON_AND_LABEL,
                     false,
-                    'portal-add-block');
+                    'portal-add-block btn-link');
+                $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
 
                 $buttonToolBar->addItem($splitDropdownButton);
 
@@ -412,7 +463,7 @@ class Basic extends Renderer
                         '#',
                         SubButton :: DISPLAY_LABEL,
                         false,
-                        'portal-add-column'));
+                        'portal-add-column btn-link'));
                 $splitDropdownButton->addSubButton(
                     new SubButton(
                         Translation :: get('NewTab'),
@@ -420,7 +471,7 @@ class Basic extends Renderer
                         '#',
                         SubButton :: DISPLAY_LABEL,
                         false,
-                        'portal-add-tab'));
+                        'portal-add-tab btn-link'));
 
                 $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
 
@@ -434,7 +485,7 @@ class Basic extends Renderer
                             SubButton :: DISPLAY_LABEL,
                             true,
                             false,
-                            'portal-reset'));
+                            'portal-reset btn-link'));
                 }
             }
 

@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * Block to display all bookmarks foor the handbooks application

@@ -3,12 +3,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 
 /**
  * $Id: new_announcements.class.php 216 2009-11-13 14:08:06Z kariboe $

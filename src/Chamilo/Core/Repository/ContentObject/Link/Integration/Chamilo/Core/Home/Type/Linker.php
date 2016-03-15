@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Link\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Libraries\Platform\Translation;
 
-class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface
+class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
+    StaticBlockTitleInterface
 {
 
     public function __construct($renderer, $block)
