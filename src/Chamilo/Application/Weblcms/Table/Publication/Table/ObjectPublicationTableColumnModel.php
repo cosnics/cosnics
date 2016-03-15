@@ -32,8 +32,10 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
 
     /**
      * Initializes the columns for the table
+     *
+     * @param bool $addActionsColumn
      */
-    public function initialize_columns()
+    public function initialize_columns($addActionsColumn = true)
     {
         $this->add_column(new StaticTableColumn(self :: COLUMN_STATUS, '', 'publication_table_status_column'));
 
@@ -79,6 +81,17 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
             )
         );
 
+        if($addActionsColumn)
+        {
+            $this->addActionsColumn();
+        }
+    }
+
+    /**
+     * Adds the actions column
+     */
+    protected function addActionsColumn()
+    {
         $this->add_column(new ActionsTableColumn('publication_table_actions_column'));
     }
 
