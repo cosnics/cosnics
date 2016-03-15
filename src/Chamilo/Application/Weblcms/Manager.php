@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms;
 
+use Chamilo\Application\Weblcms\Admin\CourseAdminValidator;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -10,6 +11,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -553,12 +555,10 @@ abstract class Manager extends Application
                 return true;
             }
 
+            $courseValidator = new CourseAdminValidator(Configuration::get_instance());
+
             // If the user is a sub administrator, grant all rights
-            if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: entity_is_admin_for_target(
-                \Chamilo\Application\Weblcms\Admin\Entity\UserEntity :: ENTITY_TYPE,
-                $user->get_id(),
-                \Chamilo\Application\Weblcms\Admin\Entity\CourseEntity :: ENTITY_TYPE,
-                $course->get_id()))
+            if ($courseValidator->isUserAdminOfCourse($user, $course))
             {
                 return true;
             }
