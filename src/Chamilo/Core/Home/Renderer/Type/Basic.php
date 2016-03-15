@@ -2,14 +2,12 @@
 namespace Chamilo\Core\Home\Renderer\Type;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Home\BlockRendition;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Renderer\Type\Basic\TabRenderer;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
-use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
@@ -22,6 +20,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Home\Renderer\Type\Basic\TabHeaderRenderer;
 
 /**
  *
@@ -67,79 +66,10 @@ class Basic extends Renderer
 
     /**
      *
-     * @param string $type
-     * @param integer $parentId
-     */
-    private function getElements($type, $parentIdentifier = 0)
-    {
-        if (! isset($this->elements))
-        {
-            $homeUserIdentifier = $this->determineHomeUserIdentifier();
-            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-
-            if ($userHomeAllowed && $this->get_user() instanceof User)
-            {
-                if ($this->getHomeService()->countElementsByUserIdentifier($homeUserIdentifier) == 0)
-                {
-                    $this->getHomeService()->createDefaultHomeByUserIdentifier($homeUserIdentifier);
-                }
-            }
-
-            $elementsResultSet = $this->getHomeService()->getElementsByUserIdentifier($homeUserIdentifier);
-
-            while ($element = $elementsResultSet->next_result())
-            {
-                $this->elements[$element->get_type()][$element->getParentId()][] = $element;
-            }
-        }
-
-        if (isset($this->elements[$type]) && isset($this->elements[$type][$parentIdentifier]))
-        {
-            return $this->elements[$type][$parentIdentifier];
-        }
-        else
-        {
-            return array();
-        }
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    private function determineHomeUserIdentifier()
-    {
-        if (! isset($this->homeUserIdentifier))
-        {
-            $user = $this->get_user();
-            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-            $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
-
-            // Get user id
-            if ($user instanceof User && $generalMode && $user->is_platform_admin())
-            {
-                $this->homeUserIdentifier = 0;
-            }
-            elseif ($userHomeAllowed && $user instanceof User)
-            {
-                $this->homeUserIdentifier = $user->get_id();
-            }
-            else
-            {
-                $this->homeUserIdentifier = 0;
-            }
-        }
-
-        return $this->homeUserIdentifier;
-    }
-
-    /**
-     *
      * @see \Chamilo\Core\Home\Renderer\Renderer::render()
      */
     public function render()
     {
-        $currentTabIdentifier = $this->getCurrentTabIdentifier();
         $user = $this->get_user();
 
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
@@ -182,56 +112,17 @@ class Basic extends Renderer
      */
     public function renderTabs()
     {
-        $tabs = $this->getElements(Tab :: class_name());
-        $currentTabIdentifier = $this->getCurrentTabIdentifier();
-        $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
-
         $html = array();
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 
+        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab :: class_name());
+
         foreach ($tabs as $tabKey => $tab)
         {
-            $tab_id = $tab->get_id();
-
-            $listItem = array();
-
-            $listItem[] = '<li';
-
-            if (($tab_id == $currentTabIdentifier) || (count($tabs) == 1) ||
-                 (! isset($currentTabIdentifier) && $tabKey == 0))
-            {
-                $listItem[] = 'class="portal-nav-tab active"';
-            }
-            else
-            {
-                $listItem[] = 'class="portal-nav-tab"';
-            }
-
-            $listItem[] = ' data-tab-id="' . $tab->get_id() . '"';
-            $listItem[] = ' data-tab-title="' . $tab->getTitle() . '"';
-            $listItem[] = '>';
-
-            $html[] = implode(' ', $listItem);
-
-            $html[] = '<a class="portal-action-tab-title" href="#">';
-
-            $html[] = '<span class="portal-nav-tab-title">' . htmlspecialchars($tab->getTitle()) . '</span>';
-
-            $isUser = $this->get_user() instanceof User;
-            $homeAllowed = $isUser && ($userHomeAllowed || ($this->get_user()->is_platform_admin()) && $generalMode);
-            $isAnonymous = $isUser && $this->get_user()->is_anonymous_user();
-
-            if ($isUser && $homeAllowed && ! $isAnonymous)
-            {
-                $html[] = '<span class="glyphicon glyphicon-remove portal-action-tab-delete ' .
-                     (count($tabs) > 1 ? 'show' : 'hidden') . '"></span>';
-            }
-
-            $html[] = '</a>';
-
-            $html[] = '</li>';
+            $tabHeaderRenderer = new TabHeaderRenderer($this->getApplication(), $this->getHomeService(), $tab);
+            $html[] = $tabHeaderRenderer->render(
+                $this->getHomeService()->isActiveTab($this->getApplication()->getRequest(), $tabKey, $tab));
         }
 
         $html[] = $this->renderButtons();
@@ -337,9 +228,6 @@ class Basic extends Renderer
         $modules = $angularConnectorService->getAngularModules();
         $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 
-        $tabs = $this->getElements(Tab :: class_name());
-        $currentTabIdentifier = $this->getCurrentTabIdentifier();
-
         $html = array();
 
         $html[] = $angularConnectorService->loadAngularModules();
@@ -352,69 +240,15 @@ class Basic extends Renderer
 
         $html[] = '<div class="portal-tabs" ng-app="homeApp">';
 
+        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab :: class_name());
+
         foreach ($tabs as $tabKey => $tab)
         {
-            $isCurrentTab = ((! isset($currentTabIdentifier) && ($tabKey == 0 || count($tabs) == 1)) ||
-                 $currentTabIdentifier == $tab->get_id());
-
-            $html[] = '<div class="row portal-tab ' . ($isCurrentTab ? 'show' : 'hidden') . '" data-element-id="' .
-                 $tab->get_id() . '">';
-
-            $columns = $this->getElements(Column :: class_name(), $tab->get_id());
-
-            foreach ($columns as $columnKey => $column)
-            {
-                $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' portal-column" data-tab-id="' .
-                     $tab->get_id() . '" data-element-id="' . $column->get_id() . '" data-element-width="' .
-                     $column->getWidth() . '">';
-
-                $blocks = $this->getElements(Block :: class_name(), $column->get_id());
-
-                foreach ($blocks as $block)
-                {
-                    $blockRendition = BlockRendition :: factory($this, $block);
-
-                    if ($blockRendition->isVisible())
-                    {
-                        $html[] = $blockRendition->toHtml();
-                    }
-                }
-
-                $html[] = $this->renderEmptyColumn($column->get_id(), (count($blocks) > 0), (count($columns) == 1));
-
-                $html[] = '</div>';
-            }
-
-            $html[] = '</div>';
+            $tabRenderer = new TabRenderer($this->getApplication(), $this->getHomeService(), $tab);
+            $html[] = $tabRenderer->render(
+                $this->getHomeService()->isActiveTab($this->getApplication()->getRequest(), $tabKey, $tab));
         }
 
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @param integer $columnId
-     * @param boolean $isEmpty
-     * @return string
-     */
-    public function renderEmptyColumn($columnId, $isEmpty = false, $isOnlyColumn = false)
-    {
-        $html = array();
-
-        $html[] = '<div class="panel panel-warning portal-column-empty ' . ($isEmpty ? 'hidden' : 'show') . '">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<div class="pull-right">';
-        $html[] = '<a href="#" class="portal-action portal-action-column-delete ' . ($isOnlyColumn ? 'hidden' : 'show') .
-             '" data-column-id="' . $columnId . '" title="' . Translation :: get('Delete') . '">';
-        $html[] = '<span class="glyphicon glyphicon-remove"></span></a>';
-        $html[] = '</div>';
-        $html[] = '<h3 class="panel-title">' . Translation :: get('EmptyColumnTitle') . '</h3>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
-        $html[] = Translation :: get('EmptyColumnBody');
-        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -429,7 +263,7 @@ class Basic extends Renderer
         $user = $this->get_user();
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
         $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
-        $homeUserIdentifier = $this->determineHomeUserIdentifier();
+        $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
 
         $html = array();
 

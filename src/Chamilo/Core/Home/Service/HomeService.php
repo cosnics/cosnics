@@ -7,6 +7,10 @@ use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\Home\Manager;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  *
@@ -17,6 +21,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class HomeService
 {
+    const PARAM_TAB_ID = 'tab';
 
     /**
      *
@@ -125,7 +130,7 @@ class HomeService
         {
             foreach ($typeElements as $typeElement)
             {
-                if (!$this->createDefaultElementByUserIdentifier($elementIdentifierMap, $typeElement, $userIdentifier))
+                if (! $this->createDefaultElementByUserIdentifier($elementIdentifierMap, $typeElement, $userIdentifier))
                 {
                     return false;
                 }
@@ -156,5 +161,132 @@ class HomeService
         }
 
         return true;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string $type
+     * @param integer $parentIdentifier
+     */
+    public function getElements(User $user, $type, $parentIdentifier = 0)
+    {
+        if (! isset($this->elements))
+        {
+            $homeUserIdentifier = $this->determineHomeUserIdentifier($user);
+            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+
+            if ($userHomeAllowed && $this->get_user() instanceof User)
+            {
+                if ($this->countElementsByUserIdentifier($homeUserIdentifier) == 0)
+                {
+                    $this->createDefaultHomeByUserIdentifier($homeUserIdentifier);
+                }
+            }
+
+            $elementsResultSet = $this->getElementsByUserIdentifier($homeUserIdentifier);
+
+            while ($element = $elementsResultSet->next_result())
+            {
+                $this->elements[$element->get_type()][$element->getParentId()][] = $element;
+            }
+        }
+
+        if (isset($this->elements[$type]) && isset($this->elements[$type][$parentIdentifier]))
+        {
+            return $this->elements[$type][$parentIdentifier];
+        }
+        else
+        {
+            return array();
+        }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return integer
+     */
+    public function determineHomeUserIdentifier(User $user)
+    {
+        if (! isset($this->homeUserIdentifier))
+        {
+            $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+            $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+
+            // Get user id
+            if ($user instanceof User && $generalMode && $user->is_platform_admin())
+            {
+                $this->homeUserIdentifier = 0;
+            }
+            elseif ($userHomeAllowed && $user instanceof User)
+            {
+                $this->homeUserIdentifier = $user->get_id();
+            }
+            else
+            {
+                $this->homeUserIdentifier = 0;
+            }
+        }
+
+        return $this->homeUserIdentifier;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return integer
+     */
+    public function getCurrentTabIdentifier(Request $request)
+    {
+        return $request->query->get(self :: PARAM_TAB_ID);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isUserHomeAllowed()
+    {
+        return (boolean) PlatformSetting :: get('allow_user_home', Manager :: context());
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function isInGeneralMode()
+    {
+        return (boolean) \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @return boolean
+     */
+    public function userHasMultipleTabs(User $user)
+    {
+        $tabs = $this->getElements($user, Tab :: class_name());
+        return count($tabs) > 1;
+    }
+
+    public function tabByUserAndIdentifierHasMultipleColumns(User $user, $tabIdentifier)
+    {
+        $columns = $this->getElements($user, Column :: class_name(), $tabIdentifier);
+        return count($columns) > 1;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param integer $tabKey
+     * @param \Chamilo\Core\Home\Storage\DataClass\Tab $tab
+     * @return boolean
+     */
+    public function isActiveTab(Request $request, $tabKey, Tab $tab)
+    {
+        $currentTabIdentifier = $this->getCurrentTabIdentifier($request);
+        return ($currentTabIdentifier == $tab->getId() || (! isset($currentTabIdentifier) && $tabKey == 0));
     }
 }

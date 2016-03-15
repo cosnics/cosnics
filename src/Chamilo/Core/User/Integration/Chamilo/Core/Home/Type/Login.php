@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class Login extends \Chamilo\Core\Home\BlockRendition
+class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 {
 
     public function isEditable()

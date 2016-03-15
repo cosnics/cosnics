@@ -15,7 +15,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Day extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
+class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface
 {
     const CONFIGURATION_HOUR_STEP = 'hour_step';
     const CONFIGURATION_TIME_START = 'time_start';

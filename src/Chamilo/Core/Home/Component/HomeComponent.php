@@ -29,7 +29,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
 
         BreadcrumbTrail :: get_instance()->truncate();
 
-        $type = $this->getRequest()->query->get(Renderer :: PARAM_VIEW_TYPE, Renderer :: TYPE_BASIC);
+        $type = $this->getRequest()->query->get(self :: PARAM_RENDERER_TYPE, Renderer :: TYPE_BASIC);
         $rendererFactory = new Factory($type, $this);
 
         $html = array();

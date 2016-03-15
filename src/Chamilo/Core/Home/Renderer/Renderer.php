@@ -15,10 +15,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 abstract class Renderer
 {
     const TYPE_BASIC = 'Basic';
-    const PARAM_TAB_ID = 'tab';
-    const PARAM_VIEW_TYPE = 'view_type';
-    const PARAM_WIDGET_ID = 'widget_id';
-    const PARAM_SECURITY_TOKEN = 'sid';
 
     /**
      *

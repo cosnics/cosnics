@@ -2,8 +2,9 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\BlockRendition;
-use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
+use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -48,12 +49,16 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
         {
             $postedValues = $this->getPostDataValue(self :: PARAM_DATA);
 
-            $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
-            $blockRendition = BlockRendition :: factory($rendererFactory->getRenderer(), $block);
+            // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
+            // $renderer = $rendererFactory->getRenderer();
 
-            if ($blockRendition instanceof ConfigurableInterface)
+            $homeService = new HomeService(new HomeRepository());
+            $blockRendererFactory = new BlockRendererFactory($this, $homeService, $block);
+            $blockRenderer = $blockRendererFactory->getRenderer();
+
+            if ($blockRenderer instanceof ConfigurableInterface)
             {
-                foreach ($blockRendition->getConfigurationVariables() as $configurationVariable)
+                foreach ($blockRenderer->getConfigurationVariables() as $configurationVariable)
                 {
                     $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
                 }
@@ -71,7 +76,7 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                 {
 
                     $result = new JsonAjaxResult(200);
-                    $result->set_property(self :: PROPERTY_BLOCK, $blockRendition->toHtml());
+                    $result->set_property(self :: PROPERTY_BLOCK, $blockRenderer->toHtml());
                     $result->display();
                 }
             }

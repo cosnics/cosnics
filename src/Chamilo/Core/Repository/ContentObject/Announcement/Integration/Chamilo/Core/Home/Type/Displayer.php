@@ -3,17 +3,27 @@ namespace Chamilo\Core\Repository\ContentObject\Announcement\Integration\Chamilo
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 
 class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
     StaticBlockTitleInterface
 {
 
-    public function __construct($renderer, $block)
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param string $defaultTitle
+     */
+    public function __construct(Application $application, HomeService $homeService, Block $block, $defaultTitle = '')
     {
-        parent :: __construct($renderer, $block, Translation :: get('Displayer'));
+        parent :: __construct($application, $homeService, $block, Translation :: get('Displayer'));
     }
 
     public function isVisible()

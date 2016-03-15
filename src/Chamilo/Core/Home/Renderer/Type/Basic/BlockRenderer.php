@@ -1,27 +1,28 @@
 <?php
-namespace Chamilo\Core\Home;
+namespace Chamilo\Core\Home\Renderer\Type\Basic;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
-use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Manager;
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
-use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 
 /**
  *
  * @package common.libraries
  */
-class BlockRendition
+class BlockRenderer
 {
     const PARAM_ACTION = 'block_action';
     const BLOCK_PROPERTY_ID = 'id';
@@ -42,18 +43,16 @@ class BlockRendition
      */
     private $block;
 
-    private $configuration;
-
     /**
      *
-     * @param \Chamilo\Core\Home\Renderer\Renderer $renderer
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
-     * @return \Chamilo\Core\Home\BlockRendition
      */
-    public static function factory(Renderer $renderer, Block $block)
+    public function __construct(Application $application, HomeService $homeService, Block $block)
     {
-        $class = $block->getContext() . '\Integration\Chamilo\Core\Home\Type\\' . $block->getBlockType();
-        return new $class($renderer, $block);
+        $this->renderer = $application;
+        $this->block = $block;
     }
 
     /**
@@ -90,17 +89,6 @@ class BlockRendition
                 return Theme :: getInstance()->getImagePath($context, 'Blocks/' . $type);
             }
         }
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\Home\Renderer\Renderer $renderer
-     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
-     */
-    public function __construct($renderer, $block)
-    {
-        $this->renderer = $renderer;
-        $this->block = $block;
     }
 
     /**
@@ -145,26 +133,46 @@ class BlockRendition
         return $this->block;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isEditable()
     {
         return true;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isHidable()
     {
         return true;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isDeletable()
     {
         return true;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function isConfigurable()
     {
         return $this instanceof ConfigurableInterface;
     }
 
+    /**
+     *
+     * @return boolean
+     */
     public function hasStaticTitle()
     {
         return $this instanceof StaticBlockTitleInterface;
@@ -345,49 +353,6 @@ class BlockRendition
 
     /**
      *
-     * @param Block $block
-     * @return string
-     */
-    public function getBlockVisibilityLink(Block $block)
-    {
-        return $this->getManipulationLink(
-            array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_EDIT_HOME,
-                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK,
-                Manager :: PARAM_HOME_ID => $block->get_id()));
-    }
-
-    public function getBlockDeletingLink($home_block)
-    {
-        return '#';
-    }
-
-    public function getBlockEditingLink($home_block)
-    {
-        return $this->getManipulationLink(
-            array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_EDIT_HOME_PERSONAL,
-                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK,
-                Manager :: PARAM_HOME_ID => $home_block->get_id()));
-    }
-
-    public function getBlockConfiguringLink($home_block)
-    {
-        return $this->getManipulationLink(
-            array(
-                Manager :: PARAM_ACTION => Manager :: ACTION_CONFIGURE_HOME_PERSONAL,
-                Manager :: PARAM_HOME_TYPE => Manager :: TYPE_BLOCK,
-                Manager :: PARAM_HOME_ID => $home_block->get_id()));
-    }
-
-    public function getManipulationLink($parameters)
-    {
-        $redirect = new Redirect($parameters);
-        return $redirect->getUrl();
-    }
-
-    /**
-     *
      * @param string[] $parameters
      * @param boolean $encode
      * @return string
@@ -406,12 +371,7 @@ class BlockRendition
 
     public function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
     {
-        if ($widget_id = Request :: get(Renderer :: PARAM_WIDGET_ID))
-        {
-            $parameters[Renderer :: PARAM_WIDGET_ID] = $widget_id;
-        }
-        $result = $this->getRenderer()->get_url($parameters, $filter, $encode_entities);
-        return $result;
+        return $this->getRenderer()->get_url($parameters, $filter, $encode_entities);
     }
 
     public function get_parameter($name)
@@ -421,13 +381,7 @@ class BlockRendition
 
     public function get_parameters()
     {
-        $result = $this->getRenderer()->get_parameters();
-        if ($widget_id = Request :: get(Renderer :: PARAM_WIDGET_ID))
-        {
-            $result[Renderer :: PARAM_WIDGET_ID] = $widget_id;
-        }
-
-        return $result;
+        return $this->getRenderer()->get_parameters();
     }
 
     /**
