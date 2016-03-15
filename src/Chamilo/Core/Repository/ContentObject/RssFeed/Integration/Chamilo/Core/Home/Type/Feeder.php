@@ -5,14 +5,24 @@ use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 
 class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
     StaticBlockTitleInterface
 {
 
-    public function __construct($renderer, $block)
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param string $defaultTitle
+     */
+    public function __construct(Application $application, HomeService $homeService, Block $block, $defaultTitle = '')
     {
-        parent :: __construct($renderer, $block, Translation :: get('Feeder'));
+        parent :: __construct($application, $homeService, $block, Translation :: get('Feeder'));
     }
 
     public function isVisible()

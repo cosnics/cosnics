@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home;
 
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Base class for blocks based on a content object.
@@ -13,15 +15,22 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
  */
-class Block extends \Chamilo\Core\Home\BlockRendition
+class Block extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 {
     const CONFIGURATION_OBJECT_ID = 'use_object';
 
     protected $defaultTitle = '';
 
-    public function __construct($renderer, $block, $defaultTitle = '')
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     */
+    public function __construct(Application $application, HomeService $homeService,
+        \Chamilo\Core\Home\Storage\DataClass\Block $block, $defaultTitle = '')
     {
-        parent :: __construct($renderer, $block);
+        parent :: __construct($application, $homeService, $block);
         $this->defaultTitle = $defaultTitle ? $defaultTitle : Translation :: get('Object');
     }
 

@@ -3,9 +3,11 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -17,6 +19,18 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class Streaming extends Block implements ConfigurableInterface, StaticBlockTitleInterface
 {
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param string $defaultTitle
+     */
+    public function __construct(Application $application, HomeService $homeService, Block $block, $defaultTitle = '')
+    {
+        parent :: __construct($application, $homeService, $block, Translation :: get('Streaming'));
+    }
 
     /**
      * Returns the list of type names that this block can map to.
@@ -34,11 +48,6 @@ class Streaming extends Block implements ConfigurableInterface, StaticBlockTitle
         $result[] = 'Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube';
 
         return $result;
-    }
-
-    public function __construct($renderer, $block)
-    {
-        parent :: __construct($renderer, $block, Translation :: get('Streaming'));
     }
 
     public function isVisible()

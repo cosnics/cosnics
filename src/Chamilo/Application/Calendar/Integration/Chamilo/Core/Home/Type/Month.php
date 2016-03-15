@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Month extends \Chamilo\Core\Home\BlockRendition
+class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 {
 
     public function displayContent()

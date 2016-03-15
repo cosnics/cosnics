@@ -3,7 +3,7 @@ namespace Chamilo\Core\Home\Storage;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Home\BlockRendition;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -90,9 +90,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     $blocks[$packageId]['image'] = Theme :: getInstance()->getImagePath($parentNamespace, 'Logo/16');
 
                     $blocks[$packageId]['components'][] = array(
-                        BlockRendition :: BLOCK_PROPERTY_ID => $blockId,
-                        BlockRendition :: BLOCK_PROPERTY_NAME => Translation :: get($blockName, null, $packageId),
-                        BlockRendition :: BLOCK_PROPERTY_IMAGE => BlockRendition :: getImagePath($packageId, $blockName));
+                        BlockRenderer :: BLOCK_PROPERTY_ID => $blockId,
+                        BlockRenderer :: BLOCK_PROPERTY_NAME => Translation :: get($blockName, null, $packageId),
+                        BlockRenderer :: BLOCK_PROPERTY_IMAGE => BlockRenderer :: getImagePath($packageId, $blockName));
                 }
             }
         }

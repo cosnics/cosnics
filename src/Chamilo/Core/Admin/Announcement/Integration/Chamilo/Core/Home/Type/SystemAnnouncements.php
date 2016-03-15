@@ -11,7 +11,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
-class SystemAnnouncements extends \Chamilo\Core\Home\BlockRendition implements ConfigurableInterface
+class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 

@@ -3,6 +3,9 @@ namespace Chamilo\Core\Home\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -22,6 +25,18 @@ class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bl
 
     /**
      *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param string $defaultTitle
+     */
+    public function __construct(Application $application, HomeService $homeService, Block $block, $defaultTitle = '')
+    {
+        parent :: __construct($application, $homeService, $block, Translation :: get('External'));
+    }
+
+    /**
+     *
      * @see \Chamilo\Core\Home\Architecture\ConfigurableInterface::getConfigurationVariables()
      */
     public function getConfigurationVariables()
@@ -37,11 +52,6 @@ class External extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bl
     public static function getSupportedTypes()
     {
         return array('Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link');
-    }
-
-    public function __construct($renderer, $block)
-    {
-        parent :: __construct($renderer, $block, Translation :: get('External'));
     }
 
     public function isVisible()

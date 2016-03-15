@@ -16,12 +16,16 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 abstract class Manager extends Application
 {
+    // Parameters
     const PARAM_HOME_ID = 'id';
     const PARAM_HOME_TYPE = 'type';
     const PARAM_DIRECTION = 'direction';
     const PARAM_TAB_ID = 'tab';
     const PARAM_OBJECT_ID = 'object_id';
     const PARAM_PARENT_ID = 'parent_id';
+    const PARAM_RENDERER_TYPE = 'renderer_type';
+
+    // Actions
     const ACTION_VIEW_HOME = 'Home';
     const ACTION_MANAGE_HOME = 'Manager';
     const ACTION_EDIT_HOME = 'Editor';
@@ -34,6 +38,8 @@ abstract class Manager extends Application
     const ACTION_PERSONAL = 'Personal';
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const DEFAULT_ACTION = self :: ACTION_VIEW_HOME;
+
+    // Types
     const TYPE_BLOCK = 'block';
     const TYPE_COLUMN = 'column';
     const TYPE_ROW = 'row';

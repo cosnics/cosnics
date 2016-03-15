@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Home\Ajax\Component;
 
-use Chamilo\Core\Home\BlockRendition;
-use Chamilo\Core\Home\Renderer\Factory;
-use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
+use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -56,8 +56,6 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         }
 
         $columnId = $this->getPostDataValue(self :: PARAM_COLUMN);
-        $blocks = $this->unserialize_jquery($this->getPostDataValue(self :: PARAM_ORDER));
-
         $block = $this->getPostDataValue(self :: PARAM_BLOCK);
         $context = ClassnameUtilities :: getInstance()->getNamespaceParent($block, 6);
         $blockType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($block);
@@ -76,12 +74,15 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
 
             if ($block->update())
             {
-                $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
-                $renderer = $rendererFactory->getRenderer();
-                $html = BlockRendition :: factory($renderer, $block)->toHtml();
+                // $rendererFactory = new Factory(Renderer :: TYPE_BASIC, $this);
+                // $renderer = $rendererFactory->getRenderer();
+
+                $homeService = new HomeService(new HomeRepository());
+                $blockRendererFactory = new BlockRendererFactory($this, $homeService, $block);
+                $blockRenderer = $blockRendererFactory->getRenderer();
 
                 $result = new JsonAjaxResult(200);
-                $result->set_property(self :: PROPERTY_BLOCK, $html);
+                $result->set_property(self :: PROPERTY_BLOCK, $blockRenderer->toHtml());
                 $result->display();
             }
             else

@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author laurent.opprecht@unige.ch
  * @package home.block
  */
-class Publish extends \Chamilo\Core\Home\BlockRendition
+class Publish extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 {
 
     public function displayContent()

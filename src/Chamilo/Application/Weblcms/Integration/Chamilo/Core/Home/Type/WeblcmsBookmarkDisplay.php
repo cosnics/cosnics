@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -23,11 +22,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class WeblcmsBookmarkDisplay extends NewBlock implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
-
-    public function __construct($renderer, $block)
-    {
-        parent :: __construct($renderer, $block, Translation :: get('WeblcmsBookmarks'));
-    }
 
     public function isConfigured()
     {

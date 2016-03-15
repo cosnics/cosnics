@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
-class Block extends \Chamilo\Core\Home\BlockRendition
+class Block extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 {
 
     public function getLastLogin($user_id)

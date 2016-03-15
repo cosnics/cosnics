@@ -5,7 +5,7 @@ use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
-class PortalHome extends \Chamilo\Core\Home\BlockRendition
+class PortalHome extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 {
 
     public function displayContent()
