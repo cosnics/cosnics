@@ -279,7 +279,7 @@ class AuthenticationValidator
                             }
                             catch (AuthenticationException $exception)
                             {
-                                $errorMessages[] = $exception->getMessage();
+                                $errorMessages[] = $exception->getErrorMessage();
                             }
                         }
                         else
