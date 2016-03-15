@@ -713,8 +713,7 @@ $(function()
         var form = $(this).parent().parent().parent().parent();
         var portalBlockForm = form.parent().parent();
         var panel = portalBlockForm.parent();
-        var block = panel.parent();
-        var contentIsHidden = $('.portal-action-block-hide', block).hasClass('hidden');
+        var contentIsHidden = $('.portal-action-block-hide', panel).hasClass('hidden');
         
         $(':reset', form).trigger("click");
         panel.removeClass('panel-info').addClass('panel-default');
@@ -722,15 +721,15 @@ $(function()
         
         if (!contentIsHidden)
         {
-            $('.portal-block-content', block).toggleClass('hidden');
+            $('.portal-block-content', panel).toggleClass('hidden');
         }
         else
         {
-            $('.panel-heading', block).addClass('panel-heading-without-content');
+            $('.panel-heading', panel).addClass('panel-heading-without-content');
         }
         
-        $('.portal-action', block).show();
-        $('.panel-title-configuration', block).remove();
+        $('.portal-action', panel).show();
+        $('.panel-title-configuration', panel).remove();
     }
     
     function saveBlockConfiguration(e, ui)

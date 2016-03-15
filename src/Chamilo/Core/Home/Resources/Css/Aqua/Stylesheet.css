@@ -104,3 +104,8 @@
 .portal-block-sortable-helper {
 	margin-bottom: 20px;
 }
+
+.panel-heading+.portal-block-form.hidden+.list-group .list-group-item:first-child
+	{
+	border-top-width: 0
+}

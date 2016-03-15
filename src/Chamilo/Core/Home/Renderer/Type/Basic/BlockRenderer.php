@@ -260,6 +260,15 @@ class BlockRenderer
             $html[] = '</div>';
         }
 
+        $html[] = $this->renderContentHeader();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderContentHeader()
+    {
+        $html = array();
+
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
         $html[] = '<div class="panel-body">';
 
@@ -336,6 +345,14 @@ class BlockRenderer
         return '';
     }
 
+    public function renderContentFooter()
+    {
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
     /**
      *
      * @return string
@@ -344,8 +361,7 @@ class BlockRenderer
     {
         $html = array();
 
-        $html[] = '</div>';
-        $html[] = '</div>';
+        $html[] = $this->renderContentFooter();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
