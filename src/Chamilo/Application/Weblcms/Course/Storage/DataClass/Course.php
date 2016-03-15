@@ -671,7 +671,7 @@ class Course extends DataClass
      */
     public function is_course_admin($user)
     {
-        $courseValidator = new CourseAdminValidator(Configuration::get_instance());
+        $courseValidator = CourseAdminValidator::getInstance();
 
         // fix for view as
         $va_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_ID);

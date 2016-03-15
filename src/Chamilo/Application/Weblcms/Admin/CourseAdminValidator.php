@@ -20,6 +20,13 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
      */
     protected $courseAdminValidatorExtensions;
 
+    /**
+     * Singleton
+     *
+     * @var CourseAdminValidator
+     */
+    protected static $instance;
+
     /*
      * Constructor
      *
@@ -50,6 +57,21 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
 
             $this->courseAdminValidatorExtensions[] = new $class();
         }
+    }
+
+    /**
+     * Singleton
+     *
+     * @return CourseAdminValidator
+     */
+    public static function getInstance()
+    {
+        if(!self::$instance)
+        {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     /**

@@ -549,13 +549,13 @@ abstract class Manager extends Application
     {
         if ($user != null && $course != null)
         {
-            // If the user is a platform administrator, grant all rights
-            if ($user->is_platform_admin())
-            {
-                return true;
-            }
+//            // If the user is a platform administrator, grant all rights
+//            if ($user->is_platform_admin())
+//            {
+//                return true;
+//            }
 
-            $courseValidator = new CourseAdminValidator(Configuration::get_instance());
+            $courseValidator = CourseAdminValidator::getInstance();
 
             // If the user is a sub administrator, grant all rights
             if ($courseValidator->isUserAdminOfCourse($user, $course))
