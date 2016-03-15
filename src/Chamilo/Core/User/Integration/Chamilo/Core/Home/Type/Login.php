@@ -66,27 +66,21 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                     \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
 
-            $html[] = '<br />';
-            $max_height = PlatformSetting :: get('restrict_picture_height', \Chamilo\Core\User\Manager :: context()) ? 'max-height:100px' : null;
-            $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" style="max-width: 100%; ' .
-                 $max_height . '" />';
-            $html[] = '<br /><br />';
-            $html[] = htmlspecialchars($user->get_fullname()) . '<br />';
-            $html[] = htmlspecialchars($user->get_email()) . '<br />';
-            $html[] = '<br /><br />';
+            $maximumHeight = PlatformSetting :: get('restrict_picture_height', \Chamilo\Core\User\Manager :: context()) ? 'max-height:100px' : null;
 
             $redirect = new Redirect(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_LOGOUT));
-            $logout_link = $redirect->getUrl();
+            $logoutLink = $redirect->getUrl();
 
-            $html[] = '<a href="' . $logout_link . '" class="button normal_button logout_button">' . htmlspecialchars(
-                Translation :: get('Logout')) . '</a>';
-            // add custom change password url if you are using external authentication (LDAP...)
-            // $html[] = '<br /><br /><a href="https://yourchangepassurl/" target="password" class="button normal_button
-            // register_button">' . htmlspecialchars(Translation :: get('ChangePassword')) . '</a>';
-            $html[] = '<br /><br />';
+            $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" alt="' .
+                 htmlspecialchars($user->get_fullname()) . '"  class="img-circle img-thumbnail" style="max-width: 100%; ' .
+                 $maximumHeight . '" />';
+            $html[] = '<h3>' . htmlspecialchars($user->get_fullname()) . '</h3>';
+            $html[] = '<p>' . htmlspecialchars($user->get_email()) . '</p>';
+            $html[] = '<p><a href="' . $logoutLink . '" class="btn btn-danger" role="button">' . htmlspecialchars(
+                Translation :: get('Logout')) . '</a></p>';
         }
 
         return implode(PHP_EOL, $html);
