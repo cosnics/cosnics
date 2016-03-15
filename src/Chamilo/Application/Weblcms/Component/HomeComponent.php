@@ -231,7 +231,7 @@ class HomeComponent extends Manager implements DelegateComponent
                     $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))));
         }
 
-        if (\Chamilo\Application\Weblcms\Admin\Storage\DataManager :: user_is_admin($this->get_user()))
+        if (\Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager :: user_is_admin($this->get_user()))
         {
             $buttonGroup->addButton(
                 new Button(
