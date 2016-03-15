@@ -1,0 +1,23 @@
+syntax: glob
+*.orig
+*.rej
+*.php~
+*.sql
+*.zip
+*.conflict
+*.chg
+*.log
+*.bak
+*.txt
+*.phar
+deactivator.php
+behat.yml
+
+syntax: regexp
+(^|/)\.
+^composer\.(?!json)
+^vendor/
+^components/
+^bin/
+^files/
+^web/
