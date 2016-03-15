@@ -75,7 +75,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
             $logoutLink = $redirect->getUrl();
 
             $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" alt="' .
-                 htmlspecialchars($user->get_fullname()) . '"  class="img-circle img-thumbnail" style="max-width: 100%; ' .
+                 htmlspecialchars($user->get_fullname()) . '"  class="img-thumbnail" style="max-width: 100%; ' .
                  $maximumHeight . '" />';
             $html[] = '<h3>' . htmlspecialchars($user->get_fullname()) . '</h3>';
             $html[] = '<p>' . htmlspecialchars($user->get_email()) . '</p>';

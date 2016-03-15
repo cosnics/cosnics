@@ -313,6 +313,7 @@ $(function()
     function deleteTab(e, ui)
     {
         e.preventDefault();
+        e.stopPropagation();
         
         var tab = $(this).parent().parent();
         var tabId = tab.data('tab-id');

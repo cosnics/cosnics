@@ -3,6 +3,8 @@ $(function()
     
     function showTab(e, ui)
     {
+        e.preventDefault();
+        
         var tab = $(this);
         var tabId = tab.data('tab-id');
         
@@ -13,13 +15,9 @@ $(function()
         $('.portal-tab[data-element-id="' + tabId + '"]').switchClass('hidden', 'show');
     }
     
-    $(document)
-            .ready(
-                    function()
-                    {
-                        $(document).on('click',
-                                '.portal-nav-tabs li.portal-nav-tab:not(.active) span:not(.portal-action-tab-delete)',
-                                showTab);
-                    });
+    $(document).ready(function()
+    {
+        $(document).on('click', '.portal-nav-tabs li.portal-nav-tab:not(.active)', showTab);
+    });
     
 });
