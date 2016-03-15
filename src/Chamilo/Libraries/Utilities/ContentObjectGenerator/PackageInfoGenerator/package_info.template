@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>{CONTENT_OBJECT_NAME}</name>
+		<code>{CODE}</code>
+		<section>content_object</section>
+		<category>general</category>
+		<author>{AUTHOR}</author>
+		<version>1.0.0</version>
+		<filename>pool/main/objects/{FOLDER}/{CODE}/{CODE}-1.0.0.zip</filename>
+		<size></size>
+		<md5></md5>
+		<sha1></sha1>
+		<sha256></sha256>
+		<sha512></sha512>
+		<tagline></tagline>
+		<description></description>
+		<homepage></homepage>
+		<dependencies>
+			<server>
+				<dependency>
+					<id>php</id>
+					<version type="4">5.2.0</version>
+					<severity>1</severity>
+				</dependency>
+			</server>
+		</dependencies>
+	</package>
+</packages>

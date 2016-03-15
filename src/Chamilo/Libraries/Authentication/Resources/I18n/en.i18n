@@ -1,0 +1,2 @@
+GeneralPasswordRequirements = "Password requirements"
+CasAuthenticationError = "You were successfully authenticated in CAS but we're having some problems authenticating you in {PLATFORM}. Please contact your system administrator as soon as possible."
