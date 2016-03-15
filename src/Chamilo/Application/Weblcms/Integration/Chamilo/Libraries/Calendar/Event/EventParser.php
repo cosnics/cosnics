@@ -118,7 +118,8 @@ class EventParser
             $this->getToDate(),
             Event :: class_name());
 
-        foreach ($parser->getEvents() as &$parsedEvent)
+        $events = $parser->getEvents();
+        foreach ($events as &$parsedEvent)
         {
             $parameters = array();
             $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
