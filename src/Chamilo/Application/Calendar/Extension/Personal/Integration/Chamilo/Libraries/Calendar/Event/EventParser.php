@@ -144,7 +144,8 @@ class EventParser
             $this->getToDate(),
             Event :: class_name());
 
-        foreach ($parser->getEvents() as &$parsedEvent)
+        $events = $parser->getEvents();
+        foreach ($events as &$parsedEvent)
         {
             if ($publisher != $this->getCalendarRendererProvider()->getViewingUser()->getId())
             {
