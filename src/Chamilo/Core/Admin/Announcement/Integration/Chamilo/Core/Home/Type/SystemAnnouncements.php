@@ -101,7 +101,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
      */
     public function renderContentHeader()
     {
-        return '<ul class="list-group">';
+        return '<ul class="list-group portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
     }
 
     /**

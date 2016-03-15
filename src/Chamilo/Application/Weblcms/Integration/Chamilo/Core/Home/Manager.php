@@ -10,7 +10,6 @@ class Manager
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\AssignmentSubmissions',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseList',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseMenu',
-            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\CourseTypeCourseList',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\EndingAssignments',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\FilteredCourseList',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewAnnouncements',

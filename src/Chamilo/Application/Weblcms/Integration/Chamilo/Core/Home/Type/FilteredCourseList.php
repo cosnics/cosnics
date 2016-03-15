@@ -69,24 +69,24 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
     }
 
     /**
-     * Displays the content
      *
-     * @return string
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
      */
-    public function displayContent()
+    public function renderContentHeader()
     {
-        $this->loadSettings();
+        return '<div class="portal-block-content portal-block-course-list' .
+             ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+    }
 
+    /**
+     *
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     */
+    public function renderContentFooter()
+    {
         $html = array();
 
-        $renderer = $this->getCourseListRenderer();
-
-        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
-        {
-            $renderer->show_new_publication_icons();
-        }
-
-        $html[] = $renderer->as_html();
+        $html[] = '</div>';
 
         if (! $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
         {
@@ -95,12 +95,31 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: package(),
                     \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE => $this->getCourseTypeId()));
 
-            $html[] = '<div style="margin-top: 15px;">';
+            $html[] = '<div class="panel-footer">';
             $html[] = Translation :: get('CheckWhatsNew', array('URL' => $courseTypeLink->getUrl()));
             $html[] = '</div>';
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Displays the content
+     *
+     * @return string
+     */
+    public function displayContent()
+    {
+        $this->loadSettings();
+
+        $renderer = $this->getCourseListRenderer();
+
+        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
+        {
+            $renderer->show_new_publication_icons();
+        }
+
+        return $renderer->as_html();
     }
 
     /**
