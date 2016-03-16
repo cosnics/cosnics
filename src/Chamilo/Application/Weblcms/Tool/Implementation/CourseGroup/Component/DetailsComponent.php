@@ -135,7 +135,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         $html = array();
 
         $html[] = '<div class="container-fluid">';
-        
+
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
         $html[] = $currentCourseGroup->get_description();
@@ -308,7 +308,10 @@ class DetailsComponent extends TabComponent implements TableSupport
                 );
             }
 
-            $buttonToolbar->addItem($navigateToOptions);
+            if($navigateToOptions->hasButtons())
+            {
+                $buttonToolbar->addItem($navigateToOptions);
+            }
         }
 
         return new ButtonToolBarRenderer($buttonToolbar);
