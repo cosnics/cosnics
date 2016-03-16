@@ -76,7 +76,7 @@ abstract class TabComponent extends Manager
     public function run()
     {
         $this->rootCourseGroup = DataManager:: retrieve_course_group_root($this->get_course()->get_id());
-        $this->retrieveIntroductionText();
+        $this->introduction_text = $this->get_introduction_text();
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
         $html = array();
@@ -326,50 +326,6 @@ abstract class TabComponent extends Manager
     {
         $currentCourseGroup = $this->getCurrentCourseGroup();
         return $currentCourseGroup->getId() == $this->rootCourseGroup->getId();
-    }
-
-    /**
-     * Retrieves the introduction text
-     */
-    protected function retrieveIntroductionText()
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication:: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID
-            ),
-            new StaticConditionVariable($this->get_course_id())
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication:: class_name(),
-                ContentObjectPublication :: PROPERTY_TOOL
-            ),
-            new StaticConditionVariable('course_group')
-        );
-
-        $subselect_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_TYPE),
-            new StaticConditionVariable(Introduction:: class_name())
-        );
-
-        $conditions[] = new SubselectCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication:: class_name(),
-                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID
-            ),
-            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_ID),
-            ContentObject:: get_table_name(),
-            $subselect_condition
-        );
-
-        $condition = new AndCondition($conditions);
-
-        $this->introduction_text = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve(
-            ContentObjectPublication:: class_name(),
-            new DataClassRetrieveParameters($condition)
-        );
     }
 
     /**
