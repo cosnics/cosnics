@@ -18,7 +18,7 @@ class SelfUnsubscriberComponent extends Manager
         $course_group = $this->get_course_group();
         $user = $this->get_user();
 
-        if (!$this->is_allowed(WeblcmsRights :: EDIT_RIGHT) && $course_group->is_self_unregistration_allowed() &&
+        if ($course_group->is_self_unregistration_allowed() &&
             $course_group->is_member($user) && $this->get_user()->get_id() == $user->get_id()
         )
         {
