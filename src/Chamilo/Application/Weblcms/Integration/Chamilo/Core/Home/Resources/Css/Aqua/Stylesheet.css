@@ -13,3 +13,12 @@ div.event_publication_info {
 	font-style: italic;
 	margin: 1em 0;
 }
+
+.portal-block-course-list ul.list-group {
+	margin: 10px 0px;
+}
+
+.portal-block-course-list ul.list-group li.list-group-item {
+	border: 0px solid white;
+	padding: 5px 15px;
+}
