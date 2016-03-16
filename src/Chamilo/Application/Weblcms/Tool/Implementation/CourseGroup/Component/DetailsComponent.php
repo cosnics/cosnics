@@ -135,10 +135,16 @@ class DetailsComponent extends TabComponent implements TableSupport
         $html = array();
 
         $html[] = '<div class="container-fluid">';
+        
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-sm-12">';
+        $html[] = $currentCourseGroup->get_description();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
 
-        $html[] = $currentCourseGroup->get_description();
         $html[] = '<b>' . Translation:: get('NumberOfMembers') . ':</b> ' . $currentCourseGroup->count_members();
         $html[] = '<br /><b>' . Translation:: get('MaximumMembers') . ':</b> ' .
             $currentCourseGroup->get_max_number_of_members();
