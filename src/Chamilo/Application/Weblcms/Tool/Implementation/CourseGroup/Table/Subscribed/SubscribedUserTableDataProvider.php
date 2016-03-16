@@ -24,7 +24,7 @@ class SubscribedUserTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager :: retrieve_course_group_users(
-            $this->get_component()->get_course_group()->get_id(), 
+            $this->get_component()->getCurrentCourseGroup()->get_id(),
             $condition, 
             $offset, 
             $count, 
@@ -38,6 +38,6 @@ class SubscribedUserTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_course_group_users($this->get_component()->get_course_group()->get_id(), $condition);
+        return DataManager :: count_course_group_users($this->get_component()->getCurrentCourseGroup()->get_id(), $condition);
     }
 }

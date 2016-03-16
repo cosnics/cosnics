@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -21,7 +22,12 @@ use Chamilo\Libraries\Utilities\Utilities;
 class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    // Inherited
+    /**
+     * @param TableColumn $column
+     * @param CourseGroup $course_group
+     *
+     * @return string
+     */
     public function render_cell($column, $course_group)
     {
         // Add special features here
@@ -33,7 +39,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                 {
                     $url = $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_UNSUBSCRIBE,
+                            Manager :: PARAM_ACTION => Manager::ACTION_GROUP_DETAILS,
                             \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP => $course_group->get_id()));
                     return '<a href="' . $url . '">' . $course_group->get_name() . '</a>';
                 }
@@ -43,6 +49,8 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                 }
             case CourseGroup :: PROPERTY_DESCRIPTION :
                 return strip_tags($course_group->get_description());
+            case CourseGroupTableColumnModel::COLUMN_NUMBER_OF_MEMBERS:
+                return $course_group->count_members();
         }
         return parent :: render_cell($column, $course_group);
     }
