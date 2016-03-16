@@ -135,7 +135,9 @@ class HomeComponent extends Manager implements DelegateComponent
                 $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_CATEGORY_MANAGER)),
                 Button :: DISPLAY_LABEL));
 
-        $importDropDownButton = new DropdownButton(Translation :: get('CourseOverviewImport'), new BootstrapGlyph('import'));
+        $importDropDownButton = new DropdownButton(
+            Translation :: get('CourseOverviewImport'),
+            new BootstrapGlyph('import'));
         $buttonGroup->addButton($importDropDownButton);
 
         $importDropDownButton->addSubButton(
@@ -231,16 +233,20 @@ class HomeComponent extends Manager implements DelegateComponent
                     $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))));
         }
 
-        if (\Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager :: user_is_admin($this->get_user()))
+        if (\Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager :: user_is_admin(
+            $this->get_user()))
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation :: get('TypeName', null, \Chamilo\Application\Weblcms\Admin\Manager :: package()),
+                    Translation :: get(
+                        'TypeName',
+                        null,
+                        \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager :: package()),
                     new BootstrapGlyph('search'),
                     $this->get_url(
                         array(
-                            Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Manager :: package(),
-                            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Manager :: ACTION_BROWSE))));
+                            Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager :: package(),
+                            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager :: ACTION_BROWSE))));
         }
 
         return $buttonGroup;

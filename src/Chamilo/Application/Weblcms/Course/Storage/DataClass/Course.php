@@ -2,12 +2,14 @@
 namespace Chamilo\Application\Weblcms\Course\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Admin\CourseAdminValidator;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
-use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseModuleLastAccess;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
@@ -15,7 +17,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -27,8 +28,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * This class represents a course in the weblcms.
@@ -671,7 +670,7 @@ class Course extends DataClass
      */
     public function is_course_admin($user)
     {
-        $courseValidator = CourseAdminValidator::getInstance();
+        $courseValidator = CourseAdminValidator :: getInstance();
 
         // fix for view as
         $va_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_ID);

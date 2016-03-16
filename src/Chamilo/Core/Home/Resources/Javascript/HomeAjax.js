@@ -746,9 +746,25 @@ $(function()
         $(':input', form).each(function(index)
         {
             var inputElement = $(this);
-            if (inputElement.attr('type') != 'radio' || inputElement.prop('checked') == true)
+            
+            if (inputElement.attr('type') != 'radio' && inputElement.attr('type') != 'checkbox')
             {
                 submittedData[inputElement.attr('name')] = inputElement.val();
+            }
+            else if (inputElement.attr('type') != 'radio' && inputElement.prop('checked') == true)
+            {
+                submittedData[inputElement.attr('name')] = inputElement.val();
+            }
+            else if (inputElement.attr('type') == 'checkbox')
+            {
+                if (inputElement.prop('checked') == true)
+                {
+                    submittedData[inputElement.attr('name')] = inputElement.val();
+                }
+                else
+                {
+                    submittedData[inputElement.attr('name')] = 0;
+                }
             }
         });
         

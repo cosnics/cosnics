@@ -197,7 +197,7 @@ class BlockRenderer
      */
     public function getTitle()
     {
-        return $this->getBlock()->getTitle();
+        return htmlspecialchars($this->getBlock()->getTitle());
     }
 
     /**
@@ -265,12 +265,28 @@ class BlockRenderer
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function renderContentHeader()
     {
         $html = array();
 
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
         $html[] = '<div class="panel-body">';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderContentFooter()
+    {
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -282,7 +298,7 @@ class BlockRenderer
         $html[] = '<div class="panel-heading' . ($this->getBlock()->isVisible() ? '' : ' panel-heading-without-content') .
              '">';
         $html[] = '<div class="pull-right">' . $this->displayActions() . '</div>';
-        $html[] = '<h3 class="panel-title">' . htmlspecialchars($this->getTitle()) . '</h3>';
+        $html[] = '<h3 class="panel-title">' . $this->getTitle() . '</h3>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -343,14 +359,6 @@ class BlockRenderer
     public function displayContent()
     {
         return '';
-    }
-
-    public function renderContentFooter()
-    {
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 
     /**

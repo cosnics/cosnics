@@ -76,6 +76,27 @@ class MiniMonthRenderer extends ViewRenderer
      */
     public function render()
     {
+        $html = array();
+
+        $html[] = '<div class="panel panel-default">';
+        $html[] = $this->renderNavigation();
+
+        $html[] = '<div class="table-calendar-mini-container">';
+        $html[] = $this->renderCalendar();
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderCalendar()
+    {
         $calendar = $this->getCalendar();
 
         $startTime = $calendar->getStartTime();
@@ -105,18 +126,14 @@ class MiniMonthRenderer extends ViewRenderer
             $tableDate = $nextTableDate;
         }
 
-        $html = array();
-
-        $html[] = '<div class="panel panel-default">';
-        $html[] = $this->renderNavigation();
         $calendar->addNavigationLinks($this->determineNavigationUrl());
+
+        $html = array();
 
         $html[] = '<div class="table-calendar-mini-container">';
         $html[] = $calendar->render();
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
-
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -128,25 +145,40 @@ class MiniMonthRenderer extends ViewRenderer
      */
     public function renderNavigation()
     {
-        $urlFormat = $this->determineNavigationUrl();
-        $previousTime = strtotime('-1 Month', $this->getDisplayTime());
-        $nextTime = strtotime('+1 Month', $this->getDisplayTime());
-
-        $todayUrl = str_replace(Calendar :: TIME_PLACEHOLDER, time(), $urlFormat);
-        $previousUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $previousTime, $urlFormat);
-        $nextUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $nextTime, $urlFormat);
-
         $html = array();
 
         $html[] = '<div class="panel-heading table-calendar-mini-navigation">';
-        $html[] = '<a href="' . $previousUrl . '"><span class="glyphicon glyphicon-chevron-left pull-left"></span></a>';
-        $html[] = '<a href="' . $nextUrl . '"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>';
+        $html[] = $this->renderPreviousMonthNavigation();
+        $html[] = $this->renderNextMonthNavigation();
         $html[] = '<h4 class="panel-title">';
-        $html[] = Translation :: get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities :: COMMON_LIBRARIES) .
-             ' ' . date('Y', $this->getDisplayTime());
+        $html[] = $this->renderTitle();
         $html[] = '</h4>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    public function renderTitle()
+    {
+        return Translation :: get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+             date('Y', $this->getDisplayTime());
+    }
+
+    public function renderPreviousMonthNavigation()
+    {
+        $urlFormat = $this->determineNavigationUrl();
+        $previousTime = strtotime('-1 Month', $this->getDisplayTime());
+        $previousUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $previousTime, $urlFormat);
+
+        return '<a href="' . $previousUrl . '"><span class="glyphicon glyphicon-chevron-left pull-left"></span></a>';
+    }
+
+    public function renderNextMonthNavigation()
+    {
+        $urlFormat = $this->determineNavigationUrl();
+        $nextTime = strtotime('+1 Month', $this->getDisplayTime());
+        $nextUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $nextTime, $urlFormat);
+
+        return '<a href="' . $nextUrl . '"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>';
     }
 }

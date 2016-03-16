@@ -185,6 +185,6 @@ class FilteredCourseListRenderer extends CourseListRenderer
      */
     protected function get_no_courses_message_as_html()
     {
-        return '<div style="text-align:center">' . Translation :: get('NoCoursesMatchSearchCriteria') . '</div>';
+        return '<div class="panel-body">' . Translation :: get('NoCoursesMatchSearchCriteria') . '</div>';
     }
 }

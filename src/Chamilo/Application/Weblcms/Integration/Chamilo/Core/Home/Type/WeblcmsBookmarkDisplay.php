@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
@@ -19,7 +18,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @package handbook.block
  */
-class WeblcmsBookmarkDisplay extends NewBlock implements ConfigurableInterface
+class WeblcmsBookmarkDisplay extends \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block implements
+    ConfigurableInterface
 {
     const CONFIGURATION_SHOW_EMPTY = 'show_when_empty';
 

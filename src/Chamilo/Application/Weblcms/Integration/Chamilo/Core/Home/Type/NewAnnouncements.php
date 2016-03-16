@@ -7,7 +7,6 @@ use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -24,6 +23,22 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
+    /**
+     *
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
+     */
+    public function renderContentHeader()
+    {
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     */
+    public function renderContentFooter()
+    {
+    }
+
     public function displayContent()
     {
         if (! $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_CONTENT, false))
@@ -33,7 +48,14 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: package(),
                     \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_ANNOUNCEMENT));
 
-            return Translation :: get('ClickForAnnouncements', array('URL' => $redirect->getUrl()));
+            $html = array();
+
+            $html[] = '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
+                 '">';
+            $html[] = Translation :: get('ClickForAnnouncements', array('URL' => $redirect->getUrl()));
+            $html[] = '</div>';
+
+            return implode(PHP_EOL, $html);
         }
 
         $publications = $this->getContent(self :: TOOL_ANNOUNCEMENT);
@@ -43,56 +65,43 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
             return $this->getOversizedWarning();
         }
 
-        ksort($publications);
-        $icon = $this->getNewAnnouncementsIcon();
+        if (count($publications) == 0)
+        {
+            $html = array();
+
+            $html[] = '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
+                 '">';
+            $html[] = Translation :: get('NoNewAnnouncementsSinceLastVisit');
+            $html[] = '</div>';
+
+            return implode(PHP_EOL, $html);
+        }
+
+        usort($publications, array($this, 'sortAnnouncements'));
 
         $html = array();
-        $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
 
-        $current_course_id = - 1;
+        $html[] = '<div class="list-group portal-block-content portal-block-new-list' .
+             ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
 
         foreach ($publications as $publication)
         {
             $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
-            $title = $publication[ContentObject :: PROPERTY_TITLE];
-
-            if ($course_id != $current_course_id)
-            {
-                if ($current_course_id != - 1)
-                {
-                    $html[] = '</ul>';
-                }
-                $current_course_id = $course_id;
-                $html[] = '<li>' . $this->getCourseById($current_course_id)->get_title() . '</li>';
-                $html[] = '<ul style="padding: 0px; margin: 2px 2px 2px 20px;">';
-            }
-
-            $title = htmlspecialchars($title);
+            $title = htmlspecialchars($publication[ContentObject :: PROPERTY_TITLE]);
             $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
-            $html[] = '<li style="list-style: none; list-style-image: url(' . $icon . ');">' . '<a href="' . $link .
-                 '" >' . $title . '</a></li>';
+
+            $html[] = '<a href="' . $link . '" class="list-group-item">';
+            $html[] = '<span class="badge badge-date">' .
+                 date('j M', $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]) . '</span>';
+            $html[] = '<p class="list-group-item-text">' . $title . '</p>';
+            $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
+
+            $html[] = '</a>';
         }
 
-        if ($current_course_id != - 1)
-        {
-            $html[] = '</ul>';
-        }
-
-        $html[] = '</ul>';
-
-        if (count($html) < 3)
-        {
-            return Translation :: get('NoNewAnnouncementsSinceLastVisit');
-        }
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    private function getNewAnnouncementsIcon()
-    {
-        return Theme :: getInstance()->getImagePath(
-            \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(self :: TOOL_ANNOUNCEMENT),
-            'Logo/' . Theme :: ICON_MINI . 'New');
     }
 
     private function getCourseViewerLink($course, $publication)
@@ -117,5 +126,29 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
     public function getConfigurationVariables()
     {
         return array(self :: CONFIGURATION_SHOW_CONTENT);
+    }
+
+    /**
+     *
+     * @param string[] $publicationLeft
+     * @param string[] $publicationRight
+     * @return integer
+     */
+    public function sortAnnouncements($publicationLeft, $publicationRight)
+    {
+        if ($publicationLeft[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] ==
+             $publicationRight[ContentObjectPublication :: PROPERTY_MODIFIED_DATE])
+        {
+            return 0;
+        }
+        elseif ($publicationLeft[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] >
+             $publicationRight[ContentObjectPublication :: PROPERTY_MODIFIED_DATE])
+        {
+            return - 1;
+        }
+        else
+        {
+            return 1;
+        }
     }
 }

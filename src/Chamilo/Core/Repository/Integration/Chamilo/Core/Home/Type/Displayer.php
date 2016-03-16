@@ -1,14 +1,16 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Link\Integration\Chamilo\Core\Home\Type;
+namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Platform\Translation;
 
-class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
+class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
     StaticBlockTitleInterface
 {
 
@@ -21,7 +23,7 @@ class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
      */
     public function __construct(Application $application, HomeService $homeService, Block $block, $defaultTitle = '')
     {
-        parent :: __construct($application, $homeService, $block, Translation :: get('Linker'));
+        parent :: __construct($application, $homeService, $block, Translation :: get('Displayer'));
     }
 
     public function isVisible()
@@ -32,13 +34,12 @@ class Linker extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
     public function displayContent()
     {
         $content_object = $this->getObject();
-        $url = htmlentities($content_object->get_url());
 
-        $html = array();
-        $html[] = $content_object->get_description();
-        $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . $url . '" target="_blank" >' . $url .
-             '</a></div>';
-
-        return implode(PHP_EOL, $html);
+        $display = ContentObjectRenditionImplementation :: factory(
+            $content_object,
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_DESCRIPTION,
+            $this->getRenderer());
+        return $display->render();
     }
 }

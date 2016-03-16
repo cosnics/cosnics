@@ -11,14 +11,13 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * ============================================================================== This is an application that creates a
@@ -549,13 +548,13 @@ abstract class Manager extends Application
     {
         if ($user != null && $course != null)
         {
-//            // If the user is a platform administrator, grant all rights
-//            if ($user->is_platform_admin())
-//            {
-//                return true;
-//            }
+            // // If the user is a platform administrator, grant all rights
+            // if ($user->is_platform_admin())
+            // {
+            // return true;
+            // }
 
-            $courseValidator = CourseAdminValidator::getInstance();
+            $courseValidator = CourseAdminValidator :: getInstance();
 
             // If the user is a sub administrator, grant all rights
             if ($courseValidator->isUserAdminOfCourse($user, $course))
