@@ -18,25 +18,27 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.tool.course_group.component
  */
-class EditorComponent extends Manager
+class EditorComponent extends TabComponent
 {
 
-    public function run()
+    public function renderTabContent()
     {
-        if (! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
 
-        $course_group_id = Request :: get(self :: PARAM_COURSE_GROUP);
+        $course_group_id = Request:: get(self :: PARAM_COURSE_GROUP);
         $this->set_parameter(self :: PARAM_COURSE_GROUP, $course_group_id);
 
-        $course_group = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $course_group_id);
+        $course_group = DataManager:: retrieve_by_id(CourseGroup:: class_name(), $course_group_id);
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail:: get_instance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation :: get('EditorComponent', array('GROUPNAME' => $course_group->get_name()))));
+                Translation:: get('EditorComponent', array('GROUPNAME' => $course_group->get_name()))
+            )
+        );
 
         $form = new CourseGroupForm(
             CourseGroupForm :: TYPE_EDIT,
@@ -44,7 +46,10 @@ class EditorComponent extends Manager
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EDIT_COURSE_GROUP,
-                    self :: PARAM_COURSE_GROUP => $course_group_id)));
+                    self :: PARAM_COURSE_GROUP => $course_group_id
+                )
+            )
+        );
 
         if ($form->validate())
         {
@@ -52,36 +57,25 @@ class EditorComponent extends Manager
 
             if ($succes)
             {
-                $message = Translation :: get(
+                $message = Translation:: get(
                     'ObjectUpdated',
-                    array('OBJECT' => Translation :: get('CourseGroup')),
-                    Utilities :: COMMON_LIBRARIES);
+                    array('OBJECT' => Translation:: get('CourseGroup')),
+                    Utilities :: COMMON_LIBRARIES
+                );
             }
             else
             {
-                $message = Translation :: get(
-                    'ObjectNotUpdated',
-                    array('OBJECT' => Translation :: get('CourseGroup')),
-                    Utilities :: COMMON_LIBRARIES) . '<br />' . implode('<br />', $course_group->get_errors());
+                $message = Translation:: get(
+                        'ObjectNotUpdated',
+                        array('OBJECT' => Translation:: get('CourseGroup')),
+                        Utilities :: COMMON_LIBRARIES
+                    ) . '<br />' . implode('<br />', $course_group->get_errors());
             }
 
-            $this->redirect(
-                $message,
-                ! $succes,
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_GROUPS,
-                    self :: PARAM_COURSE_GROUP => $course_group->get_parent_id()));
+            $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
-        else
-        {
-            $html = array();
 
-            $html[] = $this->render_header();
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
-        }
+        return $form->toHtml();
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

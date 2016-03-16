@@ -279,6 +279,11 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
         return $this->course_group;
     }
 
+    public function getCurrentCourseGroup()
+    {
+        return $this->course_group;
+    }
+
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('weblcms_course_group_unsubscribe_browser');

@@ -84,7 +84,7 @@ class CourseGroupForm extends FormValidator
 
     public function add_top_fields()
     {
-        $this->build_header(Translation :: get("NewCourseGroup"));
+//        $this->build_header(Translation :: get("NewCourseGroup"));
         // $group = array();
         // $this->addRule(CourseGroupForm::COURSE_GROUP_QUANTITY, Translation
         // ::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
@@ -98,12 +98,12 @@ class CourseGroupForm extends FormValidator
      */
     public function build_header($header_title)
     {
-        $this->addElement('html', '<div class="configuration_form">');
-        $this->addElement(
-            'html',
-            '<span class="category">' . $header_title . // Translation :: get($header_title, null, Utilities ::
-                                                        // COMMON_LIBRARIES) .
-            '</span>');
+//        $this->addElement('html', '<div class="configuration_form">');
+//        $this->addElement(
+//            'html',
+//            '<span class="category">' . $header_title . // Translation :: get($header_title, null, Utilities ::
+//                                                        // COMMON_LIBRARIES) .
+//            '</span>');
     }
 
     /**
@@ -111,8 +111,8 @@ class CourseGroupForm extends FormValidator
      */
     public function close_header()
     {
-        $this->addElement('html', '<div style="clear: both;"></div>');
-        $this->addElement('html', '</div>');
+//        $this->addElement('html', '<div style="clear: both;"></div>');
+//        $this->addElement('html', '</div>');
     }
 
     public function build_parent_form_create($counter = '')

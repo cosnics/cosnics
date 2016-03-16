@@ -19,73 +19,41 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @package application.lib.weblcms.tool.course_group.component
  */
-class ManageSubscriptionsComponent extends Manager implements DelegateComponent
+class ManageSubscriptionsComponent extends TabComponent
 {
 
-    public function run()
+    public function renderTabContent()
     {
-        if (! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
 
-        $course_group_id = Request :: get(self :: PARAM_COURSE_GROUP);
-        $this->set_parameter(self :: PARAM_COURSE_GROUP, $course_group_id);
+        $courseGroup = $this->getCurrentCourseGroup();
+        $form = new CourseGroupSubscriptionsForm($courseGroup, $this->get_url(), $this);
 
-        $course_group = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $course_group_id);
-
-        BreadcrumbTrail :: get_instance()->add(
-            new Breadcrumb(
-                $this->get_url(),
-                Translation :: get('ManageSubscriptionComponent', array('GROUPNAME' => $course_group->get_name()))));
-        // $trail = BreadcrumbTrail :: get_instance();
-
-        $form = new CourseGroupSubscriptionsForm(
-            $course_group,
-            $this->get_url(
-                array(
-                    self :: PARAM_ACTION => self :: ACTION_MANAGE_SUBSCRIPTIONS,
-                    self :: PARAM_COURSE_GROUP => $course_group->get_id())),
-            $this);
         if ($form->validate())
         {
             $succes = $form->update_course_group_subscriptions();
 
             if ($succes)
-                $message = Translation :: get(
-                    'CourseGroupSubscriptionsUpdated',
-                    array('OBJECT' => Translation :: get('CourseGroup'))) . // , Utilities :: COMMON_LIBRARIES
-'<br />' . implode('<br />', $course_group->get_errors());
-                // $message = 'CourseGroupSubscriptionsUpdated';
+            {
+                $message = Translation:: get(
+                        'CourseGroupSubscriptionsUpdated',
+                        array('OBJECT' => Translation:: get('CourseGroup'))
+                    ) . '<br />' . implode('<br />', $courseGroup->get_errors());
+            }
             else
-                // $message = 'MaximumAmountOfMembersReached';
-
-                $message = Translation :: get(
-                    'ObjectNotUpdated',
-                    array('OBJECT' => Translation :: get('CourseGroup')),
-                    Utilities :: COMMON_LIBRARIES) . '<br />' . implode('<br />', $course_group->get_errors());
-            $this->redirect(
-                $message,
-                ! $succes,
-                array(
-                    self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE,
-                    self :: PARAM_COURSE_GROUP => $course_group->get_id()));
+            {
+                $message = Translation:: get(
+                        'ObjectNotUpdated',
+                        array('OBJECT' => Translation:: get('CourseGroup')),
+                        Utilities :: COMMON_LIBRARIES
+                    ) . '<br />' . implode('<br />', $courseGroup->get_errors());
+            }
+            $this->redirect($message, !$succes, array(self :: PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }
-        else
-        {
-            $html = array();
 
-            $html[] = $this->render_header();
-            $html[] = '<h3>' . Translation :: get('CourseGroup') . ': ' . $course_group->get_name() . '</h3>';
-            $html[] = $form->toHtml();
-            $html[] = $this->render_footer();
-
-            return implode(PHP_EOL, $html);
-        }
-    }
-
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('weblcms_course_group_manage_subscription');
+        return $form->toHtml();
     }
 }
