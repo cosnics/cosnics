@@ -61,24 +61,26 @@ class CourseGroupMenu extends HTML_Menu
      *            string "?category=%s".
      */
     public function __construct($course, $current_group,
-        $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&course=%s&course_group=%s')
+        $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&tool_action=Details&course=%s&course_group=%s')
     {
+        $this->course = $course;
+        $this->urlFmt = $url_format;
+
         if ($current_group == '0' || is_null($current_group))
         {
             $this->current_group = DataManager :: retrieve_course_group_root($course->get_id());
+            $url = $this->get_home_url();
         }
         else
         {
             $this->current_group = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $current_group);
+            $url = $this->get_url($this->current_group->get_id());
         }
-
-        $this->course = $course;
-        $this->urlFmt = $url_format;
 
         $menu = $this->get_menu();
         parent :: __construct($menu);
         $this->array_renderer = new HTML_Menu_ArrayRenderer();
-        $this->forceCurrentUrl($this->get_url($this->current_group->get_id()));
+        $this->forceCurrentUrl($url);
     }
 
     public function get_menu()
@@ -151,7 +153,14 @@ class CourseGroupMenu extends HTML_Menu
 
     private function get_home_url()
     {
-        return htmlentities(sprintf(str_replace('&course_group=%s', '', $this->urlFmt), $this->course->get_id()));
+        return htmlentities(
+            sprintf(
+                str_replace(
+                    'tool_action=Details', 'tool_action=Browser', str_replace('&course_group=%s', '', $this->urlFmt)
+                ),
+                $this->course->get_id()
+            )
+        );
     }
 
     /**
