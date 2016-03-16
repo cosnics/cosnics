@@ -33,6 +33,16 @@ trait DropdownButtonTrait
     }
 
     /**
+     * Returns whether or not this dropdown button has sub buttons
+     *
+     * @return bool
+     */
+    public function hasButtons()
+    {
+        return count($this->subButtons) > 0;
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] $subButtons
      */
