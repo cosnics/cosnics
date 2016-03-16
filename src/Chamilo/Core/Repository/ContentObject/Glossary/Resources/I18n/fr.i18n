@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\glossary
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Glossaire"
+CreateItem = "Créer un élément"
+Title = "Titre"
+Description = "Description"
+GlossaryToolBrowserComponent = "Parcourir"
+GlossaryToolEvaluateComponent = "Evaluer"
+GlossaryToolIntroductionPublisherComponent = "Publier un texte d'introduction"
+GlossaryToolMoverComponent = "Déplacer"
+GlossaryToolPublisherComponent = "Publier"
+GlossaryToolUpdaterComponent = "Modifier"
+GlossaryToolViewerComponent = "Afficher"
