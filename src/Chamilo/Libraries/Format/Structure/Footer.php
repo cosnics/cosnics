@@ -95,10 +95,12 @@ class Footer
             $output[] = '<div class="pull-left">';
 
             $links = array();
-            $links[] = DatetimeUtilities :: format_locale_date(
-                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-                     Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
-                    time());
+
+//            $links[] = DatetimeUtilities :: format_locale_date(
+//                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
+//                     Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
+//                    time());
+
             $links[] = '<a href="' . \Chamilo\Configuration\Configuration :: get(
                 'Chamilo\Core\Admin',
                 'institution_url') . '" target="about:blank">' . \Chamilo\Configuration\Configuration :: get(
@@ -176,7 +178,7 @@ class Footer
                         Application :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_WHOIS_ONLINE));
 
                 $links[] = '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation :: get(
-                    'WhoisOnline') . '</a>';
+                    'WhoisOnline') . '?</a>';
             }
 
             $links[] = '&copy;&nbsp;' . date('Y');
