@@ -100,12 +100,9 @@ class NewAssignments extends NewBlock
             // 'From') . ' ' . $start_date . ' ' . Translation :: get('Until') . ' ' . $end_date . '<br />';
 
             $html[] = '<a href="' . $link . '" class="list-group-item">';
-            $html[] = '<span class="badge badge-date">' .
-                 date('j M', $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]) . '</span>';
-            $html[] = '<p class="list-group-item-text">' . $content_object->get_title();
-            $html[] = ' (' . Translation :: get('From') . ' ' . $start_date . ' ' . Translation :: get('Until') . ' ' .
-                 $end_date . ')';
-            $html[] = '</p>';
+            $html[] = '<span class="badge badge-date">' . date('j M', $content_object->get_start_time()) . ' - ' .
+                 date('j M', $content_object->get_end_time()) . '</span>';
+            $html[] = '<p class="list-group-item-text">' . $content_object->get_title() . '</p>';
             $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
 
             $html[] = '</a>';
