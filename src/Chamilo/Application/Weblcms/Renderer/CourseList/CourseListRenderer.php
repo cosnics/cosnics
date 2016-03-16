@@ -182,7 +182,7 @@ class CourseListRenderer
 
         if (count($courses) > 0)
         {
-            $html[] = '<ul style="padding: 0px; margin: 0px 0px 0px 15px;">';
+            $html[] = '<ul class="list-group">';
 
             $course_settings_controller = CourseSettingsController:: get_instance();
 
@@ -217,7 +217,7 @@ class CourseListRenderer
                     continue;
                 }
 
-                $html[] = '<li><a href="' . htmlspecialchars($this->get_course_url($course)) . '"' . $target . '>' .
+                $html[] = '<li class="list-group-item"><a href="' . htmlspecialchars($this->get_course_url($course)) . '"' . $target . '>' .
                     htmlspecialchars($course->get_title()) . '</a>';
 
                 if ($this->get_new_publication_icons())
