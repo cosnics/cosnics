@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: course_group_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -16,13 +15,11 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
     const TOOL_NAME = 'course_group';
-
     const PARAM_COURSE_GROUP_ACTION = 'tool_action';
     const PARAM_DELETE_COURSE_GROUPS = 'delete_course_groups';
     const PARAM_UNSUBSCRIBE_USERS = 'unsubscribe_users';
     const PARAM_COURSE_GROUP = 'course_group';
     const PARAM_TAB = 'tab';
-
     const ACTION_SUBSCRIBE = 'SubscribeBrowser';
     const ACTION_UNSUBSCRIBE = 'UnsubscribeBrowser';
     const ACTION_ADD_COURSE_GROUP = 'Creator';
@@ -47,6 +44,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_COURSE_GROUP);
+        return array(self :: PARAM_COURSE_GROUP);
     }
 }

@@ -5,9 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -96,10 +94,10 @@ class Footer
 
             $links = array();
 
-//            $links[] = DatetimeUtilities :: format_locale_date(
-//                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-//                     Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
-//                    time());
+            // $links[] = DatetimeUtilities :: format_locale_date(
+            // Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
+            // Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
+            // time());
 
             $links[] = '<a href="' . \Chamilo\Configuration\Configuration :: get(
                 'Chamilo\Core\Admin',

@@ -4,34 +4,20 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\CourseGroupMenu;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroup\CourseGroupTable;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\CourseGroup\CourseGroupTableDataProvider;
-use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\ConditionProperty;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -43,6 +29,7 @@ abstract class TabComponent extends Manager
 {
 
     /**
+     *
      * @var ButtonToolBarRenderer
      */
     protected $buttonToolbarRenderer;
@@ -75,7 +62,7 @@ abstract class TabComponent extends Manager
      */
     public function run()
     {
-        $this->rootCourseGroup = DataManager:: retrieve_course_group_root($this->get_course()->get_id());
+        $this->rootCourseGroup = DataManager :: retrieve_course_group_root($this->get_course()->get_id());
         $this->introduction_text = $this->get_introduction_text();
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
@@ -83,10 +70,9 @@ abstract class TabComponent extends Manager
 
         $html[] = $this->render_header();
 
-        $intro_text_allowed = CourseSettingsController:: get_instance()->get_course_setting(
+        $intro_text_allowed = CourseSettingsController :: get_instance()->get_course_setting(
             $this->get_course(),
-            CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT
-        );
+            CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
 
         if ($intro_text_allowed)
         {
@@ -131,63 +117,47 @@ abstract class TabComponent extends Manager
      */
     protected function renderTabs()
     {
-        $translator = Translation::getInstance();
-        $theme = Theme::getInstance();
+        $translator = Translation :: getInstance();
+        $theme = Theme :: getInstance();
 
         $tabs = new DynamicVisualTabsRenderer('course_groups', $this->renderTabContent());
 
-        if(!$this->isCurrentGroupRoot())
+        if (! $this->isCurrentGroupRoot())
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
                     'view_details',
                     $this->getCurrentGroupName(),
                     $theme->getCommonImagePath('Action/Details'),
-                    $this->get_url(
-                        array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS)
-                    ),
-                    get_class($this) == DetailsComponent::class_name()
-                )
-            );
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_GROUP_DETAILS)),
+                    get_class($this) == DetailsComponent :: class_name()));
         }
 
         $tabs->add_tab(
             new DynamicVisualTab(
                 'view_details',
-                $translator->getTranslation('BrowseChildren', null, Manager::context()),
+                $translator->getTranslation('BrowseChildren', null, Manager :: context()),
                 $theme->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array(self::PARAM_ACTION => self::ACTION_BROWSE)
-                ),
-                get_class($this) == BrowserComponent::class_name()
-            )
-        );
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)),
+                get_class($this) == BrowserComponent :: class_name()));
 
-        if(!$this->isCurrentGroupRoot() && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (! $this->isCurrentGroupRoot() && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
                     'view_details',
-                    $translator->getTranslation('EditGroup', null, Manager::context()),
+                    $translator->getTranslation('EditGroup', null, Manager :: context()),
                     $theme->getCommonImagePath('Action/Edit'),
-                    $this->get_url(
-                        array(self::PARAM_ACTION => self::ACTION_EDIT_COURSE_GROUP)
-                    ),
-                    get_class($this) == EditorComponent::class_name()
-                )
-            );
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_COURSE_GROUP)),
+                    get_class($this) == EditorComponent :: class_name()));
 
             $tabs->add_tab(
                 new DynamicVisualTab(
                     'view_details',
-                    $translator->getTranslation('ManageSubscriptions', null, Manager::context()),
+                    $translator->getTranslation('ManageSubscriptions', null, Manager :: context()),
                     $theme->getCommonImagePath('Action/Subscribe'),
-                    $this->get_url(
-                        array(self::PARAM_ACTION => self::ACTION_MANAGE_SUBSCRIPTIONS)
-                    ),
-                    get_class($this) == ManageSubscriptionsComponent::class_name()
-                )
-            );
+                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_MANAGE_SUBSCRIPTIONS)),
+                    get_class($this) == ManageSubscriptionsComponent :: class_name()));
         }
 
         return $tabs->render();
@@ -202,62 +172,49 @@ abstract class TabComponent extends Manager
      */
     protected function getButtonToolbarRenderer()
     {
-        if (!isset($this->buttonToolbarRenderer))
+        if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
-            $param_add_course_group[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
-                self :: ACTION_ADD_COURSE_GROUP;
+            $param_add_course_group[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = self :: ACTION_ADD_COURSE_GROUP;
             $param_add_course_group[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP] = $this->get_group_id();
 
-            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
-                self :: ACTION_SUBSCRIPTIONS_OVERVIEW;
-            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP] =
-                $this->get_group_id();
+            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = self :: ACTION_SUBSCRIPTIONS_OVERVIEW;
+            $param_subscriptions_overview[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP] = $this->get_group_id();
 
             if ($this->is_allowed(WeblcmsRights :: ADD_RIGHT))
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation:: get('Create'),
-                        Theme:: getInstance()->getCommonImagePath('Action/Create'),
+                        Translation :: get('Create'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Create'),
                         $this->get_url($param_add_course_group),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
-                    )
-                );
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
 
-            if (!$this->introduction_text && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+            if (! $this->introduction_text && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation:: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                        Theme:: getInstance()->getCommonImagePath('Action/Introduce'),
+                        Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
+                        Theme :: getInstance()->getCommonImagePath('Action/Introduce'),
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION =>
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION
-                            )
-                        ),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
-                    )
-                );
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
 
             if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation:: get('ViewSubscriptions'),
-                        Theme:: getInstance()->getCommonImagePath('Action/Browser'),
+                        Translation :: get('ViewSubscriptions'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Browser'),
                         $this->get_url(
                             $param_subscriptions_overview,
-                            array(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP)
-                        ),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
-                    )
-                );
+                            array(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP)),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
 
             $buttonToolbar->addButtonGroup($commonActions);
@@ -274,9 +231,8 @@ abstract class TabComponent extends Manager
 
         if ($currentCourseGroup->get_max_number_of_members() > 0)
         {
-            $maxMembersString =
-                ' (' . $currentCourseGroup->count_members() . '/' . $currentCourseGroup->get_max_number_of_members() .
-                ')';
+            $maxMembersString = ' (' . $currentCourseGroup->count_members() . '/' .
+                 $currentCourseGroup->get_max_number_of_members() . ')';
         }
         else
         {
@@ -303,16 +259,16 @@ abstract class TabComponent extends Manager
      */
     public function getCurrentCourseGroup()
     {
-        if (!$this->currentCourseGroup)
+        if (! $this->currentCourseGroup)
         {
             $id = $this->get_group_id();
-            if (!$id || $id == $this->rootCourseGroup->getId())
+            if (! $id || $id == $this->rootCourseGroup->getId())
             {
                 $this->currentCourseGroup = $this->rootCourseGroup;
             }
             else
             {
-                $this->currentCourseGroup = DataManager::retrieve_by_id(CourseGroup::class_name(), $id);
+                $this->currentCourseGroup = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $id);
             }
         }
 
@@ -329,6 +285,7 @@ abstract class TabComponent extends Manager
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
