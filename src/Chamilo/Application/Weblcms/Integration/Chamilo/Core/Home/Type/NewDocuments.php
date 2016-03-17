@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 
 /**
  *
@@ -40,7 +41,7 @@ class NewDocuments extends NewBlock
      *
      * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::getCourseViewerLink()
      */
-    public function getCourseViewerLink($course, $publication)
+    public function getCourseViewerLink(Course $course, $publication)
     {
         $parameters = array(
             \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course->get_id(),
