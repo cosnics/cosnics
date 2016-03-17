@@ -9,10 +9,12 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
+use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -262,7 +264,7 @@ class Kernel
         {
             if (! $authenticationValidator->validate() && ! Authentication :: anonymous_user_exists())
             {
-                throw new NotAllowedException(true);
+                throw new NotAuthenticatedException(true);
             }
         }
 
@@ -505,6 +507,11 @@ class Kernel
             {
                 $this->checkUpgrade()->setup()->handleOAuth2()->checkAuthentication()->loadUser()->buildApplication()->traceVisit()->runApplication();
             }
+        }
+        catch(NotAuthenticatedException $exception)
+        {
+            $response = new NotAuthenticatedResponse();
+            $response->send();
         }
         catch (\Exception $exception)
         {

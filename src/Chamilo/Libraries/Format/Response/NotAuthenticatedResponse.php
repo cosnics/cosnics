@@ -1,37 +1,65 @@
 <?php
-namespace Chamilo\Libraries\Architecture\Exceptions;
+namespace Chamilo\Libraries\Format\Response;
 
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * This class represents a parameter not defined exception.
- * Throw this if you expected an URL parameter that is not
- * there
+ *
+ * @package Chamilo\Libraries\Format\Structure
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class NotAllowedException extends \Exception
+class NotAuthenticatedResponse extends Response
 {
 
-    public function __construct($show_login_form = false)
+    /**
+     * Constructor
+     */
+    public function __construct()
     {
-        Session:: register('request_uri', $_SERVER['REQUEST_URI']);
+        $page = Page :: getInstance();
 
         $html = array();
+        $html[] = $page->getHeader()->toHtml();
+        $html[] = $this->renderPanel();
+        $html[] = $page->getFooter()->toHtml();
 
-        $html[] = Translation:: get('NotAllowed', null, Utilities :: COMMON_LIBRARIES);
-
-//        if ($show_login_form)
-//        {
-//            $html[] = $this->getLoginForm()->toHtml();
-//        }
-
-        parent:: __construct(implode(PHP_EOL, $html));
+        parent :: __construct(implode(PHP_EOL, $html));
     }
 
-    public function getLoginForm()
+    /**
+     * Renders the panel with the not authenticated message and the login form
+     *
+     * @return string
+     */
+    public function renderPanel()
+    {
+        $html = array();
+
+        $html[] = '<div class="panel panel-danger panel-not-authenticated">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = Translation::getInstance()->getTranslation('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+        $html[] = $this->displayLoginForm();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Displays the login form
+     *
+     * @return string
+     */
+    public function displayLoginForm()
     {
         $translator = Translation::getInstance();
         $redirect = new Redirect();
@@ -89,7 +117,6 @@ class NotAllowedException extends \Exception
             'required'
         );
 
-
-        return $form;
+        return $form->toHtml();
     }
 }
