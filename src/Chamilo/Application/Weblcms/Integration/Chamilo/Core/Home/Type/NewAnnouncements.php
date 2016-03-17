@@ -5,25 +5,25 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * $Id: new_announcements.class.php 216 2009-11-13 14:08:06Z kariboe $
  *
- * @package application.lib.weblcms.block
- */
-
-/**
- * This class represents a calendar repo_viewer component which can be used to browse through the possible learning
- * objects to publish.
+ * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class NewAnnouncements extends NewBlock implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_CONTENT = 'show_content';
 
+    /**
+     *
+     * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::displayContent()
+     */
     public function displayContent()
     {
         if (! $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_CONTENT, false))
@@ -46,24 +46,10 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
         return parent :: displayContent();
     }
 
-    public function displayNewItem($publication)
-    {
-        $html = array();
-
-        $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
-        $title = htmlspecialchars($publication[ContentObject :: PROPERTY_TITLE]);
-        $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
-
-        $html[] = '<a href="' . $link . '" class="list-group-item">';
-        $html[] = $this->getBadgeContent($publication);
-        $html[] = '<p class="list-group-item-text">' . $title . '</p>';
-        $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
-
-        $html[] = '</a>';
-
-        return implode(PHP_EOL, $html);
-    }
-
+    /**
+     *
+     * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::getCourseViewerLink()
+     */
     public function getCourseViewerLink($course, $publication)
     {
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
@@ -73,8 +59,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
 
-        $redirect = new Redirect($parameters);
-        return $redirect->getUrl();
+        return $this->getLink($parameters);
     }
 
     /**

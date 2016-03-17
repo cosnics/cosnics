@@ -6,35 +6,17 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 
 /**
- * A notification block for new document submissions (document tool) based on new_assignments.class.php
  *
- * @author Parcifal Aertssen (Howest)
+ * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class NewDocuments extends NewBlock
 {
-
-    public function displayNewItem($publication)
-    {
-        $html = array();
-
-        $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
-        $title = $publication[ContentObject :: PROPERTY_TITLE];
-        $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
-
-        $html[] = '<a href="' . $link . '" class="list-group-item">';
-        $html[] = $this->getBadgeContent($publication);
-        $html[] = '<p class="list-group-item-text">' . $title . '</p>';
-        $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
-
-        $html[] = '</a>';
-
-        return implode(PHP_EOL, $html);
-    }
 
     /**
      *
@@ -69,7 +51,6 @@ class NewDocuments extends NewBlock
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]);
 
-        $redirect = new Redirect($parameters);
-        return $redirect->getUrl();
+        return $this->getLink($parameters);
     }
 }
