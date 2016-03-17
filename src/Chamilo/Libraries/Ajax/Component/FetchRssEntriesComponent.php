@@ -1,12 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\File\Rss\Parser\RssFeedParserFactory;
 
-class FetchRssEntriesComponent extends Manager
+class FetchRssEntriesComponent extends Manager implements NoAuthenticationSupport
 {
     /**
      * Run the AJAX component
