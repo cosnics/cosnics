@@ -3,11 +3,10 @@ namespace Chamilo\Core\Home\Storage;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\Home\Manager;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
@@ -117,24 +116,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self :: retrieves(Block :: class_name(), new DataClassRetrievesParameters($condition));
     }
 
+    /**
+     *
+     * @param integer $userIdentifier
+     * @return boolean
+     */
     public static function truncateHome($userIdentifier)
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Tab :: class_name(), Tab :: PROPERTY_USER),
-            new StaticConditionVariable($userIdentifier));
-
-        $parameters = new DataClassRetrievesParameters($condition);
-
-        $tabs = self :: retrieves(Tab :: class_name(), $parameters);
-
-        while ($tab = $tabs->next_result())
-        {
-            if (! $tab->delete())
-            {
-                return false;
-            }
-        }
-
-        return true;
+        return self :: deletes(
+            Element :: class_name(),
+            new EqualityCondition(
+                new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_USER_ID),
+                new StaticConditionVariable($userIdentifier)));
     }
 }

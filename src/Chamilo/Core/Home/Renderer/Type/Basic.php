@@ -301,7 +301,7 @@ class Basic extends Renderer
                         false,
                         'portal-add-tab btn-link'));
 
-                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
+                $truncateLink = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
 
                 if ($homeUserIdentifier != '0')
                 {
@@ -309,10 +309,9 @@ class Basic extends Renderer
                         new SubButton(
                             Translation :: get('ResetHomepage'),
                             null,
-                            '#',
+                            $truncateLink->getUrl(),
                             SubButton :: DISPLAY_LABEL,
                             true,
-                            false,
                             'portal-reset btn-link'));
                 }
             }
