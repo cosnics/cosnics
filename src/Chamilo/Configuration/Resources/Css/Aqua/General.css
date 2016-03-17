@@ -37,7 +37,7 @@ body {
 }
 
 /* Message boxes */
-.normal-message, .error-message, .warning-message, .confirm-message,
+/*.normal-message, .error-message, .warning-message, .confirm-message,
 	.fatal-message {
 	z-index: 9999;
 	position: relative;
@@ -93,7 +93,7 @@ body {
 	margin: 0px;
 	font-size: 120%;
 	font-weight: bold;
-}
+}*/
 
 .notification {
 	float: right;
@@ -1434,4 +1434,11 @@ code.inline {
 	color: #555555;
 	padding: 1em 1em;
 	background: #f4f4f4;
+}
+
+.panel.panel-not-authenticated {
+	margin-top: 20px;
+	max-width: 700px;
+	margin-left: auto;
+	margin-right: auto;
 }

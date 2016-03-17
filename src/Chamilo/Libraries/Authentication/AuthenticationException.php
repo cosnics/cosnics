@@ -34,7 +34,7 @@ class AuthenticationException extends \Chamilo\Libraries\Architecture\Exceptions
 
         $html = array();
         $html[] = $message;
-        $html[] = $this->getLoginForm()->toHtml();
+//        $html[] = $this->getLoginForm()->toHtml();
 
         \Exception :: __construct(implode(PHP_EOL, $html), $code, $previous);
     }
