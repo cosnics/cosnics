@@ -12,11 +12,11 @@ namespace Chamilo\Libraries\Format;
  */
 class Display
 {
-    const MESSAGE_TYPE_CONFIRM = 'confirm';
-    const MESSAGE_TYPE_NORMAL = 'normal';
+    const MESSAGE_TYPE_CONFIRM = 'info';
+    const MESSAGE_TYPE_NORMAL = 'info';
     const MESSAGE_TYPE_WARNING = 'warning';
-    const MESSAGE_TYPE_ERROR = 'error';
-    const MESSAGE_TYPE_FATAL = 'fatal';
+    const MESSAGE_TYPE_ERROR = 'danger';
+    const MESSAGE_TYPE_FATAL = 'danger';
 
     /**
      *
@@ -58,7 +58,7 @@ class Display
     {
         $html = array();
 
-        $html[] = '<div class="' . $type . '-message">';
+        $html[] = '<div class="alert-message alert alert-' . $type . '">';
         $html[] = $message;
         $html[] = '<div class="close_message" id="closeMessage"></div>';
         $html[] = '</div>';
