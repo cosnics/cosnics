@@ -36,7 +36,7 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService
         $path = $identifier->get(self :: PARAM_PATH);
         $lifetime = $identifier->get(self :: PARAM_LIFETIME);
 
-        if ($this->get_path_type() == ExternalCalendar :: PATH_TYPE_REMOTE)
+        if (!file_exists($path))
         {
             if ($f = @fopen($path, 'r'))
             {
