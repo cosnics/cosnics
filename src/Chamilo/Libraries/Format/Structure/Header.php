@@ -182,6 +182,7 @@ class Header
             'shortcut icon',
             null,
             'image/x-icon');
+
         $this->addHtmlHeader(
             '<script type="text/javascript">var rootWebPath="' . Path :: getInstance()->getBasePath(true) . '";</script>');
 

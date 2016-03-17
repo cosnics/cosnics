@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Form\CourseGroupForm;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -23,22 +22,20 @@ class EditorComponent extends TabComponent
 
     public function renderTabContent()
     {
-        if (!$this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
 
-        $course_group_id = Request:: get(self :: PARAM_COURSE_GROUP);
+        $course_group_id = Request :: get(self :: PARAM_COURSE_GROUP);
         $this->set_parameter(self :: PARAM_COURSE_GROUP, $course_group_id);
 
-        $course_group = DataManager:: retrieve_by_id(CourseGroup:: class_name(), $course_group_id);
+        $course_group = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $course_group_id);
 
-        BreadcrumbTrail:: get_instance()->add(
+        BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation:: get('EditorComponent', array('GROUPNAME' => $course_group->get_name()))
-            )
-        );
+                Translation :: get('EditorComponent', array('GROUPNAME' => $course_group->get_name()))));
 
         $form = new CourseGroupForm(
             CourseGroupForm :: TYPE_EDIT,
@@ -46,10 +43,7 @@ class EditorComponent extends TabComponent
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EDIT_COURSE_GROUP,
-                    self :: PARAM_COURSE_GROUP => $course_group_id
-                )
-            )
-        );
+                    self :: PARAM_COURSE_GROUP => $course_group_id)));
 
         if ($form->validate())
         {
@@ -57,22 +51,20 @@ class EditorComponent extends TabComponent
 
             if ($succes)
             {
-                $message = Translation:: get(
+                $message = Translation :: get(
                     'ObjectUpdated',
-                    array('OBJECT' => Translation:: get('CourseGroup')),
-                    Utilities :: COMMON_LIBRARIES
-                );
+                    array('OBJECT' => Translation :: get('CourseGroup')),
+                    Utilities :: COMMON_LIBRARIES);
             }
             else
             {
-                $message = Translation:: get(
-                        'ObjectNotUpdated',
-                        array('OBJECT' => Translation:: get('CourseGroup')),
-                        Utilities :: COMMON_LIBRARIES
-                    ) . '<br />' . implode('<br />', $course_group->get_errors());
+                $message = Translation :: get(
+                    'ObjectNotUpdated',
+                    array('OBJECT' => Translation :: get('CourseGroup')),
+                    Utilities :: COMMON_LIBRARIES) . '<br />' . implode('<br />', $course_group->get_errors());
             }
 
-            $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
+            $this->redirect($message, ! $succes, array(self :: PARAM_ACTION => self :: ACTION_GROUP_DETAILS));
         }
 
         return $form->toHtml();
