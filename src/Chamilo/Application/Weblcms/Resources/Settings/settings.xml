@@ -64,12 +64,5 @@
 				</options>
 			</setting>
 		</category>
-		<category name="integration">
-			<setting name="oversized_new_list_threshold" field="text" default="0">
-				<validations>
-					<validation rule="numeric" message="MustBeNumeric" />
-				</validations>
-			</setting>
-		</category>
 	</settings>
 </package>
