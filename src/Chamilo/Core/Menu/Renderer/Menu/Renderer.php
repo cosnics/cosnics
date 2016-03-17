@@ -46,7 +46,7 @@ abstract class Renderer
      *
      * @param $user User|null
      */
-    public function __construct(Request $request, $user = null)
+    public function __construct(Request $request = null, $user = null)
     {
         $this->user = $user;
         $this->request = $request;
@@ -72,7 +72,7 @@ abstract class Renderer
      * @param $user User|null
      * @return Renderer
      */
-    public static function factory($type, Request $request, $user)
+    public static function factory($type, Request $request = null, $user = null)
     {
         $class = __NAMESPACE__ . '\Type\\' . $type;
         return new $class($request, $user);
@@ -84,7 +84,7 @@ abstract class Renderer
      * @param $user User|null
      * @return string
      */
-    public static function toHtml($type, Request $request, $user)
+    public static function toHtml($type, Request $request = null, $user = null)
     {
         return self :: factory($type, $request, $user)->render();
     }
