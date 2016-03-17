@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announc
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 
 /**
  *
@@ -50,7 +51,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
      *
      * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::getCourseViewerLink()
      */
-    public function getCourseViewerLink($course, $publication)
+    public function getCourseViewerLink(Course $course, $publication)
     {
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;

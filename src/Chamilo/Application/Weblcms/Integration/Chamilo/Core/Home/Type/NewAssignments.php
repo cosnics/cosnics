@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 
 /**
  *
@@ -54,7 +55,7 @@ class NewAssignments extends NewBlock
      *
      * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::getCourseViewerLink()
      */
-    public function getCourseViewerLink($course, $publication)
+    public function getCourseViewerLink(Course $course, $publication)
     {
         $parameters = array(
             \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course->get_id(),
