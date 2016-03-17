@@ -2,10 +2,8 @@
 namespace Chamilo\Libraries\Format\Response;
 
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -45,7 +43,7 @@ class NotAuthenticatedResponse extends Response
 
         $html[] = '<div class="panel panel-danger panel-not-authenticated">';
         $html[] = '<div class="panel-heading">';
-        $html[] = Translation::getInstance()->getTranslation('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
+        $html[] = Translation :: getInstance()->getTranslation('NotAuthenticated', array(), Utilities :: COMMON_LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = $this->displayLoginForm();
@@ -61,7 +59,7 @@ class NotAuthenticatedResponse extends Response
      */
     public function displayLoginForm()
     {
-        $translator = Translation::getInstance();
+        $translator = Translation :: getInstance();
         $redirect = new Redirect();
 
         $form = new FormValidator('formLogin', 'post', $redirect->getCurrentUrl());
@@ -74,48 +72,44 @@ class NotAuthenticatedResponse extends Response
         $form->addElement('html', '<div class="input-group">');
 
         $form->addElement(
-            'html', '<div class="input-group-addon">' . $translator->getTranslation('Username') . '</div>'
-        );
+            'html',
+            '<div class="input-group-addon">' . $translator->getTranslation('Username') . '</div>');
 
         $form->addElement(
             'text',
             'login',
-            Translation:: get('UserName'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
-        );
+            Translation :: get('UserName'),
+            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
 
         $form->addElement('html', '</div>');
         $form->addElement('html', '</div>');
-
 
         $form->addElement('html', '<div class="form-group">');
         $form->addElement('html', '<div class="input-group">');
 
         $form->addElement(
-            'html', '<div class="input-group-addon">' . $translator->getTranslation('Password') . '</div>'
-        );
+            'html',
+            '<div class="input-group-addon">' . $translator->getTranslation('Password') . '</div>');
 
         $form->addElement(
             'password',
             'password',
-            Translation:: get('Pass'),
-            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control')
-        );
+            Translation :: get('Pass'),
+            array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
 
         $form->addElement('html', '</div>');
         $form->addElement('html', '</div>');
 
         $form->addElement('html', '<div class="form-group text-right">');
-        $form->addElement('style_submit_button', 'submitAuth', Translation:: get('Login'), null, null, 'log-in');
+        $form->addElement('style_submit_button', 'submitAuth', Translation :: get('Login'), null, null, 'log-in');
         $form->addElement('html', '</div>');
 
-        $form->addRule('password', Translation:: get('ThisFieldIsRequired'), 'required');
+        $form->addRule('password', Translation :: get('ThisFieldIsRequired'), 'required');
 
         $form->addRule(
             'login',
-            Translation:: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
-            'required'
-        );
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            'required');
 
         return $form->toHtml();
     }
