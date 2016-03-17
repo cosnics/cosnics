@@ -45,7 +45,7 @@ body {
 }
 
 /* Message boxes */
-.normal-message, .error-message, .warning-message, .confirm-message,
+/*.normal-message, .error-message, .warning-message, .confirm-message,
 	.fatal-message {
 	z-index: 9999;
 	position: relative;
@@ -101,7 +101,7 @@ body {
 	margin: 0px;
 	font-size: 120%;
 	font-weight: bold;
-}
+}*/
 
 .notification {
 	float: right;
