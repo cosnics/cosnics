@@ -6,10 +6,6 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
-use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -27,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Anthony Hurst (Hogeschool Gent)
  */
-class NewBlock extends Block
+abstract class NewBlock extends Block
 {
     const TOOL_ANNOUNCEMENT = 'Announcement';
     const TOOL_ASSIGNMENT = 'Assignment';
@@ -38,6 +34,22 @@ class NewBlock extends Block
     const OVERSIZED_WARNING = 'oversized';
 
     private $courses;
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
+     */
+    public function renderContentHeader()
+    {
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
+     */
+    public function renderContentFooter()
+    {
+    }
 
     public function getContent($tool)
     {
@@ -107,24 +119,16 @@ class NewBlock extends Block
                 }
             }
         }
+
+        usort($unique_publications, array($this, 'sortPublications'));
+
         return $unique_publications;
     }
 
     private function getPublicationConditions($course, $tool)
     {
         $type = null;
-        switch ($tool)
-        {
-            case self :: TOOL_ANNOUNCEMENT :
-                $type = Announcement :: class_name();
-                break;
-            case self :: TOOL_ASSIGNMENT :
-                $type = Assignment :: class_name();
-                break;
-            case self :: TOOL_DOCUMENT :
-                $type = array(File :: class_name(), Webpage :: class_name());
-                break;
-        }
+
         $last_visit_date = \Chamilo\Application\Weblcms\Storage\DataManager :: get_last_visit_date(
             $course->get_id(),
             $this->getUserId(),
@@ -132,7 +136,11 @@ class NewBlock extends Block
             0);
 
         $conditions = array();
-        $conditions[] = WeblcmsDataManager :: get_publications_condition($course, $this->getUser(), $tool, $type);
+        $conditions[] = WeblcmsDataManager :: get_publications_condition(
+            $course,
+            $this->getUser(),
+            $tool,
+            $this->getContentObjectTypes());
         $conditions[] = new InequalityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
@@ -153,5 +161,81 @@ class NewBlock extends Block
              Translation :: get('OversizedWarning', null, Utilities :: COMMON_LIBRARIES) . ' <a href="?' .
              Utilities :: get_current_query_string(array(self :: FORCE_OVERSIZED => self :: DO_FORCE_OVERSIZED)) . '">' .
              Translation :: get('ForceOversized', null, Utilities :: COMMON_LIBRARIES) . '</a></div>';
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    abstract public function getContentObjectTypes();
+
+    abstract public function getToolName();
+
+    /**
+     *
+     * @param string[] $publicationLeft
+     * @param string[] $publicationRight
+     * @return integer
+     */
+    public function sortPublications($publicationLeft, $publicationRight)
+    {
+        if ($publicationLeft[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] ==
+             $publicationRight[ContentObjectPublication :: PROPERTY_MODIFIED_DATE])
+        {
+            return 0;
+        }
+        elseif ($publicationLeft[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] >
+             $publicationRight[ContentObjectPublication :: PROPERTY_MODIFIED_DATE])
+        {
+            return - 1;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    public function displayContent()
+    {
+        $publications = $this->getContent($this->getToolName());
+
+        if (count($publications) == 0)
+        {
+            $html = array();
+
+            $html[] = '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
+                 '">';
+            $html[] = Translation :: get('NoNewPublicationsSinceLastVisit');
+            $html[] = '</div>';
+
+            return implode(PHP_EOL, $html);
+        }
+
+        return $this->displayNewItems($publications);
+    }
+
+    public function displayNewItems($publications)
+    {
+        $html = array();
+
+        $html[] = '<div class="list-group portal-block-content portal-block-new-list' .
+             ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+
+        foreach ($publications as $publication)
+        {
+            $html[] = $this->displayNewItem($publication);
+        }
+
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    abstract public function getCourseViewerLink($course, $publication);
+
+    public function getBadgeContent($publication)
+    {
+        return '<span class="badge badge-date">' .
+             date('j M', $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]) . '</span>';
     }
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -22,22 +23,6 @@ use Chamilo\Libraries\Platform\Translation;
 class NewAnnouncements extends NewBlock implements ConfigurableInterface
 {
     const CONFIGURATION_SHOW_CONTENT = 'show_content';
-
-    /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentHeader()
-     */
-    public function renderContentHeader()
-    {
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::renderContentFooter()
-     */
-    public function renderContentFooter()
-    {
-    }
 
     public function displayContent()
     {
@@ -58,62 +43,35 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
             return implode(PHP_EOL, $html);
         }
 
-        $publications = $this->getContent(self :: TOOL_ANNOUNCEMENT);
+        return parent :: displayContent();
+    }
 
-        if ($publications === self :: OVERSIZED_WARNING)
-        {
-            return $this->getOversizedWarning();
-        }
-
-        if (count($publications) == 0)
-        {
-            $html = array();
-
-            $html[] = '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
-                 '">';
-            $html[] = Translation :: get('NoNewAnnouncementsSinceLastVisit');
-            $html[] = '</div>';
-
-            return implode(PHP_EOL, $html);
-        }
-
-        usort($publications, array($this, 'sortAnnouncements'));
-
+    public function displayNewItem($publication)
+    {
         $html = array();
 
-        $html[] = '<div class="list-group portal-block-content portal-block-new-list' .
-             ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+        $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
+        $title = htmlspecialchars($publication[ContentObject :: PROPERTY_TITLE]);
+        $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
 
-        foreach ($publications as $publication)
-        {
-            $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
-            $title = htmlspecialchars($publication[ContentObject :: PROPERTY_TITLE]);
-            $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
+        $html[] = '<a href="' . $link . '" class="list-group-item">';
+        $html[] = $this->getBadgeContent($publication);
+        $html[] = '<p class="list-group-item-text">' . $title . '</p>';
+        $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
 
-            $html[] = '<a href="' . $link . '" class="list-group-item">';
-            $html[] = '<span class="badge badge-date">' .
-                 date('j M', $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]) . '</span>';
-            $html[] = '<p class="list-group-item-text">' . $title . '</p>';
-            $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
-
-            $html[] = '</a>';
-        }
-
-        $html[] = '</div>';
+        $html[] = '</a>';
 
         return implode(PHP_EOL, $html);
     }
 
-    private function getCourseViewerLink($course, $publication)
+    public function getCourseViewerLink($course, $publication)
     {
-        $id = $publication[ContentObjectPublication :: PROPERTY_ID];
-
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course->get_id();
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = self :: TOOL_ANNOUNCEMENT;
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $id;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
@@ -130,25 +88,19 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
 
     /**
      *
-     * @param string[] $publicationLeft
-     * @param string[] $publicationRight
-     * @return integer
+     * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::getContentObjectTypes()
      */
-    public function sortAnnouncements($publicationLeft, $publicationRight)
+    public function getContentObjectTypes()
     {
-        if ($publicationLeft[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] ==
-             $publicationRight[ContentObjectPublication :: PROPERTY_MODIFIED_DATE])
-        {
-            return 0;
-        }
-        elseif ($publicationLeft[ContentObjectPublication :: PROPERTY_MODIFIED_DATE] >
-             $publicationRight[ContentObjectPublication :: PROPERTY_MODIFIED_DATE])
-        {
-            return - 1;
-        }
-        else
-        {
-            return 1;
-        }
+        return array(Announcement :: class_name());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::getToolName()
+     */
+    public function getToolName()
+    {
+        return 'Announcement';
     }
 }
