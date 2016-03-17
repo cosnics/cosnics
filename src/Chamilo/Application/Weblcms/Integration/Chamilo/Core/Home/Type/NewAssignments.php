@@ -7,14 +7,21 @@ use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 
 /**
- * A notificationblock for new assignment submissions (assignmenttool)
+ *
+ * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class NewAssignments extends NewBlock
 {
 
+    /**
+     *
+     * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::displayNewItem()
+     */
     public function displayNewItem($publication)
     {
         if ($publication[ContentObject :: PROPERTY_TYPE] != Assignment :: class_name())
@@ -22,25 +29,7 @@ class NewAssignments extends NewBlock
             return;
         }
 
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            Assignment :: class_name(),
-            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-
-        $html = array();
-
-        $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
-        $title = htmlspecialchars($publication[ContentObject :: PROPERTY_TITLE]);
-        $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
-
-        $html[] = '<a href="' . $link . '" class="list-group-item">';
-        $html[] = '<span class="badge badge-date">' . date('j M Y', $content_object->get_start_time()) . ' - ' .
-             date('j M Y', $content_object->get_end_time()) . '</span>';
-        $html[] = '<p class="list-group-item-text">' . $title . '</p>';
-        $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
-
-        $html[] = '</a>';
-
-        return implode(PHP_EOL, $html);
+        return parent :: displayNewItem($publication);
     }
 
     /**
@@ -76,7 +65,20 @@ class NewAssignments extends NewBlock
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID]);
 
-        $redirect = new Redirect($parameters);
-        return $redirect->getUrl();
+        return $this->getLink($parameters);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock::getBadgeContent()
+     */
+    public function getBadgeContent($publication)
+    {
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            Assignment :: class_name(),
+            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
+
+        return '<span class="badge badge-date">' . date('j M Y', $content_object->get_start_time()) . ' - ' .
+             date('j M Y', $content_object->get_end_time()) . '</span>';
     }
 }

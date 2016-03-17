@@ -6,8 +6,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -16,23 +15,24 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * Description of weblcms_new_block
  *
- * @author Anthony Hurst (Hogeschool Gent)
+ * @package Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 abstract class NewBlock extends Block
 {
     const TOOL_ANNOUNCEMENT = 'Announcement';
     const TOOL_ASSIGNMENT = 'Assignment';
     const TOOL_DOCUMENT = 'Document';
-    const OVERSIZED_SETTING = 'oversized_new_list_threshold';
-    const FORCE_OVERSIZED = 'force_oversized_newblocks';
-    const DO_FORCE_OVERSIZED = '1';
-    const OVERSIZED_WARNING = 'oversized';
 
+    /**
+     *
+     * @var \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
+     */
     private $courses;
 
     /**
@@ -51,6 +51,11 @@ abstract class NewBlock extends Block
     {
     }
 
+    /**
+     *
+     * @param string $tool
+     * @return string[][]
+     */
     public function getContent($tool)
     {
         // All user courses for active course types
@@ -64,15 +69,6 @@ abstract class NewBlock extends Block
 
         // All user courses
         $user_courses = CourseDataManager :: retrieve_all_courses_from_user($this->getUser(), $archiveCondition);
-
-        $threshold = intval(PlatformSetting :: get(self :: OVERSIZED_SETTING, 'Chamilo\Application\Weblcms'));
-
-        if ($threshold !== 0 && Request :: get(self :: FORCE_OVERSIZED) != self :: DO_FORCE_OVERSIZED &&
-             $user_courses->size() > $threshold)
-        {
-            $this->courses = array();
-            return self :: OVERSIZED_WARNING;
-        }
 
         $this->courses = array();
 
@@ -125,6 +121,12 @@ abstract class NewBlock extends Block
         return $unique_publications;
     }
 
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param string $tool
+     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
+     */
     private function getPublicationConditions($course, $tool)
     {
         $type = null;
@@ -150,17 +152,14 @@ abstract class NewBlock extends Block
         return new AndCondition($conditions);
     }
 
+    /**
+     *
+     * @param integer $course_id
+     * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course
+     */
     protected function getCourseById($course_id)
     {
         return $this->courses[$course_id];
-    }
-
-    public function getOversizedWarning()
-    {
-        return '<div class="warning-message" style="width: auto; margin: 0 0 1em 0; position: static;">' .
-             Translation :: get('OversizedWarning', null, Utilities :: COMMON_LIBRARIES) . ' <a href="?' .
-             Utilities :: get_current_query_string(array(self :: FORCE_OVERSIZED => self :: DO_FORCE_OVERSIZED)) . '">' .
-             Translation :: get('ForceOversized', null, Utilities :: COMMON_LIBRARIES) . '</a></div>';
     }
 
     /**
@@ -169,6 +168,10 @@ abstract class NewBlock extends Block
      */
     abstract public function getContentObjectTypes();
 
+    /**
+     *
+     * @return string
+     */
     abstract public function getToolName();
 
     /**
@@ -195,6 +198,10 @@ abstract class NewBlock extends Block
         }
     }
 
+    /**
+     *
+     * @see \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer::displayContent()
+     */
     public function displayContent()
     {
         $publications = $this->getContent($this->getToolName());
@@ -214,6 +221,11 @@ abstract class NewBlock extends Block
         return $this->displayNewItems($publications);
     }
 
+    /**
+     *
+     * @param string[][] $publications
+     * @return string
+     */
     public function displayNewItems($publications)
     {
         $html = array();
@@ -231,11 +243,45 @@ abstract class NewBlock extends Block
         return implode(PHP_EOL, $html);
     }
 
-    abstract public function getCourseViewerLink($course, $publication);
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param string[] $publication
+     * @return string
+     */
+    abstract public function getCourseViewerLink(Course $course, $publication);
 
+    /**
+     *
+     * @param string[] $publication
+     * @return string
+     */
     public function getBadgeContent($publication)
     {
         return '<span class="badge badge-date">' .
              date('j M', $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE]) . '</span>';
+    }
+
+    /**
+     *
+     * @param string[] $publication
+     * @return string
+     */
+    public function displayNewItem($publication)
+    {
+        $html = array();
+
+        $course_id = $publication[ContentObjectPublication :: PROPERTY_COURSE_ID];
+        $title = $publication[ContentObject :: PROPERTY_TITLE];
+        $link = $this->getCourseViewerLink($this->getCourseById($course_id), $publication);
+
+        $html[] = '<a href="' . $link . '" class="list-group-item">';
+        $html[] = $this->getBadgeContent($publication);
+        $html[] = '<p class="list-group-item-text">' . $title . '</p>';
+        $html[] = '<h5 class="list-group-item-heading">' . $this->getCourseById($course_id)->get_title() . '</h5>';
+
+        $html[] = '</a>';
+
+        return implode(PHP_EOL, $html);
     }
 }
