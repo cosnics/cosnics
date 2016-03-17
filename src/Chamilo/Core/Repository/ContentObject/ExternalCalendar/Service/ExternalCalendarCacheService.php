@@ -75,7 +75,7 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService
      */
     public function getCalendarForPath($path, $lifetime = 3600)
     {
-        $cacheIdentifier = md5(serialize($this->get_full_path()));
+        $cacheIdentifier = md5(serialize($path));
         $parameterBag = new ParameterBag(
             array(
                 ParameterBag :: PARAM_IDENTIFIER => $cacheIdentifier,
