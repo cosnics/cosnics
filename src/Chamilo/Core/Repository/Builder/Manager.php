@@ -417,7 +417,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         $this->get_parent()->redirect_away_from_complex_builder($message, $error_message);
     }
 
-    public function getButtonToolbarRenderer(ContentObject $content_object)
+    public function getButtonToolbarRenderer(ContentObject $content_object = null)
     {
         return '';
     }

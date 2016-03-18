@@ -103,7 +103,7 @@ abstract class Manager extends Application
             $root_content_object_id);
     }
 
-    public function getButtonToolbarRenderer(ContentObject $content_object)
+    public function getButtonToolbarRenderer(ContentObject $content_object = null)
     {
         return $this->get_parent()->getButtonToolbarRenderer($content_object);
     }

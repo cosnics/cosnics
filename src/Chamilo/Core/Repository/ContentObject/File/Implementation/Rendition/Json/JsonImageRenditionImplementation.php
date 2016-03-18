@@ -15,15 +15,16 @@ class JsonImageRenditionImplementation extends JsonRenditionImplementation
 
         if ($object->is_image())
         {
-            $url = Path :: getInstance()->getBasePath(true) .
-                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-                    $object->get_id(),
-                    $object->calculate_security_code());
+            $url = \Chamilo\Core\Repository\Manager:: get_document_downloader_url(
+                $object->get_id(),
+                $object->calculate_security_code()
+            );
+
             return array(JsonImageContentObjectRendition :: PROPERTY_URL => $url);
         }
         else
         {
-            return ContentObjectRendition :: launch($this);
+            return ContentObjectRendition:: launch($this);
         }
     }
 }
