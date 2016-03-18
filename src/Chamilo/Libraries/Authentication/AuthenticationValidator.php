@@ -221,14 +221,14 @@ class AuthenticationValidator
      */
     public function performCredentialsAuthentication()
     {
-        $userName = $this->getRequest()->request->get(CredentialsAuthentication :: PARAM_LOGIN);
+        $userIdentifier = $this->getRequest()->request->get(CredentialsAuthentication :: PARAM_LOGIN);
         $password = $this->getRequest()->request->get(CredentialsAuthentication :: PARAM_PASSWORD);
 
-        if ($userName && $password)
+        if ($userIdentifier && $password)
         {
-            if (\Chamilo\Core\User\Storage\DataManager :: userExists($userName))
+            if (\Chamilo\Core\User\Storage\DataManager :: usernameOrEmailExists($userIdentifier))
             {
-                $user = \Chamilo\Core\User\Storage\DataManager :: retrieveUserByUsername($userName);
+                $user = \Chamilo\Core\User\Storage\DataManager :: retrieveUserByUsernameOrEmail($userIdentifier);
 
                 $this->isValidUser($user);
 
@@ -243,8 +243,7 @@ class AuthenticationValidator
                 }
                 else
                 {
-                    $authentication = CredentialsAuthentication :: factory($authenticationSource, $userName);
-
+                    $authentication = CredentialsAuthentication :: factory($authenticationSource, $user->get_username());
                     $authentication->login($password);
                 }
             }
@@ -264,7 +263,7 @@ class AuthenticationValidator
                     {
                         $authentication = CredentialsAuthentication :: factory(
                             $credentialsAuthenticationType,
-                            $userName);
+                            $userIdentifier);
 
                         if ($authentication instanceof UserRegistrationSupport)
                         {
@@ -305,9 +304,7 @@ class AuthenticationValidator
             }
 
             $this->setAuthenticatedUser($user);
-
             $this->trackLogin($user);
-
             $this->redirectAfterLogin();
 
             return $user;

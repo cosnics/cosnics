@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Storage;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *
@@ -34,6 +34,25 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
             new StaticConditionVariable($userName));
         return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters($condition));
+    }
+
+    /**
+     *
+     * @param string $userIdentifier
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public static function retrieveUserByUsernameOrEmail($userIdentifier)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL),
+            new StaticConditionVariable($userIdentifier));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+            new StaticConditionVariable($userIdentifier));
+
+        return self :: retrieve(User :: class_name(), new DataClassRetrieveParameters(new OrCondition($conditions)));
     }
 
     /**
@@ -308,6 +327,23 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         return self :: count(User :: class_name(), new DataClassCountParameters($condition)) == 1;
+    }
+
+    public static function usernameOrEmailExists($userIdentifier)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME),
+            new StaticConditionVariable($userIdentifier));
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL),
+            new StaticConditionVariable($userIdentifier));
+
+        $condition = new OrCondition($conditions);
+
+        return self :: count(User :: class_name(), new DataClassCountParameters($condition)) > 0;
     }
 
     /**

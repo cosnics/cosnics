@@ -39,7 +39,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
         if (! $this->getUser() || ($this->getUser() instanceof \Chamilo\Core\User\Storage\DataClass\User &&
              $this->getUser()->is_anonymous_user()))
         {
-            $request = $this->getRenderer()->getApplication()->getApplicationConfiguration()->getRequest();
+            $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
             $message = $request->query->get(AuthenticationValidator :: PARAM_AUTHENTICATION_ERROR);
 
             if ($message)
@@ -88,7 +88,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 
     public function displayLoginForm()
     {
-        $request = $this->getRenderer()->getApplication()->getApplicationConfiguration()->getRequest();
+        $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
 
         $form = new FormValidator('formLogin', 'post');
         $renderer = & $form->defaultRenderer();
