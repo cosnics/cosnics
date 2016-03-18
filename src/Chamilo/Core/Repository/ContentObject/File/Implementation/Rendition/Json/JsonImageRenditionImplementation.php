@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Js
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\Json\Type\JsonImageContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\JsonRenditionImplementation;
-use Chamilo\Libraries\File\Path;
 
 class JsonImageRenditionImplementation extends JsonRenditionImplementation
 {

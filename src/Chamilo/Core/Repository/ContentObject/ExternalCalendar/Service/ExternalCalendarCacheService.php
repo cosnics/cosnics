@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service;
 
-use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\Cache\ParameterBag;
 use Sabre\VObject;
