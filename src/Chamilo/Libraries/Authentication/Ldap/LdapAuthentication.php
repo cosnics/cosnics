@@ -14,7 +14,7 @@ use Chamilo\Libraries\Platform\Translation;
  * like myldap and to rename the class files. Then you can change your LDAP-implementation without changing this
  * default. Please note that the users in your database should have myldap as auth_source also in that case.
  */
-class LdapAuthentication extends CredentialsAuthentication implements UserRegistrationSupport
+class LdapAuthentication extends CredentialsAuthentication
 {
 
     /**
@@ -101,6 +101,7 @@ class LdapAuthentication extends CredentialsAuthentication implements UserRegist
     }
 
     /**
+     * Unused for now class should implement UserRegistrationSupport to support this
      *
      * @see \Chamilo\Libraries\Architecture\Interfaces\UserRegistrationSupport::registerUser()
      */
