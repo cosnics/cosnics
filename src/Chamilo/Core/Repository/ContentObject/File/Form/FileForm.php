@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  *
@@ -43,10 +44,23 @@ class FileForm extends ContentObjectForm
             Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
             'disk_quota');
 
+        $this->addElement(
+            'static',
+            null,
+            sprintf(Translation :: get('FileName')),
+            '<div class="dropzone needsclick dz-clickable" id="file-upload"><div class="dz-message needsclick">' .
+                 Translation :: get('DropFileHere') . '
+  </div></div>');
+        $this->addElement('hidden', 'file_upload_data');
+
         $calculator->addUploadWarningToForm($this);
 
         $this->addFormRule(array($this, 'check_document_form'));
         $this->addElement('category');
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(File :: package(), true) . 'fileUpload.js'));
     }
 
     protected function build_editing_form()
@@ -68,10 +82,6 @@ class FileForm extends ContentObjectForm
         $object = $this->get_content_object();
 
         $this->addElement('file', 'file', sprintf(Translation :: get('FileName'), $postMaxSize));
-        $this->addRule(
-            'file',
-            Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
-            'disk_quota');
 
         $calculator->addUploadWarningToForm($this);
 
@@ -87,10 +97,24 @@ class FileForm extends ContentObjectForm
     public function create_content_object()
     {
         $object = new File();
-        $object->set_filename($_FILES['file']['name']);
-        $object->set_temporary_file_path($_FILES['file']['tmp_name']);
+
+        if (isset($_FILES['file']) && strlen($_FILES['file']['name']) > 0)
+        {
+            $object->set_filename($_FILES['file']['name']);
+            $object->set_temporary_file_path($_FILES['file']['tmp_name']);
+        }
+        else
+        {
+            $fileUploadData = json_decode($this->exportValue('file_upload_data'));
+            $temporaryFilePath = Path :: getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
+                 $fileUploadData->temporaryFileName;
+
+            $object->set_filename($fileUploadData->name);
+            $object->set_temporary_file_path($temporaryFilePath);
+        }
 
         $this->set_content_object($object);
+
         $document = parent :: create_content_object();
 
         $owner = $this->get_owner_id();
@@ -148,9 +172,6 @@ class FileForm extends ContentObjectForm
                 case 3 : // uploaded file was only partially uploaded
                     $errors['file'] = Translation :: get('UploadIncomplete');
                     break;
-                case 4 : // no file was uploaded
-                    $errors['file'] = Translation :: get('NoFileSelected');
-                    break;
             }
         }
         elseif (isset($_FILES['file']) && strlen($_FILES['file']['name']) > 0)
@@ -183,15 +204,34 @@ class FileForm extends ContentObjectForm
                 }
             }
         }
+        elseif (isset($fields['file_upload_data']))
+        {
+            $fileUploadData = json_decode($this->exportValue('file_upload_data'));
+            $temporaryFilePath = Path :: getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
+                 $fileUploadData->temporaryFileName;
+
+            $size = filesize($temporaryFilePath);
+
+            if (! $calculator->canUpload($size))
+            {
+                $errors['file_upload_data'] = Translation :: get(
+                    'DiskQuotaExceeded',
+                    null,
+                    Utilities :: COMMON_LIBRARIES);
+            }
+        }
         else
         {
             $errors['file'] = Translation :: get('NoFileSelected');
+            $errors['file_upload_data'] = Translation :: get('NoFileSelected');
         }
 
         if (count($errors) == 0)
         {
             return true;
         }
+
+        var_dump($errors);
 
         return $errors;
     }
