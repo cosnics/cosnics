@@ -1,7 +1,4 @@
-ul.tree-menu li div a.assessment_match_text_question {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_assessment_match_text_question {
+ul.tree-menu li div a.assessment_match_text_question, ul.tree-menu li div a.type_assessment_match_text_question,
+	ul.tree-menu li div a.type_assessment_match_text_question_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }

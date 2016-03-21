@@ -290,10 +290,7 @@ table.collapsed tr.collapsable {
 	color: #e17009;
 }
 
-ul.tree-menu li div a.wiki {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_wiki {
+ul.tree-menu li div a.wiki, ul.tree-menu li div a.type_wiki, ul.tree-menu li div a.type_wiki_default
+	{
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }

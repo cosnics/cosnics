@@ -51,13 +51,6 @@ div.question div.title {
 	/*margin-bottom: 10px;*/
 }
 
-/* div.question div.title div.number, div.question div.title div.text {
-	border: 1px solid #b5cae7;
-	background: #4171b5
-		url(../../../../../../common/libraries/resources/Images/Aqua/Background/TableHeader.png)
-		repeat-x;
-} */
-
 div.question div.title div.number {
 	float: left;
 	text-align: center;

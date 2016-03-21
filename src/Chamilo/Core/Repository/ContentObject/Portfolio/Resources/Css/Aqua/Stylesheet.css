@@ -1,5 +1,5 @@
-ul.tree-menu li div a.portfolio,ul.tree-menu li div a.type_portfolio,ul.tree-menu li div a.type_portfolio_default
-	{
+ul.tree-menu li div a.portfolio, ul.tree-menu li div a.type_portfolio,
+	ul.tree-menu li div a.type_portfolio_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
@@ -72,7 +72,7 @@ ul.tree-menu li div a.portfolio,ul.tree-menu li div a.type_portfolio,ul.tree-men
 	clear: both;
 }
 
-.feedback-history-toggle-visible,.feedback-history-toggle-invisible {
+.feedback-history-toggle-visible, .feedback-history-toggle-invisible {
 	cursor: pointer;
 	font-weight: bold;
 	color: #4171B5;

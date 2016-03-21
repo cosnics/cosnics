@@ -1,7 +1,4 @@
-ul.tree-menu li div a.glossary_item {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_glossary_item {
+ul.tree-menu li div a.glossary_item, ul.tree-menu li div a.type_glossary_item,
+	ul.tree-menu li div a.type_glossary_item_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }
