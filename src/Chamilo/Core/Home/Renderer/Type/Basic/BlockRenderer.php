@@ -45,6 +45,12 @@ class BlockRenderer
 
     /**
      *
+     * @var \Chamilo\Core\Home\Service\HomeService
+     */
+    private $homeService;
+
+    /**
+     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
@@ -52,7 +58,26 @@ class BlockRenderer
     public function __construct(Application $application, HomeService $homeService, Block $block)
     {
         $this->renderer = $application;
+        $this->homeService = $homeService;
         $this->block = $block;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Home\Service\HomeService
+     */
+    public function getHomeService()
+    {
+        return $this->homeService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Home\Service\HomeService $homeService
+     */
+    public function setHomeService(HomeService $homeService)
+    {
+        $this->homeService = $homeService;
     }
 
     /**
@@ -309,9 +334,10 @@ class BlockRenderer
         $html = array();
 
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+        $generalMode = $this->getUser()->is_platform_admin() && $this->getHomeService()->isInGeneralMode();
+        $isIdentifiedUser = ! $this->getUser()->is_anonymous_user();
 
-        if ($this->getUser() instanceof User && ($userHomeAllowed || $this->getUser()->is_platform_admin()) &&
-             ! $this->getUser()->is_anonymous_user())
+        if ($this->getUser() instanceof User && ($userHomeAllowed || $generalMode) && $isIdentifiedUser)
         {
             if ($this->isHidable())
             {
