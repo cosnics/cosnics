@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\CasStorage\Account\Component;
 
-use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Account\Form\AccountForm;
 use Chamilo\Application\CasStorage\Account\Manager;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 

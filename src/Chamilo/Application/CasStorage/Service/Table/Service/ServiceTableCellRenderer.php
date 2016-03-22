@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\CasStorage\Service\Table\Service;
 
-use Chamilo\Application\CasStorage\Service\Storage\DataClass\Service;
 use Chamilo\Application\CasStorage\Service\Manager;
+use Chamilo\Application\CasStorage\Service\Storage\DataClass\Service;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;

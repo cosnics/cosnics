@@ -2,9 +2,9 @@
 namespace Chamilo\Application\CasStorage\Component;
 
 use Chamilo\Application\CasStorage\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class AccountComponent extends Manager implements DelegateComponent
 {

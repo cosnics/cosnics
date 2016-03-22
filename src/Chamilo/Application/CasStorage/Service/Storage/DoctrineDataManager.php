@@ -1,4 +1,4 @@
-<?php
+3<?php
 namespace Chamilo\Application\CasStorage\Service\Storage;
 
 use Chamilo\Application\CasStorage\Service\Storage\Connection\DoctrineConnection;
