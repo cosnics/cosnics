@@ -49,7 +49,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         
         $html[] = $this->render_header();
         
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->get_root_content_object());
         
         if ($this->buttonToolbarRenderer)
         {
