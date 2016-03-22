@@ -69,7 +69,9 @@ class UserComponent extends TabComponent implements TableSupport
                 false, 
                 array(self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT));
         }
-        
+
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+
         $this->set_parameter(
             ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, 
             $this->buttonToolbarRenderer->getSearchForm()->getQuery());
@@ -91,8 +93,6 @@ class UserComponent extends TabComponent implements TableSupport
                     array(self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT));
             }
         }
-        
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         
         // Default table of users which can be emulated (as determined by the context)
         $table = new UserTable($this);
