@@ -137,7 +137,7 @@
 .navbar-chamilo .navbar-nav .dropdown-menu li a:hover
 {
     /*background-color: #262f52;*/
-    background: #2f3a66;
+    background: #406e8e;
     height: auto;
 }
 
@@ -169,7 +169,7 @@
 
 .navbar-chamilo ul.navbar-nav li.dropdown.open ul.dropdown-menu li a
 {
-    color: #8eadd8;
+    color: #f5f5f5;
     padding: 0;
 }
 
@@ -276,7 +276,7 @@
     min-width: 300px;
     height: 136px;
     overflow: hidden;
-    background-color: #2f3a66;
+    background-color: #406e8e;
     clear: both;
     white-space: normal;
     position: fixed;
@@ -400,14 +400,14 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
     text-align: center;
     color: white;
     line-height: 16px;
-    background-color: #262F52;
+    background-color: #406e8e;
 }
 
 .navbar-chamilo .navbar-nav .dropdown-menu div.chamilo-menu-item-account div.chamilo-menu-item-account-logout a {
     height: auto;
     line-height: normal;
     padding: 0;
-    background-color: #262F52;
+    background-color: #406e8e;
 }
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-logout img,
