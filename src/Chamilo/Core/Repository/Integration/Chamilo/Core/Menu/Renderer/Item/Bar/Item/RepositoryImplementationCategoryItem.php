@@ -66,7 +66,7 @@ class RepositoryImplementationCategoryItem extends CategoryItem
         $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
         $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
 
-        $title = Translation :: get('Instance');
+        $title = Translation :: get('Instance', null, 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu');
 
         if ($this->getItem()->show_icon())
         {
