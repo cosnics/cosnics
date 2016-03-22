@@ -3,10 +3,10 @@ namespace Chamilo\Application\Calendar\Extension\Personal;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 
 /**
  *

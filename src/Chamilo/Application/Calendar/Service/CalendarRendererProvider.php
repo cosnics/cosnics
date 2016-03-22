@@ -3,6 +3,8 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Visibility;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Event\Interfaces\ActionSupport;
@@ -12,8 +14,6 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *

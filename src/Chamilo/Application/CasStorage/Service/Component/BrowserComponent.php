@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Application\CasStorage\Service\Component;
 
-use Chamilo\Application\CasStorage\Service\Storage\DataClass\Service;
 use Chamilo\Application\CasStorage\Service\Manager;
+use Chamilo\Application\CasStorage\Service\Storage\DataClass\Service;
 use Chamilo\Application\CasStorage\Service\Table\Service\ServiceTable;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
