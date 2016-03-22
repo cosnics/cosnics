@@ -5,12 +5,12 @@ namespace Chamilo\Application\CasStorage\Service\Component;
  *
  * @author Hans De Bisschop
  */
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Service\Manager;
 use Chamilo\Application\CasStorage\Service\Storage\DataManager;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class DeactivaterComponent extends Manager
 {

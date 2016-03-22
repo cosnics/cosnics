@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\CasStorage\Account\Component;
 
-use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Account\Manager;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Account\Table\Account\AccountTable;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
