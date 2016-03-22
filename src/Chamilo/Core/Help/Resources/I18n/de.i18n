@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = help
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Hilfe"
+HelpItemsInstalled = "Hilfepositionen installiert"
+Url = "Url"
+UpdateItem = "Position aktualisieren"
+NoHelpItemSelected = "Keine Hilfeposition ausgewählt"
+List = "Liste"
+ListDescription = "Ansicht der Liste verfügbarer Hilfepositionen auf der Plattform mit der Möglichkeit, sich mit eigenen Hilfsseiten pro Thema zu verlinken"
+Help = "Hilfe"
+HelpItemUpdated = "Hilfe"
+HelpItemNotUpdated = "Hilfeposition nicht aktualisiert"
+HelpManagerBrowserComponent = "Browser"
+HelpManagerUpdaterComponent = "Aktualisierer"
+Context = ""
+Identifier = ""
+Language = ""

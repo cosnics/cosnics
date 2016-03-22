@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\hotpotatoes
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Hotpotatoes"
+TypeCategory = "Content Objects"
+Properties = "Properties"
+MaximumAttempts = "Maximum number of attempts"
+UploadHotpotatoes = "Upload Hotpotatoes"
+ChangeHotpotatoes = "Change Hotpotatoes"
+Title = "Title"
+Description = "Description"
+NoMaximumAttemptsFillIn0 = "(0 = unlimited)"
