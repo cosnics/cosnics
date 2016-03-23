@@ -42,19 +42,19 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         switch ($column->get_name())
         {
             case PublicationTableColumnModel :: COLUMN_PROGRESS :
+            {
+                if (!$this->get_component()->get_tool_browser()->get_parent()->is_empty_learning_path($publication))
                 {
-                    if (! $this->get_component()->get_tool_browser()->get_parent()->is_empty_learning_path($publication))
-                    {
-                        return $this->get_progress($publication);
-                    }
-                    else
-                    {
-                        return Translation :: get('EmptyLearningPath');
-                    }
+                    return $this->get_progress($publication);
                 }
+                else
+                {
+                    return Translation:: get('EmptyLearningPath');
+                }
+            }
         }
 
-        return parent :: render_cell($column, $publication);
+        return parent:: render_cell($column, $publication);
     }
 
     /**
@@ -73,24 +73,31 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
     public function get_progress($publication)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_component()->get_course_id()));
+            new PropertyConditionVariable(
+                LearningPathAttempt:: class_name(), LearningPathAttempt :: PROPERTY_COURSE_ID
+            ),
+            new StaticConditionVariable($this->get_component()->get_course_id())
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LearningPathAttempt :: class_name(),
-                LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID),
-            new StaticConditionVariable($publication[ContentObjectPublication :: PROPERTY_ID]));
+                LearningPathAttempt:: class_name(),
+                LearningPathAttempt :: PROPERTY_LEARNING_PATH_ID
+            ),
+            new StaticConditionVariable($publication[ContentObjectPublication :: PROPERTY_ID])
+        );
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(LearningPathAttempt :: class_name(), LearningPathAttempt :: PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_component()->get_user_id()));
+            new PropertyConditionVariable(LearningPathAttempt:: class_name(), LearningPathAttempt :: PROPERTY_USER_ID),
+            new StaticConditionVariable($this->get_component()->get_user_id())
+        );
 
         $condition = new AndCondition($conditions);
 
-        $attempt = DataManager :: retrieve(
-            LearningPathAttempt :: class_name(),
-            new DataClassRetrieveParameters($condition));
+        $attempt = DataManager:: retrieve(
+            LearningPathAttempt:: class_name(),
+            new DataClassRetrieveParameters($condition)
+        );
 
         if ($attempt instanceof LearningPathAttempt)
         {
@@ -106,9 +113,11 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
             array(
                 Manager :: PARAM_ACTION => Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                'lp_action' => 'view_progress'));
+                'lp_action' => 'view_progress'
+            )
+        );
 
-        return Text :: create_link($url, $bar);
+        return Text:: create_link($url, $bar);
     }
 
     /**
@@ -120,12 +129,14 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      */
     private function get_progress_bar($progress)
     {
-        $html[] = '<div style="position: relative; border: 1px solid black; height: 14px; width:100px;">';
-        $html[] = '<div style="background-color: lightblue; height: 14px; width:' . $progress .
-             'px; text-align: center;">';
+        $progress = round($progress);
+
+        $html[] = '<div class="progress">';
+        $html[] = '<div class="progress-bar" role="progressbar" aria-valuenow="' . $progress .
+            '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $progress . '%;">';
+        $html[] = $progress . '%';
         $html[] = '</div>';
-        $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round($progress) .
-             '%</div></div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
