@@ -6,12 +6,12 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationForm;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Extension of the default Content to allow for the feedback-functionality

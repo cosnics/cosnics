@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
+use Chamilo\Libraries\Platform\Session\Request;
 
 class MoverComponent extends Manager
 {

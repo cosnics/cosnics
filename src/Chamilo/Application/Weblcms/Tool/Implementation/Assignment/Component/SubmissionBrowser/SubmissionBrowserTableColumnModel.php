@@ -2,10 +2,10 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionBrowser;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 /**
  * Abstract table column model for the submitters browser table

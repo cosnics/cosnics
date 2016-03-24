@@ -4,13 +4,13 @@ namespace Chamilo\Application\Weblcms;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingDefaultValue;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingRelation;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseSettingRelation;
 
 /**
  * Controller for the course settings With this class you can - Install course settings for a given installer by parsing

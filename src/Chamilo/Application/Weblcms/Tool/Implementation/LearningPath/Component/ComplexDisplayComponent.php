@@ -15,18 +15,21 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySuppor
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -34,9 +37,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
     ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent

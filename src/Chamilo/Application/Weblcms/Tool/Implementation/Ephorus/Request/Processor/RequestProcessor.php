@@ -2,9 +2,9 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Processor;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * handles request processing (calls to ephorus webservices)

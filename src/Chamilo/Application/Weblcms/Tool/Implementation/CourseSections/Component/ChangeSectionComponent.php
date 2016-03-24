@@ -7,8 +7,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseSections\Storage\DataManager;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use HTML_Table;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use HTML_Table;
 
 /**
  * $Id: course_sections_change_section.class.php 216 2009-11-13 14:08:06Z kariboe $

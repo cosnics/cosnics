@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Component;
 
-use Chamilo\Core\Repository\Viewer\Manager as RepoViewer;
 use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
+use Chamilo\Core\Repository\Viewer\Manager as RepoViewer;
 
 class PublisherComponent extends Manager
 {

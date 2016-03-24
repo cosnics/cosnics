@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Component;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
 
 /**
  * Description

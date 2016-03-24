@@ -1,9 +1,11 @@
+
 <?php
 namespace Chamilo\Application\Weblcms;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -11,7 +13,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * This class represents a publisher which shows the selected content objects and the publication form
