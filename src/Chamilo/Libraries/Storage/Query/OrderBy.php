@@ -39,7 +39,7 @@ class OrderBy
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
      */
     public function get_property()
     {
