@@ -130,12 +130,12 @@ class BrowserComponent extends Manager implements DelegateComponent
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
-            $commonActions->addButton(
-                new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+//            $commonActions->addButton(
+//                new Button(
+//                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
+//                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+//                    $this->get_url(),
+//                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             
             $renderers = $this->get_parent()->get_available_renderers();
             
