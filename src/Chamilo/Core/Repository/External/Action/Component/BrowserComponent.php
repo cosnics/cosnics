@@ -79,8 +79,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = '<div id="action_bar_browser">';
-        
+//        $html[] = '<div id="action_bar_browser">';
+        $html[] = '<div class="row">';
+
         if ($this->get_menu() == null)
         {
             $menu = $this->render_menu();
@@ -88,7 +89,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         else
         {
             $menu = array();
-            $menu[] = '<div style=" width: 20%; overflow: auto; float: left;">';
+            $menu[] = '<div class="col-md-3">';
             $menu[] = $this->get_menu()->render_as_tree();
             $menu[] = '</div>';
             $menu = implode(PHP_EOL, $menu);
@@ -96,7 +97,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($menu)
         {
             $html[] = $menu;
-            $html[] = '<div style=" width: 80%; overflow: auto; float: left;">';
+            $html[] = '<div class="col-md-9">';
         }
         $html[] = Renderer :: factory($this->get_parent()->get_renderer(), $this)->as_html();
         
