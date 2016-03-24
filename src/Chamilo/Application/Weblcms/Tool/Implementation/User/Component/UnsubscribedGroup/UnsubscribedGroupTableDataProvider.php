@@ -3,8 +3,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubsc
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * * *************************************************************************** Data provider for an unsubscribed

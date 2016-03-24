@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\DirectS
 
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * Cell renderer for a direct subscribed course group browser table.

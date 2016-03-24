@@ -5,14 +5,16 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -22,8 +24,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * This class displays the result of a single attempt

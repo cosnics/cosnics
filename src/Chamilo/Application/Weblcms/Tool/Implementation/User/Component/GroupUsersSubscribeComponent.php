@@ -1,15 +1,16 @@
+
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * $Id: group_users_subscribe.class.php 218 2009-11-13 14:21:26Z kariboe $

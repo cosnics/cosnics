@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Note\Component;
 
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Note\Manager;
+use Chamilo\Libraries\Platform\Session\Request;
 
 class MoverComponent extends Manager
 {

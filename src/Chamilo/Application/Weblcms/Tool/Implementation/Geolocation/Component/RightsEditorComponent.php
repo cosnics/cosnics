@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class RightsEditorComponent extends Manager implements DelegateComponent
 {

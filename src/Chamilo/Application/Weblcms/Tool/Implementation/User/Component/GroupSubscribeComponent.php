@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: subscribe.class.php 218 2009-11-13 14:21:26Z kariboe $

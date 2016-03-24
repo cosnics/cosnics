@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Link;
 
 use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
-use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
+use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
 /**
  * $Id: link_tool.class.php 216 2009-11-13 14:08:06Z kariboe $

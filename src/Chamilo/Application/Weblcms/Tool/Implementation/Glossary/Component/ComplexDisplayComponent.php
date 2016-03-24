@@ -3,15 +3,15 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * $Id: glossary_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
