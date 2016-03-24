@@ -1,4 +1,5 @@
 @import url(../../../Feedback/Resources/Css/Aqua/Stylesheet.css);
+
 @import url(../../../Publication/Resources/Css/Aqua/Stylesheet.css);
 
 tr.recycled td { /*text-decoration:line-through;*/
@@ -165,4 +166,8 @@ div.quota_statistics .data_table td.header {
 
 .type_disabled {
 	background-image: url(../../Images/Aqua/Menu/Disabled.png) !important;
+}
+
+#repository-tree-container {
+	margin-bottom: 15px;
 }

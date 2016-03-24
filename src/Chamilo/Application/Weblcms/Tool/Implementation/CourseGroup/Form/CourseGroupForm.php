@@ -725,7 +725,7 @@ class CourseGroupForm extends FormValidator
             $this->addElement(
                 'html',
                 '<div id="tool_unchecked_warning_' . CourseGroup :: PROPERTY_DOCUMENT_CATEGORY_ID . $counter .
-                     '" class="row tool_unchecked_warning hidden"><div class="formw">' . '<div class="warning-message">' .
+                     '" class="form-row tool_unchecked_warning hidden"><div class="formw">' . '<div class="warning-message">' .
                      Translation :: get('DocumentToolUncheckedWarning') . '</div>' . '</div></div>');
         }
         else
@@ -750,7 +750,7 @@ class CourseGroupForm extends FormValidator
             $this->addElement(
                 'html',
                 '<div id="tool_unchecked_warning_' . CourseGroup :: PROPERTY_FORUM_CATEGORY_ID . $counter .
-                     '" class="row tool_unchecked_warning hidden"><div class="formw">' . '<div class="warning-message">' .
+                     '" class="form-row tool_unchecked_warning hidden"><div class="formw">' . '<div class="warning-message">' .
                      Translation :: get('ForumToolUncheckedWarning') . '</div>' . '</div></div>');
         }
 

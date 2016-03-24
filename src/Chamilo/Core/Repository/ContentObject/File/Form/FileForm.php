@@ -44,13 +44,18 @@ class FileForm extends ContentObjectForm
             Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
             'disk_quota');
 
-        $this->addElement(
-            'static',
-            null,
-            sprintf(Translation :: get('FileName')),
-            '<div class="dropzone needsclick dz-clickable" id="file-upload"><div class="dz-message needsclick">' .
-                 Translation :: get('DropFileHere') . '
-  </div></div>');
+        $dropzoneHtml = array();
+
+        $dropzoneHtml[] = '<div class="panel panel-default" id="file-upload">';
+        $dropzoneHtml[] = '<div class="panel-body" id="previews">';
+        $dropzoneHtml[] = '<span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign"></span>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '<div class="panel-footer">';
+        $dropzoneHtml[] = Translation :: get('DropFileHereMessage');
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+
+        $this->addElement('static', null, sprintf(Translation :: get('FileName')), implode(PHP_EOL, $dropzoneHtml));
         $this->addElement('hidden', 'file_upload_data');
 
         $calculator->addUploadWarningToForm($this);

@@ -124,33 +124,16 @@ div.admin_search_form div.row div.formw button {
 	color: red;
 }
 
-div.vertical_action {
-	clear: both;
-	width: 100%;
-	overflow: hidden;
-	padding: 10px 0px 10px 0px;
-	border-top: 1px solid #EBEBEB;
+.vertical-action div.icon {
+	margin: 8px 15px;
+	margin-left: 0px;
 }
 
-div.vertical_action div.icon {
-	float: left;
-	width: 64px;
-	height: 64px;
-}
-
-div.vertical_action div.icon img {
-	margin: 16px;
-}
-
-div.vertical_action div.description {
-	margin-left: 64px;
-}
-
-div.vertical_action div.description .binary_checkbox {
+.vertical-action div.description .binary_checkbox {
 	margin-top: 10px;
 }
 
-div.vertical_action h4 {
+.vertical-action h4 {
 	margin: 0px;
 	padding: 0px;
 }
@@ -167,3 +150,12 @@ div.items {
 	clear: both;
 	width: 100%;
 }
+
+/* .tab-content .list-group .list-group-item.vertical-action { */
+/* 	border-top-right-radius: 0px; */
+/* 	border-top-left-radius: 0px; */
+/* } */
+
+/* .tab-content .list-group .list-group-item.vertical-action:first-child { */
+/* 	border-top: 0px solid white; */
+/* } */

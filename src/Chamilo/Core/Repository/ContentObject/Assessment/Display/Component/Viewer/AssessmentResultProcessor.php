@@ -135,7 +135,7 @@ class AssessmentResultProcessor
         $this->question_results[] = '<div class="assessment">';
         $this->question_results[] = '<h2>' . Translation :: get('ViewAssessmentResults') . '</h2>';
 
-        $this->question_results[] = '<div class="row"><div class="formc formc_no_margin">';
+        $this->question_results[] = '<div class="form-row"><div class="formc formc_no_margin">';
         $this->question_results[] = '<b>' . $assessment->get_title() . '</b><br />';
         $this->question_results[] = $assessment->get_description() . '</div></div>';
 

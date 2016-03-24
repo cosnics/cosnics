@@ -69,7 +69,7 @@ class DynamicTabsRenderer
      */
     public function add_tab(DynamicTab $tab)
     {
-        $tab->set_id($this->name . '_' . $tab->get_id());
+        $tab->set_id($this->name . '-' . $tab->get_id());
         $this->tabs[] = $tab;
     }
 
@@ -79,16 +79,17 @@ class DynamicTabsRenderer
 
         $html = array();
 
-        // $html[] = '<a name="top"></a>';
-        $html[] = '<div id="' . $this->name . '_tabs">';
+        $html[] = '<div id="' . $this->name . 'Tabs">';
 
         // Tab headers
-        $html[] = '<ul class="tabs-header">';
+        $html[] = '<ul class="nav nav-tabs tabs-header dynamic-visual-tabs">';
         foreach ($tabs as $key => $tab)
         {
             $html[] = $tab->header();
         }
         $html[] = '</ul>';
+
+        $html[] = '<div id="' . $this->name . 'TabsContent" class="tab-content dynamic-visual-tab-content">';
 
         return implode(PHP_EOL, $html);
     }
@@ -113,7 +114,7 @@ class DynamicTabsRenderer
                 return null;
             }
 
-            return $this->get_name() . '_' . $selected_tab;
+            return $this->get_name() . '-' . $selected_tab;
         }
         else
         {
@@ -144,39 +145,51 @@ class DynamicTabsRenderer
     public function footer()
     {
         $html = array();
+
+        $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<script type="text/javascript">';
-        $html[] = 'function setSearchTab(e, ui)
-	{
-		var searchForm = $("div.action_bar div.search_form form");
-                var uri = searchForm.attr(\'action\');
-                if(uri){
-                    var url = $.query.load(uri);
-                    var currentTabId = $("div.admin_tab:visible").attr(\'id\').replace("' .
-             $this->get_name() . '_", "");
-                    searchForm.attr(\'action\', url.set("tab", currentTabId).toString());
-                }
-	}';
 
-        $html[] = '	$(\'#' . $this->get_name() . '_tabs > ul.tabs-header > li > a\').click(function(e) {
-                e.preventDefault();
-            });';
+        $html[] = '$(\'#' . $this->name . 'Tabs a\').click(function (e) {
+  e.preventDefault()
+  $(this).tab(\'show\')
+})';
 
-        $html[] = '	$("#' . $this->get_name() . '_tabs ul.tabs-header").css(\'display\', \'block\');';
-        $html[] = '	$("#' . $this->get_name() . '_tabs h2").hide();';
-        $html[] = '	$("#' . $this->get_name() . '_tabs").tabs();';
-        // $html[] = ' var tabs = $(\'#' . $this->get_name() . '_tabs\').tabs(\'paging\', { cycle: false, follow: false}
-        // );';
+        // $html[] = 'function setSearchTab(e, ui)
+        // {
+        // var searchForm = $("div.action_bar div.search_form form");
+        // var uri = searchForm.attr(\'action\');
+        // if(uri){
+        // var url = $.query.load(uri);
+        // var currentTabId = $("div.admin_tab:visible").attr(\'id\').replace("' .
+        // $this->get_name() . '_", "");
+        // searchForm.attr(\'action\', url.set("tab", currentTabId).toString());
+        // }
+        // }';
+
+        // $html[] = ' $(\'#' . $this->get_name() . '_tabs > ul.tabs-header > li > a\').click(function(e) {
+        // e.preventDefault();
+        // });';
+
+        // $html[] = ' $("#' . $this->get_name() . '_tabs ul.tabs-header").css(\'display\', \'block\');';
+        // $html[] = ' $("#' . $this->get_name() . '_tabs h2").hide();';
+        // $html[] = ' $("#' . $this->get_name() . '_tabs").tabs();';
+        // // $html[] = ' var tabs = $(\'#' . $this->get_name() . '_tabs\').tabs(\'paging\', { cycle: false, follow:
+        // false}
+        // // );';
 
         $selected_tab = $this->get_selected_tab();
+
         if (isset($selected_tab))
         {
-            $html[] = 'var activeTabIndex = $(\'#' . $this->get_name() . '_tabs > div\').index($("#' . $selected_tab .
-                 '"))';
-            $html[] = '	$(\'#' . $this->get_name() . '_tabs\').tabs( "option", "active", activeTabIndex );';
+            $html[] = '$(\'#' . $this->name . 'Tabs a[href="#' . $selected_tab . '"]\').tab(\'show\');';
+        }
+        else
+        {
+            $html[] = '$(\'#' . $this->name . 'Tabs a:first\').tab(\'show\')';
         }
 
-        $html[] = '	$(document).on(\'tabsshow\', ("#' . $this->get_name() . '_tabs"), setSearchTab);';
+        // $html[] = ' $(document).on(\'tabsshow\', ("#' . $this->get_name() . '_tabs"), setSearchTab);';
 
         $html[] = '</script>';
 
@@ -193,7 +206,7 @@ class DynamicTabsRenderer
 
         foreach ($tabs as $key => $tab)
         {
-            $html[] = $tab->body($this->name . '_' . $tab->get_id());
+            $html[] = $tab->body($this->name . '-' . $tab->get_id());
         }
 
         $html[] = $this->footer();

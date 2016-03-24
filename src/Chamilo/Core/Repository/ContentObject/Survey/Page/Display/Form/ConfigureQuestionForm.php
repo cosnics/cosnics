@@ -94,7 +94,7 @@ class ConfigureQuestionForm extends FormValidator
 
         $this->addElement(
             'html',
-            '<div class="row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >');
+            '<div class="form-row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >');
 
         $question_display = QuestionDisplay :: factory(
             $this,
@@ -133,7 +133,7 @@ class ConfigureQuestionForm extends FormValidator
 
                 $this->addElement(
                     'html',
-                    '<div class="row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >');
+                    '<div class="form-row"><div class="label"></div><div class="formw"><div class="element"  style="position : relative ; width : 100%" >');
 
                 $question_display->run();
 

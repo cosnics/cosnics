@@ -41,12 +41,18 @@ body {
 		rgba(0, 0, 0, 0.075);
 }
 
-.btn-action-toolbar .btn-group-vertical {
-	width: 100%;
-	margin-bottom: 15px;
+.btn-action-toolbar.btn-action-toolbar-vertical {
+	margin-left: 0px;
 }
 
-.btn-action-toolbar .btn-group-vertical .btn {
+.btn-action-toolbar.btn-action-toolbar-vertical .btn-group-vertical {
+	width: 100%;
+	margin-bottom: 15px;
+	margin-left: 0px;
+}
+
+.btn-action-toolbar.btn-action-toolbar-vertical .btn-group-vertical .btn
+	{
 	text-align: left;
 }
 
@@ -105,15 +111,15 @@ form .radio+.radio {
 	margin-bottom: 0;
 }
 
-form .row {
+form .form-row {
 	margin: 0 0 5px;
 }
 
-form.table_form .row {
+form.table_form .form-row {
 	margin-bottom: 0;
 }
 
-form.table_form .row .btn-action-toolbar {
+form.table_form .form-row .btn-action-toolbar {
 	margin-bottom: 5px;
 }
 
@@ -205,9 +211,7 @@ ol.breadcrumb a {
 /***********************
  * Alert			   *
  ***********************/
-
-.alert-message
-{
+.alert-message {
 	z-index: 9999;
 	position: relative;
 	margin: 10px auto 10px -287px;
@@ -234,6 +238,7 @@ ol.breadcrumb a {
 .alert-message.alert-danger {
 	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
 }
+
 .alert-message.alert-warning {
 	background-image: url('../../Images/Aqua/Status/WarningMini.png');
 }
