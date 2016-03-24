@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Application\Survey\Form;
 
+use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use PHPExcel_Reader_Excel2007;
 use PHPExcel_Reader_Excel5;
 use PHPExcel_Reader_OOCalc;
-use Chamilo\Application\Survey\Service\RightsService;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");

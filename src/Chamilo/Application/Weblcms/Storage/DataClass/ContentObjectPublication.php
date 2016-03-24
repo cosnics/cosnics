@@ -9,20 +9,20 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use ErrorException;
 // to support mailing CO publications:
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
-use Chamilo\Libraries\Mail\MailEmbeddedObject;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Mail\Mail;
-use DOMDocument;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\File\FileLogger;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\File\FileLogger;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\MailEmbeddedObject;
+use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use DOMDocument;
 
 /**
  * $Id: content_object_publication.class.php 218 2009-11-13 14:21:26Z kariboe $

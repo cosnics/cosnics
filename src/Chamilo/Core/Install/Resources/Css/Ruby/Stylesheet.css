@@ -64,17 +64,17 @@
 .installation-step-collapsed {
 	clear: none;
 	float: left;
-	height: 22px;
-	width: 22px;
+	height: 42px;
+	width: 42px;
 	padding: 10px;
 	margin-right: 1em;
 	overflow: hidden;
 }
 
-.installation-step-successful { /*	border: 1px solid #339900;*/
-	/*	background-color: #ddffaa;*/
-	/*	color: #006600;*/
-	
+.installation-step-successful {
+/* 	border: 1px solid #339900; */
+/* 	background-color: #ddffaa; */
+/* 	color: #006600; */
 }
 
 .installation-step-failed {
@@ -91,4 +91,56 @@
 	border-bottom: 1px solid #CCCCCC;
 	width: 100%;
 	margin-bottom: 1em;
+}
+
+div.package-list {
+	margin-bottom: 5px;
+}
+
+div.package-list h3 {
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+div.package-selection h3 img.package-list-select-all, div.package-selection h3 img.package-list-select-none
+	{
+	margin-left: 5px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+div.package-selection h3 img.package-list-select-none {
+	margin-left: 0px;
+}
+
+div.package-list-item, div.package-list-item-core, div.package-list-item-selected
+	{
+	background-color: #E5EDF9;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	display: inline-block;
+	margin: 0px 4px 4px 0px;
+	padding: 4px 8px 4px 38px;
+	border: 1px solid #B9D0EF;
+	display: inline-block;
+	color: #212467;
+	background-position: 8px 4px;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	font-size: 12px;
+	line-height: 22px;
+}
+
+div.package-list-item-selected {
+	border: 1px solid #339900;
+	background-color: #ddffaa;
+	color: #006600;
+}
+
+div.package-list-item-core {
+	cursor: default;
+	border: 1px solid #f0f0f0;
+	background-color: #fafafa;
+	color: #666666;
 }

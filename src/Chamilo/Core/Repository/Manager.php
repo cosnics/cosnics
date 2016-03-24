@@ -204,7 +204,7 @@ abstract class Manager extends Application
     {
         $html = array();
 
-        $html[] = '<div id="repository_tree_container">';
+        $html[] = '<div id="repository-tree-container">';
         $tabs = new DynamicTabsRenderer(self :: TABS_FILTER);
 
         $tabs->add_tab(
@@ -278,16 +278,16 @@ abstract class Manager extends Application
 
         $html[] = ($tabs->render());
 
+        $html[] = '</div>';
+
         $html_filter_renderer = HtmlFilterRenderer :: factory(
             FilterData :: get_instance($this->getWorkspace()),
             $this->getWorkspace());
 
         $html[] = $html_filter_renderer->render();
 
-        $repository_menu = new RepositoryMenu($this);
-        $html[] = ($repository_menu->render_as_tree());
-
-        $html[] = '</div>';
+        $repositoryMenu = new RepositoryMenu($this);
+        $html[] = $repositoryMenu->render();
 
         return implode(PHP_EOL, $html);
     }

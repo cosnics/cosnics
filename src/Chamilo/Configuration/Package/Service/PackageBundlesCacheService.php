@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Package\Service;
 
+use Chamilo\Configuration\Package\Finder\PackageBundles;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
-use Chamilo\Configuration\Package\Finder\PackageBundles;
 
 /**
  *

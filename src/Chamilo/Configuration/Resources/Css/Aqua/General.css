@@ -1302,10 +1302,6 @@ div.create_block {
 	margin-top: 10px;
 }
 
-#repository_tree_container {
-	overflow: auto;
-}
-
 div.no_thumbnail, div.no_preview {
 	border: 1px solid #cccccc;
 	/* 	background-color: white; */

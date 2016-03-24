@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Rights\Entities;
 
+use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
@@ -10,7 +11,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Application\Weblcms\Ajax\Manager;
 
 /**
  * Extension on the platform group entity specific for the course to limit the platform groups

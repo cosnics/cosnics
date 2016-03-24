@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
@@ -8,7 +9,6 @@ use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announc
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 
 /**
  *

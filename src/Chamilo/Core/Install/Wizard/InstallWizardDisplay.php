@@ -67,7 +67,7 @@ EOT;
         // --><span style=\"color: #ff0000;font-size:x-small;margin:2px;\">{error}</span><br /><!-- END error
         // -->\t{element}</td>\n\t</tr>";
         $element_template = array();
-        $element_template[] = '<div class="row">';
+        $element_template[] = '<div class="form-row">';
         $element_template[] = '<div class="label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
              Theme :: getInstance()->getCommonImagePath('Action/Required') .
@@ -84,7 +84,7 @@ EOT;
         $renderer->setElementTemplate($element_template);
         // $header_template = "\n\t<tr>\n\t\t<td valign=\"top\" colspan=\"2\">{header}</td>\n\t</tr>";
         $header_template = array();
-        $header_template[] = '<div class="row">';
+        $header_template[] = '<div class="form-row">';
         $header_template[] = '<div class="form_header">{header}</div>';
         $header_template[] = '</div>';
         $header_template = implode(PHP_EOL, $header_template);
@@ -95,7 +95,7 @@ EOT;
                  '" alt="*" title ="*"/>&nbsp;<small>' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
-	<div class="row">
+	<div class="form-row">
 		<div class="label"></div>
 		<div class="formw">{requiredNote}</div>
 	</div>
@@ -201,7 +201,7 @@ EOT;
         if ($current_page->get_title() || $current_page->get_info())
         {
             $html[] = '<div id="theForm" style="margin: 10px;">';
-            $html[] = '<div id="select" class="row"><div class="formc formc_no_margin">';
+            $html[] = '<div id="select" class="form-row"><div class="formc formc_no_margin">';
             $html[] = '<b>' . Translation :: get(
                 'CurrentSteps',
                 array('CURRENT' => $current_page_number, 'TOTAL' => $total_number_of_pages),

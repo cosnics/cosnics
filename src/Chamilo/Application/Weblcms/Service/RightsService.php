@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *

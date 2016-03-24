@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Target;
 
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Entity\EntityTableCellRenderer;
 use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Table cell renderer for the schema

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class CategoryManagerComponent extends Manager implements DelegateComponent
 {

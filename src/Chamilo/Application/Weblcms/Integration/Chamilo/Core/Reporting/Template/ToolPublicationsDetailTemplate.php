@@ -5,8 +5,8 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Publica
 use Chamilo\Core\Reporting\ReportingTemplate;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: tool_publications_detail_reporting_template.class.php 216 2009-11-13 14:08:06Z kariboe $

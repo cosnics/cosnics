@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Request\Component;
 
 use Chamilo\Application\Weblcms\Request\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class RightsComponent extends Manager
 {

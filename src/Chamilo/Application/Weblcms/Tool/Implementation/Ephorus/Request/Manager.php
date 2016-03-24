@@ -4,9 +4,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request;
 /**
  * User: Pieterjan Broekaert Date: 30/07/12 Time: 12:38
  */
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\EphorusRequest\EphorusRequestSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 abstract class Manager extends Application

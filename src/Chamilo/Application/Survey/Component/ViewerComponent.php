@@ -2,18 +2,18 @@
 namespace Chamilo\Application\Survey\Component;
 
 use Chamilo\Application\Survey\Manager;
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Core\Repository\ContentObject\Survey\Configuration\SurveyConfiguration;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
 use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Service\RightsService;
+use Chamilo\Core\Repository\ContentObject\Survey\Configuration\SurveyConfiguration;
+use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Platform\Translation;
 
 class ViewerComponent extends Manager implements DelegateComponent, SurveyDisplaySupport
 {

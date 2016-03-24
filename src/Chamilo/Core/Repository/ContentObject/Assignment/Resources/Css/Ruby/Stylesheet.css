@@ -12,10 +12,7 @@
 	float: right;
 }
 
-ul.tree-menu li div a.assignment {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_assignment {
+ul.tree-menu li div a.assignment, ul.tree-menu li div a.type_assignment,
+	ul.tree-menu li div a.type_assignment_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }

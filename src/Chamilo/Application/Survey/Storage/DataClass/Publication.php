@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Survey\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * A survey publication

@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 
 use Chamilo\Core\Rights\Editor\Table\LocationEntity\LocationEntityTableColumnModel;
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 
 class CourseUserEntityTableColumnModel extends LocationEntityTableColumnModel
 {

@@ -132,13 +132,13 @@ div.announcements {
 	margin-bottom: 5px;
 }
 
-div.questionform input[type=text],div.row div.questionform input[type=password],div.row div.questionform select
-	{ 
+div.questionform input[type=text],div.form-row div.questionform input[type=password],div.form-row div.questionform select
+	{
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 }
 
-div.questionform input[type=text]:hover,div.row div.questionform input[type=text]:focus,div.row div.questionform input[type=password]:hover,div.row div.questionform input[type=password]:focus,div.row div.questionform select:hover,div.row div.questionform select:focus
+div.questionform input[type=text]:hover,div.form-row div.questionform input[type=text]:focus,div.form-row div.questionform input[type=password]:hover,div.form-row div.questionform input[type=password]:focus,div.form-row div.questionform select:hover,div.form-row div.questionform select:focus
 	{
 	background-color: #f7fbfd;
 	border-color: #4171B5;
@@ -334,7 +334,7 @@ th.reporting_td_name {
  *  Course group styles                              *
  *****************************************************/
 /* Neater inline alignment on the form */
-div.row.tool_unchecked_warning .warning-message {
+div.form-row.tool_unchecked_warning .warning-message {
 	margin-left: 0;
 	left: 0;
 	right: 0;

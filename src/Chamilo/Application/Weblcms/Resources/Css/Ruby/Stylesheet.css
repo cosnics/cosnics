@@ -383,31 +383,37 @@ table tr td.column_tool_title {
 
 /** Course List **/
 
-.nav.nav-tabs.course-list-tabs {
+.nav.nav-tabs.course-list-tabs,
+.nav.nav-tabs.tool-list-tabs {
 	border-left: 1px solid #dddddd;
 	border-right: 1px solid #dddddd;
 	border-top: 1px solid #dddddd;
 }
 
-.nav.nav-tabs.course-list-tabs li {
+.nav.nav-tabs.course-list-tabs li,
+.nav.nav-tabs.tool-list-tabs li{
 	margin-bottom: -2px;
 	margin-top: -1px;
 }
 
-.nav.nav-tabs.course-list-tabs li a {
+.nav.nav-tabs.course-list-tabs li a,
+.nav.nav-tabs.tool-list-tabs li a {
 	padding: 12px 15px;
 	font-size: 13px;
 }
 
-.nav.nav-tabs.course-list-tabs li.active a {
+.nav.nav-tabs.course-list-tabs li.active a,
+.nav.nav-tabs.tool-list-tabs li.active a{
 	border-radius: 0;
 }
 
-.nav.nav-tabs.course-list-tabs li.active:first-child a {
+.nav.nav-tabs.course-list-tabs li.active:first-child a,
+.nav.nav-tabs.tool-list-tabs li.active:first-child a{
 	border-left: none;
 }
 
 .nav.nav-tabs.course-list-tabs,
+.nav.nav-tabs.tool-list-tabs,
 .course-list-tab-content .list-group-header {
 	background-color: #F5F5F5;
 	color: #555555;
@@ -443,6 +449,7 @@ table tr td.column_tool_title {
 	margin-bottom: 0;
 }
 
+.tool-list-content .tool a.invisible-tool,
 .course-list-tab-content .list-group-item.invisible-course .list-group-item-heading,
 .course-list-tab-content .list-group-item.invisible-course .list-group-item-heading a,
 .course-list-tab-content .list-group-item.invisible-course .list-group-item-text {
@@ -463,4 +470,13 @@ table tr td.column_tool_title {
 .tool-list-content .tool {
 	display: block;
 	float: none;
+}
+
+.tool-list-content .tool-link .tool-link-actions {
+	display: inline;
+	margin-right: 15px;
+}
+
+.tool-list-content .tool-link .tool-link-image {
+	margin-right: 10px;
 }

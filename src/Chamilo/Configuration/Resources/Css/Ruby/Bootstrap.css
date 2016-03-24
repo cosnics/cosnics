@@ -135,6 +135,74 @@ ol.breadcrumb a {
 }
 
 /***********************
+ * DYNAMIC VISUAL TABS *
+ ***********************/
+.nav.nav-tabs.dynamic-visual-tabs, .nav.nav-tabs.tool-list-tabs {
+	border-left: 1px solid #dddddd;
+	border-right: 1px solid #dddddd;
+	border-top: 1px solid #dddddd;
+}
+
+.nav.nav-tabs.dynamic-visual-tabs li, .nav.nav-tabs.tool-list-tabs li {
+	margin-bottom: -2px;
+	margin-top: -1px;
+}
+
+.nav.nav-tabs.dynamic-visual-tabs li a, .nav.nav-tabs.tool-list-tabs li a
+	{
+	padding: 12px 15px;
+	font-size: 13px;
+}
+
+.nav.nav-tabs.dynamic-visual-tabs li.active a, .nav.nav-tabs.tool-list-tabs li.active a
+	{
+	border-radius: 0;
+}
+
+.nav.nav-tabs.dynamic-visual-tabs li.active:first-child a, .nav.nav-tabs.tool-list-tabs li.active:first-child a
+	{
+	border-left: none;
+}
+
+.nav.nav-tabs.dynamic-visual-tabs, .nav.nav-tabs.tool-list-tabs,
+	.dynamic-visual-tab-content .list-group-header {
+	background-color: #F5F5F5;
+	color: #555555;
+}
+
+.dynamic-visual-tab-content .list-group-item:first-child {
+	border-radius: 0;
+	padding-top: 12px;
+}
+
+.dynamic-visual-tab-content .list-group-item {
+	border-top: 0;
+}
+
+.dynamic-visual-tab-content .list-group-item.list-group-header {
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 2px solid #DDDDDD;
+}
+
+.dynamic-visual-tab-content .list-group-item.list-group-header:first-child
+	{
+	border-top: none;
+}
+
+.dynamic-visual-tab-content h4 .glyphicon {
+	font-size: 14px;
+}
+
+.dynamic-visual-tab-content .list-group-item-text {
+	color: #666666;
+}
+
+.dynamic-visual-tab-content .list-group-header .list-group-item-heading
+	{
+	margin-bottom: 0;
+}
+
+/***********************
  * Alert			   *
  ***********************/
 
@@ -169,4 +237,3 @@ ol.breadcrumb a {
 .alert-message.alert-warning {
 	background-image: url('../../Images/Aqua/Status/WarningMini.png');
 }
-

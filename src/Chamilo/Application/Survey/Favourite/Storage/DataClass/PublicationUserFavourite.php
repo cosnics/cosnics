@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Survey\Favourite\Storage\DataClass;
 
+use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Application\Survey\Storage\DataClass\Publication;
 
 /**
  *

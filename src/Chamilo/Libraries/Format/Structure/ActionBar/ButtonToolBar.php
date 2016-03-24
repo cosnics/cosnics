@@ -25,13 +25,21 @@ class ButtonToolBar
 
     /**
      *
+     * @var string[]
+     */
+    private $classes;
+
+    /**
+     *
      * @param string $searchUrl
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
+     * @param string[] $classes
      */
-    public function __construct($searchUrl = null, $items = array())
+    public function __construct($searchUrl = null, $items = array(), $classes = array())
     {
         $this->searchUrl = $searchUrl;
         $this->items = $items;
+        $this->classes = $classes;
     }
 
     /**
@@ -106,5 +114,32 @@ class ButtonToolBar
     public function addItem($buttonToolBarItem)
     {
         $this->items[] = $buttonToolBarItem;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getClasses()
+    {
+        return $this->classes;
+    }
+
+    /**
+     *
+     * @param string[] $classes
+     */
+    public function setClasses($classes)
+    {
+        $this->classes = $classes;
+    }
+
+    /**
+     *
+     * @param string $class
+     */
+    public function addClass($class)
+    {
+        $this->classes[] = $class;
     }
 }

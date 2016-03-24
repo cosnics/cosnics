@@ -126,7 +126,7 @@ class DynamicAction
     public function render($is_first = false)
     {
         $html = array();
-        
+
         if ($this->needs_confirmation())
         {
             $onclick = 'onclick = "return confirm(\'' . $this->get_confirm() . '\')"';
@@ -135,38 +135,30 @@ class DynamicAction
         {
             $onclick = '';
         }
-        
-        if ($is_first)
-        {
-            $html[] = '<div class="vertical_action" style="border-top: none;">';
-        }
-        else
-        {
-            $html[] = '<div class="vertical_action">';
-        }
-        
-        $html[] = '<div class="icon">';
+
+        $html[] = '<div class="list-group-item vertical-action">';
+
+        $html[] = '<div class="pull-left icon">';
         $html[] = '<a href="' . $this->get_url() . '" ' . $onclick . '><img src="' . $this->get_image() . '" alt="' .
              $this->get_title() . '" title="' . $this->get_title() . '"/></a>';
         $html[] = '</div>';
-        
+
+        $html[] = '<div class="pull-left">';
+
         $title = $this->get_title();
-        
+
         if (isset($title))
         {
-            $html[] = '<div class="description">';
-            $html[] = '<h4><a href="' . $this->get_url() . '" ' . $onclick . '>' . $this->get_title() . '</a></h4>';
+            $html[] = '<h5 class="list-group-item-heading"><a href="' . $this->get_url() . '" ' . $onclick . '>' .
+                 $this->get_title() . '</a></h5>';
         }
-        
-        $html[] = $this->get_description();
-        
-        if (isset($title))
-        {
-            $html[] = '</div>';
-        }
-        
+
+        $html[] = '<p class="list-group-item-text">' . $this->get_description() . '</p>';
         $html[] = '</div>';
-        
+
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 }

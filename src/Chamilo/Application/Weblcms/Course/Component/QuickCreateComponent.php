@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Course\Component;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * This class describes an action to create a course quickly without going through the browser.
