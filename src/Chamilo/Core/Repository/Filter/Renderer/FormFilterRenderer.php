@@ -141,7 +141,7 @@ class FormFilterRenderer extends FilterRenderer
     {
         $this->renderer->setFormTemplate(
             '<form {attributes}><div class="advanced_filter_form">{content}</div><div class="clear">&nbsp;</div></form>');
-        $this->renderer->setElementTemplate('<div class="row">{element}</div>');
+        $this->renderer->setElementTemplate('<div class="form-row">{element}</div>');
 
         // title
         $this->form_validator->addElement('category', Translation :: get('TextSearch'));

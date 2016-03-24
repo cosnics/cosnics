@@ -47,35 +47,36 @@ class DynamicActionsTab extends DynamicTab
 
     /**
      *
+     * @return string
+     */
+    public function body_header()
+    {
+        $html = array();
+
+        $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
+        $html[] = '<div class="list-group">';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
      * @param string $tab_name
      * @return string
      */
     public function body()
     {
         $html = array();
-        
-        $html[] = '<h2>';
-        if ($this->get_image())
-        {
-            $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle;" alt="' .
-                 $this->get_name() . '" title="' . $this->get_name() . '"/>&nbsp;';
-        }
-        $html[] = $this->get_name();
-        $html[] = '</h2>';
-        
-        $html[] = '<div class="admin_tab no-padding" id="' . $this->get_id() . '">';
-        $html[] = '<a class="prev"></a>';
-        
-        $html[] = '<div class="items">';
-        
+
+        $html[] = $this->body_header();
+
         foreach ($this->actions as $key => $action)
         {
             $html[] = $action->render($key == 0);
         }
-        $html[] = '</div>';
-        
-        $html[] = $this->body_footer($this->get_id());
-        
+
+        $html[] = $this->body_footer();
+
         return implode(PHP_EOL, $html);
     }
 }
