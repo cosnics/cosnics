@@ -1,15 +1,27 @@
-div.mini_calendar {
-	float: left;
-	width: 250px;
-	padding-right: 10px;
+.portal-block-course-list ul.list-group {
+	margin: 10px 0px;
 }
 
-div.normal_calendar {
-	margin-left: 260px;
+.portal-block-course-list ul.list-group li.list-group-item {
+	border: 0px solid white;
+	padding: 5px 15px;
 }
 
-div.event_publication_info {
-	text-align: right;
-	font-style: italic;
-	margin: 1em 0;
+span.badge-date {
+	font-weight: normal;
+	opacity: 0.5;
+	background-color: #337ab7;
+}
+
+@media ( min-width : 768px) {
+	.portal-block-content.list-group.portal-block-new-list {
+		max-height: 500px;
+		overflow: auto;
+	}
+}
+
+.portal-block-content.list-group.portal-block-new-list .list-group-item .list-group-item-text
+	{
+	color: #337ab7;
+	font-size: 13px;
 }

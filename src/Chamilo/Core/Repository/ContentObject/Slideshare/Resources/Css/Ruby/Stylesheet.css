@@ -1,7 +1,4 @@
-ul.tree-menu li div a.slideshare {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_slideshare {
+ul.tree-menu li div a.slideshare, ul.tree-menu li div a.type_slideshare,
+	ul.tree-menu li div a.type_slideshare_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }

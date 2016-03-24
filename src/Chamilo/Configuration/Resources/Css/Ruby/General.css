@@ -9,13 +9,6 @@ body {
 	background-color: white;
 }
 
-div#emulator {
-	width: 100%;
-	height: 20px;
-	text-align: center;
-	background-color: lightblue;
-}
-
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -24,17 +17,9 @@ div#emulator {
 	clear: both;
 	padding: 20px;
 	color: black;
-	text-align: center;
 	font-size: 75%;
-}
-
-.footer {
 	background-color: white;
 	border-top: 1px solid #dcdcdc;
-}
-
-.copyright div.links {
-	float: left;
 }
 
 /*****************************************************
@@ -177,12 +162,8 @@ div#emulator {
 	color: #006600;
 }
 
-.warning-banner {
+.warning-banner, .danger-banner {
 	border-bottom: 1px solid #ffd89b;
-	background-color: #fff8aa;
-	color: #996900;
-	position: relative;
-	margin: -10px -10px 20px -10px;
 	padding: 10px;
 	z-index: 9999;
 	text-align: center;
@@ -190,11 +171,15 @@ div#emulator {
 	text-transform: uppercase;
 }
 
-.warning-banner .actions {
+.danger-banner {
+	border-bottom: 1px solid #FF9B9D;
+}
+
+.warning-banner .actions, .danger-banner .actions {
 	float: right;
 }
 
-.warning-banner .action-bar {
+.warning-banner .action-bar, .danger-banner .action-bar {
 	float: left;
 }
 
@@ -239,9 +224,9 @@ a.invisible:link, a.invisible:visited {
 	padding: 10px 0;
 }
 
-p, blockquote, ol, ul {
-	font-size: 12px;
-}
+/* p, blockquote, ol, ul { */
+/* 	font-size: 12px; */
+/* } */
 
 /*****************************************************
  *  SOME MORE GENERAL STYLES                         *
@@ -1398,7 +1383,7 @@ a.cda_link {
 	color: #222222 /*{fcContent}*/;
 }
 
-.highlight {
+span.highlight {
 	color: #B1071C;
 }
 

@@ -69,3 +69,4 @@ MaximumFileSizeUserNoUpgrade = "You have <b>{USER}</b> left in your repository t
 MaximumFileSizeServer = "The maximal filesize allowed by the platform is currently <b>{FILESIZE}</b>."
 SelectAType = "Select a type"
 FileType = "File type"
+DropFileHereMessage= "Drop files here to upload them to your repository instantly"

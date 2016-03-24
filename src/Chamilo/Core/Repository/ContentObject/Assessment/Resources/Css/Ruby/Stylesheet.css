@@ -1,7 +1,6 @@
 /*********************************************
  * GENERAL STYLES FOR DISPLAYING ASSESSMENTS *
  *********************************************/
-
 .take_assessment th.checkbox_answer {
 	width: 48px;
 }
@@ -55,7 +54,8 @@ div.question div.title {
 
 div.question div.title div.number, div.question div.title div.text {
 	border: 1px solid #CECECE;
-	background: #9e021b url(../../Images/Ruby/Background/TableHeader.png)
+	background: #9e021b
+		url(../../../../../../../Configuration/Resources/Images/Ruby/Background/TableHeader.png)
 		repeat-x;
 }
 

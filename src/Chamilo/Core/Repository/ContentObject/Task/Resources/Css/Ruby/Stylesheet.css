@@ -1,8 +1,5 @@
-ul.tree-menu li div a.task {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_task {
+ul.tree-menu li div a.task, ul.tree-menu li div a.type_task, ul.tree-menu li div a.type_task_default
+	{
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }
 

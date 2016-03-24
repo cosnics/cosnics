@@ -63,12 +63,10 @@ ul.tree-menu li div.lastExpand {
 ul.tree-menu li div a {
 	clear: both;
 	display: block;
-	height: 18px;
 	padding-left: 21px;
 	background-repeat: no-repeat;
 	background-position: left top;
 	background-image: url(../../Images/Ruby/Treemenu/TreeDocument.png);
-	white-space: nowrap;
 	font-weight: bold;
 }
 
@@ -170,30 +168,8 @@ ul.tree-menu li div a.template {
 	background-image: url(../../Images/Ruby/Treemenu/Template.png);
 }
 
-
-
 ul.tree-menu li div a.hidden {
 	background-image: url(../../Images/Ruby/Treemenu/Hidden.png);
-}
-
-ul.tree-menu li div a.google_docs_pdf {
-	background-image:
-		url(../../Images/Ruby/external_repository/google_docs/types/pdf.png);
-}
-
-ul.tree-menu li div a.google_docs_document {
-	background-image:
-		url(../../Images/Ruby/external_repository/google_docs/types/document.png);
-}
-
-ul.tree-menu li div a.google_docs_presentation {
-	background-image:
-		url(../../Images/Ruby/external_repository/google_docs/types/presentation.png);
-}
-
-ul.tree-menu li div a.google_docs_spreadsheet {
-	background-image:
-		url(../../Images/Ruby/external_repository/google_docs/types/spreadsheet.png);
 }
 
 ul.tree-menu li div a.survey {
@@ -251,6 +227,10 @@ ul.tree-menu li.current_path>div a.invisible_category, ul.tree-menu li.current>d
 
 ul.tree-menu li.current>div a {
 	text-decoration: underline;
+}
+
+ul.tree-menu li div.collapse {
+	display: block;
 }
 
 /*

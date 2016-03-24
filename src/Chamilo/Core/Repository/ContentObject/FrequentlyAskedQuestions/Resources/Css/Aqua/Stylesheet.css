@@ -5,12 +5,11 @@ ul.tree-menu li div a.faq, ul.tree-menu li div a.type_faq, ul.tree-menu li div a
 
 .faq-item {
 	list-style: none;
-	padding-left:32px;
+	padding-left: 32px;
 }
 
-.faq-item-first
-{
-	padding-left:0px;
+.faq-item-first {
+	padding-left: 0px;
 }
 
 .faq-item-title {

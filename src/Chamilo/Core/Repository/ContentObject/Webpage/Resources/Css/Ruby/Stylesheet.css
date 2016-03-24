@@ -1,7 +1,4 @@
-ul.tree-menu li div a.document {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_document {
+ul.tree-menu li div a.document, ul.tree-menu li div a.type_document, ul.tree-menu li div a.type_document_default
+	{
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }

@@ -94,12 +94,12 @@ abstract class DynamicTab
             $html[] = '<img src="' . $this->image . '" border="0" style="vertical-align: middle; " alt="' . $this->name .
                  '" title="' . $this->name . '"/>';
         }
-        
+
         if ($this->image && $this->name)
         {
             $html[] = '&nbsp;&nbsp;';
         }
-        
+
         if ($this->name)
         {
             $html[] = '<span class="title">' . $this->name . '</span>';
@@ -116,17 +116,10 @@ abstract class DynamicTab
     public function body_header()
     {
         $html = array();
-        $html[] = '<h2>';
-        if ($this->get_image())
-        {
-            $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle;" alt="' .
-                 $this->get_name() . '" title="' . $this->get_name() . '"/>&nbsp;';
-        }
-        $html[] = $this->get_name();
-        $html[] = '</h2>';
-        
-        $html[] = '<div class="admin_tab" id="' . $this->get_id() . '">';
-        $html[] = '<a class="prev"></a>';
+
+        $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
+        $html[] = '<div class="list-group-item">';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -137,9 +130,10 @@ abstract class DynamicTab
     public function body_footer()
     {
         $html = array();
-        $html[] = '<a class="next"></a>';
-        $html[] = '<div class="clear"></div>';
+
         $html[] = '</div>';
+        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 
