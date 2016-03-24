@@ -58,7 +58,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = array();
         if ($menu->count_menu_items() > 0)
         {
-            $html[] = '<div style=" width: 20%; overflow: auto; float: left;">';
+            $html[] = '<div class="col-md-3">';
             $html[] = $menu->render_as_tree();
             $html[] = '</div>';
         }
