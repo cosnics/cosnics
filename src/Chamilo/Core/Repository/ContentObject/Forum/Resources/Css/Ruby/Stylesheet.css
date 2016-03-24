@@ -129,10 +129,7 @@ table.forum .quotecontent, .attachcontent {
 	padding: 5px;
 }
 
-ul.tree-menu li div a.forum {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_forum {
+ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default
+	{
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }

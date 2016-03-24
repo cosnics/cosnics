@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Survey\Rights\Component;
 
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Survey\Rights\Form\RightsForm;
 use Chamilo\Application\Survey\Repository\EntityRelationRepository;
+use Chamilo\Application\Survey\Rights\Form\RightsForm;
 use Chamilo\Application\Survey\Service\EntityRelationService;
 use Chamilo\Application\Survey\Service\RightsService;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

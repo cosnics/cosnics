@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 
 class ContentObjectUpdaterComponent extends Manager
 {

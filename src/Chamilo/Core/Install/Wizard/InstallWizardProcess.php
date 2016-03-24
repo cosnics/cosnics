@@ -140,7 +140,7 @@ class InstallWizardProcess extends HTML_QuickForm_Action implements InstallerObs
         $html[] = $this->parent->render_header();
 
         $html[] = '<div id="theForm" style="margin: 10px;">';
-        $html[] = '<div id="select" class="row"><div class="formc formc_no_margin">';
+        $html[] = '<div id="select" class="form-row"><div class="formc formc_no_margin">';
         $html[] = '<b>' . Translation :: get('Step') . ' ' . $total_number_of_pages . ' ' . Translation :: get('of') .
              ' ' . $total_number_of_pages . ' &ndash; ' . Translation :: get('Installation') . '</b><br />';
 

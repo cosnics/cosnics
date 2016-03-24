@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Form;
 
-use Chamilo\Application\Weblcms\CourseSettingsConnector;
-use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;

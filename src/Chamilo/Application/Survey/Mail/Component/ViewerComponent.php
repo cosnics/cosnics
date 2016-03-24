@@ -8,6 +8,8 @@ use Chamilo\Application\Survey\Mail\Storage\DataManager;
 use Chamilo\Application\Survey\Mail\Table\MailRecipientTable\MailRecipientTable;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -19,8 +21,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 
 class ViewerComponent extends Manager implements TableSupport
 {

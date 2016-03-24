@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Survey\Favourite;
 
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
 use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *

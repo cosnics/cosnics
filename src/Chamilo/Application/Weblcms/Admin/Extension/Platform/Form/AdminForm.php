@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Form;
 
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class AdminForm extends FormValidator
@@ -29,7 +29,7 @@ class AdminForm extends FormValidator
     public function build_form()
     {
         $element_template = array();
-        $element_template[] = '<div class="row">';
+        $element_template[] = '<div class="form-row">';
         $element_template[] = '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
         $element_template[] = '<div class="form_feedback"></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';

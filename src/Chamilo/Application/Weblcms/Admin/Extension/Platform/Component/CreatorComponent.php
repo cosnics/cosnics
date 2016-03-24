@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Component;
 
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Form\AdminForm;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Controller to create the schema

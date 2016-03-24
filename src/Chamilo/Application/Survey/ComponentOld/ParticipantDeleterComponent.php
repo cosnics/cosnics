@@ -1,18 +1,18 @@
 <?php
 namespace Chamilo\Application\Survey\Component;
 
+use Chamilo\Application\Survey\Export\Storage\DataManager;
 use Chamilo\Application\Survey\Manager;
 use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Application\Survey\Export\Storage\DataManager;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 class ParticipantDeleterComponent extends Manager
 {

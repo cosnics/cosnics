@@ -4,8 +4,8 @@ namespace Chamilo\Application\Survey\Form;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class PublicationForm extends FormValidator
 {

@@ -4,13 +4,13 @@ namespace Chamilo\Application\Survey\Export\Component;
 use Chamilo\Application\Survey\Export\Form\ExportTemplateForm;
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataClass\ExportTemplate;
+use Chamilo\Application\Survey\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Application\Survey\Service\RightsService;
 
 class CreatorComponent extends Manager
 {

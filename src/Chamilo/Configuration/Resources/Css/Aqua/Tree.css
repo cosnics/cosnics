@@ -171,25 +171,6 @@ ul.tree-menu li div a.hidden {
 	background-image: url(../../Images/Aqua/Treemenu/Hidden.png);
 }
 
-ul.tree-menu li div a.google_docs_pdf {
-	background-image: url(../../Images/Aqua/File/Extension/Pdf/16.png);
-}
-
-ul.tree-menu li div a.google_docs_document {
-	background-image:
-		url(../../../../../common/extensions/external_repository_manager/implementation/google_docs/resources/Images/Aqua/types/document.png);
-}
-
-ul.tree-menu li div a.google_docs_presentation {
-	background-image:
-		url(../../../../../common/extensions/external_repository_manager/implementation/google_docs/resources/Images/Aqua/types/presentation.png);
-}
-
-ul.tree-menu li div a.google_docs_spreadsheet {
-	background-image:
-		url(../../../../../common/extensions/external_repository_manager/implementation/google_docs/resources/Images/Aqua/types/spreadsheet.png);
-}
-
 ul.tree-menu li div a.survey {
 	background-image: url(../../Images/Aqua/Treemenu/Survey.png);
 }
@@ -224,7 +205,7 @@ ul.tree-menu li.current_path>div a.type_category, ul.tree-menu li.current>div a.
 
 ul.tree-menu li div a.new_category {
 	background-image:
-		url(../../Images/Aqua/Treemenu/TreeFolderClosedNew.png);
+	url(../../Images/Aqua/Treemenu/TreeFolderClosedNew.png);
 }
 
 ul.tree-menu li.current_path>div a.new_category, ul.tree-menu li.current>div a.new_category  {
@@ -234,11 +215,11 @@ ul.tree-menu li.current_path>div a.new_category, ul.tree-menu li.current>div a.n
 ul.tree-menu li div a.invisible_category {
 	color: #666;
 	background-image:
-		url(../../Images/Aqua/Treemenu/TreeFolderClosedInvisible.png);
+	url(../../Images/Aqua/Treemenu/TreeFolderClosedInvisible.png);
 }
 
 ul.tree-menu li.current_path>div a.invisible_category, ul.tree-menu li.current>div a.invisible_category
-	{
+{
 	color: #666;
 	background: url(../../Images/Aqua/Treemenu/TreeFolderOpenInvisible.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Survey\Table\Publication;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
+use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 
 /**
  *

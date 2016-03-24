@@ -3,10 +3,10 @@ namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Table\Publication\Gallery\ObjectPublicationGalleryTable;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\NotificationMessage;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 
 /**

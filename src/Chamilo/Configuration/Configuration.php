@@ -7,8 +7,8 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
-use Doctrine\DBAL\DriverManager;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\DBAL\DriverManager;
 
 /**
  * This class represents the current configuration

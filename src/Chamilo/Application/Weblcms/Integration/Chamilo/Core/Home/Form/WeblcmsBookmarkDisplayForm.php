@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Form;
 
-use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\WeblcmsBookmarkDisplay;
+use Chamilo\Core\Home\Form\ConfigurationForm;
 use Chamilo\Libraries\Platform\Translation;
 
 class WeblcmsBookmarkDisplayForm extends ConfigurationForm

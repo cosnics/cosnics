@@ -22,6 +22,8 @@ $(function()
     {
         $('input[name=file]').parent().parent().parent().hide();
         $("div#file-upload").dropzone({
+            maxFiles : 1,
+            previewsContainer : '#previews',
             url : getPath('WEB_PATH') + 'index.php?application=Chamilo\\Libraries\\Ajax&go=UploadTemporaryFile',
             init : function()
             {

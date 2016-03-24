@@ -64,7 +64,7 @@ class ButtonToolBarRenderer
     {
         $html = array();
 
-        $html[] = '<div class="btn-toolbar btn-action-toolbar">';
+        $html[] = '<div class="' . $this->getClasses() . '">';
 
         foreach ($this->getButtonToolBar()->getButtonGroups() as $buttonGroup)
         {
@@ -90,6 +90,18 @@ class ButtonToolBarRenderer
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getClasses()
+    {
+        $classes = array('btn-toolbar', 'btn-action-toolbar');
+        $classes = array_merge($classes, $this->getButtonToolBar()->getClasses());
+
+        return implode(' ', $classes);
     }
 
     /**

@@ -92,7 +92,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 
         $form = new FormValidator('formLogin', 'post');
         $renderer = & $form->defaultRenderer();
-        $renderer->setElementTemplate('<div class="row">{label}<br />{element}</div>');
+        $renderer->setElementTemplate('<div class="form-row">{label}<br />{element}</div>');
         $form->setRequiredNote(null);
         $html = '<script type="text/javascript">$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);

@@ -1,4 +1,4 @@
-ul.tree-menu li div a.description,ul.tree-menu li div a.type_description,ul.tree-menu li div a.type_description_default
-	{
+ul.tree-menu li div a.description, ul.tree-menu li div a.type_description,
+	ul.tree-menu li div a.type_description_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }

@@ -6,12 +6,12 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
 
 /**
  * Doctrine implementation of the datamanager

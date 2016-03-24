@@ -1,23 +1,23 @@
 <?php
 namespace Chamilo\Application\Weblcms\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Manager;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
+use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
-use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
+use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
-use Chamilo\Libraries\Storage\Query\Condition\InequalityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 /**
  *

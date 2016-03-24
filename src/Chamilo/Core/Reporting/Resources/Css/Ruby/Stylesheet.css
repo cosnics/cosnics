@@ -3,7 +3,7 @@ body {
 	margin: 0;
 }
 
-a,a:visited {
+a, a:visited {
 	outline: none
 }
 
@@ -139,7 +139,7 @@ div.reporting_template_menu {
 	
 }
 
-div.reporting_template_menu #nav,#nav ul {
+div.reporting_template_menu #nav, #nav ul {
 	padding: 3px 0 0 0;
 	margin: 0;
 	list-style: none;
@@ -156,7 +156,7 @@ div.reporting_template_menu #nav ul {
 	left: -1000px;
 }
 
-div.reporting_template_menu #nav li:hover ul,#nav li.ie_does_hover ul {
+div.reporting_template_menu #nav li:hover ul, #nav li.ie_does_hover ul {
 	left: auto;
 	background-position: 0 0;
 }
@@ -173,12 +173,12 @@ div.reporting_template_menu ul a {
 	cursor: default;
 }
 
-div.reporting_template_menu ul ul a:link,ul ul a:visited {
+div.reporting_template_menu ul ul a:link, ul ul a:visited {
 	font-weight: normal;
 	cursor: pointer;
 }
 
-div.reporting_template_menu ul ul a:hover,ul ul a:active {
+div.reporting_template_menu ul ul a:hover, ul ul a:active {
 	font-weight: normal;
 	color: #FFF;
 	cursor: pointer;

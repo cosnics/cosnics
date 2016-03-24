@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Application\Survey\Rights\Component;
 
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Application\Survey\Rights\Table\EntityRelation\EntityRelationTable;
+use Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation;
 
 /**
  *

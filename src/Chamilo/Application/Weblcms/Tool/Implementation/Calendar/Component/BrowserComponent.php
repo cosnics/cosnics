@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Component;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Application\Weblcms\Service\CalendarRendererProvider;
-use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
+use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Manager;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\Calendar\Renderer\Type\ViewRendererFactory;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 class BrowserComponent extends Manager

@@ -1,7 +1,4 @@
-ul.tree-menu li div a.physical_location {
-	background-image: url(../../Images/Ruby/Logo/16.png);
-}
-
-ul.tree-menu li div a.type_physical_location {
+ul.tree-menu li div a.physical_location, ul.tree-menu li div a.type_physical_location,
+	ul.tree-menu li div a.type_physical_location_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }

@@ -46,7 +46,7 @@ div.blog_item div.attachments {
 	padding-bottom: 20px;
 }
 
-ul.tree-menu li div a.blog,ul.tree-menu li div a.type_blog,ul.tree-menu li div a.type_blog_default
+ul.tree-menu li div a.blog, ul.tree-menu li div a.type_blog, ul.tree-menu li div a.type_blog_default
 	{
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
