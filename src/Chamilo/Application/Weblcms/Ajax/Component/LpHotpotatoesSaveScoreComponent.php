@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Ajax\Component;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Session\Request;
 
 class LpHotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
 {

@@ -3,11 +3,11 @@ namespace Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ActionResult;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *

@@ -3,12 +3,12 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataCl
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * This class defines a request for the ephorus tool

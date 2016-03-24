@@ -4,20 +4,20 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Compone
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\PeerAssessmentFeedback as PeerAssessmentFeedbackTracker;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\PeerAssessmentScore as PeerAssessmentScoreTracker;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\PeerAssessmentDisplaySupport;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment\Manager;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Represents the view component for the peer assessment tool.

@@ -16,6 +16,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -26,7 +27,6 @@ use PHPExcel_IOFactory;
 use PHPExcel_Style_Alignment;
 use PHPExcel_Style_Color;
 use PHPExcel_Style_Font;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  * Class To export users and course groups from a course

@@ -4,13 +4,13 @@ namespace Chamilo\Application\Weblcms\Component;
 use Chamilo\Application\Weblcms\Form\CourseImportForm;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: course_importer.class.php 218 2009-11-13 14:21:26Z kariboe $

@@ -5,11 +5,11 @@ use Chamilo\Application\Survey\Cron\Storage\DataClass\ExportJob;
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataClass\SynchronizeAnswer;
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");

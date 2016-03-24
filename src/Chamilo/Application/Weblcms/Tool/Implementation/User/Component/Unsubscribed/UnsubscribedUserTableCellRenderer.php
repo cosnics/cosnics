@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubsc
 
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -12,7 +13,6 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * * *************************************************************************** Cell renderer for an unsubscribed

@@ -99,7 +99,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @return ExternalRepository
+     * @return Instance
      */
     public function get_external_repository()
     {
@@ -108,7 +108,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @param $external_repository ExternalRepository
+     * @param $external_repository Instance
      */
     public function set_external_repository(Instance $external_repository)
     {

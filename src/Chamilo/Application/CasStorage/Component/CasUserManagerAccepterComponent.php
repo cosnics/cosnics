@@ -5,12 +5,12 @@ namespace Chamilo\Application\CasStorage\Component;
  *
  * @author Hans De Bisschop
  */
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Application\CasStorage\Manager;
 use Chamilo\Application\CasStorage\Storage\DataClass\AccountRequest;
 use Chamilo\Application\CasStorage\Storage\DataManager;
-use Chamilo\Application\CasStorage\Manager;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class CasUserManagerAccepterComponent extends Manager
 {

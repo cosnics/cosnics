@@ -3,6 +3,7 @@ namespace Chamilo\Application\Survey\Export\Component;
 
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
+use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
@@ -18,7 +19,6 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Alignment;
-use Chamilo\Application\Survey\Service\RightsService;
 
 class ExcelMedianExporterComponent extends Manager
 {

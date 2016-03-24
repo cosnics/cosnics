@@ -334,8 +334,8 @@ class BlockRenderer
         $html = array();
 
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $generalMode = $this->getUser()->is_platform_admin() && $this->getHomeService()->isInGeneralMode();
-        $isIdentifiedUser = ! $this->getUser()->is_anonymous_user();
+        $generalMode = $this->getUser() && $this->getUser()->is_platform_admin() && $this->getHomeService()->isInGeneralMode();
+        $isIdentifiedUser = $this->getUser() && !$this->getUser()->is_anonymous_user();
 
         if ($this->getUser() instanceof User && ($userHomeAllowed || $generalMode) && $isIdentifiedUser)
         {

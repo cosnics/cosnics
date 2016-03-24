@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Application\Survey\Rights\Table\EntityRelation;
 
+use Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation;
 
 /**
  *

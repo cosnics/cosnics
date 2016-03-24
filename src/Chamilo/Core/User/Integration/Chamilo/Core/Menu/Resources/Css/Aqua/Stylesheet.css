@@ -10,7 +10,7 @@
 	width: 300px;
 	height: 106px;
 	overflow: hidden;
-	background-color: #2f3a66;
+	background-color: #406e8e;
 	clear: both;
 	white-space: normal;
 	position: fixed;
@@ -123,7 +123,7 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	text-align: center;
 	color: white;
 	line-height: 16px;
-	background-color: #262F52;
+	background-color: #406e8e;
 }
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-logout a {

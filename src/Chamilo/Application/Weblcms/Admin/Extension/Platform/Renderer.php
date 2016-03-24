@@ -1,20 +1,20 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform;
 
-use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Weblcms\CourseSettingsController;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Application\Weblcms\CourseSettingsController;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
+use Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Course list renderer to render the course list with tabs for the course types (used in courses home, courses sorter)

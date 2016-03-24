@@ -2,13 +2,13 @@
 namespace Chamilo\Application\Survey\Service;
 
 use Chamilo\Application\Survey\Repository\PublicationRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *

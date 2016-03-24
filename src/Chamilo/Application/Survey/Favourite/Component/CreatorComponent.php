@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Survey\Favourite\Component;
 
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Survey\Favourite\Manager;
-use Chamilo\Application\Survey\Service\PublicationService;
-use Chamilo\Application\Survey\Repository\PublicationRepository;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Application\Survey\Favourite\Service\FavouriteService;
 use Chamilo\Application\Survey\Favourite\Repository\FavouriteRepository;
+use Chamilo\Application\Survey\Favourite\Service\FavouriteService;
 use Chamilo\Application\Survey\Favourite\Storage\DataClass\PublicationUserFavourite;
+use Chamilo\Application\Survey\Repository\PublicationRepository;
+use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

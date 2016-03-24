@@ -2,19 +2,19 @@
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Component;
 
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Controller to create the schema

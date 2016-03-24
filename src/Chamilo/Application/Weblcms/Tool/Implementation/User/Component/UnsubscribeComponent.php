@@ -4,11 +4,11 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\UserStatusChange;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: unsubscribe.class.php 218 2009-11-13 14:21:26Z kariboe $

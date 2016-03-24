@@ -2,17 +2,17 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Form\PublicationForm;
+use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  * Modified version of the default Publisher to allow for the feedback-functionality

@@ -75,7 +75,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent :: __construct($applicationConfiguration);
-        
+
         $complex_content_object_item_id = Request :: get(self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         if ($complex_content_object_item_id)
         {

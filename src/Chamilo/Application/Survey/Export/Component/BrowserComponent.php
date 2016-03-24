@@ -2,15 +2,19 @@
 namespace Chamilo\Application\Survey\Export\Component;
 
 use Chamilo\Application\Survey\Export\Manager;
+use Chamilo\Application\Survey\Export\Storage\DataClass\Export;
 use Chamilo\Application\Survey\Export\Storage\DataClass\ExportRegistration;
 use Chamilo\Application\Survey\Export\Storage\DataClass\ExportTemplate;
+use Chamilo\Application\Survey\Export\Storage\DataClass\SynchronizeAnswer;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
 use Chamilo\Application\Survey\Export\Table\RegistrationTable\ExportRegistrationTable;
 use Chamilo\Application\Survey\Export\Table\TemplateTable\ExportTemplateTable;
 use Chamilo\Application\Survey\Export\Table\TrackerTable\ExportTable;
-use Chamilo\Application\Survey\Export\Storage\DataClass\Export;
-use Chamilo\Application\Survey\Export\Storage\DataClass\SynchronizeAnswer;
+use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -27,10 +31,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Application\Survey\Service\RightsService;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 
 class BrowserComponent extends Manager implements TableSupport
 {

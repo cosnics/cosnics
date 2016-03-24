@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Survey\Component;
 
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 /**
  *

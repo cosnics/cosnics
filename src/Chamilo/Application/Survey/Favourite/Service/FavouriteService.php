@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Survey\Favourite\Service;
 
 use Chamilo\Application\Survey\Favourite\Repository\FavouriteRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Survey\Favourite\Storage\DataClass\PublicationUserFavourite;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *

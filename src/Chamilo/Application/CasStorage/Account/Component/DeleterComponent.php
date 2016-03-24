@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\CasStorage\Account\Component;
 
-use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Account\Manager;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Account\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;

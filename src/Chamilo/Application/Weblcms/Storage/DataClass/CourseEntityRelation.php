@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * This class represents a relation between a weblcms course and an entity (a

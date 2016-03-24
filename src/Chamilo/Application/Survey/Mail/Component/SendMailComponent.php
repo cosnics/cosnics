@@ -7,6 +7,7 @@ use Chamilo\Application\Survey\Mail\Manager;
 use Chamilo\Application\Survey\Mail\Storage\DataClass\Mail;
 use Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail;
 use Chamilo\Application\Survey\Mail\Storage\DataManager;
+use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -22,7 +23,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Survey\Service\RightsService;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");

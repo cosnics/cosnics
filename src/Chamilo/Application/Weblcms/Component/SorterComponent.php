@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Component;
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeUserOrder;
 use Chamilo\Application\Weblcms\Form\CourseTypeUserCategoryRelCourseForm;
 use Chamilo\Application\Weblcms\Form\CourseUserCategoryForm;
 use Chamilo\Application\Weblcms\Manager;
@@ -12,25 +13,24 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
-use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeUserOrder;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 
 /**
  * $Id: sorter.class.php 218 2009-11-13 14:21:26Z kariboe $

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Survey\Table\Publication\Shared;
 
-use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
+use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Table\Publication\PublicationTableDataProvider;
 
 /**

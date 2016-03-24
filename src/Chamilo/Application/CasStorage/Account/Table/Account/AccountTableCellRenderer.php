@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\CasStorage\Account\Table\Account;
 
-use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Application\CasStorage\Account\Manager;
+use Chamilo\Application\CasStorage\Account\Storage\DataClass\Account;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;

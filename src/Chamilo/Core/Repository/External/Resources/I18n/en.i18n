@@ -56,7 +56,7 @@ Description = "Description"
 ExporterTitle = "Exporter"
 UploaderTitle = "Uploader"
 ViewerTitle = "Viewer"
-AdminTitle = "Administration"
+AdministrationTitle = "Administration"
 MetadataMapper = 'Metadata mapper'
 TypeName = "External Repositories"
 

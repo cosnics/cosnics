@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 class StatusChangerPlatformgroupStudentComponent extends StatusChangerComponent
 {
