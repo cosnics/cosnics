@@ -58,7 +58,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html = array();
         if ($menu->count_menu_items() > 0)
         {
-            $html[] = '<div class="col-md-3">';
+            $html[] = '<div class="col-md-2">';
             $html[] = $menu->render_as_tree();
             $html[] = '</div>';
         }
@@ -89,7 +89,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         else
         {
             $menu = array();
-            $menu[] = '<div class="col-md-3">';
+            $menu[] = '<div class="col-md-2">';
             $menu[] = $this->get_menu()->render_as_tree();
             $menu[] = '</div>';
             $menu = implode(PHP_EOL, $menu);
@@ -97,7 +97,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($menu)
         {
             $html[] = $menu;
-            $html[] = '<div class="col-md-9">';
+            $html[] = '<div class="col-md-10">';
         }
         $html[] = Renderer :: factory($this->get_parent()->get_renderer(), $this)->as_html();
         
