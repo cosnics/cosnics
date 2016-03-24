@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\announcement
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Ankündigung"
+Title = "Titel"
+Description = "Beschreibung"
+AnnouncementToolBrowserComponent = ""
+AnnouncementToolIntroductionPublisherComponent = ""
+AnnouncementToolPublisherComponent = ""
+AnnouncementToolUpdaterComponent = ""
+AnnouncementToolViewerComponent = ""
