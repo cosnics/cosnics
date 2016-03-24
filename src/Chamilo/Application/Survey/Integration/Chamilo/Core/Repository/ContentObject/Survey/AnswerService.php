@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Survey\Integration\Chamilo\Core\Repository\ContentObject\Survey;
 
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
+use Chamilo\Libraries\Platform\Session\Session;
 
 class AnswerService implements AnswerServiceInterface
 {

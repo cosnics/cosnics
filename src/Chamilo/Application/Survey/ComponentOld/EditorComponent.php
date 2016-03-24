@@ -6,9 +6,9 @@ use Chamilo\Application\Survey\Manager;
 use Chamilo\Application\Survey\Rights\Rights;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class EditorComponent extends Manager
 {

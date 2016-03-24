@@ -4,11 +4,12 @@ namespace Chamilo\Application\Survey\Integration\Chamilo\Core\Repository\Publica
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Application\Survey\Storage\DataManager;
 // use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
-use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\Location\Location;
 use Chamilo\Core\Repository\Publication\Location\Locations;
+use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -23,7 +24,6 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

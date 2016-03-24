@@ -3,8 +3,8 @@ namespace Chamilo\Application\Survey\Export\Component;
 
 use Chamilo\Application\Survey\Cron\Storage\DataClass\ExportJob;
 use Chamilo\Application\Survey\Export\Manager;
-use Chamilo\Application\Survey\Export\Storage\DataManager;
 use Chamilo\Application\Survey\Export\Storage\DataClass\Export;
+use Chamilo\Application\Survey\Export\Storage\DataManager;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Survey\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
