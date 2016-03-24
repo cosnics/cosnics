@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Menu;
 use Chamilo\Application\Weblcms\Component\AdminRequestBrowserComponent;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CommonRequest;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Platform\Translation;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 
 /**
  * $Id: request_tree_renderer.class.php 204 2009-11-13 12:51:30Z tristan $
