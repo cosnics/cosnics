@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Survey\Service;
 
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Survey\Repository\EntityRelationRepository;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 
 /**

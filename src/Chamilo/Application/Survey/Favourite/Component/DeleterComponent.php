@@ -2,11 +2,11 @@
 namespace Chamilo\Application\Survey\Favourite\Component;
 
 use Chamilo\Application\Survey\Favourite\Manager;
+use Chamilo\Application\Survey\Favourite\Repository\FavouriteRepository;
+use Chamilo\Application\Survey\Favourite\Service\FavouriteService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Application\Survey\Favourite\Service\FavouriteService;
-use Chamilo\Application\Survey\Favourite\Repository\FavouriteRepository;
 
 /**
  *

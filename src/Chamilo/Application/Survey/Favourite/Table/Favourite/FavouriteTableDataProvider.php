@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Survey\Favourite\Table\Favourite;
 
-use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
-use Chamilo\Application\Survey\Table\Publication\PublicationTableDataProvider;
 use Chamilo\Application\Survey\Service\EntityService;
+use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Application\Survey\Table\Publication\PublicationTableDataProvider;
 
 /**
  *

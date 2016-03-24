@@ -1,17 +1,17 @@
 <?php
 namespace Chamilo\Application\Survey\Rights\Form;
 
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Application\Survey\Storage\DataClass\PublicationEntityRelation;
-use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

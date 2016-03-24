@@ -2,12 +2,12 @@
 namespace Chamilo\Application\Survey\Component;
 
 use Chamilo\Application\Survey\Manager;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
 use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
