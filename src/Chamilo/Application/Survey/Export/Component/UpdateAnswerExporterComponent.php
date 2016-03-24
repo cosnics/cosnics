@@ -3,15 +3,9 @@ namespace Chamilo\Application\Survey\Export\Component;
 
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use PHPExcel;
-use PHPExcel_IOFactory;
-use PHPExcel_Style_Alignment;
-use PHPExcel_Style_Color;
-use PHPExcel_Style_Fill;
-use PHPExcel_Style_Font;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");

@@ -2,13 +2,13 @@
 namespace Chamilo\Application\Survey\Mail\Form;
 
 use Chamilo\Application\Survey\Mail\Storage\DataClass\Mail;
+use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Application\Survey\Storage\DataClass\Participant;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Application\Survey\Service\RightsService;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");

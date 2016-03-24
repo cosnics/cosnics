@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Application\Survey\Rights\Component;
 
+use Chamilo\Application\Survey\Repository\EntityRelationRepository;
 use Chamilo\Application\Survey\Rights\Manager;
+use Chamilo\Application\Survey\Service\EntityRelationService;
+use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Application\Survey\Repository\EntityRelationRepository;
-use Chamilo\Application\Survey\Service\EntityRelationService;
-use Chamilo\Application\Survey\Service\RightsService;
 
 /**
  *

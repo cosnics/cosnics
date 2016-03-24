@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Survey\Favourite\Repository;
 
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Application\Survey\Favourite\Storage\DataClass\PublicationUserFavourite;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 /**
  *

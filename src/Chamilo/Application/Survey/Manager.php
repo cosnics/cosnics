@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Survey;
 
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
+use Chamilo\Application\Survey\Service\PublicationService;
+use Chamilo\Application\Survey\Storage\DataClass\Publication;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *

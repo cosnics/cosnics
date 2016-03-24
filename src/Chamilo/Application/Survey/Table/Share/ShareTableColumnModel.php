@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Survey\Table\Share;
 
+use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Application\Survey\Storage\DataClass\Publication;
 
 class ShareTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Application\Survey\Table\Share;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
+use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Service\RightsService;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 
 /**
  *
