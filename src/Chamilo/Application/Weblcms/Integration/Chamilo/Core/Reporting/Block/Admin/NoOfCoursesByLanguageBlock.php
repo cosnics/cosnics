@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\Admin;
 
-use Chamilo\Application\Weblcms\CourseSettingsConnector;
-use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
+use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseBlock;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class NoOfCoursesByLanguageBlock extends CourseBlock
 {

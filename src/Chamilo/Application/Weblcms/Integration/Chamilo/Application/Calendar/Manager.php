@@ -1,26 +1,26 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar;
 
+use Chamilo\Application\Calendar\Architecture\InternalCalendar;
+use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
+use Chamilo\Application\Calendar\Service\AvailabilityService;
+use Chamilo\Application\Calendar\Storage\DataClass\Availability;
+use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Application\Calendar\Service\AvailabilityService;
-use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
-use Chamilo\Application\Calendar\Storage\DataClass\Availability;
-use Chamilo\Application\Calendar\Architecture\InternalCalendar;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 
 /**
  *

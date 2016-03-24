@@ -2,8 +2,8 @@
 namespace Chamilo\Application\Weblcms\Renderer\ToolList;
 
 use Chamilo\Libraries\Platform\Translation;
-use Exception;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Exception;
 
 /**
  * $Id: tool_list_renderer.class.php 218 2009-11-13 14:21:26Z kariboe $

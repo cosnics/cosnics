@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage;
 
-use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseTypeRelCourseSetting;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
@@ -12,6 +12,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseModuleLastAccess;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
@@ -32,6 +33,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -56,8 +58,6 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
 use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Exception;
-use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  * This class represents the data manager for this package

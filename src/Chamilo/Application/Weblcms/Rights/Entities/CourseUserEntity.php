@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Rights\Entities;
 
+use Chamilo\Application\Weblcms\Ajax\Manager;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
@@ -10,7 +11,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Application\Weblcms\Ajax\Manager;
 
 /**
  * Extension on the user entity specific for the course to limit the users

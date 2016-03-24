@@ -1,23 +1,23 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage;
 
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\UserEntityHelper;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\UserEntityHelper;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Target;
 
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Entity\EntityTable;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Entity\EntityTable;
 
 /**
  * Table for the schema

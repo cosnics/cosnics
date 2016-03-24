@@ -1,27 +1,27 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform;
 
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\PlatformGroupEntity;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseEntity;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseCategoryEntity;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\CourseEntityHelper;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\CourseEntity;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\CourseCategoryEntityHelper;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\CourseEntityHelper;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\PlatformGroupEntityHelper;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\Helper\UserEntityHelper;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\PlatformGroupEntity;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity\UserEntity;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
+use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 abstract class Manager extends Application
 {

@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Entity;
 
-use Chamilo\Core\Rights\Entity\RightsEntity;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Core\Rights\Entity\RightsEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class that describes the courses for the rights editor
