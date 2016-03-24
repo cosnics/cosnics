@@ -2,12 +2,12 @@
 namespace Chamilo\Application\Survey\Component;
 
 use Chamilo\Application\Survey\Form\PublicationForm;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Application\Survey\Repository\PublicationRepository;
 use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

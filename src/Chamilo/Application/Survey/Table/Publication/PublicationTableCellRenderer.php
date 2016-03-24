@@ -1,22 +1,22 @@
 <?php
 namespace Chamilo\Application\Survey\Table\Publication;
 
+use Chamilo\Application\Survey\Favourite\Repository\FavouriteRepository;
+use Chamilo\Application\Survey\Favourite\Service\FavouriteService;
+use Chamilo\Application\Survey\Favourite\Storage\DataClass\PublicationUserFavourite;
+use Chamilo\Application\Survey\Manager;
+use Chamilo\Application\Survey\Service\RightsService;
+use Chamilo\Application\Survey\Storage\DataClass\Publication;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Application\Survey\Storage\DataClass\Publication;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Application\Survey\Manager;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Application\Survey\Service\RightsService;
-use Chamilo\Application\Survey\Favourite\Service\FavouriteService;
-use Chamilo\Application\Survey\Favourite\Repository\FavouriteRepository;
-use Chamilo\Application\Survey\Favourite\Storage\DataClass\PublicationUserFavourite;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *

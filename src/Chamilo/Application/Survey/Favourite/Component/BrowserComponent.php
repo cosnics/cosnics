@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Application\Survey\Favourite\Component;
 
+use Chamilo\Application\Survey\Favourite\Manager;
+use Chamilo\Application\Survey\Favourite\Storage\DataClass\PublicationUserFavourite;
+use Chamilo\Application\Survey\Favourite\Table\Favourite\FavouriteTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Application\Survey\Favourite\Manager;
-use Chamilo\Application\Survey\Favourite\Table\Favourite\FavouriteTable;
-use Chamilo\Application\Survey\Favourite\Storage\DataClass\PublicationUserFavourite;
 
 /**
  *
