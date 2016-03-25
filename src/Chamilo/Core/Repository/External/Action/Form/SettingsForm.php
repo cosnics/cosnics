@@ -284,7 +284,7 @@ class SettingsForm extends FormValidator
         $external_repository = $this->external_repository;
 
         $file = Path :: getInstance()->namespaceToFullPath($external_repository->get_implementation()) .
-             'php/settings/settings.xml';
+             'Resources/Settings/Settings.xml';
         $result = array();
 
         if (file_exists($file))
