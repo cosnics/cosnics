@@ -1,22 +1,22 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Component;
 
-use Chamilo\Core\Metadata\Provider\Manager;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Core\Metadata\Service\EntityService;
-use Chamilo\Core\Metadata\Relation\Service\RelationService;
-use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Provider\Form\ProviderLinkForm;
+use Chamilo\Core\Metadata\Provider\Manager;
 use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Metadata\Relation\Service\RelationService;
+use Chamilo\Core\Metadata\Service\EntityService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\SortableTableFromArray;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *

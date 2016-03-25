@@ -1,21 +1,21 @@
 <?php
 namespace Chamilo\Core\Metadata\Element\Service;
 
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
+use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Core\Metadata\Storage\DataClass\Element;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
-use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  *

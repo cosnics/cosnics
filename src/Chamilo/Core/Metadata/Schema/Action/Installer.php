@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Metadata\Schema\Action;
 
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 class Installer

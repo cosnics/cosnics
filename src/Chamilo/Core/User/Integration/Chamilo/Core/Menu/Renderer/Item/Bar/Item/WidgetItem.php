@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
-use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
+use Chamilo\Core\User\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

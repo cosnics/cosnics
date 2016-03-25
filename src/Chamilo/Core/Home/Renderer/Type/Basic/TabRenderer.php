@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Home\Renderer\Type\Basic;
 
+use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Home\Service\HomeService;
 
 /**
  *

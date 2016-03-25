@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Metadata\Schema\Component;
 
 use Chamilo\Core\Metadata\Schema\Manager;
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Schema\Storage\DataManager;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;

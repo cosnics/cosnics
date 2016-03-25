@@ -1,23 +1,23 @@
 <?php
 namespace Chamilo\Core\Metadata\Service;
 
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
-use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Utilities\UUID;
-use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService;
-use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
-use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
+use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
+use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
+use Chamilo\Core\Metadata\Vocabulary\Service\VocabularyService;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\UUID;
 
 /**
  *

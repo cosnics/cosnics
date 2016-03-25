@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Element\Table\Element;
 
-use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Element\Storage\DataManager;
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;

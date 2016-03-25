@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Metadata\Vocabulary\Ajax\Component;
 
 use Chamilo\Core\Metadata\Service\EntityService;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
 
 /**
  *

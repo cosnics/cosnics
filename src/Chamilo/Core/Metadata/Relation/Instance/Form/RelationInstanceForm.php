@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation\Instance\Form;
 
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Service\EntityConditionService;
 use Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService;
+use Chamilo\Core\Metadata\Service\EntityConditionService;
+use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Form for the element

@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Metadata\Action;
 
 use Chamilo\Core\Metadata\Manager;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Extension of the generic installer for metadata integrations

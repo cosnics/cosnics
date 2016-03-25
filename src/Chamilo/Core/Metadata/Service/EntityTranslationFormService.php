@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Metadata\Service;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Language;
+use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Configuration\Storage\DataClass\Language;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
