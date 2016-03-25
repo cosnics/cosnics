@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: learning_path.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -39,18 +40,29 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport,
 
     public function get_allowed_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
-            self :: package(), 
-            \Chamilo\Core\Repository\Manager :: context() . '\ContentObject');
+        $classNameUtilities = ClassnameUtilities::getInstance();
+        $configuration = Configuration::get_instance();
+
+        $registrations = $configuration->getIntegrationRegistrations(
+            self :: package()
+        );
         $types = array();
-        
+
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                $registration[Registration :: PROPERTY_CONTEXT], 
-                6);
-            $types[] = $namespace . '\Storage\DataClass\\' .
-                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+            $type = $registration[Registration :: PROPERTY_TYPE];
+            $parentContext = $classNameUtilities->getNamespaceParent($type);
+            $parentRegistration = $configuration->get_registration($parentContext);
+
+            if($parentRegistration[Registration :: PROPERTY_TYPE] == \Chamilo\Core\Repository\Manager::context() . '\ContentObject')
+            {
+                $namespace = ClassnameUtilities:: getInstance()->getNamespaceParent(
+                    $registration[Registration :: PROPERTY_CONTEXT],
+                    6
+                );
+                $types[] = $namespace . '\Storage\DataClass\\' .
+                    ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($namespace);
+            }
         }
         
         return $types;
