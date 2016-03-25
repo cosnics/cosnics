@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Instance\Storage;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
@@ -17,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -86,17 +89,33 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_active_instances($types = array())
     {
+        $configuration = Configuration::get_instance();
+        $stringUtilities = StringUtilities::getInstance();
+
+        $packages = $configuration->get_registrations_by_type(
+            \Chamilo\Core\Repository\Manager:: context() . '\Implementation'
+        );
+
+        $namespaces = array();
+
+        foreach($types as $type)
+        {
+            $typeName = ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($type);
+            foreach($packages as $package)
+            {
+                $packageContext = $package[Registration::PROPERTY_CONTEXT];
+                if($stringUtilities->createString($packageContext)->contains($typeName))
+                {
+                    $namespaces[] = $packageContext;
+                }
+            }
+        }
+
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance:: class_name(), Instance :: PROPERTY_ENABLED),
             new StaticConditionVariable(1)
         );
-
-        foreach ($types as $type)
-        {
-            $namespaces[] = \Chamilo\Core\Repository\Manager:: context() . '\Implementation\\' .
-                ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($type);
-        }
 
         if (count($namespaces) > 0)
         {

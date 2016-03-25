@@ -3,6 +3,8 @@ namespace Chamilo\Core\Rights\Entity;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Rights\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
 use Chamilo\Libraries\Format\Theme;
@@ -10,8 +12,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * Class that describes the platform groups for the rights editor

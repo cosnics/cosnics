@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Element\Storage;
 
+use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager

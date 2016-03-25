@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Metadata\Element\Component;
 
 use Chamilo\Core\Metadata\Element\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class VocabularyComponent extends Manager
 {

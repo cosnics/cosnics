@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Metadata\Element\Table\Element;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 
 /**
  * Table column model for the schema

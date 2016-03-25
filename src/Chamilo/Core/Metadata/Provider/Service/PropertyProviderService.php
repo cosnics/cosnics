@@ -1,22 +1,22 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Service;
 
+use Chamilo\Core\Metadata\Element\Service\ElementService;
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
+use Chamilo\Core\Metadata\Relation\Service\RelationService;
+use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Core\Metadata\Provider\Exceptions\NoProviderAvailableException;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Core\Metadata\Storage\DataClass\ProviderRegistration;
-use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Core\Metadata\Service\EntityService;
-use Chamilo\Core\Metadata\Relation\Service\RelationService;
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Core\Metadata\Element\Service\ElementService;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *

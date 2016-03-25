@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Metadata\Provider\Table\ProviderLink;
 
 use Chamilo\Core\Metadata\Relation\Instance\Storage\DataManager;
+use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
 
 /**
  *

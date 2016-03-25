@@ -2,10 +2,10 @@
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
  * $Id: user_field_builder.class.php 211 2009-11-13 13:28:39Z vanpouckesven $

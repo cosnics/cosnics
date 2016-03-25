@@ -1,17 +1,17 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation\Component;
 
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Form\RelationForm;
 use Chamilo\Core\Metadata\Relation\Manager;
-use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Relation\Storage\DataManager;
+use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
+use Chamilo\Core\Metadata\Service\EntityTranslationService;
+use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Metadata\Service\EntityTranslationService;
-use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  * Controller to update the schema

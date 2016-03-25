@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider;
 
+use Chamilo\Core\Metadata\Service\EntityConditionService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Service\EntityConditionService;
 
 /**
  *

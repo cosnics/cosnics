@@ -397,7 +397,7 @@ class Configuration
     public function getIntegrationRegistrations($integration, $root = null)
     {
         $integrationRegistrations = $this->registrations[self :: REGISTRATION_INTEGRATION][$integration];
-                
+
         if ($root)
         {
             $rootIntegrationRegistrations = array();

@@ -4,7 +4,9 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\ChangeablePassword;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
@@ -18,8 +20,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: reset_password.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
