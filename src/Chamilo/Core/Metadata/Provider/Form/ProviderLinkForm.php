@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Form;
 
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Core\Metadata\Provider\Service\ProviderFormService;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Service\EntityService;
-use Chamilo\Core\Metadata\Provider\Service\ProviderFormService;
+use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
  * Form for the element

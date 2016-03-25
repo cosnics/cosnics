@@ -2,10 +2,10 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass;
 
 use Chamilo\Core\Tracking\Storage\DataClass\SimpleTracker;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * This class tracks the visits to pages

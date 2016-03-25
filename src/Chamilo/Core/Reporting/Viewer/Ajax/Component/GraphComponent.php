@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Reporting\Viewer\Ajax\Component;
 
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Chamilo\Libraries\Format\Theme;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  *

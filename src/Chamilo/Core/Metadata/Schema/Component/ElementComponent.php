@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Metadata\Schema\Component;
 
 use Chamilo\Core\Metadata\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**

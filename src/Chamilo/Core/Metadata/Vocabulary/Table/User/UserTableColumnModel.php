@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Table\User;
 
-use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
-use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
+use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 
 /**
  * Table column model for the schema

@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation\Instance\Component;
 
-use Chamilo\Core\Metadata\Relation\Instance\Manager;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
 use Chamilo\Core\Metadata\Relation\Instance\Form\RelationInstanceForm;
+use Chamilo\Core\Metadata\Relation\Instance\Manager;
 use Chamilo\Core\Metadata\Relation\Instance\Service\RelationInstanceService;
+use Chamilo\Core\Metadata\Storage\DataClass\RelationInstance;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
