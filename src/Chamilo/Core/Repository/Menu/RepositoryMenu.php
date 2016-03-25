@@ -99,14 +99,12 @@ class RepositoryMenu
                 $buttonGroup->addButton(
                     new Button(
                         Translation :: get('AddExisting'),
-                        new BootstrapGlyph('plus'),
+                        new BootstrapGlyph('hdd'),
                         $repositoryManager->get_url(
                             array(
                                 \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_WORKSPACE,
                                 \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_PUBLISH)),
-                        Button :: DISPLAY_ICON_AND_LABEL,
-                        false,
-                        'btn-primary'));
+                        Button :: DISPLAY_ICON_AND_LABEL));
             }
 
             $buttonToolBar->addButtonGroup($buttonGroup);

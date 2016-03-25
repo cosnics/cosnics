@@ -121,7 +121,7 @@ class ShareComponent extends Manager implements TableSupport
 
                 $selectedObjectsPreviews = array();
 
-                $selectedObjectsPreviews[] = '<div class="information-box">';
+                $selectedObjectsPreviews[] = '<div class="alert alert-info">';
                 $selectedObjectsPreviews[] = '<h3>';
                 $selectedObjectsPreviews[] = Translation:: get('SelectedContentObjects');
                 $selectedObjectsPreviews[] = '</h3>';
