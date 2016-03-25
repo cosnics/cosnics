@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 
 /**
  *

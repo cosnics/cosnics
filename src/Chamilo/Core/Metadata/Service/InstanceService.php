@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Service;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Core\Metadata\Storage\DataClass\SchemaInstance;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  *

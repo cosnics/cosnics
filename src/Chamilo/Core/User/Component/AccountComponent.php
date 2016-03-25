@@ -3,8 +3,8 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Core\User\Form\AccountForm;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

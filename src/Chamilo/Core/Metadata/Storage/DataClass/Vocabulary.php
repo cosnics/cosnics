@@ -1,16 +1,16 @@
 <?php
 namespace Chamilo\Core\Metadata\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
+use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
+use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
 use Chamilo\Core\Metadata\Vocabulary\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Metadata\Storage\DataClass\ElementInstance;
-use Chamilo\Core\Metadata\Interfaces\EntityTranslationInterface;
 
 /**
  * This class describes a metadata vocabulary

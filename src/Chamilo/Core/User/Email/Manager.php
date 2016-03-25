@@ -2,8 +2,8 @@
 namespace Chamilo\Core\User\Email;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * $Id: email_manager.class.php 191 2009-11-13 11:50:28Z chellee $

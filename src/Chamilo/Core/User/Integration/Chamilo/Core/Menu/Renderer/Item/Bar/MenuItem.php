@@ -2,9 +2,9 @@
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar;
 
 use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
