@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Form;
 
+use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
 
 /**
  * Form for the element

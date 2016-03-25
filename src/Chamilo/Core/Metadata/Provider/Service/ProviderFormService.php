@@ -1,21 +1,21 @@
 <?php
 namespace Chamilo\Core\Metadata\Provider\Service;
 
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Core\Metadata\Element\Service\ElementService;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
-use Chamilo\Core\Metadata\Service\EntityService;
+use Chamilo\Core\Metadata\Provider\Service\PropertyProviderService;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Metadata\Service\EntityService;
 use Chamilo\Core\Metadata\Storage\DataClass\Element;
 use Chamilo\Core\Metadata\Storage\DataClass\ProviderLink;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *

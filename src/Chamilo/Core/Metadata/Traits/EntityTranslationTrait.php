@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Traits;
 
-use Chamilo\Core\Metadata\Service\EntityTranslationService;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Metadata\Service\EntityTranslationService;
 
 /**
  *

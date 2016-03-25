@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Form\Storage\DataClass\Instance;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
@@ -13,7 +14,6 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Configuration\Configuration;
 
 /**
  *

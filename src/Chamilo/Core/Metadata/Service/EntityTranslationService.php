@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Metadata\Service;
 
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Metadata\Storage\DataClass\EntityTranslation;
-use Chamilo\Core\Metadata\Entity\DataClassEntity;
 
 /**
  *

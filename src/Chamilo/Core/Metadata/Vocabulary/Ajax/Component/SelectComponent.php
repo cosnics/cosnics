@@ -1,24 +1,24 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Ajax\Component;
 
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Vocabulary\Table\Select\SelectTable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Core\Metadata\Vocabulary\Table\Select\SelectTable;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *

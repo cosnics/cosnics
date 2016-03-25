@@ -4,9 +4,9 @@ namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Reporting\Viewer\Manager;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Table\SortableTableFromArray;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 
 /**
  *

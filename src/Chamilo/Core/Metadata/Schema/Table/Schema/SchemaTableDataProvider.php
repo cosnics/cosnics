@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Schema\Table\Schema;
 
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Schema\Storage\DataManager;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 

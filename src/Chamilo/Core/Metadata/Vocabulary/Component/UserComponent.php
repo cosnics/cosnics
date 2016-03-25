@@ -1,20 +1,20 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Component;
 
-use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Core\Metadata\Vocabulary\Manager;
 use Chamilo\Core\Metadata\Vocabulary\Table\User\UserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
