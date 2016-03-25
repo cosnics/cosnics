@@ -4,10 +4,10 @@ namespace Chamilo\Core\User\Email\Component;
 use Chamilo\Core\User\Email\Form\EmailForm;
 use Chamilo\Core\User\Email\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * $Id: emailer.class.php 191 2009-11-13 11:50:28Z chellee $

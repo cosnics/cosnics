@@ -4,16 +4,16 @@
  */
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Template\Type\Html;
 
+use Chamilo\Core\Reporting\FilteredBlock;
+use Chamilo\Core\Reporting\Viewer\Manager;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Reporting\FilteredBlock;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRenditionImplementation;
-use Chamilo\Core\Reporting\Viewer\Manager;
 
 class Filtered extends Basic
 {

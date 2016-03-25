@@ -1,19 +1,19 @@
 <?php
 namespace Chamilo\Core\Metadata\Schema\Component;
 
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Schema\Form\SchemaForm;
 use Chamilo\Core\Metadata\Schema\Manager;
-use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Core\Metadata\Schema\Storage\DataManager;
+use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
+use Chamilo\Core\Metadata\Service\EntityTranslationService;
+use Chamilo\Core\Metadata\Storage\DataClass\Schema;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
-use Chamilo\Core\Metadata\Service\EntityTranslationService;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  * Controller to update the schema

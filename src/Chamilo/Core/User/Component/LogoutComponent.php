@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Configuration\Configuration;
 
 /**
  *

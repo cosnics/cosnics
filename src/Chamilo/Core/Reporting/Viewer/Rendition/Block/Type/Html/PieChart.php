@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 
+use Chamilo\Core\Reporting\Viewer\Chart\pChamiloImage;
 use Chamilo\Libraries\File\Path;
 use CpChart\Classes\pData;
-use Chamilo\Core\Reporting\Viewer\Chart\pChamiloImage;
 use CpChart\Classes\pPie;
 
 /**

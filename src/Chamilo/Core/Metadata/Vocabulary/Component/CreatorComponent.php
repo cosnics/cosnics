@@ -1,16 +1,16 @@
 <?php
 namespace Chamilo\Core\Metadata\Vocabulary\Component;
 
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
+use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
+use Chamilo\Core\Metadata\Service\EntityTranslationService;
+use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\Metadata\Vocabulary\Form\VocabularyForm;
 use Chamilo\Core\Metadata\Vocabulary\Manager;
-use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Core\Metadata\Service\EntityTranslationService;
-use Chamilo\Core\Metadata\Service\EntityTranslationFormService;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 
 /**
  * Controller to create the schema

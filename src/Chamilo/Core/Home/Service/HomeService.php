@@ -1,15 +1,15 @@
 <?php
 namespace Chamilo\Core\Home\Service;
 
+use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Home\Manager;
+use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Home\Renderer\Type;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Renderer\Renderer;
+use Chamilo\Core\Home\Renderer\Type\Basic\TabHeaderRenderer;
 use Chamilo\Core\Home\Renderer\Type\Basic\TabRenderer;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Service\AngularConnectorService;
@@ -20,7 +21,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Home\Renderer\Type\Basic\TabHeaderRenderer;
 
 /**
  *

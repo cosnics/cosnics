@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Metadata\Integration\Chamilo\Core\Metadata\Entity;
 
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

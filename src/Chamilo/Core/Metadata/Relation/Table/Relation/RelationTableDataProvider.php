@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Metadata\Relation\Table\Relation;
 
-use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Core\Metadata\Relation\Storage\DataManager;
+use Chamilo\Core\Metadata\Storage\DataClass\Relation;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
