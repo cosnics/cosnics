@@ -127,10 +127,14 @@ button.btn {
 	text-shadow: none;
 }
 
-a, .ui-widget-content a {
+a, .ui-widget-content a:not(.btn) {
 	color: #406e8e;
 	text-decoration: none;
 	font-weight: bold;
+}
+
+.ui-widget-content .btn-group a {
+	color: #333333;
 }
 
 /***************
