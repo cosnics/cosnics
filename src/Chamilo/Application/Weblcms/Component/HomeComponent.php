@@ -70,6 +70,7 @@ class HomeComponent extends Manager implements DelegateComponent
     protected function renderMenu()
     {
         $buttonToolBar = new ButtonToolBar();
+        $buttonToolBar->addClass('btn-action-toolbar-vertical');
 
         if ($this->get_user()->is_platform_admin())
         {

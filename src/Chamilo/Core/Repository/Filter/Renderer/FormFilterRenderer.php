@@ -23,7 +23,10 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
+ * @package Chamilo\Core\Repository\Filter\Renderer
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class FormFilterRenderer extends FilterRenderer
 {
@@ -42,7 +45,7 @@ class FormFilterRenderer extends FilterRenderer
 
     /**
      *
-     * @var \libraries\format\FormValidator
+     * @var \Chamilo\Libraries\Format\Form\FormValidator
      */
     private $form_validator;
 
@@ -121,7 +124,7 @@ class FormFilterRenderer extends FilterRenderer
 
     /**
      *
-     * @return \libraries\format\FormValidator
+     * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
     public function get_form_validitor()
     {
@@ -139,117 +142,121 @@ class FormFilterRenderer extends FilterRenderer
 
     public function build()
     {
-        $this->renderer->setFormTemplate(
-            '<form {attributes}><div class="advanced_filter_form">{content}</div><div class="clear">&nbsp;</div></form>');
-        $this->renderer->setElementTemplate('<div class="form-row">{element}</div>');
+        $this->renderer->setFormTemplate('<form {attributes}>{content}</form>');
+        $this->renderer->setElementTemplate('<div class="form-group"><label>{label}</label>{element}</div>');
 
         // title
-        $this->form_validator->addElement('category', Translation :: get('TextSearch'));
-        $this->form_validator->addElement('text', FilterData :: FILTER_TEXT, null, 'class="full"');
-        $this->form_validator->addElement('category');
+        $this->form_validator->addElement(
+            'text',
+            FilterData :: FILTER_TEXT,
+            Translation :: get('TextSearch'),
+            'class="form-control input-sm"');
 
         // category
-        $this->form_validator->addElement('category', Translation :: get('Category'));
         $this->form_validator->addElement(
             'select',
             ContentObject :: PROPERTY_PARENT_ID,
-            null,
+            Translation :: get('Category'),
             $this->get_categories(),
-            'class="full"');
+            'class="form-control input-sm"');
         $this->form_validator->addElement(
             'checkbox',
             FilterData :: FILTER_CATEGORY_RECURSIVE,
             null,
-            Translation :: get('SearchRecursive'),
-            'style="vertical-align: middle;"');
-        $this->form_validator->addElement('category');
+            Translation :: get('SearchRecursive'));
+
+        $this->renderer->setElementTemplate('{element}', FilterData :: FILTER_CATEGORY_RECURSIVE);
 
         // creation date
-        $this->form_validator->addElement('category', Translation :: get('CreationDate'));
-        $creation_date = array();
-        $creation_date[] = $this->form_validator->createElement(
-            'static',
-            '',
-            '',
-            '<span style="display:inline-block; margin-right: 2px;">' . Translation :: get('From') . '</span>');
-        $creation_date[] = $this->form_validator->createElement(
+        $creationGroup = array();
+
+        $creationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_FROM_DATE,
             Translation :: get('From'),
-            'id="creation_date_from" style="width:60px;"');
-        $creation_date[] = $this->form_validator->createElement(
-            'static',
-            '',
-            '',
-            '<span style="display:inline-block; margin-left: 2px; margin-right: 2px;">' . Translation :: get('To') .
-                 '</span>');
-        $creation_date[] = $this->form_validator->createElement(
+            'id="creation_date_from" class="form-control input-sm input-date"');
+
+        $creationToName = FilterData :: FILTER_CREATION_DATE . '[' . FilterData :: FILTER_TO_DATE . ']';
+
+        $creationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_TO_DATE,
             Translation :: get('To'),
-            'id="creation_date_to" style="width:60px;"');
-        $this->form_validator->addGroup($creation_date, FilterData :: FILTER_CREATION_DATE);
-        $this->form_validator->addElement('category');
+            'id="creation_date_to" class="form-control input-sm input-date"');
 
-        $this->renderer->setGroupElementTemplate('{element}', FilterData :: FILTER_CREATION_DATE);
+        $this->form_validator->addGroup(
+            $creationGroup,
+            FilterData :: FILTER_CREATION_DATE,
+            Translation :: get('CreationDate'),
+            null);
+
+        $this->renderer->setElementTemplate(
+            '<div class="form-group form-inline"><label>{label}</label><div>{element}</div></div>',
+            FilterData :: FILTER_CREATION_DATE);
+
+        $this->renderer->setGroupElementTemplate(
+            '<div class="input-group input-group-date">
+        <span class="input-group-addon input-group-filter-date">{label}</span></span>{element}</div>',
+            FilterData :: FILTER_CREATION_DATE);
 
         // modification date
-        $this->form_validator->addElement('category', Translation :: get('ModificationDate'));
-        $modification_date = array();
-        $modification_date[] = $this->form_validator->createElement(
-            'static',
-            '',
-            '',
-            '<span style="display:inline-block; margin-right: 2px;">' . Translation :: get('From') . '</span>');
-        $modification_date[] = $this->form_validator->createElement(
+        $modificationGroup = array();
+
+        $modificationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_FROM_DATE,
             Translation :: get('From'),
-            'id="modification_date_from" style="width:60px;"');
-        $modification_date[] = $this->form_validator->createElement(
-            'static',
-            '',
-            '',
-            '<span style="display:inline-block; margin-left: 2px; margin-right: 2px;">' . Translation :: get('To') .
-                 '</span>');
-        $modification_date[] = $this->form_validator->createElement(
+            'id="modification_date_from" class="form-control input-sm input-date"');
+
+        $modificationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_TO_DATE,
             Translation :: get('To'),
-            'id="modification_date_to" style="width:60px;"');
-        $this->form_validator->addGroup($modification_date, FilterData :: FILTER_MODIFICATION_DATE);
-        $this->form_validator->addElement('category');
+            'id="modification_date_to" class="form-control input-sm input-date"');
 
-        $this->renderer->setGroupElementTemplate('{element}', FilterData :: FILTER_MODIFICATION_DATE);
+        $this->form_validator->addGroup(
+            $modificationGroup,
+            FilterData :: FILTER_MODIFICATION_DATE,
+            Translation :: get('ModificationDate'),
+            null);
+
+        $this->renderer->setElementTemplate(
+            '<div class="form-group form-inline"><label>{label}</label><div>{element}</div></div>',
+            FilterData :: FILTER_MODIFICATION_DATE);
+
+        $this->renderer->setGroupElementTemplate(
+            '<div class="input-group input-group-date">
+        <span class="input-group-addon input-group-filter-date">{label}</span></span>{element}</div>',
+            FilterData :: FILTER_MODIFICATION_DATE);
 
         // type
-        $this->form_validator->addElement('category', Translation :: get('ContentObjectType'));
 
         $typeSelectorFactory = new TypeSelectorFactory($this->get_content_object_types());
         $type_selector = $typeSelectorFactory->getTypeSelector();
 
-        $select = $this->form_validator->addElement('select', FilterData :: FILTER_TYPE, null, array(), 'class="full"');
+        $select = $this->form_validator->addElement(
+            'select',
+            FilterData :: FILTER_TYPE,
+            Translation :: get('ContentObjectType'),
+            array(),
+            'class="form-control input-sm"');
 
         foreach ($type_selector->as_tree() as $key => $type)
         {
             $select->addOption($type, $key);
         }
 
-        $this->form_validator->addElement('category');
-
         // User view
         $user_views = $this->get_user_views();
 
         if (count($user_views) > 0)
         {
-            $this->form_validator->addElement('category', Translation :: get('UserView'));
             $select = $this->form_validator->addElement(
                 'select',
                 FilterData :: FILTER_USER_VIEW,
-                null,
+                Translation :: get('UserView'),
                 $user_views,
-                'class="full"');
-            $this->form_validator->addElement('category');
+                'class="form-control input-sm"');
         }
     }
 
