@@ -3,11 +3,11 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Vie
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentResultProcessor;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $

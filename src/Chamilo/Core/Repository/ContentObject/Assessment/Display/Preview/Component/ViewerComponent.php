@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\PreviewStorage;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 
 /**
  *

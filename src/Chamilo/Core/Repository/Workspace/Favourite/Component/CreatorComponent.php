@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Component;
 
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Favourite\Manager;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
-use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
+use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

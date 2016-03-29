@@ -1,22 +1,22 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Table\Workspace;
 
+use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
+use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
+use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Core\Repository\Workspace\Manager;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Toolbar;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
-use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
-use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
-use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *

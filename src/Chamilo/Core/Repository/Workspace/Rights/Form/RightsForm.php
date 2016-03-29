@@ -1,18 +1,18 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Form;
 
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\Workspace\Rights\Manager;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
-use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**

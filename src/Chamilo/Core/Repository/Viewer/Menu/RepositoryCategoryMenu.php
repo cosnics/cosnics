@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\Viewer\Menu;
 
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * Extension on the content object category menu in preparation of an refactoring that is needed in the tree menu's

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Viewer\Component;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Viewer\Table\Import\ImportTable;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -15,7 +16,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 class ImportedSelecterComponent extends Manager implements TableSupport, DelegateComponent
 {

@@ -4,13 +4,13 @@ namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer\QuestionResultDisplay;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * $Id: result_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $

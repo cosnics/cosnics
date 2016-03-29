@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $

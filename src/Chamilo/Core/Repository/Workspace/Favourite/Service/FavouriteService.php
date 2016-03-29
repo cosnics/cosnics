@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\Workspace\Favourite\Service;
 
 use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *

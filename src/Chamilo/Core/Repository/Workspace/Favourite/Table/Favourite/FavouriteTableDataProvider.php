@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Table\Favourite;
 
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider;
 
 /**
  *

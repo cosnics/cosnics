@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Component;
 
+use Chamilo\Core\Repository\Workspace\Favourite\Manager;
+use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
+use Chamilo\Core\Repository\Workspace\Favourite\Table\Favourite\FavouriteTable;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
@@ -9,9 +12,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Repository\Workspace\Favourite\Manager;
-use Chamilo\Core\Repository\Workspace\Favourite\Table\Favourite\FavouriteTable;
-use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
 
 /**
  *

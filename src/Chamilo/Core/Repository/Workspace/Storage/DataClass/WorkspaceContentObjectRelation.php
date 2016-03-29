@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Storage\DataClass;
 
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *

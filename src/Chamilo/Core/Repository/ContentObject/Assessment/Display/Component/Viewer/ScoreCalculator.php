@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * $Id: score_calculator.class.php 200 2009-11-13 12:30:04Z kariboe $

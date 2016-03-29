@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Repository\Workspace\Service;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
