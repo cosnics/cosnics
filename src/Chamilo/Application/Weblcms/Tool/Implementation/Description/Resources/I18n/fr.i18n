@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\description
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Description"
+BrowserComponent = "Parcourir descriptions"
+ViewerComponent = "Voir description du cours"
+EvaluateComponent = "Evaluer la description du cours"
+IntroductionPublisherComponent = "Publier le texte d'introduction"
+MoverComponent = "Déplacer description du cours"
+PublisherComponent = "Publier description du cours"
+UpdaterComponent = "Modifier description du cours"
