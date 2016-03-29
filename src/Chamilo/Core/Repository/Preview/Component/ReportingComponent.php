@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Preview\Component;
 
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\PreviewSupport;
 use Chamilo\Core\Repository\Preview\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;

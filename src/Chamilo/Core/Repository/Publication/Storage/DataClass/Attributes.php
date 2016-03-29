@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\Publication\Storage\DataClass;
 
 use Chamilo\Core\Repository\Publication\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: content_object_publication_attributes.class.php 204 2009-11-13 12:51:30Z kariboe $

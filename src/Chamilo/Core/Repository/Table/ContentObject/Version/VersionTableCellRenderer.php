@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Table\ContentObject\Version;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
@@ -9,9 +10,8 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class VersionTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {

@@ -3,10 +3,10 @@ namespace Chamilo\Core\Repository\Filter;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 /**
  * The data set via Session, $_POST and $_GET variables related to filtering a set of content objects

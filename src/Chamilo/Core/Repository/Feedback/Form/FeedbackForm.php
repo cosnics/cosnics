@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback\Form;
 
+use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
+use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
-use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * Form for the feedback

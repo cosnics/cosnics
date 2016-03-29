@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Ajax\Component;
 
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
  *

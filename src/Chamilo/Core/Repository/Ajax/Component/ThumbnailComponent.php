@@ -3,12 +3,12 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Chamilo\Libraries\File\Filesystem;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class ThumbnailComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {

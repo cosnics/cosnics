@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Repository\Processor\Ckeditor;
 
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 class Processor extends HtmlEditorProcessor
 {

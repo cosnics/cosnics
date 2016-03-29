@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
+use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -8,7 +9,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Menu\Storage\DataClass\Item;
 
 /**
  *

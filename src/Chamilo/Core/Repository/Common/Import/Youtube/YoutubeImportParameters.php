@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\Common\Import\Youtube;
 
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
-use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Libraries\File\Properties\FileProperties;
 
 class YoutubeImportParameters extends ImportParameters
 {

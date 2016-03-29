@@ -8,8 +8,8 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\String\Text;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class UploadImageComponent extends \Chamilo\Core\Repository\Ajax\Manager implements NoAuthenticationSupport
 {

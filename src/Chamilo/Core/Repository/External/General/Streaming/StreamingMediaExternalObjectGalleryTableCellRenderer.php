@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\External\General\Streaming;
 
 use Chamilo\Core\Repository\External\Table\ExternalObjectGallery\DefaultExternalObjectGalleryTableCellRenderer;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class StreamingMediaExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGalleryTableCellRenderer
 {

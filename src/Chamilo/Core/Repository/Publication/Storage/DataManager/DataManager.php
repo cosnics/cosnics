@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Storage\DataManager;
 
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
  *

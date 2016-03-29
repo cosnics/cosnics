@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback\Generator;
 
+use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
+use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 
 /**
  *

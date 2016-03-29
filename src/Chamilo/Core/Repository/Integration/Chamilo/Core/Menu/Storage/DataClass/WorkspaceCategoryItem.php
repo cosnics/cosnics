@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Storage\DataClass;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  *

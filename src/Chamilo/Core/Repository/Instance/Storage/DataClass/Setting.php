@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\Instance\Storage\DataClass;
 use Chamilo\Core\Repository\Instance\Storage\DataManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use DOMDocument;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**
  *

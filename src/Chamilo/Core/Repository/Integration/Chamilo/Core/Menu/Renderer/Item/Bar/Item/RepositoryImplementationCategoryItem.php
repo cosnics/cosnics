@@ -2,11 +2,11 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Bar\Item\CategoryItem;
+use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 /**

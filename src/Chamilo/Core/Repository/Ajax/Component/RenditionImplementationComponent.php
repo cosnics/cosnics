@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {

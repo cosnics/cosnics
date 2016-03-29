@@ -3,11 +3,11 @@ namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Platform\Session\Request;
 
 class HtmlEditorFileComponent extends Manager
 {

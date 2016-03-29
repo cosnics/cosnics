@@ -1,14 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\Table\ContentObject\Table;
 
-// use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-// use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-// use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
-use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
-use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 
 class RepositoryTableDataProvider extends DataClassTableDataProvider
 {

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Import;
 
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 
 abstract class ImportParameters
 {

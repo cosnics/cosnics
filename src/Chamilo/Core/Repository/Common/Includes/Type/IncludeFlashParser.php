@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\Common\Includes\Type;
 use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Processor\HtmlEditorProcessor;
-use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Utilities\String\Text;
 
 /**
  * $Id: include_flash_parser.class.php 204 2009-11-13 12:51:30Z kariboe $

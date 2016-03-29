@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\Common\Export\Cpo\Type;
 use Chamilo\Core\Repository\Common\Export\Cpo\CpoContentObjectExport;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 
 class CpoDefaultContentObjectExport extends CpoContentObjectExport
 {

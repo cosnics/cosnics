@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item;
 
 use Chamilo\Core\Menu\Renderer\Item\Bar\Item\CategoryItem;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\Menu\Renderer\Item\Renderer;
+use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Repository\Workspace\Manager;
-use Chamilo\Core\Menu\Renderer\Item\Renderer;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

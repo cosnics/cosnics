@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
-use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Format\Structure\Page;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * $Id: restorer.class.php 204 2009-11-13 12:51:30Z kariboe $

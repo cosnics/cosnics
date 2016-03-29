@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\Entity;
 
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

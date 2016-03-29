@@ -5,8 +5,8 @@ use Chamilo\Core\Repository\Instance\Manager;
 use Chamilo\Core\Repository\Instance\Rights;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**

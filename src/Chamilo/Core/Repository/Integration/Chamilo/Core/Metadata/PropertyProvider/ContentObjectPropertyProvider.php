@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider;
 
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Core\Metadata\Provider\PropertyProviderInterface;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  * This class provides and renders the properties to link to a metadata element

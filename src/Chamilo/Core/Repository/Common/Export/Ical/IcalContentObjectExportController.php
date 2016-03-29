@@ -1,20 +1,19 @@
 <?php
 namespace Chamilo\Core\Repository\Common\Export\Ical;
 
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-// use libraries\platform\configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
+use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
+use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
+use Chamilo\Core\Repository\Common\Export\ExportParameters;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Sabre\VObject\Component\VCalendar;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
-use Chamilo\Core\Repository\Common\Export\ExportParameters;
-use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
-use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
-use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 
 class IcalContentObjectExportController extends ContentObjectExportController
 {

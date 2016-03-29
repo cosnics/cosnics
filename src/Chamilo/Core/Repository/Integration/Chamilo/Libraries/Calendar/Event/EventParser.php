@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event;
 
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Abstract base-class for the parsing of content object to renderable calendar events

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Table;
 
+use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 
 class PublicationTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {

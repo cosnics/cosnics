@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\Publication\Location;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\Manager;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 
 /**
  *

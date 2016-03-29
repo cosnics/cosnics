@@ -1,17 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
-use Chamilo\Core\Repository\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
+use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Metadata\Entity\DataClassEntity;
+use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Storage\DataClass\Relation;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
-use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Storage\DataClass\Schema;
-use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Manager;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

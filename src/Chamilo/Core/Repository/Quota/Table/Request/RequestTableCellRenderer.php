@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\Quota\Table\Request;
 
 use Chamilo\Core\Repository\Quota\Calculator;
-use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Manager;
+use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
