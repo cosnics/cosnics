@@ -6,8 +6,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: blog.class.php 200 2009-11-13 12:30:04Z kariboe $

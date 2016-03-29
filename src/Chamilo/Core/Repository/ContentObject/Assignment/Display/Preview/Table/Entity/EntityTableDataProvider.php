@@ -1,9 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity;
 
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
  *
