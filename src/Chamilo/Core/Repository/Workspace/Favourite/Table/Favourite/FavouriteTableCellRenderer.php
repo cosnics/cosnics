@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite\Table\Favourite;
 
+use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableCellRenderer;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 
 /**
  *

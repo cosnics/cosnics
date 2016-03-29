@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Table\Workspace;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 
 /**
  *

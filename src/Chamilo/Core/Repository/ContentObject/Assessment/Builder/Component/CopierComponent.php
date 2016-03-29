@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**

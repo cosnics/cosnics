@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Table\EntityRelation;
 
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Platform\Translation;
 
 class EntityRelationTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {

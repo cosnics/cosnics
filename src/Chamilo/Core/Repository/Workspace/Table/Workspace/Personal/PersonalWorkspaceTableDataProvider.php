@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Table\Workspace\Personal;
 
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider;
 
 /**

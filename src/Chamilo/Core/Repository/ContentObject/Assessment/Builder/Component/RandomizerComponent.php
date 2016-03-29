@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Builder\Component;
 
+use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\ComplexAssessmentMatchingQuestion;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\ComplexAssessmentMatrixQuestion;
 use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\ComplexAssessmentMultipleChoiceQuestion;
 use Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass\ComplexAssessmentSelectQuestion;
-use Chamilo\Core\Repository\ContentObject\Assessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\ComplexFillInBlanksQuestion;
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\ComplexHotspotQuestion;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\ComplexOrderingQuestion;

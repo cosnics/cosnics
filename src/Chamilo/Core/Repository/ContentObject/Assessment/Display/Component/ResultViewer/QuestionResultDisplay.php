@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\ResultViewer;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\AssessmentQuestionResultDisplay;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Favourite;
 
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *

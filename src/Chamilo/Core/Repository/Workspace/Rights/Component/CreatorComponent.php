@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
-use Chamilo\Core\Repository\Workspace\Rights\Manager;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
+use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
+use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

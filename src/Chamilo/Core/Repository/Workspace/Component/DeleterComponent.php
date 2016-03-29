@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Core\Repository\Workspace\Manager;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 /**
  *

@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Service;
 
-use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 
 /**
  *
