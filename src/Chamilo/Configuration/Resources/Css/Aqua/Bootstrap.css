@@ -2,6 +2,10 @@ body {
 	font-size: 13px;
 }
 
+a:focus {
+	outline: 0;
+}
+
 /**************
  * ACTION BAR *
  **************/
@@ -133,6 +137,8 @@ a, .ui-widget-content a:not(.btn) {
 	font-weight: bold;
 }
 
+#advanced_filter_form .input-date {
+	width: 90px;}
 .ui-widget-content .btn-group a {
 	color: #333333;
 }

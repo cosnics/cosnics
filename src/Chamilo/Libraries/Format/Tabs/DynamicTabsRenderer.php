@@ -88,6 +88,7 @@ class DynamicTabsRenderer
             $html[] = $tab->header();
         }
         $html[] = '</ul>';
+        $html[] = '</div>';
 
         $html[] = '<div id="' . $this->name . 'TabsContent" class="tab-content dynamic-visual-tab-content">';
 
@@ -146,7 +147,6 @@ class DynamicTabsRenderer
     {
         $html = array();
 
-        $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<script type="text/javascript">';
 
