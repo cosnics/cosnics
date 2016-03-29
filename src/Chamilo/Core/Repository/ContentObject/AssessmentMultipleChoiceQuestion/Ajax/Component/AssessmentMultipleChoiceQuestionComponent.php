@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Ajax;
 
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *

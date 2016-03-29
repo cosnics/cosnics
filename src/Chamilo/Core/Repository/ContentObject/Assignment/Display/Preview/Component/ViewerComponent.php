@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Component;
 
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\AssignmentDataProvider;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Manager;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 /**
  *

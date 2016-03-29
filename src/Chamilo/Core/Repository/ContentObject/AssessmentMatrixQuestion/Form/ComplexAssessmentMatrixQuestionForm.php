@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Form;
 
-use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\ComplexAssessmentMatrixQuestion;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Form\ConfigurationForm;
+use Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass\ComplexAssessmentMatrixQuestion;
 use Chamilo\Core\Repository\Form\ComplexContentObjectItemForm;
 use Chamilo\Libraries\Platform\Translation;
 
