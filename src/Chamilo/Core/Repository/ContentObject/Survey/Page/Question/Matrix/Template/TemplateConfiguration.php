@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Template;
 
 use Chamilo\Core\Repository\Common\Template\TemplateConfigurationParser;
-use DOMXPath;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\Matrix;
+use DOMXPath;
 
 /**
  *

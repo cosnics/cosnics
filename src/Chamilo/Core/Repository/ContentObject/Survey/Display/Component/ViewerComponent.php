@@ -1,14 +1,14 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Form\ViewerForm;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplayItem;
 use Chamilo\Core\Repository\ContentObject\Survey\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Survey\Display\Form\ViewerForm;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplayItem;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Session\Request;
 
 class ViewerComponent extends TabComponent
 {

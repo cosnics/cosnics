@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Repository\ContentObject\Task\Implementation\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\Task\Implementation\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task;
 
 class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 {

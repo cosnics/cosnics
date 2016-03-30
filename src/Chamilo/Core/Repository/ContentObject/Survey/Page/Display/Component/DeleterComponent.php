@@ -2,17 +2,17 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class DeleterComponent extends Manager
 {

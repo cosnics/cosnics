@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 abstract class QuestionDisplay extends \Chamilo\Core\Repository\ContentObject\Survey\Display\PageDisplay
 {

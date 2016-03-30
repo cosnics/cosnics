@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Ajax;
 
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\ContentObject\Survey\Configuration\SurveyConfiguration;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
 {

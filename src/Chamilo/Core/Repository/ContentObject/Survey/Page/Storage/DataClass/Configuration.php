@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 
 class Configuration extends DataClass implements DisplayOrderDataClassListenerSupport
 {

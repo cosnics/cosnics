@@ -5,8 +5,12 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\Da
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\MatrixMatch;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\MatrixOption;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataManager;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Template\TemplateConfiguration;
+use Chamilo\Core\Repository\Exception\NoTemplateException;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
@@ -17,12 +21,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Template\TemplateConfiguration;
-use Chamilo\Core\Repository\Exception\NoTemplateException;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *

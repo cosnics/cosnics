@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Configuration;
 
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
-use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceFactory;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceFactory;
+use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 
 /**
  *

@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplaySupport;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Core\Repository\ContentObject\Survey\Configuration\SurveyConfiguration;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Interfaces\PageDisplaySupport;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\File\Path;
 
 /**
  *

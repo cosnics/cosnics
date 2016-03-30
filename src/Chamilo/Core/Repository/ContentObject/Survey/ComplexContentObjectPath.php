@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey;
 
+use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplayItem;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\ComplexDescription;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\ComplexPage;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\ComplexSurvey;
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplayItem;
 
 /**
  *

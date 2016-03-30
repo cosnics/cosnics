@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Table\Item;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Page;
 
 /**
  * Portfolio item table cell renderer

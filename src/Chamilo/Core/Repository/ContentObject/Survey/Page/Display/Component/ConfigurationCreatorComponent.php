@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Form\ConfigureQuestionForm;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class ConfigurationCreatorComponent extends TabComponent
 {

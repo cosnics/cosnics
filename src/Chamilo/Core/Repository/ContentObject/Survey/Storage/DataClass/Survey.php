@@ -1,21 +1,21 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Page;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectDisclosure;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
+use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Configuration;
 
 class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject implements ComplexContentObjectSupport, 
     ComplexContentObjectDisclosure, Versionable

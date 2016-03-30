@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Task\Implementation\Export\Ical;
 
 use Chamilo\Core\Repository\ContentObject\Task\Implementation\Export\IcalExportImplementation;
-use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
 use Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Libraries\Calendar\Event\RecurrenceRulesParser;
+use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
 
 class IcalDefaultExportImplementation extends IcalExportImplementation
 {

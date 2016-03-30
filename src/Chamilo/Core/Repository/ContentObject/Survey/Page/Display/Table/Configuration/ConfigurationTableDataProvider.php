@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Table\Configuration;
 
-use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
+use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;

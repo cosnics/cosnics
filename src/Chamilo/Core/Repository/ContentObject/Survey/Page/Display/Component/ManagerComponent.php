@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Table\Item\ItemTable;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\Breadcrumb;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Platform\Translation;
 
 class ManagerComponent extends TabComponent implements TableSupport
 {

@@ -5,10 +5,10 @@ use Chamilo\Core\Repository\Common\Template\TemplateConfiguration;
 use Chamilo\Core\Repository\Common\Template\TemplateParser;
 use Chamilo\Core\Repository\Common\Template\TemplateTranslation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\Matrix;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\MatrixOption;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\MatrixMatch;
-use DOMXPath;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\MatrixOption;
 use Chamilo\Libraries\Platform\Translation;
+use DOMXPath;
 
 class Template extends \Chamilo\Core\Repository\Common\Template\Template implements TemplateParser
 {

@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\Description;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\Description;
 
 /**
  *

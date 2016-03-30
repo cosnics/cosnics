@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\Viewer;
 
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\PageDisplay;
+use Chamilo\Libraries\Format\Form\FormValidator;
 
 class Form extends FormValidator
 {

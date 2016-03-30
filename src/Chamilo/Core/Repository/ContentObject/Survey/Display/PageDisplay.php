@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
 use Chamilo\Core\Repository\ContentObject\Survey\Page\ComplexContentObjectPathNode;
-use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
+use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 
 abstract class PageDisplay
 {

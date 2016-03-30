@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class SorterComponent extends Manager implements DelegateComponent
 {
