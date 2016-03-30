@@ -49,6 +49,7 @@ class UploadTemporaryFileComponent extends \Chamilo\Libraries\Ajax\Manager
      */
     public function getFile()
     {
-        return $this->getRequest()->files->get('file');
+        $filePropertyName = $this->getRequest()->request->get('filePropertyName');
+        return $this->getRequest()->files->get($filePropertyName);
     }
 }
