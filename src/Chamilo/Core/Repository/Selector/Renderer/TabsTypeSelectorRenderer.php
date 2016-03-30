@@ -216,6 +216,8 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             $html[] = $this->render_option($type_option, $url);
         }
 
+        $html[] = '<div class="clearfix"></div>';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -234,6 +236,8 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             $url = $this->get_parent()->get_content_object_type_creation_url($option->get_template_registration_id());
             $html[] = $this->render_option($option, $url);
         }
+
+        $html[] = '<div class="clearfix"></div>';
 
         return implode(PHP_EOL, $html);
     }
