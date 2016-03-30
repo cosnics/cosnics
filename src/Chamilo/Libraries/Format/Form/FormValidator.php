@@ -703,7 +703,8 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName .
+                 " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');
@@ -1274,7 +1275,7 @@ EOT;
         $dropzoneOptions['successCallbackFunction'] = 'chamilo.libraries.single.processUploadedFile';
         $dropzoneOptions['removedfileCallbackFunction'] = 'chamilo.libraries.single.deleteUploadedFile';
 
-        $this->addFileDropzone('single', $elementName, $dropzoneOptions);
+        $this->addFileDropzone($elementName, $dropzoneOptions);
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
@@ -1284,21 +1285,11 @@ EOT;
 
     /**
      *
-     * @param string $elementName
-     * @param string[] $dropzoneOptions
-     */
-    public function addMultipleFileDropzone($elementName, $dropzoneOptions = array())
-    {
-        $this->addFileDropzone('multiple', $elementName, $dropzoneOptions);
-    }
-
-    /**
-     *
      * @param string $uploadType
      * @param string $elementName
      * @param string[] $dropzoneOptions
      */
-    public function addFileDropzone($uploadType = 'single', $elementName, $dropzoneOptions = array())
+    public function addFileDropzone($elementName, $dropzoneOptions = array())
     {
         $this->addElement('html', '<div id="' . $elementName . '-upload-container">');
 
@@ -1346,7 +1337,16 @@ EOT;
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
 
-        $this->addElement('static', null, sprintf(Translation :: get('FileName')), implode(PHP_EOL, $dropzoneHtml));
+        if (array_key_exists('maxFiles', $dropzoneOptions) && $dropzoneOptions['maxFiles'] == 1)
+        {
+            $label = 'File';
+        }
+        else
+        {
+            $label = 'Files';
+        }
+
+        $this->addElement('static', null, sprintf(Translation :: get($label)), implode(PHP_EOL, $dropzoneHtml));
         $this->addElement('hidden', $elementName . '_upload_data');
 
         $dropzoneOptionsString = array();

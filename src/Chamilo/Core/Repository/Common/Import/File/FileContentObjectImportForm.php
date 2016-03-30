@@ -34,17 +34,19 @@ class FileContentObjectImportForm extends ContentObjectImportForm
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_application()->get_user_id()));
 
-        $this->addMultipleFileDropzone(
+        $this->addFileDropzone(
             self :: IMPORT_FILE_NAME,
             array(
                 'name' => self :: IMPORT_FILE_NAME,
                 'maxFilesize' => $calculator->getMaximumUploadSize(),
-                'successCallbackFunction' => 'myCallbackFunction'));
+                'successCallbackFunction' => 'chamilo.core.repository.import.processUploadedFile',
+                'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'));
 
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Manager :: context(), true) . 'FileImportCallback.js'));
+                Path :: getInstance()->getJavascriptPath(Manager :: context(), true) .
+                     'Plugin/jquery.file.upload.import.js'));
 
         $this->addElement('html', '</div>');
 
