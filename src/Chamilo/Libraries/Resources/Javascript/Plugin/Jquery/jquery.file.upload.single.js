@@ -23,7 +23,6 @@ dropzoneCallbacks.chamilo = {
                 
                 $(file.previewElement).data('temporary-file-name', serverResponse.properties.temporaryFileName);
             },
-            
             deleteUploadedFile : function(environment, file, serverResponse)
             {
                 var ajaxUri = getPath('WEB_PATH') + 'index.php';
