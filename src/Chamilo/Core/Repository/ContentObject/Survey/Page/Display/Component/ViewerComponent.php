@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\TabComponent;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\Viewer\Form;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Component\TabComponent;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 class ViewerComponent extends TabComponent
 {

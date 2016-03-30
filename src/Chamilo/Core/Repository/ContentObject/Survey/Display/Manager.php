@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display;
 
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceFactory;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Platform\Session\Request;
 
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {

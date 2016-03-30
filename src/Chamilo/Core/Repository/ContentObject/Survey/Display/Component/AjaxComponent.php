@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Core\Repository\ContentObject\Survey\Configuration\SurveyConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 class AjaxComponent extends Manager implements DelegateComponent
 {

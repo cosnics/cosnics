@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Ajax\Component;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\ComplexDescription;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Description\Storage\DataClass\ComplexDescription;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\Survey;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;

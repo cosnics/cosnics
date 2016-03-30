@@ -5,9 +5,9 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Manager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
 class ConfigurationTable extends DataClassTable implements TableFormActionsSupport
 {

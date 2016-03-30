@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Table\Configuration\ConfigurationTable;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Table\Configuration\ConfigurationTable;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 
 class QuestionManagerComponent extends TabComponent implements TableSupport
 {

@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Form;
 
+use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Display\QuestionDisplay;
 
 /**
  *

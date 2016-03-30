@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Display\Component;
 
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class VisibilityChangerComponent extends TabComponent
 {

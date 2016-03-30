@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass;
 
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplayItem;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 /**
  *

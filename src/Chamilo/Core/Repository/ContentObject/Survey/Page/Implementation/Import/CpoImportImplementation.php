@@ -2,12 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Implementation\Import;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Implementation\Export\CpoExportImplementation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Implementation\ImportImplementation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Storage\DataClass\Matching;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\Matrix;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\MultipleChoice;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Implementation\ImportImplementation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Storage\DataClass\Rating;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataClass\Select;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -15,8 +17,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Implementation\Export\CpoExportImplementation;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Storage\DataClass\Configuration;
 
 class CpoImportImplementation extends ImportImplementation
 {

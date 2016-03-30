@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Survey\Form;
 
-use Chamilo\Core\Repository\Form\ComplexContentObjectItemForm;
 use Chamilo\Core\Repository\ContentObject\Survey\Storage\DataClass\ComplexSurvey;
+use Chamilo\Core\Repository\Form\ComplexContentObjectItemForm;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
