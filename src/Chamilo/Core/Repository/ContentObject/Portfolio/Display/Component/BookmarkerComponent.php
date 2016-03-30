@@ -3,11 +3,11 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 
 /**
  * Component that allows the user to create bookmarks to specific portfolio item

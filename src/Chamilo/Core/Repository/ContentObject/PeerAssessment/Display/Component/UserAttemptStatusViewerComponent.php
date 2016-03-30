@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component\UserA
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -14,8 +16,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 
 class UserAttemptStatusViewerComponent extends Manager implements TableSupport
 {

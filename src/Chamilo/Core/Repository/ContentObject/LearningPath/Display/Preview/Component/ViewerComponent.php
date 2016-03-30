@@ -8,18 +8,18 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySuppor
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyItemAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\DummyQuestionAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *

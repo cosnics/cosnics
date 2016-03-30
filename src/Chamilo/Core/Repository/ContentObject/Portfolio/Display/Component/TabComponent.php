@@ -2,24 +2,24 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
+use Chamilo\Core\Repository\Feedback\Generator\TabsGenerator;
+use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Core\Repository\Selector\TypeSelector;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Repository\Feedback\Generator\TabsGenerator;
-use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {

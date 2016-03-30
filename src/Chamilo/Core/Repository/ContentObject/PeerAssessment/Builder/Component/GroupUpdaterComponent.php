@@ -3,11 +3,11 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Component
 
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Builder\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Form\PeerAssessmentGroupForm;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class GroupUpdaterComponent extends Manager
 {
