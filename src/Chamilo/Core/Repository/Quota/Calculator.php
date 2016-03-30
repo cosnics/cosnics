@@ -627,7 +627,7 @@ class Calculator
         $html[] = '<div class="progress-bar progress-bar-striped ' . $class . '" role="progressbar" aria-valuenow="' .
              $displayPercent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $displayPercent .
              '%; min-width: 2em;">';
-        $html[] = $status . ' &ndash; ' .  $displayPercent . '%';
+        $html[] = $status . ' &ndash; ' . $displayPercent . '%';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -715,5 +715,31 @@ class Calculator
                 array('FILESIZE' => Filesystem :: format_file_size($maximumSize)));
             $form->add_warning_message('max_size', null, $message);
         }
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getMaximumUploadSize()
+    {
+        $enableQuota = (boolean) PlatformSetting :: get('enable_quota', \Chamilo\Core\Repository\Manager :: context());
+
+        $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
+        $uploadMaxFilesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));
+
+        $maximumServerSize = $postMaxSize < $uploadMaxFilesize ? $uploadMaxFilesize : $postMaxSize;
+
+        if ($enableQuota && $this->getAvailableUserDiskQuota() < $maximumServerSize)
+        {
+            $maximumSize = $this->getAvailableUserDiskQuota();
+            $maximumUploadSize = $maximumSize > $maximumServerSize ? $maximumServerSize : $maximumSize;
+        }
+        else
+        {
+            $maximumUploadSize = $maximumServerSize;
+        }
+
+        return floor($maximumUploadSize / 1024 / 1024);
     }
 }

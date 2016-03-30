@@ -11,6 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
 use HTML_QuickForm_RuleRegistry;
+use Chamilo\Core\Repository\Quota\Calculator;
 
 /**
  *
@@ -1261,5 +1262,83 @@ EOT;
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'));
+    }
+
+    public function addFileDropzone($elementName)
+    {
+        $calculator = new Calculator(
+            \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                (int) $this->get_owner_id()));
+
+        $this->addElement('html', '<div id="' . $elementName . '-upload-container">');
+
+        $this->addElement('file', $elementName, sprintf(Translation :: get('FileName')));
+        $this->addRule(
+            $elementName,
+            Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
+            'disk_quota');
+
+        $dropzoneHtml = array();
+
+        $dropzoneHtml[] = '<div id="' . $elementName . '-upload" class="file-upload">';
+
+        $dropzoneHtml[] = '<div class="file-previews files" id="' . $elementName . '-previews">';
+        $dropzoneHtml[] = '<div id="' . $elementName . '-template" class="thumbnail pull-left">';
+        $dropzoneHtml[] = '<span class="preview"><img data-dz-thumbnail /></span>';
+        $dropzoneHtml[] = '<div class="caption">';
+        $dropzoneHtml[] = '<h3 data-dz-name></h3>';
+        $dropzoneHtml[] = '<strong class="error text-danger" data-dz-errormessage></strong>';
+        $dropzoneHtml[] = '<p class="size" data-dz-size></p>';
+        $dropzoneHtml[] = '<div>';
+        $dropzoneHtml[] = '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">';
+        $dropzoneHtml[] = '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '<div>';
+        $dropzoneHtml[] = '<button data-dz-remove class="btn btn-warning cancel">';
+        $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>';
+        $dropzoneHtml[] = '</button>';
+        $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
+        $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>Delete</span>';
+        $dropzoneHtml[] = '</button>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+
+        $dropzoneHtml[] = '<div class="clearfix"></div>';
+        $dropzoneHtml[] = '<div class="panel panel-default">';
+        $dropzoneHtml[] = '<div class="panel-body">';
+        $dropzoneHtml[] = '<span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>';
+
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '<div class="panel-footer">';
+        $dropzoneHtml[] = Translation :: get('DropFileHereMessage');
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '</div>';
+
+        $this->addElement('static', null, sprintf(Translation :: get('FileName')), implode(PHP_EOL, $dropzoneHtml));
+        $this->addElement('hidden', $elementName . '_upload_data');
+
+        $calculator->addUploadWarningToForm($this);
+
+        $this->addElement('html', '</div>');
+
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                     'Plugin/Jquery/jquery.file.upload.js'));
+
+        $javascriptHtml = array();
+
+        $javascriptHtml[] = '<script type="text/javascript">';
+        $javascriptHtml[] = '$("#' . $elementName . '-upload-container").fileUpload({maxFilesize: ' .
+             $calculator->getMaximumUploadSize() . ', maxFiles: 1 });';
+        $javascriptHtml[] = '</script>';
+
+        $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
     }
 }
