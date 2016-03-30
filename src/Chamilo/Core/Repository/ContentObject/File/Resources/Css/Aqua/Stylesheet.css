@@ -2,16 +2,3 @@ ul.tree-menu li div a.file, ul.tree-menu li div a.type_file, ul.tree-menu li div
 	{
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
-
-#file-upload {
-	margin-bottom: 0px;
-}
-
-#file-upload .panel-body {
-	text-align: center;
-}
-
-#file-upload span.glyphicon {
-	font-size: 48px;
-	color: #406e8e;
-}
