@@ -34,7 +34,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $search_url = '#';
             $search = array();
 
-            $search['title'] = Translation:: get('SearchResults');
+            $search['title'] = Translation :: get('SearchResults');
 
             $search['url'] = $search_url;
             $search['class'] = 'search_results';
@@ -46,10 +46,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $menu = new Menu(
-            Request:: get(\Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY_ID),
+            Request :: get(\Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY_ID),
             $this->get_parent(),
-            $extra
-        );
+            $extra);
 
         if ($search_url)
         {
@@ -81,7 +80,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-//        $html[] = '<div id="action_bar_browser">';
+        // $html[] = '<div id="action_bar_browser">';
         $html[] = '<div class="row">';
 
         if ($this->get_menu() == null)
@@ -101,7 +100,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $html[] = $menu;
             $html[] = '<div class="col-md-10">';
         }
-        $html[] = Renderer:: factory($this->get_parent()->get_renderer(), $this)->as_html();
+        $html[] = Renderer :: factory($this->get_parent()->get_renderer(), $this)->as_html();
 
         if ($menu)
         {
@@ -127,7 +126,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function getButtonToolbarRenderer()
     {
-        if (!isset($this->buttonToolbarRenderer))
+        if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
@@ -138,9 +137,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $currentRenderer = $this->get_parent()->get_renderer();
 
                 $viewActions = new DropdownButton(
-                    Translation:: get($currentRenderer . 'View', null, Utilities :: COMMON_LIBRARIES),
-                    Theme:: getInstance()->getCommonImagePath('View/' . $currentRenderer)
-                );
+                    Translation :: get($currentRenderer . 'View', null, Utilities :: COMMON_LIBRARIES),
+                    Theme :: getInstance()->getCommonImagePath('View/' . $currentRenderer));
                 $buttonToolbar->addItem($viewActions);
 
                 foreach ($renderers as $renderer)
@@ -148,8 +146,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     if ($currentRenderer != $renderer)
                     {
                         $action = $this->get_url(
-                            array(\Chamilo\Core\Repository\External\Manager::PARAM_RENDERER => $renderer)
-                        );
+                            array(\Chamilo\Core\Repository\External\Manager :: PARAM_RENDERER => $renderer));
                         $classes = '';
                     }
                     else
@@ -160,22 +157,18 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                     $viewActions->addSubButton(
                         new SubButton(
-                            Translation:: get(
-                                (string) StringUtilities:: getInstance()->createString($renderer)->upperCamelize() .
-                                'View',
-                                null,
-                                Utilities :: COMMON_LIBRARIES
-                            ),
-                            Theme:: getInstance()->getImagePath(
+                            Translation :: get(
+                                (string) StringUtilities :: getInstance()->createString($renderer)->upperCamelize() .
+                                     'View',
+                                    null,
+                                    Utilities :: COMMON_LIBRARIES),
+                            Theme :: getInstance()->getImagePath(
                                 'Chamilo\Core\Repository',
-                                'View/' . StringUtilities:: getInstance()->createString($renderer)->upperCamelize()
-                            ),
+                                'View/' . StringUtilities :: getInstance()->createString($renderer)->upperCamelize()),
                             $action,
                             Button :: DISPLAY_LABEL,
                             false,
-                            $classes
-                        )
-                    );
+                            $classes));
                 }
             }
 
