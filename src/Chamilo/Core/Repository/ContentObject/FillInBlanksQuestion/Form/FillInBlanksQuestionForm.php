@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Form;
 use Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion\Storage\DataClass\FillInBlanksQuestion;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Theme;
 
 /**
  * $Id: fill_in_blanks_question_form.class.php 200 2009-11-13 12:30:04Z kariboe $

@@ -2,14 +2,17 @@
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 
 use Chamilo\Core\Repository\Common\ContentObjectResourceRenderer;
+use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\Forum\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -18,9 +21,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 use HTML_Table;
 use Pager;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: topic_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $

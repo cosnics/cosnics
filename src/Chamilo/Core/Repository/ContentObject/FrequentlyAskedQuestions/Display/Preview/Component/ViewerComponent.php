@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Preview\Component;
 
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\FrequentlyAskedQuestionsDisplaySupport;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\File\Path;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository

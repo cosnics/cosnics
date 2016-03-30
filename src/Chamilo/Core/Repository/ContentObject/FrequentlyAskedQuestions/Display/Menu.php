@@ -4,8 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
-use HTML_Menu;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_Menu;
 
 /**
  * The portfolio structure represented as a tree-menu

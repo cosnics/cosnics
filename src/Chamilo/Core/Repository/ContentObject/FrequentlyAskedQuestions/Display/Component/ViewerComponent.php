@@ -1,17 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Component;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataClass\FrequentlyAskedQuestions;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataClass\FrequentlyAskedQuestions;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Default viewer component that handles the visualization of the portfolio item or folder

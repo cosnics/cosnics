@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Component;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataClass\FrequentlyAskedQuestions;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 
 /**
  * Component that allows the user to move an item or folder to another parent folder

@@ -3,12 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display
 
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Form\RightsForm;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\FrequentlyAskedQuestionsComplexRights;
+use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 
 /**
  * Rights configuration of portfolio items and/or folders

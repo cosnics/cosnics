@@ -1,8 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -11,10 +15,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 
 /**
  * Component that allows the user to update the content of a portfolio item or folder
