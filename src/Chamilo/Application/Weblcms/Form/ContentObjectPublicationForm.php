@@ -182,7 +182,7 @@ class ContentObjectPublicationForm extends FormValidator
         $defaults[ContentObjectPublication :: PROPERTY_CATEGORY_ID] = Request:: get(Manager :: PARAM_CATEGORY);
         $defaults[self :: PROPERTY_FOREVER] = 1;
         $defaults[self :: PROPERTY_INHERIT] = self :: INHERIT_TRUE;
-        $defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ALL;
+        $defaults[self :: PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_SELECT;
 
         if (count($publications) == 1)
         {
@@ -636,6 +636,35 @@ class ContentObjectPublicationForm extends FormValidator
                 Path:: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'
             )
         );
+
+        $this->addFormRule(array($this, 'validate_rights_settings'));
+    }
+
+    /**
+     * Checks if the current combination of rights is allowed
+     */
+    public function validate_rights_settings($values)
+    {
+        if ($values[self::PROPERTY_INHERIT] == self::INHERIT_TRUE)
+        {
+            return true;
+        }
+
+        $errors = array();
+
+        if ($values[self::PROPERTY_RIGHT_OPTION] == self::RIGHT_OPTION_SELECT &&
+            empty($values['active_hidden_' . self::PROPERTY_TARGETS])
+        )
+        {
+            $errors[self::PROPERTY_RIGHT_OPTION] = Translation::get('InvalidRightsSelection');
+        }
+
+        if (count($errors) > 0)
+        {
+            return $errors;
+        }
+
+        return true;
     }
 
     /**
