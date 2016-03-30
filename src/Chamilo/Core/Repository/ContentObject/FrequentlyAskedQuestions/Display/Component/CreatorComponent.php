@@ -1,22 +1,22 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestionsItem\Storage\DataClass\FrequentlyAskedQuestionsItem;
+use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataClass\ComplexFrequentlyAskedQuestions;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataClass\FrequentlyAskedQuestions;
+use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestionsItem\Storage\DataClass\FrequentlyAskedQuestionsItem;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager;
 
 class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface
 {

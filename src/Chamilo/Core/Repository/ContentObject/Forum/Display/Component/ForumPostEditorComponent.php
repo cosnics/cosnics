@@ -1,16 +1,16 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Forum\Display\Component\ForumPostFormAction\ForumPostFormAction;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Form\ForumPostForm;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
-use Chamilo\Core\Repository\ContentObject\Forum\Display\Component\ForumPostFormAction\ForumPostFormAction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  *

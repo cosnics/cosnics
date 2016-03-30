@@ -2,9 +2,9 @@
 namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass;
 
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /*
  * Dataclass that describes a Forum Post Attachments. @author Maarten Volckaert - Hogeschool Gent - copied class content

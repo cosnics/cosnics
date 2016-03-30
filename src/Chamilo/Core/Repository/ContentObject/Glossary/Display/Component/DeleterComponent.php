@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Glossary\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\Manager;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 /**
  * $Id: browser.class.php 200 2009-11-13 12:30:04Z kariboe $

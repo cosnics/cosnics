@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\Display\Preview\Component;
 
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 
 class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Forum\Display\Preview\Manager implements
     ForumDisplaySupport

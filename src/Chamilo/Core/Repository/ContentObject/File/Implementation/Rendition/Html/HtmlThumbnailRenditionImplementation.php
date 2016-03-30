@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html;
 
+use Chamilo\Core\Repository\Ajax\Component\ThumbnailComponent;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\HtmlRenditionImplementation;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Repository\Ajax\Component\ThumbnailComponent;
 
 class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
