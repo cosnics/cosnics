@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Component
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Form\PeerAssessmentViewerForm;
 use Chamilo\Core\Repository\ContentObject\PeerAssessment\Storage\DataClass\PeerAssessment;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class ViewerComponent extends Manager
 {

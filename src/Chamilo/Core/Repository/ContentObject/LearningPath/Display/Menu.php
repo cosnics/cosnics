@@ -6,8 +6,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use HTML_Menu;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use HTML_Menu;
 
 /**
  *

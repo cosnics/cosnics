@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Storage;
 
-use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 
 /**
  * Portfolio datamanager

@@ -4,10 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\PreviewStorage;
 use Chamilo\Core\Repository\Display\PreviewResetSupport;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *

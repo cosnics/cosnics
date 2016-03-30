@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Component;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\DummyFeedback;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\DummyNotification;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\PreviewStorage;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository

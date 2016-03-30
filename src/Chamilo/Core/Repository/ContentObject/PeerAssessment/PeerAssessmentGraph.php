@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\PeerAssessment;
 
+use Chamilo\Core\Reporting\Viewer\Chart\pChamiloImage;
 use Chamilo\Libraries\File\Path;
 use CpChart\Classes\pData;
-use Chamilo\Core\Reporting\Viewer\Chart\pChamiloImage;
 use CpChart\Classes\pRadar;
 
 /**
