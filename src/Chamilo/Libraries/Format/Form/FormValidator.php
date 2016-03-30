@@ -11,7 +11,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_QuickForm;
 use HTML_QuickForm_RuleRegistry;
-use Chamilo\Core\Repository\Quota\Calculator;
 
 /**
  *
@@ -1264,20 +1263,48 @@ EOT;
                 Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'));
     }
 
-    public function addFileDropzone($elementName)
+    /**
+     *
+     * @param string $elementName
+     * @param string[] $dropzoneOptions
+     */
+    public function addSingleFileDropzone($elementName, $dropzoneOptions = array())
     {
-        $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-                (int) $this->get_owner_id()));
+        $dropzoneOptions['maxFiles'] = 1;
+        $dropzoneOptions['successCallbackFunction'] = 'chamilo.libraries.single.processUploadedFile';
+        $dropzoneOptions['removedfileCallbackFunction'] = 'chamilo.libraries.single.deleteUploadedFile';
 
+        $this->addFileDropzone('single', $elementName, $dropzoneOptions);
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                     'Plugin/Jquery/jquery.file.upload.single.js'));
+    }
+
+    /**
+     *
+     * @param string $elementName
+     * @param string[] $dropzoneOptions
+     */
+    public function addMultipleFileDropzone($elementName, $dropzoneOptions = array())
+    {
+        $this->addFileDropzone('multiple', $elementName, $dropzoneOptions);
+    }
+
+    /**
+     *
+     * @param string $uploadType
+     * @param string $elementName
+     * @param string[] $dropzoneOptions
+     */
+    public function addFileDropzone($uploadType = 'single', $elementName, $dropzoneOptions = array())
+    {
         $this->addElement('html', '<div id="' . $elementName . '-upload-container">');
 
+        $this->addElement('html', '<div id="' . $elementName . '-upload-input">');
         $this->addElement('file', $elementName, sprintf(Translation :: get('FileName')));
-        $this->addRule(
-            $elementName,
-            Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
-            'disk_quota');
+        $this->addElement('html', '</div>');
 
         $dropzoneHtml = array();
 
@@ -1322,9 +1349,12 @@ EOT;
         $this->addElement('static', null, sprintf(Translation :: get('FileName')), implode(PHP_EOL, $dropzoneHtml));
         $this->addElement('hidden', $elementName . '_upload_data');
 
-        $calculator->addUploadWarningToForm($this);
+        $dropzoneOptionsString = array();
 
-        $this->addElement('html', '</div>');
+        foreach ($dropzoneOptions as $optionKey => $optionValue)
+        {
+            $dropzoneOptionsString[] = $optionKey . ': \'' . $optionValue . '\'';
+        }
 
         $this->addElement(
             'html',
@@ -1335,10 +1365,12 @@ EOT;
         $javascriptHtml = array();
 
         $javascriptHtml[] = '<script type="text/javascript">';
-        $javascriptHtml[] = '$("#' . $elementName . '-upload-container").fileUpload({maxFilesize: ' .
-             $calculator->getMaximumUploadSize() . ', maxFiles: 1 });';
+        $javascriptHtml[] = '$("#' . $elementName . '-upload-container").fileUpload({' .
+             implode(', ', $dropzoneOptionsString) . '});';
         $javascriptHtml[] = '</script>';
 
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+
+        $this->addElement('html', '</div>');
     }
 }
