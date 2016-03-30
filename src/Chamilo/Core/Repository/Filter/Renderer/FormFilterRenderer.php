@@ -143,7 +143,8 @@ class FormFilterRenderer extends FilterRenderer
     public function build()
     {
         $this->renderer->setFormTemplate('<form {attributes}>{content}</form>');
-        $this->renderer->setElementTemplate('<div class="form-group"><label>{label}</label>{element}</div>');
+        $this->renderer->setElementTemplate(
+            '<div class="form-group form-group-sm"><label>{label}</label>{element}</div>');
 
         // title
         $this->form_validator->addElement(
@@ -153,19 +154,25 @@ class FormFilterRenderer extends FilterRenderer
             'class="form-control input-sm"');
 
         // category
-        $this->form_validator->addElement(
-            'select',
-            ContentObject :: PROPERTY_PARENT_ID,
-            Translation :: get('Category'),
-            $this->get_categories(),
-            'class="form-control input-sm"');
-        $this->form_validator->addElement(
-            'checkbox',
-            FilterData :: FILTER_CATEGORY_RECURSIVE,
-            null,
-            Translation :: get('SearchRecursive'));
 
-        $this->renderer->setElementTemplate('{element}', FilterData :: FILTER_CATEGORY_RECURSIVE);
+        $categories = $this->get_categories();
+
+        if (count($categories) > 2)
+        {
+            $this->form_validator->addElement(
+                'select',
+                ContentObject :: PROPERTY_PARENT_ID,
+                Translation :: get('Category'),
+                $categories,
+                'class="form-control input-sm"');
+            $this->form_validator->addElement(
+                'checkbox',
+                FilterData :: FILTER_CATEGORY_RECURSIVE,
+                null,
+                Translation :: get('SearchRecursive'));
+
+            $this->renderer->setElementTemplate('{element}', FilterData :: FILTER_CATEGORY_RECURSIVE);
+        }
 
         // creation date
         $creationGroup = array();
@@ -173,7 +180,7 @@ class FormFilterRenderer extends FilterRenderer
         $creationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_FROM_DATE,
-            Translation :: get('From'),
+            Translation :: get('DateFrom'),
             'id="creation_date_from" class="form-control input-sm input-date"');
 
         $creationToName = FilterData :: FILTER_CREATION_DATE . '[' . FilterData :: FILTER_TO_DATE . ']';
@@ -181,7 +188,7 @@ class FormFilterRenderer extends FilterRenderer
         $creationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_TO_DATE,
-            Translation :: get('To'),
+            Translation :: get('DateTo'),
             'id="creation_date_to" class="form-control input-sm input-date"');
 
         $this->form_validator->addGroup(
@@ -196,7 +203,7 @@ class FormFilterRenderer extends FilterRenderer
 
         $this->renderer->setGroupElementTemplate(
             '<div class="input-group input-group-date">
-        <span class="input-group-addon input-group-filter-date">{label}</span></span>{element}</div>',
+        <span class="input-group-addon input-group-filter-date input-sm">{label}</span></span>{element}</div>',
             FilterData :: FILTER_CREATION_DATE);
 
         // modification date
@@ -205,13 +212,13 @@ class FormFilterRenderer extends FilterRenderer
         $modificationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_FROM_DATE,
-            Translation :: get('From'),
+            Translation :: get('DateFrom'),
             'id="modification_date_from" class="form-control input-sm input-date"');
 
         $modificationGroup[] = $this->form_validator->createElement(
             'text',
             FilterData :: FILTER_TO_DATE,
-            Translation :: get('To'),
+            Translation :: get('DateTo'),
             'id="modification_date_to" class="form-control input-sm input-date"');
 
         $this->form_validator->addGroup(
@@ -226,7 +233,7 @@ class FormFilterRenderer extends FilterRenderer
 
         $this->renderer->setGroupElementTemplate(
             '<div class="input-group input-group-date">
-        <span class="input-group-addon input-group-filter-date">{label}</span></span>{element}</div>',
+        <span class="input-group-addon input-group-filter-date input-sm">{label}</span></span>{element}</div>',
             FilterData :: FILTER_MODIFICATION_DATE);
 
         // type
@@ -249,7 +256,7 @@ class FormFilterRenderer extends FilterRenderer
         // User view
         $user_views = $this->get_user_views();
 
-        if (count($user_views) > 0)
+        if (count($user_views) > 1)
         {
             $select = $this->form_validator->addElement(
                 'select',

@@ -131,6 +131,8 @@ abstract class DynamicTab
     {
         $html = array();
 
+        $html[] = '<div class="clearfix"></div>';
+
         $html[] = '</div>';
         $html[] = '</div>';
 
