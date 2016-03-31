@@ -25,6 +25,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
 
 class ImporterComponent extends Manager implements DelegateComponent
 {
@@ -116,8 +117,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                             Session :: register(Application :: PARAM_MESSAGES, $messages);
                         }
 
-                        $this->simple_redirect(
-                            array(self :: PARAM_ID => $filtered_content_object_ids[0]));
+                        $this->simple_redirect(array(self :: PARAM_ID => $filtered_content_object_ids[0]));
                     }
                     elseif (count($filtered_content_object_ids) == 0)
                     {
@@ -134,8 +134,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     }
                     else
                     {
-                        $this->simple_redirect(
-                            array(self :: PARAM_ID => $content_object_ids));
+                        $this->simple_redirect(array(self :: PARAM_ID => $content_object_ids));
                     }
                 }
                 else

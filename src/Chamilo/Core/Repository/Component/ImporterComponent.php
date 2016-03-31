@@ -1,22 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\Component;
 
-use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
-use Chamilo\Core\Repository\Common\Import\ImportParameters;
-use Chamilo\Core\Repository\Form\ContentObjectImportForm;
+use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -38,72 +31,17 @@ class ImporterComponent extends Manager
             throw new NotAllowedException();
         }
 
+        $type = $this->getRequest()->query->get(self :: PARAM_IMPORT_TYPE);
+        $contentObjectImportService = new ContentObjectImportService($type, $this->getWorkspace(), $this);
+
         $type = Request :: get(self :: PARAM_IMPORT_TYPE);
 
         if ($type)
         {
-            $import_form = ContentObjectImportForm :: factory(
-                $type,
-                $this->getWorkspace(),
-                $this,
-                'post',
-                $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)));
-
-            if ($import_form->validate())
+            if ($contentObjectImportService->hasFinished())
             {
-                $values = $import_form->exportValues();
-                $parent_id = $values[ContentObject :: PROPERTY_PARENT_ID];
-                $new_category_name = $values[ContentObjectImportForm :: NEW_CATEGORY];
-
-                if (! StringUtilities :: getInstance()->isNullOrEmpty($new_category_name, true))
-                {
-                    $new_category = new RepositoryCategory();
-                    $new_category->set_name($new_category_name);
-                    $new_category->set_parent($parent_id);
-                    $new_category->set_type_id($this->getWorkspace()->getId());
-                    $new_category->set_type($this->getWorkspace()->getWorkspaceType());
-                    
-                    if (! $new_category->create())
-                    {
-                        throw new \Exception(Translation :: get('CategoryCreationFailed'));
-                    }
-                    else
-                    {
-                        $category_id = $new_category->get_id();
-                    }
-                }
-                else
-                {
-                    $category_id = $parent_id;
-                }
-
-                if (isset($_FILES[ContentObjectImportForm :: IMPORT_FILE_NAME]))
-                {
-                    $file = FileProperties :: from_upload($_FILES[ContentObjectImportForm :: IMPORT_FILE_NAME]);
-                }
-                else
-                {
-                    $file = null;
-                }
-
-                $parameters = ImportParameters :: factory(
-                    $import_form->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
-                    $this->get_user_id(),
-                    $this->getWorkspace(),
-                    $category_id,
-                    $file,
-                    $values);
-                
-                $controller = ContentObjectImportController :: factory($parameters);
-                $content_object_ids = $controller->run();
-
-                $messages = $controller->get_messages_for_url();
-
-                Session :: register(self :: PARAM_MESSAGES, $messages);
-
-                $parameters = array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS);
-
-                $this->simple_redirect($parameters);
+                // Session :: register(self :: PARAM_MESSAGES, $controller->get_messages_for_url());
+                $this->simple_redirect(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS));
             }
             else
             {
@@ -119,7 +57,7 @@ class ImporterComponent extends Manager
                 $html = array();
 
                 $html[] = $this->render_header();
-                $html[] = $import_form->toHtml();
+                $html[] = $contentObjectImportService->renderForm();
                 $html[] = $this->render_footer();
 
                 return implode(PHP_EOL, $html);
@@ -133,20 +71,7 @@ class ImporterComponent extends Manager
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = '<div class="btn-group">';
-
-            foreach ($this->get_types() as $type => $name)
-            {
-
-                $html[] = '<a class="btn btn-default" href="' . $this->get_url(
-                    array(self :: PARAM_IMPORT_TYPE => $type)) . '">';
-                $html[] = '<img src="' . Theme :: getInstance()->getImagePath(Manager :: package(), 'Import/' . $type) .
-                     '" /> ';
-                $html[] = $name;
-                $html[] = '</a>';
-            }
-
-            $html[] = '</div>';
+            $html[] = $contentObjectImportService->renderTypeSelector($this->get_types());
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
