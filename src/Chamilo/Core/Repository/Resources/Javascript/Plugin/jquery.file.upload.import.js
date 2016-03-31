@@ -6,9 +6,10 @@ dropzoneCallbacks.chamilo = {
                 {
                     var viewButton = $(serverResponse.properties.viewButton);
                     var contentObjectId = serverResponse.properties.contentObjectId;
+                    var previewElement = $(file.previewElement);
                     
-                    $(file.previewElement).data('content-object-id', contentObjectId);
-                    $('.file-upload-buttons', $(file.previewElement)).prepend(viewButton);
+                    previewElement.data('content-object-id', contentObjectId);
+                    $('.file-upload-buttons', previewElement).prepend(viewButton);
                 },
                 prepareRequest : function(environment, file, xhrObject, formData)
                 {
@@ -38,3 +39,30 @@ dropzoneCallbacks.chamilo = {
         }
     }
 };
+
+(function($)
+{
+    function setDocumentTypeField()
+    {
+        var documentType = $('input[name="document_type"]:checked');
+        
+        if (documentType.val() == 0)
+        {
+            $('div#document_upload').show();
+            $('div#document_link').hide();
+            $('#import_button').hide();
+        }
+        else
+        {
+            $('div#document_upload').hide();
+            $('div#document_link').show();
+            $('#import_button').show();
+        }
+    }
+    
+    $(document).ready(function()
+    {
+        $(document).on('change', 'input[name="document_type"]', setDocumentTypeField);
+        setDocumentTypeField();
+    });
+})(jQuery);

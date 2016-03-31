@@ -1374,8 +1374,10 @@ EOT;
         $javascriptHtml = array();
 
         $javascriptHtml[] = '<script type="text/javascript">';
+        $javascriptHtml[] = '$(document).ready(function() {';
         $javascriptHtml[] = '$("#' . $elementName . '-upload-container").fileUpload({' .
              implode(', ', $dropzoneOptionsString) . '});';
+        $javascriptHtml[] = '});';
         $javascriptHtml[] = '</script>';
 
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
