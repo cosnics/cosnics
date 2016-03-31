@@ -1,90 +1,113 @@
-/**
- * Copyright (c) 2010, Sven Vanpoucke, Chamilo tree menu in jQuery plugin
- */
+Dropzone.autoDiscover = false;
+
+var dropzoneCallbacks = {};
 
 (function($)
 {
     $.fn.extend({
         fileUpload : function(options)
         {
+            var ajaxUri = getPath('WEB_PATH') + 'index.php';
             
             // Settings list and the default values
             var defaults = {
                 name : 'file',
                 maxFileSize : 100,
-                thumbnailWidth : 240,
-                thumbnailHeight : 200,
-                maxFiles : 1,
-                ajaxUri : getPath('WEB_PATH') + 'index.php',
+                thumbnailWidth : 200,
+                thumbnailHeight : 150,
+                maxFiles : null,
                 uploadUrl : ajaxUri + '?application=Chamilo\\Libraries\\Ajax&go=UploadTemporaryFile',
-                deleteUrl : ajaxUri,
-                deleteContext : 'Chamilo\\Libraries\\Ajax',
-                deleteComponent : 'DeleteTemporaryFile',
-                titleInputName : null
+                successCallbackFunction : null,
+                sendingCallbackFunction : null,
+                removedfileCallbackFunction : null
             };
             
-            var settings = $.extend(defaults, options), self = $(this);
+            var settings = $.extend(defaults, options);
+            var self = $(this), myDropzone, previewNode, previewTemplate;
+            var environment = {
+                container : self,
+                dropzone : myDropzone,
+                settings : settings
+            };
             
-            var elementContainer, previewNode, previewTemplate;
+            function getCallbackFunctionName(functionName)
+            {
+                var namespaces = functionName.split(".");
+                return namespaces.pop();
+            }
+            
+            function getCallbackFunctionNamespace(functionName)
+            {
+                var namespaces = functionName.split(".");
+                var func = namespaces.pop();
+                var context = dropzoneCallbacks;
+                
+                for (var i = 0; i < namespaces.length; i++)
+                {
+                    context = context[namespaces[i]];
+                }
+                
+                return context;
+            }
             
             function processUploadedFile(file, serverResponse)
             {
-                var fileData = {
-                    name : file.name,
-                    temporaryFileName : serverResponse.properties.temporaryFileName
-                };
+                var previewElement = $(file.previewElement);
+                var successCallbackFunction = settings.successCallbackFunction;
                 
-                if (settings.maxFiles == 1)
+                if (settings.maxFiles != null && getCurrentNumberOfFiles() >= settings.maxFiles)
                 {
-                    if (settings.titleInputName != null)
-                    {
-                        var titleField = $('input[name=' + settings.titleInputName + ']');
-                        
-                        if (titleField.val() == '')
-                        {
-                            titleField.val(file.name);
-                        }
-                    }
-                    
-                    $('input[type=hidden][name=' + settings.name + '_upload_data]').val(JSON.stringify(fileData));
+                    $('.panel', self).hide();
                 }
                 
-                $('.panel', elementContainer).hide();
-                $('.file-previews .thumbnail .progress', elementContainer).hide();
-                $('.file-previews .thumbnail button.cancel', elementContainer).hide();
+                $('.progress', previewElement).hide();
+                $(' button.cancel', previewElement).hide();
                 
-                $(file.previewElement).data('temporary-file-name', serverResponse.properties.temporaryFileName);
+                if (successCallbackFunction != null)
+                {
+                    var callbackFunctionNamespace = getCallbackFunctionNamespace(successCallbackFunction);
+                    var callbackFunctionName = getCallbackFunctionName(successCallbackFunction);
+                    
+                    callbackFunctionNamespace[callbackFunctionName](environment, file, serverResponse);
+                }
+            }
+            
+            function getCurrentNumberOfFiles()
+            {
+                return myDropzone.files.length;
+            }
+            
+            function prepareRequest(file, xhrObject, formData)
+            {
+                var sendingCallbackFunction = settings.sendingCallbackFunction;
+                
+                formData.append('filePropertyName', settings.name);
+                
+                if (settings.sendingCallbackFunction != null)
+                {
+                    var callbackFunctionNamespace = getCallbackFunctionNamespace(sendingCallbackFunction);
+                    var callbackFunctionName = getCallbackFunctionName(sendingCallbackFunction);
+                    
+                    callbackFunctionNamespace[callbackFunctionName](environment, file, xhrObject, formData);
+                }
             }
             
             function deleteUploadedFile(file, serverResponse)
             {
-                var temporaryFileName = $(file.previewElement).data('temporary-file-name');
+                var removedfileCallbackFunction = settings.removedfileCallbackFunction;
                 
-                var parameters = {
-                    'application' : settings.deleteContext,
-                    'go' : settings.deleteComponent,
-                    'file' : temporaryFileName
-                };
-                
-                var response = $.ajax({
-                    type : "POST",
-                    url : ajaxUri,
-                    data : parameters
-                }).success(function(json)
+                if (removedfileCallbackFunction != null)
                 {
-                    if (settings.maxFiles == 1)
-                    {
-                        if (settings.titleInputName != null)
-                        {
-                            var titleField = $('input[name=' + settings.titleInputName + ']');
-                            titleField.val('');
-                        }
-                        
-                        $('input[type=hidden][name=' + settings.name + '_upload_data]').val('');
-                    }
+                    var callbackFunctionNamespace = getCallbackFunctionNamespace(removedfileCallbackFunction);
+                    var callbackFunctionName = getCallbackFunctionName(removedfileCallbackFunction);
                     
-                    $('.panel', elementContainer).show();
-                });
+                    callbackFunctionNamespace[callbackFunctionName](environment, file, serverResponse);
+                }
+                
+                if (settings.maxFiles != null && getCurrentNumberOfFiles() < settings.maxFiles)
+                {
+                    $('.panel', self).show();
+                }
             }
             
             function determineTemplate()
@@ -95,13 +118,17 @@
                 previewNode.remove();
             }
             
+            function hideLegacyInput()
+            {
+                $('#' + settings.name + '-upload-input', self).hide();
+            }
+            
             function init()
             {
-                elementContainer = $(this);
-                $('input[name=' + settings.name + ']', elementContainer).parent().parent().parent().hide();
+                hideLegacyInput();
                 determineTemplate();
                 
-                $("#" + settings.name + "-upload", elementContainer).dropzone({
+                myDropzone = new Dropzone("#" + settings.name + "-upload", {
                     paramName : settings.name,
                     maxFiles : settings.maxFiles,
                     previewTemplate : previewTemplate,
@@ -115,6 +142,7 @@
                     init : function()
                     {
                         this.on("success", processUploadedFile);
+                        this.on("sending", prepareRequest);
                         this.on("removedfile", deleteUploadedFile);
                     }
                 });
