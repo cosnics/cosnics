@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -9,7 +10,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {

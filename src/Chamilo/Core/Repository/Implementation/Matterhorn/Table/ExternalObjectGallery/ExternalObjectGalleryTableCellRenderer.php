@@ -3,8 +3,8 @@ namespace Chamilo\Core\Repository\Implementation\Matterhorn\Table\ExternalObject
 
 use Chamilo\Core\Repository\External\ExternalObjectDisplay;
 use Chamilo\Core\Repository\External\Table\ExternalObjectGallery\DefaultExternalObjectGalleryTableCellRenderer;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGalleryTableCellRenderer
 {

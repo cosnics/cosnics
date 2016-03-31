@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs\Menu;
 
-use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\DataConnector;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Manager;
+use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Menu\TreeMenu\GenericTree;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * This class provides a navigation menu to allow a user to browse through repository categories
