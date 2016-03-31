@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_rating_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Question à évaluation chiffrée"
+Properties = "Propriétés"
+Percentage = "Pourcentage"
+Rating = "Evaluation"
+CorrectValue = "Valeur correcte"
+Weight = "Poids"
+Title = "Titre"
+Description = "Description"
+Hint = "Aide"

@@ -1,0 +1,42 @@
+ul.tree-menu li div a.task, ul.tree-menu li div a.type_task, ul.tree-menu li div a.type_task_default
+	{
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
+
+.ui-timepicker {
+	background-color: #a00007 !important;
+}
+
+.ui-datepicker {
+	background-color: #a00007 !important;
+}
+
+/* css for timepicker */
+.ui-timepicker-div .ui-widget-header {
+	margin-bottom: 8px;
+	background-color: #a00007 !important;
+}
+
+.ui-timepicker-div dl {
+	text-align: left;
+}
+
+.ui-timepicker-div dl dt {
+	height: 25px;
+	margin-bottom: -25px;
+}
+
+.ui-timepicker-div dl dd {
+	margin: 0 10px 10px 65px;
+}
+
+.ui-timepicker-div td {
+	font-size: 90%;
+}
+
+.ui-tpicker-grid-label {
+	background: none;
+	border: none;
+	margin: 0;
+	padding: 0;
+}

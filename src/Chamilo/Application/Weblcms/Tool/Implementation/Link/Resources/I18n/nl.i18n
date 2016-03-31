@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\link
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Links"
+TypeNameSingle = "Link"
+BrowserComponent = "Doorblader links"
+DeleteSelected = "Verwijder geselecteerde link"
+ViewerComponent = "Bekijk link"
+IntroductionPublisherComponent = "Publiceer introductie"
+MoverComponent = "Verplaats link"
+PublisherComponent = "Publiceer link"
+UpdaterComponent = "Bewerk link"
+CategoryMovercomponent = "Verplaats link"
+Properties = "Eigenschappen"
+URL = "URL"
