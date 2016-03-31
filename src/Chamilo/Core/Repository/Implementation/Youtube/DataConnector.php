@@ -1,19 +1,19 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Youtube;
 
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {

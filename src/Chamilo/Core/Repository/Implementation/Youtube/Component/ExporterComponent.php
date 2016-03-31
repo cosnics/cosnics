@@ -2,11 +2,11 @@
 namespace Chamilo\Core\Repository\Implementation\Youtube\Component;
 
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Session;
 
 class ExporterComponent extends Manager implements DelegateComponent
 {

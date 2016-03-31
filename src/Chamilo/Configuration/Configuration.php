@@ -326,6 +326,17 @@ class Configuration
     }
 
     /**
+     * Returns the registration contexts
+     *
+     * @return array
+     */
+    public function get_registration_contexts()
+    {
+        $registrations = $this->get_registrations();
+        return array_keys($registrations[Configuration::REGISTRATION_CONTEXT]);
+    }
+
+    /**
      *
      * @param string $type
      * @return \configuration\Registration[]
@@ -476,7 +487,8 @@ class Configuration
         $this->set(array('Chamilo\Configuration', 'debug', 'show_errors'), false);
         $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_cache'), true);
         $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_file_cache'), false);
-        
+        $this->set(array('Chamilo\Configuration', 'session', 'session_handler'), 'chamilo');
+
         $this->set(
             array('Chamilo\Configuration', 'storage', 'archive'), 
             Path :: getInstance()->getStoragePath('archive'));

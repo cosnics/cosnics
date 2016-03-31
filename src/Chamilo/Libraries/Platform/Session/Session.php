@@ -11,17 +11,22 @@ class Session
 
     public static function start()
     {
-        if (\Chamilo\Configuration\Configuration :: get_instance()->is_available() &&
-             \Chamilo\Configuration\Configuration :: get_instance()->is_connectable())
+        $configuration = \Chamilo\Configuration\Configuration::get_instance();
+
+        if ($configuration->is_available() && $configuration->is_connectable())
         {
-            $session_handler = new SessionHandler();
-            session_set_save_handler(
-                array($session_handler, 'open'),
-                array($session_handler, 'close'),
-                array($session_handler, 'read'),
-                array($session_handler, 'write'),
-                array($session_handler, 'destroy'),
-                array($session_handler, 'garbage'));
+            if($configuration->get_setting(array('Chamilo\Configuration', 'session', 'session_handler')) == 'chamilo')
+            {
+                $session_handler = new SessionHandler();
+                session_set_save_handler(
+                    array($session_handler, 'open'),
+                    array($session_handler, 'close'),
+                    array($session_handler, 'read'),
+                    array($session_handler, 'write'),
+                    array($session_handler, 'destroy'),
+                    array($session_handler, 'garbage')
+                );
+            }
 
             $session_key = \Chamilo\Configuration\Configuration :: get(
                 'Chamilo\Configuration',

@@ -3,13 +3,13 @@ namespace Chamilo\Core\Repository\Implementation\Youtube\Component;
 
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
 
 class UploaderComponent extends Manager implements DelegateComponent
 {
