@@ -234,7 +234,7 @@
 }
 
 .navbar-chamilo ul li div.chamilo-menu-item-account {
-	min-width: 300px;
+	min-width: 332px;
 	height: 136px;
 	overflow: hidden;
 	background-color: #2f3a66;
@@ -356,7 +356,7 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	left: 0;
 	right: 0;
 	top: 100px;
-	min-width: 300px;
+	min-width: 332px;
 	width: auto;
 	text-align: center;
 	color: white;

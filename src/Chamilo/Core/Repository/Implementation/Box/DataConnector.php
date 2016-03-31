@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Box;
 
+use boxclient;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
-use boxclient;
 
 require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'box-api/boxlibphp5.php';
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector

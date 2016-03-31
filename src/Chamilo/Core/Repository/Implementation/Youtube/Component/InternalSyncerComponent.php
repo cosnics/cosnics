@@ -4,11 +4,11 @@ namespace Chamilo\Core\Repository\Implementation\Youtube\Component;
 use Chamilo\Core\Repository\Implementation\Youtube\ExternalObject;
 use Chamilo\Core\Repository\Implementation\Youtube\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class InternalSyncerComponent extends Manager
 {

@@ -7,7 +7,7 @@
 
 .chamilo-menu-bar ul li div.chamilo-menu-item-account {
 	display: none;
-	width: 300px;
+	min-width: 332px;
 	height: 106px;
 	overflow: hidden;
 	background-color: #406e8e;
