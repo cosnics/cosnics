@@ -326,6 +326,17 @@ class Configuration
     }
 
     /**
+     * Returns the registration contexts
+     *
+     * @return array
+     */
+    public function get_registration_contexts()
+    {
+        $registrations = $this->get_registrations();
+        return array_keys($registrations[Configuration::REGISTRATION_CONTEXT]);
+    }
+
+    /**
      *
      * @param string $type
      * @return \configuration\Registration[]
