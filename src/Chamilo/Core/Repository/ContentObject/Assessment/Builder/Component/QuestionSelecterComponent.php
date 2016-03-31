@@ -60,7 +60,6 @@ class QuestionSelecterComponent extends Manager
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_MERGE_ASSESSMENT,
-                            \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_PUBLISHER,
                             \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => Request :: get(
                                 \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID))),
                     Translation :: get('MergeAssessment')));

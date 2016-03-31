@@ -83,7 +83,6 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
 
             $parameters = $this->get_parameters();
             $parameters[\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID] = $object_ids;
-            $parameters[\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\Viewer\Manager :: ACTION_PUBLISHER;
 
             $form = new PublicationForm(
                 PublicationForm :: TYPE_CREATE,

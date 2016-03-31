@@ -89,7 +89,6 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
                     $choices,
                     $this->get_url(
                         array(
-                            \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_PUBLISHER,
                             \Chamilo\Core\Repository\Viewer\Manager :: PARAM_CONTENT_OBJECT_TYPE => Request :: get(
                                 \Chamilo\Core\Repository\Viewer\Manager :: PARAM_CONTENT_OBJECT_TYPE),
                             \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => $this->get_repo_objects())));

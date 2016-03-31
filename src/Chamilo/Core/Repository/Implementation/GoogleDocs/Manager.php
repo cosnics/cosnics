@@ -126,14 +126,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     }
 
     /*
-     * (non-PHPdoc) @see common/extensions/external_repository_manager/Manager#is_ready_to_be_used()
-     */
-    public function is_ready_to_be_used()
-    {
-        return false;
-    }
-
-    /*
      * (non-PHPdoc) @see
      * application/common/external_repository_manager/ExternalRepositoryManager#get_external_repository_actions()
      */

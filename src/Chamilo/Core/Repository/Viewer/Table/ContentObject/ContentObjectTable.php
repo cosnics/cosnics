@@ -55,10 +55,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
         if ($this->get_component()->get_maximum_select() != Manager :: SELECT_SINGLE)
         {
             $actions->add_form_action(
-                new TableFormAction(
-                    $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_PUBLISHER)),
-                    Translation :: get('PublishSelected'),
-                    false));
+                new TableFormAction($this->get_component()->get_url(), Translation :: get('PublishSelected'), false));
         }
 
         return $actions;

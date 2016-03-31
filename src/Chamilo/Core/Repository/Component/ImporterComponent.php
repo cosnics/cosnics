@@ -62,7 +62,7 @@ class ImporterComponent extends Manager
                     $new_category->set_parent($parent_id);
                     $new_category->set_type_id($this->getWorkspace()->getId());
                     $new_category->set_type($this->getWorkspace()->getWorkspaceType());
-
+                    
                     if (! $new_category->create())
                     {
                         throw new \Exception(Translation :: get('CategoryCreationFailed'));
@@ -93,8 +93,9 @@ class ImporterComponent extends Manager
                     $category_id,
                     $file,
                     $values);
+                
                 $controller = ContentObjectImportController :: factory($parameters);
-                $controller->run();
+                $content_object_ids = $controller->run();
 
                 $messages = $controller->get_messages_for_url();
 
