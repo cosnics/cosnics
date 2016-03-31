@@ -131,8 +131,7 @@ button.btn {
 	text-shadow: none;
 }
 
-a, .ui-widget-content a:not(.btn )
-{
+a, .ui-widget-content a:not(.btn ) {
 	color: #406e8e;
 	text-decoration: none;
 	font-weight: bold;
@@ -267,7 +266,7 @@ ol.breadcrumb a {
 	text-align: center;
 }
 
-.file-upload span.glyphicon {
+.file-upload .panel .glyphicon {
 	font-size: 48px;
 	color: #406e8e;
 }
@@ -285,4 +284,16 @@ ol.breadcrumb a {
 	font-size: 18px;
 	margin-top: 5px;
 	margin-bottom: 5px;
+}
+
+.file-upload-no-preview {
+	width: 200px;
+	height: 150px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.file-upload-no-preview .glyphicon {
+	font-size: 100px;
+	line-height: 150px;
 }

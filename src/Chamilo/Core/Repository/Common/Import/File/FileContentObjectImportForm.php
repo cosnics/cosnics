@@ -65,11 +65,6 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="document_link">');
         $this->add_textfield(self :: PROPERTY_LINK, null, false);
         $this->addElement('html', '</div>');
-
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'FileImportForm.js'));
     }
 
     public function setDefaults($defaults = array ())
