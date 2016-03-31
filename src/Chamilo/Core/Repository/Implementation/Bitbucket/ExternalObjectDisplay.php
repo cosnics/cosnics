@@ -2,12 +2,12 @@
 namespace Chamilo\Core\Repository\Implementation\Bitbucket;
 
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
+use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 
 class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalObjectDisplay
 {
