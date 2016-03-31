@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\geolocation
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Lieux"
+LocationsSummary = "Résumé des lieux"
+BrowserComponent = "Parcourir des lieux"
+GeoLocationToolViewerComponent = "Voir les lieux"
+EvaluateComponent = "Evaluer les lieux"
+IntroductionPublisherComponent = "Publier une introduction"
+ReportingViewerComponent = "Rapports"
+UpdaterComponent = "Modifier le lieu"
