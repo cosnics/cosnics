@@ -38,33 +38,36 @@ class Manager extends InternalCalendar
      */
     public function getEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
-        $requestedSourceType, $fromDate, $toDate)
+        $requestedSourceType, $fromDate, $toDate
+    )
     {
         $events = array();
 
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
-        $packageContext = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
-        $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($packageContext);
+        $packageContext = ClassnameUtilities:: getInstance()->getNamespaceParent(__NAMESPACE__, 4);
+        $packageName = ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($packageContext);
 
-        $activeAvailability = $availabilityService->getAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
-            $packageContext,
-            $packageName);
-
-        if ($activeAvailability instanceof Availability && $activeAvailability->getAvailability() == 1)
+        if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
+            $calendarRendererProvider->getDataUser(), $packageContext, $packageName
+        )
+        )
         {
             $condition = $this->getConditions($calendarRendererProvider->getDataUser());
-            $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-                ContentObjectPublication :: class_name(),
-                new DataClassRetrievesParameters($condition));
+
+            $publications = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieves(
+                ContentObjectPublication:: class_name(),
+                new DataClassRetrievesParameters($condition)
+            );
 
             while ($publication = $publications->next_result())
             {
-                if (! WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+                if (!WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
                     WeblcmsRights :: VIEW_RIGHT,
                     $publication->get_id(),
                     WeblcmsRights :: TYPE_PUBLICATION,
-                    $publication->get_course_id()))
+                    $publication->get_course_id()
+                )
+                )
                 {
                     continue;
                 }
@@ -80,11 +83,12 @@ class Manager extends InternalCalendar
     /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
     public function getConditions($user)
     {
-        $user_courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
+        $user_courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager:: retrieve_all_courses_from_user($user);
         $course_ids = array();
 
         while ($course = $user_courses->next_result())
@@ -95,31 +99,40 @@ class Manager extends InternalCalendar
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_TOOL),
-            array('Calendar', 'Assignment'));
+                ContentObjectPublication:: class_name(),
+                ContentObjectPublication :: PROPERTY_TOOL
+            ),
+            array('Calendar', 'Assignment')
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_HIDDEN),
-            new StaticConditionVariable(0));
+                ContentObjectPublication:: class_name(),
+                ContentObjectPublication :: PROPERTY_HIDDEN
+            ),
+            new StaticConditionVariable(0)
+        );
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID),
-            $course_ids);
+                ContentObjectPublication:: class_name(),
+                ContentObjectPublication :: PROPERTY_COURSE_ID
+            ),
+            $course_ids
+        );
         $subselect_condition = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-            array(CalendarEvent :: class_name(), Assignment :: class_name()));
+            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_TYPE),
+            array(CalendarEvent:: class_name(), Assignment:: class_name())
+        );
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            ContentObject :: get_table_name(),
+                ContentObjectPublication:: class_name(),
+                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID
+            ),
+            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_ID),
+            ContentObject:: get_table_name(),
             $subselect_condition,
             null,
-            \Chamilo\Core\Repository\Storage\DataManager :: get_instance());
+            \Chamilo\Core\Repository\Storage\DataManager:: get_instance()
+        );
 
         return new AndCondition($conditions);
     }
@@ -130,12 +143,12 @@ class Manager extends InternalCalendar
      */
     public function getCalendars()
     {
-        $package = \Chamilo\Application\Weblcms\Manager :: package();
+        $package = \Chamilo\Application\Weblcms\Manager:: package();
 
         $calendar = new AvailableCalendar();
-        $calendar->setIdentifier(ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($package));
+        $calendar->setIdentifier(ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($package));
         $calendar->setType($package);
-        $calendar->setName(Translation :: get('TypeName', null, $package));
+        $calendar->setName(Translation:: get('TypeName', null, $package));
 
         return array($calendar);
     }
