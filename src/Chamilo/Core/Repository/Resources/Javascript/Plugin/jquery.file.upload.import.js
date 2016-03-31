@@ -4,21 +4,35 @@ dropzoneCallbacks.chamilo = {
             import : {
                 processUploadedFile : function(environment, file, serverResponse)
                 {
-                    $(file.previewElement).data('content-object-id', serverResponse.properties.contentObjectId);
+                    var viewButton = $(serverResponse.properties.viewButton);
+                    var contentObjectId = serverResponse.properties.contentObjectId;
                     
-                    // Add view button
+                    $(file.previewElement).data('content-object-id', contentObjectId);
+                    $('.file-upload-buttons', $(file.previewElement)).prepend(viewButton);
                 },
                 prepareRequest : function(environment, file, xhrObject, formData)
                 {
-                    // Retrieve the chosen repository category and add it to the
-                    // form data
+                    var selectedCategory = $('#parent_id').val();
+                    formData.append('parentId', selectedCategory);
                 },
                 deleteUploadedFile : function(environment, file, serverResponse)
                 {
                     var contentObjectId = $(file.previewElement).data('content-object-id');
-                    alert(contentObjectId);
                     
-                    // Do AJAX call to delete content object again
+                    var ajaxUri = getPath('WEB_PATH') + 'index.php';
+                    var temporaryFileName = $(file.previewElement).data('temporary-file-name');
+                    
+                    var parameters = {
+                        'application' : 'Chamilo\\Core\\Repository\\Ajax',
+                        'go' : 'DeleteFile',
+                        'content_object_id' : contentObjectId
+                    };
+                    
+                    var response = $.ajax({
+                        type : "POST",
+                        url : ajaxUri,
+                        data : parameters
+                    });
                 }
             }
         }

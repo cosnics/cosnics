@@ -15,4 +15,5 @@ abstract class Manager extends AjaxManager
     const ACTION_CATEGORY_MENU_FEED = 'XmlRepositoryCategoryMenuFeed';
     const ACTION_THUMBNAIL = 'Thumbnail';
     const ACTION_IMPORT_FILE = 'ImportFile';
+    const ACTION_DELETE_FILE = 'DeleteFile';
 }

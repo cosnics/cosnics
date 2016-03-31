@@ -1313,7 +1313,7 @@ EOT;
         $dropzoneHtml[] = '<div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
-        $dropzoneHtml[] = '<div>';
+        $dropzoneHtml[] = '<div class="file-upload-buttons">';
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-warning cancel">';
         $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>';
         $dropzoneHtml[] = '</button>';

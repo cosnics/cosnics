@@ -60,11 +60,11 @@ abstract class AjaxManager extends Application
     {
         $getValue = Request :: get($parameter);
 
-        if (! $getValue)
+        if (! isset($getValue))
         {
             $postValue = Request :: post($parameter);
 
-            if (! $postValue)
+            if (! isset($postValue))
             {
                 return null;
             }

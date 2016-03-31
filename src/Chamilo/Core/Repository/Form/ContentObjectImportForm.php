@@ -83,7 +83,7 @@ abstract class ContentObjectImportForm extends FormValidator
                 'select',
                 ContentObject :: PROPERTY_PARENT_ID,
                 Translation :: get('CategoryTypeName'),
-                $this->get_categories());
+                $this->get_categories(), array('id' => 'parent_id'));
             $category_group[] = $this->createElement(
                 'image',
                 'add_category',
