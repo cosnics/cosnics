@@ -37,11 +37,11 @@ class HomeComponent extends Manager implements DelegateComponent
 
         $html[] = '<div class="row">';
 
-        $html[] = '<div class="col-md-10">';
+        $html[] = '<div class="col-md-9">';
         $html[] = $this->getCourseListRenderer()->as_html();
         $html[] = '</div>';
 
-        $html[] = '<div class="col-md-2">';
+        $html[] = '<div class="col-md-3">';
         $html[] = $this->renderMenu();
         $html[] = '</div>';
 
