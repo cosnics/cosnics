@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\File\Form;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -38,66 +38,21 @@ class FileForm extends ContentObjectForm
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 (int) $this->get_owner_id()));
 
-        // $this->addElement('file', 'file', sprintf(Translation :: get('FileName')));
-        // $this->addRule(
-        // 'file',
-        // Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
-        // 'disk_quota');
+        $this->addSingleFileDropzone(
+            'file',
+            array(
+                'maxFilesize' => $calculator->getMaximumUploadSize(),
+                'titleInputName' => ContentObject :: PROPERTY_TITLE));
 
-        // $dropzoneHtml = array();
+        $this->addRule(
+            'file',
+            Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
+            'disk_quota');
 
-        // $dropzoneHtml[] = '<div id="file-upload">
-        // <div class="files" id="previews">
-        // <div id="template" class="thumbnail pull-left">
-        // <span class="preview"><img data-dz-thumbnail /></span>
-        // <div class="caption">
-        // <h3 data-dz-name></h3>
-        // <strong class="error text-danger" data-dz-errormessage></strong>
-        // <p class="size" data-dz-size></p>
-        // <div>
-        // <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-        // aria-valuenow="0">
-        // <div class="progress-bar progress-bar-success" style="width: 0%;" data-dz-uploadprogress></div>
-        // </div>
-        // </div>
-        // <div>
-        // <button data-dz-remove class="btn btn-warning cancel">
-        // <i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
-        // </button>
-        // <button data-dz-remove class="btn btn-danger delete">
-        // <i class="glyphicon glyphicon-trash"></i> <span>Delete</span>
-        // </button>
-        // </div>
-        // </div>
-        // </div>
-        // </div>';
-
-        // $dropzoneHtml[] = '<div class="clearfix"></div>';
-        // $dropzoneHtml[] = '<div class="panel panel-default">';
-        // $dropzoneHtml[] = '<div class="panel-body">';
-        // $dropzoneHtml[] = '<span class="actions"><span class="glyphicon glyphicon-upload"></span>&nbsp;<span
-        // class="glyphicon glyphicon-plus-sign fileinput-button dz-clickable"></span></span>';
-
-        // $dropzoneHtml[] = '</div>';
-        // $dropzoneHtml[] = '<div class="panel-footer">';
-        // $dropzoneHtml[] = Translation :: get('DropFileHereMessage');
-        // $dropzoneHtml[] = '</div>';
-        // $dropzoneHtml[] = '</div>';
-        // $dropzoneHtml[] = '</div>';
-
-        // $this->addElement('static', null, sprintf(Translation :: get('FileName')), implode(PHP_EOL, $dropzoneHtml));
-        // $this->addElement('hidden', 'file_upload_data');
-
-        // $calculator->addUploadWarningToForm($this);
-
-        $this->addFileDropzone('file');
+        $calculator->addUploadWarningToForm($this);
 
         $this->addFormRule(array($this, 'check_document_form'));
         $this->addElement('category');
-//         $this->addElement(
-//             'html',
-//             ResourceManager :: get_instance()->get_resource_html(
-//                 Path :: getInstance()->getJavascriptPath(File :: package(), true) . 'fileUpload.js'));
     }
 
     protected function build_editing_form()
@@ -267,8 +222,6 @@ class FileForm extends ContentObjectForm
         {
             return true;
         }
-
-        var_dump($errors);
 
         return $errors;
     }
