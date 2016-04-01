@@ -1,4 +1,4 @@
-.<?php
+<?php
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;

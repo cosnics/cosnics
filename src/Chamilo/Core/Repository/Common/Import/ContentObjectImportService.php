@@ -5,11 +5,6 @@ use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\File\Properties\FileProperties;
 
 /**
  *
@@ -151,50 +146,17 @@ class ContentObjectImportService
     {
         if ($this->getForm()->validate())
         {
-            $values = $this->getForm()->exportValues();
-            $parent_id = $values[ContentObject :: PROPERTY_PARENT_ID];
-            $new_category_name = $values[ContentObjectImportForm :: NEW_CATEGORY];
-
-            if (! StringUtilities :: getInstance()->isNullOrEmpty($new_category_name, true))
-            {
-                $new_category = new RepositoryCategory();
-                $new_category->set_name($new_category_name);
-                $new_category->set_parent($parent_id);
-                $new_category->set_type_id($this->getWorkspace()->getId());
-                $new_category->set_type($this->getWorkspace()->getWorkspaceType());
-
-                if (! $new_category->create())
-                {
-                    throw new \Exception(Translation :: get('CategoryCreationFailed'));
-                }
-                else
-                {
-                    $category_id = $new_category->get_id();
-                }
-            }
-            else
-            {
-                $category_id = $parent_id;
-            }
-
-            if (isset($_FILES[ContentObjectImportForm :: IMPORT_FILE_NAME]))
-            {
-                $file = FileProperties :: from_upload($_FILES[ContentObjectImportForm :: IMPORT_FILE_NAME]);
-            }
-            else
-            {
-                $file = null;
-            }
-
-            $parameters = ImportParameters :: factory(
-                $this->getForm()->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
+            $formProcessorFactory = FormProcessorFactory :: getInstance();
+            $formProcessor = $formProcessorFactory->getFormProcessor(
+                $this->getType(),
                 $this->getApplication()->getUser()->getId(),
                 $this->getWorkspace(),
-                $category_id,
-                $file,
-                $values);
+                $this->getForm()->exportValues(),
+                $this->getApplication()->getRequest());
 
-            $controller = ContentObjectImportController :: factory($parameters);
+            $importParameters = $formProcessor->getImportParameters();
+
+            $controller = ContentObjectImportController :: factory($importParameters);
             $this->contentObjectIds = $controller->run();
 
             return true;
