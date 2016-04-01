@@ -13,6 +13,7 @@ class ZipDefaultExportImplementation extends ZipExportImplementation
     public function render()
     {
         $export_parameters = new ExportParameters(
+            $this->get_context()->get_parameters()->getWorkspace(),
             $this->get_context()->get_parameters()->get_user(), 
             ContentObjectExport :: FORMAT_ICAL, 
             array($this->get_content_object()->get_id()));
