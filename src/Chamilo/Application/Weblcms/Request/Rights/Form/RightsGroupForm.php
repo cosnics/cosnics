@@ -155,4 +155,3 @@ class RightsGroupForm extends FormValidator
         return true;
     }
 }
-?>
