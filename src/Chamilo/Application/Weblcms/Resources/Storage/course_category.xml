@@ -6,6 +6,7 @@
 		<property name="parent_id" type="integer" notnull="1" default="0" />
 		<property name="display_order" type="integer" unsigned="1" notnull="1" />
 		<property name="code" type="text" length="25" default="" />
+		<property name="state" type="integer" notnull="1" default="0" />
 	</properties>
 	<index name="parent_id">
 		<indexproperty name="parent_id" />
