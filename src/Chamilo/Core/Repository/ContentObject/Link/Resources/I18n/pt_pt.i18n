@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\link
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Link"
+Properties = "Properties"
+URL = "URI"
+ShowInIframe = "Show in iframe"
+Linker = ""
+Title = ""
+Description = ""
+ShowInIFrame = ""
+DeleteSelected = ""
+LinkToolBrowserComponent = ""
+LinkToolIntroductionPublisherComponent = ""
+LinkToolMoverComponent = ""
+LinkToolPublisherComponent = ""
+LinkToolUpdaterComponent = ""
+LinkToolViewerComponent = ""
