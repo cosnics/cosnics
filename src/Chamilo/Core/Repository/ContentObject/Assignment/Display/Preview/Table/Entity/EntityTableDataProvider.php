@@ -38,11 +38,13 @@ class EntityTableDataProvider extends \Chamilo\Core\Repository\ContentObject\Ass
 
         for ($i = 1; $i <= 10; $i ++)
         {
-            $user = new User();
-            $user->set_lastname('User');
-            $user->set_firstname('Test ' . $i);
-            $user->set_email('test.' . $i . '@user.com');
-            $user->set_username('test.' . $i . '@user.com');
+            $user = array();
+            $user[EntityTableColumnModel::PROPERTY_NAME] = 'Preview User ' . $i;
+//            $user = new User();
+//            $user->set_lastname('User');
+//            $user->set_firstname('Test ' . $i);
+//            $user->set_email('test.' . $i . '@user.com');
+//            $user->set_username('test.' . $i . '@user.com');
 
             $users[] = $user;
         }
