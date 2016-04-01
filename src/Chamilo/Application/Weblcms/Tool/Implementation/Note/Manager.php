@@ -1,4 +1,5 @@
-3<?php
+<?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Note;
 
 use Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note;
