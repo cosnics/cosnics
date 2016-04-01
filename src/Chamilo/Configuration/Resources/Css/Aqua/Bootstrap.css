@@ -23,13 +23,33 @@ a:focus {
 }
 
 .dropdown-menu>li>a {
-	padding: 3px 32px;
+	/* 	padding: 3px 32px; */
+	
+}
+
+.dropdown-menu>li>a>img, .dropdown-menu>li>a>span.inline-glyph, .btn>img,
+	.btn>span.inline-glyph {
+	margin-right: 10px;
+}
+
+.dropdown-menu>li>a.selected>img, .dropdown-menu>li>a.selected>span.glyphicon
+	{
+	display: none;
+}
+
+.dropdown-menu>li>a.selected, .dropdown-menu>li>a.not-selected {
+	padding-left: 46px;
+}
+
+.dropdown-menu>li>a.not-selected {
+	opacity: 0.5;
 }
 
 .dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
 	background-image: url("../../Images/Aqua/Background/Checkmark.png");
-	background-position: 12px center;
+	background-position: 20px center;
 	background-repeat: no-repeat;
+
 }
 
 .action-bar-search, .action-bar-search:hover, .action-bar-search:active,
@@ -131,7 +151,7 @@ button.btn {
 	text-shadow: none;
 }
 
-a, .ui-widget-content a:not(.btn) {
+a, .ui-widget-content a:not (.btn ) {
 	color: #406e8e;
 	text-decoration: none;
 	font-weight: bold;

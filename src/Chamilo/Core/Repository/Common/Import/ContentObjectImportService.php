@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Common\Import;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -123,13 +122,13 @@ class ContentObjectImportService
         if (! isset($this->form))
         {
             $this->form = ContentObjectImportForm :: factory(
-                $this->getType(),
-                $this->getWorkspace(),
-                $this->getApplication(),
-                'post',
+                $this->getType(), 
+                $this->getWorkspace(), 
+                $this->getApplication(), 
+                'post', 
                 $this->getApplication()->get_url(array(self :: PARAM_IMPORT_TYPE => $this->getType())));
         }
-
+        
         return $this->form;
     }
 
@@ -148,17 +147,17 @@ class ContentObjectImportService
         {
             $formProcessorFactory = FormProcessorFactory :: getInstance();
             $formProcessor = $formProcessorFactory->getFormProcessor(
-                $this->getType(),
-                $this->getApplication()->getUser()->getId(),
-                $this->getWorkspace(),
-                $this->getForm()->exportValues(),
+                $this->getType(), 
+                $this->getApplication()->getUser()->getId(), 
+                $this->getWorkspace(), 
+                $this->getForm()->exportValues(), 
                 $this->getApplication()->getRequest());
-
+            
             $importParameters = $formProcessor->getImportParameters();
-
+            
             $controller = ContentObjectImportController :: factory($importParameters);
             $this->contentObjectIds = $controller->run();
-
+            
             return true;
         }
         else
@@ -174,27 +173,5 @@ class ContentObjectImportService
     public function renderForm()
     {
         return $this->getForm()->toHtml();
-    }
-
-    public function renderTypeSelector($availableTypes = array())
-    {
-        $html = array();
-
-        $html[] = '<div class="btn-group">';
-
-        foreach ($availableTypes as $type => $name)
-        {
-            $imageContext = \Chamilo\Core\Repository\Manager :: package();
-
-            $html[] = '<a class="btn btn-default" href="' .
-                 $this->getApplication()->get_url(array(self :: PARAM_IMPORT_TYPE => $type)) . '">';
-            $html[] = '<img src="' . Theme :: getInstance()->getImagePath($imageContext, 'Import/' . $type) . '" /> ';
-            $html[] = $name;
-            $html[] = '</a>';
-        }
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
     }
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Menu\Renderer\Menu;
 use Chamilo\Core\Menu\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  *
@@ -116,30 +117,28 @@ abstract class Renderer
     public function render()
     {
         $user = $this->get_user();
-
-        if (! $user && !$this->isMenuAvailableAnonymously())
+        
+        if (! $user instanceof User && ! $this->isMenuAvailableAnonymously())
         {
             return;
-        }
-
-        $userRights = array();
-
-        if($user)
-        {
-            $userRights = $this->getItemService()->determineRightsForUser($user);
         }
         
         $html = array();
         
         $html[] = $this->display_menu_header();
         
-        foreach ($this->getRootItems() as $item)
+        if ($user)
         {
-            if ($userRights[$item->get_id()])
+            $userRights = $this->getItemService()->determineRightsForUser($user);
+            
+            foreach ($this->getRootItems() as $item)
             {
-                if (! $item->is_hidden())
+                if ($userRights[$item->get_id()])
                 {
-                    $html[] = \Chamilo\Core\Menu\Renderer\Item\Renderer :: toHtml($this, $item);
+                    if (! $item->is_hidden())
+                    {
+                        $html[] = \Chamilo\Core\Menu\Renderer\Item\Renderer :: toHtml($this, $item);
+                    }
                 }
             }
         }

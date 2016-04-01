@@ -29,7 +29,7 @@ class IntroductionPage extends InstallWizardPage
         if ($phpVersion >= 5.4)
         {
             $html = array();
-            $html[] = '<div class="normal-message" style="margin-bottom: 39px; margin-top: 30px;">';
+            $html[] = '<div class="alert alert-info" style="margin-bottom: 39px; margin-top: 30px;">';
             $html[] = 'From the looks of it, Chamilo is currently not installed on your system.';
             $html[] = '<br />';
             $html[] = '<br />';

@@ -37,3 +37,4 @@ ObjectsImportedButNoneUseable = "De objecten werden geimporteerd, helaas zijn ze
 MultipleObjectsImportedButOneUseable = "Meedere objecten werden geimporteerd, helaas is slechts een bruikbaar in de huidige context"
 ContentObjectNotCreated = "Content object niet aangemaakt"
 BrowserComponent = "Doorblader repository"
+SharedObject = "Gedeeld object"

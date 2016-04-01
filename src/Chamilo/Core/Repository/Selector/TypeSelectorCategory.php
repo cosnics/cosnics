@@ -78,7 +78,7 @@ class TypeSelectorCategory
 
     /**
      *
-     * @return \core\repository\ContentObjectTypeSelectorOption[]
+     * @return \Chamilo\Core\Repository\Selector\TypeSelectorOption[]
      */
     public function get_options()
     {

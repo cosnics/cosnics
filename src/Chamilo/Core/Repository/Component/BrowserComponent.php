@@ -183,7 +183,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     {
                         $action = $this->get_url(
                             array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => $renderer));
-                        $classes = '';
+                        $classes = 'not-selected';
                     }
                     else
                     {
