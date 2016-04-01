@@ -39,6 +39,11 @@ class RepositoryImplementationCategoryItem extends CategoryItem
 
             while ($instance = $instances->next_result())
             {
+                if(!$instance->is_enabled())
+                {
+                    continue;
+                }
+                
                 $sysImagePath = Theme :: getInstance()->getImagePath(
                     $instance->get_implementation(),
                     'Menu',
