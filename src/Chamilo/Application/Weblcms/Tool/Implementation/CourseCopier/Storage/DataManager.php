@@ -77,13 +77,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ContentObjectPublication :: class_name(),
                 $id);
 
-            $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() .
+            $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $publication->get_tool() .
                  '\\Storage\\DataClass\\Publication';
             $publication_extension_exists = class_exists($possible_publication_class);
 
             if ($publication_extension_exists)
             {
-                $datamanager_class = 'Chamilo\Application\Weblcms\Tool\\' . $publication->get_tool() .
+                $datamanager_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $publication->get_tool() .
                      '\\Storage\\DataManager';
 
                 $publication_extension = $datamanager_class :: retrieve(
