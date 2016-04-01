@@ -37,7 +37,7 @@ class ContentObjectResourceRenderer
         $this->dom_document->removeChild($this->dom_document->firstChild);
         $this->dom_xpath = new DOMXPath($this->dom_document);
 
-        if (! $this->full_html)
+        if (!$this->full_html)
         {
             $body_nodes = $this->dom_xpath->query('body/*');
             $fragment = $this->dom_document->createDocumentFragment();
@@ -71,11 +71,12 @@ class ContentObjectResourceRenderer
 
             try
             {
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
-                    $source);
+                $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
+                    ContentObject:: class_name(),
+                    $source
+                );
 
-                if (! $object instanceof ContentObject)
+                if (!$object instanceof ContentObject)
                 {
                     continue;
                 }
@@ -85,18 +86,26 @@ class ContentObjectResourceRenderer
                 continue;
             }
 
+            $descriptionRendition = ContentObjectRenditionImplementation:: factory(
+                $object,
+                ContentObjectRendition :: FORMAT_HTML,
+                $type,
+                $this
+            )->render($parameters);
+
             $rendition = new DOMDocument();
-            $rendition->loadHTML(
-                ContentObjectRenditionImplementation :: factory(
-                    $object,
-                    ContentObjectRendition :: FORMAT_HTML,
-                    $type,
-                    $this)->render($parameters));
+            $rendition->loadHTML($descriptionRendition);
 
             $rendition_xpath = new DOMXPath($rendition);
 
+            $javascript_nodes = $rendition_xpath->query('//script');
             $body_nodes = $rendition_xpath->query('body/*');
             $fragment = $rendition->createDocumentFragment();
+
+            foreach($javascript_nodes as $javascript_node)
+            {
+                $fragment->appendChild($javascript_node);
+            }
 
             foreach ($body_nodes as $child)
             {
