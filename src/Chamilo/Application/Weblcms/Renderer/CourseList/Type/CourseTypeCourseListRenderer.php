@@ -112,8 +112,8 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
         $user_id = $this->get_parent()->get_user_id();
 
         $courses = DataManager :: retrieve_all_courses_with_course_categories(
-            $user_id,
-            \Chamilo\Core\Group\Storage\DataManager :: retrieve_all_subscribed_groups_array($user_id, true));
+            $this->get_parent()->get_user()
+        );
 
         return $this->parse_courses($courses);
     }

@@ -7,12 +7,15 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 
 /**
  * Course list renderer to render the course list filtered by a given course type and user course category
@@ -132,6 +135,85 @@ class FilteredCourseListRenderer extends CourseListRenderer
         }
 
         return new AndCondition($conditions);
+    }
+
+    /**
+     * Retrieves the courses for the user
+     */
+    protected function retrieve_courses()
+    {
+        $courseObjects = array();
+
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_courses_with_user_course_categories(
+            $this->get_parent()->get_user(), $this->get_retrieve_courses_condition()
+        );
+
+        if(!$this->get_user_course_category_id())
+        {
+            $courses = $this->order_courses_by_user_course_categories($courses);
+        }
+
+        while($course = $courses->next_result())
+        {
+            $courseObjects[] = DataClass :: factory(Course :: class_name(), $course);
+        }
+
+        return new ArrayResultSet($courseObjects);
+    }
+
+    /**
+     * Order the courses by the user course categories
+     *
+     * @param RecordResultSet $courses
+     *
+     * @return ArrayResultSet
+     */
+    protected function order_courses_by_user_course_categories($courses)
+    {
+        $coursesByCourseCategories = array();
+
+        while($course = $courses->next_result())
+        {
+            $category_id = $course[CourseTypeUserCategoryRelCourse :: PROPERTY_COURSE_TYPE_USER_CATEGORY_ID];
+            $category = !is_null($category_id) ? $category_id : 0;
+            $coursesByCourseCategories[$category][] = $course;
+        }
+
+        $userCategories = $this->retrieve_course_user_categories_for_course_type($this->get_course_type_id());
+
+        $orderedCourses = array();
+
+        if(is_array($coursesByCourseCategories[0]))
+        {
+            $orderedCourses = array_merge($orderedCourses, $coursesByCourseCategories[0]);
+        }
+
+        while($userCategory = $userCategories->next_result())
+        {
+            $coursesByCourseCategory = $coursesByCourseCategories[$userCategory[CourseTypeUserCategory::PROPERTY_ID]];
+
+            if(is_array($coursesByCourseCategory))
+            {
+                $orderedCourses = array_merge($orderedCourses, $coursesByCourseCategory);
+            }
+        }
+
+        return new ArrayResultSet($orderedCourses);
+    }
+
+    /**
+     * Retrieves the course user categories for a course type
+     *
+     * @param int $course_type_id
+     *
+     * @return RecordResultSet
+     */
+    protected function retrieve_course_user_categories_for_course_type($course_type_id)
+    {
+        return DataManager ::retrieve_course_user_categories_from_course_type(
+            $course_type_id,
+            $this->get_parent()->get_user_id()
+        );
     }
 
     /**

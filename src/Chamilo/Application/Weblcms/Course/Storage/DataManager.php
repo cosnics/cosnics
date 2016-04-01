@@ -12,6 +12,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
+use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -31,11 +32,13 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
+use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 
 /**
  * This class represents the data manager for this package
@@ -498,7 +501,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         return new AndCondition($conditions);
     }
 
-    protected static function getSubscribedCourseIdentifiersByRelation($user, $userStatus)
+    protected static function getSubscribedCourseIdentifiersByRelation($user, $userStatus = null)
     {
         $conditions = array();
 
@@ -1637,5 +1640,140 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     {
         $extension = new DoctrineExtension(self :: get_instance());
         return $extension->count_all_course_users($course_id, $condition);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Courses with course categories
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Retrieves all the courses with course categories for a given user
+     *
+     * @param User $user
+     *
+     * @return RecordResultSet
+     */
+    public static function retrieve_all_courses_with_course_categories(User $user)
+    {
+        $course_ids = self::getSubscribedCourseIdentifiersByRelation($user);
+
+        return self::retrieve_courses_with_course_categories_by_ids($user->getId(), $course_ids);
+    }
+
+    /**
+     * Retrieves courses with course categories for a given user, optionally limiting the result by a given condition
+     *
+     * @param User $user
+     * @param Condition $condition
+     *
+     * @return RecordResultSet
+     */
+    public static function retrieve_courses_with_user_course_categories(User $user, Condition $condition = null)
+    {
+        $course_ids = self::getSubscribedCourseIdentifiersByRelation($user);
+
+        return self::retrieve_courses_with_course_categories_by_ids($user->get_id(), $course_ids, $condition);
+    }
+
+    /**
+     * Retrieves courses with user course categories by course ids
+     *
+     * @param int $user_id
+     * @param array $course_ids
+     * @param Condition $condition
+     *
+     * @return RecordResultSet
+     */
+    public static function retrieve_courses_with_course_categories_by_ids(
+        $user_id, array $course_ids = array(), Condition $condition = null
+    )
+    {
+        if (count($course_ids) > 0)
+        {
+            $properties = new DataClassProperties();
+
+            $properties->add(new PropertiesConditionVariable(Course:: class_name()));
+            $properties->add(
+                new PropertyConditionVariable(
+                    CourseTypeUserCategoryRelCourse:: class_name(),
+                    CourseTypeUserCategoryRelCourse :: PROPERTY_COURSE_TYPE_USER_CATEGORY_ID
+                )
+            );
+            $properties->add(
+                new PropertyConditionVariable(
+                    CourseTypeUserCategoryRelCourse:: class_name(),
+                    CourseTypeUserCategoryRelCourse :: PROPERTY_SORT
+                )
+            );
+
+            $join_conditions = array();
+
+            $join_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseTypeUserCategoryRelCourse:: class_name(),
+                    CourseTypeUserCategoryRelCourse :: PROPERTY_USER_ID
+                ),
+                new StaticConditionVariable($user_id)
+            );
+
+            $join_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseTypeUserCategoryRelCourse:: class_name(),
+                    CourseTypeUserCategoryRelCourse :: PROPERTY_COURSE_ID
+                ),
+                new PropertyConditionVariable(Course:: class_name(), Course :: PROPERTY_ID)
+            );
+
+            $join = new Join(
+                CourseTypeUserCategoryRelCourse:: class_name(),
+                new AndCondition($join_conditions),
+                Join :: TYPE_LEFT
+            );
+
+            $conditions = array();
+
+            $conditions[] = new InCondition(
+                new PropertyConditionVariable(Course:: class_name(), Course :: PROPERTY_ID),
+                $course_ids
+            );
+
+            if ($condition)
+            {
+                $conditions[] = $condition;
+            }
+
+            $order_by = array();
+
+            $order_by[] = new OrderBy(
+                new PropertyConditionVariable(
+                    CourseTypeUserCategoryRelCourse::class_name(), CourseTypeUserCategoryRelCourse :: PROPERTY_SORT
+                ),
+                SORT_ASC
+            );
+
+            $order_by[] = new OrderBy(
+                new PropertyConditionVariable(
+                    Course::class_name(), Course :: PROPERTY_TITLE
+                ),
+                SORT_ASC
+            );
+
+            $parameters = new RecordRetrievesParameters(
+                $properties,
+                new AndCondition($conditions), /* $count = */
+                null, /* $offset = */
+                null,
+                $order_by,
+                new Joins(array($join))
+            );
+
+            $courses = self:: records(Course:: class_name(), $parameters);
+
+            return $courses;
+        }
+
+        return new RecordResultSet(array());
     }
 }

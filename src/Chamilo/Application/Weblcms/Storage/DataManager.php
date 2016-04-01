@@ -243,7 +243,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $data_class_properties[] = new PropertyConditionVariable(
             ContentObject :: class_name(),
             ContentObject :: PROPERTY_OWNER_ID);
-        
+
         $data_class_properties[] = new PropertyConditionVariable(
             ContentObject :: class_name(),
             ContentObject :: PROPERTY_CREATION_DATE);
@@ -2577,144 +2577,148 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return (self :: count(CourseRequest :: class_name(), $condition) > 0);
     }
 
-    public static function retrieve_all_courses_with_course_categories($user_id, $group_ids)
+    public static function retrieve_all_courses_with_course_categories(User $user)
     {
-        // First: retrieve the ids of courses the user is subscribed to individually.
-        $properties = new DataClassProperties();
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_with_course_categories(
+            $user
+        );
 
-        $properties->add(
-            new PropertyConditionVariable(
-                CourseEntityRelation :: class_name(),
-                CourseEntityRelation :: PROPERTY_COURSE_ID));
-
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation :: class_name(),
-                CourseEntityRelation :: PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($user_id));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation :: class_name(),
-                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER));
-
-        $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
-
-        $directly_subscribed_course_ids = self :: records(CourseEntityRelation :: class_name(), $parameters);
-
-        $course_ids = array();
-
-        foreach ($directly_subscribed_course_ids->as_array() as $course_id)
-        {
-            $course_ids[] = $course_id[CourseEntityRelation :: PROPERTY_COURSE_ID];
-        }
-
-        // Second, if any groups have been specified, retrieve any *additional* courses these groups are subscribed to.
-        if (! $group_ids instanceof EmptyResultSet && count($group_ids) > 0)
-        {
-            $properties = new DataClassProperties();
-
-            $properties->add(
-                new PropertyConditionVariable(
-                    CourseEntityRelation :: class_name(),
-                    CourseEntityRelation :: PROPERTY_COURSE_ID));
-
-            $conditions = array();
-
-            $conditions[] = new InCondition(
-                new PropertyConditionVariable(
-                    CourseEntityRelation :: class_name(),
-                    CourseEntityRelation :: PROPERTY_ENTITY_ID),
-                $group_ids);
-
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    CourseEntityRelation :: class_name(),
-                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
-                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
-
-            if (count($course_ids) > 0) // Exclude the courses we already know about
-            {
-                $conditions[] = new NotCondition(
-                    new InCondition(
-                        new PropertyConditionVariable(
-                            CourseEntityRelation :: class_name(),
-                            CourseEntityRelation :: PROPERTY_COURSE_ID),
-                        $course_ids));
-            }
-
-            $condition = new AndCondition($conditions);
-
-            $parameters = new DataClassDistinctParameters($condition, CourseEntityRelation :: PROPERTY_COURSE_ID);
-            $groupCourseIds = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
-            $course_ids = array_merge($course_ids, $groupCourseIds);
-        }
-
-        // Finally, retrieve information about the course, as well as labels the user applied to allow sorting the
-        // courses
-        if (count($course_ids) > 0)
-        {
-            $properties = new DataClassProperties();
-
-            $properties->add(new PropertiesConditionVariable(Course :: class_name()));
-            $properties->add(
-                new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse :: class_name(),
-                    CourseTypeUserCategoryRelCourse :: PROPERTY_COURSE_TYPE_USER_CATEGORY_ID));
-            $properties->add(
-                new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse :: class_name(),
-                    CourseTypeUserCategoryRelCourse :: PROPERTY_SORT));
-
-            $join_conditions = array();
-
-            $join_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse :: class_name(),
-                    CourseTypeUserCategoryRelCourse :: PROPERTY_USER_ID),
-                new StaticConditionVariable($user_id));
-
-            $join_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse :: class_name(),
-                    CourseTypeUserCategoryRelCourse :: PROPERTY_COURSE_ID),
-                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID));
-
-            $join = new Join(
-                CourseTypeUserCategoryRelCourse :: class_name(),
-                new AndCondition($join_conditions),
-                Join :: TYPE_LEFT);
-
-            $conditions = array();
-
-            $conditions[] = new InCondition(
-                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID),
-                $course_ids);
-
-            $order_by = array();
-
-            $order_by[] = new OrderBy(
-                new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse :: class_name(),
-                    CourseTypeUserCategoryRelCourse :: PROPERTY_SORT),
-                SORT_ASC,
-                self :: get_alias(CourseTypeUserCategoryRelCourse :: get_table_name()));
-
-            $order_by[] = new OrderBy(
-                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_TITLE),
-                SORT_ASC,
-                self :: get_alias(Course :: get_table_name()));
-
-            $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions), /* $count = */
-                null, /* $offset = */
-                null, $order_by, new Joins(array($join)));
-
-            $courses = self :: records(Course :: class_name(), $parameters);
-
-            return $courses;
-        }
-
-        return new RecordResultSet(array());
+//        // First: retrieve the ids of courses the user is subscribed to individually.
+//        $properties = new DataClassProperties();
+//
+//        $properties->add(
+//            new PropertyConditionVariable(
+//                CourseEntityRelation :: class_name(),
+//                CourseEntityRelation :: PROPERTY_COURSE_ID));
+//
+//        $conditions = array();
+//        $conditions[] = new EqualityCondition(
+//            new PropertyConditionVariable(
+//                CourseEntityRelation :: class_name(),
+//                CourseEntityRelation :: PROPERTY_ENTITY_ID),
+//            new StaticConditionVariable($user_id));
+//        $conditions[] = new EqualityCondition(
+//            new PropertyConditionVariable(
+//                CourseEntityRelation :: class_name(),
+//                CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+//            new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_USER));
+//
+//        $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions));
+//
+//        $directly_subscribed_course_ids = self :: records(CourseEntityRelation :: class_name(), $parameters);
+//
+//        $course_ids = array();
+//
+//        foreach ($directly_subscribed_course_ids->as_array() as $course_id)
+//        {
+//            $course_ids[] = $course_id[CourseEntityRelation :: PROPERTY_COURSE_ID];
+//        }
+//
+//        // Second, if any groups have been specified, retrieve any *additional* courses these groups are subscribed to.
+//        if (! $group_ids instanceof EmptyResultSet && count($group_ids) > 0)
+//        {
+//            $properties = new DataClassProperties();
+//
+//            $properties->add(
+//                new PropertyConditionVariable(
+//                    CourseEntityRelation :: class_name(),
+//                    CourseEntityRelation :: PROPERTY_COURSE_ID));
+//
+//            $conditions = array();
+//
+//            $conditions[] = new InCondition(
+//                new PropertyConditionVariable(
+//                    CourseEntityRelation :: class_name(),
+//                    CourseEntityRelation :: PROPERTY_ENTITY_ID),
+//                $group_ids);
+//
+//            $conditions[] = new EqualityCondition(
+//                new PropertyConditionVariable(
+//                    CourseEntityRelation :: class_name(),
+//                    CourseEntityRelation :: PROPERTY_ENTITY_TYPE),
+//                new StaticConditionVariable(CourseEntityRelation :: ENTITY_TYPE_GROUP));
+//
+//            if (count($course_ids) > 0) // Exclude the courses we already know about
+//            {
+//                $conditions[] = new NotCondition(
+//                    new InCondition(
+//                        new PropertyConditionVariable(
+//                            CourseEntityRelation :: class_name(),
+//                            CourseEntityRelation :: PROPERTY_COURSE_ID),
+//                        $course_ids));
+//            }
+//
+//            $condition = new AndCondition($conditions);
+//
+//            $parameters = new DataClassDistinctParameters($condition, CourseEntityRelation :: PROPERTY_COURSE_ID);
+//            $groupCourseIds = self :: distinct(CourseEntityRelation :: class_name(), $parameters);
+//            $course_ids = array_merge($course_ids, $groupCourseIds);
+//        }
+//
+//        // Finally, retrieve information about the course, as well as labels the user applied to allow sorting the
+//        // courses
+//        if (count($course_ids) > 0)
+//        {
+//            $properties = new DataClassProperties();
+//
+//            $properties->add(new PropertiesConditionVariable(Course :: class_name()));
+//            $properties->add(
+//                new PropertyConditionVariable(
+//                    CourseTypeUserCategoryRelCourse :: class_name(),
+//                    CourseTypeUserCategoryRelCourse :: PROPERTY_COURSE_TYPE_USER_CATEGORY_ID));
+//            $properties->add(
+//                new PropertyConditionVariable(
+//                    CourseTypeUserCategoryRelCourse :: class_name(),
+//                    CourseTypeUserCategoryRelCourse :: PROPERTY_SORT));
+//
+//            $join_conditions = array();
+//
+//            $join_conditions[] = new EqualityCondition(
+//                new PropertyConditionVariable(
+//                    CourseTypeUserCategoryRelCourse :: class_name(),
+//                    CourseTypeUserCategoryRelCourse :: PROPERTY_USER_ID),
+//                new StaticConditionVariable($user_id));
+//
+//            $join_conditions[] = new EqualityCondition(
+//                new PropertyConditionVariable(
+//                    CourseTypeUserCategoryRelCourse :: class_name(),
+//                    CourseTypeUserCategoryRelCourse :: PROPERTY_COURSE_ID),
+//                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID));
+//
+//            $join = new Join(
+//                CourseTypeUserCategoryRelCourse :: class_name(),
+//                new AndCondition($join_conditions),
+//                Join :: TYPE_LEFT);
+//
+//            $conditions = array();
+//
+//            $conditions[] = new InCondition(
+//                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_ID),
+//                $course_ids);
+//
+//            $order_by = array();
+//
+//            $order_by[] = new OrderBy(
+//                new PropertyConditionVariable(
+//                    CourseTypeUserCategoryRelCourse :: class_name(),
+//                    CourseTypeUserCategoryRelCourse :: PROPERTY_SORT),
+//                SORT_ASC,
+//                self :: get_alias(CourseTypeUserCategoryRelCourse :: get_table_name()));
+//
+//            $order_by[] = new OrderBy(
+//                new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_TITLE),
+//                SORT_ASC,
+//                self :: get_alias(Course :: get_table_name()));
+//
+//            $parameters = new RecordRetrievesParameters($properties, new AndCondition($conditions), /* $count = */
+//                null, /* $offset = */
+//                null, $order_by, new Joins(array($join)));
+//
+//            $courses = self :: records(Course :: class_name(), $parameters);
+//
+//            return $courses;
+//        }
+//
+//        return new RecordResultSet(array());
     }
 }
