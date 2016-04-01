@@ -16,39 +16,6 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton
-     */
-    private $button;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
-     */
-    public function __construct(AbstractButton $button)
-    {
-        $this->button = $button;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton
-     */
-    public function getButton()
-    {
-        return $this->button;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
-     */
-    public function setButton(AbstractButton $button)
-    {
-        $this->button = $button;
-    }
-
-    /**
-     *
      * @return string
      */
     public function render()
@@ -72,11 +39,11 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
     public function renderLink()
     {
         $html = array();
-
+        
         $html[] = $this->renderLinkOpeningTag();
         $html[] = $this->renderLinkContent();
         $html[] = $this->renderLinkClosingTag();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -87,12 +54,12 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
     public function renderLinkOpeningTag()
     {
         $html = array();
-
+        
         $html[] = '<a';
         $html[] = $this->renderClasses();
         $html[] = $this->renderTitle();
         $html[] = '>';
-
+        
         return implode(' ', $html);
     }
 
@@ -121,11 +88,11 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
     public function determineClasses()
     {
         $classes = array();
-
+        
         $classes[] = 'btn';
         $classes[] = 'btn-default';
         $classes[] = $this->getButton()->getClasses();
-
+        
         return $classes;
     }
 
@@ -147,28 +114,23 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         $button = $this->getButton();
         $label = $this->getLabel();
         $imagePath = $button->getImagePath();
-
+        
         $html = array();
-
+        
         $displayLabel = $button->getDisplay() != AbstractButton :: DISPLAY_ICON && ! empty($label);
         $displayIcon = $button->getDisplay() != AbstractButton :: DISPLAY_LABEL && ! empty($imagePath);
-
+        
         if ($displayIcon)
         {
             $html[] = $this->renderLinkContentImage();
         }
-
-        if ($displayIcon && $displayLabel)
-        {
-            $html[] = '&nbsp;';
-        }
-
+        
         if ($displayLabel)
         {
             $html[] = '<span>' . $label . '</span>';
         }
-
-        return implode(PHP_EOL, $html);
+        
+        return implode('', $html);
     }
 
     /**
@@ -180,7 +142,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         $button = $this->getButton();
         $label = $this->getLabel();
         $imagePath = $button->getImagePath();
-
+        
         if ($imagePath instanceof InlineGlyph)
         {
             return $imagePath->render();

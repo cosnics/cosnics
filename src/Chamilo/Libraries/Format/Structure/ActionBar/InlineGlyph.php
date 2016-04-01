@@ -50,7 +50,7 @@ abstract class InlineGlyph
      */
     public function render()
     {
-        return '<span class="' . $this->getClassNames() . '"></span>';
+        return '<span class="inline-glyph ' . $this->getClassNames() . '"></span>';
     }
 
     /**

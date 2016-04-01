@@ -26,9 +26,12 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
     {
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
+            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
+            
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(), 
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                $applicationConfiguration);
             return $factory->run();
         }
         else

@@ -292,7 +292,7 @@ abstract class ViewRenderer extends Renderer
                     $typeUrl->getUrl(),
                     SubButton :: DISPLAY_LABEL,
                     false,
-                    $currentRendererType == $rendererType ? 'selected' : ''));
+                    $currentRendererType == $rendererType ? 'selected' : 'not-selected'));
         }
 
         return $button;

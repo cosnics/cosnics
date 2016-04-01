@@ -19,6 +19,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class Manager extends Application
 {
+    // Parameters
     const PARAM_ACTION = 'viewer_action';
     const PARAM_EDIT = 'edit';
     const PARAM_ID = 'viewer_object_id';
@@ -29,11 +30,18 @@ abstract class Manager extends Application
     const PARAM_PUBLISH_SELECTED = 'viewer_selected';
     const PARAM_IMPORT_TYPE = 'import_type';
     const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
+    
+    // Actions
     const ACTION_CREATOR = 'Creator';
     const ACTION_BROWSER = 'Browser';
     const ACTION_VIEWER = 'Viewer';
     const ACTION_IMPORTER = 'Importer';
+    
+    // Default action
     const DEFAULT_ACTION = self :: ACTION_CREATOR;
+    
+    // Configuration
+    const SETTING_TABS_DISABLED = 'tabs_disabled';
 
     /**
      *
@@ -56,17 +64,17 @@ abstract class Manager extends Application
     private $tabs;
 
     private $creation_defaults;
-
+    
     /**
      * Allow selection of multiple content objects in the viewer
-     *
+     * 
      * @var int
      */
     const SELECT_MULTIPLE = 0;
-
+    
     /**
      * Allow selection of just one content object in the viewer
-     *
+     * 
      * @var int
      */
     const SELECT_SINGLE = 1;
@@ -82,68 +90,78 @@ abstract class Manager extends Application
         $this->default_content_objects = array();
         $this->parameters = array();
         $this->excluded_objects = array();
-
+        
         $this->set_actions(array(self :: ACTION_CREATOR, self :: ACTION_BROWSER, self :: ACTION_IMPORTER));
         $this->set_parameter(
-            self :: PARAM_ACTION,
+            self :: PARAM_ACTION, 
             (Request :: get(self :: PARAM_ACTION) ? Request :: get(self :: PARAM_ACTION) : self :: ACTION_CREATOR));
     }
 
     public function render_header()
     {
+        if ($this->areTabsDisabled())
+        {
+            return parent :: render_header();
+        }
+        
         $html = array();
-
+        
         $html[] = parent :: render_header();
-
+        
         $current_action = $this->get_parameter(self :: PARAM_ACTION);
-
+        
         $actions = $this->get_actions();
-
+        
         if ($current_action == self :: ACTION_VIEWER)
         {
             $actions[] = self :: ACTION_VIEWER;
         }
-
+        
         $this->tabs = new DynamicVisualTabsRenderer('viewer');
-
+        
         foreach ($actions as $viewer_action)
         {
             $selected = ($current_action == $viewer_action ? true : false);
-
+            
             $parameters = $this->get_parameters();
             $parameters[self :: PARAM_ACTION] = $viewer_action;
-
+            
             if ($viewer_action == self :: ACTION_VIEWER)
             {
                 $parameters[self :: PARAM_ID] = Request :: get(self :: PARAM_ID);
             }
-
+            
             $label = Translation :: get(
                 (string) StringUtilities :: getInstance()->createString($viewer_action)->upperCamelize() . 'Title');
             $link = $this->get_url($parameters);
             $this->tabs->add_tab(
                 new DynamicVisualTab(
-                    $viewer_action,
-                    $label,
-                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . $viewer_action),
-                    $link,
+                    $viewer_action, 
+                    $label, 
+                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . $viewer_action), 
+                    $link, 
                     $selected));
         }
-
+        
         $html[] = $this->tabs->header();
         $html[] = $this->tabs->body_header();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function render_footer()
     {
+        if ($this->areTabsDisabled())
+        {
+            return parent :: render_footer();
+        }
+        
         $html = array();
-
+        
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
         $html[] = parent :: render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -167,7 +185,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the types of content object that the viewer can use.
-     *
+     * 
      * @return multitype:string
      */
     public function get_types()
@@ -227,12 +245,12 @@ abstract class Manager extends Application
     public static function get_selected_objects()
     {
         $requestedObjects = Request :: get(self :: PARAM_ID);
-
+        
         if (! $requestedObjects)
         {
             $requestedObjects = Request :: post(self :: PARAM_ID);
         }
-
+        
         return $requestedObjects;
     }
 
@@ -248,5 +266,14 @@ abstract class Manager extends Application
     public static function is_ready_to_be_published()
     {
         return (self :: any_object_selected());
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function areTabsDisabled()
+    {
+        return $this->getApplicationConfiguration()->get(self :: SETTING_TABS_DISABLED) === true;
     }
 }

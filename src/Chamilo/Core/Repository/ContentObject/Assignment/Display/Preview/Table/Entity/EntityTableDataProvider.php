@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity;
 
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
@@ -35,20 +34,20 @@ class EntityTableDataProvider extends \Chamilo\Core\Repository\ContentObject\Ass
     private function generateUsers()
     {
         $users = array();
-
+        
         for ($i = 1; $i <= 10; $i ++)
         {
             $user = array();
-            $user[EntityTableColumnModel::PROPERTY_NAME] = 'Preview User ' . $i;
-//            $user = new User();
-//            $user->set_lastname('User');
-//            $user->set_firstname('Test ' . $i);
-//            $user->set_email('test.' . $i . '@user.com');
-//            $user->set_username('test.' . $i . '@user.com');
-
+            $user[EntityTableColumnModel :: PROPERTY_NAME] = 'Preview User ' . $i;
+            // $user = new User();
+            // $user->set_lastname('User');
+            // $user->set_firstname('Test ' . $i);
+            // $user->set_email('test.' . $i . '@user.com');
+            // $user->set_username('test.' . $i . '@user.com');
+            
             $users[] = $user;
         }
-
+        
         return $users;
     }
 }

@@ -31,7 +31,7 @@ class TypeSelector
 
     /**
      *
-     * @return \core\repository\TypeSelectorCategory[]
+     * @return \Chamilo\Core\Repository\Selector\TypeSelectorCategory[]
      */
     public function get_categories()
     {

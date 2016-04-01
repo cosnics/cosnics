@@ -469,7 +469,14 @@ class Configuration
         $this->set(array('Chamilo\Core\Admin', 'version'), '5.0');
         $this->set(array('Chamilo\Core\Admin', 'maintenance_mode'), false);
         
+        $this->set(array('Chamilo\Core\Admin', 'administrator_email'), '');
+        $this->set(array('Chamilo\Core\Admin', 'administrator_website'), '');
+        $this->set(array('Chamilo\Core\Admin', 'administrator_surname'), '');
+        $this->set(array('Chamilo\Core\Admin', 'administrator_firstname'), '');
+        
         $this->set(array('Chamilo\Core\Menu', 'show_sitemap'), false);
+        $this->set(array('Chamilo\Core\Menu', 'menu_renderer'), 'Bar');
+        $this->set(array('Chamilo\Core\Menu', 'brand_image'), '');
         
         $this->set(array('Chamilo\Core\Help', 'hide_empty_pages'), true);
         

@@ -55,7 +55,6 @@ use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\EmptyResultSet;
 use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Exception;
 

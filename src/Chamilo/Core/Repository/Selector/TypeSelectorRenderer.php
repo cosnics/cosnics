@@ -49,7 +49,7 @@ abstract class TypeSelectorRenderer
 
     /**
      *
-     * @return \core\repository\TypeSelector
+     * @return \Chamilo\Core\Repository\Selector\TypeSelector
      */
     public function get_type_selector()
     {

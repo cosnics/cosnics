@@ -8,6 +8,6 @@ namespace Chamilo\Libraries\Format\Structure\ActionBar;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class SubButton extends Button implements SubButtonInterface
+interface SubButtonInterface
 {
 }
