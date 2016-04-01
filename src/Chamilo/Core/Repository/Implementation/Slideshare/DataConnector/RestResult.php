@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Slideshare\DataConnector;
 
-use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult;
 use SimpleXMLElement;
 
-class RestResult extends RestResult
+class RestResult extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult
 {
 
     private $response_content_xml;

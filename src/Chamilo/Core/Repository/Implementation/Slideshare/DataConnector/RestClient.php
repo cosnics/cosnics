@@ -1,10 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Slideshare\DataConnector;
 
+use Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data\Form;
+use Chamilo\Libraries\Protocol\Webservice\Rest\Client\Data\Plain;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use HTTP_Request;
 
-class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient
+class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Client\Curl
 {
 
     private $slideshare_url;
@@ -14,7 +16,7 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
 
     public function __construct($slideshare_url)
     {
-        parent :: __construct();
+        parent :: __construct('');
 
         $this->slideshare_url = $slideshare_url;
     }
@@ -45,21 +47,24 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
         }
     }
 
-    /*
-     * a prefab function for a request @param method string @param url string @param data array @return
-     * MediaMosaRestResult object
+    /**
+     * @param $method
+     * @param $url
+     * @param $data
+     *
+     * @return RestResult
      */
-    public function request($method, $url, $data = null)
+    public function send_request($method, $url, $data = null)
     {
-        $this->set_http_method($method);
-        $this->set_data_to_send('');
+        $this->set_method($method);
+        $this->set_data(new Plain(''));
 
         // different method need different handling of data
         if (($method == self :: METHOD_POST))
         {
             if (is_array($data))
             {
-                $this->set_data_to_send($data);
+                $this->set_data(new Form($data));
             }
             $url = $this->slideshare_url . $url;
         }
@@ -94,12 +99,13 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
         elseif ($method == self :: METHOD_PUT)
         {
             if (is_array($data))
-                $this->set_data_to_send($data);
+                $this->set_data(new Form($data));
         }
 
-        $this->set_url($url);
+        $this->set_base_url($url);
 
-        $response = $this->send_request();
+        /** @var RestResult $response */
+        $response = parent::request();
         $response->set_response_content_xml();
         return $response;
     }

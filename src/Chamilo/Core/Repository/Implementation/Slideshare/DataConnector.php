@@ -33,7 +33,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->user = Setting :: get('username', $this->get_external_repository_instance_id());
         $this->password = Setting :: get('password', $this->get_external_repository_instance_id());
         $this->slideshare = new RestClient('https://www.slideshare.net/api/2/');
-        $this->slideshare->set_connexion_mode(RestClient :: MODE_PEAR);
     }
 
     /**
@@ -60,7 +59,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['limit'] = $count;
         $params['offset'] = $offset;
         
-        $result = $this->slideshare->request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
+        $result = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
         $slideshows = (array) $result->get_response_content_xml();
         
         $objects = array();
@@ -109,7 +108,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['hash'] = $hash;
         $params['tag'] = $condition;
         
-        $result = $this->slideshare->request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
+        $result = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
         $slideshows = (array) $result->get_response_content_xml();
         
         $objects = array();
@@ -188,7 +187,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['api_key'] = $this->consumer_key;
         $params['ts'] = $date;
         $params['hash'] = $hash;
-        $slideshow = $this->slideshare->request(RestClient :: METHOD_GET, 'get_slideshow', $params);
+        $slideshow = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshow', $params);
         $slideshow = (array) $slideshow->get_response_content_xml();
         
         $object = new ExternalObject();
@@ -216,7 +215,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         /*
          * $date = time(); $hash = sha1($this->consumer_secret . $date); $params = array(); $params['api_key'] =
          * $this->consumer_key; $params['ts'] = $date; $params['hash'] = $hash; $params['slideshow_id'] =
-         * $values[ExternalObject :: PROPERTY_ID]; $result = $this->slideshare->request(SlideshareRestClient ::
+         * $values[ExternalObject :: PROPERTY_ID]; $result = $this->slideshare->send_request(SlideshareRestClient ::
          * METHOD_GET, 'edit_slideshow', $params); $slideshows = (array) $result->get_response_content_xml();
          */
     }
@@ -238,9 +237,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['password'] = $this->password;
         $params['slideshow_title'] = $values['title'];
         $params['slideshow_srcfile'] = file_get_contents($slideshow['tmp_name']);
-        $this->slideshare->set_header_data('Content-Type', 'multipart/form-data');
-        $this->slideshare->set_header_data('enctype', 'multipart/form-data');
-        $slideshow1 = $this->slideshare->request(RestClient :: METHOD_POST, 'upload_slideshow', $params);
+        $this->slideshare->add_header('Content-Type', 'multipart/form-data');
+        $this->slideshare->add_header('enctype', 'multipart/form-data');
+        $slideshow1 = $this->slideshare->send_request(RestClient :: METHOD_POST, 'upload_slideshow', $params);
         /*
          * $slideshow1 = $slideshow1->get_response_content_xml();
          */
@@ -281,7 +280,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
          * $date = time(); $hash = sha1($this->consumer_secret . $date); $params = array(); $params['api_key'] =
          * $this->consumer_key; $params['ts'] = $date; $params['hash'] = $hash; $params['slideshow_id'] = $id;
          * $params['username'] = $this->user; $params['password'] = $this->password; $slideshow =
-         * $this->slideshare->request(SlideshareRestClient :: METHOD_GET, 'delete_slideshow', $params); $slideshow =
+         * $this->slideshare->send_request(SlideshareRestClient :: METHOD_GET, 'delete_slideshow', $params); $slideshow =
          * (array) $slideshow->get_response_content_xml();
          */
     }
