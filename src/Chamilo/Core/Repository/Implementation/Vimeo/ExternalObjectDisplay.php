@@ -33,7 +33,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
         }
         else
         {
-            $html[] = '<iframe src="http://player.vimeo.com/video/' . $object->get_id() .
+            $html[] = '<iframe src="https://player.vimeo.com/video/' . $object->get_id() .
                  '" width="400" height="300" frameborder="0"></iframe>';
         }
         return implode(PHP_EOL, $html);
