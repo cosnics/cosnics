@@ -50,7 +50,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
                     FilterData :: FILTER_CATEGORY => $document->get_parent_id()));
 
             $viewButton = array();
-            $viewButton[] = '<a class="btn btn-primary" target="_blank" href="' . $viewLink->getUrl() . '">';
+            $viewButton[] = '<a class="btn btn-primary view" target="_blank" href="' . $viewLink->getUrl() . '">';
             $viewButton[] = '<i class="glyphicon glyphicon-file"></i> <span>' . Translation :: get('View') . '</span>';
             $viewButton[] = '</a>';
 

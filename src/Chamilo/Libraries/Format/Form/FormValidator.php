@@ -1303,7 +1303,12 @@ EOT;
 
         $dropzoneHtml[] = '<div class="file-previews files" id="' . $elementName . '-previews">';
         $dropzoneHtml[] = '<div id="' . $elementName . '-template" class="thumbnail pull-left">';
-        $dropzoneHtml[] = '<span class="preview"><img data-dz-thumbnail /></span>';
+        $dropzoneHtml[] = '<div class="preview">';
+        $dropzoneHtml[] = '<div class="file-upload-no-preview">';
+        $dropzoneHtml[] = '<span class="glyphicon glyphicon-file"></span>';
+        $dropzoneHtml[] = '</div>';
+        $dropzoneHtml[] = '<img data-dz-thumbnail />';
+        $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="caption">';
         $dropzoneHtml[] = '<h3 data-dz-name></h3>';
         $dropzoneHtml[] = '<strong class="error text-danger" data-dz-errormessage></strong>';

@@ -25,6 +25,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
 
 class ImporterComponent extends Manager implements DelegateComponent
 {
@@ -45,7 +46,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         {
             $import_form = ContentObjectImportForm :: factory(
                 $type,
-                new PersonalWorkspace($this->get_user()),
+                $this->getWorkspace(),
                 $this,
                 'post',
                 $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)));
@@ -61,8 +62,9 @@ class ImporterComponent extends Manager implements DelegateComponent
                     $new_category = new RepositoryCategory();
                     $new_category->set_name($new_category_name);
                     $new_category->set_parent($parent_id);
-                    $new_category->set_type_id($this->get_user_id());
-                    $new_category->set_type(PersonalWorkspace :: WORKSPACE_TYPE);
+                    $new_category->set_type_id($this->getWorkspace()->getId());
+                    $new_category->set_type($this->getWorkspace()->getWorkspaceType());
+
                     if (! $new_category->create())
                     {
                         throw new \Exception(Translation :: get('CategoryCreationFailed'));
@@ -89,14 +91,15 @@ class ImporterComponent extends Manager implements DelegateComponent
                 $parameters = ImportParameters :: factory(
                     $import_form->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
                     $this->get_user_id(),
-                    new PersonalWorkspace($this->get_user()),
+                    $this->getWorkspace(),
                     $category_id,
                     $file,
                     $values);
+
                 $controller = ContentObjectImportController :: factory($parameters);
                 $content_object_ids = $controller->run();
-                $filtered_content_object_ids = $this->filter_content_object_ids($content_object_ids);
 
+                $filtered_content_object_ids = $this->filter_content_object_ids($content_object_ids);
                 $messages = $controller->get_messages_for_url();
 
                 Session :: register(Application :: PARAM_MESSAGES, $messages);
@@ -114,10 +117,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                             Session :: register(Application :: PARAM_MESSAGES, $messages);
                         }
 
-                        $this->simple_redirect(
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEWER,
-                                self :: PARAM_ID => $filtered_content_object_ids[0]));
+                        $this->simple_redirect(array(self :: PARAM_ID => $filtered_content_object_ids[0]));
                     }
                     elseif (count($filtered_content_object_ids) == 0)
                     {
@@ -134,8 +134,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     }
                     else
                     {
-                        Session :: register(self :: PARAM_IMPORTED_CONTENT_OBJECT_IDS, $content_object_ids);
-                        $this->simple_redirect(array(self :: PARAM_ACTION => self :: ACTION_IMPORTED_SELECTER));
+                        $this->simple_redirect(array(self :: PARAM_ID => $content_object_ids));
                     }
                 }
                 else
@@ -241,5 +240,15 @@ class ImporterComponent extends Manager implements DelegateComponent
         $property = ContentObject :: PROPERTY_ID;
         $parameters = new DataClassDistinctParameters($condition, $property);
         return \Chamilo\Core\Repository\Storage\DataManager :: distinct(ContentObject :: class_name(), $parameters);
+    }
+
+    public function getWorkspace()
+    {
+        if (! isset($this->currentWorkspace))
+        {
+            $this->currentWorkspace = new PersonalWorkspace($this->get_user());
+        }
+
+        return $this->currentWorkspace;
     }
 }

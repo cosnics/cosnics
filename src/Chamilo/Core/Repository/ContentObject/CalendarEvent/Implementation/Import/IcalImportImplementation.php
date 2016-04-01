@@ -41,21 +41,21 @@ class IcalImportImplementation extends ImportImplementation
             switch ($recurrence['FREQ'])
             {
                 case 'MONTHLY' :
-                    $content_object->set_frequency(CalendarEvent :: FREQ_MONTHLY);
+                    $content_object->set_frequency(CalendarEvent :: FREQUENCY_MONTHLY);
                     break;
                 case 'YEARLY' :
-                    $content_object->set_frequency(CalendarEvent :: FREQ_YEARLY);
+                    $content_object->set_frequency(CalendarEvent :: FREQUENCY_YEARLY);
                     break;
                 case 'WEEKLY' :
-                    $content_object->set_frequency(CalendarEvent :: FREQ_BIWEEK);
+                    $content_object->set_frequency(CalendarEvent :: FREQUENCY_BIWEEKLY);
 
                     if ($recurrence['INTERVAL'] == '2')
                     {
-                        $content_object->set_frequency(CalendarEvent :: FREQ_BIWEEK);
+                        $content_object->set_frequency(CalendarEvent :: FREQUENCY_BIWEEKLY);
                     }
                     else
                     {
-                        $content_object->set_frequency(CalendarEvent :: FREQ_WEEKLY);
+                        $content_object->set_frequency(CalendarEvent :: FREQUENCY_WEEKLY);
                     }
 
                     break;
@@ -64,11 +64,11 @@ class IcalImportImplementation extends ImportImplementation
 
                     if ($recurrence['BYDAY'] == $weekdays)
                     {
-                        $content_object->set_frequency(CalendarEvent :: FREQ_WEEK_DAYS);
+                        $content_object->set_frequency(CalendarEvent :: FREQUENCY_WEEKDAYS);
                     }
                     else
                     {
-                        $content_object->set_frequency(CalendarEvent :: FREQ_DAILY);
+                        $content_object->set_frequency(CalendarEvent :: FREQUENCY_DAILY);
                     }
                     break;
             }
@@ -116,7 +116,7 @@ class IcalImportImplementation extends ImportImplementation
                 $content_object->set_bymonth($by_month);
             }
 
-            if ($recurrence['BYDAY'] && $content_object->get_frequency() != CalendarEvent :: FREQ_WEEK_DAYS)
+            if ($recurrence['BYDAY'] && $content_object->get_frequency() != CalendarEvent :: FREQUENCY_WEEKDAYS)
             {
                 if (is_array($recurrence['BYDAY']))
                 {
@@ -130,6 +130,11 @@ class IcalImportImplementation extends ImportImplementation
                 $content_object->set_byday($by_day);
             }
         }
+        else
+        {
+            $content_object->set_frequency(CalendarEvent :: FREQUENCY_NONE);
+        }
+
         return $content_object;
     }
 }

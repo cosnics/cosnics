@@ -10,6 +10,13 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
+/**
+ *
+ * @package Chamilo\Core\Repository\Viewer
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @author Eduard Vossen <eduard.vossen@ehb.be>
+ */
 abstract class Manager extends Application
 {
     const PARAM_ACTION = 'viewer_action';
@@ -24,10 +31,8 @@ abstract class Manager extends Application
     const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
     const ACTION_CREATOR = 'Creator';
     const ACTION_BROWSER = 'Browser';
-    const ACTION_PUBLISHER = 'Publisher';
     const ACTION_VIEWER = 'Viewer';
     const ACTION_IMPORTER = 'Importer';
-    const ACTION_IMPORTED_SELECTER = 'ImportedSelecter';
     const DEFAULT_ACTION = self :: ACTION_CREATOR;
 
     /**
@@ -99,27 +104,11 @@ abstract class Manager extends Application
             $actions[] = self :: ACTION_VIEWER;
         }
 
-        if ($current_action == self :: ACTION_IMPORTED_SELECTER)
-        {
-            $actions[] = self :: ACTION_IMPORTED_SELECTER;
-        }
-
         $this->tabs = new DynamicVisualTabsRenderer('viewer');
 
         foreach ($actions as $viewer_action)
         {
-            if ($current_action == $viewer_action)
-            {
-                $selected = true;
-            }
-            elseif ($current_action == self :: ACTION_PUBLISHER && $viewer_action == self :: ACTION_CREATOR)
-            {
-                $selected = true;
-            }
-            else
-            {
-                $selected = false;
-            }
+            $selected = ($current_action == $viewer_action ? true : false);
 
             $parameters = $this->get_parameters();
             $parameters[self :: PARAM_ACTION] = $viewer_action;
@@ -247,10 +236,14 @@ abstract class Manager extends Application
         return $requestedObjects;
     }
 
+    public function isReadyToBePublished()
+    {
+        return $this->getRequest()->get(self :: PARAM_ID);
+    }
+
     /**
      *
-     * @return boolean
-     * @Deprecated any_object_selected()
+     * @return boolean @Deprecated any_object_selected()
      */
     public static function is_ready_to_be_published()
     {

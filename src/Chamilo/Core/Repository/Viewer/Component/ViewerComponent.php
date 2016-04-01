@@ -40,7 +40,6 @@ class ViewerComponent extends Manager
                             array_merge(
                                 $this->get_parameters(),
                                 array(
-                                    self :: PARAM_ACTION => self :: ACTION_PUBLISHER,
                                     self :: PARAM_ID => $content_object->get_id())),
                             false)));
             }

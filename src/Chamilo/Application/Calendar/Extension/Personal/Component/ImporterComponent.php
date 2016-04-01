@@ -37,8 +37,7 @@ class ImporterComponent extends Manager
                     false,
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_CREATE,
-                        \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => $object,
-                        \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_PUBLISHER));
+                        \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => $object));
             }
             else
             {

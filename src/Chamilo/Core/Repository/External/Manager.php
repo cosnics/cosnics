@@ -138,15 +138,6 @@ abstract class Manager extends Application implements NoContextComponent
         return ! (boolean) $this->get_parameter(self :: PARAM_EMBEDDED);
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function is_ready_to_be_used()
-    {
-        return false;
-    }
-
     public function any_object_selected()
     {
     }

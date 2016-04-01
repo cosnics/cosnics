@@ -216,9 +216,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 $content_object_ids = $content_object->get_id();
             }
 
-            $redirect_parameters = array_merge(
-                $this->get_parameters(),
-                array(self :: PARAM_ACTION => self :: ACTION_PUBLISHER, self :: PARAM_ID => $content_object_ids));
+            $redirect_parameters = array_merge($this->get_parameters(), array(self :: PARAM_ID => $content_object_ids));
 
             $this->redirect(null, false, $redirect_parameters);
         }
