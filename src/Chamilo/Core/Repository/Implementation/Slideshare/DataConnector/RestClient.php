@@ -106,7 +106,7 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Clie
 
         /** @var RestResult $response */
         $response = parent::request();
-        $response->set_response_content_xml();
+//        $response->set_response_content_xml();
         return $response;
     }
 
