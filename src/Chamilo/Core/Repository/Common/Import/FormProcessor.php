@@ -202,4 +202,22 @@ abstract class FormProcessor
     {
         return $this->getRequest()->files->get($fileName);
     }
+
+    /**
+     * @param string $fileName
+     * @return \Chamilo\Libraries\File\Properties\FileProperties|NULL
+     */
+    public function getFile($fileName = ContentObjectImportForm :: IMPORT_FILE_NAME)
+    {
+        $file = $this->getFileByName($fileName);
+
+        if ($file instanceof UploadedFile)
+        {
+            return $this->getFileProperties($file);
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
