@@ -1,0 +1,4 @@
+ul.tree-menu li div a.forum_topic, ul.tree-menu li div a.type_forum_topic,
+	ul.tree-menu li div a.type_forum_topic_default {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
