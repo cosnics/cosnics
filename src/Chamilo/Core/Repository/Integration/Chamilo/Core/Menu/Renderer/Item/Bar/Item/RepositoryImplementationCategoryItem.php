@@ -43,7 +43,7 @@ class RepositoryImplementationCategoryItem extends CategoryItem
                 {
                     continue;
                 }
-                
+
                 $sysImagePath = Theme :: getInstance()->getImagePath(
                     $instance->get_implementation(),
                     'Menu',
