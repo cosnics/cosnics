@@ -188,7 +188,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['ts'] = $date;
         $params['hash'] = $hash;
         $slideshow = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshow', $params);
-        $slideshow = (array) $slideshow->get_response_content_xml();
+        $slideshow = (array) $slideshow->get_response_content();
         
         $object = new ExternalObject();
         $object->set_external_repository_id($this->get_external_repository_instance_id());
