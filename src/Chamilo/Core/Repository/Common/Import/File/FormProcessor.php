@@ -22,7 +22,7 @@ class FormProcessor extends \Chamilo\Core\Repository\Common\Import\FormProcessor
             $this->getUserIdentifier(),
             $this->getWorkspace(),
             $this->determineCategoryIdentifier(),
-            $this->getFileByName(),
+            $this->getFile(),
             $this->getFormValues());
     }
 }
