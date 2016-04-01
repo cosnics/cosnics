@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Request\Rights\Table\Entity;
 
-use Chamilo\Application\Weblcms\Request\Manager;
+use Chamilo\Application\Weblcms\Request\Rights\Manager;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Format\Structure\Toolbar;

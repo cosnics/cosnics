@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Request\Rights\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Request\Rights\Manager;
 use Chamilo\Application\Weblcms\Request\Rights\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
@@ -64,7 +65,7 @@ class RightsLocationEntityRightGroup extends DataClass
         if (! isset($this->location_entity_right))
         {
             $this->location_entity_right = \Chamilo\Core\Rights\Storage\DataManager :: retrieve_rights_location_entity_right_by_id(
-                __NAMESPACE__,
+                Manager::context(),
                 $this->get_location_entity_right_id());
         }
         return $this->location_entity_right;
