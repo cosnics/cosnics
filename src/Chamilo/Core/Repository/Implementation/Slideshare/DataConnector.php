@@ -60,7 +60,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['offset'] = $offset;
         
         $result = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
-        $slideshows = (array) $result->get_response_content_xml();
+        $slideshows = (array) $result->get_response_content();
         
         $objects = array();
         foreach ($slideshows['Slideshow'] as $slideshow)
@@ -216,7 +216,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
          * $date = time(); $hash = sha1($this->consumer_secret . $date); $params = array(); $params['api_key'] =
          * $this->consumer_key; $params['ts'] = $date; $params['hash'] = $hash; $params['slideshow_id'] =
          * $values[ExternalObject :: PROPERTY_ID]; $result = $this->slideshare->send_request(SlideshareRestClient ::
-         * METHOD_GET, 'edit_slideshow', $params); $slideshows = (array) $result->get_response_content_xml();
+         * METHOD_GET, 'edit_slideshow', $params); $slideshows = (array) $result->get_response_content();
          */
     }
 
@@ -241,7 +241,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->slideshare->add_header('enctype', 'multipart/form-data');
         $slideshow1 = $this->slideshare->send_request(RestClient :: METHOD_POST, 'upload_slideshow', $params);
         /*
-         * $slideshow1 = $slideshow1->get_response_content_xml();
+         * $slideshow1 = $slideshow1->get_response_content();
          */
     }
 
@@ -281,7 +281,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
          * $this->consumer_key; $params['ts'] = $date; $params['hash'] = $hash; $params['slideshow_id'] = $id;
          * $params['username'] = $this->user; $params['password'] = $this->password; $slideshow =
          * $this->slideshare->send_request(SlideshareRestClient :: METHOD_GET, 'delete_slideshow', $params); $slideshow =
-         * (array) $slideshow->get_response_content_xml();
+         * (array) $slideshow->get_response_content();
          */
     }
 
