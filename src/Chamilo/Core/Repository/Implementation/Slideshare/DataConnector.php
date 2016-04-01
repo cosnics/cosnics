@@ -109,7 +109,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['tag'] = $condition;
         
         $result = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
-        $slideshows = (array) $result->get_response_content_xml();
+        $slideshows = (array) $result->get_response_content();
         
         $objects = array();
         $count = 0;
