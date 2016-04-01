@@ -76,41 +76,30 @@ abstract class ContentObjectImportForm extends FormValidator
     {
         $this->addElement('hidden', self :: PROPERTY_TYPE);
 
-        if ($this->show_categories)
-        {
-            $category_group = array();
-            $category_group[] = $this->createElement(
-                'select',
-                ContentObject :: PROPERTY_PARENT_ID,
-                Translation :: get('CategoryTypeName'),
-                $this->get_categories(), array('id' => 'parent_id'));
-            $category_group[] = $this->createElement(
-                'image',
-                'add_category',
-                Theme :: getInstance()->getCommonImagePath('Action/Add'),
-                array('id' => 'add_category', 'style' => 'display:none'));
-            $this->addGroup($category_group, null, Translation :: get('CategoryTypeName'));
+        $category_group = array();
 
-            $group = array();
-            $group[] = $this->createElement('static', null, null, '<div id="' . self :: NEW_CATEGORY . '">');
-            $group[] = $this->createElement('static', null, null, Translation :: get('AddNewCategory'));
-            $group[] = $this->createElement('text', self :: NEW_CATEGORY);
-            $group[] = $this->createElement('static', null, null, '</div>');
-            $this->addGroup($group);
-        }
-        else
-        {
-            $this->addElement('hidden', ContentObject :: PROPERTY_PARENT_ID);
-        }
-    }
+        $category_group[] = $this->createElement(
+            'select',
+            ContentObject :: PROPERTY_PARENT_ID,
+            Translation :: get('CategoryTypeName'),
+            $this->get_categories(),
+            array('id' => 'parent_id'));
 
-    public function setDefaults($defaults = array())
-    {
-        if (! $this->show_categories)
-        {
-            $defaults[ContentObject :: PROPERTY_PARENT_ID] = 0;
-        }
-        parent :: setDefaults($defaults);
+        $category_group[] = $this->createElement(
+            'image',
+            'add_category',
+            Theme :: getInstance()->getCommonImagePath('Action/Add'),
+            array('id' => 'add_category', 'style' => 'display:none'));
+
+        $this->addGroup($category_group, null, Translation :: get('CategoryTypeName'));
+
+        $group = array();
+        $group[] = $this->createElement('static', null, null, '<div id="' . self :: NEW_CATEGORY . '">');
+        $group[] = $this->createElement('static', null, null, Translation :: get('AddNewCategory'));
+        $group[] = $this->createElement('text', self :: NEW_CATEGORY);
+        $group[] = $this->createElement('static', null, null, '</div>');
+
+        $this->addGroup($group);
     }
 
     public function add_footer()
