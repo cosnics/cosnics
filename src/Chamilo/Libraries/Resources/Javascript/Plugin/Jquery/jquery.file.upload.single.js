@@ -22,6 +22,8 @@ dropzoneCallbacks.chamilo = {
                         JSON.stringify(fileData));
                 
                 $(file.previewElement).data('temporary-file-name', serverResponse.properties.temporaryFileName);
+
+                $('button[type=submit]').prop('disabled', false);
             },
             deleteUploadedFile : function(environment, file, serverResponse)
             {
@@ -48,6 +50,8 @@ dropzoneCallbacks.chamilo = {
                     
                     $('input[type=hidden][name=' + environment.settings.name + '_upload_data]').val('');
                 });
+
+                $('button[type=submit]').prop('disabled', true);
             }
         }
     }

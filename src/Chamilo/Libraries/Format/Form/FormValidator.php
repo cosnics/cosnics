@@ -1276,6 +1276,17 @@ EOT;
         $dropzoneOptions['removedfileCallbackFunction'] = 'chamilo.libraries.single.deleteUploadedFile';
 
         $this->addFileDropzone($elementName, $dropzoneOptions, $includeLabel);
+
+        $javascriptHtml = array();
+
+        $javascriptHtml[] = '<script type="text/javascript">';
+        $javascriptHtml[] = '$(document).ready(function() {';
+        $javascriptHtml[] = '$(\'button[type=submit]\').prop(\'disabled\', true)';
+        $javascriptHtml[] = '});';
+        $javascriptHtml[] = '</script>';
+
+        $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
+
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(

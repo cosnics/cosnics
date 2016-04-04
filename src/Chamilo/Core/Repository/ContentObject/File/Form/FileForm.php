@@ -151,7 +151,7 @@ class FileForm extends ContentObjectForm
 
         $calculator = new Calculator($owner);
 
-        if (isset($_FILES['file']) && isset($_FILES['file']['error']) && $_FILES['file']['error'] != 0)
+        if (isset($_FILES['file']) && isset($_FILES['file']['error']) && $_FILES['file']['error'] != 0 && $_FILES['file']['error'] != 4)
         {
             switch ($_FILES['file']['error'])
             {
@@ -196,7 +196,7 @@ class FileForm extends ContentObjectForm
                 }
             }
         }
-        elseif (isset($fields['file_upload_data']))
+        elseif (isset($fields['file_upload_data']) && !empty($fields['file_upload_data']))
         {
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
             $temporaryFilePath = Path :: getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
