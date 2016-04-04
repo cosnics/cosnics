@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Viewer\Table\ContentObject\ContentObjectTable;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\Personal\PersonalWorkspaceTable;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -39,7 +38,7 @@ class BrowserComponent extends Manager implements TableSupport
     /**
      * The search form
      *
-     * @var \libraries\format\FormValidator
+     * @var \Chamilo\Libraries\Format\Form\FormValidator
      */
     private $form;
 
@@ -47,29 +46,6 @@ class BrowserComponent extends Manager implements TableSupport
      * The renderer for the search form
      */
     private $renderer;
-
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
-    {
-        parent :: __construct($applicationConfiguration);
-
-        $form_parameters = $this->get_parameter();
-        $form_parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSER;
-
-        if ($this->is_shared_object_browser())
-        {
-            $form_parameters[self :: SHARED_BROWSER] = 1;
-        }
-
-        $this->set_form(
-            new FormValidator('search', 'post', $this->get_url($form_parameters), '', array('id' => 'search'), false));
-        $this->get_form()->addElement(
-            'text',
-            self :: PARAM_QUERY,
-            Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
-            'size="30" class="search_query"');
-        $this->get_form()->addElement('style_submit_button', 'submit', null, null, null, 'search');
-        $this->get_form()->setDefaults(array(self :: PARAM_QUERY => $this->get_query()));
-    }
 
     public function get_additional_parameters()
     {
@@ -81,42 +57,39 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $this->renderer = clone $this->form->defaultRenderer();
-        $this->renderer->setElementTemplate('<span>{element}</span> ');
-        $this->form->accept($this->renderer);
-
         $html = array();
 
         $html[] = $this->render_header();
 
-        $html[] = '<div class="search_form" style="float: right; margin: 0px 0px 5px 0px;">';
-        $html[] = '<div class="simple_search">';
-        $html[] = $this->renderer->toHTML();
+        $html[] = '<div class="row row-search">';
+        $html[] = '<div class="col-xs-12">';
+        $html[] = $this->getForm()->toHtml();
         $html[] = '</div>';
         $html[] = '</div>';
 
         if ($this->get_maximum_select() > self :: SELECT_SINGLE)
         {
-            $html[] = '<b>' . sprintf(
-                Translation :: get('SelectMaximumNumberOfContentObjects'),
-                $this->get_maximum_select()) . '</b><br />';
+            $message = sprintf(Translation :: get('SelectMaximumNumberOfContentObjects'), $this->get_maximum_select());
+
+            $html[] = '<div class="row">';
+            $html[] = '<div class="col-xs-12">';
+            $html[] = '<div class="alert alert-warning">' . $message . '</div>';
+            $html[] = '</div>';
+            $html[] = '</div>';
         }
 
         $menu = $this->get_menu();
-
         $table = $this->get_object_table();
 
-        $html[] = '<br />';
-
-        $html[] = '<div style="width: 15%; overflow: auto; float:left">';
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12 col-md-4 col-lg-3">';
         $html[] = $menu->render_as_tree();
-
         $html[] = '</div>';
 
-        $html[] = '<div style="width: 83%; float: right;">';
+        $html[] = '<div class="col-xs-12 col-md-8 col-lg-9">';
         $html[] = $table->as_html();
         $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '</div>';
 
         $html[] = $this->render_footer();
 
@@ -125,7 +98,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     /**
      *
-     * @return \core\repository\viewer\ContentObjectTable
+     * @return \Chamilo\Core\Repository\Viewer\Table\ContentObject\ContentObjectTable
      */
     protected function get_object_table()
     {
@@ -138,26 +111,56 @@ class BrowserComponent extends Manager implements TableSupport
      */
     protected function get_query()
     {
-        if ($this->get_form()->validate())
+        if ($this->getForm()->validate())
         {
-
-            return $this->get_form()->exportValue(self :: PARAM_QUERY);
+            return $this->getForm()->exportValue(self :: PARAM_QUERY);
         }
 
-        if (Request :: get(self :: PARAM_QUERY))
-        {
-            return Request :: get(self :: PARAM_QUERY);
-        }
-
-        return null;
+        return $this->getRequest()->query->get(self :: PARAM_QUERY);
     }
 
     /**
      *
-     * @return \libraries\format\FormValidator
+     * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
-    public function get_form()
+    public function getForm()
     {
+        if (! isset($this->form))
+        {
+            $form_parameters = $this->get_parameter();
+            $form_parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSER;
+
+            if ($this->is_shared_object_browser())
+            {
+                $form_parameters[self :: SHARED_BROWSER] = 1;
+            }
+
+            $this->form = new FormValidator(
+                'search',
+                'post',
+                $this->get_url($form_parameters),
+                '',
+                array('id' => 'search', 'class' => 'form-inline pull-right'),
+                false);
+
+            $this->form->addElement(
+                'text',
+                self :: PARAM_QUERY,
+                Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
+                'class="form-control"');
+
+            $this->form->addElement('style_button', 'submit', Translation :: get('Search'), null, null, 'search');
+            $this->form->setDefaults(array(self :: PARAM_QUERY => $this->get_query()));
+
+            $renderer = $this->form->get_renderer();
+            $renderer->setElementTemplate('<div class="form-group">
+      {element}
+</div>');
+            $renderer->setElementTemplate(' {element}', 'submit');
+
+            $this->form->accept($renderer);
+        }
+
         return $this->form;
     }
 
@@ -165,7 +168,7 @@ class BrowserComponent extends Manager implements TableSupport
      *
      * @param \libraries\format\FormValidator $form
      */
-    public function set_form($form)
+    public function setForm(FormValidator $form)
     {
         $this->form = $form;
     }
@@ -286,10 +289,7 @@ class BrowserComponent extends Manager implements TableSupport
                     Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                     $this->get_url(
-                        array_merge(
-                            $this->get_parameters(),
-                            array(
-                                self :: PARAM_ID => $content_object->get_id())),
+                        array_merge($this->get_parameters(), array(self :: PARAM_ID => $content_object->get_id())),
                         false),
                     ToolbarItem :: DISPLAY_ICON));
         }
