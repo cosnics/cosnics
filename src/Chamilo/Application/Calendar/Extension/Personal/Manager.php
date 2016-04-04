@@ -22,7 +22,6 @@ abstract class Manager extends Application
     const ACTION_EDIT = 'Editor';
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const ACTION_EXPORT = 'Exporter';
-    const ACTION_IMPORT = 'Importer';
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW;

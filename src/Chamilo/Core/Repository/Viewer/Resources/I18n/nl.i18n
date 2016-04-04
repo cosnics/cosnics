@@ -38,3 +38,6 @@ MultipleObjectsImportedButOneUseable = "Meedere objecten werden geimporteerd, he
 ContentObjectNotCreated = "Content object niet aangemaakt"
 BrowserComponent = "Doorblader repository"
 SharedObject = "Gedeeld object"
+SelectFrom = "Selecteer uit"
+SelectFromRepository = "Je repository"
+SelectFromWorkspaces = "Je workspaces"

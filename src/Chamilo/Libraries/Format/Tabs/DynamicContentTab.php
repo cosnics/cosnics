@@ -47,7 +47,7 @@ class DynamicContentTab extends DynamicTab
      * @param string $tab_name
      * @return string
      */
-    public function body()
+    public function body($isOnlyTab = false)
     {
         $html = array();
         $html[] = $this->body_header();

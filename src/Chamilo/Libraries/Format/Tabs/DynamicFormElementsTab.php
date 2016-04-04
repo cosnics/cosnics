@@ -47,7 +47,7 @@ class DynamicFormElementsTab extends DynamicTab
      * @param $tab_name string
      * @return string
      */
-    public function body()
+    public function body($isOnlyTab = false)
     {
         return '';
     }

@@ -144,5 +144,5 @@ abstract class DynamicTab
      * @param string $tab_name
      * @return string
      */
-    abstract public function body();
+    abstract public function body($isOnlyTab);
 }
