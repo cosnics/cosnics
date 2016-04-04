@@ -62,20 +62,28 @@ class ActionSelector
 
     /**
      *
+     * @var string
+     */
+    private $classes;
+
+    /**
+     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param integer $userIdentifier
      * @param string[] $allowedContentObjectTypes
      * @param string[] $parameters
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] extraActions
+     * @param string $classes
      */
     public function __construct(Application $application, $userIdentifier, $allowedContentObjectTypes = array(),
-        $parameters = array(), $extraActions = array())
+        $parameters = array(), $extraActions = array(), $classes = null)
     {
         $this->application = $application;
         $this->userIdentifier = $userIdentifier;
         $this->allowedContentObjectTypes = $allowedContentObjectTypes;
         $this->parameters = $parameters;
         $this->extraActions = $extraActions;
+        $this->classes = $classes;
     }
 
     /**
@@ -180,6 +188,24 @@ class ActionSelector
 
     /**
      *
+     * @return string
+     */
+    public function getClasses()
+    {
+        return $this->classes;
+    }
+
+    /**
+     *
+     * @param string $classes
+     */
+    public function setClasses($classes)
+    {
+        $this->classes = $classes;
+    }
+
+    /**
+     *
      * @param string $label
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph|string $image
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
@@ -191,6 +217,13 @@ class ActionSelector
         if ($this->hasExtraActions())
         {
             $dropdownButton->addSubButtons($this->getExtraActions());
+            $dropdownButton->addSubButton(new SubButtonDivider());
+        }
+
+        if ($this->getTypeSelector()->count_options() > 1)
+        {
+            $dropdownButton->addSubButton(new SubButtonHeader(Translation :: get('CreatorTitle')));
+            $dropdownButton->addSubButtons($this->getCreationOptions());
             $dropdownButton->addSubButton(new SubButtonDivider());
         }
 
@@ -211,15 +244,21 @@ class ActionSelector
 
         if ($typeSelector->count_options() == 1)
         {
-            $dropdownButton = new SplitDropdownButton($label, $image, $this->getSingleCreationOptionUrl());
+            $dropdownButton = new SplitDropdownButton(
+                $label,
+                $image,
+                $this->getSingleCreationOptionUrl(),
+                SplitDropdownButton :: DISPLAY_ICON_AND_LABEL,
+                false,
+                $this->getClasses());
         }
         else
         {
-            $dropdownButton = new DropdownButton($label, $image);
-
-            $dropdownButton->addSubButton(new SubButtonHeader(Translation :: get('CreatorTitle')));
-            $dropdownButton->addSubButtons($this->getCreationOptions());
-            $dropdownButton->addSubButton(new SubButtonDivider());
+            $dropdownButton = new DropdownButton(
+                $label,
+                $image,
+                SplitDropdownButton :: DISPLAY_ICON_AND_LABEL,
+                $this->getClasses());
         }
 
         return $dropdownButton;

@@ -3,9 +3,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
 class BrowserComponent extends Manager
@@ -20,7 +20,7 @@ class BrowserComponent extends Manager
 
             $tool_actions[] = new Button(
                 Translation :: get('Reporting'),
-                Theme :: getInstance()->getCommonImagePath('Action/ViewResults'),
+                new BootstrapGlyph('stats'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'reporting',

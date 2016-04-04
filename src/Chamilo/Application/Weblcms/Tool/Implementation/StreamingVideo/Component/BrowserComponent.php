@@ -4,8 +4,9 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Compone
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo\Manager;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -22,46 +23,62 @@ class BrowserComponent extends Manager
     const FILTER_THIS_WEEK = 'week';
     const FILTER_THIS_MONTH = 'month';
 
-    public function get_tool_actions()
+    public function getFilterActions()
     {
-        $toolActions = array();
         $showActions = array();
+        $filter = $this->getFilter();
+
+        $showActions[] = new SubButtonHeader(Translation :: get('ViewPeriodHeader'));
 
         $showActions[] = new SubButton(
-            Translation :: get('ShowToday', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('PeriodAll', null, Utilities :: COMMON_LIBRARIES),
+            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null)),
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == '' ? 'selected' : 'not-selected');
+
+        $showActions[] = new SubButton(
+            Translation :: get('PeriodToday', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
                     self :: PARAM_FILTER => self :: FILTER_TODAY)),
-            Button :: DISPLAY_ICON_AND_LABEL);
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == self :: FILTER_TODAY ? 'selected' : 'not-selected');
 
         $showActions[] = new SubButton(
-            Translation :: get('ShowThisWeek', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('PeriodWeek', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
                     self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
-            Button :: DISPLAY_ICON_AND_LABEL);
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == self :: FILTER_THIS_WEEK ? 'selected' : 'not-selected');
 
         $showActions[] = new SubButton(
-            Translation :: get('ShowThisMonth', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('PeriodMonth', null, Utilities :: COMMON_LIBRARIES),
             Theme :: getInstance()->getCommonImagePath('Action/Browser'),
             $this->get_url(
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
                     self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
-            Button :: DISPLAY_ICON_AND_LABEL);
+            Button :: DISPLAY_LABEL,
+            false,
+            $filter == self :: FILTER_THIS_MONTH ? 'selected' : 'not-selected');
 
-        $showAction = new DropdownButton(
-            Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'));
-        $showAction->setSubButtons($showActions);
+        $showActions[] = new SubButtonDivider();
 
-        $toolActions[] = $showAction;
+        return $showActions;
+    }
 
-        return $toolActions;
+    protected function getFilter()
+    {
+        return $this->getRequest()->query->get(self :: PARAM_FILTER);
     }
 
     public function get_tool_conditions()

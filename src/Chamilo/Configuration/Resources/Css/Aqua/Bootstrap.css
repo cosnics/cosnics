@@ -22,6 +22,17 @@ a:focus {
 	font-weight: normal !important;
 }
 
+.btn-default span.glyphicon, .btn-default span.fa {
+	color: #406e8e;
+}
+
+.btn-primary span.glyphicon, .btn-primary span.fa, .btn-success span.glyphicon,
+	.btn-success span.fa, .btn-info span.glyphicon, .btn-info span.fa,
+	.btn-warning span.glyphicon, .btn-warning span.fa, .btn-danger span.glyphicon,
+	.btn-danger span.fa {
+	color: white;
+}
+
 .dropdown-menu>li>a {
 	/* 	padding: 3px 32px; */
 	
@@ -49,7 +60,6 @@ a:focus {
 	background-image: url("../../Images/Aqua/Background/Checkmark.png");
 	background-position: 20px center;
 	background-repeat: no-repeat;
-
 }
 
 .action-bar-search, .action-bar-search:hover, .action-bar-search:active,
@@ -151,12 +161,39 @@ button.btn {
 	text-shadow: none;
 }
 
-a, .ui-widget-content a:not (.btn ) {
-	color: #406e8e;
-	text-decoration: none;
-	font-weight: bold;
-}
+a
+,
+.ui-widget-content
+ 
+a
+:not
+(
+.btn
+ 
+)
+{
+color
+:
+ 
+#406e8e
+;
 
+	
+text-decoration
+:
+ 
+none
+;
+
+	
+font-weight
+:
+ 
+bold
+;
+
+
+}
 #advanced_filter_form .input-date {
 	width: 90px;
 }

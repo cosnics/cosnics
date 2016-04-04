@@ -6,9 +6,11 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Theme;
@@ -35,14 +37,19 @@ class BrowserComponent extends Manager
 
         $toolActions[] = new Button(
             Translation :: get('Download'),
-            Theme :: getInstance()->getCommonImagePath('Action/Save'),
+            new BootstrapGlyph('download'),
             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ZIP_AND_DOWNLOAD)),
             Button :: DISPLAY_ICON_AND_LABEL);
 
-        $showActions = array();
+        return $toolActions;
+    }
 
+    public function getFilterActions()
+    {
+        $showActions = array();
         $filter = $this->getFilter();
-        $variable = $filter ? $filter : 'All';
+
+        $showActions[] = new SubButtonHeader(Translation :: get('ViewPeriodHeader'));
 
         $showActions[] = new SubButton(
             Translation :: get('PeriodAll', null, Utilities :: COMMON_LIBRARIES),
@@ -50,7 +57,7 @@ class BrowserComponent extends Manager
             $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null)),
             Button :: DISPLAY_LABEL,
             false,
-            $filter == '' ? 'selected' : '');
+            $filter == '' ? 'selected' : 'not-selected');
 
         $showActions[] = new SubButton(
             Translation :: get('PeriodToday', null, Utilities :: COMMON_LIBRARIES),
@@ -61,7 +68,7 @@ class BrowserComponent extends Manager
                     self :: PARAM_FILTER => self :: FILTER_TODAY)),
             Button :: DISPLAY_LABEL,
             false,
-            $filter == self :: FILTER_TODAY ? 'selected' : '');
+            $filter == self :: FILTER_TODAY ? 'selected' : 'not-selected');
 
         $showActions[] = new SubButton(
             Translation :: get('PeriodWeek', null, Utilities :: COMMON_LIBRARIES),
@@ -72,7 +79,7 @@ class BrowserComponent extends Manager
                     self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
             Button :: DISPLAY_LABEL,
             false,
-            $filter == self :: FILTER_THIS_WEEK ? 'selected' : '');
+            $filter == self :: FILTER_THIS_WEEK ? 'selected' : 'not-selected');
 
         $showActions[] = new SubButton(
             Translation :: get('PeriodMonth', null, Utilities :: COMMON_LIBRARIES),
@@ -83,16 +90,11 @@ class BrowserComponent extends Manager
                     self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
             Button :: DISPLAY_LABEL,
             false,
-            $filter == self :: FILTER_THIS_MONTH ? 'selected' : '');
+            $filter == self :: FILTER_THIS_MONTH ? 'selected' : 'not-selected');
 
-        $showAction = new DropdownButton(
-            Translation :: get('Period' . $variable, null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Period'));
-        $showAction->setSubButtons($showActions);
+        $showActions[] = new SubButtonDivider();
 
-        $toolActions[] = $showAction;
-
-        return $toolActions;
+        return $showActions;
     }
 
     protected function getFilter()
