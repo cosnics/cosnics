@@ -37,11 +37,6 @@ a:focus {
 	color: white;
 }
 
-.dropdown-menu>li>a {
-	/* 	padding: 3px 32px; */
-	
-}
-
 .dropdown-menu>li>a>img, .dropdown-menu>li>a>span.inline-glyph, .btn>img,
 	.btn>span.inline-glyph {
 	margin-right: 10px;
