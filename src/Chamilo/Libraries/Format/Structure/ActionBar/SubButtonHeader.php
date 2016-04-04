@@ -22,10 +22,10 @@ class SubButtonHeader extends AbstractButtonToolBarItem implements SubButtonInte
      * @param string $label
      * @param string $classes
      */
-    public function __construct($label, $classes)
+    public function __construct($label, $classes = null)
     {
         parent :: __construct($classes);
-        
+
         $this->label = $label;
     }
 
