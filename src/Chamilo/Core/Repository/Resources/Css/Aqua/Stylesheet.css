@@ -1,0 +1,107 @@
+@import url(../../../Feedback/Resources/Css/Aqua/Stylesheet.css);
+
+@import url(../../../Publication/Resources/Css/Aqua/Stylesheet.css);
+
+tr.recycled td {
+	color: #cccccc;
+}
+
+tr.recycled td a {
+	color: #cccccc;
+}
+
+tr.recycled td a:hover {
+	color: #ff7777;
+}
+
+ul.tree-menu li div a.category_agenda {
+	background-image: url(../../Images/Aqua/Category/Agenda.png);
+}
+
+ul.tree-menu li div a.category_assessment {
+	background-image: url(../../Images/Aqua/Category/Assessment.png);
+}
+
+ul.tree-menu li div a.category_collaboration {
+	background-image: url(../../Images/Aqua/Category/Collaboration.png);
+}
+
+ul.tree-menu li div a.category_general {
+	background-image: url(../../Images/Aqua/Category/General.png);
+}
+
+ul.tree-menu li div a.category_handbook {
+	background-image: url(../../Images/Aqua/Category/Handbook.png);
+}
+
+ul.tree-menu li div a.category_media {
+	background-image: url(../../Images/Aqua/Category/Media.png);
+}
+
+ul.tree-menu li div a.category_news {
+	background-image: url(../../Images/Aqua/Category/News.png);
+}
+
+ul.tree-menu li div a.category_peer_assessment {
+	background-image: url(../../Images/Aqua/Category/PeerAssessment.png);
+}
+
+ul.tree-menu li div a.category_reference {
+	background-image: url(../../Images/Aqua/Category/Reference.png);
+}
+
+ul.tree-menu li div a.category_survey {
+	background-image: url(../../Images/Aqua/Category/Survey.png);
+}
+
+ul.tree-menu li div a.category_video_conferencing {
+	background-image: url(../../Images/Aqua/Category/VideoConferencing.png);
+}
+
+div#advanced_filter_tabs div.admin_tab {
+	background-color: transparent;
+	padding: 10px !important;
+}
+
+div#advanced_filter_tabs .ui-tabs-selected {
+	background-color: white;
+	background-image: none;
+}
+
+div.quota_statistics .data_table td.header {
+	width: 20%;
+}
+
+.type_disabled {
+	background-image: url(../../Images/Aqua/Menu/Disabled.png) !important;
+}
+
+#repository-tree-container {
+	margin-bottom: 15px;
+}
+
+#search-parameters .list-group-item {
+	border-top: 0px solid white;
+	padding: 5px 15px;
+}
+
+#search-parameters .list-group-item:first-child {
+	padding-top: 10px;
+}
+
+#search-parameters .list-group-item:last-child {
+	padding-bottom: 10px;
+}
+
+#search-parameters .panel-title .search-parameter span.glyphicon.glyphicon-remove,
+	#search-parameters .search-parameter.list-group-item span.glyphicon.glyphicon-remove
+	{
+	opacity: 0.25;
+	font-size: 13px;
+	cursor: pointer;
+}
+
+#search-parameters .panel-title .search-parameter span.glyphicon.glyphicon-remove
+	{
+	opacity: 0.5;
+}
