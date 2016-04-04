@@ -101,17 +101,26 @@ class XmlPublicationsTreeFeedComponent extends \Chamilo\Application\Weblcms\Ajax
             $user = \Chamilo\Core\User\Storage\DataManager :: get_current_user();
         }
 
-        if (DataManager :: tool_category_has_new_publications(
-            $category->get_tool(),
-            $user,
-            $course,
-            $category->get_id()))
+        if ($category->get_visibility())
         {
-            return 'new_category';
+            if (DataManager :: tool_category_has_new_publications(
+                $category->get_tool(),
+                $user,
+                $course,
+                $category->get_id()
+            )
+            )
+            {
+                return 'new_category';
+            }
+            else
+            {
+                return 'category';
+            }
         }
         else
         {
-            return 'category';
+            return 'invisible_category';
         }
     }
 }
