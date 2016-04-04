@@ -437,6 +437,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($this->isCourseAdmin())
             {
+                $isSelected = ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL ? 'selected' : 'not-selected');
+
                 $publicationsActions[] = new SubButton(
                     Translation :: get('AllPublications'),
                     Theme :: getInstance()->getCommonImagePath('Treemenu/SharedObjects'),
@@ -445,8 +447,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL)),
                     Button :: DISPLAY_LABEL,
                     false,
-                    $publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_ALL ? 'selected' : '');
+                    $isSelected);
             }
+
+            $isSelected = ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME ? 'selected' : 'not-selected');
 
             $publicationsActions[] = new SubButton(
                 Translation :: get('PublishedForMe'),
@@ -456,7 +460,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME)),
                 Button :: DISPLAY_LABEL,
                 false,
-                $publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FOR_ME ? 'selected' : '');
+                $isSelected);
+
+            $isSelected = ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME ? 'selected' : 'not-selected');
 
             $publicationsActions[] = new SubButton(
                 Translation :: get('MyPublications'),
@@ -466,7 +472,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME)),
                 Button :: DISPLAY_LABEL,
                 false,
-                $publicationType == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLICATION_TYPE_FROM_ME ? 'selected' : '');
+                $isSelected);
 
             switch ($publicationType)
             {

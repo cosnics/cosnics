@@ -194,6 +194,13 @@ class ActionSelector
             $dropdownButton->addSubButton(new SubButtonDivider());
         }
 
+        if ($this->getTypeSelector()->count_options() > 1)
+        {
+            $dropdownButton->addSubButton(new SubButtonHeader(Translation :: get('CreatorTitle')));
+            $dropdownButton->addSubButtons($this->getCreationOptions());
+            $dropdownButton->addSubButton(new SubButtonDivider());
+        }
+
         // Browser + Shared objects
         $dropdownButton->addSubButtons($this->getExistingOptions());
         $dropdownButton->addSubButton(new SubButtonDivider());
@@ -216,10 +223,6 @@ class ActionSelector
         else
         {
             $dropdownButton = new DropdownButton($label, $image);
-
-            $dropdownButton->addSubButton(new SubButtonHeader(Translation :: get('CreatorTitle')));
-            $dropdownButton->addSubButtons($this->getCreationOptions());
-            $dropdownButton->addSubButton(new SubButtonDivider());
         }
 
         return $dropdownButton;
