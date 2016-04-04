@@ -101,6 +101,7 @@ SubscribedDirectly = "Individual"
 SubscribedGroup = "Platform Group"
 CourseGroups = "Course groups"
 SubscriptionType = "Subscription type"
+SubscriptionList = "Subscription list"
 
 ViewGroup = "Details"
 BrowseChildren = "Browse the subgroups"

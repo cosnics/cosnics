@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Style_Alignment;
@@ -51,12 +52,6 @@ class ExporterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $this->current_tab = SubscriptionsOverviewerComponent :: TAB_USERS;
-        if (Request :: get(SubscriptionsOverviewerComponent :: PARAM_TAB))
-        {
-            $this->current_tab = Request :: get(SubscriptionsOverviewerComponent :: PARAM_TAB);
-        }
-
         if (Request :: get(self :: PARAM_COURSE_GROUP))
         {
             $course_group_id = Request :: get(self :: PARAM_COURSE_GROUP);
@@ -64,6 +59,16 @@ class ExporterComponent extends Manager
             $course_group = DataManager :: retrieve_by_id(CourseGroup :: class_name(), $course_group_id);
 
             $this->course_group = $course_group;
+        }
+
+        $this->current_tab = SubscriptionsOverviewerComponent :: TAB_USERS;
+        if (Request :: get(SubscriptionsOverviewerComponent :: PARAM_TAB))
+        {
+            $this->current_tab = Request :: get(SubscriptionsOverviewerComponent :: PARAM_TAB);
+        }
+        elseif(!is_null($this->course_group))
+        {
+            $this->current_tab = SubscriptionsOverviewerComponent::TAB_COURSE_GROUPS;
         }
 
         switch ($this->current_tab)
@@ -233,26 +238,42 @@ class ExporterComponent extends Manager
      *
      * @param $worksheet <type>
      */
-    private function get_course_groups_tab($worksheet)
+    protected function get_course_groups_tab($worksheet)
     {
-        $course_groups = DataManager :: retrieves(
-            CourseGroup :: class_name(),
-            new DataClassRetrievesParameters($this->get_condition()));
+        $courseGroupRoot = DataManager::retrieve_course_group_root($this->get_course_id());
+        $course_groups = $courseGroupRoot->get_children(false);
 
-        $rowcount = 0;
+        $this->handle_course_groups($course_groups, $worksheet);
+    }
+
+    /**
+     * Handles a resultset of course groups and their children
+     *
+     * @param ResultSet $course_groups
+     * @param $worksheet
+     * @param int $rowcount
+     *
+     * @return string
+     */
+    protected function handle_course_groups(ResultSet $course_groups, $worksheet, $rowcount = 0)
+    {
         while ($course_group = $course_groups->next_result())
         {
             $course_group_users = DataManager :: retrieve_course_group_users(
-                $course_group->get_id(),
-                null,
-                null,
-                null,
-                null);
+                $course_group->get_id(), null, null, null, null
+            );
 
             $users_table = $this->get_users_table($course_group_users);
             $title = $course_group->get_name();
-            $rowcount = $this->render_table($worksheet, $title, $users_table, $rowcount);
+
+            $rowcount = $this->render_table(
+                $worksheet, $title, $course_group->get_description(), $users_table, $rowcount
+            );
+
+            $rowcount = $this->handle_course_groups($course_group->get_children(), $worksheet, $rowcount);
         }
+
+        return $rowcount;
     }
 
     /**
@@ -324,7 +345,7 @@ class ExporterComponent extends Manager
         $table = $this->get_users_table($data);
         $title = Translation :: get('SubscriptionList');
         $rowcount = 0;
-        $this->render_table($worksheet, $title, $table, $rowcount);
+        $this->render_table($worksheet, $title, $this->course_group->get_description(), $table, $rowcount);
     }
 
     /**
@@ -336,30 +357,48 @@ class ExporterComponent extends Manager
      * @param $block_row Integer
      * @return Integer
      */
-    private function render_table($worksheet, $title, $table, $block_row)
+    private function render_table($worksheet, $title, $description, $table, $block_row)
     {
-
-        // $block_row++;
-        // $block_row++;
-
-        // $worksheet->setCellValueByColumnAndRow($column, $block_row, $title);
-        // // $this->wrap_text($worksheet, $column, $block_row);
-        // $worksheet->mergeCells('A' . $block_row . ':F' . $block_row);
-        // $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-        // PHPExcel_Style_Alignment :: HORIZONTAL_CENTER
-        // );
-        // $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
-        $block_row ++;
-
         $column = 0;
         $column1 = 1;
         $column2 = 2;
         $color = PHPExcel_Style_Color :: COLOR_BLUE;
 
         $styleArray = array(
-            'font' => array('underline' => PHPExcel_Style_Font :: UNDERLINE_SINGLE, 'color' => array('argb' => $color)));
+            'font' => array(
+                'underline' => PHPExcel_Style_Font :: UNDERLINE_SINGLE,
+                'color' => array('argb' => $color)
+            )
+        );
 
-        // moved this block outside the loop, since it has nothing to do with the data
+        $block_row++;
+        $block_row++;
+
+        $worksheet->setCellValueByColumnAndRow($column, $block_row, $title);
+        // $this->wrap_text($worksheet, $column, $block_row);
+        $worksheet->mergeCells('A' . $block_row . ':F' . $block_row);
+        $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment :: HORIZONTAL_CENTER
+        );
+        $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
+
+        $block_row++;
+
+        if($description)
+        {
+            $block_row++;
+
+            $worksheet->mergeCells('A' . $block_row . ':F' . $block_row);
+            $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
+                PHPExcel_Style_Alignment :: HORIZONTAL_CENTER
+            );
+
+            $worksheet->setCellValueByColumnAndRow($column, $block_row, $description);
+
+            $block_row ++;
+        }
+
+        //moved this block outside the loop, since it has nothing to do with the data
         {
             $worksheet->getColumnDimension('A')->setWidth(20);
             $worksheet->getColumnDimension('B')->setWidth(30);
@@ -376,12 +415,12 @@ class ExporterComponent extends Manager
             $worksheet->getStyleByColumnAndRow($column2 + 3, $block_row + 1)->applyFromArray($styleArray);
         }
 
-        // $i = 0;
+        //$i = 0;
 
         foreach ($table as $entry)
         {
-            // $i++;
-            $block_row ++;
+            //$i++;
+            $block_row++;
             $worksheet->setCellValueByColumnAndRow($column, $block_row, $entry[User :: PROPERTY_OFFICIAL_CODE]);
             $worksheet->setCellValueByColumnAndRow($column1, $block_row, $entry[User :: PROPERTY_USERNAME]);
             $worksheet->setCellValueByColumnAndRow($column2, $block_row, $entry[User :: PROPERTY_LASTNAME]);
@@ -389,7 +428,8 @@ class ExporterComponent extends Manager
             $worksheet->setCellValueByColumnAndRow($column2 + 2, $block_row, $entry[User :: PROPERTY_EMAIL]);
             $worksheet->setCellValueByColumnAndRow($column2 + 3, $block_row, $entry['Course Groups']);
 
-            // if ($i == 1)
+            //if ($i == 1)
+
         }
         // $block_row++;
         return $block_row;

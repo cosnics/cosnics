@@ -31,6 +31,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class SubscriptionsOverviewerComponent extends Manager implements TableSupport
@@ -152,42 +153,42 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         return $table->as_html();
     }
 
+    /**
+     * Handles the content for the course groups tab
+     *
+     * @return string
+     */
     private function get_course_groups_tab()
     {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_COURSE_CODE), 
-            new StaticConditionVariable($this->get_course_id()));
-        $conditions[] = new InequalityCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_PARENT_ID), 
-            InequalityCondition :: GREATER_THAN, 
-            new StaticConditionVariable(0));
-        
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        $query_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME), 
-            '*' . $query . '*', 
-            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()), 
-            true);
-        $query_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_DESCRIPTION), 
-            '*' . $query . '*', 
-            WeblcmsDataManager :: get_instance()->get_alias(CourseGroup :: get_table_name()), 
-            true);
-        $conditions[] = new OrCondition($query_conditions);
-        
-        $course_groups = DataManager :: retrieves(
-            CourseGroup :: class_name(), 
-            new DataClassRetrievesParameters(new AndCondition($conditions)));
-        
-        $html_tables = '';
+        $courseGroupRoot = DataManager::retrieve_course_group_root($this->get_course_id());
+        $course_groups = $courseGroupRoot->get_children(false);
+
+        return $this->handle_course_groups($course_groups);
+    }
+
+    /**
+     * Handles a resultset of course groups and their children
+     *
+     * @param ResultSet $course_groups
+     *
+     * @return string
+     */
+    protected function handle_course_groups(ResultSet $course_groups)
+    {
+        $html = array();
+
         while ($course_group = $course_groups->next_result())
         {
             $this->table_course_group_id = $course_group->get_id();
-            
+
             $table = new CourseGroupUserTable($this);
-            $html_tables = $html_tables . '<h4>' . $course_group->get_name() . '</h4>' . $table->as_html();
+            $html[] = '<h4>' . $course_group->get_name() . '</h4>' . $table->as_html();
+
+            $children = $course_group->get_children(false);
+            $html[] = $this->handle_course_groups($children);
         }
-        return $html_tables;
+
+        return implode("\n", $html);
     }
 
     public function get_table_course_group_id()

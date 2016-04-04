@@ -101,6 +101,7 @@ SubscribedDirectly = "Individueel"
 SubscribedGroup = "Platformgroep"
 CourseGroups = "Cursusgroepen"
 SubscriptionType = "Inschrijvings type"
+SubscriptionList = "Inschrijvingslijst"
 
 ViewGroup = "Details"
 BrowseChildren = "Bekijk de subgroepen"
