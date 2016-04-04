@@ -6,6 +6,10 @@ a:focus {
 	outline: 0;
 }
 
+.row-search {
+	margin-bottom: 10px;
+}
+
 /**************
  * ACTION BAR *
  **************/
@@ -161,39 +165,12 @@ button.btn {
 	text-shadow: none;
 }
 
-a
-,
-.ui-widget-content
- 
-a
-:not
-(
-.btn
- 
-)
-{
-color
-:
- 
-#406e8e
-;
-
-	
-text-decoration
-:
- 
-none
-;
-
-	
-font-weight
-:
- 
-bold
-;
-
-
+.ui-widget-content a:not (.btn ), a {
+	color: #406e8e;
+	text-decoration: none;
+	font-weight: bold;
 }
+
 #advanced_filter_form .input-date {
 	width: 90px;
 }
