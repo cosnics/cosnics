@@ -16,8 +16,8 @@ $(function()
             $("#title").removeClass('input_valid');
             $("#title").addClass('input_conflict');
             $('button[name="submit_button"]').attr('class', '');
-            $('button[name="submit_button"]').addClass('negative error');
-            $('button[name="submit_button"]').html(getTranslation('InvalidConflict', null, 'common\\libraries'));
+            $('button[name="submit_button"]').addClass('btn btn-danger');
+            $('button[name="submit_button"]').html(getTranslation('InvalidConflict', null, 'Chamilo\\Libraries'));
             $('button[name="submit_button"]').bind('click', disableButton);
         }
         else
@@ -54,7 +54,7 @@ $(function()
                         $("#title").removeClass('input_valid input_conflict');
                         $("#title").addClass('input_warning');
                         $('button[name="submit_button"]').attr('class', '');
-                        $('button[name="submit_button"]').addClass('warning alert');
+                        $('button[name="submit_button"]').addClass('btn btn-warning');
                         $('button[name="submit_button"]').unbind('click');
                     }
                     else
@@ -112,8 +112,8 @@ $(function()
                     $('input[name="new_category"]').removeClass('input_valid');
                     $('input[name="new_category"]').addClass('input_conflict');
                     $('button[name="submit_button"]').attr('class', '');
-                    $('button[name="submit_button"]').addClass('negative error');
-                    $('button[name="submit_button"]').html(getTranslation('InvalidConflict', null, 'common\\libraries'));
+                    $('button[name="submit_button"]').addClass('btn btn-danger');
+                    $('button[name="submit_button"]').html(getTranslation('InvalidConflict', null, 'Chamilo\\Libraries'));
                     $('button[name="submit_button"]').bind('click', disableButton);
                 }
                 else
