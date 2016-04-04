@@ -32,14 +32,22 @@ class DynamicFormTabsRenderer extends DynamicTabsRenderer
 
     public function render()
     {
-        $this->form->addElement('html', $this->header());
+        $tabCount = count($this->get_tabs());
+
+        if ($tabCount > 1)
+        {
+            $this->form->addElement('html', $this->header());
+        }
 
         foreach ($this->get_tabs() as $key => $tab)
         {
             $tab->set_form($this->form);
-            $tab->body();
+            $tab->body($tabCount == 1);
         }
 
-        $this->form->addElement('html', $this->footer());
+        if ($tabCount > 1)
+        {
+            $this->form->addElement('html', $this->footer());
+        }
     }
 }

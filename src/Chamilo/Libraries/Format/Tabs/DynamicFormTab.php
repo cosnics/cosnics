@@ -8,7 +8,7 @@ class DynamicFormTab extends DynamicTab
 
     /**
      * The parameters needed to call the method
-     * 
+     *
      * @var array
      */
     private $parameters;
@@ -70,19 +70,26 @@ class DynamicFormTab extends DynamicTab
      *
      * @return string
      */
-    public function body()
+    public function body($isOnlyTab = false)
     {
-        $this->get_form()->addElement('html', $this->body_header());
-        
+        if (! $isOnlyTab)
+        {
+            $this->get_form()->addElement('html', $this->body_header());
+        }
+
         $method = $this->get_method();
-        
+
         if (! is_array($method))
         {
             $method = array($this->get_form(), $method);
         }
-        
+
         call_user_func_array($method, $this->parameters);
-        $this->get_form()->addElement('html', $this->body_footer());
+
+        if (! $isOnlyTab)
+        {
+            $this->get_form()->addElement('html', $this->body_footer());
+        }
     }
 
     public function get_link()

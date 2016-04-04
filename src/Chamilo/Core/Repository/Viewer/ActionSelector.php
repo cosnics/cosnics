@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 
 /**
  *
@@ -49,18 +50,32 @@ class ActionSelector
 
     /**
      *
+     * @var \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
+     */
+    private $extraActions;
+
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Selector\TypeSelector
+     */
+    private $typeSelector;
+
+    /**
+     *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param integer $userIdentifier
      * @param string[] $allowedContentObjectTypes
      * @param string[] $parameters
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] extraActions
      */
-    public function __construct(Application $application, $userIdentifier, $allowedContentObjectTypes = array(), 
-        $parameters = array())
+    public function __construct(Application $application, $userIdentifier, $allowedContentObjectTypes = array(),
+        $parameters = array(), $extraActions = array())
     {
         $this->application = $application;
         $this->userIdentifier = $userIdentifier;
         $this->allowedContentObjectTypes = $allowedContentObjectTypes;
         $this->parameters = $parameters;
+        $this->extraActions = $extraActions;
     }
 
     /**
@@ -137,31 +152,76 @@ class ActionSelector
 
     /**
      *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
+     */
+    public function getExtraActions()
+    {
+        return $this->extraActions;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[] $extraActions
+     */
+    public function setExtraActions($extraActions)
+    {
+        $this->extraActions = $extraActions;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function hasExtraActions()
+    {
+        $extraActions = $this->getExtraActions();
+        return count($extraActions) > 0;
+    }
+
+    /**
+     *
      * @param string $label
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph|string $image
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
     public function getActionButton($label, $image)
     {
-        $dropdownButton = new DropdownButton($label, $image);
-        
-        // Creation options
-        $dropdownButton->addSubButton(new SubButtonHeader(Translation :: get('CreatorTitle')));
-        $dropdownButton->addSubButtons($this->getCreationOptions());
-        
-        // Divider
+        $dropdownButton = $this->getDropdownButton($label, $image);
+
+        if ($this->hasExtraActions())
+        {
+            $dropdownButton->addSubButtons($this->getExtraActions());
+            $dropdownButton->addSubButton(new SubButtonDivider());
+        }
+
+        // Browser + Shared objects
+        $dropdownButton->addSubButtons($this->getExistingOptions());
         $dropdownButton->addSubButton(new SubButtonDivider());
-        
+
         // Import options
         $dropdownButton->addSubButton(new SubButtonHeader(Translation :: get('ImporterTitle')));
         $dropdownButton->addSubButtons($this->getImportOptions());
-        
-        // Divider
-        $dropdownButton->addSubButton(new SubButtonDivider());
-        
-        // Browser + Shared objects
-        $dropdownButton->addSubButtons($this->getExistingOptions());
-        
+
+        return $dropdownButton;
+    }
+
+    public function getDropdownButton($label, $image)
+    {
+        $typeSelector = $this->getTypeSelector();
+
+        if ($typeSelector->count_options() == 1)
+        {
+            $dropdownButton = new SplitDropdownButton($label, $image, $this->getSingleCreationOptionUrl());
+        }
+        else
+        {
+            $dropdownButton = new DropdownButton($label, $image);
+
+            $dropdownButton->addSubButton(new SubButtonHeader(Translation :: get('CreatorTitle')));
+            $dropdownButton->addSubButtons($this->getCreationOptions());
+            $dropdownButton->addSubButton(new SubButtonDivider());
+        }
+
         return $dropdownButton;
     }
 
@@ -171,16 +231,42 @@ class ActionSelector
      */
     public function getCreationOptions()
     {
+        return $this->getSubButtonTypeSelectorRenderer()->render();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getSingleCreationOptionUrl()
+    {
         $typeSelector = $this->getTypeSelector();
-        $createParameters = $this->getParameters();
-        $createParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_CREATOR;
-        
-        $typeSelectorRenderer = new SubButtonTypeSelectorRenderer(
-            $this->getApplication(), 
-            $typeSelector, 
-            $createParameters);
-        
-        return $typeSelectorRenderer->render();
+
+        $templateIds = $typeSelector->get_unique_content_object_template_ids();
+        $templateId = array_pop($templateIds);
+
+        return $this->getSubButtonTypeSelectorRenderer()->getContentObjectTypeUrl($templateId);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Selector\Renderer\SubButtonTypeSelectorRenderer
+     */
+    public function getSubButtonTypeSelectorRenderer()
+    {
+        if (! isset($this->subButtonTypeSelectorRenderer))
+        {
+            $typeSelector = $this->getTypeSelector();
+            $createParameters = $this->getParameters();
+            $createParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_CREATOR;
+
+            $this->subButtonTypeSelectorRenderer = new SubButtonTypeSelectorRenderer(
+                $this->getApplication(),
+                $typeSelector,
+                $createParameters);
+        }
+
+        return $this->subButtonTypeSelectorRenderer;
     }
 
     /**
@@ -191,9 +277,9 @@ class ActionSelector
     {
         $importParameters = $this->getParameters();
         $importParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_IMPORTER;
-        
+
         $importTypeSelector = new ImportTypeSelector($importParameters, $this->getAllowedContentObjectTypes());
-        
+
         return $importTypeSelector->getTypeSelectorSubButtons();
     }
 
@@ -204,18 +290,20 @@ class ActionSelector
     public function getExistingOptions()
     {
         $subButtons = array();
-        
+
+        $subButtons[] = new SubButtonHeader(Translation :: get('SelectFrom'));
+
         $subButtons[] = new SubButton(
-            Translation :: get('BrowserComponent'), 
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/Browser'), 
-            $this->getExistingLink(Manager :: ACTION_BROWSER), 
+            Translation :: get('SelectFromRepository'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/Browser'),
+            $this->getExistingLink(Manager :: ACTION_BROWSER),
             SubButton :: DISPLAY_ICON_AND_LABEL);
-        
+
         $subButtons[] = new SubButton(
-            Translation :: get('SharedObject'), 
-            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/Share'), 
+            Translation :: get('SelectFromWorkspaces'),
+            Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Action/Share'),
             $this->getExistingLink(Manager :: ACTION_BROWSER));
-        
+
         return $subButtons;
     }
 
@@ -228,9 +316,9 @@ class ActionSelector
     {
         $parameters = $this->getParameters();
         $parameters[Manager :: PARAM_ACTION] = $action;
-        
+
         $existingLink = new Redirect($parameters);
-        
+
         return $existingLink->getUrl();
     }
 
@@ -240,7 +328,14 @@ class ActionSelector
      */
     public function getTypeSelector()
     {
-        $typeSelectorFactory = new TypeSelectorFactory($this->getAllowedContentObjectTypes(), $this->getUserIdentifier());
-        return $typeSelectorFactory->getTypeSelector();
+        if (! isset($this->typeSelector))
+        {
+            $typeSelectorFactory = new TypeSelectorFactory(
+                $this->getAllowedContentObjectTypes(),
+                $this->getUserIdentifier());
+            $this->typeSelector = $typeSelectorFactory->getTypeSelector();
+        }
+
+        return $this->typeSelector;
     }
 }
