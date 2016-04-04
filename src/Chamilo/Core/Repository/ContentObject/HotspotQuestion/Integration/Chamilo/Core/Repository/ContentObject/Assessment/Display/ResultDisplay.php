@@ -101,7 +101,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if ($configuration->show_correction() || $configuration->show_solution())
             {
                 $html[] = '<td>' . ($valid_answer ? Theme :: getInstance()->getImage('AnswerCorrect') : Theme :: getInstance()->getImage(
-                    'AnswerWwrong')) . '</td>';
+                    'AnswerWrong')) . '</td>';
             }
 
             $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $answer->get_answer());
@@ -133,9 +133,10 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
     public function is_valid_answer($answer, $user_answer)
     {
-        $hotspot_coordinates = $answer->get_hotspot_coordinates();
+        $hotspot_coordinates = unserialize($answer->get_hotspot_coordinates());
+        $hotspot_coordinates[] = $hotspot_coordinates[0];
 
-        $polygon = new PointInPolygon(unserialize($hotspot_coordinates));
+        $polygon = new PointInPolygon($hotspot_coordinates);
         $is_inside = $polygon->is_inside(unserialize($user_answer));
 
         switch ($is_inside)
