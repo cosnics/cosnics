@@ -10,18 +10,22 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSection;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
+use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Display;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Theme;
@@ -40,10 +44,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
-use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 
 /**
  * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
