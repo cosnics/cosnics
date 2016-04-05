@@ -1,23 +1,13 @@
+@import url('../Aqua/Tree.css');
+
 /*****************************************************
  *  TREEMENU STYLES                                  *
  *****************************************************/
-ul.tree-menu, ul.tree-menu ul {
-	list-style: none;
-	margin: 0px;
-	padding: 0px;
-	clear: both;
-}
 
 ul.tree-menu ul {
 	background-repeat: repeat-y;
 	background-image: url(../../Images/Ruby/Treemenu/TreeBranch.png);
 	padding-left: 18px;
-	clear: both;
-}
-
-ul.tree-menu li {
-	margin: 0px;
-	padding: 0px;
 	clear: both;
 }
 
@@ -28,32 +18,6 @@ ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
 	background-repeat: no-repeat;
 	height: 18px;
 	clear: both;
-}
-
-ul.tree-menu li div {
-	background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
-		repeat-y;
-}
-
-ul.tree-menu li div.last {
-	background-image: url(../../Images/Aqua/Treemenu/TreeLeafEnd.png);
-}
-
-ul.tree-menu li div.collapse {
-	background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
-		repeat-y;
-}
-
-ul.tree-menu li div.lastCollapse {
-	background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
-}
-
-ul.tree-menu li div.expand {
-	background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left
-		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
-		repeat-y;
 }
 
 ul.tree-menu li div.lastExpand {
@@ -74,24 +38,6 @@ ul.tree-menu li div a.selected {
 	background-color: #f7dddd;
 }
 
-ul.tree-menu li div a.lastSelected {
-	border: 1px dotted #d4d4d4;
-	margin-left: -1px;
-	height: 16px;
-}
-
-ul.tree-menu li div a.disabled {
-	color: #9f9f9f;
-	cursor: default;
-}
-
-ul.tree-menu li div img {
-	height: 16px;
-	margin-left: 2px;
-	position: relative;
-	margin-top: -1px;
-	vertical-align: middle;
-}
 
 /*
  * Special treemenu icons
@@ -225,14 +171,6 @@ ul.tree-menu li.current_path>div a.invisible_category, ul.tree-menu li.current>d
 	background: url(../../Images/Ruby/Treemenu/TreeFolderOpenInvisible.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
 }
 
-ul.tree-menu li.current>div a {
-	text-decoration: underline;
-}
-
-ul.tree-menu li div.collapse {
-	display: block;
-}
-
 /*
 ul.tree-menu li.current_path ul li div a.category
 {
@@ -246,11 +184,6 @@ ul.tree-menu li.current_path ul li.current_path div a.category
 */
 ul.tree-menu li div a.end_node {
 	background-image: url(../../Images/Ruby/Treemenu/EndNode.png);
-}
-
-ul.tree-menu li div a.no_link {
-	color: #797268;
-	cursor: default;
 }
 
 ul.tree-menu li div a.type_user {
