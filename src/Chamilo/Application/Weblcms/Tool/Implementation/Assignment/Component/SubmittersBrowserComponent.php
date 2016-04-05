@@ -468,7 +468,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
                 
                 $course = $this->get_course();
                 $ephorus_tool = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_course_tool_by_name(
-                    'ephorus');
+                    'Ephorus');
                 if ($ephorus_tool && $course->get_course_setting(
                     \Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting :: COURSE_SETTING_TOOL_ACTIVE, 
                     $ephorus_tool->get_id()))
@@ -477,11 +477,11 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
                         new Button(
                             Translation :: get('EphorusOverview'), 
                             Theme :: getInstance()->getImagePath(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace('ephorus'), 
+                                \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace('Ephorus'),
                                 'Logo/16'), 
                             $this->get_url(
                                 array(
-                                    \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'ephorus', 
+                                    \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'Ephorus',
                                     \Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION => $this->get_publication_id(), 
                                     \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager :: ACTION_ASSIGNMENT_BROWSER)), 
                             ToolbarItem :: DISPLAY_ICON_AND_LABEL));
