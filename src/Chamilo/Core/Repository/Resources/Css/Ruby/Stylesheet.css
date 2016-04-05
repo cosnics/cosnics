@@ -1,16 +1,9 @@
+@import url('../Aqua/Stylesheet.css');
 @import url(../../../Feedback/Resources/Css/Ruby/Stylesheet.css);
 @import url(../../../Publication/Resources/Css/Ruby/Stylesheet.css);
 
 tr.recycled td { /*text-decoration:line-through;*/
 	color: #cccccc;
-}
-
-tr.recycled td a {
-	color: #cccccc;
-}
-
-tr.recycled td a:hover {
-	color: #ff7777;
 }
 
 div.story_image {
@@ -90,16 +83,6 @@ ul.tree-menu li div a.category_survey {
 
 ul.tree-menu li div a.category_video_conferencing {
 	background-image: url(../../Images/Ruby/Category/VideoConferencing.png);
-}
-
-div#advanced_filter_tabs div.admin_tab {
-	background-color: transparent;
-	padding: 10px !important;
-}
-
-div#advanced_filter_tabs .ui-tabs-selected {
-	background-color: white;
-	background-image: none;
 }
 
 div#repository_menu, div#search_parameters, div.information-box {
