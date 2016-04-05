@@ -36,7 +36,7 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent:: __construct($applicationConfiguration);
 
         $this->initialize_dependencies($this->get_dependency_container());
     }
@@ -48,9 +48,17 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
     {
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
+            $request = $this->getRequest();
+            $request->query->set(
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION,
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE
+            );
+
             $factory = new ApplicationFactory(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager :: context(),
-               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager:: context(),
+                new ApplicationConfiguration($request, $this->get_user(), $this)
+            );
+
             return $factory->run();
         }
         else
@@ -66,7 +74,9 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      */
     public function initialize_dependencies(DependencyContainer $dependency_container)
     {
-        $dependency_container->add(self :: DEPENDENCY_DATA_MANAGER_CLASS, 'Chamilo\Core\Repository\Storage\DataManager');
+        $dependency_container->add(
+            self :: DEPENDENCY_DATA_MANAGER_CLASS, 'Chamilo\Core\Repository\Storage\DataManager'
+        );
         $dependency_container->add(self :: DEPENDENCY_REQUEST_CLASS, 'Chamilo\Libraries\Platform\Session\Request');
     }
 
@@ -88,16 +98,17 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
      */
     public function get_base_requests()
     {
-        $content_object_translation = Translation :: get(
+        $content_object_translation = Translation:: get(
             'ContentObject',
             null,
-            \Chamilo\Core\Repository\Manager :: context());
+            \Chamilo\Core\Repository\Manager:: context()
+        );
 
         $request_class = $this->get_request_class();
 
-        $ids = $request_class :: get(self :: PARAM_CONTENT_OBJECT_IDS);
+        $ids = $request_class:: get(self :: PARAM_CONTENT_OBJECT_IDS);
 
-        if (! $ids)
+        if (!$ids)
         {
             throw new NoObjectSelectedException($content_object_translation);
         }
@@ -108,9 +119,9 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         $requests = array();
         foreach ($ids as $id)
         {
-            $content_object = $data_manager_class :: retrieve_by_id(ContentObject :: class_name(), $id);
+            $content_object = $data_manager_class:: retrieve_by_id(ContentObject:: class_name(), $id);
 
-            if (! $content_object)
+            if (!$content_object)
             {
                 throw new ObjectNotExistException($content_object_translation, $id);
             }
