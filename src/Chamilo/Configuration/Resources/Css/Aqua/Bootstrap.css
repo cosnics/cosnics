@@ -293,6 +293,7 @@ ol.breadcrumb a {
 
 .file-upload .panel-body {
 	text-align: center;
+	cursor: pointer;
 }
 
 .file-upload .panel .glyphicon {
