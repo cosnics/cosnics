@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+ListDescription = "Die Liste von allen Plattformgruppen"
+CreateDescription = "Eine neue Gruppe oder Untergruppe erstellen"
+ExportDescription = "Die Gruppen in CSV/XML exportieren"
+ImportDescription = "Die Gruppen von XML importieren"
+ImportGroupUsers = "Gruppennutzer importieren"
+ImportGroupUsersDescription = "Gruppennutzer von CSV importieren"

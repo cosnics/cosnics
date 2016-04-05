@@ -1,0 +1,10 @@
+@import url('../Aqua/Stylesheet.css');
+
+div.reporting_template_menu ul ul li {
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+	border: none;
+	background-color: #EFEFEF;
+	border-top: 1px solid #FFF;
+	border-left: 0;
+}
