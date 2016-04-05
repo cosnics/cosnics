@@ -50,8 +50,7 @@ form div.formw input[type=text], form div.form-row div.formw input[type=password
 form div.formw input[type=text]:hover, form div.form-row div.formw input[type=text]:focus,
 	form div.form-row div.formw input[type=password]:hover, form div.form-row div.formw input[type=password]:focus,
 	form div.form-row div.formw select:hover, form div.form-row div.formw select:focus
-form div.form-row div.formw textarea:hover, form div.form-row div.formw textarea:focus
-	{
+form div.form-row div.formw textarea:hover, form div.form-row div.formw textarea:focus {
 	background-color: #f7fbfd;
 	border-color: #4171B5;
 }
@@ -218,8 +217,7 @@ form .input_numeric {
 	text-align: right;
 }
 
-form input.rating_question_low_value, form input.rating_question_high_value
-	{
+form input.rating_question_low_value, form input.rating_question_high_value {
 	background-image: url(../../Images/Aqua/Buttons/Low.png);
 	background-position: 4px center;
 	background-repeat: no-repeat;
@@ -863,7 +861,7 @@ div .collapsed .row {
 }
 
 div .collapsed a {
-	background-image: url(../../Images/Aqua/Action/ToggleHide.png);
+	background-image: url(../../Images/Ruby/Action/ToggleHide.png);
 	background-position: right center;
 	background-repeat: no-repeat;
 	padding-right: 10px;

@@ -104,6 +104,8 @@ abstract class ContentObjectImportForm extends FormValidator
 
     public function add_footer()
     {
+        $buttons = array();
+
         $buttons[] = $this->createElement(
             'style_submit_button',
             'import_button',
@@ -125,6 +127,17 @@ abstract class ContentObjectImportForm extends FormValidator
         return $this->application;
     }
 
+    /**
+     *
+     * @param unknown $type
+     * @param WorkspaceInterface $workspace
+     * @param unknown $application
+     * @param unknown $method
+     * @param unknown $action
+     * @param string $show_categories
+     * @throws \Exception
+     * @return \Chamilo\Core\Repository\Form\ContentObjectImportForm
+     */
     public static function factory($type, WorkspaceInterface $workspace, $application, $method, $action = null,
         $show_categories = true)
     {

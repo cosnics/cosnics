@@ -70,3 +70,4 @@ MaximumFileSizeServer = "The maximal filesize allowed by the platform is current
 SelectAType = "Select a type"
 FileType = "File type"
 DropFileHereMessage= "Drop files here or click on the plus sign to select a file from your device"
+CurrentlySelectedFile = "The currently selected file is <b>{FILENAME}</b> (<b>{FILESIZE}</b>). <br/> Select a new file in the field below if you want to change the currently selected file or leave the field blank if you want to keep the currently selected file."

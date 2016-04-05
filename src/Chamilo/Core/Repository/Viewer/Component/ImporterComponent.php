@@ -25,6 +25,9 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
 
 class ImporterComponent extends Manager implements DelegateComponent
 {
@@ -43,16 +46,17 @@ class ImporterComponent extends Manager implements DelegateComponent
 
         if ($type)
         {
-            $import_form = ContentObjectImportForm :: factory(
+            $importForm = ContentObjectImportForm :: factory(
                 $type,
                 $this->getWorkspace(),
                 $this,
                 'post',
                 $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)));
+            $this->addPublishButtonToImportForm($importForm);
 
-            if ($import_form->validate())
+            if ($importForm->validate())
             {
-                $values = $import_form->exportValues();
+                $values = $importForm->exportValues();
                 $parent_id = $values[ContentObject :: PROPERTY_PARENT_ID];
                 $new_category_name = $values[ContentObjectImportForm :: NEW_CATEGORY];
 
@@ -88,7 +92,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                 }
 
                 $parameters = ImportParameters :: factory(
-                    $import_form->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
+                    $importForm->exportValue(ContentObjectImportForm :: PROPERTY_TYPE),
                     $this->get_user_id(),
                     $this->getWorkspace(),
                     $category_id,
@@ -165,7 +169,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                 $html = array();
 
                 $html[] = $this->render_header();
-                $html[] = $import_form->toHtml();
+                $html[] = $importForm->toHtml();
                 $html[] = $this->render_footer();
 
                 return implode(PHP_EOL, $html);
@@ -198,6 +202,31 @@ class ImporterComponent extends Manager implements DelegateComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Repository\Form\ContentObjectImportForm $importForm
+     */
+    public function addPublishButtonToImportForm($importForm)
+    {
+        $buttons = $importForm->getElement('buttons');
+
+        $buttonElements = $buttons->getElements();
+        $buttonElements[] = $importForm->createElement(
+            'style_submit_button',
+            'publish',
+            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+            array('id' => 'publish-button', 'class' => 'hidden'),
+            null,
+            'plus');
+
+        $buttons->setElements($buttonElements);
+
+        $importForm->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(self :: package(), true) . 'ImporterComponent.js'));
     }
 
     public function get_import_types()

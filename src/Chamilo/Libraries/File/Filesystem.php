@@ -534,19 +534,19 @@ class Filesystem
         $gigabyte = pow($kilobyte, 3);
         if ($file_size >= $gigabyte)
         {
-            $file_size = round($file_size / $gigabyte * 100) / 100 . ($postfix ? 'GB' : '');
+            $file_size = round($file_size / $gigabyte * 100) / 100 . ($postfix ? ' GB' : '');
         }
         elseif ($file_size >= $megabyte)
         {
-            $file_size = round($file_size / $megabyte * 100) / 100 . ($postfix ? 'MB' : '');
+            $file_size = round($file_size / $megabyte * 100) / 100 . ($postfix ? ' MB' : '');
         }
         elseif ($file_size >= $kilobyte)
         {
-            $file_size = round($file_size / $kilobyte * 100) / 100 . ($postfix ? 'kB' : '');
+            $file_size = round($file_size / $kilobyte * 100) / 100 . ($postfix ? ' kB' : '');
         }
         else
         {
-            $file_size = $file_size . ($postfix ? 'B' : '');
+            $file_size = $file_size . ($postfix ? ' B' : '');
         }
         return $file_size;
     }
