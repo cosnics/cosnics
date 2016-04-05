@@ -1,30 +1,8 @@
+@import url('../Aqua/Stylesheet.css');
+
 /*****************************************************
  *  ADMIN STYLES                                     *
  *****************************************************/
-/* Platform admin overview */
-div.admin {
-	float: left;
-	width: 49%;
-	margin: 10px 20px 10px 0px;
-}
-
-div.admin_section {
-	clear: both;
-	padding: 10px;
-	border: 1px solid #ebebeb;
-	-moz-border-radius-topright: 10px;
-	-moz-border-radius-bottomleft: 10px;
-	border-radius-topright: 10px;
-	border-radius-bottomleft: 10px;
-	-webkit-border-top-right-radius: 10px;
-	-webkit-border-bottom-left-radius: 10px;
-	background-color: #f6f6f6;
-}
-
-div.admin_header {
-	clear: both;
-}
-
 div.admin_header span.category {
 	float: left;
 	background-color: #f6f6f6;
@@ -43,10 +21,6 @@ div.admin_header span.category {
 	*/
 }
 
-div.admin_header span.category img {
-	margin: 0px 5px 0px 0px;
-}
-
 div.admin_header span.category span.title {
 	color: #B1071C;
 	font-size: 14px;
@@ -58,70 +32,6 @@ div.admin_header div.admin_search {
 	background-color: #FFFFFF;
 	font-weight: bold;
 	color: #9e021b;
-}
-
-div.admin_section div.actions {
-	clear: both;
-	text-align: center;
-}
-
-div.action {
-	float: left;
-	text-align: center;
-	padding: 5px 10px 5px 10px;
-	margin: 0;
-}
-
-div.action img {
-	margin: 8px 15px 8px 15px;
-}
-
-/*
- * Various
- */
-div.admin_search_form {
-	padding: 10px 0px 0px 0px;
-	margin: 0px;
-	height: 48px;
-}
-
-div.admin_search_form div.row {
-	clear: none;
-	float: left;
-	padding: 0px;
-}
-
-div.admin_search_form div.row div.formw {
-	float: none;
-	width: auto;
-}
-
-div.admin_search_form div.row div.formw button {
-	margin-top: -2px;
-	margin-left: 10px;
-}
-
-.tab {
-	border: 1px solid #ebebeb;
-	background-color: #fafcfc;
-	z-index: 1000;
-	clear: both;
-}
-
-#tabs ul {
-	display: none;
-}
-
-#tabs a:link {
-	color: #303030;
-}
-
-#tabs a:visited {
-	color: #303030;
-}
-
-#tabs a:hover {
-	color: red;
 }
 
 div.vertical_action {
@@ -153,17 +63,4 @@ div.vertical_action div.description .binary_checkbox {
 div.vertical_action h4 {
 	margin: 0px;
 	padding: 0px;
-}
-
-span.active {
-	color: green;
-}
-
-span.inactive {
-	color: red;
-}
-
-div.items {
-	clear: both;
-	width: 100%;
 }
