@@ -128,6 +128,15 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      *
+     * @return boolean
+     */
+    public function is_allowed_to_edit_attempt_data()
+    {
+        return $this->get_application()->is_allowed_to_edit_learning_path_attempt_data();
+    }
+
+    /**
+     *
      * @see \libraries\architecture\application\Application::get_additional_parameters()
      */
     public function get_additional_parameters()
