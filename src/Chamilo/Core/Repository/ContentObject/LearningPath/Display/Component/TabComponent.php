@@ -681,13 +681,4 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         return implode(PHP_EOL, $html);
     }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function is_allowed_to_edit_attempt_data()
-    {
-        return $this->get_application()->is_allowed_to_edit_learning_path_attempt_data();
-    }
 }
