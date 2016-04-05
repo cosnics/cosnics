@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\hotpotatoes
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Hot Potatoes"
+Properties = "Eigenschappen"
+MaximumAttempts = "Maximum aantal pogingen"
+UploadHotpotatoes = "Upload Hot Potatoes"
+ChangeHotpotatoes = "Verander Hot Potatoes"
+Title = "Titel"
+Description = "Beschrijving"
+NoMaximumAttemptsFillIn0 = "(0 = ongelimiteerd)"
