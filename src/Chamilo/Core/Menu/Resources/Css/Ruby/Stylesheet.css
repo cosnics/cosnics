@@ -1,3 +1,5 @@
+@import url('../Aqua/Stylesheet.css');
+
 /*
  * Chamilo Navbar
  */
@@ -19,30 +21,6 @@
 	padding-right: 0;
 }
 
-.navbar .container-fluid .navbar-header .navbar-brand {
-	margin-left: 0;
-}
-
-/* Fixes for collapsed icon */
-.navbar-chamilo .navbar-header .collapsed {
-	height: auto;
-	padding-bottom: 10px;
-}
-
-.navbar-chamilo .container-fluid>.navbar-collapse, .navbar-chamilo .container-fluid>.navbar-header
-	{
-	margin-left: 0;
-	margin-right: 0;
-}
-
-.navbar-chamilo .navbar-toggle .icon-bar {
-	background-color: white;
-}
-
-.navbar-chamilo .navbar-toggle:hover .icon-bar, .navbar-chamilo .navbar-toggle:focus .icon-bar
-	{
-	background-color: #888888;
-}
 
 /** Menu Item **/
 .navbar-chamilo ul.navbar-nav li a, .navbar-chamilo ul.navbar-nav li a:visited
@@ -60,40 +38,10 @@
 	vertical-align: middle;
 }
 
-.navbar-chamilo ul.navbar-nav li a:hover {
-	color: #c7d6eb;
-}
-
-.navbar-chamilo ul li a img.chamilo-menu-item-icon {
-	vertical-align: middle;
-	margin: 0;
-}
 
 .navbar-chamilo ul.navbar-nav li a img.chamilo-menu-item-icon:only-child
 	{
 	padding-top: 0px;
-}
-
-.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label:only-child:before
-	{
-	content: " ";
-	display: inline-block;
-	height: 100%;
-	vertical-align: middle;
-	max-width: 0.001%;
-	/* Just in case the text wrapps, you shouldn't notice it */
-}
-
-.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label:only-child:first-child
-	{
-	display: inline-block;
-	vertical-align: middle;
-	max-width: 99.999%;
-	height: 100%;
-}
-
-.navbar-chamilo li a div.chamilo-menu-item-label {
-	padding: 0 10px 10px 10px;
 }
 
 /** Active Menu Item **/
@@ -116,12 +64,6 @@
 	border: none !important;
 }
 
-/* Dropdown */
-.navbar-chamilo .navbar-nav .dropdown-menu {
-	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
-	padding: 0;
-}
-
 .navbar-chamilo .navbar-nav .dropdown-menu li, .navbar-chamilo .navbar-nav .dropdown-menu li a,
 	.navbar-chamilo .navbar-nav .dropdown-menu li a:hover {
 	/*background-color: #262f52;*/
@@ -129,108 +71,9 @@
 	height: auto;
 }
 
-.navbar-chamilo .navbar-nav .dropdown-menu li a:hover, .navbar-chamilo .navbar-nav li.dropdown.open .dropdown-menu li a:hover
-	{
-	color: #c7d6eb;
-}
-
-.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a {
-	height: auto;
-}
-
-.navbar-chamilo ul.navbar-nav li.dropdown.open>a {
-	background: #c7d6eb;
-	color: #444444;
-	bottom: -1px;
-	border-top: 1px solid #c7d6eb;
-	border-bottom: 1px solid #c7d6eb;
-}
-
-.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a div.chamilo-menu-item-label:only-child
-	{
-	height: auto;
-	padding: 10px;
-}
-
 .navbar-chamilo ul.navbar-nav li.dropdown.open ul.dropdown-menu li a {
 	color: #8eadd8;
 	padding: 0;
-}
-
-/* Set minimum width for full view to 1400px */
-@media ( max-width : 900px) {
-	.navbar-header {
-		float: none;
-	}
-	.navbar .container-fluid .navbar-header .navbar-brand {
-		padding-top: 0;
-	}
-	.navbar-left, .navbar-right {
-		float: none !important;
-	}
-	.navbar-toggle {
-		display: block;
-	}
-	.navbar.navbar-no-items .navbar-toggle {
-		display: none;
-	}
-	.navbar-collapse {
-		border-top: 1px solid transparent;
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-	}
-	.navbar-fixed-top {
-		top: 0;
-		border-width: 0 0 1px;
-	}
-	.navbar-collapse.collapse {
-		display: none !important;
-	}
-	.navbar-nav {
-		float: none !important;
-		margin-top: 7.5px;
-		margin-left: -15px;
-		margin-right: -15px;
-	}
-	.navbar-nav>li {
-		float: none;
-	}
-	.navbar-nav>li>a {
-		padding-top: 10px;
-		padding-bottom: 10px;
-	}
-	.collapse.in {
-		display: block !important;
-	}
-	.navbar-chamilo ul li, .navbar-chamilo ul li ul li {
-		display: block;
-		float: none;
-	}
-	.navbar-chamilo .navbar-nav .open .dropdown-menu {
-		position: static;
-		float: none;
-		border: none;
-		box-shadow: none;
-	}
-	#header1 div.banner {
-		top: 1px;
-	}
-}
-
-/*********************************************************************************************************************/
-/* Menu Item Specific Content                                                                                        */
-/*********************************************************************************************************************/
-
-/* Language Selector */
-.navbar-chamilo ul.navbar-nav li ul.language-selector {
-	min-width: 75px;
-}
-
-/* User account widget */
-.navbar-chamilo ul.navbar-nav li a img.chamilo-menu-item-icon-account {
-	height: 76px;
-	width: 76px;
-	margin: 0;
-	padding: 0 !important;
 }
 
 .navbar-chamilo ul li div.chamilo-menu-item-account {
@@ -252,101 +95,6 @@
 	line-height: normal;
 }
 
-.navbar-chamilo ul.navbar-nav li.chamilo-account-menu-item>a,
-	.navbar-chamilo ul.navbar-nav li.chamilo-account-menu-item.dropdown.open>a
-	{
-	bottom: 0px;
-	border-top: none;
-	border-bottom: none;
-}
-
-.chamilo-menu-bar ul li:hover div.chamilo-menu-item-account {
-	display: block;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-photo {
-	display: inline-block;
-	width: 74px;
-	height: 74px;
-	margin-right: 16px;
-	float: left;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-photo a {
-	height: auto;
-	line-height: normal;
-	padding: 0;
-	margin: 0;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-photo img {
-	width: 72px;
-	height: 72px;
-	border: 1px solid #3a5599;
-	z-index: 10;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-photo div.chamilo-menu-item-account-photo-edit
-	{
-	width: 72px;
-	height: 16px;
-	line-height: 16px;
-	position: relative;
-	top: -21px;
-	left: 1px;
-	font-size: 10px;
-	padding: 4px 0;
-	color: white;
-	z-index: 100;
-	background-color: rgba(38, 47, 82, 0.5);
-	text-align: center;
-	display: none;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-photo div.chamilo-menu-item-account-photo-edit a
-	{
-	margin: 0;
-	padding: 0;
-	color: white;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-photo:hover div.chamilo-menu-item-account-photo-edit
-	{
-	display: block;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-data {
-	display: inline-block;
-	width: 210px;
-	white-space: normal;
-	float: left;
-}
-
-span.chamilo-menu-item-account-data-name, span.chamilo-menu-item-account-data-email,
-	span.chamilo-menu-item-account-data-my-account {
-	display: block;
-}
-
-span.chamilo-menu-item-account-data-name {
-	font-size: 14px;
-	font-weight: bold;
-	color: white;
-}
-
-span.chamilo-menu-item-account-data-email {
-	font-size: 13px;
-}
-
-span.chamilo-menu-item-account-data-my-account {
-	margin-top: 8px;
-}
-
-span.chamilo-menu-item-account-data-my-account a {
-	margin: 0 !important;
-	padding: 0 !important;
-	font-size: 11px;
-	display: inline !important;
-}
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	border-top: 1px dotted #dcdcdc;
@@ -370,24 +118,4 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	line-height: normal;
 	padding: 0;
 	background-color: #262F52;
-}
-
-div.chamilo-menu-item-account div.chamilo-menu-item-account-logout img,
-	span.chamilo-menu-item-account-data-my-account img {
-	vertical-align: middle;
-	margin-right: 5px;
-}
-
-/* Set minimum width for full view to 1400px */
-@media ( max-width : 1200px) {
-	.navbar-chamilo ul li div.chamilo-menu-item-account {
-		position: relative;
-		width: auto;
-		top: 0;
-		box-shadow: none;
-	}
-	.navbar-chamilo ul li div.chamilo-menu-item-account div.chamilo-menu-item-account-logout
-		{
-		width: auto;
-	}
 }

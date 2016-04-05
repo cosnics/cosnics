@@ -1,7 +1,9 @@
-.cke_chamilo_bookmark {
+@import url('../../Aqua/HtmlEditor/Ckeditor/Stylesheet.css');
+
+.cke_chamilo_calendar_event {
 	background-image: url(../../../../../Images/Ruby/Logo/48.png);
 	background-position: center center;
 	background-repeat: no-repeat;
-	border: 1px solid #a04a46;
+	border: 1px solid #a0a0a0;
 	background-position: center center;
 }
