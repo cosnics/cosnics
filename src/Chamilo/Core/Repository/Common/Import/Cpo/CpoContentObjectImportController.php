@@ -684,7 +684,9 @@ class CpoContentObjectImportController extends ContentObjectImportController
             return $xpath_value;
         }
 
-        exit();
+        throw new \InvalidArgumentException(
+            sprintf('The imported value (%s) is not of type Chamilo\Core\Repository\ContentObject', $xpath_value)
+        );
 
         return 'Chamilo\Core\Repository\ContentObject\\' .
              (string) StringUtilities :: getInstance()->createString($xpath_value)->upperCamelize() . '\\' .
