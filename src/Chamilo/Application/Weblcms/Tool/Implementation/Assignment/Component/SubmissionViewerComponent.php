@@ -896,7 +896,7 @@ class SubmissionViewerComponent extends SubmissionsManager
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
             
-            return $buttonToolbar->addButtonGroup($commonActions);
+            $buttonToolbar->addButtonGroup($commonActions);
             
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
