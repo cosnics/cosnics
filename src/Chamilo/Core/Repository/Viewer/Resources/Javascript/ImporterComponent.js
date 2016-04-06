@@ -9,6 +9,11 @@ $(document).ready(function()
             'viewer_object_id' : []
         };
         
+        if (previewContainers.length == 0)
+        {
+            return;
+        }
+        
         previewContainers.each(function(index)
         {
             var previewContainer = $(this);

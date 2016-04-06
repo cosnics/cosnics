@@ -109,12 +109,13 @@ class ApplicationFactory
 
     /**
      *
+     * @param string $action
      * @throws \Exception
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
-    public function getComponent()
+    public function getComponent($action = null)
     {
-        $component = $this->createComponent();
+        $component = $this->createComponent($action);
         $component->get_breadcrumb_generator()->generate_breadcrumbs();
         return $component;
     }
@@ -152,9 +153,13 @@ class ApplicationFactory
      * @param string $action
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
-    private function createComponent()
+    private function createComponent($action = null)
     {
-        $action = $this->getAction();
+        if (is_null($action))
+        {
+            $action = $this->getAction();
+        }
+
         $class = $this->getClassName();
 
         $component = new $class($this->getApplicationConfiguration());
@@ -263,9 +268,14 @@ class ApplicationFactory
      * @param string $action
      * @return string
      */
-    public function getClassName()
+    public function getClassName($action = null)
     {
-        return $this->buildClassName($this->getAction());
+        if (is_null($action))
+        {
+            $action = $this->getAction();
+        }
+
+        return $this->buildClassName($action);
     }
 
     private function buildClassName($action)

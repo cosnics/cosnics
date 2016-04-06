@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -20,6 +21,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
  */
 class PagerRenderer
 {
+    const PAGE_SELECTOR_TRANSLATION_TITLE = 'title';
+    const PAGE_SELECTOR_TRANSLATION_ROW = 'row';
 
     /**
      *
@@ -267,17 +270,29 @@ class PagerRenderer
      * @param string $itemsPerPageParameterName
      * @return string
      */
-    public function renderItemsPerPageSelector($queryParameters, $itemsPerPageParameterName)
+    public function renderItemsPerPageSelector($queryParameters, $itemsPerPageParameterName,
+        $translationVariables = array())
+
     {
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
         $buttonToolBar->addButtonGroup($buttonGroup);
 
+        if (empty($translationVariables))
+        {
+            $translationVariables[Application :: PARAM_CONTEXT] = Utilities :: COMMON_LIBRARIES;
+            $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
+            $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfItemsPerPage';
+        }
+
         $currentNumberOfItemsPerPage = $this->getPager()->getNumberOfItemsPerPage();
         $numberOfItems = $this->getPager()->getNumberOfItems();
 
         $dropDownButton = new DropdownButton(
-            Translation :: get('ShowNumberOfItemsPerPage', array('NUMBER' => $currentNumberOfItemsPerPage)),
+            Translation :: get(
+                $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE],
+                array('NUMBER' => $currentNumberOfItemsPerPage),
+                $translationVariables[Application :: PARAM_CONTEXT]),
             null,
             Button :: DISPLAY_LABEL,
             'btn-sm');
@@ -294,7 +309,10 @@ class PagerRenderer
         {
             $dropDownButton->addSubButton(
                 new SubButton(
-                    Translation :: get('NumberOfItemsPerPage', array('NUMBER' => $nr)),
+                    Translation :: get(
+                        $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_ROW],
+                        array('NUMBER' => $nr),
+                        $translationVariables[Application :: PARAM_CONTEXT]),
                     null,
                     $this->getUrl($queryParameters, $itemsPerPageParameterName, $nr),
                     SubButton :: DISPLAY_LABEL,
