@@ -612,6 +612,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
 
     public function process_external_instance($external_instance_id)
     {
+        /** @var \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance $external_instance */
         $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
             \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
             $external_instance_id);
@@ -624,7 +625,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $id->appendChild($this->dom_document->createTextNode($external_instance_id));
 
             $type = $external_instance_node->appendChild($this->dom_document->createAttribute('type'));
-            $type->appendChild($this->dom_document->createTextNode($external_instance->get_type()));
+            $type->appendChild($this->dom_document->createTextNode($external_instance->get_implementation()));
 
             $settings_node = $external_instance_node->appendChild($this->dom_document->createElement('settings'));
 
