@@ -44,6 +44,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * $Id: viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -164,38 +165,74 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html = array();
 
-        $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
-
-        $categoryId = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
-
-        if (! $categoryId || $categoryId == 0)
+        if ($this->hasCategories())
         {
-            $categoryName = Translation :: get('Root');
-        }
-        else
-        {
-            $category = $this->retrieve_category($categoryId);
-            if ($category)
-            {
-                $categoryName = $category->get_name();
-            }
-            else
+
+            $html[] = '<div class="col-md-3 col-lg-2 col-sm-12">';
+
+            $categoryId = intval(Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
+
+            if (! $categoryId || $categoryId == 0)
             {
                 $categoryName = Translation :: get('Root');
             }
+            else
+            {
+                $category = $this->retrieve_category($categoryId);
+                if ($category)
+                {
+                    $categoryName = $category->get_name();
+                }
+                else
+                {
+                    $categoryName = Translation :: get('Root');
+                }
+            }
+
+            $html[] = '<div id="tree">';
+            $html[] = $publicationCategoryTree->render_as_tree();
+            $html[] = '</div>';
+            $html[] = '</div>';
+
+            $html[] = '<div class="publication_renderer col-md-9 col-lg-10 col-sm-12">';
+            $html[] = $renderedPublications;
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+        else
+        {
+            $html[] = '<div class="publication_renderer col-md-12">';
+            $html[] = $renderedPublications;
+            $html[] = '</div>';
+            $html[] = '</div>';
         }
 
-        $html[] = '<div id="tree">';
-        $html[] = $publicationCategoryTree->render_as_tree();
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="publication_renderer col-md-9 col-lg-10 col-sm-12">';
-        $html[] = $renderedPublications;
-        $html[] = '</div>';
-        $html[] = '</div>';
-
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function hasCategories()
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_COURSE),
+            new StaticConditionVariable($this->get_course_id()));
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublicationCategory :: class_name(),
+                ContentObjectPublicationCategory :: PROPERTY_TOOL),
+            new StaticConditionVariable($this->get_tool_id()));
+
+        return \Chamilo\Libraries\Storage\DataManager\DataManager :: count(
+            ContentObjectPublicationCategory :: class_name(),
+            new DataClassCountParameters(new AndCondition($conditions))) > 0;
     }
 
     /**
