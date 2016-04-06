@@ -50,7 +50,7 @@ class Toolbar
 
     /**
      *
-     * @param array $items
+     * @param \Chamilo\Libraries\Format\Structure\ToolbarItem[] $items
      */
     public function set_items(array $items)
     {
@@ -59,7 +59,7 @@ class Toolbar
 
     /**
      *
-     * @return array:
+     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
     public function get_items()
     {
@@ -70,7 +70,7 @@ class Toolbar
      * Returns the toolbaritem from the given position
      *
      * @param int $index
-     * @return ToolbarItem
+     * @return \Chamilo\Libraries\Format\Structure\ToolbarItem
      */
     public function get_item($index)
     {
