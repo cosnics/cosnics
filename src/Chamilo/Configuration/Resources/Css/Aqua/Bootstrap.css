@@ -152,14 +152,9 @@ a:focus {
 	float: left;
 }
 
-.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox .btn-action-toolbar
+.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox input
 	{
-	margin-bottom: 0px;
-}
-
-.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox .btn-action-toolbar .btn
-	{
-	padding: 3px 15px 3px 0px;
+	margin: 0px 15px 0px 0px;
 }
 
 @media ( min-width : 768px) {
