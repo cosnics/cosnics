@@ -1,5 +1,27 @@
 $(function()
 {
+    
+    function executeAction(event)
+    {
+        if (event.isDefaultPrevented())
+        {
+            return false;
+        }
+        
+        event.preventDefault();
+        
+        var form = $(this).closest('form');
+        
+        if (!$('input:checked', form).length > 0)
+        {
+            
+            return false;
+        }
+        
+        form.prop('action', $(this).prop('href'));
+        $('input[type="submit"]', form).click();
+    }
+    
     function toggleSelectButtons()
     {
         $("form.form-list-view").each(function()
@@ -34,12 +56,20 @@ $(function()
         toggleSelectButtons();
     }
     
-    $(document).ready(function()
-    {
-        toggleSelectButtons();
-        $(document).on('click', ".btn.select-all", selectAllItems);
-        $(document).on('click', ".btn.select-none", unselectAllItems);
-        
-        $(document).on('change', "form.form-list-view input:checkbox", toggleSelectButtons);
-    });
+    $(document)
+            .ready(
+                    function()
+                    {
+                        toggleSelectButtons();
+                        $(document).on('click', ".btn.select-all", selectAllItems);
+                        $(document).on('click', ".btn.select-none", unselectAllItems);
+                        
+                        $(document).on('change', "form.form-list-view input:checkbox", toggleSelectButtons);
+                        
+                        $(document)
+                                .on(
+                                        'click',
+                                        'form.form-list-view a.btn:not(.dropdown-toggle):not(.select-all):not(.select-none), form.form-list-view ul.dropdown-menu > li > a',
+                                        executeAction);
+                    });
 });
