@@ -204,13 +204,13 @@ EOT;
         $this->renderer->setFormTemplate($form_template);
 
         $element_template = array();
-        $element_template[] = '<div class="form-row">';
-        $element_template[] = '<div class="label">';
+        $element_template[] = '<div class="form-row row">';
+        $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
              Theme :: getInstance()->getCommonImagePath('Action/Required') .
              '" alt="*" title ="*"/></span> <!-- END required -->';
         $element_template[] = '</div>';
-        $element_template[] = '<div class="formw">';
+        $element_template[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
         $element_template[] = '<div class="element"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}</div>';
         $element_template[] = '<div class="form_feedback"></div></div>';
         $element_template[] = '<div class="clear">&nbsp;</div>';
@@ -232,9 +232,9 @@ EOT;
                  '" alt="*" title ="*"/>&nbsp;<small>' .
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
-	<div class="form-row">
-		<div class="label"></div>
-		<div class="formw">{requiredNote}</div>
+	<div class="form-row row">
+		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 label"></div>
+		<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">{requiredNote}</div>
 	</div>
 EOT;
         $this->renderer->setRequiredNoteTemplate($required_note_template);
@@ -971,22 +971,48 @@ EOT;
         return (0 == count($this->_errors));
     }
 
+    protected function addMessage($type, $name, $label, $message, $noMargin = false)
+    {
+        $html = array();
+
+        $html[] = '<div id="' . $name . '" class="form-row row">';
+
+        if ($noMargin)
+        {
+            $html[] = '<div class="col-xs-12">';
+        }
+        else
+        {
+            $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 label">';
+            $html[] = '</div>';
+            $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
+        }
+
+        $html[] = '<div role="alert" class="alert alert-' . $type . '">';
+
+        if ($label)
+        {
+            $html[] = '<b>' . $label . '</b><br />';
+        }
+        $html[] = $message;
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
+
     /**
      * Adds a warning message to the form.
      *
      * @param string $label The label for the error message
      * @param string $message The actual error message
      */
-    function add_warning_message($name, $label, $message, $no_margin = false)
+    function add_warning_message($name, $label, $message, $noMargin = false)
     {
-        $html = '<div id="' . $name . '" class="form-row"><div role="alert" class="formwa alert alert-warning' .
-             ($no_margin ? ' formwa_no_margin' : '') . '">';
-        if ($label)
-        {
-            $html .= '<b>' . $label . '</b><br />';
-        }
-        $html .= $message . '</div></div>';
-        $this->addElement('html', $html);
+        return $this->addMessage('warning', $name, $label, $message, $noMargin);
     }
 
     /**
@@ -995,16 +1021,9 @@ EOT;
      * @param string $label The label for the error message
      * @param string $message The actual error message
      */
-    function add_error_message($name, $label, $message, $no_margin = false)
+    function add_error_message($name, $label, $message, $noMargin = false)
     {
-        $html = '<div id="' . $name . '" class="form-row"><div role="alert" class="forme alert alert-danger' .
-             ($no_margin ? ' forme_no_margin' : '') . '">';
-        if ($label)
-        {
-            $html .= '<b>' . $label . '</b><br />';
-        }
-        $html .= $message . '</div></div>';
-        $this->addElement('html', $html);
+        return $this->addMessage('danger', $name, $label, $message, $noMargin);
     }
 
     /**
@@ -1013,16 +1032,9 @@ EOT;
      * @param string $label The label for the error message
      * @param string $message The actual error message
      */
-    function add_information_message($name, $label, $message, $no_margin = false)
+    function add_information_message($name, $label, $message, $noMargin = false)
     {
-        $html = '<div id="' . $name . '" class="form-row"><div class="formc alert alert-info' .
-             ($no_margin ? ' formc_no_margin' : '') . '">';
-        if ($label)
-        {
-            $html .= '<b>' . $label . '</b><br />';
-        }
-        $html .= $message . '</div></div>';
-        $this->addElement('html', $html);
+        return $this->addMessage('info', $name, $label, $message, $noMargin);
     }
 
     public function parse_checkbox_value($value = null)

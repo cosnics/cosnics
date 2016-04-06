@@ -313,7 +313,7 @@ class SortableTable extends HTML_Table
         }
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-md-4 table-navigation-actions">';
+        $html[] = '<div class="col-xs-12 col-md-4 table-navigation-actions">';
 
         if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
         {
@@ -321,7 +321,7 @@ class SortableTable extends HTML_Table
         }
 
         $html[] = '</div>';
-        $html[] = '<div class="col-md-8 table-navigation-search">';
+        $html[] = '<div class="col-xs-12 col-md-8 table-navigation-search">';
 
         $html[] = $this->renderNumberOfItemsPerPageSelector();
 
@@ -380,7 +380,7 @@ class SortableTable extends HTML_Table
         if ($this->allowPageSelection || $this->allowPageNavigation)
         {
             $html[] = '<div class="row">';
-            $html[] = '<div class="col-md-4 table-navigation-actions">';
+            $html[] = '<div class="col-xs-12 col-md-4 table-navigation-actions">';
 
             if ($this->getTableFormActions() instanceof TableFormActions &&
                  $this->getTableFormActions()->has_form_actions())
@@ -396,7 +396,7 @@ class SortableTable extends HTML_Table
             $queryParameters[$this->getParameterName('column')] = $this->getOrderColumn();
             $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
-            $html[] = '<div class="col-md-8 table-navigation-pagination">';
+            $html[] = '<div class="col-xs-12 col-md-8 table-navigation-pagination">';
             $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit(
                 $queryParameters,
                 $this->getParameterName('page_nr'));
@@ -436,7 +436,7 @@ class SortableTable extends HTML_Table
         }
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-md-12">';
+        $html[] = '<div class="col-xs-12">';
 
         $html[] = '<div class="table-responsive">';
         $html[] = $this->getBodyHtml();
