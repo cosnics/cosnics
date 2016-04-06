@@ -62,7 +62,7 @@ class PclzipFilecompression extends Filecompression
 
         $fileList = Filesystem:: get_directory_content($path, Filesystem :: LIST_FILES, true);
 
-        ini_set('memory_limit','4096M');
+        ini_set('memory_limit','-1');
 
         $pclzip = new PclZip($archiveFile);
         $pclzip->add($fileList, PCLZIP_OPT_REMOVE_PATH, $path);
