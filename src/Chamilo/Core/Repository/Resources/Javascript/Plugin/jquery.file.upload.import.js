@@ -45,18 +45,21 @@ dropzoneCallbacks.chamilo = {
     function setDocumentTypeField()
     {
         var documentType = $('input[name="document_type"]:checked');
+        var buttonContainer = $('#import_button').parent();
         
         if (documentType.val() == 0)
         {
             $('div#document_upload').show();
             $('div#document_link').hide();
             $('#import_button').hide();
+            $('button:not(#import_button)', buttonContainer).show();
         }
         else
         {
             $('div#document_upload').hide();
             $('div#document_link').show();
             $('#import_button').show();
+            $('button:not(#import_button)', buttonContainer).hide();
         }
     }
     
