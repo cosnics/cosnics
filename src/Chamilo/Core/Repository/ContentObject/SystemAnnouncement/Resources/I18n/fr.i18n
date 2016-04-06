@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\system_announcement
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Annonce système"
+Confirmation = "Confirmation"
+Error = "Erreur"
+Warning = "Avertissement"
+Stop = "Stop"
+Question = "Question"
+Config = "Configuration"
+Properties = "Propriétés"
+Icon = "Icône"
+Title = "Sujet"
+Description = "Message"
