@@ -42,28 +42,25 @@ class ShortcutToolListRenderer extends ToolListRenderer
      */
     private function show_tools($tools)
     {
-        $translator = Translation::getInstance();
-        $themeUtilities = Theme::getInstance();
+        $translator = Translation :: getInstance();
+        $themeUtilities = Theme :: getInstance();
 
         $parent = $this->get_parent();
         $course = $parent->get_course();
 
         $currentTool = $parent->get_tool_id();
-        $toolNamespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($currentTool);
-
+        $toolNamespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($currentTool);
 
         $toolsButton = new DropdownButton(
-            'Navigeer naar',
-            $themeUtilities->getImagePath($toolNamespace, 'Logo/' . Theme::ICON_MINI),
-            Button :: DISPLAY_LABEL
-        );
+            Translation :: get('NavigateTo'),
+            $themeUtilities->getImagePath($toolNamespace, 'Logo/' . Theme :: ICON_MINI),
+            Button :: DISPLAY_LABEL);
 
         $toolsButton->setDropdownClasses('dropdown-menu-right');
 
-
         foreach ($tools as $tool)
         {
-            if ($tool->get_section_type() == CourseSection :: TYPE_ADMIN && !$this->is_course_admin)
+            if ($tool->get_section_type() == CourseSection :: TYPE_ADMIN && ! $this->is_course_admin)
             {
                 continue;
             }
@@ -79,20 +76,19 @@ class ShortcutToolListRenderer extends ToolListRenderer
             $title = $translator->getTranslation('TypeName', null, $tool->getContext());
 
             $params = array(
-                Application :: PARAM_CONTEXT => Manager:: context(),
+                Application :: PARAM_CONTEXT => Manager :: context(),
                 Manager :: PARAM_COURSE => $course->get_id(),
                 Application :: PARAM_ACTION => Manager :: ACTION_VIEW_COURSE,
-                Manager :: PARAM_TOOL => $tool->get_name()
-            );
+                Manager :: PARAM_TOOL => $tool->get_name());
 
             $redirect = new Redirect($params, array(Manager :: PARAM_CATEGORY), false);
             $url = $redirect->getUrl();
 
-            $toolButton = new SubButton($title,
+            $toolButton = new SubButton(
+                $title,
                 $themeUtilities->getImagePath($tool->getContext(), 'Logo/' . $tool_image),
                 $url,
-                Button :: DISPLAY_ICON_AND_LABEL
-            );
+                Button :: DISPLAY_ICON_AND_LABEL);
 
             $toolsButton->addSubButton($toolButton);
         }

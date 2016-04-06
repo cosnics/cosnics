@@ -73,6 +73,10 @@ abstract class ContentObjectPublicationListRenderer
         $this->tool_browser = $tool_browser;
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
+     */
     public function get_actions()
     {
         return $this->actions;
@@ -182,10 +186,12 @@ abstract class ContentObjectPublicationListRenderer
         }
 
         return htmlentities(
-            Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                 $this->format_date($publication[ContentObjectPublication :: PROPERTY_FROM_DATE]) . ' ' .
-                 Translation :: get('Until', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                 $this->format_date($publication[ContentObjectPublication :: PROPERTY_TO_DATE]));
+            Translation :: get(
+                'VisibleFromUntil',
+                array(
+                    'FROM' => $this->format_date($publication[ContentObjectPublication :: PROPERTY_FROM_DATE]),
+                    'UNTIL' => $this->format_date($publication[ContentObjectPublication :: PROPERTY_TO_DATE])),
+                Utilities :: COMMON_LIBRARIES));
     }
 
     /**

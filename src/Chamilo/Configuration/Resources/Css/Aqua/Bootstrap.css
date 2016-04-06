@@ -37,9 +37,9 @@ a:focus {
 	color: white;
 }
 
-.dropdown-menu>li>a>img, .dropdown-menu>li>a>span.inline-glyph, .btn>img,
-	.btn>span.inline-glyph {
-	margin-right: 10px;
+.dropdown-menu>li>a>img+span, .dropdown-menu>li>a>span.inline-glyph+span,
+	.btn>img+span, .btn>span.inline-glyph+span {
+	margin-left: 10px;
 }
 
 .dropdown-menu>li>a.selected>img, .dropdown-menu>li>a.selected>span.glyphicon
@@ -97,6 +97,93 @@ a:focus {
 	box-shadow: none;
 }
 
+/**************
+ * LIST VIEW PANEL *
+ **************/
+.list-group-item.list-group-item-faded-faded {
+	opacity: 0.5;
+}
+
+.panel.panel-publication .panel-publication-header {
+	margin-bottom: 15px;
+	padding-bottom: 15px;
+	border-bottom: 1px dashed #dddddd;
+}
+
+.panel.panel-publication .panel-publication-footer {
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px dashed #dddddd;
+}
+
+.panel.panel-publication .panel-publication-footer .panel-publication-footer-visibility,
+	.panel.panel-publication .panel-publication-footer .panel-publication-footer-date,
+	.panel.panel-publication .panel-publication-header .panel-publication-header-title
+	{
+	margin-bottom: 5px;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3
+	{
+	padding: 0px;
+	margin: 0px;
+	font-size: 16px;
+	color: #23527c;
+	font-weight: bold;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar
+	{
+	margin-bottom: 0px;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn
+	{
+	padding: 3px;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn span.caret
+	{
+	margin-left: 3px;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox
+	{
+	float: left;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox .btn-action-toolbar
+	{
+	margin-bottom: 0px;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox .btn-action-toolbar .btn
+	{
+	padding: 3px 15px 3px 0px;
+}
+
+@media ( min-width : 768px) {
+	.panel.panel-publication .panel-publication-footer .panel-publication-footer-visibility
+		{
+		text-align: center;
+	}
+	.panel.panel-publication .panel-publication-footer .panel-publication-footer-targets,
+		.panel.panel-publication .panel-publication-header .panel-publication-header-actions
+		{
+		text-align: right;
+	}
+	.panel.panel-publication .panel-publication-footer .panel-publication-footer-visibility,
+		.panel.panel-publication .panel-publication-footer .panel-publication-footer-date,
+		.panel.panel-publication .panel-publication-header .panel-publication-header-title
+		{
+		margin-bottom: 0px;
+	}
+	.panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar
+		{
+		float: right !important;
+	}
+}
+
 /****************************
  * SPECIFIC BOOTSTRAP FIXES *
  ****************************/
@@ -124,10 +211,6 @@ body h3#page-title {
 input.form-control[type="text"], input.form-control[type="password"] {
 	border: 1px solid #ccc;
 	padding: 6px 12px;
-}
-
-form .label {
-	font-size: 100%;
 }
 
 form .radio input[type="radio"], form .radio input[type="checkbox"] {

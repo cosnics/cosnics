@@ -80,6 +80,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
         }
 
         $navigation_toolbar = new Toolbar();
+
         if (! $first)
         {
             $navigation_toolbar->add_item(
