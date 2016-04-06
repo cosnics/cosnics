@@ -703,7 +703,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 sprintf('The imported value (%s) is not of type Chamilo\Core\Repository\ContentObject', $xpath_value)
             );
         }
-        
+
         return $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' . $registration[Registration::PROPERTY_NAME];
     }
 
