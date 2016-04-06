@@ -557,18 +557,14 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
 
+        $html[] = '';
+
         if ($this->hasActions())
         {
             // Add the checkbox
             $html[] = '<div class="panel-publication-header-title-checkbox">';
-            $html[] = '<div class="btn-toolbar btn-action-toolbar">';
-            $html[] = '<div class="action-bar btn-group">';
-            $html[] = '<label class="btn btn-link">';
             $html[] = '<input class="pid" type="checkbox" name="' . Manager :: PARAM_PUBLICATION . '[]" value="' .
                  $publication[ContentObjectPublication :: PROPERTY_ID] . '"/>';
-            $html[] = '</label>';
-            $html[] = '</div>';
-            $html[] = '</div>';
             $html[] = '</div>';
         }
 
