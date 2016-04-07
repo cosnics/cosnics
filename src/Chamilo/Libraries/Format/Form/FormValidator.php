@@ -205,7 +205,7 @@ EOT;
 
         $element_template = array();
         $element_template[] = '<div class="form-row row">';
-        $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 label">';
+        $element_template[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
         $element_template[] = '{label}<!-- BEGIN required --><span class="form_required"><img src="' .
              Theme :: getInstance()->getCommonImagePath('Action/Required') .
              '" alt="*" title ="*"/></span> <!-- END required -->';
@@ -233,7 +233,7 @@ EOT;
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
 	<div class="form-row row">
-		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 label"></div>
+		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>
 		<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">{requiredNote}</div>
 	</div>
 EOT;
@@ -983,7 +983,7 @@ EOT;
         }
         else
         {
-            $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 label">';
+            $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label">';
             $html[] = '</div>';
             $html[] = '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 formw">';
         }
@@ -1157,7 +1157,7 @@ EOT;
             $renderer = $this->defaultRenderer();
             $element_template = <<<EOT
 	<div class="form-row">
-		<div class="label">
+		<div class="form-label">
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
 		</div>
 		<div class="formw">
