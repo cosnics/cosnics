@@ -51,10 +51,6 @@ a:focus {
 	padding-left: 46px;
 }
 
-.dropdown-menu>li>a.not-selected {
-	opacity: 0.5;
-}
-
 .dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
 	background-image: url("../../Images/Aqua/Background/Checkmark.png");
 	background-position: 20px center;
@@ -104,6 +100,10 @@ a:focus {
 	opacity: 0.5;
 }
 
+.panel.panel-publication.panel-publication-with-actions {
+	position: relative;
+}
+
 .panel.panel-publication .panel-publication-header {
 	margin-bottom: 15px;
 	padding-bottom: 15px;
@@ -139,7 +139,7 @@ a:focus {
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn
 	{
-	padding: 3px;
+	padding: 0px 3px;
 }
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn span.caret
@@ -147,14 +147,51 @@ a:focus {
 	margin-left: 3px;
 }
 
-.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox
 	{
-	float: left;
+	display: inline;
 }
 
-.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox input
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3
 	{
-	margin: 0px 15px 0px 0px;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 a.title
+	{
+	order: 2;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels
+	{
+	order: 1;
+	display: block;
+	margin-bottom: 5px;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels span.label
+	{
+	margin-right: 5px;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels .btn
+	{
+	font-weight: 700;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::before
+	{
+	width: 20px;
+	height: 20px;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::after
+	{
+	width: 19px;
+	height: 19px;
+	font-size: 14px;
+	line-height: 16px;
 }
 
 @media ( min-width : 768px) {
@@ -176,6 +213,39 @@ a:focus {
 	.panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar
 		{
 		float: right !important;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header,
+		.panel.panel-publication.panel-publication-with-actions .panel-publication-body,
+		.panel.panel-publication.panel-publication-with-actions .panel-publication-footer
+		{
+		padding-left: 30px;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox
+		{
+		position: absolute;
+		left: -9px;
+		padding: 0px;
+		margin: 0px;
+		background-color: transparent;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3
+		{
+		display: block;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels
+		{
+		display: inline;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::before
+		{
+		width: 17px;
+		height: 17px;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::after
+		{
+		width: 16px;
+		height: 16px;
+		font-size: 11px;
 	}
 }
 

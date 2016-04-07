@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\DropdownButtonRenderer
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: shortcut_tool_list_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -52,7 +53,7 @@ class ShortcutToolListRenderer extends ToolListRenderer
         $toolNamespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($currentTool);
 
         $toolsButton = new DropdownButton(
-            Translation :: get('NavigateTo'),
+            Translation :: get('NavigateTo', null, Utilities :: COMMON_LIBRARIES),
             $themeUtilities->getImagePath($toolNamespace, 'Logo/' . Theme :: ICON_MINI),
             Button :: DISPLAY_LABEL);
 
