@@ -8,6 +8,11 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessmen
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -86,6 +91,31 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_RESULTS,
                         self :: PARAM_ASSESSMENT => $publication_id)),
                 ToolbarItem :: DISPLAY_ICON));
+    }
+
+    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
+        DropdownButton $dropdownButton)
+    {
+        $publication_id = $publication[ContentObjectPublication :: PROPERTY_ID];
+
+        $buttonGroup->prependButton(
+            new Button(
+                Translation :: get('Take'),
+                new BootstrapGlyph('play'),
+                $this->get_complex_display_url($publication_id),
+                Button :: DISPLAY_ICON,
+                false,
+                'btn-link'));
+
+        $dropdownButton->prependSubButton(
+            new SubButton(
+                Translation :: get('ManageAttempts'),
+                Theme :: getInstance()->getImagePath(__NAMESPACE__, 'ManageAttempts'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_RESULTS,
+                        self :: PARAM_ASSESSMENT => $publication_id)),
+                SubButton :: DISPLAY_LABEL));
     }
 
     private static $checked_publications = array();

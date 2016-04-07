@@ -17,7 +17,7 @@ form div.form-row div.form_header {
 	border: 1px solid #4271B5;
 }
 
-form div.form-row div.label {
+form div.form-row div.form-label {
 	text-align: right;
 	overflow: hidden;
 	font-weight: bold;
@@ -125,12 +125,12 @@ form div.form-row div.forme_no_margin, form div.form-row div.formwa_no_margin,
 	margin-left: 0px;
 }
 
-[dir=ltr] form div.form-row div.label, [dir=rtl] form div.form-row div.formw {
+[dir=ltr] form div.form-row div.form-label, [dir=rtl] form div.form-row div.formw {
 	float: left;
 	text-align: right;
 }
 
-[dir=rtl] form div.form-row div.label, [dir=ltr] form div.form-row div.formw {
+[dir=rtl] form div.form-row div.form-label, [dir=ltr] form div.form-row div.formw {
 	float: right;
 	text-align: left;
 }

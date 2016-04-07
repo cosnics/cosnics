@@ -101,7 +101,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             }
 
             $html[] = '<div class="form-row">';
-            $html[] = '<div class="label">' . Translation :: get('Feedback') . '</div>';
+            $html[] = '<div class="form-label">' . Translation :: get('Feedback') . '</div>';
             $html[] = '<div class="formw">';
 
             while ($feedback = $feedbacks->next_result())

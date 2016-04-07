@@ -56,7 +56,6 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
     const PROPERTY_SHOW_ON_HOMEPAGE = 'show_on_homepage';
     const PROPERTY_ALLOW_COLLABORATION = 'allow_collaboration';
     const TYPE_FILE = 'file';
-
     const CONTENT_OBJECT_MODIFICATION_DATE_ALIAS = 'content_object_modification_date';
 
     // added to support mailing within content object
@@ -424,7 +423,7 @@ class ContentObjectPublication extends DataClass implements DisplayOrderDataClas
      */
     public function toggle_visibility()
     {
-        $this->set_hidden(! $this->is_hidden());
+        $this->set_hidden((integer) ! $this->is_hidden());
     }
 
     public function get_show_on_homepage()

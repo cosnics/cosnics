@@ -13,6 +13,9 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 
 /**
  * $Id: learning_path_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -88,6 +91,38 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         Theme :: getInstance()->getCommonImagePath('Action/StatisticsNa'),
                         null,
                         ToolbarItem :: DISPLAY_ICON));
+            }
+        }
+    }
+
+    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
+        DropdownButton $dropdownButton)
+    {
+        $allowed = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT);
+
+        if (! $this->is_empty_learning_path($publication))
+        {
+            if ($allowed)
+            {
+                $dropdownButton->prependSubButton(
+                    new SubButton(
+                        Translation :: get('Statistics'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Statistics'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_STATISTICS,
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])),
+                        SubButton :: DISPLAY_LABEL));
+
+                $dropdownButton->prependSubButton(
+                    new SubButton(
+                        Translation :: get('ExportRawResults'),
+                        Theme :: getInstance()->getCommonImagePath('Action/Export'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_EXPORT_RAW_RESULTS,
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])),
+                        SubButton :: DISPLAY_LABEL));
             }
         }
     }

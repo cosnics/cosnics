@@ -55,4 +55,13 @@ class ButtonGroup extends AbstractButtonToolBarItem
     {
         $this->buttons[] = $button;
     }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton $button
+     */
+    public function prependButton(AbstractButton $button)
+    {
+        array_unshift($this->buttons, $button);
+    }
 }

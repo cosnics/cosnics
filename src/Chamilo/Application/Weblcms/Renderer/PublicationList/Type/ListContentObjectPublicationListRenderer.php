@@ -456,11 +456,13 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     'btn-link'));
         }
 
-        // if (method_exists($this->get_tool_browser()->get_parent(), 'add_content_object_publication_actions'))
-        // {
-        // // $content_object_publication_actions =
-        // $this->get_tool_browser()->get_parent()->add_content_object_publication_actions($toolbar, $publication);
-        // }
+        if (method_exists($this->get_tool_browser()->get_parent(), 'addContentObjectPublicationButtons'))
+        {
+            $this->get_tool_browser()->get_parent()->addContentObjectPublicationButtons(
+                $publication,
+                $buttonGroup,
+                $dropdownButton);
+        }
 
         $buttonGroup->addButton($dropdownButton);
         $buttonToolBar->addItem($buttonGroup);
@@ -605,10 +607,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="col-xs-12 col-sm-2 panel-publication-header-actions">';
 
-        if ($this->hasActions())
-        {
-            $html[] = $this->renderPublicationActions($publication);
-        }
+        $html[] = $this->renderPublicationActions($publication);
 
         $html[] = '</div>';
 

@@ -12,6 +12,10 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 
 /**
  * $Id: document_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -78,6 +82,29 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD,
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObject :: PROPERTY_ID])),
                     ToolbarItem :: DISPLAY_ICON));
+        }
+    }
+
+    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
+        DropdownButton $dropdownButton)
+    {
+        $class = $publication[ContentObject :: PROPERTY_TYPE];
+        $content_object = new $class($publication);
+        $content_object->set_id($publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
+
+        if (! $content_object instanceof Page)
+        {
+            $buttonGroup->prependButton(
+                new Button(
+                    Translation :: get('Download'),
+                    new BootstrapGlyph('download'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DOWNLOAD,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObject :: PROPERTY_ID])),
+                    Button :: DISPLAY_ICON,
+                    false,
+                    'btn-link'));
         }
     }
 }
