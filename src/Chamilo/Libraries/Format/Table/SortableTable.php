@@ -647,7 +647,7 @@ class SortableTable extends HTML_Table
 
         if ($actions instanceof TableFormActions && $actions->has_form_actions())
         {
-            $columnHeaderHtml = '<input type="checkbox" name="sortableTableSelectToggle" class="sortableTableSelectToggle" />';
+            $columnHeaderHtml = '<div class="checkbox"><input type="checkbox" name="sortableTableSelectToggle" class="sortableTableSelectToggle" /><label></label></div>';
         }
         else
         {
@@ -702,7 +702,7 @@ class SortableTable extends HTML_Table
         {
             if (strlen($row[0]) > 0)
             {
-                $row[0] = '<input type="checkbox" name="' . $this->getTableFormActions()->getIdentifierName() .
+                $row[0] = '<div class="checkbox"><input type="checkbox" name="' . $this->getTableFormActions()->getIdentifierName() .
                      '[]" value="' . $row[0] . '"';
 
                 if (Request :: get($this->getParameterName('selectall')))
@@ -710,7 +710,7 @@ class SortableTable extends HTML_Table
                     $row[0] .= ' checked="checked"';
                 }
 
-                $row[0] .= '/>';
+                $row[0] .= '/><label></label></div>';
             }
         }
 

@@ -1,8 +1,5 @@
 <?php
-
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
-
-use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
 
 /**
  * Renders the events for the mini month calendar
@@ -32,13 +29,15 @@ class EventMiniMonthRenderer extends EventMonthRenderer
         $html[] = '<span class="tooltip-event-content">' . $this->renderFullTitle() . '</span>';
         $html[] = '</div>';
 
-//        echo '<div class="tooltip tooltip-calendar fade top in" role="tooltip" style="top: -31px left: 70px; display:block;"><div class="tooltip-arrow"></div><div class="tooltip-inner">' .
-//        implode(PHP_EOL, $html) . '</div></div>';
+        // echo '<div class="tooltip tooltip-calendar fade top in" role="tooltip" style="top: -31px left: 70px;
+        // display:block;"><div class="tooltip-arrow"></div><div class="tooltip-inner">' .
+        // implode(PHP_EOL, $html) . '</div></div>';
 
         return implode(PHP_EOL, $html);
     }
 
     /**
+     *
      * @return string
      */
     public function renderFullTitle()
@@ -46,7 +45,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
         $fullTitle = '';
 
         $prefix = $this->renderPrefix();
-        if($prefix)
+        if ($prefix)
         {
             $fullTitle .= '<span class="tooltip-event-prefix">' . $prefix . '</span> ';
         }
@@ -54,7 +53,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
         $fullTitle .= htmlentities($this->getEvent()->getTitle());
 
         $postfix = $this->renderPostfix();
-        if($postfix)
+        if ($postfix)
         {
             $fullTitle .= '<span class="tooltip-event-postfix"> ' . $postfix . '</span>';
         }
