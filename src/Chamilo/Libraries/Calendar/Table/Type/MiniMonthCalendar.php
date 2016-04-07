@@ -20,7 +20,7 @@ class MiniMonthCalendar extends MonthCalendar
      */
     public function __construct($displayTime)
     {
-        parent :: __construct($displayTime, array('table-calendar-mini'));
+        parent:: __construct($displayTime, array('table-calendar-mini'));
     }
 
     /**
@@ -64,14 +64,16 @@ class MiniMonthCalendar extends MonthCalendar
             $row = $cellMapping[$cellMappingKey][0];
             $column = $cellMapping[$cellMappingKey][1];
 
-            $tooltip = implode('&#13;', $items);
+            $tooltip = htmlentities(implode("\n", $items));
 
             if (date('Ymd', $time) != date('Ymd'))
             {
                 $this->setCellContents(
                     $row,
                     $column,
-                    '<span class="badge" title="' . $tooltip . '">' . $this->getCellContents($row, $column) . '</span>');
+                    '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
+                    $this->getCellContents($row, $column) . '</span>'
+                );
             }
         }
     }
@@ -83,17 +85,19 @@ class MiniMonthCalendar extends MonthCalendar
     public function render()
     {
         $this->addEvents();
+
         return $this->toHtml();
     }
 
     /**
      *
      * @param integer $tableDate
+     *
      * @return string
      */
     protected function determineCellContent($tableDate)
     {
-        $cellContent = parent :: determineCellContent($tableDate);
+        $cellContent = parent:: determineCellContent($tableDate);
 
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))

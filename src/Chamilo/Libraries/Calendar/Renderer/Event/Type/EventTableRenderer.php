@@ -37,6 +37,20 @@ abstract class EventTableRenderer extends EventRenderer
     {
         $html = array();
 
+        $fullTitle = $this->renderFullTitle();
+
+        $html[] = '<a href="' . $this->getEvent()->getUrl() . '" title="' . strip_tags($fullTitle) . '">';
+        $html[] = $fullTitle;
+        $html[] = '</a>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @return string
+     */
+    public function renderFullTitle()
+    {
         $fullTitle = '';
 
         $prefix = $this->renderPrefix();
@@ -53,11 +67,7 @@ abstract class EventTableRenderer extends EventRenderer
             $fullTitle .= ' ' . $postfix;
         }
 
-        $html[] = '<a href="' . $this->getEvent()->getUrl() . '" title="' . strip_tags($fullTitle) . '">';
-        $html[] = $fullTitle;
-        $html[] = '</a>';
-
-        return implode(PHP_EOL, $html);
+        return $fullTitle;
     }
 
     /**
