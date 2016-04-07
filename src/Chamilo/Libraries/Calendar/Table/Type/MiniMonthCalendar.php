@@ -64,12 +64,14 @@ class MiniMonthCalendar extends MonthCalendar
             $row = $cellMapping[$cellMappingKey][0];
             $column = $cellMapping[$cellMappingKey][1];
 
+            $tooltip = implode('&#13;', $items);
+
             if (date('Ymd', $time) != date('Ymd'))
             {
                 $this->setCellContents(
                     $row,
                     $column,
-                    '<span class="badge">' . $this->getCellContents($row, $column) . '</span>');
+                    '<span class="badge" title="' . $tooltip . '">' . $this->getCellContents($row, $column) . '</span>');
             }
         }
     }

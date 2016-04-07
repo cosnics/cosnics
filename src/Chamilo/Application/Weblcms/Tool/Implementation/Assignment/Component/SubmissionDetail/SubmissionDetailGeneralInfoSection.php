@@ -125,18 +125,10 @@ class SubmissionDetailGeneralInfoSection
         {
             $html[] = '<div class="description" style="overflow: auto;">';
 
-            $renderer = new ContentObjectResourceRenderer($this, $submission->get_description());
-
-            $html[] = $renderer->run();
-            $html[] = '<div class="clear"></div>';
-            $html[] = '</div>';
-
             $rendition_implementation = ContentObjectRenditionImplementation:: factory(
                 $submission,
-                ContentObjectRendition :: FORMAT_HTML, ContentObjectRendition :: VIEW_INLINE, $this
+                ContentObjectRendition :: FORMAT_HTML, ContentObjectRendition::VIEW_DESCRIPTION, $this
             );
-
-            $html[] = $submission->get_description();
 
             $html[] = $rendition_implementation->render();
         }
