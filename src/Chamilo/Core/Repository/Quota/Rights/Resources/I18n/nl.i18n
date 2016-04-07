@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\quota\rights
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Toegangsbeheer"
+AccessorComponent = "Beheer rechten"
+RightsGroupAccess = "Wie wil je toestaan aanvragen te beheren?"
+RightsGroupTargets = "Welke aanvragen mogen de geselecteerde gebruikers en groepen beheren?"
+CreatorComponent = "Ken rechten toe"
+GeneralAccess = "Toegang"
+Targets = "Doelgebruikers en/of -groepen"
+Add = "Ken toe"
+BrowserComponent = "Beheer doelen"
+Type = ""
+Entity = ""
+Group = "Groep"
+Path = "Pad"
+Type = ""
+Entity = ""

@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\course
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+SectionTools = ""
+SectionAdministration = ""
+SectionLinks = ""
+SectionDisabled = ""
+CourseManagerQuickCreateComponent = ""
+Typename = ""
+SelectCourseType = ""
+CourseType = ""
+SelectAValidCourseType = ""
+ThisFieldIsRequired = ""
+Title = ""
+VisualCode = ""
