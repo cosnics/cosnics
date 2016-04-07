@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
 /**
  *
@@ -86,6 +88,9 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '</div>';
 
         $html[] = '<div class="clearfix"></div>';
+
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
 
         return implode(PHP_EOL, $html);
     }

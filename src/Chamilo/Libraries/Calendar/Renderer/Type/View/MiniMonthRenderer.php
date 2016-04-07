@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
@@ -119,7 +120,12 @@ class MiniMonthRenderer extends ViewRenderer
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $this->getLegend()->addSource($event->getSource());
-                    $calendar->addEvent($tableDate, $event->getTitle());
+
+                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                    $configuration->setStartDate($tableDate);
+
+                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
 
