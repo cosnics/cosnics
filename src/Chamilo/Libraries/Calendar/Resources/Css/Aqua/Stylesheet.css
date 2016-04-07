@@ -367,6 +367,7 @@ h4 .calendar-event-range {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	text-align: left;
 }
 
 .table-calendar .event-container-source, .table-calendar .event-container-source a,
@@ -448,4 +449,69 @@ h4 .calendar-event-range {
 
 .table-list-sidebar, .table-calendar-sidebar {
 	padding-top: 5px;
+}
+
+.tooltip-calendar.in {
+	opacity: 1;
+}
+
+.tooltip-calendar .tooltip-inner {
+	background-color: #f5f5f5;
+	border: 1px solid #f5f5f5;
+	-webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	padding: 5px 8px;
+	color: #333333;
+	text-align: left;
+}
+
+.tooltip-calendar .event-data {
+	white-space: normal;
+	overflow: visible;
+	text-overflow: clip;
+	text-align: left;
+}
+
+.tooltip-calendar.top .tooltip-arrow {
+	border-top-color: rgba(0, 0, 0, 0.2);
+}
+.tooltip-calendar.top-left .tooltip-arrow {
+	border-top-color: rgba(0, 0, 0, 0.2);
+}
+.tooltip-calendar.top-right .tooltip-arrow {
+	border-top-color: rgba(0, 0, 0, 0.2);
+}
+.tooltip-calendar.right .tooltip-arrow {
+	border-right-color: rgba(0, 0, 0, 0.2);
+}
+.tooltip-calendar.left .tooltip-arrow {
+	border-left-color: rgba(0, 0, 0, 0.2);
+}
+.tooltip-calendar.bottom .tooltip-arrow {
+	border-bottom-color: rgba(0, 0, 0, 0.2);
+}
+.tooltip-calendar.bottom-left .tooltip-arrow {
+	border-bottom-color: rgba(0, 0, 0, 0.2);
+}
+.tooltip-calendar.bottom-right .tooltip-arrow {
+	border-bottom-color: rgba(0, 0, 0, 0.2);
+}
+
+.tooltip-calendar .event-container {
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+}
+
+.tooltip-calendar .tooltip-event-container {
+	margin: 3px;
+}
+
+.tooltip-calendar .tooltip-event-content {
+	padding: 5px;
+}
+
+.tooltip-calendar .tooltip-event-prefix,
+.tooltip-calendar .tooltip-event-postfix {
+	color: dimgray;
 }
