@@ -93,9 +93,9 @@ a:focus {
 	box-shadow: none;
 }
 
-/**************
+/*******************
  * LIST VIEW PANEL *
- **************/
+ *******************/
 .list-group-item.list-group-item-faded-faded {
 	opacity: 0.5;
 }
@@ -242,6 +242,20 @@ a:focus {
 		height: 16px;
 		font-size: 11px;
 	}
+}
+
+/************************
+ * SLIDESHOW VIEW PANEL *
+ ************************/
+.panel.panel-slideshow .panel-slideshow-actions {
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px dashed #dddddd;
+}
+
+.panel.panel-slideshow .panel-slideshow-actions .btn-toolbar.btn-action-toolbar
+	{
+	margin: 0px;
 }
 
 /****************************
