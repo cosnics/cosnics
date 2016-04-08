@@ -56,10 +56,10 @@ abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
      */
     public function __construct($include_fake_root = true, $root_ids = array())
     {
+        $this->root_ids = $root_ids;
         $this->current_node_id = $this->get_current_node_id();
         $this->tree = array();
         $this->include_fake_root = $include_fake_root;
-        $this->root_ids = $root_ids;
 
         $this->build_tree();
 
