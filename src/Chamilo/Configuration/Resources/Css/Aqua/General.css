@@ -1303,48 +1303,6 @@ div.create_block {
 	margin-top: 10px;
 }
 
-div.no_thumbnail, div.no_preview {
-	border: 1px solid #cccccc;
-	/* 	background-color: white; */
-	padding: 15px;
-	width: 300px;
-	text-align: center;
-	color: #797268;
-	-webkit-border-top-left-radius: 10px;
-	-webkit-border-top-right-radius: 0px;
-	-webkit-border-bottom-right-radius: 5px;
-	-webkit-border-bottom-left-radius: 0px;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-topright: 0px;
-	-moz-border-radius-bottomright: 5px;
-	-moz-border-radius-bottomleft: 0px;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 0px;
-	border-bottom-right-radius: 5px;
-	border-bottom-left-radius: 0px;
-}
-
-div.no_thumbnail {
-	width: 75px;
-	border-width: 0px;
-	padding: 0px;
-}
-
-div.no_thumbnail div.background, div.no_preview div.background {
-	border: 1px solid #cccccc;
-	background-color: #efefef;
-	padding: 15px;
-	width: 268px;
-	background-image: url(../../Images/Aqua/Background/NoThumbnail.png);
-	background-position: top center;
-	background-repeat: repeat-x;
-}
-
-div.no_thumbnail div.background {
-	width: 63px;
-	padding: 5px;
-}
-
 iframe.preview {
 	border: 1px solid #cccccc;
 	width: 100%;
