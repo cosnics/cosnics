@@ -6,6 +6,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: content_object_publication_details_renderer.class.php 216 2009-11-13
@@ -18,6 +21,19 @@ use Chamilo\Libraries\Format\Theme;
  */
 class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationListRenderer
 {
+    public function get_publications()
+    {
+        $publication_id = $this->get_tool_browser()->get_publication_id();
+        $publication = DataManager :: retrieve_content_object_publication_with_content_object($publication_id);
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication :: class_name(),
+                ContentObjectPublication :: PROPERTY_ID),
+            new StaticConditionVariable($publication_id));
+
+        return DataManager :: retrieve_content_object_publications($condition, array(), 0, 1);
+    }
 
     /**
      * Returns the HTML output of this renderer.
@@ -34,8 +50,40 @@ class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationLi
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
             $publication_id);
 
+        $html = array();
+
+        $html[] = $this->renderHeader();
         $html[] = $this->render_publication($publication);
-        $html[] = '<br />';
+        $html[] = $this->renderFooter();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderHeader()
+    {
+        $html = array();
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function renderFooter()
+    {
+        $html = array();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 

@@ -90,9 +90,6 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 true);
         }
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'PublicationsList.js');
-
         $html[] = $this->renderHeader();
 
         foreach ($publications as $index => $publication)
@@ -848,6 +845,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '</div>';
 
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -858,6 +858,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     public function renderFooter()
     {
         $html = array();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         $html[] = '<div class="row">';
 
@@ -887,6 +890,10 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string
+     */
     public function renderItemsPerPageSelector()
     {
         $sourceDataCount = $this->getNumberOfItems();
