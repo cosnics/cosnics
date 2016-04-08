@@ -406,6 +406,10 @@ div.thumbnail_container {
 	display: inline;
 }
 
+.table-slideshow .thumbnail-container .no-preview span.glyphicon {
+	font-size: 60px;
+}
+
 @media ( min-width : 768px) {
 	.table-slideshow .control {
 		width: 95px;
