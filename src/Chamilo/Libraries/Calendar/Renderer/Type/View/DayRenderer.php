@@ -204,4 +204,22 @@ class DayRenderer extends FullTableRenderer
     {
         return date('l d F Y', $this->getDisplayTime());
     }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
+     */
+    public function getPreviousDisplayTime()
+    {
+        return strtotime('-1 Day', $this->getDisplayTime());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
+     */
+    public function getNextDisplayTime()
+    {
+        return strtotime('+1 Day', $this->getDisplayTime());
+    }
 }

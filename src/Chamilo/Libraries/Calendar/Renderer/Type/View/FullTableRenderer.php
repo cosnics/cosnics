@@ -29,8 +29,9 @@ abstract class FullTableRenderer extends FullRenderer
     public function renderNavigation()
     {
         $urlFormat = $this->determineNavigationUrl();
-        $previousTime = strtotime('-1 Month', $this->getDisplayTime());
-        $nextTime = strtotime('+1 Month', $this->getDisplayTime());
+
+        $previousTime = $this->getPreviousDisplayTime();
+        $nextTime = $this->getNextDisplayTime();
 
         $todayUrl = str_replace(Calendar :: TIME_PLACEHOLDER, time(), $urlFormat);
         $previousUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $previousTime, $urlFormat);
@@ -60,4 +61,16 @@ abstract class FullTableRenderer extends FullRenderer
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         return $buttonToolbarRenderer->render();
     }
+
+    /**
+     *
+     * @return integer
+     */
+    abstract public function getPreviousDisplayTime();
+
+    /**
+     *
+     * @return integer
+     */
+    abstract public function getNextDisplayTime();
 }
