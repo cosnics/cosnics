@@ -510,7 +510,7 @@ class Kernel
         }
         catch(NotAuthenticatedException $exception)
         {
-            $response = new NotAuthenticatedResponse();
+            $response = $this->getNotAuthenticatedResponse();
             $response->send();
         }
         catch (\Exception $exception)
@@ -520,5 +520,15 @@ class Kernel
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }
+    }
+
+    /**
+     * Returns a response that renders the not authenticated message
+     *
+     * @return NotAuthenticatedResponse
+     */
+    protected function getNotAuthenticatedResponse()
+    {
+        return new NotAuthenticatedResponse();
     }
 }
