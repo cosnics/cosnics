@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\announcement
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Annonces"
+InstallTypeName = "Annonces"
+BrowserComponent = "Parcourir annonces"
+ViewerComponent = "Voir annonce"
+PublisherComponent = "Publier annonce"
+UpdaterComponent = "Modifier annonce"
+IntroductionPublisherComponent = "Publier le texte d'introduction"

@@ -1,0 +1,56 @@
+<?php
+
+namespace {NAMESPACE};
+
+use common\libraries\Breadcrumb;
+use common\libraries\BreadcrumbTrail;
+use common\libraries\Translation;
+use common\libraries\Utilities;
+
+/**
+ * @package application.{L_APPLICATION_NAME}.{L_APPLICATION_NAME}.component
+ */
+
+/**
+ * Component to create a new {L_OBJECT_CLASS} object
+ * @author Sven Vanpoucke
+ * @author {AUTHOR}
+ */
+class {APPLICATION_NAME}Manager{OBJECT_CLASS}CreatorComponent extends {APPLICATION_NAME}Manager
+{
+    /**
+     * Runs this component and displays its output.
+     */
+    function run()
+    {
+        ${L_OBJECT_CLASS} = new {OBJECT_CLASS}();
+        $form = new {OBJECT_CLASS}Form({OBJECT_CLASS}Form :: TYPE_CREATE, ${L_OBJECT_CLASS}, $this->get_url(), $this->get_user());
+
+        if($form->validate())
+        {
+            $success = $form->create_{L_OBJECT_CLASS}();
+            $message = $success ? Translation :: get('ObjectCreated', array('OBJECT' => '{OBJECT_CLASS}'), Utilities :: COMMON_LIBRARIES) :
+                        Translation :: get('ObjectNotCreated', array('OBJECT' => '{OBJECT_CLASS}'), Utilities :: COMMON_LIBRARIES);
+            $this->redirect($message, !$success, array({APPLICATION_NAME}Manager :: PARAM_ACTION => {APPLICATION_NAME}Manager :: ACTION_BROWSE_{U_OBJECT_CLASSES}));
+        }
+        else
+        {
+            $this->display_header($trail);
+            $form->display();
+            $this->display_footer();
+        }
+    }
+
+    function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+    	$breadcrumbtrail->add_help('{L_OBJECT_CLASS}_creator');
+    	$breadcrumbtrail->add(new Breadcrumb($this->get_url(array({APPLICATION_NAME}Manager :: PARAM_ACTION => {APPLICATION_NAME}Manager :: ACTION_BROWSE)), Translation :: get('{APPLICATION_NAME}ManagerBrowserComponent')));
+        $breadcrumbtrail->add(new Breadcrumb($this->get_url(array({APPLICATION_NAME}Manager :: PARAM_ACTION => {APPLICATION_NAME}Manager :: ACTION_BROWSE_{U_OBJECT_CLASSES})), Translation :: get('{APPLICATION_NAME}Manager{OBJECT_CLASSES}BrowserComponent')));
+    }
+
+    function get_additional_parameters()
+    {
+    	return array();
+    }
+}
+?>
