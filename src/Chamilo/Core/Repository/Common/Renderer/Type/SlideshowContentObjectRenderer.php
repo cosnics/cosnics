@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 
 class SlideshowContentObjectRenderer extends ContentObjectRenderer
 {
@@ -56,14 +57,14 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
 
         $parameters = $this->get_parameters();
 
-        $play_toolbar = new Toolbar();
-        $play_toolbar->add_items($this->get_content_object_actions($content_object));
+        $actionsToolBar = new Toolbar();
+        $actionsToolBar->add_items($this->get_content_object_actions($content_object));
         if (Request :: get(self :: SLIDESHOW_AUTOPLAY))
         {
             $parameters[self :: SLIDESHOW_INDEX] = Request :: get(self :: SLIDESHOW_INDEX);
             $parameters[self :: SLIDESHOW_AUTOPLAY] = null;
 
-            $play_toolbar->add_item(
+            $actionsToolBar->add_item(
                 new ToolbarItem(
                     Translation :: get('Stop', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Stop'),
@@ -75,7 +76,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $parameters[self :: SLIDESHOW_INDEX] = Request :: get(self :: SLIDESHOW_INDEX);
             $parameters[self :: SLIDESHOW_AUTOPLAY] = 1;
 
-            $play_toolbar->add_item(
+            $actionsToolBar->add_item(
                 new ToolbarItem(
                     Translation :: get('Play', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Play'),
@@ -83,103 +84,103 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
                     ToolbarItem :: DISPLAY_ICON));
         }
 
-        $parameters = $this->get_parameters();
+        $html = array();
 
-        $navigation_toolbar = new Toolbar();
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
+
+        $html[] = '<div class="panel panel-default panel-slideshow">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . htmlspecialchars($content_object->get_title()) . ' - ' .
+             ($slideshow_index + 1) . '/' . $content_object_count . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
+
+        $html[] = '<table class="table-slideshow">';
+        $html[] = '<tbody>';
+        $html[] = '<tr>';
+
+        $html[] = '<td class="control control-left">';
+
+        $previousNavigation = array();
+
         if (! $is_first)
         {
+            $parameters = $this->get_parameters();
             $parameters[self :: SLIDESHOW_INDEX] = 0;
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('First', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/First'),
-                    $this->get_url($parameters),
-                    ToolbarItem :: DISPLAY_ICON));
 
+            $previousNavigation[] = '<a href="' . $this->get_url($parameters) .
+                 '"><span class="glyphicon glyphicon-step-backward"></span></a>';
+
+            $parameters = $this->get_parameters();
             $parameters[self :: SLIDESHOW_INDEX] = $slideshow_index - 1;
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Prev'),
-                    $this->get_url($parameters),
-                    ToolbarItem :: DISPLAY_ICON));
+            $previousNavigation[] = '<a href="' . $this->get_url($parameters) .
+                 '"><span class="glyphicon glyphicon-triangle-left"></span></a>';
         }
         else
         {
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('First', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/FirstNa'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON));
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/PrevNa'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON));
+            $previousNavigation[] = '<span class="glyphicon glyphicon-step-backward disabled"></span>';
+            $previousNavigation[] = '<span class="glyphicon glyphicon-triangle-left disabled"></span>';
         }
 
-        if (! $is_last)
-        {
-            $parameters[self :: SLIDESHOW_INDEX] = $slideshow_index + 1;
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Next'),
-                    $this->get_url($parameters),
-                    ToolbarItem :: DISPLAY_ICON));
+        $html[] = implode('', $previousNavigation);
 
-            $parameters[self :: SLIDESHOW_INDEX] = $content_object_count - 1;
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Last'),
-                    $this->get_url($parameters),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
-        else
-        {
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/NextNa'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON));
-            $navigation_toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Last', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/LastNa'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON));
-        }
+        $html[] = '</td>';
 
-        $table = array();
-        $table[] = '<table id="slideshow" class="table table-striped table-bordered table-hover table-responsive">';
-        $table[] = '<thead>';
-        $table[] = '<tr>';
-        $table[] = '<th class="actions" style="width: 25%; text-align: left;">';
-        $table[] = $play_toolbar->as_html();
-        $table[] = '</th>';
-        $table[] = '<th style="text-align: center;">' . htmlspecialchars($content_object->get_title()) . ' - ' .
-             ($slideshow_index + 1) . '/' . $content_object_count . '</th>';
-        $table[] = '<th class="navigation" style="width: 25%; text-align: right;">';
-        $table[] = $navigation_toolbar->as_html();
-        $table[] = '</th>';
-        $table[] = '</tr>';
-        $table[] = '</thead>';
-        $table[] = '<tbody>';
-        $table[] = '<tr><td colspan="3" style="background-color: #f9f9f9; text-align: center;">';
-        $table[] = ContentObjectRenditionImplementation :: factory(
+        $html[] = '<td class="thumbnail-container">';
+        $html[] = ContentObjectRenditionImplementation :: factory(
             $content_object,
             ContentObjectRendition :: FORMAT_HTML,
             ContentObjectRendition :: VIEW_PREVIEW,
             $this->get_repository_browser())->render();
-        $table[] = '</td></tr>';
+        $html[] = '</td>';
 
-        $table[] = '</tbody>';
+        $html[] = '<td class="control control-right">';
 
-        $table[] = '</table>';
+        $nextNavigation = array();
+
+        if (! $is_last)
+        {
+            $parameters = $this->get_parameters();
+            $parameters[self :: SLIDESHOW_INDEX] = $slideshow_index + 1;
+            $nextNavigation[] = '<a href="' . $this->get_url($parameters) .
+                 '"><span class="glyphicon glyphicon-triangle-right"></span></a>';
+
+            $parameters = $this->get_parameters();
+            $parameters[self :: SLIDESHOW_INDEX] = $content_object_count - 1;
+            $nextNavigation[] = '<a href="' . $this->get_url($parameters) .
+                 '"><span class="glyphicon glyphicon-step-forward"></span></a>';
+        }
+        else
+        {
+            $nextNavigation[] = '<span class="glyphicon glyphicon-triangle-right disabled"></span>';
+            $nextNavigation[] = '<span class="glyphicon glyphicon-step-forward disabled"></span>';
+        }
+
+        $html[] = implode('', $nextNavigation);
+
+        $html[] = '</td>';
+
+        $html[] = '</tr>';
+        $html[] = '</tbody>';
+        $html[] = '</table>';
+
+        $html[] = '<div class="row panel-slideshow-actions">';
+        $html[] = '<div class="col-xs-12">';
+
+        $actionsToolBarRenderer = new ButtonToolBarRenderer($actionsToolBar->convertToButtonToolBar(false));
+
+        $html[] = $actionsToolBarRenderer->render();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         if (Request :: get(self :: SLIDESHOW_AUTOPLAY))
         {
@@ -196,7 +197,6 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $html[] = '<meta http-equiv="Refresh" content="10; url=' . $autoplay_url . '" />';
         }
 
-        $html[] = implode(PHP_EOL, $table);
         return implode(PHP_EOL, $html);
     }
 }
