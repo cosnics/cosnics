@@ -96,7 +96,7 @@ EOT;
                  Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES) . '</small></span>');
         $required_note_template = <<<EOT
 	<div class="form-row">
-		<div class="label"></div>
+		<div class="form-label"></div>
 		<div class="formw">{requiredNote}</div>
 	</div>
 EOT;

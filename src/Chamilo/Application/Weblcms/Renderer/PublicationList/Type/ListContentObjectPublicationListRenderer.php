@@ -121,13 +121,51 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html = array();
 
-        $html[] = '<div class="panel panel-default panel-publication">';
+        $html[] = '<div class="' . $this->determinePanelClasses() . '">';
         $html[] = '<div class="panel-body">';
 
         $html[] = $this->renderPublicationHeader($publication);
-        $html[] = $this->render_description($publication);
+        $html[] = $this->renderPublicationBody($publication);
         $html[] = $this->renderPublicationFooter($publication);
 
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function determinePanelClasses()
+    {
+        $classes = array();
+
+        $classes[] = 'panel';
+        $classes[] = 'panel-default';
+        $classes[] = 'panel-publication';
+
+        if ($this->hasActions())
+        {
+            $classes[] = 'panel-publication-with-actions';
+        }
+
+        return implode(' ', $classes);
+    }
+
+    /**
+     *
+     * @param string[] $publication
+     * @return string
+     */
+    public function renderPublicationBody($publication)
+    {
+        $html = array();
+
+        $html[] = '<div class="row panel-publication-body">';
+        $html[] = '<div class="col-xs-12">';
+        $html[] = $this->render_description($publication);
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -418,11 +456,13 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     'btn-link'));
         }
 
-        // if (method_exists($this->get_tool_browser()->get_parent(), 'add_content_object_publication_actions'))
-        // {
-        // // $content_object_publication_actions =
-        // $this->get_tool_browser()->get_parent()->add_content_object_publication_actions($toolbar, $publication);
-        // }
+        if (method_exists($this->get_tool_browser()->get_parent(), 'addContentObjectPublicationButtons'))
+        {
+            $this->get_tool_browser()->get_parent()->addContentObjectPublicationButtons(
+                $publication,
+                $buttonGroup,
+                $dropdownButton);
+        }
 
         $buttonGroup->addButton($dropdownButton);
         $buttonToolBar->addItem($buttonGroup);
@@ -556,20 +596,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $html[] = '<div class="row panel-publication-header">';
 
         $html[] = '<div class="col-xs-12 col-sm-10 panel-publication-header-title">';
-
-        $html[] = '';
-
-        if ($this->hasActions())
-        {
-            // Add the checkbox
-            $html[] = '<div class="panel-publication-header-title-checkbox">';
-            $html[] = '<input class="pid" type="checkbox" name="' . Manager :: PARAM_PUBLICATION . '[]" value="' .
-                 $publication[ContentObjectPublication :: PROPERTY_ID] . '"/>';
-            $html[] = '</div>';
-        }
-
         $html[] = '<h3>';
-        $html[] = '<a href="' . $this->getTitleUrl($publication) . '">' . $this->render_title($publication) . '</a>';
+        $html[] = '<a class="title" href="' . $this->getTitleUrl($publication) . '">' . $this->render_title(
+            $publication) . '</a>';
         $html[] = '<span class="labels">' . $this->renderPublicationLabels($publication) . '</span>';
         $html[] = '</h3>';
         $html[] = '<small>' . $this->render_repository_viewer($publication) . '</small>';
@@ -578,10 +607,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="col-xs-12 col-sm-2 panel-publication-header-actions">';
 
-        if ($this->hasActions())
-        {
-            $html[] = $this->renderPublicationActions($publication);
-        }
+        $html[] = $this->renderPublicationActions($publication);
 
         $html[] = '</div>';
 
@@ -600,6 +626,20 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $lastVisitDate = $this->get_tool_browser()->get_last_visit_date();
 
         $html = array();
+
+        if ($this->hasActions())
+        {
+            $checkboxHtml = array();
+
+            $checkboxHtml[] = '<span class="label-checkbox checkbox checkbox-primary">';
+            $checkboxHtml[] = '<input type="checkbox" class="publication-select styled styled-primary" name="' .
+                 Manager :: PARAM_PUBLICATION . '[]" value="' . $publication[ContentObjectPublication :: PROPERTY_ID] .
+                 '"/>';
+            $checkboxHtml[] = '<label></label>';
+            $checkboxHtml[] = '</span>';
+
+            $html[] = implode('', $checkboxHtml);
+        }
 
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
@@ -621,7 +661,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $html[] = '<span class="label label-success">' . Translation :: get('PublicationLabelEmailSent') . '</span>';
         }
 
-        return implode(PHP_EOL, $html);
+        return implode('', $html);
     }
 
     /**
