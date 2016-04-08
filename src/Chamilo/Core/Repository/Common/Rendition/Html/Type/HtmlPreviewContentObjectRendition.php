@@ -26,13 +26,13 @@ class HtmlPreviewContentObjectRendition extends HtmlContentObjectRendition
     public function render()
     {
         $html = array();
-        $html[] = '<div class="' . $this->get_class() . '">';
-        $html[] = '<div class="background">';
-        $html[] = $this->get_image();
+
+        $html[] = '<div class="no-preview">';
+        $html[] = '<span class="glyphicon glyphicon-picture"></span>';
+        $html[] = '<br />';
         $html[] = $this->get_text();
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 }

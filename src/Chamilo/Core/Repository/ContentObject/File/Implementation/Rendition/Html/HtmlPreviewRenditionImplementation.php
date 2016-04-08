@@ -3,22 +3,27 @@ namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Ht
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\HtmlRenditionImplementation;
-use Chamilo\Libraries\File\Path;
 
+/**
+ *
+ * @package Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ */
 class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
 {
 
     public function render()
     {
-        $object = $this->get_content_object();
+        $contentObject = $this->get_content_object();
 
-        if ($object->is_image())
+        if ($contentObject->is_image())
         {
-            $url = Path :: getInstance()->getBasePath(true) .
-                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-                    $object->get_id(),
-                    $object->calculate_security_code());
-            return '<img src="' . $url . '" alt="" style="max-width: 800px; border: 1px solid #f0f0f0;"/>';
+            $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                $contentObject->get_id(),
+                $contentObject->calculate_security_code());
+
+            return '<img src="' . $url . '" alt="' . htmlentities($contentObject->get_title()) . '" class="thumbnail" />';
         }
         else
         {
