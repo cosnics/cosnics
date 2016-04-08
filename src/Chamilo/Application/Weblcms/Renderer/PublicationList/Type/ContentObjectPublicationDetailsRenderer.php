@@ -1,11 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
-use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -19,12 +16,16 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * Renderer to display all details of learning object publication
  */
-class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationListRenderer
+class ContentObjectPublicationDetailsRenderer extends ListContentObjectPublicationListRenderer
 {
+
+    /**
+     *
+     * @see \Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer::get_publications()
+     */
     public function get_publications()
     {
         $publication_id = $this->get_tool_browser()->get_publication_id();
-        $publication = DataManager :: retrieve_content_object_publication_with_content_object($publication_id);
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -32,123 +33,19 @@ class ContentObjectPublicationDetailsRenderer extends ContentObjectPublicationLi
                 ContentObjectPublication :: PROPERTY_ID),
             new StaticConditionVariable($publication_id));
 
-        return DataManager :: retrieve_content_object_publications($condition, array(), 0, 1);
+        return DataManager :: retrieve_content_object_publications($condition, array(), 0, 1)->as_array();
     }
 
     /**
-     * Returns the HTML output of this renderer.
      *
-     * @return string The HTML output
+     * @see \Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer::as_html()
      */
     public function as_html()
     {
-        $publication_id = $this->get_tool_browser()->get_publication_id();
-
-        $publication = DataManager :: retrieve_content_object_publication_with_content_object($publication_id);
-
         $this->get_tool_browser()->get_parent()->set_parameter(
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
-            $publication_id);
+            $this->get_tool_browser()->get_publication_id());
 
-        $html = array();
-
-        $html[] = $this->renderHeader();
-        $html[] = $this->render_publication($publication);
-        $html[] = $this->renderFooter();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderHeader()
-    {
-        $html = array();
-
-        $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12">';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function renderFooter()
-    {
-        $html = array();
-
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    /**
-     * Renders a single publication.
-     *
-     * @param $publication ContentObjectPublication The publication.
-     * @return string The rendered HTML.
-     */
-    public function render_publication($publication, $first = false, $last = false)
-    {
-        $html = array();
-        $last_visit_date = $this->get_tool_browser()->get_last_visit_date();
-        $icon_suffix = '';
-
-        if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
-        {
-            $icon_suffix = 'Na';
-        }
-        elseif ($publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE] >= $last_visit_date)
-        {
-            $icon_suffix = 'New';
-        }
-
-        $content_object = $this->get_content_object_from_publication($publication);
-
-        if ($content_object instanceof ComplexContentObjectSupport)
-        {
-            $title_url = $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT));
-        }
-
-        $html[] = '<div class="announcements level_1" style="background-image: url(' .
-             $content_object->get_icon_path(Theme :: ICON_SMALL . $icon_suffix) . ');">';
-
-        if ($title_url)
-        {
-            $html[] = '<a href="' . $title_url . '">';
-        }
-
-        $html[] = '<div class="title' . ($this->is_visible_for_target_users($publication) ? '' : ' invisible') . '">';
-        $html[] = $this->render_title($publication);
-        $html[] = '</div>';
-
-        if ($title_url)
-        {
-            $html[] = '</a>';
-        }
-
-        $html[] = '<div style="padding-top: 1px;" class="description' .
-             ($this->is_visible_for_target_users($publication) ? '' : ' invisible') . '">';
-        $html[] = $this->render_description($publication);
-        // $html[] = $this->render_attachments($publication);
-        $html[] = '</div>';
-        $html[] = '<div class="publication_info' . ($this->is_visible_for_target_users($publication) ? '' : ' invisible') .
-             '">';
-        $html[] = $this->render_publication_information($publication);
-        $html[] = '</div>';
-        $html[] = '<div class="publication_actions">';
-        $html[] = $this->get_publication_actions($publication)->as_html();
-        $html[] = '</div>';
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return parent :: as_html();
     }
 }

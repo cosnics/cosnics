@@ -152,32 +152,27 @@ a:focus {
 	display: inline;
 }
 
-.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3
 	{
 	display: flex;
 	flex-flow: column nowrap;
 }
 
-.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 a.title
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 a.title
 	{
 	order: 2;
 }
 
-.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 span.labels
 	{
 	order: 1;
 	display: block;
 	margin-bottom: 5px;
 }
 
-.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels span.label
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 span.labels span.label
 	{
 	margin-right: 5px;
-}
-
-.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels .btn
-	{
-	font-weight: 700;
 }
 
 .panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::before
@@ -228,11 +223,11 @@ a:focus {
 		margin: 0px;
 		background-color: transparent;
 	}
-	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3
+	.panel.panel-publication .panel-publication-header .panel-publication-header-title h3
 		{
 		display: block;
 	}
-	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title h3 span.labels
+	.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 span.labels
 		{
 		display: inline;
 	}
