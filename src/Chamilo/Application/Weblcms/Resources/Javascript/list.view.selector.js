@@ -45,14 +45,14 @@ $(function()
     function selectAllItems(e, ui)
     {
         e.preventDefault();
-        $('.pid:checkbox').prop('checked', 'checked');
+        $('.publication-select:checkbox').prop('checked', 'checked');
         toggleSelectButtons();
     }
     
     function unselectAllItems(e, ui)
     {
         e.preventDefault();
-        $('.pid:checkbox').prop('checked', '');
+        $('.publication-select:checkbox').prop('checked', '');
         toggleSelectButtons();
     }
     

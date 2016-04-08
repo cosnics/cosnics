@@ -8,6 +8,10 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 
 /**
  *
@@ -94,5 +98,35 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                         self :: PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER)),
                 ToolbarItem :: DISPLAY_ICON));
         return $toolbar;
+    }
+
+    public function addContentObjectPublicationButtons($publication, ButtonGroup $buttonGroup,
+        DropdownButton $dropdownButton)
+    {
+        $buttonGroup->prependButton(
+            new Button(
+                Translation :: get('BrowseSubmitters'),
+                new BootstrapGlyph('folder-open'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_BROWSE_SUBMITTERS,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID])),
+                Button :: DISPLAY_ICON,
+                false,
+                'btn-link'));
+
+        $buttonGroup->prependButton(
+            new Button(
+                Translation :: get('SubmissionSubmit'),
+                new BootstrapGlyph('plus'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBMIT_SUBMISSION,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                        self :: PARAM_TARGET_ID => $this->get_user_id(),
+                        self :: PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER)),
+                Button :: DISPLAY_ICON,
+                false,
+                'btn-link'));
     }
 }

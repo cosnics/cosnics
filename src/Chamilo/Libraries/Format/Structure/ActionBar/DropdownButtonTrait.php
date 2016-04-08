@@ -34,7 +34,7 @@ trait DropdownButtonTrait
 
     /**
      * Returns whether or not this dropdown button has sub buttons
-     * 
+     *
      * @return bool
      */
     public function hasButtons()
@@ -62,6 +62,15 @@ trait DropdownButtonTrait
 
     /**
      *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface $subButton
+     */
+    public function prependSubButton(SubButtonInterface $subButton)
+    {
+        array_unshift($this->subButtons, $subButton);
+    }
+
+    /**
+     *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface[] $subButtons
      */
     public function addSubButtons($subButtons)
@@ -69,6 +78,18 @@ trait DropdownButtonTrait
         foreach ($subButtons as $subButton)
         {
             $this->addSubButton($subButton);
+        }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface[] $subButtons
+     */
+    public function prependSubButtons($subButtons)
+    {
+        foreach ($subButtons as $subButton)
+        {
+            $this->prependSubButton($subButton);
         }
     }
 
