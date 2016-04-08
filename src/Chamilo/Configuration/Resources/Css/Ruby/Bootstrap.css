@@ -1,0 +1,60 @@
+@import url('../Aqua/Bootstrap.css');
+
+/**************
+ * ACTION BAR *
+ **************/
+.dropdown-menu>li>a {
+	padding: 3px 32px;
+}
+
+.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
+	background-image: url("../../Images/Aqua/Background/Checkmark.png");
+	background-position: 12px center;
+	background-repeat: no-repeat;
+}
+
+.btn-action-toolbar .btn-group-vertical {
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.btn-action-toolbar .btn-group-vertical .btn {
+	text-align: left;
+}
+
+form .row {
+	margin: 0 0 5px;
+}
+
+form.table_form .row {
+	margin-bottom: 0;
+}
+
+form.table_form .row .btn-action-toolbar {
+	margin-bottom: 5px;
+}
+
+a, .ui-widget-content a:not(.btn) {
+	color: #337ab7;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+
+/***********************
+ * Alert			   *
+ ***********************/
+
+.alert-message
+{
+	z-index: 9999;
+	position: relative;
+	margin: 10px auto 10px -287px;
+	width: 500px;
+	left: 50%;
+	right: 50%;
+	padding: 10px 36px 10px 36px;
+	text-align: justify;
+	background-repeat: no-repeat;
+	background-position: 10px 50%;
+}
