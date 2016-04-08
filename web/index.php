@@ -1,6 +1,5 @@
 <?php
-
-use Hogent\Integration\SSO\Extension\Chamilo\Libraries\Architecture\Kernel;
+use Chamilo\Libraries\Architecture\Kernel;
 /**
  * This script will load the requested application and launch it.
  */
