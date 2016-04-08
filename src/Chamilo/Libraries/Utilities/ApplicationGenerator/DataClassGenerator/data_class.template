@@ -1,0 +1,67 @@
+<?php
+
+namespace {NAMESPACE};
+
+use common\libraries\Utilities;
+use common\libraries\DataClass;
+
+/**
+ * {PACKAGE}
+ */
+{INCLUDES}
+/**
+ * {DESCRIPTION}
+ * @author Sven Vanpoucke
+ * @author {AUTHOR}
+ */
+class {OBJECT_CLASS} extends DataClass
+{
+    const CLASS_NAME = __CLASS__;
+
+    /**
+     * {OBJECT_CLASS} properties
+     */
+    <!-- BEGIN CONSTS -->
+    const {CONSTS.PROPERTY_CONST} = '{CONSTS.PROPERTY_NAME}';
+    <!-- END CONSTS -->
+
+    /**
+     * Get the default properties
+     * @return array The property names.
+     */
+    static function get_default_property_names()
+    {
+        return array ({DEFAULT_PROPERTY_NAMES});
+    }
+
+    function get_data_manager()
+    {
+        return {APPLICATION_NAME}DataManager :: get_instance();
+    }
+
+    <!-- BEGIN PROPERTY -->
+    /**
+     * Returns the {PROPERTY.PROPERTY_NAME} of this {OBJECT_CLASS}.
+     * @return the {PROPERTY.PROPERTY_NAME}.
+     */
+    function get_{PROPERTY.PROPERTY_NAME}()
+    {
+        return $this->get_default_property(self :: {PROPERTY.PROPERTY_CONST});
+    }
+
+    /**
+     * Sets the {PROPERTY.PROPERTY_NAME} of this {OBJECT_CLASS}.
+     * @param {PROPERTY.PROPERTY_NAME}
+     */
+    function set_{PROPERTY.PROPERTY_NAME}(${PROPERTY.PROPERTY_NAME})
+    {
+        $this->set_default_property(self :: {PROPERTY.PROPERTY_CONST}, ${PROPERTY.PROPERTY_NAME});
+    }
+
+    <!-- END PROPERTY -->
+
+    static function get_table_name()
+    {
+        return Utilities :: get_classname_from_namespace(self :: CLASS_NAME, true);
+    }
+}
