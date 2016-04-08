@@ -334,8 +334,8 @@ class DetailsComponent extends TabComponent implements TableSupport
 
         $html = array();
 
-        $html[] = '<div style="background-color: #F5F5F5; border-top: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD; margin: 15px -15px; padding: 3px 10px; color: #555555;">';
-        $html[] = '<h5>Users</h5>';
+        $html[] = '<div class="tab-content-header">';
+        $html[] = '<h5>' . Translation::getInstance()->getTranslation('Users', null, Manager::context()) . '</h5>';
         $html[] = '</div>';
         $html[] = $table->as_html();
 

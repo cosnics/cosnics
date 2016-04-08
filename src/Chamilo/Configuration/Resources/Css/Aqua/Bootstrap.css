@@ -392,6 +392,15 @@ ol.breadcrumb a {
 	margin-bottom: 0;
 }
 
+.dynamic-visual-tab-content .tab-content-header {
+    background-color: #F5F5F5;
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    margin: 15px -15px;
+    padding: 3px 10px;
+    color: #555555;
+}
+
 /***********************
  * Alert			   *
  ***********************/

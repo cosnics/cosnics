@@ -110,7 +110,7 @@ class GroupSubscribeComponent extends Manager
                     Translation :: get($message),
                     ($success ? false : true),
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_GROUP_BROWSER,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS,
                         \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP => $parent_group_id));
             }
             else
