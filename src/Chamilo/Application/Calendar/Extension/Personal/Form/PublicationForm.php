@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Form;
 
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
@@ -15,7 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package application\calendar$PublicationForm
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class PublicationForm extends FormValidator
+class PublicationForm extends BasePublicationForm
 {
     // Types
     const TYPE_SINGLE = 1;
@@ -59,14 +60,17 @@ class PublicationForm extends FormValidator
      * @param ContentObject $content_object
      * @param User $form_user
      * @param string $action
+     * @param array $selectedContentObjects
      */
-    public function __construct($form_type, $content_object, User $form_user, $action)
+    public function __construct($form_type, $content_object, User $form_user, $action, $selectedContentObjects = array())
     {
         parent :: __construct('publish', 'post', $action);
 
         $this->form_type = $form_type;
         $this->content_object = $content_object;
         $this->form_user = $form_user;
+
+        $this->setSelectedContentObjects($selectedContentObjects);
 
         switch ($this->form_type)
         {
@@ -110,6 +114,8 @@ class PublicationForm extends FormValidator
      */
     public function build_form()
     {
+        $this->addSelectedContentObjects($this->form_user);
+
         $shares = array();
         $attributes = array();
         $attributes['search_url'] = Path :: getInstance()->getBasePath(true) .
