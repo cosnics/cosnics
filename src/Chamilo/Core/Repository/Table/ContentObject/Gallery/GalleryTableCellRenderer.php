@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTableCellRenderer;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
 {
@@ -15,9 +14,20 @@ class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
     {
         $html = array();
 
+        $html[] = '<div class="panel panel-default panel-gallery">';
+
+        $html[] = '<div class="panel-body panel-body-thumbnail">';
         $html[] = $this->get_cell_content($content_object);
-        $html[] = '<div class="thumbnail_action">';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . $content_object->get_title() . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
         $html[] = $this->get_modification_links($content_object);
+        $html[] = '</div>';
+
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -31,7 +41,6 @@ class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
             ContentObjectRendition :: VIEW_THUMBNAIL,
             $this->get_component());
 
-        $html[] = '<h4>' . StringUtilities :: getInstance()->truncate($content_object->get_title(), 25, false) . '</h4>';
         $html[] = '<a href="' . htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
              '">' . $display->render() . '</a>';
 

@@ -8,7 +8,6 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -105,11 +104,11 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
     public function render_header()
     {
         $html = array();
-        $html[] = parent::render_header();
+        $html[] = parent :: render_header();
 
         $html[] = '<ul class="nav nav-wizard publication-wizard">';
 
-        if(! \Chamilo\Core\Repository\Viewer\Manager :: any_object_selected())
+        if (! \Chamilo\Core\Repository\Viewer\Manager :: any_object_selected())
         {
             $stepOneClass = 'active';
             $stepTwoClass = 'disabled';
@@ -120,12 +119,10 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
             $stepTwoClass = 'active';
         }
 
-
-        $html[] = '<li class="' . $stepOneClass . '"><a href="#">' . $this->getWizardFirstStepTitle() .
-            '</a></li>';
+        $html[] = '<li class="' . $stepOneClass . '"><a href="#">' . $this->getWizardFirstStepTitle() . '</a></li>';
 
         $html[] = '<li class="' . $stepTwoClass . '"><a href="#">' . $this->getTranslation('SecondStepPublish') .
-            '</a></li>';
+             '</a></li>';
 
         $html[] = '</ul>';
 
@@ -139,14 +136,14 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
      */
     protected function getWizardFirstStepTitle()
     {
-        $action = Request::get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
-        switch($action)
+        $action = Request :: get(\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION);
+        switch ($action)
         {
-            case \Chamilo\Core\Repository\Viewer\Manager::ACTION_CREATOR:
+            case \Chamilo\Core\Repository\Viewer\Manager :: ACTION_CREATOR :
                 return $this->getTranslation('FirstStepCreate');
-            case \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER:
+            case \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER :
                 return $this->getTranslation('FirstStepBrowseInWorkspaces');
-            case \Chamilo\Core\Repository\Viewer\Manager::ACTION_IMPORTER:
+            case \Chamilo\Core\Repository\Viewer\Manager :: ACTION_IMPORTER :
                 return $this->getTranslation('FirstStepImport');
         }
     }
@@ -161,6 +158,6 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
      */
     protected function getTranslation($variable, $parameters = array())
     {
-        return Translation::getInstance()->get($variable, $parameters, Manager::context());
+        return Translation :: getInstance()->get($variable, $parameters, Manager :: context());
     }
 }

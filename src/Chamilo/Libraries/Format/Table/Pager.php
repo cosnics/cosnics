@@ -11,15 +11,21 @@ namespace Chamilo\Libraries\Format\Table;
 class Pager
 {
     const DISPLAY_PER_PAGE_LIMIT = 500;
-    const DISPLAY_PER_INCREMENT = 10;
-    const DISPLAY_PER_INCREMENT_INTERVAL_LIMIT = 50;
+    const DISPLAY_PER_INCREMENT = 20;
+    const DISPLAY_PER_INCREMENT_INTERVAL_LIMIT = 60;
     const DISPLAY_ALL = 'all';
 
     /**
      *
      * @var integer
      */
-    private $numberOfItemsPerPage;
+    private $numberOfRows;
+
+    /**
+     *
+     * @var integer
+     */
+    private $numberOfColumns;
 
     /**
      *
@@ -59,13 +65,15 @@ class Pager
 
     /**
      *
-     * @param integer $numberOfItemsPerPage
+     * @param integer $numberOfRows
+     * @param integer $numberOfColumns
      * @param integer $numberOfItems
      * @param integer $currentPageNumber
      */
-    public function __construct($numberOfItemsPerPage, $numberOfItems, $currentPageNumber)
+    public function __construct($numberOfRows, $numberOfColumns, $numberOfItems, $currentPageNumber)
     {
-        $this->numberOfItemsPerPage = $numberOfItemsPerPage;
+        $this->numberOfRows = $numberOfRows;
+        $this->numberOfColumns = $numberOfColumns;
         $this->numberOfItems = $numberOfItems;
         $this->currentPageNumber = $currentPageNumber;
     }
@@ -74,18 +82,36 @@ class Pager
      *
      * @return integer
      */
-    public function getNumberOfItemsPerPage()
+    public function getNumberOfRows()
     {
-        return $this->numberOfItemsPerPage;
+        return $this->numberOfRows;
     }
 
     /**
      *
-     * @param integer $numberOfItemsPerPage
+     * @param integer $numberOfRows
      */
-    public function setNumberOfItemsPerPage($numberOfItemsPerPage)
+    public function setNumberOfRows($numberOfRows)
     {
-        $this->numberOfItemsPerPage = $numberOfItemsPerPage;
+        $this->numberOfRows = $numberOfRows;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getNumberOfColumns()
+    {
+        return $this->numberOfColumns;
+    }
+
+    /**
+     *
+     * @param integer $numberOfColumns
+     */
+    public function setNumberOfColumns($numberOfColumns)
+    {
+        $this->numberOfColumns = $numberOfColumns;
     }
 
     /**
@@ -122,6 +148,15 @@ class Pager
     public function setCurrentPageNumber($currentPageNumber)
     {
         $this->currentPageNumber = $currentPageNumber;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getNumberOfItemsPerPage()
+    {
+        return $this->getNumberOfRows() * $this->getNumberOfColumns();
     }
 
     /**

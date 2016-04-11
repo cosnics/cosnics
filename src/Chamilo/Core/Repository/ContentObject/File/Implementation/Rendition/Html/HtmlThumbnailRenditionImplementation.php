@@ -18,8 +18,8 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
 
         if ($object->is_image())
         {
-            $width = 100;
-            $height = 100;
+            $width = 200;
+            $height = 200;
 
             $thumbnail_path = Path :: getInstance()->getTemporaryPath() . md5($object->get_full_path()) .
                  basename($object->get_full_path());
@@ -40,7 +40,8 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
                     ThumbnailComponent :: PARAM_WIDTH => $width,
                     ThumbnailComponent :: PARAM_HEIGHT => $height));
 
-            return '<img src="' . $thumbnailUrl->getUrl() . '" title="' . $object->get_title() . '" class="thumbnail" />';
+            return '<img src="' . $thumbnailUrl->getUrl() . '" title="' . $object->get_title() .
+                 '" class="thumbnail-image" />';
         }
         else
         {

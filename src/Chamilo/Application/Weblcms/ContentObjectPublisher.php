@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
@@ -12,7 +11,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This class represents a publisher which shows the selected content objects and the publication form
@@ -66,7 +64,7 @@ class ContentObjectPublisher
     {
         $html = array();
 
-        if (!is_array($content_object_ids))
+        if (! is_array($content_object_ids))
         {
             $content_object_ids = array($content_object_ids);
         }
@@ -77,38 +75,34 @@ class ContentObjectPublisher
         if ($items_to_publish > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_ID),
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
                 $content_object_ids,
-                ContentObject:: get_table_name()
-            );
+                ContentObject :: get_table_name());
             $parameters = new DataClassRetrievesParameters($condition);
 
-            $content_objects = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_active_content_objects(
-                ContentObject:: class_name(),
-                $parameters
-            );
+            $content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
+                ContentObject :: class_name(),
+                $parameters);
 
-
-//            $html[] = '<div class="panel panel-default">';
-//            $html[] = '<div class="panel-heading">';
-//            $html[] = '<h3 class="panel-title selected-content-objects">';
-//            $html[] =  Translation :: get('SelectedContentObjects', null, Utilities :: COMMON_LIBRARIES);
-//            $html[] = '</h4>';
-//            $html[] = '</div>';
-//            $html[] = '<div class="panel-body">';
+            // $html[] = '<div class="panel panel-default">';
+            // $html[] = '<div class="panel-heading">';
+            // $html[] = '<h3 class="panel-title selected-content-objects">';
+            // $html[] = Translation :: get('SelectedContentObjects', null, Utilities :: COMMON_LIBRARIES);
+            // $html[] = '</h4>';
+            // $html[] = '</div>';
+            // $html[] = '<div class="panel-body">';
             $html[] = '<ul class="attachments_list">';
 
             while ($content_object = $content_objects->next_result())
             {
-                $namespace = ClassnameUtilities:: getInstance()->getNamespaceFromClassname(
-                    ContentObject:: get_content_object_type_namespace($content_object->get_type())
-                );
+                $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
+                    ContentObject :: get_content_object_type_namespace($content_object->get_type()));
 
-                if (RightsService:: getInstance()->canUseContentObject($this->parent->get_user(), $content_object))
+                if (RightsService :: getInstance()->canUseContentObject($this->parent->get_user(), $content_object))
                 {
                     $html[] = '<li><img src="' . $content_object->get_icon_path(Theme :: ICON_MINI) . '" alt="' .
-                        htmlentities(Translation:: get('TypeName', null, $namespace)) . '"/> ' .
-                        $content_object->get_title() . '</li>';
+                         htmlentities(Translation :: get('TypeName', null, $namespace)) . '"/> ' .
+                         $content_object->get_title() . '</li>';
 
                     $publication = new ContentObjectPublication();
                     $publication->set_content_object_id($content_object->get_id());
@@ -121,15 +115,15 @@ class ContentObjectPublisher
                 else
                 {
                     $html[] = '<li><img src="' . $content_object->get_icon_path(Theme :: ICON_MINI) . '" alt="' .
-                        htmlentities(Translation:: get('TypeName', null, $namespace)) . '"/> ' .
-                        $content_object->get_title() . '<span style="color: red; font-style: italic;">' .
-                        Translation:: get('NotAllowed') . '</span>' . '</li>';
+                         htmlentities(Translation :: get('TypeName', null, $namespace)) . '"/> ' .
+                         $content_object->get_title() . '<span style="color: red; font-style: italic;">' .
+                         Translation :: get('NotAllowed') . '</span>' . '</li>';
                 }
             }
 
             $html[] = '</ul>';
-//            $html[] = '</div>';
-//            $html[] = '</div>';
+            // $html[] = '</div>';
+            // $html[] = '</div>';
         }
 
         $this->publications = $publications;
@@ -144,8 +138,7 @@ class ContentObjectPublisher
             $course,
             $this->parent->get_url(),
             $is_course_admin,
-            $content_objects->as_array()
-        );
+            $content_objects->as_array());
 
         $this->content_object_publication_form = $form;
     }
@@ -167,7 +160,7 @@ class ContentObjectPublisher
      */
     public function ready_to_publish()
     {
-        if (!$this->show_form)
+        if (! $this->show_form)
         {
             return true;
         }
@@ -182,7 +175,7 @@ class ContentObjectPublisher
      */
     public function publish()
     {
-        if (!$this->show_form)
+        if (! $this->show_form)
         {
 
             return $this->create_publications_without_form();
@@ -222,25 +215,25 @@ class ContentObjectPublisher
      */
     public function is_publish_and_build_submit()
     {
-        if (!$this->show_form)
+        if (! $this->show_form)
         {
             return false;
         }
 
         $values = $this->content_object_publication_form->exportValues();
 
-        return !empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_BUILD]);
+        return ! empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_BUILD]);
     }
 
     public function is_publish_and_view_submit()
     {
-        if (!$this->show_form)
+        if (! $this->show_form)
         {
             return false;
         }
         $values = $this->content_object_publication_form->exportValues();
 
-        return !empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_VIEW]);
+        return ! empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_VIEW]);
     }
 
     /**

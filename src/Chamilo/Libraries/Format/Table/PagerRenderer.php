@@ -285,13 +285,13 @@ class PagerRenderer
             $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfItemsPerPage';
         }
 
-        $currentNumberOfItemsPerPage = $this->getPager()->getNumberOfItemsPerPage();
+        $currentNumberOfRowsPerPage = $this->getPager()->getNumberOfRows();
         $numberOfItems = $this->getPager()->getNumberOfItems();
 
         $dropDownButton = new DropdownButton(
             Translation :: get(
                 $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE],
-                array('NUMBER' => $currentNumberOfItemsPerPage),
+                array('NUMBER' => $currentNumberOfRowsPerPage),
                 $translationVariables[Application :: PARAM_CONTEXT]),
             null,
             Button :: DISPLAY_LABEL,
@@ -299,25 +299,21 @@ class PagerRenderer
         $dropDownButton->setDropdownClasses('dropdown-menu-right');
         $buttonGroup->addButton($dropDownButton);
 
-        // calculate the roundup for the interval
-        $sourceDataCountUpperInterval = ceil($numberOfItems / Pager :: DISPLAY_PER_INCREMENT) *
-             Pager :: DISPLAY_PER_INCREMENT;
-
-        $minimum = min(Pager :: DISPLAY_PER_INCREMENT_INTERVAL_LIMIT, $sourceDataCountUpperInterval);
-
-        for ($nr = Pager :: DISPLAY_PER_INCREMENT; $nr <= $minimum; $nr += Pager :: DISPLAY_PER_INCREMENT)
+        for ($nr = Pager :: DISPLAY_PER_INCREMENT; $nr <= $numberOfItems && $nr <= 100; $nr += Pager :: DISPLAY_PER_INCREMENT)
         {
+            $nrOfRows = ($nr / $this->getPager()->getNumberOfColumns());
+
             $dropDownButton->addSubButton(
                 new SubButton(
                     Translation :: get(
                         $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_ROW],
-                        array('NUMBER' => $nr),
+                        array('NUMBER' => $nrOfRows),
                         $translationVariables[Application :: PARAM_CONTEXT]),
                     null,
-                    $this->getUrl($queryParameters, $itemsPerPageParameterName, $nr),
+                    $this->getUrl($queryParameters, $itemsPerPageParameterName, $nrOfRows),
                     SubButton :: DISPLAY_LABEL,
                     false,
-                    ($nr == $currentNumberOfItemsPerPage ? 'selected' : '')));
+                    ($nrOfRows == $currentNumberOfRowsPerPage ? 'selected' : '')));
         }
 
         if ($numberOfItems < Pager :: DISPLAY_PER_PAGE_LIMIT)
@@ -329,7 +325,7 @@ class PagerRenderer
                     $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager :: DISPLAY_ALL),
                     SubButton :: DISPLAY_LABEL,
                     false,
-                    ($nr == $currentNumberOfItemsPerPage ? ' selected' : '')));
+                    ($nr == $currentNumberOfRowsPerPage ? ' selected' : '')));
         }
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);

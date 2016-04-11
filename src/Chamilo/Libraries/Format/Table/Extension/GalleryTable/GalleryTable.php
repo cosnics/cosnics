@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Interfaces\GalleryTableOrderDirectionProhibition;
 use Chamilo\Libraries\Format\Table\GalleryHTMLTable;
 use Chamilo\Libraries\Format\Table\Table;
+use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 
 /**
  * This class represents an table to display resources like thumbnails, images, videos...
@@ -16,7 +18,9 @@ abstract class GalleryTable extends Table
     /**
      * The default row count
      */
-    const DEFAULT_COLUMN_COUNT = 5;
+    const DEFAULT_COLUMN_COUNT = 4;
+
+    const DEFAULT_ROW_COUNT = 5;
 
     /**
      * The current row that is being processed
@@ -38,19 +42,23 @@ abstract class GalleryTable extends Table
      */
     protected function initialize_table()
     {
-        $count = $this->get_default_column_count() * $this->get_default_row_count();
+        $count = $this->get_default_row_count();
 
         $table = new GalleryHTMLTable(
             $this->get_name(),
             array($this, 'countData'),
             array($this, 'getData'),
             array($this, 'get_property_model'),
-            $count,
             0,
+            $count,
             SORT_ASC,
             ! $this->prohibits_order_direction(),
-            $this->supports_ajax(),
-            $this->prohibits_page_selection());
+            ! $this->prohibits_page_selection());
+
+        if ($this->has_form_actions())
+        {
+            $table->setTableFormActions($this->get_form_actions());
+        }
 
         $table->setAdditionalParameters($this->get_parameters());
 
@@ -157,6 +165,33 @@ abstract class GalleryTable extends Table
     {
         return static :: DEFAULT_COLUMN_COUNT;
     }
+
+    /**
+     * Returns whether or not the table has form actions
+     *
+     * @return boolean
+     */
+    protected function has_form_actions()
+    {
+        return ($this instanceof TableFormActionsSupport && $this->get_form_actions() instanceof TableFormActions &&
+            $this->get_form_actions()->has_form_actions());
+    }
+
+    /**
+     * Gets the actions for the mass-update form at the bottom of the table.
+     *
+     * @return TableFormActions The actions as an associative array.
+     */
+    public function get_form_actions()
+    {
+        if (! isset($this->form_actions))
+        {
+            $this->form_actions = $this->get_implemented_form_actions();
+        }
+
+        return $this->form_actions;
+    }
+
 
     /**
      * Gets the table's property model.

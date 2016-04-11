@@ -725,6 +725,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $this->pager = new Pager(
                 $this->getNumberOfItemsPerPage(),
+                1,
                 $this->getNumberOfItems(),
                 $this->getCurrentPageNumber());
         }
