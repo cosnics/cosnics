@@ -112,4 +112,11 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     {
         $breadcrumbtrail->add_help('personal_calendar_publisher');
     }
+
+    public function get_additional_parameters()
+    {
+        return array(
+            \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID,
+            \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION);
+    }
 }
