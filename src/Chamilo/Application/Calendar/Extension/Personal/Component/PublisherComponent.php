@@ -1,14 +1,19 @@
 <?php
 namespace Chamilo\Application\Calendar\Extension\Personal\Component;
 
+use Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm;
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
-use Chamilo\Application\Calendar\Extension\Personal\Publisher\Publisher;
+use Chamilo\Application\Calendar\Extension\Personal\Publisher\PublicationHandler;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
+use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
@@ -16,38 +21,28 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  * @package application\calendar
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Viewer\ViewerInterface, DelegateComponent
+class PublisherComponent extends Manager implements PublisherSupport, DelegateComponent
 {
+    /**
+     * The publication form
+     *
+     * @var PublicationForm
+     */
+    protected $publicationForm;
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
-        if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
-        {
-            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
-            
-            $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager :: context(), 
-                $applicationConfiguration);
-            return $factory->run();
-        }
-        else
-        {
-            $publisher = new Publisher($this);
-            return $publisher->get_publications_form(\Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects());
-        }
-    }
+        $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+        $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
 
-    /**
-     *
-     * @see \libraries\architecture\application\Application::add_additional_breadcrumbs()
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
-        $breadcrumbtrail->add_help('personal_calendar_publisher');
+        $factory = new ApplicationFactory(
+            \Chamilo\Core\Repository\Publication\Publisher\Manager :: context(),
+            $applicationConfiguration);
+
+        return $factory->run();
     }
 
     /**
@@ -71,5 +66,50 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
         }
         
         return $types;
+    }
+
+    /**
+     * Returns the publication form
+     *
+     * @param ContentObject[] $selectedContentObjects
+     *
+     * @return FormValidator
+     */
+    public function getPublicationForm($selectedContentObjects = array())
+    {
+        $ids = array();
+        foreach($selectedContentObjects as $selectedContentObject)
+        {
+            $ids[] = $selectedContentObject->getId();
+        }
+
+        $this->publicationForm = new PublicationForm(
+            PublicationForm :: TYPE_MULTI,
+            $ids,
+            $this->getUser(),
+            $this->get_url(),
+            $selectedContentObjects
+        );
+
+        return $this->publicationForm;
+    }
+
+    /**
+     * Returns the publication handler
+     *
+     * @return PublicationHandlerInterface
+     */
+    public function getPublicationHandler()
+    {
+        return new PublicationHandler($this->publicationForm, $this);
+    }
+
+    /**
+     *
+     * @see \libraries\architecture\application\Application::add_additional_breadcrumbs()
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+        $breadcrumbtrail->add_help('personal_calendar_publisher');
     }
 }

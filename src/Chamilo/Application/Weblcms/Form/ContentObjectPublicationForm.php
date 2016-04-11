@@ -10,10 +10,9 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
@@ -22,8 +21,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Mail\Mail;
 use Chamilo\Libraries\Mail\MailEmbeddedObject;
@@ -48,7 +45,7 @@ use DOMDocument;
  *
  * @author Sven Vanpoucke
  */
-class ContentObjectPublicationForm extends FormValidator
+class ContentObjectPublicationForm extends BasePublicationForm
 {
     const TYPE_CREATE = 1;
     const TYPE_UPDATE = 2;
@@ -109,13 +106,6 @@ class ContentObjectPublicationForm extends FormValidator
     private $user;
 
     /**
-     * The selected content objects
-     *
-     * @var ContentObject[]
-     */
-    protected $selectedContentObjects;
-
-    /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $form_type
@@ -163,7 +153,7 @@ class ContentObjectPublicationForm extends FormValidator
         $this->course = $course;
         $this->form_type = $form_type;
         $this->is_course_admin = $is_course_admin;
-        $this->selectedContentObjects = $selectedContentObjects;
+        $this->setSelectedContentObjects($selectedContentObjects);
 
         $this->entities = array();
         $this->entities[CourseUserEntity :: ENTITY_TYPE] = new CourseUserEntity($course->get_id());
@@ -435,7 +425,7 @@ class ContentObjectPublicationForm extends FormValidator
      */
     public function build_basic_form()
     {
-        $this->addSelectedContentObjects();
+        $this->addSelectedContentObjects($this->user);
 
         $tool = DataManager:: retrieve_course_tool_by_name($this->get_tool());
 
@@ -506,43 +496,7 @@ class ContentObjectPublicationForm extends FormValidator
         }
     }
 
-    protected function addSelectedContentObjects()
-    {
-        if(count($this->selectedContentObjects) == 0)
-        {
-            return;
-        }
 
-        $html[] = '<ul class="attachments_list">';
-
-        foreach ($this->selectedContentObjects as $content_object)
-        {
-            $namespace = ClassnameUtilities:: getInstance()->getNamespaceFromClassname(
-                ContentObject:: get_content_object_type_namespace($content_object->get_type())
-            );
-
-            if (RightsService:: getInstance()->canUseContentObject($this->user, $content_object))
-            {
-                $html[] = '<li><img src="' . $content_object->get_icon_path(Theme :: ICON_MINI) . '" alt="' .
-                    htmlentities(Translation:: get('TypeName', null, $namespace)) . '"/> ' .
-                    $content_object->get_title() . '</li>';
-            }
-            else
-            {
-                $html[] = '<li><img src="' . $content_object->get_icon_path(Theme :: ICON_MINI) . '" alt="' .
-                    htmlentities(Translation:: get('TypeName', null, $namespace)) . '"/> ' .
-                    $content_object->get_title() . '<span style="color: red; font-style: italic;">' .
-                    Translation:: get('NotAllowed') . '</span>' . '</li>';
-            }
-        }
-
-        $html[] = '</ul>';
-
-        $this->addElement(
-            'static', '', Translation:: get('SelectedContentObjects', null, Utilities :: COMMON_LIBRARIES),
-            implode(PHP_EOL, $html)
-        );
-    }
 
     private $categories;
 
@@ -1090,7 +1044,7 @@ class ContentObjectPublicationForm extends FormValidator
      *
      * @return string
      */
-    protected function get_publications()
+    public function get_publications()
     {
         return $this->publications;
     }
@@ -1104,4 +1058,6 @@ class ContentObjectPublicationForm extends FormValidator
     {
         return $this->form_type;
     }
+
+
 }

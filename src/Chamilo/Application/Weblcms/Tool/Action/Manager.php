@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Action;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Platform\Translation;
@@ -117,6 +118,9 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->get_parent()->get_complex_display_url($pid);
     }
 
+    /**
+     * @return Course
+     */
     public function get_course()
     {
         return $this->get_parent()->get_course();
