@@ -8,7 +8,7 @@ SharedContentObjects = "Gedeelde objecten"
 SharedSearchResults = "Gedeelde zoekresultaten"
 Preview = "Voorbeeld"
 EditAndPublish = "Bewerk en publiceer"
-PublishSelected = "Publiceer selectie"
+PublishSelected = "Selecteer"
 RepoViewerBrowserComponent = "Blader door de repository"
 ComponentFailedToLoad = "De component is niet geladen"
 
