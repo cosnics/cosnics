@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -24,6 +25,8 @@ class ContentObjectTableCellRenderer extends DataClassTableCellRenderer implemen
                 return StringUtilities :: getInstance()->truncate($content_object->get_title(), 50);
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
+            case ContentObject::PROPERTY_MODIFICATION_DATE :
+                return DatetimeUtilities::format_locale_date(null, $content_object->get_modification_date());
         }
 
         return parent :: render_cell($column, $content_object);
