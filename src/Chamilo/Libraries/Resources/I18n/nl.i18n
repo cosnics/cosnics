@@ -634,3 +634,4 @@ NotAuthenticated = "U bent niet ingelogd. Gelieve in te loggen om deze pagina te
 DropFileHereMessage= "Sleep een bestand hierheen of klik op de plus om een bestand te selecteren vanop je apparaat"
 VisibleFromUntil = "Zichtbaar van {FROM} tot {UNTIL}"
 NavigateTo = "Navigeer naar"
+BrowserWarningPreview = "Enkel inhoud waarvoor een voorbeeld beschikbaar is, wordt weergegeven"
