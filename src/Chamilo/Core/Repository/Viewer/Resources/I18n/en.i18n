@@ -8,7 +8,7 @@ SharedContentObjects = "Shared objects"
 SharedSearchResults = "Search results"
 Preview = "Preview"
 EditAndPublish = "Edit and publish"
-PublishSelected = "Publish"
+PublishSelected = "Select"
 RepoViewerBrowserComponent = "Browse the repository"
 ComponentFailedToLoad = "The component failed to load"
 
