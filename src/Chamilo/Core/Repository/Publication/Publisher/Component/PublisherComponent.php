@@ -40,11 +40,17 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
         {
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
 
-            $tabsSetting = $this->getApplicationConfiguration()->get(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED);
-            if(isset($tabsSetting))
+            $tabsSetting = $this->getApplicationConfiguration()->get(
+                \Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED
+            );
+            if (isset($tabsSetting))
             {
-                $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, $tabsSetting);
+                $applicationConfiguration->set(
+                    \Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, $tabsSetting
+                );
             }
+
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_BREADCRUMBS_DISABLED, true);
 
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager:: context(),
@@ -56,9 +62,9 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
 
         $selectedContentObjects = $this->getSelectedContentObjects();
         $form = $this->getPublicationForm($selectedContentObjects);
-        if($form instanceof FormValidator)
+        if ($form instanceof FormValidator)
         {
-            if($form->validate())
+            if ($form->validate())
             {
                 $this->getPublicationHandler()->publish($selectedContentObjects);
             }
@@ -92,7 +98,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
             $selectedContentObjectIds = array($selectedContentObjectIds);
         }
 
-        if(count($selectedContentObjectIds) > 0)
+        if (count($selectedContentObjectIds) > 0)
         {
             $condition = new InCondition(
                 new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_ID),

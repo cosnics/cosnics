@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Viewer;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -42,6 +43,7 @@ abstract class Manager extends Application
     
     // Configuration
     const SETTING_TABS_DISABLED = 'tabs_disabled';
+    const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
 
     /**
      *
@@ -275,5 +277,24 @@ abstract class Manager extends Application
     public function areTabsDisabled()
     {
         return $this->getApplicationConfiguration()->get(self :: SETTING_TABS_DISABLED) === true;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function areBreadcrumbsDisabled()
+    {
+        return $this->getApplicationConfiguration()->get(self :: SETTING_BREADCRUMBS_DISABLED) === true;
+    }
+
+    /**
+     * Returns the breadcrumb generator
+     *
+     * @return BreadcrumbGenerator
+     */
+    public function get_breadcrumb_generator()
+    {
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::get_instance());
     }
 }
