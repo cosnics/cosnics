@@ -284,6 +284,7 @@ div.content_object div.title {
 
 div.content_object div.description ul.attachments_list {
 	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 div.content_object div.publication_info {
@@ -366,6 +367,10 @@ ul.attachments_list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
+}
+
+form .row ul.attachments_list {
+	margin-bottom: 7px;
 }
 
 ul.attachments_list li {
