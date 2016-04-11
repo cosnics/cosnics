@@ -1,0 +1,7 @@
+@import url('../Aqua/Plugin.css');
+
+.ui-tabs .ui-tabs-panel {
+	border: 1px solid #ebebeb;
+	background-color: transparent;
+	padding: 0px;
+}
