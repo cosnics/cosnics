@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Core\Repository\Publication\Publisher\Interfaces;
 
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 
 /**
@@ -12,6 +10,7 @@ use Chamilo\Libraries\Format\Form\FormValidator;
  */
 interface PublisherSupport
 {
+
     /**
      * Returns the publication form
      *

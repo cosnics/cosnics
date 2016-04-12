@@ -8,7 +8,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -23,6 +22,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 class PublisherComponent extends Manager implements PublisherSupport, DelegateComponent
 {
+
     /**
      * The publication form
      *
@@ -52,19 +52,19 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     public function get_allowed_content_object_types()
     {
         $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
-            Manager :: package(), 
+            Manager :: package(),
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();
-        
+
         foreach ($registrations as $registration)
         {
             $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                $registration[Registration :: PROPERTY_CONTEXT], 
+                $registration[Registration :: PROPERTY_CONTEXT],
                 6);
             $types[] = $namespace . '\Storage\DataClass\\' .
                  ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
         }
-        
+
         return $types;
     }
 
@@ -78,7 +78,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     public function getPublicationForm($selectedContentObjects = array())
     {
         $ids = array();
-        foreach($selectedContentObjects as $selectedContentObject)
+        foreach ($selectedContentObjects as $selectedContentObject)
         {
             $ids[] = $selectedContentObject->getId();
         }
@@ -88,8 +88,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
             $ids,
             $this->getUser(),
             $this->get_url(),
-            $selectedContentObjects
-        );
+            $selectedContentObjects);
 
         return $this->publicationForm;
     }
