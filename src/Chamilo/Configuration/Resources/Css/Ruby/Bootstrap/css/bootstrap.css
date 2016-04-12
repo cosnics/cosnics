@@ -1,1 +1,10 @@
-@import url('../../../Aqua/Bootstrap/bootstrap.css');
+@import url('../../../Aqua/Bootstrap/css/bootstrap.css');
+
+a {
+	color: #444444;
+	text-decoration: none;
+}
+
+.text-primary {
+	color: #444444;
+}
