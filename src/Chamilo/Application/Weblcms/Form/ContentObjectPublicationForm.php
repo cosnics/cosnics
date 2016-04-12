@@ -562,6 +562,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     public function build_rights_form()
     {
+        $translator = Translation::getInstance();
+
         // Add the inheritance option
         $group = array();
 
@@ -573,7 +575,62 @@ class ContentObjectPublicationForm extends BasePublicationForm
             self :: INHERIT_TRUE,
             array('class' => 'inherit_rights_selector')
         );
-        // $inherit_group[] = & $this->createElement('html',;
+
+        $group[] = $this->createElement(
+            'button', 'show_inherited_rights', 'Show Inherited Rights', array('class' => 'btn btn-info btn-inherited-rights')
+        );
+
+        $html = array();
+        $html[] = '<div class="target-entities-container">';
+        $html[] = '<div class="panel panel-default target-entities-list">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = $translator->getTranslation('Users', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+        $html[] = '<ul class="list-group target-entities-user-list">';
+        $html[] = '<li class="list-group-item">Sven Vanpoucke</li>';
+        $html[] = '<li class="list-group-item">Hans De Bisschop</li>';
+        $html[] = '<li class="list-group-item">Stefaan Vanbillemont</li>';
+        $html[] = '<li class="list-group-item">Pieterjan Broekaert</li>';
+        $html[] = '<li class="list-group-item">Magali Gillard</li>';
+        $html[] = '<li class="list-group-item">Eduard Vossen</li>';
+        $html[] = '<li class="list-group-item">Sven Vanpoucke</li>';
+        $html[] = '<li class="list-group-item">Hans De Bisschop</li>';
+        $html[] = '<li class="list-group-item">Stefaan Vanbillemont</li>';
+        $html[] = '<li class="list-group-item">Pieterjan Broekaert</li>';
+        $html[] = '<li class="list-group-item">Magali Gillard</li>';
+        $html[] = '<li class="list-group-item">Eduard Vossen</li>';
+        $html[] = '</ul>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel panel-default target-entities-list">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = $translator->getTranslation('PlatformGroups', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+        $html[] = '<ul class="list-group target-entities-platform-groups-list">';
+        $html[] = '<li class="list-group-item">Toegepaste Informatica</li>';
+        $html[] = '<li class="list-group-item">Office Management</li>';
+        $html[] = '</ul>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel panel-default target-entities-list">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = $translator->getTranslation('CourseGroups', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+        $html[] = '<ul class="list-group target-entities-course-groups-list">';
+        $html[] = '<li class="list-group-item">TIN-1A</li>';
+        $html[] = '<li class="list-group-item">TIN-1B</li>';
+        $html[] = '</ul>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '<div class="clearfix"></div>';
+
+        $group[] = $this->createElement('static', '', '', implode(PHP_EOL, $html));
 
         $group[] = &$this->createElement(
             'radio',
