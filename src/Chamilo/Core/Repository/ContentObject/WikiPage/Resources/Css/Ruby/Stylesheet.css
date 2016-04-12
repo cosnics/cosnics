@@ -1,0 +1,6 @@
+@import url ('../../Aqua/Stylesheet.css');
+
+ul.tree-menu li div a.wiki_page, ul.tree-menu li div a.type_wiki_page,
+	ul.tree-menu li div a.type_wiki_page_default {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
