@@ -6,10 +6,11 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -27,24 +28,33 @@ class ViewerComponent extends Manager
                 ContentObject :: class_name(),
                 $contentObjectIdentifier);
 
-            $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+            $canEditContentObject = RightsService :: getInstance()->canEditContentObject(
+                $this->get_user(),
+                $content_object);
+            $canUseContentObject = RightsService :: getInstance()->canUseContentObject(
+                $this->get_user(),
+                $content_object);
 
-            if (RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
+            $buttonToolBar = new ButtonToolBar();
+
+            if ($canUseContentObject)
             {
-                $toolbar->add_item(
-                    new ToolbarItem(
+                $buttonToolBar->addItem(
+                    new Button(
                         Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                         $this->get_url(
                             array_merge($this->get_parameters(), array(self :: PARAM_ID => $content_object->get_id())),
-                            false)));
+                            false),
+                        Button :: DISPLAY_ICON_AND_LABEL,
+                        false,
+                        'btn-primary'));
             }
 
-            if (RightsService :: getInstance()->canEditContentObject($this->get_user(), $content_object) &&
-                 RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
+            if ($canEditContentObject && $canUseContentObject)
             {
-                $toolbar->add_item(
-                    new ToolbarItem(
+                $buttonToolBar->addItem(
+                    new Button(
                         Translation :: get('EditAndPublish'),
                         Theme :: getInstance()->getCommonImagePath('Action/Editpublish'),
                         $this->get_url(
@@ -55,6 +65,8 @@ class ViewerComponent extends Manager
                                     self :: PARAM_EDIT_ID => $content_object->get_id())))));
             }
 
+            $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
             $html = array();
 
             $html[] = $this->render_header();
@@ -63,8 +75,7 @@ class ViewerComponent extends Manager
                 ContentObjectRendition :: FORMAT_HTML,
                 ContentObjectRendition :: VIEW_FULL,
                 $this);
-            $html[] = $toolbar->as_html();
-            $html[] = '<div class="clear"></div>';
+            $html[] = $buttonToolbarRenderer->render();
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
