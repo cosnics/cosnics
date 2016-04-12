@@ -64,12 +64,12 @@ $(function()
                         $(document).on('click', ".btn.select-all", selectAllItems);
                         $(document).on('click', ".btn.select-none", unselectAllItems);
                         
-                        $(document).on('change', "form.form-list-view input:checkbox", toggleSelectButtons);
+                        $(document).on('change', "form.form-gallery-table input:checkbox", toggleSelectButtons);
                         
                         $(document)
                                 .on(
                                         'click',
-                                        'form.form-gallery-table a.btn:not(.dropdown-toggle):not(.select-all):not(.select-none), form.form-gallery-table ul.dropdown-menu > li > a',
+                                        'form.form-gallery-table a.btn.btn-table-action:not(.dropdown-toggle):not(.select-all):not(.select-none), form.form-gallery-table ul.dropdown-menu.btn-table-action > li > a',
                                         executeAction);
                     });
 });

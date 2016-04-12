@@ -651,3 +651,4 @@ FirstStepBrowseInWorkspaces = "1. Selecteren uit jouw repository of jouw workspa
 FirstStepImport = "1. Importeren"
 SecondStepPublish = "2. Publiceren"
 RightsInformationMessage = "Opgelet: de cursusbeheerders zullen steeds in staat zijn om de publicatie(s) te zien, te wijzigen of te verwijderen. De cursusbeheerders de publicatie(s) niet inhoudelijk aanpassen, tenzij het vinkje "Cursusbeheerders mogen inhoud aanpassen" aanvinkt. Het aanpassen van de rechten van deze publicatie(s) heeft enkel gevolgen voor de gebruikers die ingeschreven zijn als student in deze cursus.
+ShowAllPublications = "Toon alle publicaties"

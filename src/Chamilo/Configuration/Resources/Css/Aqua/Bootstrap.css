@@ -301,6 +301,10 @@ body h3#page-title {
 	margin: 0px;
 }
 
+.table-navigation-search .table-order-property {
+	margin-right: 5px;
+}
+
 /********
  * FORM *
  ********/
