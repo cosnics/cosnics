@@ -13,6 +13,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -413,6 +415,8 @@ class SortableTable extends HTML_Table
         {
             $html[] = '<input type="submit" name="Submit" value="Submit" style="display:none;" />';
             $html[] = '</form>';
+            $html[] = ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'SortableTable.js');
         }
 
         return implode(PHP_EOL, $html);

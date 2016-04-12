@@ -13,6 +13,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
 use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -236,7 +238,7 @@ class GalleryHTMLTable extends HTML_Table
             $tableFormActions = $this->getTableFormActions()->get_form_actions();
             $firstFormAction = array_shift($tableFormActions);
 
-            $html[] = '<form class="table_form" method="post" action="' . $firstFormAction->get_action() .
+            $html[] = '<form class="form-gallery-table" method="post" action="' . $firstFormAction->get_action() .
                  '" name="form_' . $this->tableName . '">';
         }
 
@@ -353,6 +355,8 @@ class GalleryHTMLTable extends HTML_Table
         {
             $html[] = '<input type="submit" name="Submit" value="Submit" style="display:none;" />';
             $html[] = '</form>';
+            $html[] = ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'GalleryTable.js');
         }
 
         return implode(PHP_EOL, $html);
