@@ -1,17 +1,13 @@
 <?php
-
 namespace Chamilo\Core\Repository\Publication\Publisher;
 
-use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
 {
     const PARAM_ACTION = 'publisher_action';
-
     const ACTION_PUBLISHER = 'publisher';
-
-    const DEFAULT_ACTION = self::ACTION_PUBLISHER;
+    const DEFAULT_ACTION = self :: ACTION_PUBLISHER;
 
     /**
      * Returns the parent application
@@ -20,7 +16,7 @@ abstract class Manager extends Application
      */
     public function getParentApplication()
     {
-        return parent::get_application();
+        return parent :: get_application();
     }
 
     /**

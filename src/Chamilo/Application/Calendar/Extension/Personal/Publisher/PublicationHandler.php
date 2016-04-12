@@ -5,7 +5,6 @@ namespace Chamilo\Application\Calendar\Extension\Personal\Publisher;
 use Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm;
 use Chamilo\Application\Calendar\Extension\Personal\Manager;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;

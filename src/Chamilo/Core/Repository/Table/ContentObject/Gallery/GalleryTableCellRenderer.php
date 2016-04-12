@@ -17,14 +17,18 @@ class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
         $html[] = '<div class="panel panel-default panel-gallery">';
 
         $html[] = '<div class="panel-body panel-body-thumbnail">';
+        $html[] = '__CHECKBOX_PLACEHOLDER__';
         $html[] = $this->get_cell_content($content_object);
         $html[] = '</div>';
 
         $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">' . $content_object->get_title() . '</h3>';
+        $html[] = '<h3 class="panel-title">';
+        $html[] = $content_object->get_title();
+        $html[] = '</h3>';
         $html[] = '</div>';
 
         $html[] = '<div class="panel-body">';
+
         $html[] = $this->get_modification_links($content_object);
         $html[] = '</div>';
 

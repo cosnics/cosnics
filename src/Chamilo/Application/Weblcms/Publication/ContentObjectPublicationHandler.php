@@ -1,11 +1,9 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Publication;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
@@ -18,6 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ContentObjectPublicationHandler implements PublicationHandlerInterface
 {
+
     /**
      * The content object publication form
      *
@@ -69,10 +68,8 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      * @param Application $parentComponent
      * @param ContentObjectPublicationForm $contentObjectPublicationForm
      */
-    public function __construct(
-        $courseId, $toolId, User $user, Application $parentComponent,
-        ContentObjectPublicationForm $contentObjectPublicationForm = null
-    )
+    public function __construct($courseId, $toolId, User $user, Application $parentComponent,
+        ContentObjectPublicationForm $contentObjectPublicationForm = null)
     {
         $this->courseId = $courseId;
         $this->toolId = $toolId;
@@ -90,7 +87,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     public function publish($selectedContentObjects = array())
     {
-        if (!$this->hasForm())
+        if (! $this->hasForm())
         {
 
             $success = $this->createPublicationsWithoutForm($selectedContentObjects);
@@ -101,36 +98,29 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
             $this->createdPublications = $this->contentObjectPublicationForm->get_publications();
         }
 
-        $message = Translation:: getInstance()->getTranslation(
+        $message = Translation :: getInstance()->getTranslation(
             ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
-            array('OBJECT' => Translation:: get('Object')),
-            Utilities :: COMMON_LIBRARIES
-        );
+            array('OBJECT' => Translation :: get('Object')),
+            Utilities :: COMMON_LIBRARIES);
 
         $parameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION =>
-                \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BROWSE
-        );
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BROWSE);
 
         if ($this->is_publish_and_build_submit())
         {
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
-                \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT;
+            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT;
 
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] =
-                $this->createdPublications[0]->getId();
+            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
         }
 
         if ($this->is_publish_and_view_submit())
         {
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
-                \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
+            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
 
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] =
-                $this->createdPublications[0]->getId();
+            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
         }
 
-        $this->parentComponent->redirect($message, !$success, $parameters);
+        $this->parentComponent->redirect($message, ! $success, $parameters);
     }
 
     /**
@@ -174,14 +164,14 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     protected function is_publish_and_build_submit()
     {
-        if (!$this->hasForm())
+        if (! $this->hasForm())
         {
             return false;
         }
 
         $values = $this->contentObjectPublicationForm->exportValues();
 
-        return !empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_BUILD]);
+        return ! empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_BUILD]);
     }
 
     /**
@@ -189,13 +179,13 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     protected function is_publish_and_view_submit()
     {
-        if (!$this->hasForm())
+        if (! $this->hasForm())
         {
             return false;
         }
         $values = $this->contentObjectPublicationForm->exportValues();
 
-        return !empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_VIEW]);
+        return ! empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_VIEW]);
     }
 
     /**
