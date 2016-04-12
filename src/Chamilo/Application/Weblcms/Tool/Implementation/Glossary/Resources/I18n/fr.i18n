@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\glossary
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Glossaire"
+BrowserComponent = "Glossaires"
+ViewerComponent = "Voir glossaire"
+EvaluateComponent = "Evaluer"
+IntroductionPublisherComponent = "Publier le texte d'introduction"
+MoverComponent = "Déplacer glossaire"
+PublisherComponent = "Publier glossaire"
+UpdaterComponent = "Modifier glossaire"
+CreateItem = "Créer un élément"
