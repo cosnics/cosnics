@@ -314,7 +314,7 @@ class SortableTable extends HTML_Table
             $tableFormActions = $this->getTableFormActions()->get_form_actions();
             $firstFormAction = array_shift($tableFormActions);
 
-            $html[] = '<form class="table_form" method="post" action="' . $firstFormAction->get_action() .
+            $html[] = '<form class="form-table" method="post" action="' . $firstFormAction->get_action() .
                  '" name="form_' . $this->tableName . '">';
         }
 
@@ -352,7 +352,8 @@ class SortableTable extends HTML_Table
             $firstAction->get_action(),
             Button :: DISPLAY_LABEL,
             $firstAction->getConfirmation(),
-            'btn-sm');
+            'btn-sm btn-table-action');
+        $button->setDropdownClasses('btn-table-action');
 
         foreach ($formActions as $formAction)
         {

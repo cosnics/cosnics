@@ -23,6 +23,7 @@ class PagerRenderer
 {
     const PAGE_SELECTOR_TRANSLATION_TITLE = 'title';
     const PAGE_SELECTOR_TRANSLATION_ROW = 'row';
+    const PAGE_SELECTOR_TRANSLATION_TITLE_ALL = 'title_all';
 
     /**
      *
@@ -283,19 +284,29 @@ class PagerRenderer
             $translationVariables[Application :: PARAM_CONTEXT] = Utilities :: COMMON_LIBRARIES;
             $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
             $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfItemsPerPage';
+            $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE_ALL] = 'ShowAllItems';
         }
 
         $currentNumberOfRowsPerPage = $this->getPager()->getNumberOfRows();
         $numberOfItems = $this->getPager()->getNumberOfItems();
 
-        $dropDownButton = new DropdownButton(
-            Translation :: get(
+        if ($this->getPager()->getNumberOfItemsPerPage() == Pager :: DISPLAY_ALL)
+        {
+            $dropDownButtonLabel = Translation :: get(
+                $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE_ALL],
+                null,
+                $translationVariables[Application :: PARAM_CONTEXT]);
+        }
+        else
+        {
+            $dropDownButtonLabel = Translation :: get(
                 $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE],
                 array('NUMBER' => $currentNumberOfRowsPerPage),
-                $translationVariables[Application :: PARAM_CONTEXT]),
-            null,
-            Button :: DISPLAY_LABEL,
-            'btn-sm');
+                $translationVariables[Application :: PARAM_CONTEXT]);
+        }
+
+        $dropDownButton = new DropdownButton($dropDownButtonLabel, null, Button :: DISPLAY_LABEL, 'btn-sm');
+
         $dropDownButton->setDropdownClasses('dropdown-menu-right');
         $buttonGroup->addButton($dropDownButton);
 
@@ -313,7 +324,7 @@ class PagerRenderer
                     $this->getUrl($queryParameters, $itemsPerPageParameterName, $nrOfRows),
                     SubButton :: DISPLAY_LABEL,
                     false,
-                    ($nrOfRows == $currentNumberOfRowsPerPage ? 'selected' : '')));
+                    ($nrOfRows == $currentNumberOfRowsPerPage ? 'selected' : 'not-selected')));
         }
 
         if ($numberOfItems < Pager :: DISPLAY_PER_PAGE_LIMIT)
@@ -325,7 +336,7 @@ class PagerRenderer
                     $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager :: DISPLAY_ALL),
                     SubButton :: DISPLAY_LABEL,
                     false,
-                    ($nr == $currentNumberOfRowsPerPage ? ' selected' : '')));
+                    ($nr == Pager :: DISPLAY_ALL ? ' selected' : 'not-selected')));
         }
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
