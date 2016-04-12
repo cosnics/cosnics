@@ -305,7 +305,7 @@ class BrowserComponent extends Manager implements TableSupport
                             $this->get_parameters(),
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_VIEWER,
-                                self :: PARAM_ID => $content_object->get_id())),
+                                self :: PARAM_VIEW_ID => $content_object->get_id())),
                         false),
                     ToolbarItem :: DISPLAY_ICON));
         }

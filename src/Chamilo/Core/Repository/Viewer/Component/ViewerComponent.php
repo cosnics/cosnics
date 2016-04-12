@@ -11,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -20,14 +19,14 @@ class ViewerComponent extends Manager
 
     public function run()
     {
-        $param_id = Request :: get(self :: PARAM_ID);
+        $contentObjectIdentifier = $this->getRequest()->query->get(self :: PARAM_VIEW_ID);
 
-        if ($param_id)
+        if ($contentObjectIdentifier)
         {
-            $this->set_parameter(self :: PARAM_ID, $param_id);
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
-                Request :: get(self :: PARAM_ID));
+                $contentObjectIdentifier);
+
             $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
             if (RightsService :: getInstance()->canUseContentObject($this->get_user(), $content_object))
@@ -37,10 +36,7 @@ class ViewerComponent extends Manager
                         Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
                         Theme :: getInstance()->getCommonImagePath('Action/Publish'),
                         $this->get_url(
-                            array_merge(
-                                $this->get_parameters(),
-                                array(
-                                    self :: PARAM_ID => $content_object->get_id())),
+                            array_merge($this->get_parameters(), array(self :: PARAM_ID => $content_object->get_id())),
                             false)));
             }
 
