@@ -6,7 +6,7 @@
 .navbar.navbar-chamilo {
 	border-radius: 0;
 	width: 100%;
-	background-color: #262f52;
+	background-color: #C50C2E;
 	border: none;
 	margin-bottom: 0;
 }
@@ -16,7 +16,7 @@
 }
 
 .navbar.navbar-chamilo .container-fluid {
-	background-color: #262F52;
+	background-color: #C50C2E;
 	padding-left: 0;
 	padding-right: 0;
 }
@@ -31,7 +31,7 @@
 	padding: 0;
 	text-decoration: none;
 	font-weight: bold;
-	color: #8eadd8;
+	color: #FFFFFF;
 	outline: none;
 	text-align: center;
 	line-height: 14px;
@@ -67,12 +67,12 @@
 .navbar-chamilo .navbar-nav .dropdown-menu li, .navbar-chamilo .navbar-nav .dropdown-menu li a,
 	.navbar-chamilo .navbar-nav .dropdown-menu li a:hover {
 	/*background-color: #262f52;*/
-	background: #2f3a66;
+	background: #C50C2E;
 	height: auto;
 }
 
 .navbar-chamilo ul.navbar-nav li.dropdown.open ul.dropdown-menu li a {
-	color: #8eadd8;
+	color: #FFFFFF;
 	padding: 0;
 }
 
@@ -80,14 +80,14 @@
 	min-width: 332px;
 	height: 136px;
 	overflow: hidden;
-	background-color: #2f3a66;
+	background-color: #C50C2E;
 	clear: both;
 	white-space: normal;
 	position: fixed;
 	right: 0;
 	top: 76px;
 	padding: 16px;
-	color: #8eadd8;
+	color: #FFFFFF;
 	-webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
@@ -97,7 +97,7 @@
 
 
 div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
-	border-top: 1px dotted #dcdcdc;
+	border-top: 1px dotted #8b0504;
 	padding: 8px 16px;
 	position: absolute;
 	bottom: 0;
@@ -109,7 +109,7 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	text-align: center;
 	color: white;
 	line-height: 16px;
-	background-color: #262F52;
+	background-color: #C50C2E;
 }
 
 .navbar-chamilo .navbar-nav .dropdown-menu div.chamilo-menu-item-account div.chamilo-menu-item-account-logout a
@@ -117,5 +117,5 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
 	height: auto;
 	line-height: normal;
 	padding: 0;
-	background-color: #262F52;
+	background-color: #C50C2E;
 }
