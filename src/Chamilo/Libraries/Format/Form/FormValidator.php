@@ -691,7 +691,7 @@ EOT;
             Translation :: get('SelectGroupsUsers'),
             '1',
             array('onclick' => 'javascript:receivers_show(\'receivers_window_' . $elementName . '\')'));
-        $this->addGroup($choices, null, $elementLabel, '<br />', false);
+        $this->addGroup($choices, null, $elementLabel, '', false);
         $this->addElement(
             'html',
             '<div style="margin-left: 25px; display: block;" id="receivers_window_' . $elementName . '">');

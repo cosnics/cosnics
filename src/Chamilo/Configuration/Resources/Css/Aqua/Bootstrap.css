@@ -150,6 +150,8 @@ a:focus {
 .panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox
 	{
 	display: inline;
+	position: relative;
+	top: -3px;
 }
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-title h3
@@ -177,16 +179,22 @@ a:focus {
 
 .panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::before
 	{
-	width: 20px;
-	height: 20px;
+	width: 21px;
+	height: 21px;
 }
 
 .panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::after
 	{
-	width: 19px;
-	height: 19px;
-	font-size: 14px;
-	line-height: 16px;
+	width: 21px;
+	height: 21px;
+	font-size: 16px;
+	line-height: 21px;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox input[type="checkbox"]
+	{
+	width: 21px;
+	height: 21px;
 }
 
 @media ( min-width : 768px) {
@@ -215,13 +223,15 @@ a:focus {
 		{
 		padding-left: 30px;
 	}
-	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox
 		{
 		position: absolute;
-		left: -9px;
+		left: 4px;
+		top: 0px;
 		padding: 0px;
 		margin: 0px;
 		background-color: transparent;
+		padding: 0px;
 	}
 	.panel.panel-publication .panel-publication-header .panel-publication-header-title h3
 		{
@@ -235,12 +245,20 @@ a:focus {
 		{
 		width: 17px;
 		height: 17px;
+		top: 3px;
 	}
 	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::after
 		{
-		width: 16px;
-		height: 16px;
-		font-size: 11px;
+		width: 17px;
+		height: 17px;
+		font-size: 13px;
+		line-height: 17px;
+		top: 3px;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox input[type="checkbox"]
+		{
+		width: 17px;
+		height: 17px;
 	}
 }
 
@@ -289,6 +307,15 @@ body h3#page-title {
 input.form-control[type="text"], input.form-control[type="password"] {
 	border: 1px solid #ccc;
 	padding: 6px 12px;
+}
+
+form .radio input[type="radio"], form .radio input[type="checkbox"] {
+	margin-top: 0;
+}
+
+form .radio, form .checkbox {
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 form .radio+.radio {
@@ -704,7 +731,7 @@ ul.nav-wizard .active ~ li:after {
 }
 
 ul.nav-wizard .active ~ li a, ul.nav-wizard .active ~ li a:active, ul.nav-wizard .active 
-	~ li a:visited, ul.nav-wizard .active ~ li a:focus {
+	 ~ li a:visited, ul.nav-wizard .active ~ li a:focus {
 	color: #999999;
 	background: #ededed;
 }
@@ -735,7 +762,7 @@ ul.nav-wizard.nav-wizard-backnav .active ~ li:after {
 }
 
 ul.nav-wizard.nav-wizard-backnav .active ~ li a, ul.nav-wizard.nav-wizard-backnav .active 
-	~ li a:active, ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
+	 ~ li a:active, ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
 	ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
 	color: #999999;
 	background: #ededed;

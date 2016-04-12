@@ -825,7 +825,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $tableFormActions = $this->get_actions()->get_form_actions();
             $firstFormAction = array_shift($tableFormActions);
 
-            $html[] = '<form class="form-inline form-list-view" method="post" action="' . $firstFormAction->get_action() .
+            $html[] = '<form class="form-list-view" method="post" action="' . $firstFormAction->get_action() .
                  '" name="form_' . $this->getListName() . '">';
         }
 
