@@ -156,9 +156,9 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
                 return $this->getTranslation('FirstStepBrowseInWorkspaces');
             case \Chamilo\Core\Repository\Viewer\Manager::ACTION_IMPORTER:
                 return $this->getTranslation('FirstStepImport');
+            default:
+                return $this->getTranslation('FirstStepBrowseInWorkspaces');
         }
-
-        return '';
     }
 
     /**
