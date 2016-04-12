@@ -279,21 +279,16 @@ body h3#page-title {
 	margin-bottom: 5px;
 }
 
+.table .checkbox {
+	margin: 0px;
+}
+
 /********
  * FORM *
  ********/
 input.form-control[type="text"], input.form-control[type="password"] {
 	border: 1px solid #ccc;
 	padding: 6px 12px;
-}
-
-form .radio input[type="radio"], form .radio input[type="checkbox"] {
-	margin-top: 0;
-}
-
-form .radio, form .checkbox {
-	margin-top: 0;
-	margin-bottom: 0;
 }
 
 form .radio+.radio {
@@ -407,12 +402,12 @@ ol.breadcrumb a {
 }
 
 .dynamic-visual-tab-content .tab-content-header {
-    background-color: #F5F5F5;
-    border-top: 1px solid #DDDDDD;
-    border-bottom: 1px solid #DDDDDD;
-    margin: 15px -15px;
-    padding: 3px 10px;
-    color: #555555;
+	background-color: #F5F5F5;
+	border-top: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+	margin: 15px -15px;
+	padding: 3px 10px;
+	color: #555555;
 }
 
 /***********************
@@ -602,7 +597,6 @@ ol.breadcrumb a {
 /*****************************************************
  *  Wizard Styles					                 *
  *****************************************************/
-
 ul.nav-wizard {
 	background-color: #f9f9f9;
 	border: 1px solid #d4d4d4;
@@ -613,6 +607,7 @@ ul.nav-wizard {
 	position: relative;
 	overflow: hidden;
 }
+
 ul.nav-wizard:before {
 	display: block;
 	position: absolute;
@@ -625,6 +620,7 @@ ul.nav-wizard:before {
 	z-index: 11;
 	content: " ";
 }
+
 ul.nav-wizard:after {
 	display: block;
 	position: absolute;
@@ -637,6 +633,7 @@ ul.nav-wizard:after {
 	z-index: 11;
 	content: " ";
 }
+
 ul.nav-wizard li {
 	position: relative;
 	float: left;
@@ -648,13 +645,16 @@ ul.nav-wizard li {
 	font-size: 14px;
 	line-height: 46px;
 }
+
 ul.nav-wizard li a {
 	color: #6192b8;
 	padding: 0;
 }
+
 ul.nav-wizard li a:hover {
 	background-color: transparent;
 }
+
 ul.nav-wizard li:before {
 	position: absolute;
 	display: block;
@@ -666,6 +666,7 @@ ul.nav-wizard li:before {
 	content: '';
 	right: -16px;
 }
+
 ul.nav-wizard li:after {
 	position: absolute;
 	display: block;
@@ -677,65 +678,69 @@ ul.nav-wizard li:after {
 	content: '';
 	right: -15px;
 }
+
 ul.nav-wizard li.active {
 	color: #f5f5f5;
 	background: #6192b8;
 }
+
 ul.nav-wizard li.active:after {
 	border-left: 16px solid #6192b8;
 }
-ul.nav-wizard li.active a,
-ul.nav-wizard li.active a:active,
-ul.nav-wizard li.active a:visited,
-ul.nav-wizard li.active a:focus {
+
+ul.nav-wizard li.active a, ul.nav-wizard li.active a:active, ul.nav-wizard li.active a:visited,
+	ul.nav-wizard li.active a:focus {
 	color: #f5f5f5;
 	background: #6192b8;
 }
+
 ul.nav-wizard .active ~ li {
 	color: #999999;
 	background: #ededed;
 }
+
 ul.nav-wizard .active ~ li:after {
 	border-left: 16px solid #ededed;
 }
-ul.nav-wizard .active ~ li a,
-ul.nav-wizard .active ~ li a:active,
-ul.nav-wizard .active ~ li a:visited,
-ul.nav-wizard .active ~ li a:focus {
+
+ul.nav-wizard .active ~ li a, ul.nav-wizard .active ~ li a:active, ul.nav-wizard .active 
+	~ li a:visited, ul.nav-wizard .active ~ li a:focus {
 	color: #999999;
 	background: #ededed;
 }
+
 ul.nav-wizard.nav-wizard-backnav li:hover {
 	color: #468847;
 	background: #f6fbfd;
 }
+
 ul.nav-wizard.nav-wizard-backnav li:hover:after {
 	border-left: 16px solid #f6fbfd;
 }
-ul.nav-wizard.nav-wizard-backnav li:hover a,
-ul.nav-wizard.nav-wizard-backnav li:hover a:active,
-ul.nav-wizard.nav-wizard-backnav li:hover a:visited,
-ul.nav-wizard.nav-wizard-backnav li:hover a:focus {
+
+ul.nav-wizard.nav-wizard-backnav li:hover a, ul.nav-wizard.nav-wizard-backnav li:hover a:active,
+	ul.nav-wizard.nav-wizard-backnav li:hover a:visited, ul.nav-wizard.nav-wizard-backnav li:hover a:focus
+	{
 	color: #468847;
 	background: #f6fbfd;
 }
+
 ul.nav-wizard.nav-wizard-backnav .active ~ li {
 	color: #999999;
 	background: #ededed;
 }
+
 ul.nav-wizard.nav-wizard-backnav .active ~ li:after {
 	border-left: 16px solid #ededed;
 }
-ul.nav-wizard.nav-wizard-backnav .active ~ li a,
-ul.nav-wizard.nav-wizard-backnav .active ~ li a:active,
-ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
-ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
+
+ul.nav-wizard.nav-wizard-backnav .active ~ li a, ul.nav-wizard.nav-wizard-backnav .active 
+	~ li a:active, ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
+	ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
 	color: #999999;
 	background: #ededed;
 }
 
-ul.nav-wizard.publication-wizard
-{
+ul.nav-wizard.publication-wizard {
 	margin-bottom: 20px;
 }
-
