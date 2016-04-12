@@ -587,7 +587,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->addGroup(
             $group,
             self :: PROPERTY_INHERIT,
-            Translation:: get('PublishFor', null, Utilities :: COMMON_LIBRARIES),
+            Translation:: get('PublishFor'),
             ''
         );
 
@@ -612,6 +612,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             self :: RIGHT_OPTION_ME,
             array('class' => 'other_option_selected')
         );
+
         $group[] = &$this->createElement(
             'radio',
             null,
@@ -635,7 +636,15 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
         $this->addElement('advanced_element_finder', self :: PROPERTY_TARGETS, null, $types);
 
-        $this->addElement('html', '</div></div></div>');
+        $this->addElement('</div>');
+        $this->addElement(
+            'static', '', '',
+            '<div class="alert alert-info" style="margin-top: 10px;">' .
+            Translation::getInstance()->getTranslation('RightsInformationMessage', null, Manager::context()) .
+            '</div>'
+        );
+
+        $this->addElement('html', '</div></div>');
 
         $this->addElement(
             'html',
