@@ -6,7 +6,7 @@ $(document).ready(function()
         
         var previewContainers = $('.file-upload .thumbnail');
         var contentObjectIdentifiers = {
-            'viewer_object_id' : []
+            'viewer_publish_id' : []
         };
         
         if (previewContainers.length == 0)
@@ -17,10 +17,10 @@ $(document).ready(function()
         previewContainers.each(function(index)
         {
             var previewContainer = $(this);
-            contentObjectIdentifiers.viewer_object_id.push(previewContainer.data('content-object-id'));
+            contentObjectIdentifiers.viewer_publish_id.push(previewContainer.data('content-object-id'));
         });
         
-        var currentQuery = $.query.set('viewer_object_id', contentObjectIdentifiers.viewer_object_id);
+        var currentQuery = $.query.set('viewer_publish_id', contentObjectIdentifiers.viewer_publish_id);
         
         window.location.replace(currentQuery.toString());
     }
