@@ -249,7 +249,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $html = array();
 
         $html[] = '<div class="form-row">';
-        $html[] = '<div class="label">' . $label . '</div>';
+        $html[] = '<div class="form-label">' . $label . '</div>';
         $html[] = '<div class="formw">' . $value . '</div>';
         $html[] = '</div>';
 

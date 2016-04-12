@@ -54,7 +54,7 @@ class PublicationSelectorForm
             json_encode($this->translations) . '</script><script id="checkParentsBoolean"
             type="application/json">' . json_encode($this->check_parents) . '</script></div>';
 
-        $html[] = '<div class="row"><div class="label">' . $translator->getTranslation('Publications', null, $context) .
+        $html[] = '<div class="row"><div class="form-label">' . $translator->getTranslation('Publications', null, $context) .
             '</div><div id="publications_tree" class="formw"></div></div>';
 
         $html[] =
@@ -65,4 +65,4 @@ class PublicationSelectorForm
 
         return implode("\n", $html);
     }
-} 
+}

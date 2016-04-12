@@ -1,4 +1,3 @@
-
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
@@ -59,7 +58,7 @@ class GroupUsersSubscribeComponent extends Manager
                     Translation :: get($message),
                     ($success ? false : true),
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_GROUP_BROWSER));
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_GROUP_DETAILS));
             }
         }
     }

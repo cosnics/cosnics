@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+
 /**
  * $Id: toolbar.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
  *
@@ -210,5 +214,28 @@ class Toolbar
     public function has_items()
     {
         return count($this->items) > 0;
+    }
+
+    public function convertToButtonToolBar($keepDisplayProperty = true)
+    {
+        $buttonToolbar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+
+        foreach ($this->get_items() as $item)
+        {
+            $buttonGroup->addButton(
+                new Button(
+                    $item->get_label(),
+                    $item->get_image(),
+                    $item->get_href(),
+                    $keepDisplayProperty ? $item->get_display() : Button :: DISPLAY_ICON_AND_LABEL,
+                    $item->get_confirmation(),
+                    'btn-link',
+                    $item->get_target()));
+        }
+
+        $buttonToolbar->addItem($buttonGroup);
+
+        return $buttonToolbar;
     }
 }

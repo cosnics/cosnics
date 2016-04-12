@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Core\Repository\Publication\Publisher\Form\BasePublicationForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -20,7 +21,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
-use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Mail\Mail;
 use Chamilo\Libraries\Mail\MailEmbeddedObject;
@@ -45,7 +45,7 @@ use DOMDocument;
  *
  * @author Sven Vanpoucke
  */
-class ContentObjectPublicationForm extends FormValidator
+class ContentObjectPublicationForm extends BasePublicationForm
 {
     const TYPE_CREATE = 1;
     const TYPE_UPDATE = 2;
@@ -116,7 +116,9 @@ class ContentObjectPublicationForm extends FormValidator
      *
      * @throws NoObjectSelectedException
      */
-    public function __construct(User $user, $form_type, $publications, $course, $action, $is_course_admin)
+    public function __construct(
+        User $user, $form_type, $publications, $course, $action, $is_course_admin, $selectedContentObjects = array()
+    )
     {
         parent:: __construct('content_object_publication_form', 'post', $action);
 
@@ -151,6 +153,7 @@ class ContentObjectPublicationForm extends FormValidator
         $this->course = $course;
         $this->form_type = $form_type;
         $this->is_course_admin = $is_course_admin;
+        $this->setSelectedContentObjects($selectedContentObjects);
 
         $this->entities = array();
         $this->entities[CourseUserEntity :: ENTITY_TYPE] = new CourseUserEntity($course->get_id());
@@ -422,6 +425,8 @@ class ContentObjectPublicationForm extends FormValidator
      */
     public function build_basic_form()
     {
+        $this->addSelectedContentObjects($this->user);
+
         $tool = DataManager:: retrieve_course_tool_by_name($this->get_tool());
 
         if ($this->is_course_admin || WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
@@ -490,6 +495,8 @@ class ContentObjectPublicationForm extends FormValidator
             );
         }
     }
+
+
 
     private $categories;
 
@@ -1037,7 +1044,7 @@ class ContentObjectPublicationForm extends FormValidator
      *
      * @return string
      */
-    protected function get_publications()
+    public function get_publications()
     {
         return $this->publications;
     }
@@ -1051,4 +1058,6 @@ class ContentObjectPublicationForm extends FormValidator
     {
         return $this->form_type;
     }
+
+
 }

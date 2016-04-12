@@ -209,4 +209,22 @@ class WeekRenderer extends FullTableRenderer
              date('l d M Y', $this->getCalendar()->getStartTime()) . ' - ' .
              date('l d M Y', strtotime('+6 Days', $this->getCalendar()->getStartTime()));
     }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getPreviousDisplayTime()
+     */
+    public function getPreviousDisplayTime()
+    {
+        return strtotime('-1 Week', $this->getDisplayTime());
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Calendar\Renderer\Type\View\FullTableRenderer::getNextDisplayTime()
+     */
+    public function getNextDisplayTime()
+    {
+        return strtotime('+1 Week', $this->getDisplayTime());
+    }
 }

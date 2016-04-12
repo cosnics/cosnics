@@ -23,14 +23,14 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
      *
      * @var Application
      */
-    private $component;
+    protected $component;
 
     /**
      * The breadcrumb trail instance
      *
      * @var BreadcrumbTrail
      */
-    private $breadcrumb_trail;
+    protected $breadcrumb_trail;
 
     /**
      * Constructor

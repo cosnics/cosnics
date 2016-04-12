@@ -1,385 +1,443 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
-use Pager;
 
 /**
- * This class allows you to display a sortable data-table.
- * It is possible to split the data in several pages. Using this
- * class you can: - automatically create checkboxes of the first table column - a "select all" and "deselect all" link
- * is added - only if you provide a list of actions for the selected items - click on the table header to sort the data
- * - choose how many items you see per page - navigate through all data-pages
+ *
+ * @package Chamilo\Libraries\Format\Table
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class GalleryHTMLTable extends HTML_Table
 {
+    const DEFAULT_COLUMN_COUNT = 4;
 
-    /**
-     * A name for this table
-     */
-    private $table_name;
+    private $tableName;
 
-    /**
-     * The page to display
-     */
-    private $page_nr;
+    private $additionalParameters;
 
-    /**
-     * The property on which we want to sort
-     */
-    private $property;
+    private $pageNumber;
 
-    /**
-     * The sorting direction (SORT_ASC or SORT_DESC)
-     */
-    private $direction;
+    private $orderProperty;
 
-    /**
-     * Number of items to display per page
-     */
-    private $per_page;
+    private $orderDirection;
 
-    /**
-     * The default number of items to display per page
-     */
-    private $default_items_per_page;
+    private $numberOfItemsPerPage;
 
-    /**
-     * A prefix for the URL-parameters, can be used on pages with multiple SortableTables
-     */
-    private $param_prefix;
+    private $allowOrderDirection;
 
-    /**
-     * The pager object to split the data in several pages
-     */
+    private $allowPageSelection;
+
+    private $allowPageNavigation;
+
+    private $sourceCountFunction;
+
+    private $sourceDataFunction;
+
+    private $sourcePropertiesFunction;
+
     private $pager;
 
-    /**
-     * The total number of items in the table
-     */
-    private $total_number_of_items;
+    private $sourceDataCount;
+
+    private $tableFormActions;
+
+    private $contentCellAttributes;
+
+    private $headerAttributes;
 
     /**
-     * The function to get the total number of items
-     */
-    private $get_total_number_function;
-
-    /**
-     * The function to the the data to display
-     */
-    private $get_data_function;
-
-    /**
-     * The function to the the sort properties
-     */
-    public $get_properties_function;
-
-    /**
-     * An array with defined column-filters
-     */
-    private $column_filters;
-
-    /**
-     * A list of actions which will be available through a select list
-     */
-    private $form_actions;
-
-    /**
-     * Additional parameters to pass in the URL
-     */
-    private $additional_parameters;
-
-    /**
-     * Additional attributes for the th-tags
-     */
-    private $th_attributes;
-
-    /**
-     * Additional attributes for the td-tags
-     */
-    private $td_attributes;
-
-    /**
-     * Additional attributes for the tr-tags
-     */
-    private $tr_attributes;
-
-    private $enable_order_directions;
-
-    private $allow_page_selection;
-
-    /**
-     * Create a new SortableTable
      *
-     * @param string $table_name A name for the table (default = 'table')
-     * @param string $get_total_number_function A user defined function to get the total number of items in the table
-     * @param string $get_data_function A function to get the data to display on the current page
-     * @param int $default_column The default column on which the data should be sorted
-     * @param int $default_items_per_page The default number of items to show on one page
-     * @param int $default_order_direction The default order direction; either the constant SORT_ASC or SORT_DESC
+     * @param string $tableName
+     * @param string[] $sourceCountFunction
+     * @param string[] $sourceDataFunction
+     * @param string[] $sourcePropertiesFunction
+     * @param integer $defaultOrderProperty
+     * @param integer $defaultNumberOfItemsPerPage
+     * @param string $defaultOrderDirection
+     * @param string $allowOrderDirection
+     * @param string $allowPageSelection
+     * @param string $allowPageNavigation
      */
-    public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null,
-        $get_properties_function = null, $default_items_per_page = 20, $default_property = 0,
-        $default_order_direction = SORT_ASC, $enable_order_directions = true, $ajax_enabled = false, $allow_page_selection = true)
+    public function __construct($tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null,
+        $sourcePropertiesFunction = null, $defaultOrderProperty = 0, $defaultNumberOfItemsPerPage = 20,
+        $defaultOrderDirection = SORT_ASC, $allowOrderDirection = true, $allowPageSelection = true, $allowPageNavigation = true)
     {
-        parent :: __construct(array('class' => 'gallery_table'), 0, true);
-        $this->table_name = $table_name;
-        $this->additional_parameters = array();
-        $this->param_prefix = $table_name . '_';
+        parent :: __construct(array('class' => 'table-gallery', 'id' => $tableName), 0, true);
 
-        $this->page_nr = isset($_GET[$this->param_prefix . 'page_nr']) ? $_GET[$this->param_prefix . 'page_nr'] : 1;
-        $this->per_page = isset($_GET[$this->param_prefix . 'per_page']) ? $_GET[$this->param_prefix . 'per_page'] : $default_items_per_page;
-        $this->property = isset($_GET[$this->param_prefix . 'property']) ? $_GET[$this->param_prefix . 'property'] : $default_property;
-        $this->direction = isset($_GET[$this->param_prefix . 'direction']) ? $_GET[$this->param_prefix . 'direction'] : $default_order_direction;
+        $this->tableName = $tableName;
+        $this->additionalParameters = array();
+
+        $this->pageNumber = $this->determinePageNumber();
+        $this->orderProperty = $this->determineOrderProperty($defaultOrderProperty);
+        $this->orderDirection = $this->determineOrderDirection($defaultOrderDirection);
+        $this->numberOfItemsPerPage = $this->determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage);
+
+        $this->allowOrderDirection = $allowOrderDirection;
+        $this->allowPageSelection = $allowPageSelection;
+        $this->allowPageNavigation = $allowPageNavigation;
+
+        $this->sourceCountFunction = $sourceCountFunction;
+        $this->sourceDataFunction = $sourceDataFunction;
+        $this->sourcePropertiesFunction = $sourcePropertiesFunction;
 
         $this->pager = null;
-        $this->default_items_per_page = $default_items_per_page;
-        $this->total_number_of_items = - 1;
-        $this->get_total_number_function = $get_total_number_function;
-        $this->total_number_of_items = $this->get_total_number_of_items();
-        $this->get_data_function = $get_data_function;
-        $this->get_properties_function = $get_properties_function;
-        $this->enable_order_directions = $enable_order_directions;
-        $this->allow_page_selection = $allow_page_selection;
-        if ($this->per_page == 'all')
-        {
-            $this->per_page = $this->total_number_of_items;
-        }
+        $this->sourceDataCount = null;
 
-        $this->ajax_enabled = $ajax_enabled;
-        $this->column_filters = array();
-        $this->form_actions = array();
-        $this->checkbox_name = null;
-        $this->td_attributes = array();
-        $this->th_attributes = array();
+        $this->tableFormActions = null;
+        $this->contentCellAttributes = array();
+        $this->headerAttributes = array();
     }
 
     /**
-     * Get the Pager object to split the showed data in several pages
+     *
+     * @return string
      */
-    public function get_pager()
+    private function getTableName()
+    {
+        return $this->tableName;
+    }
+
+    /**
+     *
+     * @param string $parameter
+     * @return string
+     */
+    private function getParameterName($parameter)
+    {
+        return $this->getTableName() . '_' . $parameter;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    private function determinePageNumber()
+    {
+        $variableName = $this->getParameterName('page_nr');
+        $requestedPageNumber = Request :: get($variableName);
+
+        return $requestedPageNumber ? $requestedPageNumber : 1;
+    }
+
+    /**
+     *
+     * @param integer $defaultOrderProperty
+     * @return integer
+     */
+    private function determineOrderProperty($defaultOrderProperty)
+    {
+        $variableName = $this->getParameterName('property');
+        $requestedOrderProperty = Request :: get($variableName);
+
+        return ! is_null($requestedOrderProperty) ? $requestedOrderProperty : $defaultOrderProperty;
+    }
+
+    /**
+     *
+     * @param integer $defaultOrderDirection
+     * @return integer
+     */
+    private function determineOrderDirection($defaultOrderDirection)
+    {
+        $variableName = $this->getParameterName('direction');
+        $requestedOrderDirection = Request :: get($variableName);
+
+        return $requestedOrderDirection ? $requestedOrderDirection : $defaultOrderDirection;
+    }
+
+    /**
+     *
+     * @param integer $defaultNumberOfItemsPerPage
+     * @return integer
+     */
+    private function determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage)
+    {
+        $variableName = $this->getParameterName('per_page');
+        $requestedNumberOfItemsPerPage = Request :: get($variableName);
+
+        if ($requestedNumberOfItemsPerPage == Pager :: DISPLAY_ALL)
+        {
+            return $this->countSourceData();
+        }
+        else
+        {
+            return $requestedNumberOfItemsPerPage ? $requestedNumberOfItemsPerPage : $defaultNumberOfItemsPerPage;
+        }
+    }
+
+    /**
+     * Get the Pager object to split the shown data into several pages
+     *
+     * @return \Chamilo\Libraries\Format\Table\Pager
+     */
+    public function getPager()
     {
         if (is_null($this->pager))
         {
-            $total_number_of_items = $this->total_number_of_items;
-            $params['mode'] = 'Sliding';
-            $params['perPage'] = $this->per_page;
-            $params['totalItems'] = $total_number_of_items;
-            $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Prev') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Next') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/First') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Last') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['firstPagePre'] = '';
-            $params['lastPagePre'] = '';
-            $params['firstPagePost'] = '';
-            $params['lastPagePost'] = '';
-            $params['spacesBeforeSeparator'] = '';
-            $params['spacesAfterSeparator'] = '';
-            $params['currentPage'] = $this->page_nr;
-            $query_vars = array_keys($_GET);
-            $query_vars_needed = array(
-                $this->param_prefix . 'column',
-                $this->param_prefix . 'direction',
-                $this->param_prefix . 'per_page');
-            if (count($this->additional_parameters) > 0)
-            {
-                $query_vars_needed = array_merge($query_vars_needed, array_keys($this->additional_parameters));
-            }
-            $query_vars_exclude = array_diff($query_vars, $query_vars_needed);
-            $params['excludeVars'] = $query_vars_exclude;
-            $params['extraVars'] = $this->additional_parameters;
-            $this->pager = Pager :: factory($params);
+            $this->pager = new Pager(
+                $this->getNumberOfItemsPerPage(),
+                self :: DEFAULT_COLUMN_COUNT,
+                $this->countSourceData(),
+                $this->getPageNumber());
         }
+
         return $this->pager;
     }
 
     /**
-     * Returns the complete table HTML.
-     * Alias of as_html().
+     *
+     * @return string
+     * @deprecated Use toHtml() now
      */
-    public function toHTML()
+    public function as_html()
     {
-        return $this->as_html();
+        return $this->toHtml();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getEmptyTable()
+    {
+        $cols = $this->getHeader()->getColCount();
+
+        $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
+        $this->setCellContents(0, 0, Translation :: get('NoSearchResults', null, Utilities :: COMMON_LIBRARIES));
+
+        $html = array();
+
+        $html[] = '<div class="table-responsive">';
+        $html[] = parent :: toHTML();
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderTableHeader()
+    {
+        $html = array();
+
+        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        {
+            $tableFormActions = $this->getTableFormActions()->get_form_actions();
+            $firstFormAction = array_shift($tableFormActions);
+
+            $html[] = '<form class="table_form form-inline" method="post" action="' . $firstFormAction->get_action() .
+                 '" name="form_' . $this->tableName . '">';
+        }
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12 col-md-4 table-navigation-actions">';
+
+        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        {
+            $html[] = $this->renderActions();
+        }
+
+        $html[] = '</div>';
+        $html[] = '<div class="col-xs-12 col-md-8 table-navigation-search">';
+
+        $html[] = $this->renderNumberOfItemsPerPageSelector();
+
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderActions()
+    {
+        $formActions = $this->getTableFormActions()->get_form_actions();
+        $firstAction = array_shift($formActions);
+
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+        $buttonToolBar->addButtonGroup($buttonGroup);
+
+        $button = new SplitDropdownButton(
+            $firstAction->get_title(),
+            null,
+            $firstAction->get_action(),
+            Button :: DISPLAY_LABEL,
+            $firstAction->getConfirmation(),
+            'btn-sm');
+
+        foreach ($formActions as $formAction)
+        {
+            $button->addSubButton(
+                new SubButton(
+                    $formAction->get_title(),
+                    null,
+                    $formAction->get_action(),
+                    Button :: DISPLAY_LABEL,
+                    $formAction->getConfirmation()));
+        }
+
+        $buttonGroup->addButton($button);
+
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        $html = array();
+
+        $html[] = $buttonToolBarRenderer->render();
+        $html[] = '<input type="hidden" name="' . $this->tableName . '_namespace" value="' .
+             $this->getTableFormActions()->get_namespace() . '"/>';
+        $html[] = '<input type="hidden" name="table_name" value="' . $this->tableName . '"/>';
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function renderTableFooter()
+    {
+        $html = array();
+
+        if ($this->allowPageSelection || $this->allowPageNavigation)
+        {
+            $html[] = '<div class="row">';
+            $html[] = '<div class="col-xs-12 col-md-4 table-navigation-actions">';
+
+            if ($this->getTableFormActions() instanceof TableFormActions &&
+                 $this->getTableFormActions()->has_form_actions())
+            {
+                $html[] = $this->renderActions();
+            }
+
+            $html[] = '</div>';
+
+            $queryParameters = array();
+            $queryParameters[$this->getParameterName('direction')] = $this->getOrderDirection();
+            $queryParameters[$this->getParameterName('per_page')] = $this->getNumberOfItemsPerPage();
+            $queryParameters[$this->getParameterName('column')] = $this->getOrderColumn();
+            $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
+
+            $html[] = '<div class="col-xs-12 col-md-8 table-navigation-pagination">';
+            $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit(
+                $queryParameters,
+                $this->getParameterName('page_nr'));
+            $html[] = '</div>';
+
+            $html[] = '</div>';
+        }
+
+        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        {
+            $html[] = '<input type="submit" name="Submit" value="Submit" style="display:none;" />';
+            $html[] = '</form>';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns the complete table HTML.
+     *
+     * @return string
      */
-    public function as_html($empty_table = false)
+    public function toHtml($empty_table = false)
     {
+        if ($this->countSourceData() == 0)
+        {
+            return $this->getEmptyTable();
+        }
+
         $html = array();
 
-        $empty_table = false;
-        if ($this->get_total_number_of_items() == 0)
+        if (! $empty_table)
         {
-            $cols = $this->getColCount();
-            $this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
-            $this->setCellContents(1, 0, Translation :: get('NoSearchResults'));
-            $empty_table = true;
+            $html[] = $this->renderTableHeader();
         }
+
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
+
+        $html[] = '<div class="table-gallery-container">';
+        $html[] = $this->getBodyHtml();
+        $html[] = '</div>';
+
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         if (! $empty_table)
         {
-            $property_model = $this->get_table_properties();
-
-            $page = $this->get_page_select_form();
-            // $sort = $this->get_sort_select_form();
-            // if ($this->enable_order_directions)
-            // {
-            // $direction = $this->get_direction_select_form();
-            // }
-            $nav = $this->get_navigation_html();
-
-            $html[] = '<table style="width:100%;">';
-            $html[] = '<tr>';
-            $html[] = '<td style="width:25%;">';
-            $html[] = $page;
-
-            if ($property_model && count($property_model->get_properties()) > 0)
-            {
-                $html[] = $this->get_sort_select_form();
-
-                if ($this->enable_order_directions)
-                {
-                    $html[] = $this->get_direction_select_form();
-                }
-            }
-
-            // $html[] = $sort;
-            // $html[] = $direction;
-            $html[] = '</td>';
-            $html[] = '<td style="text-align:center;">';
-            $html[] = $this->get_table_title();
-            $html[] = '</td>';
-            $html[] = '<td style="text-align:right;width:25%;">';
-            $html[] = $nav;
-            $html[] = '</td>';
-            $html[] = '</tr>';
-            $html[] = '</table>';
-            if (count($this->form_actions))
-            {
-                $html[] = '<script type="text/javascript">
-							/* <![CDATA[ */
-							function setCheckbox(formName, value) {
-								var d = document[formName];
-								for (i = 0; i < d.elements.length; i++) {
-									if (d.elements[i].type == "checkbox") {
-									     d.elements[i].checked = value;
-									}
-								}
-							}
-							function anyCheckboxChecked(formName) {
-								var d = document[formName];
-								for (i = 0; i < d.elements.length; i++) {
-									if (d.elements[i].type == "checkbox" && d.elements[i].checked)
-										return true;
-								}
-								return false;
-							}
-							/* ]]> */
-							</script>';
-                $params = $this->get_gallery_table_param_string;
-
-                $html[] = '<form method="post" action="' . $_SERVER['PHP_SELF'] . '?' . $params . '" name="form_' .
-                     $this->table_name . '"  onsubmit="return anyCheckboxChecked(\'form_' . $this->table_name .
-                     '\') &amp;&amp; confirm(\'' .
-                     addslashes(htmlentities(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES))) .
-                     '\');">';
-            }
+            $html[] = $this->renderTableFooter();
         }
 
-        $html[] = $this->get_table_html();
-
-        if (! $empty_table)
-        {
-            $html[] = '<table style="width:100%;">';
-            $html[] = '<tr>';
-            $html[] = '<td colspan="2">';
-
-            if (count($this->form_actions))
-            {
-                $html[] = '<a href="?' . $params . '&amp;' . $this->param_prefix .
-                     'selectall=1" onclick="setCheckbox(\'form_' . $this->table_name . '\', true); return false;">' .
-                     Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES) . '</a> - ';
-                $html[] = '<a href="?' . $params . '"  onclick="setCheckbox(\'form_' . $this->table_name .
-                     '\', false); return false;">' .
-                     Translation :: get('UnselectAll', null, Utilities :: COMMON_LIBRARIES) . '</a> ';
-                $html[] = '<select name="action">';
-                foreach ($this->form_actions as $action => $label)
-                {
-                    $html[] = '<option value="' . $action . '">' . $label . '</option>';
-                }
-                $html[] = '</select>';
-                $html[] = '<input type="submit" value="' . Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) .
-                     '"/>';
-            }
-
-            $html[] = '</td>';
-            $html[] = '<td style="text-align:right;">';
-            $html[] = $nav;
-            $html[] = '</td>';
-            $html[] = '</tr>';
-            $html[] = '</table>';
-            if (count($this->form_actions) > 0)
-            {
-                $html[] = '</form>';
-            }
-        }
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Get the HTML-code with the navigational buttons to browse through the data-pages.
+     *
+     * @return string
      */
-    public function get_navigation_html()
+    public function getNavigationHtml()
     {
-        $pager = $this->get_pager();
-        $pager_links = $pager->getLinks();
-        $showed_items = $pager->getOffsetByPageId();
-        return $pager_links['first'] . ' ' . $pager_links['back'] . ' ' . $pager->getCurrentPageId() . ' / ' .
-             $pager->numPages() . ' ' . $pager_links['next'] . ' ' . $pager_links['last'];
+        if ($this->allowPageNavigation)
+        {
+            $pager = $this->getPager();
+            $pagerRenderer = new PagerRenderer($pager);
+
+            if ($pager->getNumberOfPages() > 1)
+            {
+                return $pagerRenderer->renderPaginationWithPageLimit();
+            }
+        }
+    }
+
+    public function getPagerRenderer()
+    {
+        if (! isset($this->pagerRenderer))
+        {
+            $this->pagerRenderer = new PagerRenderer($this->getPager());
+        }
+
+        return $this->pagerRenderer;
     }
 
     /**
      * Get the HTML-code with the data-table.
+     *
+     * @return string
      */
-    public function get_table_html()
+    public function getBodyHtml()
     {
-        $pager = $this->get_pager();
-        $offset = $pager->getOffsetByPageId();
-        $from = $offset[0] - 1;
-        $table_data = $this->get_table_data($from);
+        $pager = $this->getPager();
+        $offset = $pager->getCurrentRangeOffset();
+        $table_data = $this->getSourceData($offset);
 
         foreach ($table_data as $index => $row)
         {
-            $row = $this->filter_data($row);
+            $row = $this->filterData($row);
             $this->addRow($row);
         }
-        $col = 100 / count($table_data[0]);
-        $this->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
-        $this->altColAttributes(
-            0,
-            array('class' => 'col_odd', 'style' => 'width:' . number_format($col) . '%'),
-            array('class' => 'col_even', 'style' => 'width:' . number_format($col) . '%'),
-            true);
 
-        foreach ($this->th_attributes as $column => $attributes)
+        $this->altRowAttributes(0, array('class' => 'row'), array('class' => 'row'), true);
+        $this->altColAttributes(0, array('class' => 'col-xs-6 col-lg-3'), array('class' => 'col-xs-6 col-lg-3'), true);
+
+        foreach ($this->headerAttributes as $column => & $attributes)
         {
             $this->setCellAttributes(0, $column, $attributes);
         }
-        foreach ($this->td_attributes as $column => $attributes)
+
+        foreach ($this->contentCellAttributes as $column => & $attributes)
         {
             $this->setColAttributes($column, $attributes);
         }
+
         return parent :: toHTML();
     }
 
@@ -458,232 +516,168 @@ class GalleryHTMLTable extends HTML_Table
 
     /**
      * Get the HTML-code wich represents a form to select how many items a page should contain.
+     *
+     * @return string
      */
-    public function get_page_select_form()
+    public function renderNumberOfItemsPerPageSelector()
     {
-        $result = array();
-
-        if ($this->allow_page_selection)
+        if ($this->allowPageSelection)
         {
-            $total_number_of_items = $this->total_number_of_items;
+            $sourceDataCount = $this->countSourceData();
 
-            if ($total_number_of_items <= $this->default_items_per_page)
+            if ($sourceDataCount <= Pager :: DISPLAY_PER_INCREMENT)
             {
                 return '';
             }
 
-            $result[] = '<form method="get" action="' . $_SERVER['PHP_SELF'] . '" style="display:inline;">';
-            $param[$this->param_prefix . 'direction'] = $this->direction;
-            $param[$this->param_prefix . 'page_nr'] = $this->page_nr;
-            $param[$this->param_prefix . 'property'] = $this->property;
-            $param = array_merge($param, $this->additional_parameters);
+            $queryParameters = array();
+            $queryParameters[$this->getParameterName('direction')] = $this->getOrderDirection();
+            $queryParameters[$this->getParameterName('page_nr')] = $this->getPageNumber();
+            $queryParameters[$this->getParameterName('column')] = $this->getOrderColumn();
+            $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
+
+            return $this->getPagerRenderer()->renderItemsPerPageSelector(
+                $queryParameters,
+                $this->getParameterName('per_page'));
+        }
+
+        return '';
+    }
+
+    /**
+     *
+     * @param integer $orderColumn
+     * @param string $label
+     * @param boolean $sortable
+     * @param string[] $headerAttributes
+     * @param string[] $cellAttributes
+     * @return string
+     */
+    public function setColumnHeader($orderColumn, $label, $sortable = true, $headerAttributes = null, $cellAttributes = null)
+    {
+        $header = $this->getHeader();
+
+        for ($i = 0; $i < count($headerAttributes); $i ++)
+        {
+            $header->setColAttributes($i, $headerAttributes[$i]);
+        }
+
+        $param['direction'] = SORT_ASC;
+
+        if ($this->getOrderColumn() == $orderColumn && $this->getOrderDirection() == SORT_ASC)
+        {
+            $param['direction'] = SORT_DESC;
+        }
+
+        $param['page_nr'] = $this->getPageNumber();
+        $param['per_page'] = $this->getNumberOfItemsPerPage();
+        $param['column'] = $orderColumn;
+
+        if ($sortable)
+        {
+            $link = '<a href="' . $_SERVER['PHP_SELF'] . '?';
 
             foreach ($param as $key => & $value)
             {
-                if (! is_null($value))
-                {
-                    if (is_array($value))
-                    {
-                        $ser = self :: serialize_array($value, $key);
-                        $result = array_merge($result, $ser);
-                    }
-                    else
-                    {
-                        $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
-                    }
-                }
+                $link .= $this->getParameterName($key) . '=' . urlencode($value) . '&amp;';
             }
 
-            $result[] = '<select name="' . $this->param_prefix . 'per_page" onchange="javascript:this.form.submit();">';
+            $link .= http_build_query($this->getAdditionalParameters(), '', Redirect :: ARGUMENT_SEPARATOR);
+            $link .= '">' . $label . '</a>';
 
-            $lower_limit = 5 * $this->default_items_per_page;
-            $upper_limit = 50 * $this->default_items_per_page;
-
-            for ($nr = $this->default_items_per_page; $nr <= min($lower_limit, $total_number_of_items); $nr += $this->default_items_per_page)
+            if ($this->getOrderColumn() == $orderColumn)
             {
-                $result[] = '<option value="' . $nr . '" ' . ($nr == $this->per_page ? 'selected="selected"' : '') . '>' .
-                     $nr . '</option>';
+                $link .= $this->getOrderDirection() == SORT_ASC ? ' &#8595;' : ' &#8593;';
             }
-            if ($total_number_of_items < $upper_limit)
-            {
-                // $result[] = '<option value="' . $total_number_of_items . '" ' . ($total_number_of_items ==
-                // $this->per_page ? 'selected="selected"' : '') . '>ALL</option>';
-                $result[] = '<option value="' . 'all' . '" ' .
-                     ($total_number_of_items == $this->per_page ? 'selected="selected"' : '') . '>ALL</option>';
-            }
-            $result[] = '</select>';
-            $result[] = '<noscript>';
-            $result[] = '<button class="normal" type="submit" value="' .
-                 Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) . '">' .
-                 Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES) . '</button>';
-            $result[] = '</noscript>';
-            $result[] = '</form>';
         }
-        return implode(PHP_EOL, $result);
-    }
-
-    /**
-     * Get the HTML-code wich represents a form to select what property the gallery should be sorted on.
-     */
-    public function get_sort_select_form()
-    {
-        $property_model = $this->get_table_properties();
-        $result = array();
-
-        if ($property_model && count($property_model->get_properties()) > 0)
+        else
         {
-            $result[] = '<form method="get" action="' . $_SERVER['PHP_SELF'] . '" style="display:inline;">';
-            $param[$this->param_prefix . 'page_nr'] = $this->page_nr;
-            $param[$this->param_prefix . 'direction'] = $this->direction;
-            $param = array_merge($param, $this->additional_parameters);
-
-            foreach ($param as $key => $value)
-            {
-                if (! is_null($value))
-                {
-                    if (is_array($value))
-                    {
-                        $ser = self :: serialize_array($value, $key);
-                        $result = array_merge($result, $ser);
-                    }
-                    else
-                    {
-                        $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
-                    }
-                }
-            }
-
-            $properties = $property_model->get_properties();
-
-            $result[] = '<select name="' . $this->param_prefix . 'property" onchange="javascript:this.form.submit();">';
-            foreach ($properties as $index => $property)
-            {
-                $result[] = '<option value="' . $index . '" ' . ($index == $this->property ? 'selected="selected"' : '') .
-                     '>' .
-                     Translation :: get(
-                        (string) StringUtilities :: getInstance()->createString($property->get_name())->upperCamelize()) .
-                     '</option>';
-            }
-            $result[] = '</select>';
-
-            $result[] = '<noscript>';
-            $result[] = '<input type="submit" value="ok"/>';
-            $result[] = '</noscript>';
-            $result[] = '</form>';
+            $link = $label;
         }
-        return implode(PHP_EOL, $result);
-    }
 
-    /**
-     * Get the HTML-code wich represents a form to select the order direction.
-     */
-    public function get_direction_select_form()
-    {
-        $property_model = $this->get_table_properties();
-        $result = array();
+        $header->setHeaderContents(0, $orderColumn, $link);
 
-        if ($property_model && count($property_model->get_properties()) > 0)
+        if (! is_null($cellAttributes))
         {
-            $result[] = '<form method="get" action="' . $_SERVER['PHP_SELF'] . '" style="display:inline;">';
-            $param[$this->param_prefix . 'page_nr'] = $this->page_nr;
-            $param[$this->param_prefix . 'property'] = $this->property;
-            $param = array_merge($param, $this->additional_parameters);
-
-            foreach ($param as $key => $value)
-            {
-                if (! is_null($value))
-                {
-                    if (is_array($value))
-                    {
-                        $ser = self :: serialize_array($value, $key);
-                        $result = array_merge($result, $ser);
-                    }
-                    else
-                    {
-                        $result[] = '<input type="hidden" name="' . $key . '" value="' . $value . '"/>';
-                    }
-                }
-            }
-
-            $result[] = '<select name="' . $this->param_prefix . 'direction" onchange="javascript:this.form.submit();">';
-            $result[] = '<option value="' . SORT_ASC . '" ' . (SORT_ASC == $this->direction ? 'selected="selected"' : '') .
-                 '>' . Translation :: get('ASC') . '</option>';
-            $result[] = '<option value="' . SORT_DESC . '" ' .
-                 (SORT_DESC == $this->direction ? 'selected="selected"' : '') . '>' . Translation :: get('DESC') .
-                 '</option>';
-            $result[] = '</select>';
-            $result[] = '<noscript>';
-            $result[] = '<input type="submit" value="ok"/>';
-            $result[] = '</noscript>';
-            $result[] = '</form>';
+            $this->contentCellAttributes[$orderColumn] = $cellAttributes;
         }
-        return implode(PHP_EOL, $result);
+
+        if (! is_null($headerAttributes))
+        {
+            $this->headerAttributes[$orderColumn] = $headerAttributes;
+        }
+
+        return $link;
     }
 
     /**
-     * Get the table title.
+     *
+     * @return string
      */
-    public function get_table_title()
+    public function getParameterString()
     {
-        $showed_items = $this->get_pager()->getOffsetByPageId();
-        return $showed_items[0] . ' - ' . $showed_items[1] . ' / ' . $this->total_number_of_items;
-    }
+        $param = array();
 
-    /**
-     * Get the parameter-string with the SortableTable-related parameters to use in URLs
-     */
-    public function get_gallery_table_param_string()
-    {
-        $param[$this->param_prefix . 'direction'] = $this->direction;
-        $param[$this->param_prefix . 'page_nr'] = $this->page_nr;
-        $param[$this->param_prefix . 'per_page'] = $this->per_page;
-        $param[$this->param_prefix . 'property'] = $this->property;
+        $param[$this->getParameterName('direction')] = $this->getOrderDirection();
+        $param[$this->getParameterName('page_nr')] = $this->getPageNumber();
+        $param[$this->getParameterName('per_page')] = $this->getNumberOfItemsPerPage();
+        $param[$this->getParameterName('column')] = $this->getOrderColumn();
+
         $param_string_parts = array();
+
         foreach ($param as $key => & $value)
         {
             $param_string_parts[] = urlencode($key) . '=' . urlencode($value);
         }
+
         return implode('&amp;', $param_string_parts);
     }
 
     /**
-     * Add a filter to a column.
-     * If another filter was allready defined for the given column, it will be overwritten.
      *
-     * @param int $column The number of the column
-     * @param string $function The name of the filter-function. This should be a function wich requires 1 parameter and
-     *        returns the filtered value.
+     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormActions $actions
      */
-    public function set_column_filter($column, $function)
+    public function setTableFormActions(TableFormActions $actions = null)
     {
-        $this->column_filters[$column] = $function;
+        $this->tableFormActions = $actions;
+
+        if ($actions instanceof TableFormActions && $actions->has_form_actions())
+        {
+            $columnHeaderHtml = '<div class="checkbox"><input type="checkbox" name="sortableTableSelectToggle" class="sortableTableSelectToggle" /><label></label></div>';
+        }
+        else
+        {
+            $columnHeaderHtml = '';
+        }
+
+        $this->setColumnHeader(0, $columnHeaderHtml, false);
     }
 
     /**
-     * Define a list of actions which can be performed on the table-date.
-     * If you define a list of actions, the first
-     * column of the table will be converted into checkboxes.
      *
-     * @param array $actions A list of actions. The key is the name of the action. The value is the label to show in the
-     *        select-box
-     * @param string $checkbox_name The name of the generated checkboxes. The value of the checkbox will be the value of
-     *        the first column.
+     * @return \Chamilo\Libraries\Format\Table\FormAction\TableFormActions
      */
-    public function set_form_actions($actions, $checkbox_name = 'id', $select_name = 'action')
+    private function getTableFormActions()
     {
-        $this->form_actions = $actions;
-        $this->checkbox_name = $checkbox_name;
-        $this->form_actions_select_name = $select_name;
+        return $this->tableFormActions;
     }
 
     /**
-     * Define a list of additional parameters to use in the generated URLs
      *
-     * @param array $parameters
+     * @param string[]
      */
     public function setAdditionalParameters($parameters)
     {
-        $this->additional_parameters = $parameters;
+        $this->additionalParameters = $parameters;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getAdditionalParameters()
+    {
+        return $this->additionalParameters;
     }
 
     /**
@@ -692,9 +686,10 @@ class GalleryHTMLTable extends HTML_Table
      * If you've defined actions, the first element of the given row will be converted into a
      * checkbox
      *
-     * @param array $row A row from the table.
+     * @param string[]
+     * @return string[]
      */
-    public function filter_data($row)
+    public function filterData($row)
     {
         foreach ($row as $index => $value)
         {
@@ -705,33 +700,37 @@ class GalleryHTMLTable extends HTML_Table
             else
             {
                 $row[$index] = $row[$index][1];
-                if (count($this->form_actions) > 0)
+                $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
+                     $this->getTableFormActions()->has_form_actions();
+
+                if ($hasActions)
                 {
-                    $row[$index] .= '<br /><input type="checkbox" name="' . $this->checkbox_name . '[]" value="' .
-                         $value[0] . '"';
-                    if (isset($_GET[$this->param_prefix . 'selectall']))
+                    $row[$index] .= '<div class="checkbox"><input type="checkbox" name="' .
+                         $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $value[0] . '"';
+                    if (Request :: get($this->getParameterName('selectall')))
                     {
                         $row[$index] .= ' checked="checked"';
                     }
-                    $row[$index] .= '/>';
+                    $row[$index] .= '/><label></label></div>';
                 }
             }
         }
+
         return $row;
     }
 
     /**
-     * Get the total number of items.
-     * This function calls the function given as 2nd argument in the constructor of a
-     * SortableTable. Make sure your function has the same parameters as defined here.
+     *
+     * @return integer
      */
-    public function get_total_number_of_items()
+    public function countSourceData()
     {
-        if ($this->total_number_of_items == - 1 && ! is_null($this->get_total_number_function))
+        if (is_null($this->sourceDataCount))
         {
-            $this->total_number_of_items = call_user_func($this->get_total_number_function);
+            $this->sourceDataCount = call_user_func($this->getSourceCountFunction());
         }
-        return $this->total_number_of_items;
+
+        return $this->sourceDataCount;
     }
 
     /**
@@ -739,75 +738,147 @@ class GalleryHTMLTable extends HTML_Table
      * This function calls the function given as 2nd argument in the constructor of a
      * SortableTable. Make sure your function has the same parameters as defined here.
      *
-     * @param int $from Index of the first item to return.
-     * @param int $per_page The number of items to return
-     * @param int $column The number of the column on which the data should be sorted
-     * @param string $direction In which order should the data be sorted (ASC or DESC)
+     * @param integer
+     * @return string[]
      */
-    public function get_table_data($from = null, $per_page = null, $property = null, $direction = null)
+    public function getSourceData($offset = null)
     {
-        if (! is_null($this->get_data_function))
+        if (! is_null($this->getSourceDataFunction()))
         {
-            return call_user_func($this->get_data_function, $from, $this->per_page, $this->property, $this->direction);
-        }
-        return array();
-    }
+            if (is_null($this->sourceData))
+            {
+                $this->sourceData = call_user_func(
+                    $this->getSourceDataFunction(),
+                    $offset,
+                    $this->getPager()->getNumberOfItemsPerPage(),
+                    $this->getOrderColumn(),
+                    $this->getOrderDirection());
+            }
 
-    /**
-     * Get the sort properties.
-     * This function calls the function given as 3rd argument in the constructor of a
-     * GalleryTable. Make sure your function has the same parameters as defined here.
-     */
-    public function get_table_properties()
-    {
-        if (! is_null($this->get_properties_function))
-        {
-            return call_user_func($this->get_properties_function);
+            return $this->sourceData;
         }
-        return null;
+
+        return array();
     }
 
     /**
      * Serializes a URL parameter passed as an array into a query string or hidden inputs.
      *
-     * @param array $params The parameter's value.
+     * @param string[] The parameter's value.
      * @param string $key The parameter's name.
      * @param boolean $as_query_string True to format the result as a query string, false for hidden inputs.
-     * @return array The query string parts (to be joined by ampersands or another separator), or the hidden inputs as
-     *         HTML, each array element containing a single input.
+     * @return string[] The query string parts (to be joined by ampersands or another separator), or the hidden inputs
+     *         as HTML, each array element containing a single input.
      */
-    private function serialize_array($params, $key, $as_query_string = false)
+    private function serializeArray($params, $key, $as_query_string = false)
     {
         $out = array();
+
         foreach ($params as $k => & $v)
         {
             if (is_array($v))
             {
-                $ser = self :: serialize_array($v, $key . '[' . $k . ']', $as_query_string);
+                $ser = $this->serializeArray($v, $key . '[' . $k . ']', $as_query_string);
                 $out = array_merge($out, $ser);
             }
             else
             {
                 $v = urlencode($v);
             }
-            $k = urlencode($key . '[' . $k . ']');
-            $out[] = ($as_query_string ? $k . '=' . $v : '<input type="hidden" name="' . $k . '" value="' . $v . '"/>');
+
+            if ($as_query_string)
+            {
+                $k = urlencode($key . '[' . $k . ']');
+                $out[] = $k . '=' . $v;
+            }
+            else
+            {
+                $k = $key . '[' . $k . ']';
+                $out[] = '<input type="hidden" name="' . $k . '" value="' . $v . '"/>';
+            }
         }
+
         return $out;
     }
 
+    /**
+     *
+     * @return boolean
+     */
+    public function isPageSelectionAllowed()
+    {
+        return $this->allowPageSelection;
+    }
+
+    /**
+     *
+     * @return integer
+     */
     public function getNumberOfItemsPerPage()
     {
-        return $this->per_page;
+        return $this->numberOfItemsPerPage;
     }
 
-    public function get_column()
+    /**
+     *
+     * @return integer
+     */
+    public function getOrderColumn()
     {
-        return $this->column;
+        return $this->orderColumn;
     }
 
-    public function get_direction()
+    /**
+     *
+     * @return integer
+     */
+    public function getOrderDirection()
     {
-        return $this->direction;
+        return $this->orderDirection;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getPageNumber()
+    {
+        return $this->pageNumber;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getSourceDataFunction()
+    {
+        return $this->sourceDataFunction;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getSourceCountFunction()
+    {
+        return $this->sourceCountFunction;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getContentCellAttributes()
+    {
+        return $this->contentCellAttributes;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getHeaderAttributes()
+    {
+        return $this->headerAttributes;
     }
 }

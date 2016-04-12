@@ -135,7 +135,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         return $this->group;
     }
 
-    public function buttonToolbarRenderer()
+    public function getButtonToolbarRenderer()
     {
         $group = $this->group;
         

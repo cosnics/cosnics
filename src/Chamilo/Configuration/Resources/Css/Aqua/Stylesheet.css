@@ -1,6 +1,8 @@
 /* Bootstrap */
 @import url('Bootstrap/css/bootstrap.css');
 
+@import url('BootstrapCheckbox/awesome-bootstrap-checkbox.css');
+
 /* Font Awesome */
 @import url('FontAwesome/css/font-awesome.css');
 

@@ -1,11 +1,14 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 
+use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Calendar\Table\Type\MiniMonthCalendar;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -119,7 +122,12 @@ class MiniMonthRenderer extends ViewRenderer
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $this->getLegend()->addSource($event->getSource());
-                    $calendar->addEvent($tableDate, $event->getTitle());
+
+                    $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
+                    $configuration->setStartDate($tableDate);
+
+                    $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
+                    $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
 
@@ -134,6 +142,9 @@ class MiniMonthRenderer extends ViewRenderer
         $html[] = $calendar->render();
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
+
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
 
         return implode(PHP_EOL, $html);
     }

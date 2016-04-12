@@ -416,7 +416,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                         Theme :: getInstance()->getImagePath(
                             'Chamilo\Application\Weblcms\Tool\Implementation\User',
                             'Action/SubscribeGroup'),
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_GROUP_BROWSER)),
+                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_GROUP_DETAILS)),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
 
                 $param_export_subscriptions_overview = array();

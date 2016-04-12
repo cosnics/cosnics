@@ -20,5 +20,7 @@ class ContentObjectTableColumnModel extends DataClassTableColumnModel implements
             new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION));
+        $this->add_column(
+            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject::PROPERTY_MODIFICATION_DATE));
     }
 }

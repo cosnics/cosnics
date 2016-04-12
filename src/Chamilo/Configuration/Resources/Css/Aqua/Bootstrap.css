@@ -51,10 +51,6 @@ a:focus {
 	padding-left: 46px;
 }
 
-.dropdown-menu>li>a.not-selected {
-	opacity: 0.5;
-}
-
 .dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
 	background-image: url("../../Images/Aqua/Background/Checkmark.png");
 	background-position: 20px center;
@@ -97,11 +93,15 @@ a:focus {
 	box-shadow: none;
 }
 
-/**************
+/*******************
  * LIST VIEW PANEL *
- **************/
+ *******************/
 .list-group-item.list-group-item-faded-faded {
 	opacity: 0.5;
+}
+
+.panel.panel-publication.panel-publication-with-actions {
+	position: relative;
 }
 
 .panel.panel-publication .panel-publication-header {
@@ -139,7 +139,7 @@ a:focus {
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn
 	{
-	padding: 3px;
+	padding: 0px 3px;
 }
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-actions .btn-action-toolbar .btn span.caret
@@ -147,14 +147,46 @@ a:focus {
 	margin-left: 3px;
 }
 
-.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox
 	{
-	float: left;
+	display: inline;
 }
 
-.panel.panel-publication .panel-publication-header .panel-publication-header-title-checkbox input
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3
 	{
-	margin: 0px 15px 0px 0px;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 a.title
+	{
+	order: 2;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 span.labels
+	{
+	order: 1;
+	display: block;
+	margin-bottom: 5px;
+}
+
+.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 span.labels span.label
+	{
+	margin-right: 5px;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::before
+	{
+	width: 20px;
+	height: 20px;
+}
+
+.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::after
+	{
+	width: 19px;
+	height: 19px;
+	font-size: 14px;
+	line-height: 16px;
 }
 
 @media ( min-width : 768px) {
@@ -177,6 +209,53 @@ a:focus {
 		{
 		float: right !important;
 	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header,
+		.panel.panel-publication.panel-publication-with-actions .panel-publication-body,
+		.panel.panel-publication.panel-publication-with-actions .panel-publication-footer
+		{
+		padding-left: 30px;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox
+		{
+		position: absolute;
+		left: -9px;
+		padding: 0px;
+		margin: 0px;
+		background-color: transparent;
+	}
+	.panel.panel-publication .panel-publication-header .panel-publication-header-title h3
+		{
+		display: block;
+	}
+	.panel.panel-publication .panel-publication-header .panel-publication-header-title h3 span.labels
+		{
+		display: inline;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::before
+		{
+		width: 17px;
+		height: 17px;
+	}
+	.panel.panel-publication.panel-publication-with-actions .panel-publication-header .panel-publication-header-title .label-checkbox.checkbox label::after
+		{
+		width: 16px;
+		height: 16px;
+		font-size: 11px;
+	}
+}
+
+/************************
+ * SLIDESHOW VIEW PANEL *
+ ************************/
+.panel.panel-slideshow .panel-slideshow-actions {
+	margin-top: 15px;
+	padding-top: 15px;
+	border-top: 1px dashed #dddddd;
+}
+
+.panel.panel-slideshow .panel-slideshow-actions .btn-toolbar.btn-action-toolbar
+	{
+	margin: 0px;
 }
 
 /****************************
@@ -327,6 +406,15 @@ ol.breadcrumb a {
 	margin-bottom: 0;
 }
 
+.dynamic-visual-tab-content .tab-content-header {
+    background-color: #F5F5F5;
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    margin: 15px -15px;
+    padding: 3px 10px;
+    color: #555555;
+}
+
 /***********************
  * Alert			   *
  ***********************/
@@ -405,3 +493,249 @@ ol.breadcrumb a {
 	font-size: 100px;
 	line-height: 150px;
 }
+
+/*****************
+ * BUTTON GROUPS *
+ *****************/
+.ui-group-buttons .or {
+	position: relative;
+	float: left;
+	width: .3em;
+	height: 1.3em;
+	z-index: 3;
+	font-size: 12px
+}
+
+.ui-group-buttons .or:before {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	content: 'or';
+	background-color: #5a5a5a;
+	margin-top: -.1em;
+	margin-left: -.9em;
+	width: 1.8em;
+	height: 1.8em;
+	line-height: 1.55;
+	color: #fff;
+	font-style: normal;
+	font-weight: 400;
+	text-align: center;
+	border-radius: 500px;
+	-webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box
+}
+
+.ui-group-buttons .or:after {
+	position: absolute;
+	top: 0;
+	left: 0;
+	content: ' ';
+	width: .3em;
+	height: 2.84em;
+	background-color: rgba(0, 0, 0, 0);
+	border-top: .6em solid #5a5a5a;
+	border-bottom: .6em solid #5a5a5a
+}
+
+.ui-group-buttons .or.or-lg {
+	height: 1.3em;
+	font-size: 16px
+}
+
+.ui-group-buttons .or.or-lg:after {
+	height: 2.85em
+}
+
+.ui-group-buttons .or.or-sm {
+	height: 1em
+}
+
+.ui-group-buttons .or.or-sm:after {
+	height: 2.5em
+}
+
+.ui-group-buttons .or.or-xs {
+	height: .25em
+}
+
+.ui-group-buttons .or.or-xs:after {
+	height: 1.84em;
+	z-index: -1000
+}
+
+.ui-group-buttons {
+	display: inline-block;
+	vertical-align: middle
+}
+
+.ui-group-buttons:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden
+}
+
+.ui-group-buttons .btn {
+	float: left;
+	border-radius: 0
+}
+
+.ui-group-buttons .btn:first-child {
+	margin-left: 0;
+	border-top-left-radius: .25em;
+	border-bottom-left-radius: .25em;
+	padding-right: 15px
+}
+
+.ui-group-buttons .btn:last-child {
+	border-top-right-radius: .25em;
+	border-bottom-right-radius: .25em;
+	padding-left: 15px
+}
+
+/*****************************************************
+ *  Wizard Styles					                 *
+ *****************************************************/
+
+ul.nav-wizard {
+	background-color: #f9f9f9;
+	border: 1px solid #d4d4d4;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	*zoom: 1;
+	position: relative;
+	overflow: hidden;
+}
+ul.nav-wizard:before {
+	display: block;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 46px;
+	height: 47px;
+	border-top: 1px solid #d4d4d4;
+	border-bottom: 1px solid #d4d4d4;
+	z-index: 11;
+	content: " ";
+}
+ul.nav-wizard:after {
+	display: block;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 138px;
+	height: 47px;
+	border-top: 1px solid #d4d4d4;
+	border-bottom: 1px solid #d4d4d4;
+	z-index: 11;
+	content: " ";
+}
+ul.nav-wizard li {
+	position: relative;
+	float: left;
+	height: 46px;
+	display: inline-block;
+	text-align: middle;
+	padding: 0 20px 0 30px;
+	margin: 0;
+	font-size: 14px;
+	line-height: 46px;
+}
+ul.nav-wizard li a {
+	color: #6192b8;
+	padding: 0;
+}
+ul.nav-wizard li a:hover {
+	background-color: transparent;
+}
+ul.nav-wizard li:before {
+	position: absolute;
+	display: block;
+	border: 24px solid transparent;
+	border-left: 16px solid #d4d4d4;
+	border-right: 0;
+	top: -1px;
+	z-index: 10;
+	content: '';
+	right: -16px;
+}
+ul.nav-wizard li:after {
+	position: absolute;
+	display: block;
+	border: 24px solid transparent;
+	border-left: 16px solid #f9f9f9;
+	border-right: 0;
+	top: -1px;
+	z-index: 10;
+	content: '';
+	right: -15px;
+}
+ul.nav-wizard li.active {
+	color: #f5f5f5;
+	background: #6192b8;
+}
+ul.nav-wizard li.active:after {
+	border-left: 16px solid #6192b8;
+}
+ul.nav-wizard li.active a,
+ul.nav-wizard li.active a:active,
+ul.nav-wizard li.active a:visited,
+ul.nav-wizard li.active a:focus {
+	color: #f5f5f5;
+	background: #6192b8;
+}
+ul.nav-wizard .active ~ li {
+	color: #999999;
+	background: #ededed;
+}
+ul.nav-wizard .active ~ li:after {
+	border-left: 16px solid #ededed;
+}
+ul.nav-wizard .active ~ li a,
+ul.nav-wizard .active ~ li a:active,
+ul.nav-wizard .active ~ li a:visited,
+ul.nav-wizard .active ~ li a:focus {
+	color: #999999;
+	background: #ededed;
+}
+ul.nav-wizard.nav-wizard-backnav li:hover {
+	color: #468847;
+	background: #f6fbfd;
+}
+ul.nav-wizard.nav-wizard-backnav li:hover:after {
+	border-left: 16px solid #f6fbfd;
+}
+ul.nav-wizard.nav-wizard-backnav li:hover a,
+ul.nav-wizard.nav-wizard-backnav li:hover a:active,
+ul.nav-wizard.nav-wizard-backnav li:hover a:visited,
+ul.nav-wizard.nav-wizard-backnav li:hover a:focus {
+	color: #468847;
+	background: #f6fbfd;
+}
+ul.nav-wizard.nav-wizard-backnav .active ~ li {
+	color: #999999;
+	background: #ededed;
+}
+ul.nav-wizard.nav-wizard-backnav .active ~ li:after {
+	border-left: 16px solid #ededed;
+}
+ul.nav-wizard.nav-wizard-backnav .active ~ li a,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:active,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:visited,
+ul.nav-wizard.nav-wizard-backnav .active ~ li a:focus {
+	color: #999999;
+	background: #ededed;
+}
+
+ul.nav-wizard.publication-wizard
+{
+	margin-bottom: 20px;
+}
+

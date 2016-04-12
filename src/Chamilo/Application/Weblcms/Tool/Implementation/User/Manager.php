@@ -24,7 +24,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
     const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeBrowser';
-    const ACTION_SUBSCRIBE_GROUP_BROWSER = 'GroupSubscribeBrowser';
+    const ACTION_SUBSCRIBE_GROUP_DETAILS = 'SubscribeGroupsDetails';
+    const ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER = 'SubscribeGroupsBrowseSubgroups';
     const ACTION_UNSUBSCRIBE_BROWSER = 'UnsubscribeBrowser';
     const ACTION_UNSUBSCRIBE = 'Unsubscribe';
     const ACTION_SUBSCRIBE = 'Subscribe';
