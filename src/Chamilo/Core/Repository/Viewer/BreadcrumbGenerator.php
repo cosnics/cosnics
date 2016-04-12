@@ -1,10 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Viewer;
 
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -33,7 +30,7 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
         {
             return;
         }
-        
+
         $variable = ClassnameUtilities:: getInstance()->getClassNameFromNamespace(get_class($this->component));
 
         $this->breadcrumb_trail->add(

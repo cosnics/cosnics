@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 
 /**
  *
@@ -236,12 +236,12 @@ class GalleryHTMLTable extends HTML_Table
             $tableFormActions = $this->getTableFormActions()->get_form_actions();
             $firstFormAction = array_shift($tableFormActions);
 
-            $html[] = '<form class="table_form form-inline" method="post" action="' . $firstFormAction->get_action() .
+            $html[] = '<form class="table_form" method="post" action="' . $firstFormAction->get_action() .
                  '" name="form_' . $this->tableName . '">';
         }
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-xs-12 col-md-4 table-navigation-actions">';
+        $html[] = '<div class="col-xs-12 col-md-8 table-navigation-actions">';
 
         if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
         {
@@ -249,7 +249,7 @@ class GalleryHTMLTable extends HTML_Table
         }
 
         $html[] = '</div>';
-        $html[] = '<div class="col-xs-12 col-md-8 table-navigation-search">';
+        $html[] = '<div class="col-xs-12 col-md-4 table-navigation-search">';
 
         $html[] = $this->renderNumberOfItemsPerPageSelector();
 
@@ -265,8 +265,24 @@ class GalleryHTMLTable extends HTML_Table
         $firstAction = array_shift($formActions);
 
         $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-        $buttonToolBar->addButtonGroup($buttonGroup);
+
+        $buttonToolBar->addItem(
+            new Button(
+                Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES),
+                new BootstrapGlyph('check'),
+                '#',
+                Button :: DISPLAY_ICON_AND_LABEL,
+                false,
+                'btn-sm select-all'));
+
+        $buttonToolBar->addItem(
+            new Button(
+                Translation :: get('UnselectAll', null, Utilities :: COMMON_LIBRARIES),
+                new BootstrapGlyph('unchecked'),
+                '#',
+                Button :: DISPLAY_ICON_AND_LABEL,
+                false,
+                'btn-sm select-none'));
 
         $button = new SplitDropdownButton(
             $firstAction->get_title(),
@@ -287,7 +303,7 @@ class GalleryHTMLTable extends HTML_Table
                     $formAction->getConfirmation()));
         }
 
-        $buttonGroup->addButton($button);
+        $buttonToolBar->addItem($button);
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
@@ -308,7 +324,7 @@ class GalleryHTMLTable extends HTML_Table
         if ($this->allowPageSelection || $this->allowPageNavigation)
         {
             $html[] = '<div class="row">';
-            $html[] = '<div class="col-xs-12 col-md-4 table-navigation-actions">';
+            $html[] = '<div class="col-xs-12 col-md-6 table-navigation-actions">';
 
             if ($this->getTableFormActions() instanceof TableFormActions &&
                  $this->getTableFormActions()->has_form_actions())
@@ -324,7 +340,7 @@ class GalleryHTMLTable extends HTML_Table
             $queryParameters[$this->getParameterName('column')] = $this->getOrderColumn();
             $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
-            $html[] = '<div class="col-xs-12 col-md-8 table-navigation-pagination">';
+            $html[] = '<div class="col-xs-12 col-md-6 table-navigation-pagination">';
             $html[] = $this->getPagerRenderer()->renderPaginationWithPageLimit(
                 $queryParameters,
                 $this->getParameterName('page_nr'));
@@ -640,17 +656,6 @@ class GalleryHTMLTable extends HTML_Table
     public function setTableFormActions(TableFormActions $actions = null)
     {
         $this->tableFormActions = $actions;
-
-        if ($actions instanceof TableFormActions && $actions->has_form_actions())
-        {
-            $columnHeaderHtml = '<div class="checkbox"><input type="checkbox" name="sortableTableSelectToggle" class="sortableTableSelectToggle" /><label></label></div>';
-        }
-        else
-        {
-            $columnHeaderHtml = '';
-        }
-
-        $this->setColumnHeader(0, $columnHeaderHtml, false);
     }
 
     /**
@@ -693,26 +698,35 @@ class GalleryHTMLTable extends HTML_Table
     {
         foreach ($row as $index => $value)
         {
-            if (strlen($row[$index][0]) == 0)
+            if (strlen($value[0]) == 0)
             {
-                $row[$index] = '-';
+                $row[$index] = '';
             }
             else
             {
-                $row[$index] = $row[$index][1];
+                $row[$index] = $value[1];
                 $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
                      $this->getTableFormActions()->has_form_actions();
 
+                $checkboxHtml = array();
+
                 if ($hasActions)
                 {
-                    $row[$index] .= '<div class="checkbox"><input type="checkbox" name="' .
+                    $checkboxHtml[] = '<div class="checkbox checkbox-primary">';
+                    $checkboxHtml[] = '<input class="styled styled-primary" type="checkbox" name="' .
                          $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $value[0] . '"';
+
                     if (Request :: get($this->getParameterName('selectall')))
                     {
-                        $row[$index] .= ' checked="checked"';
+                        $checkboxHtml[] = ' checked="checked"';
                     }
-                    $row[$index] .= '/><label></label></div>';
+
+                    $checkboxHtml[] = '/>';
+                    $checkboxHtml[] = '<label></label>';
+                    $checkboxHtml[] = '</div>';
                 }
+
+                $row[$index] = str_replace('__CHECKBOX_PLACEHOLDER__', implode('', $checkboxHtml), $row[$index]);
             }
         }
 
