@@ -400,6 +400,10 @@ ol.breadcrumb a {
 	color: #555555;
 }
 
+.dynamic-visual-tab-content {
+	margin-bottom: 15px;
+}
+
 .dynamic-visual-tab-content .list-group-item:first-child {
 	border-radius: 0;
 	padding-top: 12px;
