@@ -33,19 +33,29 @@ class FrequentlyAskedQuestions extends ContentObject implements ComplexContentOb
      */
     public function get_allowed_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
-            'Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions',
-            \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
+        $classNameUtilities = ClassnameUtilities :: getInstance();
+        $configuration = Configuration :: get_instance();
+
+        $registrations = $configuration->getIntegrationRegistrations(self :: package());
         $types = array();
 
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                $registration[Registration :: PROPERTY_CONTEXT],
-                6);
-            $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
-            $types[] = $namespace . '\Storage\DataClass\\' . $classname;
+            $type = $registration[Registration :: PROPERTY_TYPE];
+            $parentContext = $classNameUtilities->getNamespaceParent($type);
+            $parentRegistration = $configuration->get_registration($parentContext);
+
+            if ($parentRegistration[Registration :: PROPERTY_TYPE] ==
+                 \Chamilo\Core\Repository\Manager :: context() . '\ContentObject')
+            {
+                $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
+                    $registration[Registration :: PROPERTY_CONTEXT],
+                    6);
+                $types[] = $namespace . '\Storage\DataClass\\' .
+                     ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+            }
         }
+
         return $types;
     }
 }
