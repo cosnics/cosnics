@@ -227,12 +227,13 @@ class ConfigurationForm extends FormValidator
                             $options = $setting['options']['values'];
                         }
 
-                        if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox')
+                        if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
                         {
                             $group = array();
+
                             foreach ($options as $option_value => $option_name)
                             {
-                                if ($setting['field'] == 'checkbox')
+                                if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
                                 {
                                     $group[] = & $this->createElement(
                                         $setting['field'],
@@ -254,6 +255,7 @@ class ConfigurationForm extends FormValidator
                                         $option_value);
                                 }
                             }
+
                             $this->addGroup(
                                 $group,
                                 $name,
@@ -303,8 +305,6 @@ class ConfigurationForm extends FormValidator
                 '<div class="warning-message">' .
                      Translation :: get('NoConfigurableSettings', array(), Utilities :: COMMON_LIBRARIES) . '</div>');
         }
-
-        $this->add_checkbox_javascript();
     }
 
     public function parse_application_settings()

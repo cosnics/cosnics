@@ -137,6 +137,7 @@ class FormValidator extends HTML_QuickForm
             'checkbox',
             $dir . 'Element/HTML_QuickForm_extended_checkbox.php',
             'HTML_QuickForm_extended_checkbox');
+        $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
 
         $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/HTML_QuickForm_Rule_Date.php');
         $this->registerRule(
@@ -703,8 +704,7 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName .
-                 " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');

@@ -58,7 +58,7 @@
 					<option value="23" name="23" />
 				</options>
 			</setting>
-			<setting name="hide_none_working_hours" field="checkbox" default="0" user_setting="1">
+			<setting name="hide_none_working_hours" field="toggle" default="0" user_setting="1">
 				<options type="static">
 					<option name="hide_non_working_hours" value="1" />
 				</options>

@@ -9,7 +9,7 @@
 			</setting>
 		</category>
 		<category name="authentication">
-			<setting name="enable" field="checkbox">
+			<setting name="enable" field="toggle">
 				<options type="static">
 					<option name="enable" value="1" />
 				</options>
