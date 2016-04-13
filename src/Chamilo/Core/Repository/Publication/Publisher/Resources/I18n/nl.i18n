@@ -4,6 +4,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 FirstStepCreate = "1. Aanmaken"
-FirstStepBrowseInWorkspaces = "1. Selecteren uit jouw repository of jouw workspaces"
+FirstStepBrowseInWorkspaces = "1. Selecteren"
 FirstStepImport = "1. Importeren"
 SecondStepPublish = "2. Publiceren"
