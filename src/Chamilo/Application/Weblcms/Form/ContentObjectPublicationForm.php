@@ -57,13 +57,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
     const PROPERTY_PUBLISH_AND_VIEW = 'publish_and_view';
 
     // Rights
-    const PROPERTY_INHERIT = 'inherit';
-    const PROPERTY_RIGHT_OPTION = 'right_option';
-    const INHERIT_TRUE = 0;
-    const INHERIT_FALSE = 1;
-    const RIGHT_OPTION_ALL = 0;
-    const RIGHT_OPTION_ME = 1;
-    const RIGHT_OPTION_SELECT = 2;
+    const PROPERTY_RIGHTS_SELECTOR = 'rights_selector';
+    const RIGHTS_INHERIT = 0;
+    const RIGHTS_FOR_ALL = 1;
+    const RIGHTS_FOR_ME = 2;
+    const RIGHTS_SELECT_SPECIFIC = 3;
+
     const TYPE_FILE = 'file';
 
     /**
@@ -184,8 +183,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $defaults[ContentObjectPublication :: PROPERTY_CATEGORY_ID] = Request:: get(Manager :: PARAM_CATEGORY);
         $defaults[self :: PROPERTY_FOREVER] = 1;
-        $defaults[self :: PROPERTY_INHERIT] = self :: INHERIT_TRUE;
-        $defaults[self :: PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_SELECT;
+        $defaults[self::PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_INHERIT;
 
         if (count($publications) == 1)
         {
@@ -254,13 +252,10 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         if ($location->inherits())
         {
-            $right_defaults[self :: PROPERTY_INHERIT] = self :: INHERIT_TRUE;
-            $right_defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ALL;
+            $right_defaults[self::PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_INHERIT;
         }
         else
         {
-            $right_defaults[self :: PROPERTY_INHERIT] = self :: INHERIT_FALSE;
-
             $selected_entities = CourseManagementRights:: retrieve_rights_location_rights_for_location(
                 $location,
                 WeblcmsRights :: VIEW_RIGHT
@@ -271,7 +266,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 $selected_entity = $selected_entities[0];
                 if ($selected_entity->get_entity_type() == 0 && $selected_entity->get_entity_id() == 0)
                 {
-                    $right_defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ALL;
+                    $right_defaults[self :: PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_FOR_ALL;
 
                     return $right_defaults;
                 }
@@ -280,13 +275,13 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     $selected_entity->get_entity_id() == Session:: get_user_id()
                 )
                 {
-                    $right_defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_ME;
+                    $right_defaults[self :: PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_FOR_ME;
 
                     return $right_defaults;
                 }
             }
 
-            $right_defaults[self :: PROPERTY_RIGHT_OPTION] = self :: RIGHT_OPTION_SELECT;
+            $right_defaults[self :: PROPERTY_RIGHTS_SELECTOR] = self::RIGHTS_SELECT_SPECIFIC;
 
             $default_elements = new AdvancedElementFinderElements();
 
@@ -496,8 +491,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
         }
     }
 
-
-
     private $categories;
 
     private $level = 1;
@@ -572,34 +565,32 @@ class ContentObjectPublicationForm extends BasePublicationForm
             null,
             null,
             Translation:: get('InheritRights'),
-            self :: INHERIT_TRUE,
-            array('class' => 'inherit_rights_selector')
+            self::RIGHTS_INHERIT,
+            array('class' => 'rights_selector inherit_rights_selector')
         );
 
         $group[] = $this->createElement(
-            'button', 'show_inherited_rights', 'Show Inherited Rights', array('class' => 'btn btn-info btn-inherited-rights')
+            'button', 'show_inherited_rights', 'Show Inherited Rights',
+            array('class' => 'btn btn-info btn-inherited-rights')
         );
 
         $html = array();
-        $html[] = '<div class="target-entities-container">';
+        $html[] = '<div class="target-entities-container" data-course-id="' . $this->get_course_id() . '" data-tool="' .
+            $this->get_tool() . '">';
+
+        $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager::context()) . ':</h5>';
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
         $html[] = $translator->getTranslation('Users', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-user-list">';
-        $html[] = '<li class="list-group-item">Sven Vanpoucke</li>';
-        $html[] = '<li class="list-group-item">Hans De Bisschop</li>';
-        $html[] = '<li class="list-group-item">Stefaan Vanbillemont</li>';
-        $html[] = '<li class="list-group-item">Pieterjan Broekaert</li>';
-        $html[] = '<li class="list-group-item">Magali Gillard</li>';
-        $html[] = '<li class="list-group-item">Eduard Vossen</li>';
-        $html[] = '<li class="list-group-item">Sven Vanpoucke</li>';
-        $html[] = '<li class="list-group-item">Hans De Bisschop</li>';
-        $html[] = '<li class="list-group-item">Stefaan Vanbillemont</li>';
-        $html[] = '<li class="list-group-item">Pieterjan Broekaert</li>';
-        $html[] = '<li class="list-group-item">Magali Gillard</li>';
-        $html[] = '<li class="list-group-item">Eduard Vossen</li>';
+        $html[] = '<li class="list-group-item target-entities-default target-entities-nobody">';
+        $html[] = $translator->getTranslation('NoUsers', null, Manager::context());
+        $html[] = '</li>';
+        $html[] = '<li class="list-group-item target-entities-default target-entities-everyone">';
+        $html[] = $translator->getTranslation('AllUsers', null, Manager::context());
+        $html[] = '</li>';
         $html[] = '</ul>';
         $html[] = '</div>';
         $html[] = '</div>';
@@ -610,20 +601,28 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-platform-groups-list">';
-        $html[] = '<li class="list-group-item">Toegepaste Informatica</li>';
-        $html[] = '<li class="list-group-item">Office Management</li>';
+        $html[] = '<li class="list-group-item target-entities-default target-entities-nobody">';
+        $html[] = $translator->getTranslation('NoPlatformGroups', null, Manager::context());
+        $html[] = '</li>';
+        $html[] = '<li class="list-group-item target-entities-default target-entities-everyone">';
+        $html[] = $translator->getTranslation('AllPlatformGroups', null, Manager::context());
+        $html[] = '</li>';
         $html[] = '</ul>';
         $html[] = '</div>';
         $html[] = '</div>';
 
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
-        $html[] = $translator->getTranslation('CourseGroups', null, Utilities::COMMON_LIBRARIES);
+        $html[] = $translator->getTranslation('CourseGroups', null, Manager::context());
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = '<ul class="list-group target-entities-course-groups-list">';
-        $html[] = '<li class="list-group-item">TIN-1A</li>';
-        $html[] = '<li class="list-group-item">TIN-1B</li>';
+        $html[] = '<li class="list-group-item target-entities-default target-entities-nobody">';
+        $html[] = $translator->getTranslation('NoCourseGroups', null, Manager::context());
+        $html[] = '</li>';
+        $html[] = '<li class="list-group-item target-entities-default target-entities-everyone">';
+        $html[] = $translator->getTranslation('AllCourseGroups', null, Manager::context());
+        $html[] = '</li>';
         $html[] = '</ul>';
         $html[] = '</div>';
         $html[] = '</div>';
@@ -636,38 +635,17 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'radio',
             null,
             null,
-            Translation:: get('UseSpecificRights'),
-            self :: INHERIT_FALSE,
-            array('class' => 'specific_rights_selector')
-        );
-
-        $this->addGroup(
-            $group,
-            self :: PROPERTY_INHERIT,
-            Translation:: get('PublishFor'),
-            ''
-        );
-
-        $this->addElement('html', '<div class="right">');
-
-        // Add the rights options
-        $group = array();
-
-        $group[] = &$this->createElement(
-            'radio',
-            null,
-            null,
             Translation:: get('Everyone'),
-            self :: RIGHT_OPTION_ALL,
-            array('class' => 'other_option_selected')
+            self::RIGHTS_FOR_ALL,
+            array('class' => 'rights_selector')
         );
         $group[] = &$this->createElement(
             'radio',
             null,
             null,
             Translation:: get('OnlyForMe'),
-            self :: RIGHT_OPTION_ME,
-            array('class' => 'other_option_selected')
+            self::RIGHTS_FOR_ME,
+            array('class' => 'rights_selector')
         );
 
         $group[] = &$this->createElement(
@@ -675,12 +653,14 @@ class ContentObjectPublicationForm extends BasePublicationForm
             null,
             null,
             Translation:: get('SelectSpecificEntities'),
-            self :: RIGHT_OPTION_SELECT,
-            array('class' => 'entity_option_selected')
+            self::RIGHTS_SELECT_SPECIFIC,
+            array('class' => 'rights_selector specific_rights_selector')
         );
 
-        $this->addElement('html', '<div style="margin-left:25px; display:none;" class="specific_rights_selector_box">');
-        $this->addGroup($group, self :: PROPERTY_RIGHT_OPTION, '', '');
+        $this->addGroup(
+            $group, self::PROPERTY_RIGHTS_SELECTOR,
+            $translator->getTranslation('PublishFor', null, Manager::context()), ''
+        );
 
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
@@ -701,7 +681,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             '</div>'
         );
 
-        $this->addElement('html', '</div></div>');
+        $this->addElement('html', '</div>');
 
         $this->addElement(
             'html',
@@ -718,18 +698,13 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     public function validate_rights_settings($values)
     {
-        if ($values[self::PROPERTY_INHERIT] == self::INHERIT_TRUE)
-        {
-            return true;
-        }
-
         $errors = array();
 
-        if ($values[self::PROPERTY_RIGHT_OPTION] == self::RIGHT_OPTION_SELECT &&
+        if ($values[self::PROPERTY_RIGHTS_SELECTOR] == self::RIGHTS_SELECT_SPECIFIC &&
             empty($values['active_hidden_' . self::PROPERTY_TARGETS])
         )
         {
-            $errors[self::PROPERTY_RIGHT_OPTION] = Translation::get('InvalidRightsSelection');
+            $errors[self::PROPERTY_RIGHTS_SELECTOR] = Translation::get('InvalidRightsSelection');
         }
 
         if (count($errors) > 0)
@@ -858,7 +833,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             return false;
         }
 
-        if ($values[self :: PROPERTY_INHERIT] == self :: INHERIT_TRUE)
+        if ($values[self::PROPERTY_RIGHTS_SELECTOR] == self::RIGHTS_INHERIT)
         {
             if (!$location->inherits())
             {
@@ -880,20 +855,20 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 }
             }
 
-            $option = $values[self :: PROPERTY_RIGHT_OPTION];
+            $option = $values[self :: PROPERTY_RIGHTS_SELECTOR];
             $location_id = $location->get_id();
 
             $weblcms_rights = WeblcmsRights:: get_instance();
 
             switch ($option)
             {
-                case self :: RIGHT_OPTION_ALL :
+                case self::RIGHTS_FOR_ALL :
                     if (!$weblcms_rights->invert_location_entity_right(WeblcmsRights :: VIEW_RIGHT, 0, 0, $location_id))
                     {
                         return false;
                     }
                     break;
-                case self :: RIGHT_OPTION_ME :
+                case self::RIGHTS_FOR_ME :
                     if (!$weblcms_rights->invert_location_entity_right(
                         WeblcmsRights :: VIEW_RIGHT,
                         Session:: get_user_id(),
@@ -905,7 +880,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                         return false;
                     }
                     break;
-                case self :: RIGHT_OPTION_SELECT :
+                case self::RIGHTS_SELECT_SPECIFIC :
                     foreach ($values[self :: PROPERTY_TARGETS] as $entity_type => $target_ids)
                     {
                         foreach ($target_ids as $target_id)
@@ -1124,6 +1099,5 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         return $this->form_type;
     }
-
 
 }
