@@ -2,16 +2,8 @@
 namespace Chamilo\Libraries\Format\Table;
 
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -26,32 +18,7 @@ class SortableTable extends HtmlTable
 
     /**
      *
-     * @param string $tableName
-     * @param string[] $sourceCountFunction
-     * @param string[] $sourceDataFunction
-     * @param integer $defaultOrderColumn
-     * @param integer $defaultNumberOfItemsPerPage
-     * @param string $defaultOrderDirection
-     * @param boolean $allowPageSelection
-     * @param boolean $allowPageNavigation
-     */
-    public function __construct($tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
-        $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true, $allowPageNavigation = true)
-    {
-        parent :: __construct(
-            $tableName,
-            $sourceCountFunction,
-            $sourceDataFunction,
-            $defaultOrderColumn,
-            $defaultNumberOfItemsPerPage,
-            $defaultOrderDirection,
-            $allowPageSelection,
-            $allowPageNavigation);
-    }
-
-    /**
-     *
-     * @return string
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableClasses()
      */
     public function getTableClasses()
     {
@@ -60,7 +27,7 @@ class SortableTable extends HtmlTable
 
     /**
      *
-     * @return integer
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getColumnCount()
      */
     public function getColumnCount()
     {
@@ -69,61 +36,53 @@ class SortableTable extends HtmlTable
 
     /**
      *
-     * @return string
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getFormClasses()
      */
     public function getFormClasses()
     {
         return 'form-table';
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableActionsJavascript()
+     */
     public function getTableActionsJavascript()
     {
         return ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'SortableTable.js');
+            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'SortableTable.js');
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::getTableContainerClasses()
+     */
     public function getTableContainerClasses()
     {
         return 'table-responsive';
     }
 
     /**
-     * Get the HTML-code with the data-table.
      *
-     * @return string
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processRowAttributes()
      */
-    public function getBodyHtml()
+    public function processRowAttributes($rowIdentifier, $currentRow)
     {
-        $pager = $this->getPager();
-        $offset = $pager->getCurrentRangeOffset();
-        $table_data = $this->getSourceData($offset);
-
-        foreach ($table_data as $index => & $row)
-        {
-            $row_id = $row[0];
-            $row = $this->filterData($row);
-            $current_row = $this->addRow($row);
-            $this->setRowAttributes($current_row, array('id' => 'row_' . $row_id), true);
-        }
-
-        $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
-
-        foreach ($this->headerAttributes as $column => & $attributes)
-        {
-            $this->setCellAttributes(0, $column, $attributes);
-        }
-
-        foreach ($this->contentCellAttributes as $column => & $attributes)
-        {
-            $this->setColAttributes($column, $attributes);
-        }
-
-        return \HTML_Table :: toHTML();
+        $this->setRowAttributes($currentRow, array('id' => 'row_' . $rowIdentifier), true);
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormActions $actions
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::processContentAttributes()
+     */
+    public function processContentAttributes()
+    {
+        $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::setTableFormActions()
      */
     public function setTableFormActions(TableFormActions $actions = null)
     {
@@ -142,32 +101,19 @@ class SortableTable extends HtmlTable
     }
 
     /**
-     * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
-     * elsewhere in this class.
-     * If you've defined actions, the first element of the given row will be converted into a
-     * checkbox
      *
-     * @param string[]
-     * @return string[]
+     * @see \Chamilo\Libraries\Format\Table\HtmlTable::filterData()
      */
     public function filterData($row)
     {
-        $url_params = $this->getParameterString() . '&amp;' .
-             http_build_query($this->getAdditionalParameters(), '', Redirect :: ARGUMENT_SEPARATOR);
+        $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
+             $this->getTableFormActions()->has_form_actions();
 
-        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
+        if ($hasActions)
         {
             if (strlen($row[0]) > 0)
             {
-                $row[0] = '<div class="checkbox checkbox-primary"><input class="styled styled-primary" type="checkbox" name="' .
-                     $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $row[0] . '"';
-
-                if (Request :: get($this->getParameterName('selectall')))
-                {
-                    $row[0] .= ' checked="checked"';
-                }
-
-                $row[0] .= '/><label></label></div>';
+                $row[0] = $this->getCheckboxHtml($row[0]);
             }
         }
 
