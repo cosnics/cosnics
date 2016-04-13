@@ -81,17 +81,19 @@ class SortableTableFromArray extends SortableTable
      * @param boolean $enableSorting
      * @param boolean $allowPageNavigation
      */
-    public function __construct(
-        $tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
-        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true,
-        $enableSorting = true,
-        $allowPageNavigation = true
-    )
+    public function __construct($tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
+        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true,
+        $allowPageNavigation = true)
     {
-        parent::__construct(
-            $tableName, array($this, 'countData'), array($this, 'getData'), $defaultOrderColumn,
-            $defaultPerPage, $defaultOrderDirection, $allowPageSelection, $allowPageNavigation
-        );
+        parent :: __construct(
+            $tableName,
+            array($this, 'countData'),
+            array($this, 'getData'),
+            $defaultOrderColumn,
+            $defaultPerPage,
+            $defaultOrderDirection,
+            $allowPageSelection,
+            $allowPageNavigation);
 
         $this->tableData = $tableData;
         $this->tableColumns = $tableColumns;
@@ -105,7 +107,7 @@ class SortableTableFromArray extends SortableTable
         $this->enableSorting = $enableSorting;
         $this->allowPageNavigation = $allowPageNavigation;
 
-        if (!$allowPageSelection)
+        if (! $allowPageSelection)
         {
             $this->defaultPerPage = count($tableData);
         }
@@ -119,7 +121,7 @@ class SortableTableFromArray extends SortableTable
     {
         $this->initializeTable();
 
-        return parent::toHtml();
+        return parent :: toHtml();
     }
 
     /**
@@ -128,17 +130,16 @@ class SortableTableFromArray extends SortableTable
      */
     protected function initializeTable()
     {
-//        $table = new SortableTable(
-//            $this->getTableName(),
-//            array($this, 'countData'),
-//            array($this, 'getData'),
-//            $this->getDefaultOrderColumn(),
-//            $this->getDefaultPerPage(),
-//            $this->getDefaultOrderDirection(),
-//            $this->getAllowPageSelection(),
-//            $this->getAllowPageNavigation()
-//        );
-
+        // $table = new SortableTable(
+        // $this->getTableName(),
+        // array($this, 'countData'),
+        // array($this, 'getData'),
+        // $this->getDefaultOrderColumn(),
+        // $this->getDefaultPerPage(),
+        // $this->getDefaultOrderDirection(),
+        // $this->getAllowPageSelection(),
+        // $this->getAllowPageNavigation()
+        // );
         $this->setAdditionalParameters($this->getAdditionalParameters());
 
         foreach ($this->getTableColumns() as $key => $tableColumn)
@@ -162,7 +163,7 @@ class SortableTableFromArray extends SortableTable
 
         if ($this->getEnableSorting())
         {
-            $content = TableSort:: sort_table($content, $orderColumn, $orderDirection);
+            $content = TableSort :: sort_table($content, $orderColumn, $orderDirection);
         }
 
         if ($this->getAllowPageSelection())

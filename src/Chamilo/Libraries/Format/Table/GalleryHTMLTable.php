@@ -59,7 +59,7 @@ class GalleryHTMLTable extends HtmlTable
      * @param string $allowPageSelection
      * @param string $allowPageNavigation
      */
-    public function __construct($tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null,
+    public function __construct($tableName = 'gallery_table', $sourceCountFunction = null, $sourceDataFunction = null,
         $sourcePropertiesFunction = null, $defaultOrderColumn = 0, $defaultNumberOfItemsPerPage = 20,
         $defaultOrderDirection = SORT_ASC, $allowOrderDirection = true, $allowPageSelection = true, $allowPageNavigation = true)
     {
@@ -218,9 +218,9 @@ class GalleryHTMLTable extends HtmlTable
             foreach ($properties as $index => $property)
             {
                 $queryParameters = array();
-                $queryParameters[$this->getParameterName('direction')] = $this->getOrderDirection();
-                $queryParameters[$this->getParameterName('page_nr')] = $this->getPageNumber();
-                $queryParameters[$this->getParameterName('column')] = $index;
+                $queryParameters[$this->getParameterName(self :: PARAM_ORDER_DIRECTION)] = $this->getOrderDirection();
+                $queryParameters[$this->getParameterName(self :: PARAM_PAGE_NUMBER)] = $this->getPageNumber();
+                $queryParameters[$this->getParameterName(self :: PARAM_ORDER_COLUMN)] = $index;
                 $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
                 $propertyUrl = new Redirect($queryParameters);
@@ -256,11 +256,11 @@ class GalleryHTMLTable extends HtmlTable
              count($propertyModel->get_properties()) > 0)
         {
             $queryParameters = array();
-            $queryParameters[$this->getParameterName('page_nr')] = $this->getPageNumber();
-            $queryParameters[$this->getParameterName('column')] = $this->getOrderColumn();
+            $queryParameters[$this->getParameterName(self :: PARAM_PAGE_NUMBER)] = $this->getPageNumber();
+            $queryParameters[$this->getParameterName(self :: PARAM_ORDER_COLUMN)] = $this->getOrderColumn();
             $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
 
-            $queryParameters[$this->getParameterName('direction')] = SORT_ASC;
+            $queryParameters[$this->getParameterName(self :: PARAM_ORDER_DIRECTION)] = SORT_ASC;
             $propertyUrl = new Redirect($queryParameters);
             $isSelected = $this->getOrderDirection() == SORT_ASC;
             $classes = ($isSelected ? 'selected' : 'not-selected');
@@ -273,7 +273,7 @@ class GalleryHTMLTable extends HtmlTable
                 false,
                 $classes);
 
-            $queryParameters[$this->getParameterName('direction')] = SORT_DESC;
+            $queryParameters[$this->getParameterName(self :: PARAM_ORDER_DIRECTION)] = SORT_DESC;
             $propertyUrl = new Redirect($queryParameters);
             $isSelected = $this->getOrderDirection() == SORT_DESC;
             $classes = ($isSelected ? 'selected' : 'not-selected');
