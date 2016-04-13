@@ -525,3 +525,8 @@ table tr td.column_tool_title {
 	padding: 1px 10px;
 }
 
+.target-entities-list .target-entities-default
+{
+	display: none;
+}
+
