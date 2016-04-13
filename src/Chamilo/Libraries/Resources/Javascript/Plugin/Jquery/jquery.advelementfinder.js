@@ -146,7 +146,7 @@
 														'TooManyItemsSelected',
 														{
 															'MAX_ITEMS' : settings.maxSelectableItems
-														}, 'libraries'));
+														}, 'Chamilo\\Libraries'));
 
 												return false;
 											}
@@ -456,12 +456,12 @@
 								if (replacedQuery.length == 0) {
 									inactiveBox.html(getTranslation(
 											'QueryCanNotBeStarsOnly', null,
-											'libraries'))
+											'Chamilo\\Libraries'))
 								} else {
 									if (replacedQuery.length < 3) {
 										inactiveBox.html(getTranslation(
 												'QueryMinimum3Characters',
-												null, 'libraries'));
+												null, 'Chamilo\\Libraries'));
 									} else {
 										offset = 0;
 										updateElements(true);
@@ -496,7 +496,7 @@
 						if (selectedTypeId == -1) {
 							inactiveBox.html(getTranslation(
 									'SelectElementType', null,
-									'libraries'));
+									'Chamilo\\Libraries'));
 							return;
 						}
 
@@ -537,7 +537,7 @@
 								// Add a dummy option
 								var option = createFilterOption(-1,
 										getTranslation('SelectFilter', null,
-												'libraries'));
+												'Chamilo\\Libraries'));
 								$('select', tempFilterBox).prepend(option);
 								$('select', tempFilterBox).prop(
 										'selectedIndex', 0);
@@ -559,7 +559,7 @@
 							processTree();
 						} else {
 							inactiveBox.html(getTranslation('NoSearchResults',
-									null, 'libraries'));
+									null, 'Chamilo\\Libraries'));
 						}
 					}
 
