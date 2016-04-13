@@ -8,20 +8,20 @@
 
 @import url('Bootstrap/css/bootstrap-toggle.min.css');
 
-.ui-tabs {
-	padding: 0px;
-}
+/* .ui-tabs { */
+/* 	padding: 0px; */
+/* } */
 
-.ui-tabs .ui-tabs-panel {
-	border: 1px solid #ebebeb;
-	background-color: #FAFCFC;
-	padding: 0px;
-}
+/* .ui-tabs .ui-tabs-panel { */
+/* 	border: 1px solid #ebebeb; */
+/* 	background-color: #FAFCFC; */
+/* 	padding: 0px; */
+/* } */
 
-.ui-tabs .ui-tabs-nav {
-	padding-left: 0.4em;
-	padding-right: 0.4em;
-}
+/* .ui-tabs .ui-tabs-nav { */
+/* 	padding-left: 0.4em; */
+/* 	padding-right: 0.4em; */
+/* } */
 
 .ui-widget {
 	font-family: Ubuntu, verdana, sans-serif;
