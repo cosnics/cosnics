@@ -15,6 +15,7 @@ use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
@@ -211,8 +212,12 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                 $entity = $this->entities[$selected_entity->get_entity_type()];
                 if ($entity)
                 {
-                    $default_elements->add_element(
-                        $entity->get_element_finder_element($selected_entity->get_entity_id()));
+                    $elementFinderElement = $entity->get_element_finder_element($selected_entity->get_entity_id());
+
+                    if($elementFinderElement instanceof AdvancedElementFinderElement)
+                    {
+                        $default_elements->add_element($elementFinderElement);
+                    }
                 }
             }
 
