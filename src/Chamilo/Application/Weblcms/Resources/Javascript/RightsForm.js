@@ -37,13 +37,17 @@ $(function ()
         };
 
         var retrieveTargetEntities = function() {
+            var entitiesContainer = $('.target-entities-container');
+            var courseId = entitiesContainer.attr('data-course-id');
+            var toolName = entitiesContainer.attr('data-tool');
+
             var publicationCategoryId = $('select[name="category_id"]').val();
 
             $.ajax('index.php?application=Chamilo\\Application\\Weblcms\\Ajax&go=GetTargetEntities', {
                 'method': 'POST',
                 'data': {
-                    'course_id': 1,
-                    'tool_name': 'Announcement',
+                    'course_id': courseId,
+                    'tool_name': toolName,
                     'publication_category_id': publicationCategoryId
                 }
             }).done(function(data) {

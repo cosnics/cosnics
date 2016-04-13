@@ -491,8 +491,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
         }
     }
 
-
-
     private $categories;
 
     private $level = 1;
@@ -572,12 +570,15 @@ class ContentObjectPublicationForm extends BasePublicationForm
         );
 
         $group[] = $this->createElement(
-            'button', 'show_inherited_rights', 'Show Inherited Rights', array('class' => 'btn btn-info btn-inherited-rights')
+            'button', 'show_inherited_rights', 'Show Inherited Rights',
+            array('class' => 'btn btn-info btn-inherited-rights')
         );
 
         $html = array();
-        $html[] = '<div class="target-entities-container">';
-        $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Utilities::COMMON_LIBRARIES) . ':</h5>';
+        $html[] = '<div class="target-entities-container" data-course-id="' . $this->get_course_id() . '" data-tool="' .
+            $this->get_tool() . '">';
+
+        $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager::context()) . ':</h5>';
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
         $html[] = $translator->getTranslation('Users', null, Utilities::COMMON_LIBRARIES);
@@ -629,7 +630,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $html[] = '<div class="clearfix"></div>';
 
         $group[] = $this->createElement('static', '', '', implode(PHP_EOL, $html));
-
 
         $group[] = &$this->createElement(
             'radio',
@@ -1099,6 +1099,5 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         return $this->form_type;
     }
-
 
 }
