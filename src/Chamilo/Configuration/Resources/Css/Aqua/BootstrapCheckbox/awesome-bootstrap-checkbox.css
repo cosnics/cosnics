@@ -220,6 +220,7 @@
 	width: 17px;
 	height: 17px;
 	left: 0;
+	top: 0px;
 	margin-left: -20px;
 	border: 1px solid #cccccc;
 	border-radius: 50%;
@@ -254,6 +255,8 @@
 .radio input[type="radio"] {
 	opacity: 0;
 	z-index: 1;
+	width: 17px;
+	height: 17px;
 }
 
 .radio input[type="radio"]:focus+label::before {
