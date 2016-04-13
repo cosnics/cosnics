@@ -481,3 +481,47 @@ table tr td.column_tool_title {
 	margin-right: 10px;
 }
 
+.btn-inherited-rights {
+	margin-left: 25px;
+	display: none;
+}
+
+.target-entities-container {
+	margin-left: 25px;
+	margin-top: 20px;
+}
+
+.target-entities-list {
+	width: 200px;
+	overflow: auto;
+	float: left;
+	margin-right: 20px;
+	border-radius: 0;
+}
+
+.target-entities-list .panel-heading {
+	font-weight: bold;
+	font-size: 14px;
+	color: #555555;
+	border-radius: 0;
+	padding: 3px 10px;
+}
+
+.target-entities-list .panel-body {
+	padding: 0;
+}
+
+.target-entities-list ul {
+	overflow: auto;
+	max-height: 200px;
+	padding: 5px 0 5px 0;
+	margin: 0;
+}
+
+.target-entities-list .list-group-item
+{
+	border: none;
+	margin-bottom: 0;
+	padding: 1px 10px;
+}
+
