@@ -1,0 +1,6 @@
+@import url('../Aqua/Stylesheet.css');
+
+ul.tree-menu li div a.learning_path_item, ul.tree-menu li div a.type_learning_path_item,
+	ul.tree-menu li div a.type_learning_path_item_default {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
