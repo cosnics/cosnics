@@ -114,6 +114,12 @@ abstract class HtmlTable extends \HTML_Table
     private $headerAttributes;
 
     /**
+     *
+     * @var string[]
+     */
+    private $contentCellAttributes;
+
+    /**
      * Additional attributes for the td-tags
      *
      * @var string[]
@@ -534,15 +540,16 @@ abstract class HtmlTable extends \HTML_Table
         $offset = $pager->getCurrentRangeOffset();
         $table_data = $this->getSourceData($offset);
 
-        foreach ($table_data as $index => & $row)
+        foreach ($table_data as $index => $row)
         {
             $row_id = $row[0];
             $row = $this->filterData($row);
             $current_row = $this->addRow($row);
-            $this->setRowAttributes($current_row, array('id' => 'row_' . $row_id), true);
+
+            $this->processRowAttributes($row_id, $current_row);
         }
 
-        $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
+        $this->processContentAttributes();
 
         foreach ($this->headerAttributes as $column => & $attributes)
         {
@@ -556,6 +563,15 @@ abstract class HtmlTable extends \HTML_Table
 
         return \HTML_Table :: toHTML();
     }
+
+    /**
+     *
+     * @param integer $rowIdentifier
+     * @param integer $currentRow
+     */
+    abstract public function processRowAttributes($rowIdentifier, $currentRow);
+
+    abstract public function processContentAttributes();
 
     /**
      * Get the HTML-code wich represents a form to select how many items a page should contain.
@@ -713,47 +729,6 @@ abstract class HtmlTable extends \HTML_Table
     }
 
     /**
-     * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
-     * elsewhere in this class.
-     * If you've defined actions, the first element of the given row will be converted into a
-     * checkbox
-     *
-     * @param string[]
-     * @return string[]
-     */
-    public function filterData($row)
-    {
-        $url_params = $this->getParameterString() . '&amp;' .
-             http_build_query($this->getAdditionalParameters(), '', Redirect :: ARGUMENT_SEPARATOR);
-
-        if ($this->getTableFormActions() instanceof TableFormActions && $this->getTableFormActions()->has_form_actions())
-        {
-            if (strlen($row[0]) > 0)
-            {
-                $row[0] = '<div class="checkbox checkbox-primary"><input class="styled styled-primary" type="checkbox" name="' .
-                     $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $row[0] . '"';
-
-                if (Request :: get($this->getParameterName('selectall')))
-                {
-                    $row[0] .= ' checked="checked"';
-                }
-
-                $row[0] .= '/><label></label></div>';
-            }
-        }
-
-        foreach ($row as $index => & $value)
-        {
-            if (! is_numeric($value) && empty($value))
-            {
-                $value = '-';
-            }
-        }
-
-        return $row;
-    }
-
-    /**
      *
      * @return integer
      */
@@ -793,46 +768,6 @@ abstract class HtmlTable extends \HTML_Table
         }
 
         return array();
-    }
-
-    /**
-     * Serializes a URL parameter passed as an array into a query string or hidden inputs.
-     *
-     * @param string[] The parameter's value.
-     * @param string $key The parameter's name.
-     * @param boolean $as_query_string True to format the result as a query string, false for hidden inputs.
-     * @return string[] The query string parts (to be joined by ampersands or another separator), or the hidden inputs
-     *         as HTML, each array element containing a single input.
-     */
-    protected function serializeArray($params, $key, $as_query_string = false)
-    {
-        $out = array();
-
-        foreach ($params as $k => & $v)
-        {
-            if (is_array($v))
-            {
-                $ser = $this->serializeArray($v, $key . '[' . $k . ']', $as_query_string);
-                $out = array_merge($out, $ser);
-            }
-            else
-            {
-                $v = urlencode($v);
-            }
-
-            if ($as_query_string)
-            {
-                $k = urlencode($key . '[' . $k . ']');
-                $out[] = $k . '=' . $v;
-            }
-            else
-            {
-                $k = $key . '[' . $k . ']';
-                $out[] = '<input type="hidden" name="' . $k . '" value="' . $v . '"/>';
-            }
-        }
-
-        return $out;
     }
 
     /**
@@ -915,4 +850,40 @@ abstract class HtmlTable extends \HTML_Table
     {
         return $this->headerAttributes;
     }
+
+    /**
+     *
+     * @param integer $value
+     * @return string
+     */
+    public function getCheckboxHtml($value)
+    {
+        $html = array();
+
+        $html[] = '<div class="checkbox checkbox-primary">';
+        $html[] = '<input class="styled styled-primary" type="checkbox" name="' .
+             $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $value . '"';
+
+        if (Request :: get($this->getParameterName('selectall')))
+        {
+            $html[] = ' checked="checked"';
+        }
+
+        $html[] = '/>';
+        $html[] = '<label></label>';
+        $html[] = '</div>';
+
+        return implode('', $html);
+    }
+
+    /**
+     * Transform all data in a table-row, using the filters defined by the function set_column_filter(...) defined
+     * elsewhere in this class.
+     * If you've defined actions, the first element of the given row will be converted into a
+     * checkbox
+     *
+     * @param string[] $row
+     * @return string[]
+     */
+    abstract public function filterData($row);
 }

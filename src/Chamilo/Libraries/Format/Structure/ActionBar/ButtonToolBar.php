@@ -118,6 +118,15 @@ class ButtonToolBar
 
     /**
      *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $buttonToolBarItem
+     */
+    public function prependItem($buttonToolBarItem)
+    {
+        array_unshift($this->items, $buttonToolBarItem);
+    }
+
+    /**
+     *
      * @return string[]
      */
     public function getClasses()
