@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Home\Component;
 
 use Chamilo\Application\Weblcms\CourseSettingsController;
-use Chamilo\Application\Weblcms\Renderer\ToolList\ToolListRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
@@ -11,26 +10,20 @@ class BrowserComponent extends Manager
 
     public function run()
     {
-        $tools = $this->get_visible_tools();
+        $courseTools = $this->get_visible_tools();
 
-        $intro_text_allowed = CourseSettingsController :: get_instance()->get_course_setting(
+        $introductionAllowed = CourseSettingsController :: get_instance()->get_course_setting(
             $this->get_course(),
             \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
 
+        $type = 'Chamilo\Application\Weblcms\Tool\Implementation\Home\Renderer\Type\SidebarHomeRenderer';
+
+        $homeRenderer = new $type($this, $courseTools, $introductionAllowed, $this->get_introduction_text());
+
         $html = array();
 
-        $renderer = ToolListRenderer :: factory(ToolListRenderer :: TYPE_FIXED, $this, $tools);
-
-        $html[] = $this->render_header($tools, $intro_text_allowed);
-
-        if ($intro_text_allowed)
-        {
-            $html[] = $this->display_introduction_text($this->get_introduction_text());
-        }
-
-        $html[] = $renderer->toHtml();
-
-        $html[] = '</div>';
+        $html[] = $this->render_header($courseTools, $introductionAllowed);
+        $html[] = $homeRenderer->render();
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);

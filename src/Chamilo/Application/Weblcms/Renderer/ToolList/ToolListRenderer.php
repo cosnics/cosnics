@@ -50,7 +50,7 @@ abstract class ToolListRenderer
      */
     public static function factory($type, $parent, $visible_tools = array())
     {
-        $type = StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
+        $type = StringUtilities :: getInstance()->createString($type)->upperCamelize()->__toString();
         $type .= 'ToolListRenderer';
         $class = __NAMESPACE__ . '\Type\\' . $type;
 

@@ -45,18 +45,25 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     const TYPE_CUSTOM = 4;
     const TYPE_CUSTOM_NAME = 'custom';
 
-    public function __construct($default_properties = array(), $optional_properties = array())
-    {
-        parent :: __construct($default_properties = $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
-    }
-
     private static $type_name_mapping = array(
         self :: TYPE_DISABLED => self :: TYPE_DISABLED_NAME,
         self :: TYPE_TOOL => self :: TYPE_TOOL_NAME,
         self :: TYPE_LINK => self :: TYPE_LINK_NAME,
         self :: TYPE_ADMIN => self :: TYPE_ADMIN_NAME,
         self :: TYPE_CUSTOM => self :: TYPE_CUSTOM_NAME);
+
+    private $displayName;
+
+    /**
+     *
+     * @param string[] $default_properties
+     * @param string[] $optional_properties
+     */
+    public function __construct($default_properties = array(), $optional_properties = array())
+    {
+        parent :: __construct($default_properties = $optional_properties);
+        $this->add_listener(new DisplayOrderDataClassListener($this));
+    }
 
     /**
      * **************************************************************************************************************
@@ -174,6 +181,27 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     public function get_name()
     {
         return $this->get_default_property(self :: PROPERTY_NAME);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        if (! isset($this->displayName))
+        {
+            if ($this->get_type() == CourseSection :: TYPE_CUSTOM)
+            {
+                $this->displayName = $this->get_name();
+            }
+            else
+            {
+                $this->displayName = Translation :: get($this->get_name());
+            }
+        }
+
+        return $this->displayName;
     }
 
     /**
