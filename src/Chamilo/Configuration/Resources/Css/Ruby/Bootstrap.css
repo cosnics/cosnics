@@ -35,11 +35,25 @@ form.table_form .row .btn-action-toolbar {
 }
 
 a, .ui-widget-content a:not(.btn) {
-	color: #337ab7;
+	color: #b1071c;
 	text-decoration: none;
 	font-weight: bold;
 }
 
+ul.nav-wizard li.active {
+	color: #f5f5f5;
+	background: #B63033;
+}
+
+ul.nav-wizard li.active:after {
+	border-left: 16px solid #B63033;
+}
+
+ul.nav-wizard li.active a, ul.nav-wizard li.active a:active, ul.nav-wizard li.active a:visited,
+	ul.nav-wizard li.active a:focus {
+	color: #f5f5f5;
+	background: #B63033;
+}
 
 /***********************
  * Alert			   *
@@ -57,4 +71,19 @@ a, .ui-widget-content a:not(.btn) {
 	text-align: justify;
 	background-repeat: no-repeat;
 	background-position: 10px 50%;
+}
+
+.btn-default span.glyphicon, .btn-default span.fa {
+	color: #777777;
+}
+
+.ui-widget-content a:not (.btn ), a {
+	color: #777777;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.file-upload .panel .glyphicon {
+	font-size: 48px;
+	color: #777777;
 }
