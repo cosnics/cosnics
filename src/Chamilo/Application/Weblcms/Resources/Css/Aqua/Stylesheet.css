@@ -1,6 +1,55 @@
 /*****************************************************
  *  WEBLCMS STYLES                                   *
  *****************************************************/
+
+/********************
+ * BOOTSTRAP STYLES *
+ ********************/
+.weblcms-tool-navigation {
+	margin-top: -30px;
+	margin-bottom: 10px;
+}
+
+.row.course-home {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.row.course-home .course-home-sidebar {
+	order: 2;
+}
+
+.row.course-home .course-home-content {
+	order: 1;
+}
+
+.panel.panel-course-tool-list {
+	
+}
+
+.panel.panel-course-tool-list .list-group .list-group-item {
+	border-width: 0px;
+	padding: 5px 15px;
+}
+
+.panel.panel-course-tool-list .list-group .list-group-item:first-child {
+	padding-top: 10px;
+}
+
+.panel.panel-course-tool-list .list-group .list-group-item:last-child {
+	padding-bottom: 10px;
+}
+
+@media ( min-width : 768px) {
+	.row.course-home {
+		display: block;
+	}
+}
+
+/**************
+ * OLD STYLES *
+ **************/
+
 /* for content section in weblcms home course list file */
 .maincontent {
 	float: left;
@@ -132,13 +181,15 @@ div.announcements {
 	margin-bottom: 5px;
 }
 
-div.questionform input[type=text],div.form-row div.questionform input[type=password],div.form-row div.questionform select
-	{
+div.questionform input[type=text], div.form-row div.questionform input[type=password],
+	div.form-row div.questionform select {
 	background-color: #f5f5f5;
 	border: 1px solid #dedede;
 }
 
-div.questionform input[type=text]:hover,div.form-row div.questionform input[type=text]:focus,div.form-row div.questionform input[type=password]:hover,div.form-row div.questionform input[type=password]:focus,div.form-row div.questionform select:hover,div.form-row div.questionform select:focus
+div.questionform input[type=text]:hover, div.form-row div.questionform input[type=text]:focus,
+	div.form-row div.questionform input[type=password]:hover, div.form-row div.questionform input[type=password]:focus,
+	div.form-row div.questionform select:hover, div.form-row div.questionform select:focus
 	{
 	background-color: #f7fbfd;
 	border-color: #4171B5;
@@ -175,7 +226,7 @@ div.questionform input[type=text]:hover,div.form-row div.questionform input[type
 	font-size: 12px;
 }
 
-.head5,.head6 {
+.head5, .head6 {
 	font-family: Ubuntu, verdana, arial, helvetica, sans-serif;
 }
 
@@ -241,7 +292,7 @@ div.publication_actions div.toolbar {
 	float: right;
 }
 
-div.publication_actions div.toolbar ul.toolbar_horizontal,div.publication_actions div.toolbar ul.toolbar_vertical
+div.publication_actions div.toolbar ul.toolbar_horizontal, div.publication_actions div.toolbar ul.toolbar_vertical
 	{
 	display: inline;
 	float: right;
@@ -350,9 +401,7 @@ td.publication_table_actions_column {
 	width: 220px;
 }
 
-td.publication_table_status_column,
-td.publication_table_order_column
-{
+td.publication_table_status_column, td.publication_table_order_column {
 	max-width: 50px;
 	width: 50px;
 	text-align: center;
@@ -360,17 +409,14 @@ td.publication_table_order_column
 }
 
 /** Tools Table **/
-
-table th.tools_column_toggle,
-table tr td.tools_column_toggle {
+table th.tools_column_toggle, table tr td.tools_column_toggle {
 	max-width: 150px;
 	width: 150px;
 	text-align: center;
 	vertical-align: middle;
 }
 
-table th.column_icon,
-table tr td.column_icon {
+table th.column_icon, table tr td.column_icon {
 	max-width: 50px;
 	width: 50px;
 	text-align: center;
@@ -382,39 +428,34 @@ table tr td.column_tool_title {
 }
 
 /** Course List **/
-
-.nav.nav-tabs.course-list-tabs,
-.nav.nav-tabs.tool-list-tabs {
+.nav.nav-tabs.course-list-tabs, .nav.nav-tabs.tool-list-tabs {
 	border-left: 1px solid #dddddd;
 	border-right: 1px solid #dddddd;
 	border-top: 1px solid #dddddd;
 }
 
-.nav.nav-tabs.course-list-tabs li,
-.nav.nav-tabs.tool-list-tabs li{
+.nav.nav-tabs.course-list-tabs li, .nav.nav-tabs.tool-list-tabs li {
 	margin-bottom: -2px;
 	margin-top: -1px;
 }
 
-.nav.nav-tabs.course-list-tabs li a,
-.nav.nav-tabs.tool-list-tabs li a {
+.nav.nav-tabs.course-list-tabs li a, .nav.nav-tabs.tool-list-tabs li a {
 	padding: 12px 15px;
 	font-size: 13px;
 }
 
-.nav.nav-tabs.course-list-tabs li.active a,
-.nav.nav-tabs.tool-list-tabs li.active a{
+.nav.nav-tabs.course-list-tabs li.active a, .nav.nav-tabs.tool-list-tabs li.active a
+	{
 	border-radius: 0;
 }
 
-.nav.nav-tabs.course-list-tabs li.active:first-child a,
-.nav.nav-tabs.tool-list-tabs li.active:first-child a{
+.nav.nav-tabs.course-list-tabs li.active:first-child a, .nav.nav-tabs.tool-list-tabs li.active:first-child a
+	{
 	border-left: none;
 }
 
-.nav.nav-tabs.course-list-tabs,
-.nav.nav-tabs.tool-list-tabs,
-.course-list-tab-content .list-group-header {
+.nav.nav-tabs.course-list-tabs, .nav.nav-tabs.tool-list-tabs,
+	.course-list-tab-content .list-group-header {
 	background-color: #F5F5F5;
 	color: #555555;
 }
@@ -433,7 +474,8 @@ table tr td.column_tool_title {
 	border-bottom: 2px solid #DDDDDD;
 }
 
-.course-list-tab-content .list-group-item.list-group-header:first-child {
+.course-list-tab-content .list-group-item.list-group-header:first-child
+	{
 	border-top: none;
 }
 
@@ -449,10 +491,10 @@ table tr td.column_tool_title {
 	margin-bottom: 0;
 }
 
-.tool-list-content .tool a.invisible-tool,
-.course-list-tab-content .list-group-item.invisible-course .list-group-item-heading,
-.course-list-tab-content .list-group-item.invisible-course .list-group-item-heading a,
-.course-list-tab-content .list-group-item.invisible-course .list-group-item-text {
+.tool-list-content .tool a.invisible-tool, .course-list-tab-content .list-group-item.invisible-course .list-group-item-heading,
+	.course-list-tab-content .list-group-item.invisible-course .list-group-item-heading a,
+	.course-list-tab-content .list-group-item.invisible-course .list-group-item-text
+	{
 	color: #999999;
 }
 
@@ -518,15 +560,12 @@ table tr td.column_tool_title {
 	margin: 0;
 }
 
-.target-entities-list .list-group-item
-{
+.target-entities-list .list-group-item {
 	border: none;
 	margin-bottom: 0;
 	padding: 1px 10px;
 }
 
-.target-entities-list .target-entities-default
-{
+.target-entities-list .target-entities-default {
 	display: none;
 }
-
