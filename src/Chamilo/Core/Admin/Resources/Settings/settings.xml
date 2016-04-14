@@ -3,7 +3,7 @@
 	<settings>
 		<category name="administrator">
 
-			<setting name="show_administrator_data" field="checkbox" default="1">
+			<setting name="show_administrator_data" field="toggle" default="1">
 				<options type="static">
 					<option name="show_administrator_data" value="1" />
 				</options>
@@ -49,17 +49,17 @@
 			<setting name="page_after_login" field="select" default="Chamilo\Core\Home">
 				<options type="dynamic" source="get_active_applications" />
 			</setting>
-			<setting name="active_online_email_editor" field="checkbox" default="0">
+			<setting name="active_online_email_editor" field="toggle" default="0">
 				<options type="static">
 					<option name="active_online_email_editor" value="1" />
 				</options>
 			</setting>
-			<setting name="maintenance_mode" field="checkbox" default="0">
+			<setting name="maintenance_mode" field="toggle" default="0">
 				<options type="static">
 					<option name="maintenance_mode" value="1" />
 				</options>
 			</setting>
-			<setting name="installation_blocked" field="checkbox" default="0">
+			<setting name="installation_blocked" field="toggle" default="0">
 				<options type="static">
 					<option name="installation_blocked" value="1" />
 				</options>
@@ -71,18 +71,18 @@
 			</setting>
 		</category>
 		<category name="internationalization">
-			<setting name="hide_dcda_markup" field="checkbox" default="1">
+			<setting name="hide_dcda_markup" field="toggle" default="1">
 				<options type="static">
 					<option name="hide_dcda_markup" value="1" />
 				</options>
 			</setting>
-			<setting name="show_variable_in_translation" field="checkbox" default="0">
+			<setting name="show_variable_in_translation" field="toggle" default="0">
 				<options type="static">
 					<option name="show_variable_in_translation" value="1" />
 				</options>
 			</setting>
 			<setting name="cda_url" field="text" default="http://translate.chamilo.org/" />
-			<setting name="write_new_variables_to_translation_file" field="checkbox" default="0">
+			<setting name="write_new_variables_to_translation_file" field="toggle" default="0">
 				<options type="static">
 					<option name="write_new_variables_to_translation_file" value="1" />
 				</options>
@@ -103,13 +103,13 @@
 					<!--<option name="TinyMCE" value="tinymce" /> -->
 				</options>
 			</setting>
-			<setting name="reload_templates" field="checkbox" default="0">
+			<setting name="reload_templates" field="toggle" default="0">
 				<options type="static">
 					<option name="reload_templates" value="1" />
 				</options>
 			</setting>
 			<setting name="portal_home" field="html_editor" default="" />
-			<setting name="allow_portal_functionality" field="checkbox" default="1">
+			<setting name="allow_portal_functionality" field="toggle" default="1">
 				<options type="static">
 					<option name="allow_portal_functionality" value="1" />
 				</options>
@@ -124,7 +124,7 @@
 			</setting>
 			<setting name="blacklist" field="text" default="" />
 			<setting name="whitelist" field="text" default="" />
-			<setting name="rename_instead_of_disallow" field="checkbox">
+			<setting name="rename_instead_of_disallow" field="toggle">
 				<options type="static">
 					<option name="rename_instead_of_disallow" value="1" />
 				</options>
@@ -137,7 +137,7 @@
 			</setting>
 		</category>
 		<category name="authentication">
-			<setting name="enableExternalAuthentication" field="checkbox">
+			<setting name="enableExternalAuthentication" field="toggle">
 				<options type="static">
 					<option name="enableExternalAuthentication" value="1" />
 				</options>
@@ -145,12 +145,12 @@
 		</category>
 
 		<category name="credentials_authentication">
-			<setting name="enablePlatformAuthentication" field="checkbox" default="1">
+			<setting name="enablePlatformAuthentication" field="toggle" default="1">
 				<options type="static">
 					<option name="enablePlatformAuthentication" value="1" />
 				</options>
 			</setting>
-			<setting name="enableLdapAuthentication" field="checkbox">
+			<setting name="enableLdapAuthentication" field="toggle">
 				<options type="static">
 					<option name="enableLdapAuthentication" value="1" />
 				</options>
@@ -158,7 +158,7 @@
 		</category>
 
 		<category name="query_authentication">
-			<setting name="enableSecurityTokenAuthentication" field="checkbox">
+			<setting name="enableSecurityTokenAuthentication" field="toggle">
 				<options type="static">
 					<option name="enableSecurityTokenAuthentication" value="1" />
 				</options>
@@ -166,7 +166,7 @@
 		</category>
 
 		<category name="external_authentication">
-			<setting name="enableCasAuthentication" field="checkbox">
+			<setting name="enableCasAuthentication" field="toggle">
 				<options type="static">
 					<option name="enableCasAuthentication" value="1" />
 				</options>
@@ -184,13 +184,13 @@
 			<setting name="cas_port" field="text" default="" />
 			<setting name="cas_uri" field="text" default="" />
 			<setting name="cas_certificate" field="text" default="" />
-			<setting name="cas_enable_log" field="checkbox">
+			<setting name="cas_enable_log" field="toggle">
 				<options type="static">
 					<option name="cas_enable_log" value="1" />
 				</options>
 			</setting>
 			<setting name="cas_log" field="text" default="" />
-			<setting name="cas_allow_change_password" field="checkbox">
+			<setting name="cas_allow_change_password" field="toggle">
 				<options type="static">
 					<option name="cas_allow_change_password" value="1" />
 				</options>
@@ -202,7 +202,7 @@
 			<setting name="mysql_error_location" field="text" default="" />
 		</category>
 		<category name="proxy settings">
-			<setting name="proxy_settings_active" field="checkbox">
+			<setting name="proxy_settings_active" field="toggle">
 				<options type="static">
 					<option name="proxy_settings_active" value="1" />
 				</options>
@@ -226,7 +226,7 @@
 			</setting>
 			<setting name="version" field="text" default="2.0" locked="true" />
 			<setting name="enable_package_management" field="text" default="1" locked="true" />
-			<setting name="show_version_data" field="checkbox" default="0">
+			<setting name="show_version_data" field="toggle" default="0">
 				<options type="static">
 					<option name="show_version_data" value="1" />
 				</options>
