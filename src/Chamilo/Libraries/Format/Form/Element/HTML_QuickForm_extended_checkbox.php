@@ -187,7 +187,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         }
         return true;
     }
- // end func onQuickFormEvent
+    // end func onQuickFormEvent
 
     /**
      * Returns the radio element in HTML
@@ -200,7 +200,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     {
         $html = array();
 
-        $html[] = '<div class="checkbox">';
+        $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
         $html[] = HTML_QuickForm_input :: toHtml();
         $html[] = '<label>';
         $html[] = $this->_text;
@@ -208,5 +208,10 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    function getCheckboxClasses()
+    {
+        return 'checkbox no-toggle-style';
     }
 }

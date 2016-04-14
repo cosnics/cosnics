@@ -2,7 +2,7 @@
 <package context="Chamilo\Core\Home">
 	<settings>
 		<category name="visual">
-			<setting name="allow_user_home" field="checkbox" default="1">
+			<setting name="allow_user_home" field="toggle" default="1">
 				<options type="static">
 					<option name="allow_user_home" value="1" />
 				</options>
