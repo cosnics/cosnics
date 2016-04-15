@@ -69,7 +69,7 @@ $(function()
                         $(document)
                                 .on(
                                         'click',
-                                        'form.form-list-view a.btn:not(.dropdown-toggle):not(.select-all):not(.select-none), form.form-list-view ul.dropdown-menu > li > a',
+                                        'form.form-list-view a.btn.btn-table-action:not(.dropdown-toggle):not(.select-all):not(.select-none), form.form-list-view ul.dropdown-menu.btn-table-action > li > a',
                                         executeAction);
                     });
 });
