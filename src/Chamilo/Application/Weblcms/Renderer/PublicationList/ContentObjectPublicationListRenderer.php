@@ -1000,15 +1000,17 @@ abstract class ContentObjectPublicationListRenderer
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
                 $visibility_image = 'Action/Invisible';
+                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager::context());
             }
             else
             {
+                $visibilityTranslation = Translation :: get('MakeInvisible', null, Manager::context());
                 $visibility_image = 'Action/Visible';
             }
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Visible', null, Utilities :: COMMON_LIBRARIES),
+                    $visibilityTranslation,
                     Theme :: getInstance()->getCommonImagePath($visibility_image),
                     $visibility_url,
                     ToolbarItem :: DISPLAY_ICON));

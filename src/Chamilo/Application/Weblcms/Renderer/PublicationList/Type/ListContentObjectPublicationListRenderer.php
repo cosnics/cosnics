@@ -395,15 +395,17 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
                 $visibility_image = 'Action/Invisible';
+                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager::context());
             }
             else
             {
+                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager::context());
                 $visibility_image = 'Action/Visible';
             }
 
             $dropdownButton->addSubButton(
                 new SubButton(
-                    Translation :: get('Visible', null, Utilities :: COMMON_LIBRARIES),
+                    $visibilityTranslation,
                     Theme :: getInstance()->getCommonImagePath($visibility_image),
                     $visibility_url,
                     SubButton :: DISPLAY_LABEL));
