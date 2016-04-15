@@ -57,6 +57,8 @@ class PanelToolListRenderer extends ToolListRenderer
     {
         $html = array();
 
+        $html[] = '<div class="well">';
+
         foreach ($this->getSections() as $section)
         {
             $isAdminSectionType = ($section->get_type() == CourseSection :: TYPE_DISABLED) ||
@@ -67,47 +69,66 @@ class PanelToolListRenderer extends ToolListRenderer
                 continue;
             }
 
-            if ($section->get_type() == CourseSection :: TYPE_LINK)
+            switch ($section->get_type())
             {
-                $html[] = $this->renderLinks($section);
-            }
-            else
-            {
-                if ($this->sectionHasTools($section))
-                {
+                case CourseSection :: TYPE_DISABLED :
+                    break;
+                case CourseSection :: TYPE_LINK :
+//                     $html[] = $this->renderLinks($section);
+                    break;
+                case CourseSection :: TYPE_ADMIN :
+                    break;
+                default :
                     $html[] = $this->renderToolsBySection($section);
-                }
+                    break;
             }
         }
+
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
-    private function get_publication_links()
+    /**
+     *
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication[]
+     */
+    protected function getPublicationLinks()
     {
-        if (! isset($this->publication_links))
+        if (! isset($this->publicationLinks))
         {
-            $parent = $this->get_parent();
-
             $conditions = array();
+
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublication :: class_name(),
                     ContentObjectPublication :: PROPERTY_COURSE_ID),
-                new StaticConditionVariable($parent->get_course_id()));
+                new StaticConditionVariable($this->getCourse()->getId()));
+
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublication :: class_name(),
                     ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE),
                 new StaticConditionVariable(1));
+
             $condition = new AndCondition($conditions);
 
-            $this->publication_links = DataManager :: retrieves(
+            $this->publicationLinks = DataManager :: retrieves(
                 ContentObjectPublication :: class_name(),
-                new DataClassRetrievesParameters($condition));
+                new DataClassRetrievesParameters($condition))->as_array();
         }
 
-        return $this->publication_links;
+        return $this->publicationLinks;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function hasPublicationLinks()
+    {
+        $publicationLinks = $this->getPublicationLinks();
+        return count($publicationLinks) > 0;
     }
 
     /**
@@ -115,24 +136,21 @@ class PanelToolListRenderer extends ToolListRenderer
      */
     private function renderLinks($section)
     {
-        $parent = $this->get_parent();
-        $publications = $this->get_publication_links();
-
-        if ($publications->size() == 0)
+        if (! $this->hasPublicationLinks())
         {
             return '';
         }
 
-        $count = 0;
+        $parent = $this->get_parent();
+        $publications = $this->getPublicationLinks();
 
         $html = array();
 
-        $html[] = '<div class="panel panel-default panel-course-tool-list">';
-        $html[] = '<div class="panel-heading">' . $section->getDisplayName() . '</div>';
+        $html[] = '<h4>' . $section->getDisplayName() . '</h4>';
 
-        $html[] = '<ul class="list-group">';
+        $html[] = '<ul class="list-group list-group-course-tool">';
 
-        while ($publication = $publications->next_result())
+        foreach ($publications as $publication)
         {
             $html[] = '<li class="list-group-item">';
 
@@ -156,29 +174,30 @@ class PanelToolListRenderer extends ToolListRenderer
             if ($parent->is_allowed(WeblcmsRights :: EDIT_RIGHT) || $publication->is_visible_for_target_users())
             {
 
-                // Show visibility-icon
-                if ($parent->is_allowed(WeblcmsRights :: EDIT_RIGHT))
-                {
-                    $html[] = '<a href="' .
-                         $parent->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $lcms_action,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><img src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
-                         '" style="vertical-align: middle;" alt=""/></a>';
-                }
+                // // Show visibility-icon
+                // if ($parent->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+                // {
+                // $html[] = '<a href="' .
+                // $parent->get_url(
+                // array(
+                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $lcms_action,
+                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
+                // '"><img src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
+                // '" style="vertical-align: middle;" alt=""/></a>';
+                // }
 
-                // Show delete-icon
-                if ($parent->is_allowed(WeblcmsRights :: DELETE_RIGHT))
-                {
-                    $html[] = '<a href="' .
-                         $parent->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Delete') .
-                         '" style="vertical-align: middle;" alt=""/></a>';
-                }
+                // // Show delete-icon
+                // if ($parent->is_allowed(WeblcmsRights :: DELETE_RIGHT))
+                // {
+                // $html[] = '<a href="' .
+                // $parent->get_url(
+                // array(
+                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION =>
+                // \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
+                // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
+                // '"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Delete') .
+                // '" style="vertical-align: middle;" alt=""/></a>';
+                // }
 
                 // Show tool-icon + name
 
@@ -206,20 +225,17 @@ class PanelToolListRenderer extends ToolListRenderer
                 }
 
                 $html[] = '<a href="' . $url . '"' . $target . $link_class . '>';
-                $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool()),
-                    'Logo/' . $tool_image) . '" class="tool-link-image" />' . $title;
+                // $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
+                // \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool()),
+                // 'Logo/' . $tool_image) . '" class="tool-link-image" />';
+                $html[] = $title;
                 $html[] = '</a>';
-
-                $count ++;
             }
 
             $html[] = '</li>';
         }
 
         $html[] = '</ul>';
-
-        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -231,6 +247,11 @@ class PanelToolListRenderer extends ToolListRenderer
      */
     private function renderToolsBySection($section)
     {
+        if (! $this->sectionHasTools($section))
+        {
+            return '';
+        }
+
         $tools = $this->getToolsBySection($section);
 
         $parent = $this->get_parent();
@@ -239,72 +260,59 @@ class PanelToolListRenderer extends ToolListRenderer
 
         $html = array();
 
-        $html[] = '<div class="panel panel-default panel-course-tool-list">';
-        $html[] = '<div class="panel-heading">' . $section->getDisplayName() . '</div>';
+        // $html[] = '<div class="panel panel-default panel-course-tool-list">';
+        // $html[] = '<div class="panel-heading">';
+        // $html[] = '<h3 class="panel-title">' . $section->getDisplayName() . '</h3>';
+        // $html[] = '</div>';
+
+        $html[] = '<h4>' . $section->getDisplayName() . '</h4>';
 
         $course_settings_controller = CourseSettingsController :: get_instance();
 
-        $html[] = '<ul class="list-group">';
+        $html[] = '<ul class="list-group list-group-course-tool">';
 
         foreach ($tools as $tool)
         {
 
             $html[] = '<li class="list-group-item">';
 
-            $tool_namespace = $tool->getContext();
+            $toolNamespace = $tool->getContext();
 
-            $tool_visible = $course_settings_controller->get_course_setting(
+            $toolIsVisible = $course_settings_controller->get_course_setting(
                 $this->getCourse(),
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool->get_id());
 
-            if ($tool_visible || $section->get_type() == CourseSection :: TYPE_ADMIN)
+            if ($section->get_type() != CourseSection :: TYPE_ADMIN && $toolIsVisible && $this->isCourseAdmin())
             {
-                $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_INVISIBLE;
-                $visible_image = 'Action/Visible';
-                $new = '';
                 if ($parent->tool_has_new_publications($tool->get_name(), $this->getCourse()))
                 {
                     $new = 'New';
                 }
-                $tool_image = Theme :: ICON_MINI . $new;
-                $link_class = '';
-            }
-            else
-            {
-                $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_VISIBLE;
-                $visible_image = 'Action/Invisible';
-                $tool_image = Theme :: ICON_MINI . 'Na';
-                $link_class = ' class="invisible-tool"';
-            }
 
-            $title = Translation :: get('TypeName', null, $tool_namespace);
+                $visibilityUrl = $parent->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_INVISIBLE,
+                        \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_TOOL => $tool->get_name()));
 
-            // Show visibility-icon
-            if ($this->isCourseAdmin() && $section->get_type() != CourseSection :: TYPE_ADMIN)
-            {
-                $html[] = '<a href="' .
-                     $parent->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_ACTION => $lcms_action,
-                            \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_TOOL => $tool->get_name())) .
-                     '"><img src="' . Theme :: getInstance()->getCommonImagePath($visible_image) . '" /></a>';
-                $html[] = '&nbsp;&nbsp;&nbsp;';
+                $html[] = '<div class="pull-right">';
+                $html[] = '<a href="' . $visibilityUrl . '">';
+                $html[] = '<span class="glyphicon glyphicon-remove"></span>';
+                $html[] = '</a>';
+                $html[] = '</div>';
             }
 
-            // Show tool-icon + name
-            $html[] = '<img src="' . Theme :: getInstance()->getImagePath($tool_namespace, 'Logo/' . $tool_image) .
-                 '" alt="' . $title . '" />';
-            $html[] = '&nbsp;';
-            $html[] = '<a id="tool_text" href="' . $parent->get_url(
+            $toolUrl = $parent->get_url(
                 array(Manager :: PARAM_TOOL => $tool->get_name()),
                 array(
                     Manager :: PARAM_COMPONENT_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE,
-                    Manager :: PARAM_CATEGORY),
-                true) . '" ' . $link_class . '>';
-            $html[] = $title;
+                    Manager :: PARAM_CATEGORY,
+                    true));
+
+            $html[] = '<a href="' . $toolUrl . '">';
+            $html[] = Translation :: get('TypeName', null, $toolNamespace);
             $html[] = '</a>';
 
             $html[] = '</li>';
@@ -314,7 +322,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
         $html[] = '</ul>';
 
-        $html[] = '</div>';
+        // $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

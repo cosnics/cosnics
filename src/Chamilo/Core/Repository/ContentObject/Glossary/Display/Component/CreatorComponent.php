@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * Description of glossary_item_creator
@@ -22,6 +23,11 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
     public function run()
     {
+        if (! $this->get_parent()->is_allowed_to_add_child())
+        {
+            throw new NotAllowedException();
+        }
+
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             BreadcrumbTrail :: get_instance()->add(
