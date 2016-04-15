@@ -273,20 +273,31 @@ class BrowserComponent extends Manager implements DelegateComponent
             }
         }
 
-        $actions->add_form_action(
-            new TableFormAction(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE)),
-                Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
+        if($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $actions->add_form_action(
+                new TableFormAction(
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE
+                        )
+                    ),
+                    Translation:: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)
+                )
+            );
 
-        $actions->add_form_action(
-            new TableFormAction(
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY)),
-                Translation :: get('ToggleVisibility'),
-                false));
+            $actions->add_form_action(
+                new TableFormAction(
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY
+                        )
+                    ),
+                    Translation:: get('ToggleVisibility'),
+                    false
+                )
+            );
+        }
 
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT) && $this->get_parent() instanceof Categorizable)
         {

@@ -755,6 +755,8 @@ abstract class ContentObjectPublicationListRenderer
 
     public function get_publication_actions($publication, $show_move = true, $ascending = true)
     {
+        $has_edit_right = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $publication);
+
         $publication_id = $publication[ContentObjectPublication :: PROPERTY_ID];
         $publication_type = $this->get_publication_type();
 
@@ -766,7 +768,7 @@ abstract class ContentObjectPublicationListRenderer
         // currently only mail button for announcements; this outer check can be removed, but then all
         // tools must have a <ToolName>PublicationMailerComponent class
         // (see: application/weblcms/tool/announcement/php/lib/component/publication_mailer.class.php)
-        if ($publication[ContentObjectPublicationCategory :: PROPERTY_TOOL] == self :: TOOL_TYPE_ANNOUNCEMENT)
+        if ($has_edit_right && $publication[ContentObjectPublicationCategory :: PROPERTY_TOOL] == self :: TOOL_TYPE_ANNOUNCEMENT)
         {
 
             if (! $publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
@@ -830,8 +832,6 @@ abstract class ContentObjectPublicationListRenderer
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
                     ToolbarItem :: DISPLAY_ICON));
         }
-
-        $has_edit_right = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $publication);
 
         if ($has_edit_right)
         {
