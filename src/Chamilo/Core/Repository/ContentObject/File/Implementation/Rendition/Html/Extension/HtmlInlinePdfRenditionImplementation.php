@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\Extension;
 
 use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\HtmlInlineRenditionImplementation;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementation
 {
@@ -13,10 +15,10 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
             $object->get_id(),
             $object->calculate_security_code()) . '&display=1';
 
-//        if(strpos($url, 'localhost') === false)
-//        {
-//            $url = 'https://mozilla.github.io/pdf.js/web/viewer.html?file=' . urlencode($url);
-//        }
+        $viewerPath = Path::getInstance()->getResourcesPath(Utilities::COMMON_LIBRARIES, true) .
+            'Javascript/Plugin/PDFJS/web/viewer.html';
+
+        $url = $viewerPath . '?file=' . urlencode($url);
 
         $html = array();
 
