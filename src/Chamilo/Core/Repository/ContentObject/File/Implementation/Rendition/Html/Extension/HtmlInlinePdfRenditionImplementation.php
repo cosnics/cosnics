@@ -15,7 +15,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
 
         if(strpos($url, 'localhost') === false)
         {
-            $url = 'https://mozilla.github.io/pdf.js/web/viewer.html?file=' . $url;
+            $url = 'https://mozilla.github.io/pdf.js/web/viewer.html?file=' . urlencode($url);
         }
 
         $html = array();
