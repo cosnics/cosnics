@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Ht
 
 use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\HtmlInlineRenditionImplementation;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementation
@@ -11,9 +12,10 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
     public function render($parameters)
     {
         $object = $this->get_content_object();
-        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-            $object->get_id(),
-            $object->calculate_security_code()) . '&display=1';
+        $url = \Chamilo\Core\Repository\Manager:: get_document_downloader_url(
+                $object->get_id(),
+                $object->calculate_security_code()
+            ) . '&display=1';
 
         $viewerPath = Path::getInstance()->getResourcesPath(Utilities::COMMON_LIBRARIES, true) .
             'Javascript/Plugin/PDFJS/web/viewer.html';
@@ -24,7 +26,9 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
 
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="' . $url . '" target="_blank">';
-        $html[] = '<input type="button" class="btn btn-default" value="Open in fullscreen" />';
+        $html[] = '<input type="button" class="btn btn-default" value="' . Translation::getInstance()->getTranslation(
+                'OpenInFullScreen', null, 'Chamilo\Core\Repository\ContentObject\File'
+            ) . '" />';
         $html[] = '</div>';
         $html[] = '</a>';
         $html[] = '<div class="clearfix"></div>';
