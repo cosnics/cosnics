@@ -4,3 +4,8 @@ ul.tree-menu li div a.portfolio, ul.tree-menu li div a.type_portfolio,
 	ul.tree-menu li div a.type_portfolio_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }
+
+.feedback-container .user {
+	font-weight: bold;
+	color: #b1071c;
+}
