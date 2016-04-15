@@ -345,6 +345,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $max_objects,
                     $this->get_user_id());
             }
+
             if ($publications_resultset)
             {
                 $this->publications = $publications_resultset->as_array();

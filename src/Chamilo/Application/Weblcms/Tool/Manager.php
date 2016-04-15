@@ -283,7 +283,8 @@ abstract class Manager extends Application
         $html = array();
 
         $html[] = $this->renderShortcuts($tools);
-        $html[] = $this->renderHomeActions();
+//         $html[] = $this->renderHomeActions();
+        $html[] = '<div class="clearfix"></div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -379,7 +380,7 @@ abstract class Manager extends Application
             $html[] = '</div>';
         }
 
-        $html[] = '<div class="clearfix"></div>';
+
 
         return implode(PHP_EOL, $html);
     }

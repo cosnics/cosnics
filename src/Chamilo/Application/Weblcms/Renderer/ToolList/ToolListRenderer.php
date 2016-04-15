@@ -6,12 +6,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
 /**
- * $Id: tool_list_renderer.class.php 218 2009-11-13 14:21:26Z kariboe $
  *
- * @package application.lib.weblcms
- */
-/**
- * Renderer to display a set of tools
+ * @package Chamilo\Application\Weblcms\Renderer\ToolList
+ * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 abstract class ToolListRenderer
 {
@@ -20,21 +19,21 @@ abstract class ToolListRenderer
     const TYPE_FIXED = 'fixed_location';
 
     /**
-     * The parent application
+     *
+     * @var \Chamilo\Application\Weblcms\Tool\Manager
      */
     private $parent;
 
     /**
-     * The visible tools
      *
-     * @var Array Of Strings
+     * @var \Chamilo\Application\Weblcms\Storage\DataClass\CourseTool[]
      */
     private $visible_tools;
 
     /**
-     * Constructor
      *
-     * @param $parent WebLcms The parent application
+     * @param \Chamilo\Application\Weblcms\Tool\Manager $parent
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\CourseTool[] $visible_tools
      */
     public function __construct($parent, $visible_tools)
     {
@@ -43,10 +42,12 @@ abstract class ToolListRenderer
     }
 
     /**
-     * Create a new tool list renderer
      *
-     * @param $class string The implementation of this abstract class to load
-     * @param $parent WebLcms The parent application
+     * @param string $type
+     * @param \Chamilo\Application\Weblcms\Tool\Manager $parent
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\CourseTool[] $visible_tools
+     * @throws Exception
+     * @return \Chamilo\Application\Weblcms\Renderer\ToolList\ToolListRenderer
      */
     public static function factory($type, $parent, $visible_tools = array())
     {
@@ -63,15 +64,18 @@ abstract class ToolListRenderer
     }
 
     /**
-     * Gets the parent application
      *
-     * @return WebLcms
+     * @return \Chamilo\Application\Weblcms\Tool\Manager
      */
     public function get_parent()
     {
         return $this->parent;
     }
 
+    /**
+     *
+     * @return \Chamilo\Application\Weblcms\Storage\DataClass\CourseTool[]
+     */
     public function get_visible_tools()
     {
         return $this->visible_tools;

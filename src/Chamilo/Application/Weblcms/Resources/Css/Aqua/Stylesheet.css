@@ -23,21 +23,26 @@
 	order: 1;
 }
 
-.panel.panel-course-tool-list {
-	
+.row.course-home .course-home-sidebar .well h4 {
+	margin-top: 0px;
+	margin-bottom: 5px;
 }
 
-.panel.panel-course-tool-list .list-group .list-group-item {
+.row.course-home .course-home-sidebar .well .list-group.list-group-course-tool .list-group-item
+	{
 	border-width: 0px;
-	padding: 5px 15px;
+	padding: 10px 0px;
+	background-color: transparent;
 }
 
-.panel.panel-course-tool-list .list-group .list-group-item:first-child {
-	padding-top: 10px;
+.row.course-home .course-home-sidebar .well .list-group.list-group-course-tool .list-group-item:first-child
+	{
+/* 	padding-top: 10px; */
 }
 
-.panel.panel-course-tool-list .list-group .list-group-item:last-child {
-	padding-bottom: 10px;
+.row.course-home .course-home-sidebar .well .list-group.list-group-course-tool .list-group-item:last-child
+	{
+/* 	padding-bottom: 10px; */
 }
 
 @media ( min-width : 768px) {

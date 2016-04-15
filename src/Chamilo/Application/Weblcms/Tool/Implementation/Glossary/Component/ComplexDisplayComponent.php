@@ -63,9 +63,20 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {
-        return RightsService :: getInstance()->canEditContentObject(
+        $hasWorkspaceRight = RightsService :: getInstance()->canEditContentObject(
             $this->get_user(),
             $this->publication->get_content_object());
+
+        $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+
+        $hasPublicationContentRight = $weblcmsRightsService->canEditPublicationContentObject(
+            $this->get_user(),
+            $this->get_application()->get_course(),
+            $this->publication);
+
+        $hasPublictionRight = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $this->publication);
+
+        return $hasWorkspaceRight || $hasPublicationContentRight || $hasPublictionRight;
     }
 
     public function is_allowed_to_view_content_object()
@@ -75,16 +86,12 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
     public function is_allowed_to_add_child()
     {
-        return RightsService :: getInstance()->canEditContentObject(
-            $this->get_user(),
-            $this->publication->get_content_object());
+        return $this->is_allowed_to_edit_content_object();
     }
 
     public function is_allowed_to_delete_child()
     {
-        return RightsService :: getInstance()->canEditContentObject(
-            $this->get_user(),
-            $this->publication->get_content_object());
+        return $this->is_allowed_to_edit_content_object();
     }
 
     public function is_allowed_to_delete_feedback()

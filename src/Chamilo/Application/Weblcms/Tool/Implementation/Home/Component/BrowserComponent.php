@@ -16,7 +16,7 @@ class BrowserComponent extends Manager
             $this->get_course(),
             \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
 
-        $type = 'Chamilo\Application\Weblcms\Tool\Implementation\Home\Renderer\Type\SidebarHomeRenderer';
+        $type = 'Chamilo\Application\Weblcms\Tool\Implementation\Home\Renderer\Type\ListHomeRenderer';
 
         $homeRenderer = new $type($this, $courseTools, $introductionAllowed, $this->get_introduction_text());
 
