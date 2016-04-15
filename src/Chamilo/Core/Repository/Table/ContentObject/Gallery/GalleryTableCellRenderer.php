@@ -3,41 +3,15 @@ namespace Chamilo\Core\Repository\Table\ContentObject\Gallery;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTableCellRenderer;
+use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 
-class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
+class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer implements
+    TableCellRendererActionsColumnSupport
 {
 
-    public function render_cell($content_object)
-    {
-        $html = array();
-
-        $html[] = '<div class="panel panel-default panel-gallery">';
-
-        $html[] = '<div class="panel-body panel-body-thumbnail">';
-        $html[] = '__CHECKBOX_PLACEHOLDER__';
-        $html[] = $this->get_cell_content($content_object);
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">';
-        $html[] = $content_object->get_title();
-        $html[] = '</h3>';
-        $html[] = '</div>';
-
-        $html[] = '<div class="panel-body">';
-
-        $html[] = $this->get_modification_links($content_object);
-        $html[] = '</div>';
-
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function get_cell_content(ContentObject $content_object)
+    public function renderContent($content_object)
     {
         $display = ContentObjectRenditionImplementation :: factory(
             $content_object,
@@ -51,7 +25,20 @@ class GalleryTableCellRenderer extends DataClassGalleryTableCellRenderer
         return implode(PHP_EOL, $html);
     }
 
-    private function get_modification_links($content_object)
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTableCellRenderer::renderTitle()
+     */
+    public function renderTitle($content_object)
+    {
+        return $content_object->get_title();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport::get_actions()
+     */
+    public function get_actions($content_object)
     {
         $toolbar = new Toolbar();
         $toolbar->add_items($this->get_component()->get_content_object_actions($content_object));

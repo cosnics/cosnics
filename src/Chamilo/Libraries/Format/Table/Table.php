@@ -506,7 +506,7 @@ abstract class Table
      *
      * @return boolean
      */
-    protected function has_form_actions()
+    public function has_form_actions()
     {
         return ($this instanceof TableFormActionsSupport && $this->get_form_actions() instanceof TableFormActions &&
              $this->get_form_actions()->has_form_actions());
