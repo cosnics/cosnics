@@ -395,11 +395,11 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
                 $visibility_image = 'Action/Invisible';
-                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager::context());
+                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager :: context());
             }
             else
             {
-                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager::context());
+                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager :: context());
                 $visibility_image = 'Action/Visible';
             }
 
@@ -643,6 +643,25 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
             $html[] = '<span class="label label-warning">' . Translation :: get('PublicationLabelHidden') . '</span>';
+        }
+        else
+        {
+            $hasLimitedPeriod = $publication[ContentObjectPublication :: PROPERTY_FROM_DATE] != 0 &&
+                 $publication[ContentObjectPublication :: PROPERTY_TO_DATE] != 0;
+
+            if ($hasLimitedPeriod)
+            {
+                if (time() < $publication[ContentObjectPublication :: PROPERTY_FROM_DATE])
+                {
+                    $html[] = '<span class="label label-warning">' . Translation :: get('PublicationLabelNotYetVisible') .
+                         '</span>';
+                }
+                elseif (time() > $publication[ContentObjectPublication :: PROPERTY_TO_DATE])
+                {
+                    $html[] = '<span class="label label-warning">' .
+                         Translation :: get('PublicationLabelNoLongerVisible') . '</span>';
+                }
+            }
         }
 
         if ($publication[ContentObjectPublication :: PROPERTY_PUBLICATION_DATE] >= $lastVisitDate)
