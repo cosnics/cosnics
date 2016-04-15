@@ -968,7 +968,8 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $firstAction->get_action(),
             Button :: DISPLAY_LABEL,
             $firstAction->getConfirmation(),
-            'btn-sm');
+            'btn-sm btn-table-action');
+        $button->setDropdownClasses('btn-table-action');
 
         foreach ($formActions as $formAction)
         {
