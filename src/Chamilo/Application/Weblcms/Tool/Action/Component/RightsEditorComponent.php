@@ -25,7 +25,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  *
  * @author Sven Vanpoucke
  */
-class RightsEditorComponent extends Manager implements DelegateComponent
+class RightsEditorComponent extends Manager
 {
     const ADDITIONAL_INFORMATION_OBJECT_SEPARATOR = '  |  ';
     const LOCATION_TYPE_OBJECT = 'Objects';
@@ -133,8 +133,8 @@ class RightsEditorComponent extends Manager implements DelegateComponent
                     (string) StringUtilities :: getInstance()->createString(
                         Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL))->upperCamelize());
 
-                if ($tool && strtolower($tool) !=
-                     strtolower(\Chamilo\Application\Weblcms\Tool\Manager :: class_to_type(RightsTool)))
+                $selectedTool = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL);
+                if ($selectedTool && $selectedTool != 'Rights')
                 {
                     $info[] = '<a href="' . $this->get_tool_rights_editor_url() . '">';
                     $info[] .= $tool;

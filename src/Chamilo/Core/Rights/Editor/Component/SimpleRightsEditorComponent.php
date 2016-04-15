@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Rights\Editor\Component;
 
 use Chamilo\Core\Rights\Editor\Form\SimpleRightsEditorForm;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Sven Vanpoucke
  * @package application.common.rights_editor_manager.component
  */
-class SimpleRightsEditorComponent extends RightsEditorComponent
+class SimpleRightsEditorComponent extends RightsEditorComponent implements DelegateComponent
 {
 
     /**
