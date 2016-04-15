@@ -13,10 +13,10 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
             $object->get_id(),
             $object->calculate_security_code()) . '&display=1';
 
-        if(strpos($url, 'localhost') === false)
-        {
-            $url = 'https://mozilla.github.io/pdf.js/web/viewer.html?file=' . urlencode($url);
-        }
+//        if(strpos($url, 'localhost') === false)
+//        {
+//            $url = 'https://mozilla.github.io/pdf.js/web/viewer.html?file=' . urlencode($url);
+//        }
 
         $html = array();
 
