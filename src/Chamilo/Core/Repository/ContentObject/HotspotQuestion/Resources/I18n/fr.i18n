@@ -1,0 +1,28 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\hotspot_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Question Hotspot"
+Weight = "Poids"
+HotspotTableTitle = "Hotspot"
+AddAttachments = "Ajoutez une annexe"
+HotspotJavascriptWarning = "Javascript est nécessaire pour travailler avec la question Hotspot"
+HotspotJavascriptRequired = "A cause de leur nature interactive, des questions Hotspot nécessitent un navigateur compatible avec JavaScript <br /> Si ce formulaire ne fonctionne pas correctement, s'il vous plaît utilisez un des navigateurs suivants:. <li> Internet Explorer 6.0 + < / li> <li> Firefox 2 + </ li> <li> Safari 3.0 + </ li> <li> Opera 9.0 + </ li> <li> Chrome </ li> </ ul>"
+Hotspots = "Hotspots"
+UploadImage = "Envoyez une image"
+SelectImage = "Sélectionnez une image"
+ImageObject = "Image"
+Properties = "Propriétés"
+HotspotImage = "Image Hotspot"
+CurrentlyMarking = "En train de marquer"
+SelectAnotherImage = "Choisir une autre image"
+AddHotspotOption = "Ajouter une option"
+HotspotDescription = "Description"
+Feedback = "Commentaires"
+Score = "Score"
+Answer = "Réponse"
+Comment = "Commentaire"
+Title = "Titre"
+Description = "Description"
+Image = "Image"

@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Libraries\Calendar
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Calendar"
+TypeCategory = "Libraries"
+WorkingHours = "Werkuren"
+WorkingHoursStart = "Begin"
+WorkingHoursEnd = "Einde"
+HideNoneWorkingHours = "Verberg andere uren"
+FirstDayOfWeek = "Eerste dag van de week"
+PlatformTimezone = "Tijdszone"
+Caching = "Caching"
+RefreshExternal = "Verversingstijd (in minuten)"
+DefaultView = "Standaardweergave"
+MonthView = "Maand"
+WeekView = "Week"
+DayView = "Dag"
+ListView = "Agenda"
+YearView = "Jaar"
