@@ -158,7 +158,7 @@ a:focus {
 	{
 	display: flex;
 	flex-flow: column nowrap;
-	margin-bottom: 3px;
+	margin-bottom: 5px;
 }
 
 .panel.panel-publication .panel-publication-header .panel-publication-header-title h3 a.title
