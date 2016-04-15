@@ -156,11 +156,15 @@ class FileForm extends ContentObjectForm
         else
         {
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
-            $temporaryFilePath = Path :: getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
-                 $fileUploadData->temporaryFileName;
 
-            $document->set_filename($fileUploadData->name);
-            $document->set_temporary_file_path($temporaryFilePath);
+            if($fileUploadData)
+            {
+                $temporaryFilePath = Path:: getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
+                    $fileUploadData->temporaryFileName;
+
+                $document->set_filename($fileUploadData->name);
+                $document->set_temporary_file_path($temporaryFilePath);
+            }
         }
 
         if ((isset($values['version']) && $values['version'] == 0) || ! isset($values['version']))
