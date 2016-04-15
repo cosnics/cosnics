@@ -6,27 +6,36 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Rights\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
-class RightsEditorComponent extends Manager
+class RightsEditorComponent extends Manager implements DelegateComponent
 {
 
     public function run()
     {
-        if (! $this->get_course()->is_course_admin($this->get_user()))
+        if (!$this->get_course()->is_course_admin($this->get_user()))
         {
             throw new NotAllowedException();
         }
 
+        $request = $this->getRequest();
+        $request->query->set(
+            \Chamilo\Application\Weblcms\Tool\Action\Manager::PARAM_ACTION,
+            \Chamilo\Application\Weblcms\Tool\Action\Manager::RIGHTS_EDITOR_COMPONENT
+        );
+
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            \Chamilo\Application\Weblcms\Tool\Action\Manager:: context(),
+            new ApplicationConfiguration($request, $this->get_user(), $this)
+        );
+
         return $factory->run();
     }
 
     public function get_available_rights($location)
     {
-        return WeblcmsRights :: get_available_rights($location);
+        return WeblcmsRights:: get_available_rights($location);
     }
 
     public function get_additional_parameters()
@@ -39,6 +48,5 @@ class RightsEditorComponent extends Manager
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }
