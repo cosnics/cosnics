@@ -10,11 +10,6 @@ use Chamilo\Libraries\Platform\Translation;
 class ReportingViewerComponent extends Manager
 {
 
-    public function run()
-    {
-        \Chamilo\Application\Weblcms\Tool\Action\Manager :: launch($this);
-    }
-
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(
@@ -39,6 +34,7 @@ class ReportingViewerComponent extends Manager
         return array(
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_COMPLEX_ID,
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME);
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME,
+            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
     }
 }

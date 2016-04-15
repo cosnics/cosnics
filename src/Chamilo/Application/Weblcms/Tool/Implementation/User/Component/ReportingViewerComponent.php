@@ -24,7 +24,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
 
         $factory = new ApplicationFactory(
             \Chamilo\Core\Reporting\Viewer\Manager :: context(),
-           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_template_by_name(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\CourseStudentTrackerDetailTemplate :: class_name());
@@ -36,7 +36,8 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
         return array(
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_COMPLEX_ID,
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME);
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME,
+            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
     }
 
     public function render_header($visible_tools)

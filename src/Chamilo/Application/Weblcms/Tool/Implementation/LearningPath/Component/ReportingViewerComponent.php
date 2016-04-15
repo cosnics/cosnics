@@ -34,6 +34,7 @@ class ReportingViewerComponent extends Manager
         return array(
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID,
             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_COMPLEX_ID,
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME);
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_TEMPLATE_NAME,
+            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
     }
 }

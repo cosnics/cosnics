@@ -140,9 +140,9 @@ class CourseUserExerciseInformationBlock extends ToolBlock
                 $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
             $redirect = new Redirect($params);
-            $link = $redirect->getUrl();
+            $objectLink = $redirect->getUrl();
 
-            $title = '<a href="' . $link . '">' . $content_object->get_title() . '</a>';
+            $title = '<a href="' . $objectLink . '">' . $content_object->get_title() . '</a>';
 
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row($key, Translation :: get('Title'), $title);
