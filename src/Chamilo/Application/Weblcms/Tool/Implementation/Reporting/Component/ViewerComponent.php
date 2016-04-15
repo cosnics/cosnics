@@ -64,14 +64,15 @@ class ViewerComponent extends Manager
         return array(
             \Chamilo\Application\Weblcms\Manager :: PARAM_USERS,
             \Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID,
-            \Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID);
+            \Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID,
+            \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-
     }
 }
