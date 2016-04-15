@@ -67,3 +67,4 @@ MaximumFileSizeUserNoUpgrade = "Je hebt nog <b>{USER}</b> ter beschikking in je 
 MaximumFileSizeServer = "De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{FILESIZE}</b>"
 DropFileHereMessage= "Sleep een bestand hierheen of klik op de plus om een bestand te selecteren vanop je apparaat"
 OpenInFullScreen = "Open in volledig scherm"
+CurrentlySelectedFile = "Het huidige geselecteerde bestand is <b>{FILENAME}</b> (<b>{FILESIZE}</b>). <br/> Selecteer een nieuw bestand in het onderstaande veld als je het huidige geselecteerde bestand wenst te veranderen. Als je het bestaande bestand wil behouden moet je het onderstaande veld leeg laten."
