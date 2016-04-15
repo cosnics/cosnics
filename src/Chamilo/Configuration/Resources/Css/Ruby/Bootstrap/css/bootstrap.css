@@ -17,7 +17,7 @@ a {
 .btn-primary {
 	color: #ffffff;
 	background-color: #9e021b;
-	border-color: #2e6da4;
+	border-color: #b1071c;
 }
 
 .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover,
@@ -25,7 +25,7 @@ a {
 	.btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus
 	{
 	background-color: #9e021b;
-	border-color: #2e6da4;
+	border-color: #b1071c;
 }
 
 .btn-primary .badge {
@@ -81,7 +81,7 @@ a {
 }
 
 .label-primary {
-	background-color: #9e021b;
+	background-color: #b63033;
 }
 
 .list-group-item.active>.badge, .nav-pills>.active>a>.badge {

@@ -21,7 +21,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 .btn-primary {
 	color: #fff;
 	background-color: #9e021b;
-	border-color: #2e6da4
+	border-color: #b1071c
 }
 
 .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover,
@@ -29,7 +29,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 	.btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus
 	{
 	background-color: #9e021b;
-	border-color: #2e6da4
+	border-color: #b1071c
 }
 
 .btn-primary .badge {
@@ -52,7 +52,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 }
 
 .label-primary {
-	background-color: #9e021b
+	background-color: #b63033
 }
 
 .list-group-item.active>.badge, .nav-pills>.active>a>.badge {
@@ -148,4 +148,10 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 	-webkit-transition: width .6s ease;
 	-o-transition: width .6s ease;
 	transition: width .6s ease
+}
+.radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"],
+	.checkbox-inline input[type="checkbox"] {
+	position: absolute;
+	margin-left: -20px;
+	margin-top: 4px \9;
 }
