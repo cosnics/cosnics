@@ -2,22 +2,22 @@
 <package context="Chamilo\Application\Weblcms">
 	<settings>
 		<category name="general">
-			<setting name="show_subscribe_button_on_course_home" field="checkbox" default="1">
+			<setting name="show_subscribe_button_on_course_home" field="toggle" default="1">
 				<options type="static">
 					<option name="show_subscribe_button_on_course_home" value="1" />
 				</options>
 			</setting>
-			<setting name="allow_course_creation_without_coursetype" field="checkbox" default="1">
+			<setting name="allow_course_creation_without_coursetype" field="toggle" default="1">
 				<options type="static">
 					<option name="allow_course_creation_without_coursetype" value="1" />
 				</options>
 			</setting>
-			<setting name="allow_download_page" field="checkbox" default="1">
+			<setting name="allow_download_page" field="toggle" default="1">
 				<options type="static">
 					<option name="allow_download_page" value="1" />
 				</options>
 			</setting>
-			<setting name="allow_view_as_user" field="checkbox" default="1">
+			<setting name="allow_view_as_user" field="toggle" default="1">
 				<options type="static">
 					<option name="allow_view_as_user" value="1" />
 				</options>
@@ -41,24 +41,24 @@
 					<option name="both" value="3" />
 				</options>
 			</setting>
-			<setting name="force_collaborate" field="checkbox" default="0">
+			<setting name="force_collaborate" field="toggle" default="0">
 				<options type="static">
 					<option name="force_collaborate" value="1" />
 				</options>
 			</setting>
 
-			<setting name="collaborate_default" field="checkbox" default="1" user_setting="1">
+			<setting name="collaborate_default" field="toggle" default="1" user_setting="1">
 				<options type="static">
 					<option name="collaborate_default" value="1" />
 				</options>
 			</setting>
 
-			<setting name="log_mails" field="checkbox" default="0">
+			<setting name="log_mails" field="toggle" default="0">
 				<options type="static">
 					<option name="log_mails" value="1" />
 				</options>
 			</setting>
-			<setting name="tool_dependent_publish_button" field="checkbox" default="0">
+			<setting name="tool_dependent_publish_button" field="toggle" default="0">
 				<options type="static">
 					<option name="tool_dependent_publish_button" value="1" />
 				</options>

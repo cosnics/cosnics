@@ -68,11 +68,11 @@ class SettingsForm extends FormValidator
                          'Settings'),
                 null,
                 'build_configure_form');
+
             $this->tabs_generator->add_tab($tab_admin);
         }
-        $this->tabs_generator->render();
 
-        $this->add_checkbox_javascript();
+        $this->tabs_generator->render();
     }
 
     public function build_configure_form()
@@ -206,12 +206,13 @@ class SettingsForm extends FormValidator
                             $options = $setting['options']['values'];
                         }
 
-                        if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox')
+                        if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox' ||
+                             $setting['field'] == 'toggle')
                         {
                             $group = array();
                             foreach ($options as $option_value => $option_name)
                             {
-                                if ($setting['field'] == 'checkbox')
+                                if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
                                 {
                                     $group[] = & $this->createElement(
                                         $setting['field'],
