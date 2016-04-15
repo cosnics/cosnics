@@ -20,6 +20,12 @@ a {
 	border-color: #b1071c;
 }
 
+.btn-primary:hover {
+	color: #ffffff;
+	background-color: #9e021b;
+	border-color: #b1071c;
+}
+
 .btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover,
 	.btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus,
 	.btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus
