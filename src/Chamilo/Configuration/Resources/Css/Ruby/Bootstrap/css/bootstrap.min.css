@@ -5,6 +5,11 @@ a {
 	text-decoration: none
 }
 
+a:hover, a:focus {
+	color: #444444;
+	text-decoration: underline;
+}
+
 a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 	border-color: #9e021b
 }
@@ -149,6 +154,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 	-o-transition: width .6s ease;
 	transition: width .6s ease
 }
+
 .radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"],
 	.checkbox-inline input[type="checkbox"] {
 	position: absolute;
