@@ -85,12 +85,15 @@ class Publisher
                 ContentObject :: class_name(),
                 $parameters);
 
-            $html[] = '<div class="content_object padding_10">';
-            $html[] = '<div class="title">' . Translation :: get(
-                'SelectedContentObjects',
-                null,
-                Utilities :: COMMON_LIBRARIES) . '</div>';
-            $html[] = '<div class="description">';
+            $html[] = '<div class="panel panel-default">';
+
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h3 class="panel-title">';
+            $html[] = Translation :: get('SelectedContentObjects', null, Utilities :: COMMON_LIBRARIES);
+            $html[] = '</h3>';
+            $html[] = '</div>';
+
+            $html[] = '<div class="panel-body">';
             $html[] = '<ul class="attachments_list">';
 
             while ($content_object = $content_objects->next_result())

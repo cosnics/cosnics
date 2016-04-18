@@ -95,7 +95,6 @@ body {
 	font-size: 120%;
 	font-weight: bold;
 }*/
-
 .notification {
 	float: right;
 	position: relative;
@@ -126,41 +125,21 @@ body {
 
 .notifications {
 	position: fixed;
-	right: 1%;
-	top: 1%;
-	margin-left: 290px;
-	background-repeat: no-repeat;
-	background-position: 10px 50%;
-	text-align: justify;
+	right: 15px;
+	top: 15px;
+	left: 15px; text-align : justify;
 	z-index: 9999999;
+	text-align: justify;
 }
 
-.notification-4 {
-	background-image: url('../../Images/Aqua/Status/NormalMini.png');
-	background-color: #E5EDF9;
-	border: 1px solid #b9d0ef;
-	color: #272761;
+@media ( min-width : 768px) {
+	.notifications {
+		left: auto;
+	}
 }
 
-.notification-1 {
-	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
-	background-color: #FFD1D1;
-	border: 1px solid #ff9b9d;
-	color: #b40404;
-}
-
-.notification-2 {
-	background-image: url('../../Images/Aqua/Status/WarningMini.png');
-	border: 1px solid #ffd89b;
-	background-color: #fff8aa;
-	color: #996900;
-}
-
-.notification-3 {
-	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
-	border: 1px solid #339900;
-	background-color: #ddffaa;
-	color: #006600;
+.notifications .alert {
+	margin-bottom: 10px;
 }
 
 .warning-banner, .danger-banner {

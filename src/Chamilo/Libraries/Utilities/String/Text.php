@@ -218,9 +218,9 @@ class Text
         return $document->getElementsByTagname($tag);
     }
 
-    public static function highlight($haystack, $needle, $highlight_color)
+    public static function highlight($haystack, $needle)
     {
-        if (strlen($highlight_color) < 1 || strlen($haystack) < 1 || strlen($needle) < 1)
+        if (strlen($haystack) < 1 || strlen($needle) < 1)
         {
             return $haystack;
         }
@@ -238,10 +238,7 @@ class Text
                     continue;
 
                 $matches_done[] = $match;
-                $haystack = str_replace(
-                    $match,
-                    '<span style="background-color:' . $highlight_color . ';">' . $match . '</span>',
-                    $haystack);
+                $haystack = str_replace($match, '<mark>' . $match . '</mark>', $haystack);
             }
         }
         return $haystack;

@@ -19,13 +19,18 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $object = $this->get_content_object();
         $replace = array();
 
-        $replace[] = '<div class="content_object">';
-        $replace[] = '<div class="title">';
+        $replace[] = '<div class="panel panel-default">';
+
+        $replace[] = '<div class="panel-heading">';
+        $replace[] = '<h3 class="panel-title">';
         $replace[] = $object->get_location();
+        $replace[] = '</h3>';
         $replace[] = '</div>';
-        $replace[] = '<div class="description">';
+
+        $replace[] = '<div class="panel-body">';
         $replace[] = $this->get_javascript($object);
         $replace[] = '</div>';
+
         $replace[] = '</div>';
 
         return implode(PHP_EOL, $replace);

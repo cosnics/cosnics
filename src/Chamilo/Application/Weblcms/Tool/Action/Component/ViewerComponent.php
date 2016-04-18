@@ -267,4 +267,13 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         return new AndCondition($conditions);
     }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function hasCategories()
+    {
+        return false;
+    }
 }
