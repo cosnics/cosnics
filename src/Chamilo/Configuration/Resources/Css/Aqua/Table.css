@@ -272,6 +272,13 @@
 	padding: 15px
 }
 
+/**
+ * PROPERTIES TABLE
+ */
+.table-properties {
+	width: auto;
+}
+
 /*****************************************************
  * EXTRA STYLES FOR ASSESSMENTS AND QUESTION OPTIONS *
  *****************************************************/

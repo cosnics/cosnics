@@ -81,11 +81,11 @@ class NotificationMessage
     public function to_html()
     {
         $html = array();
-        $html[] = '<div class="alert  alert-' . $this->type . ' . alert-dismissible" . role="alert">';
+        $html[] = '<div class="alert  alert-' . $this->type . ' alert-dismissible" role="alert">';
         $html[] = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
         $html[] = $this->message;
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 

@@ -24,13 +24,13 @@ class ViewerComponent extends TabComponent
     function build()
     {
         $this->current_step = Request :: get(self :: PARAM_STEP, 1);
-        
+
         if ($this->is_form_submitted())
         {
             $action = $this->get_action();
-            
+
             $this->saveAnswers();
-            
+
             if ($action == self :: FORM_BACK)
             {
                 $this->current_step = $this->current_step - 1;
@@ -42,30 +42,30 @@ class ViewerComponent extends TabComponent
             elseif ($action == self :: FORM_SUBMIT)
             {
                 $html = array();
-                
+
                 $html[] = $this->render_header();
                 $html[] = $this->get_finish_html();
                 $html[] = $this->render_footer();
-                
+
                 return implode(PHP_EOL, $html);
             }
-            
+
             $this->set_parameter(self :: PARAM_STEP, $this->current_step);
             $this->redirect(null, false, $this->get_parameters());
         }
         else
         {
-//             var_dump($_SESSION);
-            
+            // var_dump($_SESSION);
+
             $form = new ViewerForm($this, $this->get_url(array(self :: PARAM_STEP => $this->current_step)));
-            
+
             $html = array();
             $html[] = $this->render_header();
             $html[] = $this->addHiddenFields($form);
             $html[] = $this->addJavascript();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
@@ -89,7 +89,7 @@ class ViewerComponent extends TabComponent
     public function get_action()
     {
         $actions = array(self :: FORM_NEXT, self :: FORM_SUBMIT, self :: FORM_BACK);
-        
+
         foreach ($actions as $action)
         {
             if (! is_null(Request :: post($action)))
@@ -97,7 +97,7 @@ class ViewerComponent extends TabComponent
                 return $action;
             }
         }
-        
+
         return self :: FORM_NEXT;
     }
 
@@ -105,11 +105,11 @@ class ViewerComponent extends TabComponent
     {
         $paramaters = $this->get_parameters();
         $answerServiceContext = $this->getApplicationConfiguration()->getAnswerService()->getServiceContext();
-        
-        $paramaters[AnswerServiceInterface::PARAM_SERVICE_CONTEXT] = $answerServiceContext;
+
+        $paramaters[AnswerServiceInterface :: PARAM_SERVICE_CONTEXT] = $answerServiceContext;
         $paramaters[self :: PARAM_STEP] = $this->get_current_step();
         $paramaters[\Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object_id();
-        
+
         foreach ($paramaters as $name => $value)
         {
             $form->addHiddenField($name, $value);
@@ -118,25 +118,28 @@ class ViewerComponent extends TabComponent
 
     private function addJavascript()
     {
-        return ResourceManager::get_instance()->get_resource_html(Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Ajax', true).'ProcessVisibility.js');
+        return ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Ajax', true) .
+                 'ProcessVisibility.js');
     }
-    
+
     private function get_finish_html()
     {
         $html = array();
-        $html[] = '<div class="clear"></div>';
-        $html[] = '<div class="content_object" style="background-image: url(' .
-             $this->get_root_content_object()->get_icon_path() . ');">';
-        $html[] = '<div class="title">' . $this->get_root_content_object()->get_title() . '</div>';
-        $html[] = '<div class="description" style="overflow: auto;">';
-        $html[] = '<div class="description">';
+
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . $this->get_root_content_object()->get_icon_image() . ' ' .
+             $this->get_root_content_object()->get_title() . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
         $html[] = $this->get_root_content_object()->get_finish_text();
-        $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
+
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -149,26 +152,25 @@ class ViewerComponent extends TabComponent
         elseif ($this->get_current_complex_content_object_item() instanceof ComplexPage)
         {
             $nodes = $this->get_current_complex_content_object_path_node()->get_descendants();
-            
+
             foreach ($nodes as $node)
             {
                 if ($node->get_complex_content_object_item() instanceof PageDisplayItem)
                 {
-                   $this->saveAnswer($node);
-                    
+                    $this->saveAnswer($node);
                 }
             }
         }
     }
-    
+
     private function saveAnswer(ComplexContentObjectPathNode $node)
     {
         $answerService = $this->getApplicationConfiguration()->getAnswerService();
         $complexContentObjectItem = $node->get_complex_content_object_item();
         $answerIds = $complexContentObjectItem->getAnswerIds($answerService->getPrefix());
-        
+
         $answers = $answerService->getAnswer($node->get_id());
-        
+
         foreach ($answerIds as $answerId)
         {
             $answer = Request :: post($answerId);
@@ -181,8 +183,9 @@ class ViewerComponent extends TabComponent
                 unset($answers[$answerId]);
             }
         }
-        
-        if($answers){
+
+        if ($answers)
+        {
             $answerService->saveAnswer($node->get_id(), $answers);
         }
     }

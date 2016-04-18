@@ -49,8 +49,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $html[] = '<div id="hotspot_container"><div id="hotspot_image" style="width: ' .
                  $scaledDimensions['thumbnailWidth'] . 'px; height: ' . $scaledDimensions['thumbnailHeight'] .
                  'px; background-size: ' . $scaledDimensions['thumbnailWidth'] . 'px ' .
-                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' .
-                 \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+                 $scaledDimensions['thumbnailHeight'] . 'px;background-image: url(' . \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
                     $image->get_id(),
                     $image->calculate_security_code()) . ')"></div></div>';
         }

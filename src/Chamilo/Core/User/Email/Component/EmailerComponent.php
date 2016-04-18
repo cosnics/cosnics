@@ -55,9 +55,13 @@ class EmailerComponent extends Manager
         $target_users = $this->get_target_users();
         $html = array();
 
-        $html[] = '<div class="content_object padding_10">';
-        $html[] = '<div class="title">' . Translation :: get('SelectedUsers') . '</div>';
-        $html[] = '<div class="description">';
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . Translation :: get('SelectedUsers') . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
         $html[] = '<ul class="attachments_list">';
 
         foreach ($target_users as $target_user)
@@ -73,6 +77,7 @@ class EmailerComponent extends Manager
 
         $html[] = '</ul>';
         $html[] = '</div>';
+
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
