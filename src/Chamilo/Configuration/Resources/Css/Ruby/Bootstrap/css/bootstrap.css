@@ -5,6 +5,11 @@ a {
 	text-decoration: none;
 }
 
+a:hover, a:focus {
+	color: #444444;
+	text-decoration: underline;
+}
+
 .text-primary {
 	color: #444444;
 }
@@ -15,6 +20,12 @@ a {
 }
 
 .btn-primary {
+	color: #ffffff;
+	background-color: #9e021b;
+	border-color: #b1071c;
+}
+
+.btn-primary:hover {
 	color: #ffffff;
 	background-color: #9e021b;
 	border-color: #b1071c;

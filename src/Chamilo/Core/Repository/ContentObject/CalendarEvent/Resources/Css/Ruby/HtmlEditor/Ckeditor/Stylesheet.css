@@ -1,4 +1,4 @@
-@import url('../../Aqua/HtmlEditor/Ckeditor/Stylesheet.css');
+@import url('../../../Aqua/HtmlEditor/Ckeditor/Stylesheet.css');
 
 .cke_chamilo_calendar_event {
 	background-image: url(../../../../../Images/Ruby/Logo/48.png);
