@@ -88,20 +88,34 @@ class ViewComponent extends Manager
         $course_type = $this->get_selected_course_type();
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($course_type);
 
-        $html[] = '<div>';
-        $html[] = $this->buttonToolbarRenderer->render() . '<br />';
-        $html[] = '<div class="clear"></div><div class="content_object" style="background-image: url(';
-        $html[] = Theme :: getInstance()->getCommonImagePath('Place/Group') . ');">';
-        $html[] = '<div class="title">' . Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES);
+        $html[] = $this->buttonToolbarRenderer->render();
+
+        // Description
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . Theme :: getInstance()->getCommonImage('Place/Group') . ' ' .
+             Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES) . '</h3>';
         $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
         $html[] = $course_type->get_description();
         $html[] = '</div>';
-        $html[] = '<div class="content_object" style="background-image: url(';
-        $html[] = Theme :: getInstance()->getCommonImagePath('Place/Publications') . ');">';
-        $html[] = '<div class="title">' . Translation :: get('Courses') . '</div>';
+
+        $html[] = '</div>';
+
+        // Courses
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . Theme :: getInstance()->getCommonImage('Place/Publications') . ' ' .
+             Translation :: get('Courses') . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
         $html[] = $this->get_courses_table_html($course_type);
         $html[] = '</div>';
-        $html[] = '<div style="clear: both;"></div>';
+
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

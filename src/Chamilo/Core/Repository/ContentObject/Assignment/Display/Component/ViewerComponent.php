@@ -32,16 +32,16 @@ class ViewerComponent extends Manager implements TableSupport
     public function run()
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->renderDetails();
         $html[] = $this->renderReporting();
         $html[] = $this->renderEntityTable();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -52,11 +52,11 @@ class ViewerComponent extends Manager implements TableSupport
     protected function renderDetails()
     {
         $display = ContentObjectRenditionImplementation :: factory(
-            $this->get_root_content_object(), 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_FULL, 
+            $this->get_root_content_object(),
+            ContentObjectRendition :: FORMAT_HTML,
+            ContentObjectRendition :: VIEW_FULL,
             $this);
-        
+
         return $display->render();
     }
 
@@ -67,17 +67,23 @@ class ViewerComponent extends Manager implements TableSupport
     protected function renderReporting()
     {
         $html = array();
-        
-        $html[] = '<div class="content_object" style="background-image: url(' .
-             Theme :: getInstance()->getImagePath('Chamilo\Core\Reporting', 'Logo/16') . ');">';
-        $html[] = '<div class="title">' . Translation :: get('Reporting') . '</div>';
-        
+
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title"><img src="' .
+             Theme :: getInstance()->getImagePath('Chamilo\Core\Reporting', 'Logo/16') . '" /> ' .
+             Translation :: get('Reporting') . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
+
         $entityName = $this->getDataProvider()->getEntityNameByType($this->getEntityType());
         $entryCount = $this->getDataProvider()->countDistinctEntriesByEntityType($this->getEntityType());
         $feedbackCount = $this->getDataProvider()->countDistinctFeedbackByEntityType($this->getEntityType());
         $lateEntryCount = $this->getDataProvider()->countDistinctLateEntriesByEntityType($this->getEntityType());
         $entityCount = $this->getDataProvider()->countEntitiesByEntityType($this->getEntityType());
-        
+
         $properties = array();
         $properties[Translation :: get('EntriesForEntityType', array('NAME' => $entityName))] = $entryCount . '/' .
              $entityCount;
@@ -85,14 +91,14 @@ class ViewerComponent extends Manager implements TableSupport
              $entityCount;
         $properties[Translation :: get('LateEntriesForEntityType', array('NAME' => $entityName))] = $lateEntryCount . '/' .
              $entityCount;
-        
+
         $table = new PropertiesTable($properties);
-        
+
         $html[] = $table->toHtml();
-        
+
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        
+        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -123,25 +129,25 @@ class ViewerComponent extends Manager implements TableSupport
                 new ButtonGroup(
                     array(
                         new Button(
-                            Translation :: get('Download'), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Download')), 
+                            Translation :: get('Download'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Download')),
                         new Button(
-                            Translation :: get('SubmissionSubmit'), 
+                            Translation :: get('SubmissionSubmit'),
                             Theme :: getInstance()->getCommonImagePath('Action/Add')))));
-            
+
             $buttonToolBar->addButtonGroup(
                 new ButtonGroup(
                     array(
                         new Button(
-                            Translation :: get('ScoreOverview'), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Statistics')), 
+                            Translation :: get('ScoreOverview'),
+                            Theme :: getInstance()->getCommonImagePath('Action/Statistics')),
                         new Button(
-                            Translation :: get('EntriesOverview'), 
+                            Translation :: get('EntriesOverview'),
                             Theme :: getInstance()->getCommonImagePath('Action/Statistics')))));
-            
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
         }
-        
+
         return $this->buttonToolbarRenderer;
     }
 }
