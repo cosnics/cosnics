@@ -5,6 +5,11 @@ a {
 	text-decoration: none;
 }
 
+a:hover, a:focus {
+	color: #444444;
+	text-decoration: underline;
+}
+
 .text-primary {
 	color: #444444;
 }
