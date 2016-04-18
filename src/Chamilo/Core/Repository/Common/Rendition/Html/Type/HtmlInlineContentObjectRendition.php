@@ -16,26 +16,32 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
     {
         $object = $this->get_content_object();
         $html = array();
-        $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
-        $html[] = '<div class="title">' . $object->get_title() . '</div>';
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . $object->get_icon_image() . ' ' . $object->get_title() . '</h3>';
+        $html[] = '</div>';
+
         $html[] = $this->get_description();
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
 
         return implode(PHP_EOL, $html);
     }
 
     public function get_description()
     {
-        $html[] = '<div class="description" style="overflow: auto;">';
+        $html[] = '<div class="panel-body" style="overflow: auto;">';
         $renderer = new ContentObjectResourceRenderer($this, $this->get_content_object()->get_description());
         $html[] = $renderer->run();
-        $html[] = '<div class="clear"></div>';
+        $html[] = '<div class="clearfix"></div>';
+
         if (method_exists($this->get_rendition_implementation(), 'get_description'))
         {
             $html[] = $this->get_rendition_implementation()->get_description();
         }
+
         $html[] = $this->get_attachments();
+
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

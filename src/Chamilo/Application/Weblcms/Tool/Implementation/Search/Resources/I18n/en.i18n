@@ -5,7 +5,9 @@
 
 TypeName = "Search"
 TypeCategory = "Course Tools"
-ResultsFoundFor = "Results found for:"
+ResultsFoundFor = "{COUNT} results found for: <mark>{QUERY}</mark>"
+ResultFoundFor = "{COUNT} result found for: <mark>{QUERY}</mark>"
 SearcherComponent = "Search"
 SearchResult = "{COUNT} result"
 SearchResults = "{COUNT} results"
+SearchFor = "Search for"

@@ -10,6 +10,10 @@ a:focus {
 	margin-bottom: 10px;
 }
 
+mark {
+	background-color: yellow;
+}
+
 /**************
  * ACTION BAR *
  **************/
