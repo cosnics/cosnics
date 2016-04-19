@@ -124,9 +124,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
 
     /*
      * (non-PHPdoc) @see
-     * \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_tabs()
+     * \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_actions()
      */
-    public function get_portfolio_additional_tabs()
+    public function get_portfolio_additional_actions()
     {
         return array();
     }

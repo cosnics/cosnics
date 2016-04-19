@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\Rendition
 use Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\RenditionImplementation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
 
 class HtmlRenditionImplementation extends RenditionImplementation
 {
@@ -39,7 +38,6 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $html[] = '</rss-feed-renderer>';
 
         $html[] = '</ul>';
-
 
         return implode(PHP_EOL, $html);
     }

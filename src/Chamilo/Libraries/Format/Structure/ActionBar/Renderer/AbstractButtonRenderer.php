@@ -29,7 +29,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function getLabel()
     {
-        return ($this->getButton()->getLabel() ? htmlspecialchars($this->getButton()->getLabel()) : null);
+        return ($this->getButton()->getLabel() ? $this->getButton()->getLabel() : null);
     }
 
     /**
@@ -102,7 +102,12 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function renderTitle()
     {
-        return 'title="' . $this->getLabel() . '"';
+        return 'title="' . $this->getTitle() . '"';
+    }
+
+    public function getTitle()
+    {
+        return htmlspecialchars(strip_tags($this->getLabel()));
     }
 
     /**
@@ -140,7 +145,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
     public function renderLinkContentImage()
     {
         $button = $this->getButton();
-        $label = $this->getLabel();
+        $title = $this->getTitle();
         $imagePath = $button->getImagePath();
 
         if ($imagePath instanceof InlineGlyph)
@@ -149,7 +154,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         }
         else
         {
-            return '<img src="' . htmlentities($button->getImagePath()) . '" alt="' . $label . '" title="' . $label .
+            return '<img src="' . htmlentities($button->getImagePath()) . '" alt="' . $title . '" title="' . $title .
                  '"/>';
         }
     }

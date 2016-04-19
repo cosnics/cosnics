@@ -41,7 +41,15 @@ class FeedbackForm extends FormValidator
      */
     protected function build_form()
     {
-        $this->add_html_editor(Feedback :: PROPERTY_COMMENT, Translation :: get('AddFeedback'), true);
+        $renderer = $this->get_renderer();
+
+        $this->add_html_editor(
+            Feedback :: PROPERTY_COMMENT,
+            Translation :: get('AddFeedback'),
+            true,
+            array('width' => '100%', 'collapse_toolbar' => true));
+
+        $renderer->setElementTemplate('<div class="form-group">{element}</div>', Feedback :: PROPERTY_COMMENT);
 
         if ($this->application->get_parent() instanceof FeedbackNotificationSupport)
         {
@@ -50,9 +58,13 @@ class FeedbackForm extends FormValidator
                 $this->addElement(
                     'checkbox',
                     self :: PROPERTY_NOTIFICATIONS,
+                    null,
                     Translation :: get('ReceiveNotifications'));
+
+                $renderer->setElementTemplate('<div class="form-group">{element}</div>', self :: PROPERTY_NOTIFICATIONS);
             }
         }
+
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
@@ -64,6 +76,8 @@ class FeedbackForm extends FormValidator
             Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+
+        $renderer->setElementTemplate('<div class="form-group">{element}</div>', 'buttons');
     }
 
     /**

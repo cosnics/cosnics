@@ -22,8 +22,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -337,25 +337,20 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
     /*
      * (non-PHPdoc) @see
-     * \repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_tabs()
+     * \repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_actions()
      */
-    public function get_portfolio_additional_tabs()
+    public function get_portfolio_additional_actions()
     {
         return array(
-            new DynamicVisualTab(
-                self :: ACTION_BROWSE,
+            new Button(
                 Translation :: get('BrowserComponent'),
-                Theme :: getInstance()->getImagePath('Chamilo\Application\Portfolio', 'Tab/' . self :: ACTION_BROWSE),
+                new BootstrapGlyph('search'),
                 $this->get_url(
                     array(self :: PARAM_ACTION => self :: ACTION_BROWSE),
                     array(
                         self :: PARAM_USER_ID,
                         \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_ACTION,
-                        \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_STEP)),
-                false,
-                false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED));
+                        \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_STEP))));
     }
 
     /**
