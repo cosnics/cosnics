@@ -8,15 +8,13 @@ $(function()
     
     $(document).ready(function()
     {
-        initialize();
-        
         bindPortalActions();
         makeColumnsResizable();
         makeBlocksSortable();
         makeTabsSortable();
     });
     
-    function initialize()
+    function initializeAvailableBlocks()
     {
         getAvailableBlocks();
         renderAvailablePackages();
@@ -63,12 +61,17 @@ $(function()
         }).success(function(json)
         {
             availableBlocks = json.properties.blocks;
+            renderAvailablePackages();
+            renderAvailableComponents();
         });
     }
     
     function displayBlockScreen(e, ui)
     {
         e.preventDefault();
+
+        initializeAvailableBlocks();
+
         $(".portal-package-container").removeClass('hidden').addClass('show');
     }
     
