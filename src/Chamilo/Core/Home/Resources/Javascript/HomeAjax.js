@@ -14,13 +14,6 @@ $(function()
         makeTabsSortable();
     });
     
-    function initializeAvailableBlocks()
-    {
-        getAvailableBlocks();
-        renderAvailablePackages();
-        renderAvailableComponents();
-    }
-    
     function bindPortalActions()
     {
         $(document).on('click', "a.portal-add-block:not(.dropdown-toggle)", displayBlockScreen);
@@ -70,7 +63,7 @@ $(function()
     {
         e.preventDefault();
 
-        initializeAvailableBlocks();
+        getAvailableBlocks();
 
         $(".portal-package-container").removeClass('hidden').addClass('show');
     }
