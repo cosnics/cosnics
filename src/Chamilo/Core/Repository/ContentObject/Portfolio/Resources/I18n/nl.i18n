@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\portfolio
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Portfoliomap"
+PreviewModeWarning = "Opgelet: In deze preview wordt feedback *niet* opgeslagen. Publiceer je portfolio om van alle functionaliteit gebruik te kunnen maken."
+View = "Bekijken"
+Edit = "Bewerken"
+Feedback = "Feedback"
+Add = "Voeg een item toe"
+Delete = "Verwijder dit item"
+CreatedOn = "Gemaakt op {DATE}"
+CreatedOnBy = "Gemaakt op {DATE} door {USER}"
+LastModifiedOn = "Laatst gewijzigd op {DATE}"

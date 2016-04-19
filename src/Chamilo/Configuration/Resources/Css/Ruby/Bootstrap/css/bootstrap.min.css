@@ -1,0 +1,163 @@
+@import url('../../../Aqua/Bootstrap/css/bootstrap.min.css');
+
+a {
+	color: #9e021b;
+	text-decoration: none
+}
+
+a:hover, a:focus {
+	color: #444444;
+	text-decoration: underline;
+}
+
+a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
+	border-color: #9e021b
+}
+
+.text-primary {
+	color: #9e021b
+}
+
+.bg-primary {
+	color: #fff;
+	background-color: #9e021b
+}
+
+.btn-primary {
+	color: #fff;
+	background-color: #9e021b;
+	border-color: #b1071c
+}
+
+.btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover,
+	.btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus,
+	.btn-primary.disabled.focus, .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus
+	{
+	background-color: #9e021b;
+	border-color: #b1071c
+}
+
+.btn-primary .badge {
+	color: #9e021b;
+	background-color: #fff
+}
+
+.btn-link {
+	color: #9e021b;
+	font-weight: normal;
+	border-radius: 0
+}
+
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus
+	{
+	color: #fff;
+	text-decoration: none;
+	outline: 0;
+	background-color: #9e021b
+}
+
+.label-primary {
+	background-color: #b63033
+}
+
+.list-group-item.active>.badge, .nav-pills>.active>a>.badge {
+	color: #9e021b;
+	background-color: #fff
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus
+	{
+	z-index: 2;
+	color: #fff;
+	background-color: #9e021b;
+	border-color: #9e021b
+}
+
+.nav .open>a, .nav .open>a:hover, .nav .open>a:focus {
+	background-color: #eee;
+	border-color: #9e021b
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus
+	{
+	color: #fff;
+	background-color: #9e021b
+}
+
+.pagination>li>a, .pagination>li>span {
+	position: relative;
+	float: left;
+	padding: 6px 12px;
+	line-height: 1.42857143;
+	text-decoration: none;
+	color: #9e021b;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	margin-left: -1px
+}
+
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover,
+	.pagination>.active>span:hover, .pagination>.active>a:focus,
+	.pagination>.active>span:focus {
+	z-index: 3;
+	color: #fff;
+	background-color: #9e021b;
+	border-color: #9e021b;
+	cursor: default
+}
+
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover,
+	.pagination>.active>span:hover, .pagination>.active>a:focus,
+	.pagination>.active>span:focus {
+	z-index: 3;
+	color: #fff;
+	background-color: #9e021b;
+	border-color: #9e021b;
+	cursor: default
+}
+
+.panel-primary {
+	border-color: #9e021b
+}
+
+.panel-primary>.panel-heading {
+	color: #ffffff;
+	background-color: #9e021b;
+	border-color: #9e021b;
+}
+
+.panel-primary>.panel-heading+.panel-collapse>.panel-body {
+	border-top-color: #9e021b;
+}
+
+.panel-primary>.panel-heading .badge {
+	color: #9e021b;
+	background-color: #ffffff
+}
+
+.panel-primary>.panel-footer+.panel-collapse>.panel-body {
+	border-bottom-color: #9e021b;
+}
+
+.progress-bar {
+	float: left;
+	width: 0%;
+	height: 100%;
+	font-size: 12px;
+	line-height: 20px;
+	color: #fff;
+	text-align: center;
+	background-color: #9e021b;
+	-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+	box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+	-webkit-transition: width .6s ease;
+	-o-transition: width .6s ease;
+	transition: width .6s ease
+}
+
+.radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"],
+	.checkbox-inline input[type="checkbox"] {
+	position: absolute;
+	margin-left: -20px;
+	margin-top: 4px \9;
+}
