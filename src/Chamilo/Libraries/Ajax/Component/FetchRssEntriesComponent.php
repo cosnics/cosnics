@@ -17,6 +17,12 @@ class FetchRssEntriesComponent extends Manager implements NoAuthenticationSuppor
         $url = $this->getRequest()->get('rss_feed_url');
         $number_entries = $this->getRequest()->get('number_of_entries');
 
+        /**
+         * WARNING! ONLY DO THIS WHEN YOU ARE SURE THAT YOU DON'T NEED TO WRITE TO THE SESSION ANYMORE.
+         * THIS FUNCTION MAKES SURE THAT THE SESSION IS NOT BLOCKED WHEN PARSING (INVALID) RSS FEEDS.
+         */
+        session_write_close();
+
         $purifier_config = \HTMLPurifier_Config::createDefault();
         $purifier_config->set('Cache.SerializerPath', Path::getInstance()->getCachePath());
         $purifier_config->set('Cache.SerializerPermissions', 06770);

@@ -30,7 +30,7 @@
                 'index.php?application=Chamilo\\Libraries\\Ajax&go=FetchRssEntries',
                 $.param({'rss_feed_url': $scope.rssFeedUrl, 'number_of_entries': $scope.numberOfEntries}),
                 {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
-            ).success(
+            ).then(
                 angular.bind(this, function (result) {
                     if(result && result.properties) {
                         this.feedEntries = result.properties;
