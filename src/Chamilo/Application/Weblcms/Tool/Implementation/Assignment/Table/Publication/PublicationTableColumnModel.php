@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Extension on the content object publication table column model for this tool
@@ -26,20 +27,28 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
      */
     public function initialize_columns()
     {
-        parent :: initialize_columns(false);
+        parent:: initialize_columns(false);
 
         $this->add_column(
-            new DataClassPropertyTableColumn(Assignment :: class_name(), Assignment :: PROPERTY_END_TIME, null, false));
+            new DataClassPropertyTableColumn(Assignment:: class_name(), Assignment :: PROPERTY_END_TIME, null, false)
+        );
 
-        $this->add_column(new StaticTableColumn(Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS));
+        $this->add_column(
+            new StaticTableColumn(
+                Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS,
+                Translation::getInstance()->getTranslation('NumberOfSubmissions', null, Manager::context())
+            )
+        );
 
         $this->add_column(
             new DataClassPropertyTableColumn(
-                Assignment :: class_name(),
+                Assignment:: class_name(),
                 Assignment :: PROPERTY_ALLOW_GROUP_SUBMISSIONS,
                 null,
-                false),
-            1);
+                false
+            ),
+            1
+        );
 
         $this->addActionsColumn();
     }
