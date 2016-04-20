@@ -131,12 +131,12 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
      *
      * @see \repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
      */
-    public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node)
+    public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
     {
         $parameters = new DataClassRetrievesParameters(
             $this->get_feedback_conditions($node),
-            null,
-            null,
+            $count,
+            $offset,
             array(
                 new OrderBy(
                     new PropertyConditionVariable(Feedback :: class_name(), Feedback :: PROPERTY_MODIFICATION_DATE),

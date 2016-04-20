@@ -278,7 +278,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
      *
      * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
      */
-    public function retrieve_feedbacks()
+    public function retrieve_feedbacks($count, $offset)
     {
         return $this->getDataProvider()->findFeedbackByEntry($this->getEntry());
     }
