@@ -647,7 +647,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'radio',
             null,
             null,
-            Translation:: get('Everyone'),
+            Translation:: get('EveryoneCanView'),
             self::RIGHTS_FOR_ALL,
             array('class' => 'rights_selector')
         );
@@ -655,7 +655,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'radio',
             null,
             null,
-            Translation:: get('OnlyForMe'),
+            Translation:: get('OnlyMeCanView'),
             self::RIGHTS_FOR_ME,
             array('class' => 'rights_selector')
         );
@@ -664,7 +664,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'radio',
             null,
             null,
-            Translation:: get('SelectSpecificEntities'),
+            Translation:: get('SelectSpecificEntitiesThatCanView'),
             self::RIGHTS_SELECT_SPECIFIC,
             array('class' => 'rights_selector specific_rights_selector')
         );
