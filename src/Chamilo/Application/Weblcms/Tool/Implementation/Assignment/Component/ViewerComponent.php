@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -30,7 +31,7 @@ class ViewerComponent extends Manager
     {
         $actions = array();
         $publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
-        $actions[] = new ToolbarItem(
+        $actions[] = new Button(
             Translation :: get('SubmissionSubmit'),
             Theme :: getInstance()->getCommonImagePath('Action/Add'),
             $this->get_url(
@@ -39,7 +40,7 @@ class ViewerComponent extends Manager
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id,
                     self :: PARAM_TARGET_ID => $this->get_user_id(),
                     self :: PARAM_SUBMITTER_TYPE => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: SUBMITTER_TYPE_USER)),
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL);
+            Button :: DISPLAY_ICON_AND_LABEL);
         return $actions;
     }
 }
