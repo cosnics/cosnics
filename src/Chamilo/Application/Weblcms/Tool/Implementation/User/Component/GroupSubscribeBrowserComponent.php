@@ -257,6 +257,10 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
 
     /**
      * Builds the group button toolbar for the management of a single group
+     *
+     * @param Group $group
+     *
+     * @return ButtonToolBarRenderer
      */
     protected function getGroupButtonToolbarRenderer(Group $group)
     {
