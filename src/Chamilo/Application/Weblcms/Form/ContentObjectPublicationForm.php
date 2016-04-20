@@ -669,6 +669,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
             array('class' => 'rights_selector specific_rights_selector')
         );
 
+        $this->addElement('html', '<div class="right">');
+
         $this->addGroup(
             $group, self::PROPERTY_RIGHTS_SELECTOR,
             $translator->getTranslation('PublishFor', null, Manager::context()), ''
@@ -693,7 +695,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             '</div>'
         );
 
-        $this->addElement('html', '</div>');
+        $this->addElement('html', '</div></div>');
 
         $this->addElement(
             'html',

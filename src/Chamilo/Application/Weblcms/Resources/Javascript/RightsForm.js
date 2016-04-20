@@ -3,17 +3,17 @@ $(function ()
     $(document).ready(function ()
     {
         var inheritedRightsSelected = function() {
-            $('.entity_selector_box').hide();
+            $(this).closest('.right').find('.entity_selector_box').hide();
             $('.target-entities-container').show();
         };
 
         var specificEntitiesSelected = function() {
-            $('.entity_selector_box').show();
+            $(this).closest('.right').find('.entity_selector_box').show();
             $('.target-entities-container').hide();
         };
 
         var otherOptionSelected = function() {
-            $('.entity_selector_box').hide();
+            $(this).closest('.right').find('.entity_selector_box').hide();
             $('.target-entities-container').hide();
         };
 
@@ -21,13 +21,9 @@ $(function ()
         $(document).on('click', '.rights_selector:not(.inherit_rights_selector):not(.specific_rights_selector)',  otherOptionSelected);
         $(document).on('click', '.rights_selector.specific_rights_selector', specificEntitiesSelected );
 
-        if($('.inherit_rights_selector').prop('checked')) {
-            inheritedRightsSelected();
-        } else if($('.specific_rights_selector').prop('checked')) {
-            specificEntitiesSelected();
-        } else {
-            otherOptionSelected();
-        }
+        $('.specific_rights_selector:checked').each(specificEntitiesSelected);
+        $('.inherit_rights_selector:checked').each(inheritedRightsSelected);
+        $('.rights_selector:not(.inherit_rights_selector):not(.specific_rights_selector):checked').each(otherOptionSelected);
 
         var createTargetEntityItem = function(targetEntity, containerClass) {
             var newItem = $('<li class="list-group-item"></li>');
