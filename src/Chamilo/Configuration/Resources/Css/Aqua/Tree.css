@@ -73,6 +73,10 @@ ul.tree-menu li div a.selected {
 	background-color: #ddecf7;
 }
 
+ul.tree-menu li div a.selected:focus {
+	text-decoration: none;
+}
+
 ul.tree-menu li div a.lastSelected {
 	border: 1px dotted #d4d4d4;
 	margin-left: -1px;
