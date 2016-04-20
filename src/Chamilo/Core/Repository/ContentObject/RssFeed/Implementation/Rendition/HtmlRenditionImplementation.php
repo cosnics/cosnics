@@ -31,7 +31,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         $html[] = '<div class="list-group-item-heading"><h3 class="panel-title">{{ entry.title }}</h3></div>';
 
-        $html[] = '{{ entry.content }}';
+        $html[] = '<span ng-bind-html="entry.content"></span>';
         $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="{{ entry.link }}">{{ entry.link }}</a></div>';
         $html[] = '</li>';
 

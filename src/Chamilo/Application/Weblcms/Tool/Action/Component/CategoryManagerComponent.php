@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -34,9 +35,26 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
             throw new NotAllowedException();
         }
 
+        $request = $this->getRequest();
+
+        $selectedCategoryId = $request->get(\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID);
+
+        if(!$selectedCategoryId)
+        {
+            $request->query->set(
+                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID,
+                $request->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
+            );
+
+            Request::set_get(
+                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID,
+                $request->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
+            );
+        }
+
         $factory = new ApplicationFactory(
             \Chamilo\Configuration\Category\Manager:: context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+            new ApplicationConfiguration($request, $this->get_user(), $this)
         );
         $component = $factory->getComponent();
         $component->set_subcategories_allowed(true);
@@ -88,7 +106,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
     public function allowed_to_delete_category($category_id)
     {
-        if(!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
+        if (!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
         {
             return false;
         }
@@ -115,11 +133,9 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         return !$this->have_subcategories_publications($category_id);
     }
 
-
-
     public function allowed_to_edit_category($category_id)
     {
-        if(!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
+        if (!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
         {
             return false;
         }
@@ -267,7 +283,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
     public function allowed_to_change_category_visibility($category_id)
     {
         return $this->get_course()->is_course_admin($this->getUser()) ||
-            $this->getUser()->is_platform_admin();
+        $this->getUser()->is_platform_admin();
     }
 
     /*

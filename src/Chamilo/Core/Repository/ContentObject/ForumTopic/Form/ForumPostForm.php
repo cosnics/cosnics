@@ -124,7 +124,7 @@ class ForumPostForm extends FormValidator
         $html[] = 'var support_attachments = true';
         $html[] = '</script>';
         $this->addElement('html', implode(PHP_EOL, $html));
-        if ($this->form_type == self :: TYPE_EDIT)
+        if ($this->form_type == self::TYPE_EDIT)
         {
 
             $attached_objects = $this->forumpost->get_attached_content_objects();
@@ -135,7 +135,9 @@ class ForumPostForm extends FormValidator
             $attachments = array();
         }
 
-        $url = Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository', true) . 'xml_feed.php';
+        $url = Path :: getInstance()->getBasePath(true) .
+            'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
+
         $locale = array();
         $locale['Display'] = Translation :: get('AddAttachments');
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
@@ -227,5 +229,10 @@ class ForumPostForm extends FormValidator
             'reset',
             Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+
+        $this->addElement(
+            'html',
+            ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'));
     }
 }
