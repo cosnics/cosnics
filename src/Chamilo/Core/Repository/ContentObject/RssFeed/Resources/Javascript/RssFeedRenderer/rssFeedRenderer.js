@@ -1,5 +1,5 @@
 (function () {
-    var rssFeedRendererApp = angular.module('rssFeedRendererApp', []);
+    var rssFeedRendererApp = angular.module('rssFeedRendererApp', ['ngSanitize']);
 
     rssFeedRendererApp.directive('rssFeedRenderer', function() {
         return {
@@ -32,8 +32,8 @@
                 {headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}
             ).then(
                 angular.bind(this, function (result) {
-                    if(result && result.properties) {
-                        this.feedEntries = result.properties;
+                    if(result && result.data.properties) {
+                        this.feedEntries = result.data.properties;
                     }
                 })
             );
