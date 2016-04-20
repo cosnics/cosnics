@@ -49,6 +49,7 @@ UnsubscribeNotAvailableForGroups = "Individual users through platform group subs
 SubscribeSelectedGroups = "Subscribe selected groups"
 UnsubscribeSelectedGroups = "Unsubscribe selected groups"
 Subscribed = "Subscribed"
+SubscribedGroups = "Subscribed groups"
 DirectSubscriptions = "Individual subscriptions"
 GroupSubscriptions = "Platform Group subscriptions"
 AllSubscriptions = "All subscriptions"
