@@ -258,7 +258,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         $link = $this->get_url(array(self :: PARAM_TAB => self :: TAB_PLATFORM_GROUPS_SUBGROUPS));
         if ($this->get_group() != self :: PLATFORM_GROUP_ROOT_ID)
         {
-            $tab_name = Translation :: get('Subgroups', null, Utilities :: COMMON_LIBRARIES);
+            $tab_name = Translation :: get('Subgroups', null, Manager::context());
             $tab_selected = $this->current_tab == self :: TAB_PLATFORM_GROUPS_SUBGROUPS;
         }
         else
@@ -431,14 +431,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             }
 
             $show_all_url = $this->get_url();
-
-            $commonActions->addButton(
-                new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                    $show_all_url,
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                    false));
 
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);

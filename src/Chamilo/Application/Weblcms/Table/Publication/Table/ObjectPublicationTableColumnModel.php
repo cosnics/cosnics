@@ -20,7 +20,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class ObjectPublicationTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport
 {
-    const DEFAULT_ORDER_COLUMN_INDEX = 6;
+    const DEFAULT_ORDER_COLUMN_INDEX = 7;
     const COLUMN_STATUS = 'status';
     const COLUMN_PUBLISHED_FOR = 'published_for';
 
