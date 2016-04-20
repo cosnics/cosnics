@@ -76,7 +76,6 @@ ul.tree-menu li div a.selected {
 ul.tree-menu li div a.lastSelected {
 	border: 1px dotted #d4d4d4;
 	margin-left: -1px;
-	height: 16px;
 }
 
 ul.tree-menu li div a.disabled {
