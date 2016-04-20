@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\S
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
-use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableColumnModel;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Libraries\Platform\Translation;
@@ -28,27 +27,23 @@ abstract class SubmissionBrowserTableColumnModel extends RecordTableColumnModel 
     {
         $this->add_column(
             new SortableStaticTableColumn(
-                Manager :: PROPERTY_FIRST_SUBMISSION, $this->getTranslation(Manager::PROPERTY_FIRST_SUBMISSION)
-            )
-        );
+                Manager :: PROPERTY_FIRST_SUBMISSION,
+                $this->getTranslation(Manager :: PROPERTY_FIRST_SUBMISSION)));
 
         $this->add_column(
             new SortableStaticTableColumn(
-                Manager :: PROPERTY_LAST_SUBMISSION, $this->getTranslation(Manager::PROPERTY_LAST_SUBMISSION)
-            )
-        );
+                Manager :: PROPERTY_LAST_SUBMISSION,
+                $this->getTranslation(Manager :: PROPERTY_LAST_SUBMISSION)));
 
         $this->add_column(
             new SortableStaticTableColumn(
-                Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS, $this->getTranslation(Manager::PROPERTY_NUMBER_OF_SUBMISSIONS)
-            )
-        );
+                Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS,
+                $this->getTranslation(Manager :: PROPERTY_NUMBER_OF_SUBMISSIONS)));
 
         $this->add_column(
             new SortableStaticTableColumn(
-                Manager :: PROPERTY_NUMBER_OF_FEEDBACKS, $this->getTranslation(Manager::PROPERTY_NUMBER_OF_FEEDBACKS)
-            )
-        );
+                Manager :: PROPERTY_NUMBER_OF_FEEDBACKS,
+                $this->getTranslation(Manager :: PROPERTY_NUMBER_OF_FEEDBACKS)));
     }
 
     /**
@@ -61,6 +56,6 @@ abstract class SubmissionBrowserTableColumnModel extends RecordTableColumnModel 
      */
     protected function getTranslation($variableName, $parameters = array())
     {
-        return Translation::getInstance()->getTranslation($variableName, $parameters, Manager::context());
+        return Translation :: getInstance()->getTranslation($variableName, $parameters, Manager :: context());
     }
 }
