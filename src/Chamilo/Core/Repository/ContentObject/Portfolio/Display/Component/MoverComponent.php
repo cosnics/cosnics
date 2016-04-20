@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class MoverComponent extends TabComponent
+class MoverComponent extends ItemComponent
 {
     const PARAM_NEW_PARENT = 'new_parent';
 

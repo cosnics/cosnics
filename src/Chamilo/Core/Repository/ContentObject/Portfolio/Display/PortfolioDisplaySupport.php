@@ -30,7 +30,7 @@ interface PortfolioDisplaySupport
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
      * @return \libraries\storage\ResultSet
      */
-    public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node);
+    public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset);
 
     /**
      * Count the number of Feedback objects
