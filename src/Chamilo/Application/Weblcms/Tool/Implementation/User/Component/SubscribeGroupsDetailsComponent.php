@@ -89,7 +89,15 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     {
         $buttonToolbar = new ButtonToolBar();
 
-        if (! in_array($group->getId(), $this->subscribedGroups))
+        $courseManagementRights = CourseManagementRights::get_instance();
+
+        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
+            CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,
+            $group->getId(),
+            $this->get_course_id()
+        );
+
+        if (!in_array($group->getId(), $this->subscribedGroups) && $isAllowed)
         {
             $buttonToolbar->addItem(
                 new Button(
