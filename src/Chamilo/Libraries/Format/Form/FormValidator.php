@@ -1376,7 +1376,7 @@ EOT;
                 $label = 'Files';
             }
 
-            $label = sprintf($label);
+            $label = $this->getTranslation($label);
         }
         else
         {

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
+use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribedGroup\UnsubscribedGroupTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
@@ -261,7 +262,15 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     {
         $buttonToolbar = new ButtonToolBar();
 
-        if (!in_array($group->getId(), $this->subscribedGroups))
+        $courseManagementRights = CourseManagementRights::get_instance();
+
+        $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
+            CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,
+            $group->getId(),
+            $this->get_course_id()
+        );
+
+        if (!in_array($group->getId(), $this->subscribedGroups) && $isAllowed)
         {
             $buttonToolbar->addItem(
                 new Button(
@@ -269,7 +278,8 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
                     '',
                     $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS, self::PARAM_OBJECTS => $group->getId()
+                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS,
+                            self::PARAM_OBJECTS => $group->getId()
                         )
                     ),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL,
@@ -287,7 +297,8 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      *
      * @return Group
      */
-    protected function getCurrentGroup()
+    protected
+    function getCurrentGroup()
     {
         $groupId = $this->getGroupId();
         if (!$groupId)
@@ -303,7 +314,8 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      *
      * @return int
      */
-    protected function getGroupId()
+    protected
+    function getGroupId()
     {
         if (!$this->groupId)
         {
@@ -323,7 +335,8 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public function getRootGroup()
+    public
+    function getRootGroup()
     {
         if (!$this->rootGroup)
         {
@@ -349,7 +362,10 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      *
      * @return Condition
      */
-    public function get_table_condition($table_class_name)
+    public
+    function get_table_condition(
+        $table_class_name
+    )
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Group:: class_name(), Group :: PROPERTY_PARENT_ID),
@@ -389,7 +405,8 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      *
      * @return array
      */
-    public function get_additional_parameters()
+    public
+    function get_additional_parameters()
     {
         return array(self :: PARAM_TAB, \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP);
     }
