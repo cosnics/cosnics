@@ -4,7 +4,7 @@ $(function() {
 	var skippedOptions = 0;
 
 	function getDeleteIcon() {
-		return $('.data_table > tbody > tr:first > td:last .remove_option')
+		return $('.table-data > tbody > tr:first > td:last .remove_option')
 				.attr('src').replace('_na.png', '.png');
 	}
 
@@ -15,7 +15,7 @@ $(function() {
 				+ getDeleteIcon().replace('.png', '_na.png') + '"/>';
 		deleteField = '<input id="remove_$option_number" class="remove_option" type="image" src="'
 				+ getDeleteIcon() + '" name="remove[$option_number]" />';
-		rows = $('.data_table > tbody > tr');
+		rows = $('.table-data > tbody > tr');
 
 		if (rows.size() <= 2) {
 			deleteField = deleteImage;
@@ -150,7 +150,7 @@ $(function() {
 				+ '</td><td>' + fieldComment + '</td><td>' + fieldScore
 				+ '</td><td>' + fieldDelete + '</td></tr>';
 
-		$('.data_table > tbody').append(string);
+		$('.table-data > tbody').append(string);
 
 		processOptions();
 	}

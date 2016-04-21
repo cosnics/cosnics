@@ -13,7 +13,7 @@
 	function answerChanged(ev, ui) {
 		var value = $(".answer").prop('value');
 		var data = $("input[name=answer_data]");
-		var rows = $(".data_table > tbody > tr");
+		var rows = $(".table-data > tbody > tr");
 		var css_class = 'row_even';
 
 		var i = 0;
@@ -48,7 +48,7 @@
 
 		while (rows.size() > index) {
 			rows.eq(rows.size() - 1).remove();
-			rows = $(".data_table > tbody > tr");
+			rows = $(".table-data > tbody > tr");
 		}
 
 		if (index == 0) {
@@ -81,33 +81,30 @@
 		tableBody.append(html);
 	}
 
-    function lockWeight(ev, ui) {
-        var checked = $(this).prop('checked');
-        if (checked) {
-            $('input[name="weight"]').prop('disabled', true);
-        } else {
-            $('input[name="weight"]').prop('disabled', false);
-        }
-    }
+	function lockWeight(ev, ui) {
+		var checked = $(this).prop('checked');
+		if (checked) {
+			$('input[name="weight"]').prop('disabled', true);
+		} else {
+			$('input[name="weight"]').prop('disabled', false);
+		}
+	}
 
 	$(document).ready(
 			function() {
 				// ADDITIONAL PROPERTIES
-				$(document).on('click', '.type_0_option_selector',
-						function() {
-							$('.type_0_options_box').show();
-							$('.type_1_options_box').hide();
-						});
-				$(document).on('click', '.type_1_option_selector',
-						function() {
-							$('.type_0_options_box').hide();
-							$('.type_1_options_box').show();
-						});
-				$(document).on('click', '.type_2_option_selector',
-						function() {
-							$('.type_0_options_box').hide();
-							$('.type_1_options_box').hide();
-						});
+				$(document).on('click', '.type_0_option_selector', function() {
+					$('.type_0_options_box').show();
+					$('.type_1_options_box').hide();
+				});
+				$(document).on('click', '.type_1_option_selector', function() {
+					$('.type_0_options_box').hide();
+					$('.type_1_options_box').show();
+				});
+				$(document).on('click', '.type_2_option_selector', function() {
+					$('.type_0_options_box').hide();
+					$('.type_1_options_box').hide();
+				});
 
 				$('.type_0_option_selector').each(function() {
 					if ($(this).prop('checked')) {

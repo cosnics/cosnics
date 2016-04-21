@@ -3,12 +3,12 @@
 var skippedOptions = 0, baseWebPath = getPath('WEB_PATH'), currentNumberOfOptions;
 
 function getDeleteIcon() {
-	return $('.data_table > tbody > tr:first > td:last .remove_option').attr(
+	return $('.table-data > tbody > tr:first > td:last .remove_option').attr(
 			'src').replace('_na.png', '.png');
 }
 
 function getSelectOptions() {
-	return $('.data_table > tbody > tr:first select[name*="option_order"]')
+	return $('.table-data > tbody > tr:first select[name*="option_order"]')
 			.html();
 }
 
@@ -19,7 +19,7 @@ function processItems() {
 			+ getDeleteIcon().replace('.png', '_na.png') + '"/>';
 	deleteField = '<input id="remove_$option_number" class="remove_option" type="image" src="'
 			+ getDeleteIcon() + '" name="remove[$option_number]" />';
-	rows = $('.data_table > tbody > tr');
+	rows = $('.table-data > tbody > tr');
 
 	if (rows.size() <= 1) {
 		deleteField = deleteImage;
@@ -63,8 +63,7 @@ function removeOption(ev, ui) {
 
 	response = $.ajax({
 		type : "POST",
-		url : baseWebPath
-				+ "libraries/ajax/match_question.php",
+		url : baseWebPath + "libraries/ajax/match_question.php",
 		data : {
 			action : 'skip_match',
 			value : id
@@ -120,14 +119,14 @@ function addOption(ev, ui) {
 			+ '</td><td>' + fieldFeedback + '</td><td>' + fieldWeight
 			+ '</td><td>' + fieldDelete + '</td></tr>';
 
-	$('.data_table > tbody').append(string);
+	$('.table-data > tbody').append(string);
 
 	processItems();
 
 	highestOptionValue = $(
-			'.data_table tbody tr:first select[name*="option_order"] option:last')
+			'.table-data tbody tr:first select[name*="option_order"] option:last')
 			.val();
-	$('.data_table > tbody > tr:last select[name*="option_order"]').val(
+	$('.table-data > tbody > tr:last select[name*="option_order"]').val(
 			highestOptionValue);
 
 	response = $.ajax({
@@ -143,16 +142,16 @@ function addOption(ev, ui) {
 }
 
 function lockWeight(ev, ui) {
-    var checked = $(this).prop('checked');
-    if (checked) {
-        $('input[name="weight"]').prop('disabled', true);
-    } else {
-        $('input[name="weight"]').prop('disabled', false);
-    }
+	var checked = $(this).prop('checked');
+	if (checked) {
+		$('input[name="weight"]').prop('disabled', true);
+	} else {
+		$('input[name="weight"]').prop('disabled', false);
+	}
 }
 
 $(document).ready(function() {
-	currentNumberOfOptions = $('.data_table tbody tr').size();
+	currentNumberOfOptions = $('.table-data tbody tr').size();
 	$(document).on('click', '.remove_option', removeOption);
 	$(document).on('click', '#add_option', addOption);
 	$(document).on('click', 'input[name="recalculate_weight"]', lockWeight);

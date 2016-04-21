@@ -7,9 +7,9 @@ $(function() {
     var oldQuestionValue;
 
     function processOptions() {
-        var deleteField, rows = $('.data_table > tbody > tr'), row = 0;
+        var deleteField, rows = $('.table-data > tbody > tr'), row = 0;
 
-        rows = $('.data_table > tbody > tr');
+        rows = $('.table-data > tbody > tr');
 
         if (rows.size() <= 2) {
             deleteField = deleteInactive;
@@ -121,7 +121,7 @@ $(function() {
         string = '<tr id="option_' + numberOfOptions + '" class="row_even"><td>' + numberOfOptions + fieldDisplayOrder
                 + '</td><td>' + fieldId + fieldOptionValue + '</td><td>' + fieldDelete + '</td></tr>';
 
-        $('.data_table > tbody').append(string);
+        $('.table-data > tbody').append(string);
 
         processOptions();
     }
