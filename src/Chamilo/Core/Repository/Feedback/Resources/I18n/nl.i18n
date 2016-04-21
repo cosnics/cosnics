@@ -5,7 +5,7 @@
 
 TypeName = "Feedback"
 BrowserComponent = "Feedback"
-AddFeedback = "Add feedback"
+AddFeedback = "Voeg feedback toe"
 Feedback = "Bestaande feedback"
 Comment = "Commentaar"
 NoFeedbackYet = "Er is nog geen feedback beschikbaar"
