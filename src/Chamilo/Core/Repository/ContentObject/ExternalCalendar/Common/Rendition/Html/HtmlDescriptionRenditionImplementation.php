@@ -28,8 +28,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $event = $object->get_event($event_id);
 
             $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
-            $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
-            $html[] = '<div class="title">' . $event->summary['value'] . '</div>';
+
+            $html[] = '<div class="panel panel-default">';
+
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h3 class="panel-title">' . $object->get_icon_image() . ' ' . $event->summary['value'] . '</h3>';
+            $html[] = '</div>';
+
+            $html[] = '<div class="panel-body">';
             $html[] = '<div class="calendar_event_range" style="font-weight: bold;">';
             $html[] = Translation :: get('From', null, Utilities :: COMMON_LIBRARIES);
             $html[] = ' ';
@@ -54,12 +60,20 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                 $html[] = $event->description[0]['value'];
             }
             $html[] = '</div>';
+            $html[] = '</div>';
         }
         else
         {
-            $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
-            $html[] = '<div class="title">' . Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES) .
-                 '</div>';
+           $html[] = '<div class="panel panel-default">';
+
+            $html[] = '<div class="panel-heading">';
+            $html[] = '<h3 class="panel-title">';
+            $html[] = $object->get_icon_image() . ' ' .
+                 Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES);
+            $html[] = '</h3>';
+            $html[] = '</div>';
+
+            $html[] = '<div class="panel-body">';
 
             if ($object->get_path_type() == ExternalCalendar :: PATH_TYPE_REMOTE)
             {
@@ -79,6 +93,8 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
             $number_of_events = $object->count_events();
             $html[] = Translation :: get('EventCount') . ' : ' . $number_of_events;
+            
+            $html[] = '</div>';
             $html[] = '</div>';
         }
 

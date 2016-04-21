@@ -16,10 +16,9 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     {
         $object = $this->get_content_object();
         $path = $object->get_full_url();
-        $html = '<iframe src="' . $path . '" width="100%" height="600">
+       
+        return '<iframe src="' . $path . '" width="100%" height="600">
   				 <p>Your browser does not support iframes.</p>
 				 </iframe>';
-        
-        return $html;
     }
 }

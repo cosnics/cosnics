@@ -19,31 +19,28 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $object = $this->get_content_object();
         $html = array();
 
-        $html[] = ResourceManager::get_instance()->get_resource_html(
-            Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
-            'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js'
-        );
+$html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
+                 'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js');
 
-        $html[] = '<div ng-app="rssFeedRendererApp">';
-
-        $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
-        $html[] = '<div class="title">' . Translation :: get('Description') . '</div>';
-        $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="' . htmlentities($object->get_url()) . '">' .
-            htmlentities($object->get_url()) . '</a></div>';
-        $html[] = '</div>';
+        $html[] = '<ul class="list-group" ng-app="rssFeedRendererApp">';
 
         $html[] = '<rss-feed-renderer rss-feed-url="' . $object->get_url() . '" number-of-entries="' .
-            $object->get_number_of_entries() . '">';
+             $object->get_number_of_entries() . '">';
 
-        $html[] = '<div class="content_object" ng-repeat="entry in main.feedEntries" style="background-image: url(' .
-            Theme :: getInstance()->getCommonImagePath('ContentObject/RssFeedItem') . ');">';
-        $html[] = '<div class="title">{{ entry.title }}</div>';
-        $html[] = '{{ entry.content }}';
+        $html[] = '<li class="list-group-item" ng-repeat="entry in main.feedEntries">';
+
+        $html[] = '<div class="list-group-item-heading"><h3 class="panel-title">{{ entry.title }}</h3></div>';
+
+        $html[] = '<span ng-bind-html="entry.content"></span>';
         $html[] = '<div class="link_url" style="margin-top: 1em;"><a href="{{ entry.link }}">{{ entry.link }}</a></div>';
-        $html[] = '</div>';
+        $html[] = '</li>';
 
         $html[] = '</rss-feed-renderer>';
-        $html[] = '</div>';
+
+        $html[] = '</ul>';
+
+        
 
         return implode(PHP_EOL, $html);
     }
