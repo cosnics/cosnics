@@ -21,7 +21,7 @@ abstract class ContentObjectExportImplementation extends AbstractContentObjectEx
     public static function factory(ContentObjectExportController $controller, ContentObject $content_object, $format,
         $type)
     {
-        $class = $content_object->package() . '\Implementation\Export\\' .
+        $class = $content_object->package() . '\Common\Export\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() . '\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() .
              (string) StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'ExportImplementation';
@@ -47,7 +47,7 @@ abstract class ContentObjectExportImplementation extends AbstractContentObjectEx
 
     public static function get_types_for_object($content_object_namespace)
     {
-        $class = $content_object_namespace . '\Implementation\ExportImplementation';
+        $class = $content_object_namespace . '\Common\ExportImplementation';
 
         if (! class_exists($class, true))
         {

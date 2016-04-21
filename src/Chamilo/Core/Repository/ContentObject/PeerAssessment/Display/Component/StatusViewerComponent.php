@@ -83,7 +83,7 @@ class StatusViewerComponent extends Manager
         $attempts = $this->get_attempts($this->publication_id);
         
         $html = array();
-        $html[] = '<table class="data_table" style="width: auto">';
+        $html[] = '<table class="table table-striped table-bordered table-hover table-data" style="width: auto">';
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th>' . Translation :: get('User') . '</th>';

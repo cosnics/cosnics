@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Open\Implementation\Rendition\Html;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Open\Common\Rendition\Html;
 
 use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 
@@ -10,7 +10,7 @@ use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
  * @author Magali Gillard
  * @author Hans De Bisschop
  */
-class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html\HtmlFormRenditionImplementation
+class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Common\Rendition\Html\HtmlFormRenditionImplementation
 {
 
     /**
@@ -25,7 +25,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $questionId = $this->getQuestionId();
         
         $table_header = array();
-        $table_header[] = '<table class="data_table take_survey">';
+        $table_header[] = '<table class="table table-striped table-bordered table-hover table-data take_survey">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="info" >' . $this->get_instruction($question) . '</th>';
@@ -80,18 +80,15 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
 
     function get_instruction($question)
     {
-        
         if ($question->has_instruction())
         {
-        $instruction = 'test';
+            $instruction = 'test';
         }
         else
         {
-        $instruction = '';
+            $instruction = '';
         }
         
         return $instruction;
     }
-
-  
 }

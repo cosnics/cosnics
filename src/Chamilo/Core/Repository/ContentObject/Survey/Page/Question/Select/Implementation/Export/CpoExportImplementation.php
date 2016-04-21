@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Implementation\Export;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Common\Export;
 
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Implementation\ExportImplementation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Common\ExportImplementation;
 
 class CpoExportImplementation extends ExportImplementation
 {

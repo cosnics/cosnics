@@ -23,34 +23,34 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         parent :: build_creation_form();
         $this->addElement('category', Translation :: get('Options'));
         $this->addElement(
-            'html',
+            'html', 
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion',
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion', 
                     true) . 'AssessmentMatchTextQuestion.js'));
         $this->add_options();
         $this->addElement('category');
-
+        
         $this->addElement('category', Translation :: get('Hint'));
-
+        
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '100';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
         $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-
+        
         $renderer = $this->defaultRenderer();
         $this->add_html_editor(
-            AssessmentMatchTextQuestion :: PROPERTY_HINT,
-            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)),
-            false,
+            AssessmentMatchTextQuestion :: PROPERTY_HINT, 
+            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)), 
+            false, 
             $html_editor_options);
         $renderer->setElementTemplate(
-            '{element}<div class="clear"></div>',
+            '{element}<div class="clear"></div>', 
             AssessmentMatchTextQuestion :: PROPERTY_HINT);
         $this->addElement('category');
-
+        
         $this->add_example_box();
     }
 
@@ -59,34 +59,34 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         parent :: build_editing_form();
         $this->addElement('category', Translation :: get('Options'));
         $this->addElement(
-            'html',
+            'html', 
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion',
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion', 
                     true) . 'AssessmentMatchTextQuestion.js'));
         $this->add_options();
         $this->addElement('category');
-
+        
         $this->addElement('category', Translation :: get('Hint'));
-
+        
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '100';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['show_tags'] = false;
         $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-
+        
         $renderer = $this->defaultRenderer();
         $this->add_html_editor(
-            AssessmentMatchTextQuestion :: PROPERTY_HINT,
-            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)),
-            false,
+            AssessmentMatchTextQuestion :: PROPERTY_HINT, 
+            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)), 
+            false, 
             $html_editor_options);
         $renderer->setElementTemplate(
-            '{element}<div class="clear"></div>',
+            '{element}<div class="clear"></div>', 
             AssessmentMatchTextQuestion :: PROPERTY_HINT);
         $this->addElement('category');
-
+        
         $this->add_example_box();
     }
 
@@ -113,7 +113,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                 $defaults['use_wildcards'] = true;
                 $defaults['ignore_case'] = true;
                 $number_of_options = intval($_SESSION['match_number_of_options']);
-
+                
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
                     $defaults['option_weight'][$option_number] = 0;
@@ -171,7 +171,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
     private function add_options()
     {
         $renderer = $this->defaultRenderer();
-
+        
         if (! $this->isSubmitted())
         {
             unset($_SESSION['match_number_of_options']);
@@ -200,17 +200,17 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
             $_SESSION['match_number_of_options'] = $object->get_number_of_options();
         }
         $number_of_options = intval($_SESSION['match_number_of_options']);
-
+        
         $this->addElement(
-            'hidden',
-            'match_number_of_options',
-            $_SESSION['match_number_of_options'],
+            'hidden', 
+            'match_number_of_options', 
+            $_SESSION['match_number_of_options'], 
             array('id' => 'match_number_of_options'));
-
+        
         $use_wildcard_group = array();
         $use_wildcard_group[] = & $this->createElement(
-            'checkbox',
-            AssessmentMatchTextQuestion :: PROPERTY_USE_WILDCARDS,
+            'checkbox', 
+            AssessmentMatchTextQuestion :: PROPERTY_USE_WILDCARDS, 
             Translation :: get('UseWildcards')); // ,
                                                  // '',
                                                  // array('class'
@@ -230,11 +230,11 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                                                  // .
                                                  // ']'));
         $this->addGroup($use_wildcard_group, 'use_wildcards', Translation :: get('UseWildcards'), '', false);
-
+        
         $use_wildcard_group = array();
         $use_wildcard_group[] = & $this->createElement(
-            'checkbox',
-            AssessmentMatchTextQuestion :: PROPERTY_IGNORE_CASE,
+            'checkbox', 
+            AssessmentMatchTextQuestion :: PROPERTY_IGNORE_CASE, 
             Translation :: get('IgnoreCase')); // ,
                                                // '',
                                                // array('class'
@@ -254,25 +254,27 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
                                                // .
                                                // ']'));
         $this->addGroup($use_wildcard_group, 'ignore_case', Translation :: get('IgnoreCase'), '', false);
-
+        
         $buttons = array();
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
-            'style_button',
-            'add[]',
-            Translation :: get('AddItem'),
-            array('id' => 'add_option'), null, 'plus');
+            'style_button', 
+            'add[]', 
+            Translation :: get('AddItem'), 
+            array('id' => 'add_option'), 
+            null, 
+            'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
-
+        
         $html_editor_options = array();
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
         $html_editor_options['toolbar'] = 'RepositoryQuestion';
-
+        
         $table_header = array();
-        $table_header[] = '<table class="data_table">';
+        $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
@@ -284,10 +286,10 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
-
+        
         $textarea_height = $html_editor_options['height'];
         $textarea_width = $html_editor_options['width'];
-
+        
         if (strpos($textarea_height, '%') === false)
         {
             $textarea_height .= 'px';
@@ -296,87 +298,89 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         {
             $textarea_width .= 'px';
         }
-
+        
         $i = 1;
-
+        
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
             if (! in_array($option_number, $_SESSION['match_skip_options']))
             {
                 $group = array();
-
+                
                 $group[] = & $this->createElement('static', null, null, $i . '.');
                 $group[] = $this->createElement(
-                    'textarea',
-                    "option[$option_number]",
-                    Translation :: get('Answer'),
+                    'textarea', 
+                    "option[$option_number]", 
+                    Translation :: get('Answer'), 
                     array('style' => 'width: 100%; height:' . $textarea_height));
                 $group[] = $this->create_html_editor(
-                    "comment[$option_number]",
-                    Translation :: get('Comment'),
+                    "comment[$option_number]", 
+                    Translation :: get('Comment'), 
                     $html_editor_options);
                 $group[] = & $this->createElement(
-                    'text',
-                    "option_weight[$option_number]",
-                    Translation :: get('Weight'),
+                    'text', 
+                    "option_weight[$option_number]", 
+                    Translation :: get('Weight'), 
                     'size="2"  class="input_numeric"');
-
+                
                 if ($number_of_options - count($_SESSION['match_skip_options']) > 2)
                 {
                     $group[] = & $this->createElement(
-                        'image',
-                        'remove[' . $option_number . ']',
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                        'image', 
+                        'remove[' . $option_number . ']', 
+                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
                         array('class' => 'remove_option', 'id' => $option_number));
                 }
                 else
                 {
                     $group[] = & $this->createElement(
-                        'static',
-                        null,
-                        null,
+                        'static', 
+                        null, 
+                        null, 
                         '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') .
                              '" class="remove_option" />');
                 }
-
+                
                 $this->addGroup($group, 'option_' . $option_number, null, '', false);
                 $this->addGroupRule(
-                    'option_' . $option_number,
+                    'option_' . $option_number, 
                     array(
                         "option_weight[$option_number]" => array(
                             array(
-                                Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES),
+                                Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES), 
                                 'numeric'))));
-
+                
                 $renderer->setElementTemplate(
                     '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
-                         '">{element}</tr>',
+                         '">{element}</tr>', 
                         'option_' . $option_number);
                 $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $option_number);
-
+                
                 $i ++;
             }
         }
-
+        
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $this->addElement('html', implode(PHP_EOL, $table_footer));
-
+        
         $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
+            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 
             'question_buttons');
         $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
+            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
             'question_buttons');
-
+        
         $buttons = array();
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
-            'style_button',
-            'add[]',
-            Translation :: get('AddItem'),
-            array('id' => 'add_option'), null, 'plus');
+            'style_button', 
+            'add[]', 
+            Translation :: get('AddItem'), 
+            array('id' => 'add_option'), 
+            null, 
+            'plus');
         $this->addGroup($buttons, 'question_buttons', null, '', false);
     }
 }
