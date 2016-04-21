@@ -37,8 +37,7 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
         $count = $this->row_count;
         
         // get an array of the row totals
-        $row_totals = array_map(function ($item)
-        {
+        $row_totals = array_map(function ($item) {
             return array_sum($item);
         }, $this->scores);
         
@@ -113,7 +112,7 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
             
             $html = array();
             
-            $html[] = '<table class="data_table" style="width: auto">';
+            $html[] = '<table class="table table-striped table-bordered table-hover table-data" style="width: auto">';
             $html[] = '<thead>';
             $html[] = '<tr>';
             $html[] = '<th>' . Translation :: get('User') . '</th>';

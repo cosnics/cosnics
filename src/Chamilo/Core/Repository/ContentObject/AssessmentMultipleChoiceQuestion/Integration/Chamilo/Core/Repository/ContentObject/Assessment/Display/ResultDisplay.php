@@ -25,45 +25,45 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $complex_content_object_question = $this->get_complex_content_object_question();
         $question = $this->get_question();
         $configuration = $this->getViewerApplication()->get_configuration();
-
+        
         $html = array();
-        $html[] = '<table class="data_table take_assessment">';
+        $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th class="checkbox_answer"></th>';
         $html[] = '<th>' . Translation :: get('Answer') . '</th>';
-
+        
         if ($configuration->show_answer_feedback())
         {
             $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
         }
-
+        
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
-
+        
         $answers = $this->get_answers();
         $options = $question->get_options();
         $type = $question->get_answer_type();
-
+        
         foreach ($options as $i => $option)
         {
             $html[] = '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">';
-
+            
             if ($type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO)
             {
                 $is_given_answer = in_array($i, $answers);
-
+                
                 if ($is_given_answer)
                 {
                     $selected = ' checked ';
-
+                    
                     if ($configuration->show_correction() || $configuration->show_solution())
                     {
                         if ($option->is_correct())
                         {
                             $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                                __NAMESPACE__,
+                                __NAMESPACE__, 
                                 'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                                  Translation :: get('Correct') . '" style="" />';
                         }
@@ -82,13 +82,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 else
                 {
                     $selected = '';
-
+                    
                     if ($configuration->show_solution())
                     {
                         if ($option->is_correct())
                         {
                             $result = '<img src="' . Theme :: getInstance()->getImagePath(
-                                __NAMESPACE__,
+                                __NAMESPACE__, 
                                 'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
                                  Translation :: get('Correct') . '" />';
                         }
@@ -102,7 +102,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         $result = '';
                     }
                 }
-
+                
                 $html[] = '<td><input type="radio" name="yourchoice_' .
                      $this->get_complex_content_object_question()->get_id() . '" value="' . $i . '" disabled' . $selected .
                      '/>' . $result . '</td>';
@@ -111,7 +111,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 $is_given_answer = array_key_exists($i + 1, $answers);
                 $is_correct = $option->is_correct();
-
+                
                 if ($is_given_answer)
                 {
                     $selected = ' checked ';
@@ -120,7 +120,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     $selected = '';
                 }
-
+                
                 if (($is_given_answer && $configuration->show_correction()) || $configuration->show_solution())
                 {
                     if ($is_correct)
@@ -139,37 +139,37 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     $result = '';
                 }
-
+                
                 $html[] = '<td><input type="checkbox" name="yourchoice' . $i . '" disabled' . $selected . '/>' . $result .
                      '</td>';
             }
-
+            
             $object_renderer = new ContentObjectResourceRenderer($this->getViewerApplication(), $option->get_value());
             $html[] = '<td>' . $object_renderer->run() . '</td>';
-
+            
             if (AnswerFeedbackDisplay :: allowed(
-                $configuration,
-                $this->get_complex_content_object_question(),
-                $is_given_answer,
+                $configuration, 
+                $this->get_complex_content_object_question(), 
+                $is_given_answer, 
                 $option->is_correct()))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->getViewerApplication(),
+                    $this->getViewerApplication(), 
                     $option->get_feedback());
-
+                
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
             elseif ($configuration->show_answer_feedback())
             {
                 $html[] = '<td></td>';
             }
-
+            
             $html[] = '</tr>';
         }
-
+        
         $html[] = '</tbody>';
         $html[] = '</table>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

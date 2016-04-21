@@ -37,7 +37,7 @@ class ShareTableCellRenderer extends DataClassTableCellRenderer implements Table
         $toolbar->add_item(
             new ToolbarItem(
                 Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Rights'),
+                Theme :: getInstance()->getCommonImagePath('Action/Right'),
                 $this->get_component()->get_url(array(Manager :: PARAM_SELECTED_WORKSPACE_ID => $workspace->get_id())),
                 ToolbarItem :: DISPLAY_ICON));
 

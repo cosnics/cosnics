@@ -45,35 +45,44 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
     {
         $values = $page->controller->exportValues();
 
-        $content_object_ids = $page->get_parent()->getRequest()->get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
-        if (! is_array($content_object_ids))
+        $content_object_ids =
+            $page->get_parent()->getRequest()->get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        if (!is_array($content_object_ids))
         {
             $content_object_ids = array($content_object_ids);
         }
 
         $condition = new InCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            $content_object_ids);
+            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_ID),
+            $content_object_ids
+        );
 
         $order_by = array();
         $order_by[] = new OrderBy(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID));
+            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_ID)
+        );
 
-        $content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_objects(
-            ContentObject :: class_name(),
-            new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
+        $content_objects = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_content_objects(
+            ContentObject:: class_name(),
+            new DataClassRetrievesParameters($condition, null, null, $order_by)
+        )->as_array();
 
         $html = array();
 
         $html[] = $this->parent->render_header();
 
+        $html[] = '<div class="alert alert-info" style="margin-top: 15px; margin-bottom: 35px;">' .
+            Translation::getInstance()->getTranslation('PublishInformationMessage', null, Manager::context()) .
+            '</div>';
+
         if (count($values[Manager :: WIZARD_LOCATION]) > 0)
         {
             foreach ($values[Manager :: WIZARD_LOCATION] as $registration_id => $locations)
             {
-                $registration = \Chamilo\Configuration\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Configuration\Storage\DataClass\Registration :: class_name(),
-                    $registration_id);
+                $registration = \Chamilo\Configuration\Storage\DataManager:: retrieve_by_id(
+                    \Chamilo\Configuration\Storage\DataClass\Registration:: class_name(),
+                    $registration_id
+                );
 
                 $result_class = $registration->get_context() . '\Publication\LocationResult';
                 $result = new $result_class($this, $registration->get_context());
@@ -85,7 +94,8 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
                     $manager_class = $registration->get_context() . '\Publication\Manager';
 
                     if (isset($values[Manager :: WIZARD_OPTION]) &&
-                         isset($values[Manager :: WIZARD_OPTION][$registration_id]))
+                        isset($values[Manager :: WIZARD_OPTION][$registration_id])
+                    )
                     {
                         $options = $values[Manager :: WIZARD_OPTION][$registration_id];
                     }
@@ -96,7 +106,7 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
 
                     foreach ($content_objects as $content_object)
                     {
-                        $success = $manager_class :: publish_content_object($content_object, $location, $options);
+                        $success = $manager_class:: publish_content_object($content_object, $location, $options);
                         $result->add($location, $content_object, $success);
                     }
                 }
@@ -106,15 +116,12 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
         }
         else
         {
-            $html[] = Display :: warning_message(Translation :: get('NoLocationsFound'), true);
+            $html[] = Display:: warning_message(Translation:: get('NoLocationsFound'), true);
         }
 
-        $url = $this->parent->get_url(array(Manager :: PARAM_ACTION => null, Manager :: PARAM_ACTION => null));
-        $html[] = '<a href="' . $url . '">' . Translation :: get('GoBack') . '</a>';
-
         $html[] = '<script type="text/javascript" src="' .
-             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
-             '"></script>';
+            Path:: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
+            '"></script>';
 
         $page->controller->container(true);
 
@@ -126,16 +133,17 @@ class PublisherWizardProcess extends HTML_QuickForm_Action
 
     public function process_result(LocationResult $result)
     {
-        $package_context = ClassnameUtilities :: getInstance()->getNamespaceParent($result->get_context(), 4);
+        $package_context = ClassnameUtilities:: getInstance()->getNamespaceParent($result->get_context(), 4);
 
-        $category = Theme :: getInstance()->getImage(
+        $category = Theme:: getInstance()->getImage(
             'Logo/22',
             'png',
-            Translation :: get('TypeName', null, $package_context),
+            Translation:: get('TypeName', null, $package_context),
             null,
             ToolbarItem :: DISPLAY_ICON_AND_LABEL,
             false,
-            $package_context);
+            $package_context
+        );
 
         $html = array();
         $html[] = '<div class="configuration_form publication-location" >';

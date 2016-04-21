@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Implementation\Rendition\Html;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Common\Rendition\Html;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard
  * @author Hans De Bisschop
  */
-class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html\HtmlFormRenditionImplementation
+class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Common\Rendition\Html\HtmlFormRenditionImplementation
 {
 
     /**
@@ -38,7 +38,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         }
         
         $tableHeader = array();
-        $tableHeader[] = '<table class="data_table take_survey">';
+        $tableHeader[] = '<table class="table table-striped table-bordered table-hover table-data take_survey">';
         $tableHeader[] = '<thead>';
         $tableHeader[] = '<tr>';
         $tableHeader[] = '<th class="info" >' . Translation :: get('ChooseYourRating') . '</th>';
@@ -72,7 +72,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
             $scores, 
             'class="rating_slider"');
         
-        $tableFooter= array();
+        $tableFooter = array();
         $tableFooter[] = '</td>';
         $tableFooter[] = '</tr>';
         $tableFooter[] = '</tbody>';
@@ -87,5 +87,4 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
                 Path :: getInstance()->getJavascriptPath($namespace, true) . 'Form.js'));
         return $formValidator;
     }
-   
 }

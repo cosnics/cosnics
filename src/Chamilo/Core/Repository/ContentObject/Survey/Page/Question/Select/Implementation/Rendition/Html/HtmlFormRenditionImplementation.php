@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Implementation\Rendition\Html;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Common\Rendition\Html;
 
 /**
  *
@@ -8,9 +8,9 @@ namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Impl
  * @author Magali Gillard
  * @author Hans De Bisschop
  */
-class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Implementation\Rendition\Html\HtmlFormRenditionImplementation
+class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Common\Rendition\Html\HtmlFormRenditionImplementation
 {
-  
+
     /**
      *
      * @return \Chamilo\Libraries\Format\Form\FormValidator
@@ -24,7 +24,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $options = $question->get_options();
         
         $type = $question->get_answer_type();
-            
+        
         while ($option = $options->next_result())
         {
             $answer_options[$option->get_id()] = $option->get_value();
@@ -37,7 +37,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $element_template[] = '<div class="clear">&nbsp;</div>';
         $element_template[] = '</div>';
         $element_template = implode(PHP_EOL, $element_template);
-      
+        
         $questionId = $this->getQuestionId();
         
         if ($this->getPrefix())
@@ -48,7 +48,6 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         {
             $questionName = $questionId;
         }
-   
         
         if ($type == 'checkbox')
         {
@@ -76,6 +75,5 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $formValidator->get_renderer()->setElementTemplate($element_template, $questionName);
         return $formValidator;
     }
-  
 }
 ?>

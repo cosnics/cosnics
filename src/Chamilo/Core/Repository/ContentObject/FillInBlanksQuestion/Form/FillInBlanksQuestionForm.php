@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: fill_in_blanks_question_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.question_types.fill_in_blanks_question
  */
 class FillInBlanksQuestionForm extends ContentObjectForm
@@ -20,7 +20,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
     // Tabs
     const TAB_BLANKS = 'Blanks';
     const TAB_EXAMPLE = 'Example';
-
+    
     // Fields
     const FIELD_OPTION_VARIATION = 'field_option_variation';
     const FIELD_OPTION_SIZE = 'field_option_size';
@@ -38,25 +38,25 @@ class FillInBlanksQuestionForm extends ContentObjectForm
     public function prepareTabs()
     {
         $this->addDefaultTab();
-
+        
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_BLANKS,
-                Translation :: get(self :: TAB_BLANKS),
+                self :: TAB_BLANKS, 
+                Translation :: get(self :: TAB_BLANKS), 
                 Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion',
-                    'Tab/' . self :: TAB_BLANKS),
+                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion', 
+                    'Tab/' . self :: TAB_BLANKS), 
                 'buildBlanksForm'));
-
+        
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab(
-                self :: TAB_EXAMPLE,
-                Translation :: get(self :: TAB_EXAMPLE),
+                self :: TAB_EXAMPLE, 
+                Translation :: get(self :: TAB_EXAMPLE), 
                 Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion',
-                    'Tab/' . self :: TAB_EXAMPLE),
+                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion', 
+                    'Tab/' . self :: TAB_EXAMPLE), 
                 'buildExampleForm'));
-
+        
         $this->addMetadataTabs();
     }
 
@@ -64,120 +64,120 @@ class FillInBlanksQuestionForm extends ContentObjectForm
     {
         // ANSWERS
         $this->addElement('category', Translation :: get('Excercise'));
-
+        
         $this->add_information_message(null, null, Translation :: get('FillInTheBlanksInfo'));
         $this->addElement(
-            'textarea',
-            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT,
-            Translation :: get('QuestionText'),
+            'textarea', 
+            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT, 
+            Translation :: get('QuestionText'), 
             'rows="10" class="answer"');
         $this->addRule(
-            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            FillInBlanksQuestion :: PROPERTY_ANSWER_TEXT, 
+            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 
             'required');
         $this->addElement(
-            'html',
+            'html', 
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion',
+                    'Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion', 
                     true) . 'FillInTheBlanks.js'));
         $this->add_options($this->get_content_object());
         $this->addElement('category');
-
+        
         // ANSWER TYPE
         $this->addElement('category', Translation :: get('AnswerType'));
         $type_options = array();
         $type_options[] = $this->createElement(
-            'radio',
-            FillInBlanksQuestion :: PROPERTY_QUESTION_TYPE,
-            null,
-            Translation :: get('AutoTextField'),
-            FillInBlanksQuestion :: TYPE_SIZED_TEXT,
+            'radio', 
+            FillInBlanksQuestion :: PROPERTY_QUESTION_TYPE, 
+            null, 
+            Translation :: get('AutoTextField'), 
+            FillInBlanksQuestion :: TYPE_SIZED_TEXT, 
             array('class' => 'type_' . FillInBlanksQuestion :: TYPE_SIZED_TEXT . '_option_selector'));
         $type_options[] = $this->createElement(
-            'radio',
-            FillInBlanksQuestion :: PROPERTY_QUESTION_TYPE,
-            null,
-            Translation :: get('UniformTextField'),
-            FillInBlanksQuestion :: TYPE_UNIFORM_TEXT,
+            'radio', 
+            FillInBlanksQuestion :: PROPERTY_QUESTION_TYPE, 
+            null, 
+            Translation :: get('UniformTextField'), 
+            FillInBlanksQuestion :: TYPE_UNIFORM_TEXT, 
             array('class' => 'type_' . FillInBlanksQuestion :: TYPE_UNIFORM_TEXT . '_option_selector'));
         $type_options[] = $this->createElement(
-            'radio',
-            FillInBlanksQuestion :: PROPERTY_QUESTION_TYPE,
-            null,
-            Translation :: get('SelectBox'),
-            FillInBlanksQuestion :: TYPE_SELECT,
+            'radio', 
+            FillInBlanksQuestion :: PROPERTY_QUESTION_TYPE, 
+            null, 
+            Translation :: get('SelectBox'), 
+            FillInBlanksQuestion :: TYPE_SELECT, 
             array('class' => 'type_' . FillInBlanksQuestion :: TYPE_SELECT . '_option_selector'));
         $this->addElement('group', null, Translation :: get('UseSelectBox'), $type_options, '', false);
-
+        
         // show inline
         $this->addElement(
-            'checkbox',
-            FillInBlanksQuestion :: PROPERTY_SHOW_INLINE,
+            'checkbox', 
+            FillInBlanksQuestion :: PROPERTY_SHOW_INLINE, 
             Translation :: get('ShowInputFieldsInline'));
-
+        
         // case sensitive
         $this->addElement(
-            'checkbox',
-            FillInBlanksQuestion :: PROPERTY_CASE_SENSITIVE,
+            'checkbox', 
+            FillInBlanksQuestion :: PROPERTY_CASE_SENSITIVE, 
             Translation :: get('CaseSensitive'));
         $this->addElement('category');
-
+        
         // ANSWER OPTIONS
         $this->addElement('category', Translation :: get('AnswerOptions'));
-
+        
         // default scores
         $this->add_textfield(
-            FillInBlanksQuestion :: PROPERTY_DEFAULT_POSITIVE_SCORE,
-            Translation :: get('DefaultPositiveScore'),
-            false,
+            FillInBlanksQuestion :: PROPERTY_DEFAULT_POSITIVE_SCORE, 
+            Translation :: get('DefaultPositiveScore'), 
+            false, 
             array("size" => "5"));
-
+        
         $this->add_textfield(
-            FillInBlanksQuestion :: PROPERTY_DEFAULT_NEGATIVE_SCORE,
-            Translation :: get('DefaultNegativeScore'),
-            false,
+            FillInBlanksQuestion :: PROPERTY_DEFAULT_NEGATIVE_SCORE, 
+            Translation :: get('DefaultNegativeScore'), 
+            false, 
             array("size" => "5"));
-
+        
         $this->addRule(
             array(
-                FillInBlanksQuestion :: PROPERTY_DEFAULT_POSITIVE_SCORE,
-                FillInBlanksQuestion :: PROPERTY_DEFAULT_NEGATIVE_SCORE),
-            Translation :: get('DefaultPositiveScoreBiggerDefaultNegativeScore'),
-            'compare',
+                FillInBlanksQuestion :: PROPERTY_DEFAULT_POSITIVE_SCORE, 
+                FillInBlanksQuestion :: PROPERTY_DEFAULT_NEGATIVE_SCORE), 
+            Translation :: get('DefaultPositiveScoreBiggerDefaultNegativeScore'), 
+            'compare', 
             '>');
         $this->addRule(
-            array(FillInBlanksQuestion :: PROPERTY_DEFAULT_POSITIVE_SCORE),
-            Translation :: get('DefaultPositiveScoreBigger'),
-            'number_compare',
-            '>',
+            array(FillInBlanksQuestion :: PROPERTY_DEFAULT_POSITIVE_SCORE), 
+            Translation :: get('DefaultPositiveScoreBigger'), 
+            'number_compare', 
+            '>', 
             0);
-
+        
         // auto sized text field
         $this->addElement('html', '<div class="type_' . FillInBlanksQuestion :: TYPE_SIZED_TEXT . '_options_box">');
         $this->add_textfield(
-            self :: FIELD_OPTION_VARIATION,
-            Translation :: get('Variation'),
-            false,
+            self :: FIELD_OPTION_VARIATION, 
+            Translation :: get('Variation'), 
+            false, 
             array("size" => "5"));
         $this->addElement('html', '</div>');
-
+        
         // uniform sized text field
         $this->addElement('html', '<div class="type_' . FillInBlanksQuestion :: TYPE_UNIFORM_TEXT . '_options_box">');
         $field_size_options = array();
         // $field_size_options[] = $this->createElement('radio', self :: UNIFORM_INPUT_TYPE, null, Translation ::
         // get('Unlimited') . '<br />', self :: UNIFORM_UNLIMITED_ANSWER);
         $field_size_options[] = $this->createElement(
-            'radio',
-            self :: UNIFORM_INPUT_TYPE,
-            null,
-            Translation :: get('LongestAnswer') . '<br />',
+            'radio', 
+            self :: UNIFORM_INPUT_TYPE, 
+            null, 
+            Translation :: get('LongestAnswer') . '<br />', 
             self :: UNIFORM_LONGEST_ANSWER);
         $field_size_options[] = $this->createElement(
-            'radio',
-            self :: UNIFORM_INPUT_TYPE,
-            null,
-            null,
+            'radio', 
+            self :: UNIFORM_INPUT_TYPE, 
+            null, 
+            null, 
             self :: UNIFORM_FIXED_ANSWER);
         $field_size_options[] = $this->createElement('text', self :: FIELD_OPTION_SIZE, null, null, null);
         $this->addGroup($field_size_options, null, Translation :: get('FieldSize'), '');
@@ -188,7 +188,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
     public function buildExampleForm()
     {
         $this->addElement(
-            'html',
+            'html', 
             '<div>' . Translation :: get('InstructionsText', null, FillInBlanksQuestion :: package()) . '</div>');
     }
 
@@ -197,7 +197,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         if (! $this->isSubmitted())
         {
             $object = $this->get_content_object();
-
+            
             if ($object->get_answer_text())
             {
                 // $options = $object->get_answers();
@@ -207,13 +207,13 @@ class FillInBlanksQuestionForm extends ContentObjectForm
                 $defaults[FillInBlanksQuestion :: PROPERTY_DEFAULT_POSITIVE_SCORE] = $object->get_default_positive_score();
                 $defaults[FillInBlanksQuestion :: PROPERTY_DEFAULT_NEGATIVE_SCORE] = $object->get_default_negative_score();
                 $defaults[FillInBlanksQuestion :: PROPERTY_SHOW_INLINE] = $object->get_show_inline();
-
+                
                 $option = $object->get_field_option();
                 if (isset($option)) // set defaults if we don't have option value, otherwise use value
                 {
                     $defaults[self :: FIELD_OPTION_VARIATION] = $option;
                     $defaults[self :: FIELD_OPTION_SIZE] = $option;
-
+                    
                     switch ($option) // filter out -1 and 0, fixed in any other case
                     {
                         case self :: UNIFORM_UNLIMITED_ANSWER :
@@ -246,7 +246,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
                 $defaults[self :: FIELD_OPTION_VARIATION] = self :: DEFAULT_FIELD_OPTION_VARIATION;
                 $defaults[self :: FIELD_OPTION_SIZE] = self :: DEFAULT_FIELD_OPTION_SIZE;
             }
-
+            
             parent :: setDefaults($defaults);
             return;
         }
@@ -284,7 +284,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         // set type
         $type = $values[FillInBlanksQuestion :: PROPERTY_QUESTION_TYPE];
         $object->set_question_type($type);
-
+        
         // set type specific options
         switch ($type)
         {
@@ -326,9 +326,9 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         {
             $default_score = FillInBlanksQuestion :: DEFAULT_POSITIVE_SCORE;
         }
-
+        
         $style = (count($answers) == 0) ? 'style="display: none;"' : '';
-
+        
         $html = array();
         $html[] = '<div id="answers_table" class="row" ' . $style . '>';
         $html[] = '<div class="label">';
@@ -336,7 +336,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $html[] = '</div>';
         $html[] = '<div class="formw">';
         $html[] = '<div class="element">';
-        $html[] = '<table class="data_table">';
+        $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th>' . Translation :: get('Question') . '</th>';
@@ -347,7 +347,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
-
+        
         $position = 0;
         $css_class = 'row_even';
         foreach ($answers as $answer)
@@ -363,7 +363,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             {
                 $answer_score = '';
             }
-
+            
             // build table
             $html[] = '<tr class="' . $css_class . '">';
             $html[] = '<td>' . ($answer->get_position() + 1) . '</td>';
@@ -373,14 +373,14 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             $html[] = '<td>' . $answer_score . '</td>';
             $html[] = '</tr>';
         }
-
+        
         $html[] = '</tbody>';
         $html[] = '</table>';
         $html[] = '</div>';
         $html[] = '<div class="form_feedback"></div></div>';
         $html[] = '<div class="clear">&nbsp;</div>';
         $html[] = '</div>';
-
+        
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 }

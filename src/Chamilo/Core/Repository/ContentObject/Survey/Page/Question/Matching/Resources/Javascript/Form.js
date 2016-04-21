@@ -8,12 +8,12 @@ $(function ()
 	
     function getDeleteIconMatches()
     {
-		return $('.data_table.matches > tbody > tr:first > td:last .remove_match').attr('src').replace('_na.png', '.png');
+		return $('.table-data.matches > tbody > tr:first > td:last .remove_match').attr('src').replace('_na.png', '.png');
     }
     
     function getDeleteIconOptions()
     {
-		return $('.data_table.options > tbody > tr:first > td:last .remove_option').attr('src').replace('_na.png', '.png');
+		return $('.table-data.options > tbody > tr:first > td:last .remove_option').attr('src').replace('_na.png', '.png');
     }
 	
 	function processMatches()
@@ -23,7 +23,7 @@ $(function ()
 	
 		deleteImage = '<img class="remove_match" src="' + getDeleteIconMatches().replace('.png', '_na.png') + '"/>';
 		deleteField = '<input id="remove_match_$option_number" class="remove_match" type="image" src="' + getDeleteIconMatches() + '" name="remove_match[$option_number]" />';
-		rows = $('.data_table.matches > tbody > tr');
+		rows = $('.table-data.matches > tbody > tr');
 	
 		if (rows.size() <= 2)
 		{
@@ -55,7 +55,7 @@ $(function ()
 		
 		deleteImage = '<img class="remove_option" src="' + getDeleteIconOptions().replace('.png', '_na.png') + '"/>';
 		deleteField = '<input id="remove_option_$option_number" class="remove_option" type="image" src="' + getDeleteIconOptions() + '" name="remove_option[$option_number]" />';
-		rows = $('.data_table.options > tbody > tr');
+		rows = $('.table-data.options > tbody > tr');
 
 		if (rows.size() <= 1)
 		{
@@ -133,7 +133,7 @@ $(function ()
 		
 		string = '<tr id="option_' + numberOfOptions + '" class="' + rowClass + '"><td>' + fieldOption + '</td><td>' + field + '</td><td>' + fieldDelete + '</td></tr>';
 		
-		$('.data_table.options > tbody').append(string);
+		$('.table-data.options > tbody').append(string);
 		
 		processOptions();
 	}
@@ -191,7 +191,7 @@ $(function ()
 		fieldDelete = '<input id="remove_match_' + numberOfMatches + '" class="remove_match" type="image" src="' + getDeleteIconMatches() + '" name="remove_match[' + numberOfMatches + ']" />';
 		string = '<tr id="match_' + numberOfMatches + '" class="' + rowClass + '"><td>' + fieldOption + '</td><td>' + fieldAnswer + '</td><td>' + fieldDelete + '</td></tr>';
 		
-		$('.data_table.matches > tbody').append(string);
+		$('.table-data.matches > tbody').append(string);
 
 		processMatches();
 	}

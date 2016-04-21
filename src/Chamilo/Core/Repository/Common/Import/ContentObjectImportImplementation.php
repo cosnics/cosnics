@@ -26,7 +26,7 @@ abstract class ContentObjectImportImplementation extends AbstractContentObjectIm
     public static function factory(ContentObjectImportController $controller, $content_object_type,
         $content_object_import_parameters)
     {
-        $class = $content_object_type :: package() . '\Implementation\Import\\' .
+        $class = $content_object_type :: package() . '\Common\Import\\' .
              (string) StringUtilities :: getInstance()->createString($controller :: FORMAT)->upperCamelize() .
              'ImportImplementation';
 
@@ -52,7 +52,7 @@ abstract class ContentObjectImportImplementation extends AbstractContentObjectIm
 
     public static function get_types_for_object($content_object_namespace)
     {
-        $class = $content_object_namespace . '\Implementation\ImportImplementation';
+        $class = $content_object_namespace . '\Common\ImportImplementation';
 
         if (! class_exists($class, true))
         {

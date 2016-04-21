@@ -9,13 +9,13 @@ $(function() {
 
 	function getDeleteIconMatches() {
 		return $(
-				'.data_table.matches > tbody > tr:first > td:last .remove_match')
+				'.table-data.matches > tbody > tr:first > td:last .remove_match')
 				.attr('src').replace('_na.png', '.png');
 	}
 
 	function getDeleteIconOptions() {
 		return $(
-				'.data_table.options > tbody > tr:first > td:last .remove_option')
+				'.table-data.options > tbody > tr:first > td:last .remove_option')
 				.attr('src').replace('_na.png', '.png');
 	}
 
@@ -27,7 +27,7 @@ $(function() {
 		deleteField = '<input id="remove_match_$option_number" class="remove_match" type="image" src="'
 				+ getDeleteIconMatches()
 				+ '" name="remove_match[$option_number]" />';
-		rows = $('.data_table.matches > tbody > tr');
+		rows = $('.table-data.matches > tbody > tr');
 
 		if (rows.size() <= 2) {
 			deleteField = deleteImage;
@@ -61,7 +61,7 @@ $(function() {
 		deleteField = '<input id="remove_option_$option_number" class="remove_option" type="image" src="'
 				+ getDeleteIconOptions()
 				+ '" name="remove_option[$option_number]" />';
-		rows = $('.data_table.options > tbody > tr');
+		rows = $('.table-data.options > tbody > tr');
 
 		if (rows.size() <= 1) {
 			deleteField = deleteImage;
@@ -141,7 +141,7 @@ $(function() {
 				+ '"><td>' + fieldOption + '</td><td>' + field + '</td><td>'
 				+ fieldDelete + '</td></tr>';
 
-		$('.data_table.options > tbody').append(string);
+		$('.table-data.options > tbody').append(string);
 
 		processOptions();
 	}
@@ -206,7 +206,7 @@ $(function() {
 				+ '"><td>' + fieldOption + '</td><td>' + fieldAnswer
 				+ '</td><td>' + fieldDelete + '</td></tr>';
 
-		$('.data_table.matches > tbody').append(string);
+		$('.table-data.matches > tbody').append(string);
 
 		processMatches();
 	}

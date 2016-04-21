@@ -1343,10 +1343,10 @@ EOT;
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="file-upload-buttons">';
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-warning cancel">';
-        $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>';
+        $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>' . $this->getTranslation('Cancel') . '</span>';
         $dropzoneHtml[] = '</button>';
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
-        $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>Delete</span>';
+        $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') . '</span>';
         $dropzoneHtml[] = '</button>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
@@ -1376,7 +1376,7 @@ EOT;
                 $label = 'Files';
             }
 
-            $label = sprintf($label);
+            $label = $this->getTranslation($label);
         }
         else
         {
@@ -1411,5 +1411,18 @@ EOT;
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
 
         $this->addElement('html', '</div>');
+    }
+
+    /**
+     * Helper Function
+     *
+     * @param string $variable
+     * @param array $parameters
+     *
+     * @return string
+     */
+    protected function getTranslation($variable, $parameters = array())
+    {
+        return Translation::getInstance()->getTranslation($variable, $parameters, Utilities::COMMON_LIBRARIES);
     }
 }

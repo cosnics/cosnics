@@ -43,8 +43,8 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 {
     const TAB_ALL = 1;
     const TAB_USERS = 2;
-    const TAB_PLATFORM_GROUPS_SUBGROUPS = 3;
-    const TAB_PLATFORM_GROUPS_USERS = 4;
+    const TAB_PLATFORM_GROUPS_USERS = 3;
+    const TAB_PLATFORM_GROUPS_SUBGROUPS = 4;
     const PLATFORM_GROUP_ROOT_ID = 0;
 
     /**
@@ -254,28 +254,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
         $tabs = new DynamicVisualTabsRenderer('weblcms_course_user_platformgroups_browser');
 
-        // subgroups tab
-        $link = $this->get_url(array(self :: PARAM_TAB => self :: TAB_PLATFORM_GROUPS_SUBGROUPS));
-        if ($this->get_group() != self :: PLATFORM_GROUP_ROOT_ID)
-        {
-            $tab_name = Translation :: get('Subgroups', null, Manager::context());
-            $tab_selected = $this->current_tab == self :: TAB_PLATFORM_GROUPS_SUBGROUPS;
-        }
-        else
-        {
-            $tab_name = Translation :: get('Subscribed');
-            $tab_selected = true;
-        }
-        $tabs->add_tab(
-            new DynamicVisualTab(
-                self :: TAB_PLATFORM_GROUPS_SUBGROUPS,
-                $tab_name,
-                Theme :: getInstance()->getImagePath(
-                    \Chamilo\Core\Group\Manager :: context(),
-                    'Logo/' . Theme :: ICON_MINI),
-                $link,
-                $tab_selected));
-
         // no users tab if the root is selected
         if ($this->get_group() != self :: PLATFORM_GROUP_ROOT_ID)
         {
@@ -301,6 +279,28 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                 $this->current_tab = self :: TAB_PLATFORM_GROUPS_SUBGROUPS;
             }
         }
+
+        // subgroups tab
+        $link = $this->get_url(array(self :: PARAM_TAB => self :: TAB_PLATFORM_GROUPS_SUBGROUPS));
+        if ($this->get_group() != self :: PLATFORM_GROUP_ROOT_ID)
+        {
+            $tab_name = Translation :: get('Subgroups', null, Manager::context());
+            $tab_selected = $this->current_tab == self :: TAB_PLATFORM_GROUPS_SUBGROUPS;
+        }
+        else
+        {
+            $tab_name = Translation :: get('SubscribedGroups');
+            $tab_selected = true;
+        }
+        $tabs->add_tab(
+            new DynamicVisualTab(
+                self :: TAB_PLATFORM_GROUPS_SUBGROUPS,
+                $tab_name,
+                Theme :: getInstance()->getImagePath(
+                    \Chamilo\Core\Group\Manager :: context(),
+                    'Logo/' . Theme :: ICON_MINI),
+                $link,
+                $tab_selected));
 
         // render
         $html[] = $tabs->header();
