@@ -56,7 +56,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      *
      * @see \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::retrieve_portfolio_feedbacks()
      */
-    function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node)
+    function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
     {
         return PreviewStorage :: get_instance()->retrieve_feedbacks(
             $this->get_root_content_object()->get_id(),
@@ -124,9 +124,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
 
     /*
      * (non-PHPdoc) @see
-     * \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_tabs()
+     * \core\repository\content_object\portfolio\display\PortfolioDisplaySupport::get_portfolio_additional_actions()
      */
-    public function get_portfolio_additional_tabs()
+    public function get_portfolio_additional_actions()
     {
         return array();
     }

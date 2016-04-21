@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+class CreatorComponent extends ItemComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface
 {
 
     /**
@@ -55,11 +55,15 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
         {
             $exclude = $this->detemine_excluded_content_object_ids($this->get_current_content_object()->get_id());
 
+            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
+
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                $applicationConfiguration);
             $component = $factory->getComponent();
             $component->set_excluded_objects($exclude);
+
             return $component->run();
         }
         else

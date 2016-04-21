@@ -64,4 +64,28 @@ class ButtonGroup extends AbstractButtonToolBarItem
     {
         array_unshift($this->buttons, $button);
     }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $button
+     */
+    public function addButtons($buttons)
+    {
+        foreach ($buttons as $button)
+        {
+            $this->addButton($button);
+        }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $button
+     */
+    public function prependButtons($buttons)
+    {
+        foreach ($buttons as $button)
+        {
+            $this->prependButton($button);
+        }
+    }
 }

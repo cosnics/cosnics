@@ -8,11 +8,11 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  * Feedback management of the portfolio item or folder
- * 
+ *
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FeedbackComponent extends TabComponent implements FeedbackSupport
+class FeedbackComponent extends ItemComponent implements FeedbackSupport
 {
 
     /**
@@ -25,18 +25,18 @@ class FeedbackComponent extends TabComponent implements FeedbackSupport
         {
             throw new NotAllowedException();
         }
-        
+
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Feedback\Manager :: context(), 
+            \Chamilo\Core\Repository\Feedback\Manager :: context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $result = $factory->run();
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $result;
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -60,11 +60,11 @@ class FeedbackComponent extends TabComponent implements FeedbackSupport
 
     /**
      *
-     * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::retrieve_feedbacks()
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
      */
-    public function retrieve_feedbacks()
+    public function retrieve_feedbacks($count, $offset)
     {
-        return $this->get_parent()->retrieve_portfolio_feedbacks($this->get_current_node());
+        return $this->get_parent()->retrieve_portfolio_feedbacks($this->get_current_node(), $count, $offset);
     }
 
     /**

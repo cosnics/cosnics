@@ -107,9 +107,9 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
 
     /**
      *
-     * @see \core\repository\feedback\FeedbackSupport::retrieve_feedbacks()
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
      */
-    public function retrieve_feedbacks()
+    public function retrieve_feedbacks($count, $offset)
     {
         return new ArrayResultSet(array());
     }
