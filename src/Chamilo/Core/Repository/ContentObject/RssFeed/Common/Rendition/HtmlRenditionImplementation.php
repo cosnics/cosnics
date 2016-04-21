@@ -3,12 +3,11 @@ namespace Chamilo\Core\Repository\ContentObject\RssFeed\Common\Rendition;
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Common\RenditionImplementation;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
 
 class HtmlRenditionImplementation extends RenditionImplementation
 {
+
     /**
      * Renders RSS Feeds
      *
@@ -19,7 +18,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $object = $this->get_content_object();
         $html = array();
 
-$html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
                  'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js');
 
@@ -39,8 +38,6 @@ $html[] = ResourceManager :: get_instance()->get_resource_html(
         $html[] = '</rss-feed-renderer>';
 
         $html[] = '</ul>';
-
-        
 
         return implode(PHP_EOL, $html);
     }
