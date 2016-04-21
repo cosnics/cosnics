@@ -105,6 +105,13 @@ class ContentObjectPublicationForm extends BasePublicationForm
     private $user;
 
     /**
+     * The tool context for the publication form
+     *
+     * @var string
+     */
+    private $toolContext;
+
+    /**
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $form_type
@@ -116,7 +123,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
      * @throws NoObjectSelectedException
      */
     public function __construct(
-        User $user, $form_type, $publications, $course, $action, $is_course_admin, $selectedContentObjects = array()
+        $toolContext, User $user, $form_type, $publications, $course, $action, $is_course_admin,
+        $selectedContentObjects = array()
     )
     {
         parent:: __construct('content_object_publication_form', 'post', $action);
@@ -147,6 +155,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             }
         }
 
+        $this->toolContext = $toolContext;
         $this->user = $user;
         $this->publications = $publications;
         $this->course = $course;
@@ -433,7 +442,10 @@ class ContentObjectPublicationForm extends BasePublicationForm
             )
         )
         {
-            $this->categories[0] = Translation:: get('Root', null, Utilities :: COMMON_LIBRARIES);
+            $course_title = $this->course->get_title();
+            $root_title = Translation:: get('TypeName', null, $this->toolContext) . ' ' . $course_title;
+
+            $this->categories[0] = $root_title;
         }
 
         $this->get_categories(0);
@@ -635,7 +647,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'radio',
             null,
             null,
-            Translation:: get('Everyone'),
+            Translation:: get('EveryoneCanView'),
             self::RIGHTS_FOR_ALL,
             array('class' => 'rights_selector')
         );
@@ -643,7 +655,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'radio',
             null,
             null,
-            Translation:: get('OnlyForMe'),
+            Translation:: get('OnlyMeCanView'),
             self::RIGHTS_FOR_ME,
             array('class' => 'rights_selector')
         );
@@ -652,10 +664,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'radio',
             null,
             null,
-            Translation:: get('SelectSpecificEntities'),
+            Translation:: get('SelectSpecificEntitiesThatCanView'),
             self::RIGHTS_SELECT_SPECIFIC,
             array('class' => 'rights_selector specific_rights_selector')
         );
+
+        $this->addElement('html', '<div class="right">');
 
         $this->addGroup(
             $group, self::PROPERTY_RIGHTS_SELECTOR,
@@ -681,7 +695,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             '</div>'
         );
 
-        $this->addElement('html', '</div>');
+        $this->addElement('html', '</div></div>');
 
         $this->addElement(
             'html',

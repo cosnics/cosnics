@@ -17,12 +17,11 @@ class PropertiesTable extends HTML_Table
      */
     public function __construct(array $properties)
     {
-        parent :: __construct(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
+        parent :: __construct(
+            array('class' => 'table table-striped table-bordered table-hover table-responsive table-properties'));
         $this->properties = $properties;
 
         $this->build_table();
-
-        // $this->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
     }
 
     /**
