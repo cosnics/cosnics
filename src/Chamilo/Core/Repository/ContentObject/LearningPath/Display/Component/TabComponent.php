@@ -400,6 +400,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         $html[] = parent :: render_header();
 
+        $html[] = $this->get_navigation_bar();
+
         // Menu
         $html[] = '<div class="col-md-3 col-lg-2 col-sm-12 learning-path-content">';
 
@@ -412,8 +414,6 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = $this->get_progress_bar();
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
-
-        $html[] = $this->get_navigation_bar();
 
         $html[] = '</div>';
 
@@ -494,7 +494,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         if ($this->get_action() != self :: ACTION_REPORTING || $this->is_current_step_set())
         {
-            $html[] = '<div class="learning-path-navigation">';
+
+            $html[] = '<div class="navbar-learning-path">';
 
             $previous_node = $current_node->get_previous();
 
@@ -516,8 +517,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
             {
                 $label = Translation :: get('PreviousNa');
 
-                $html[] = '<span class="glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' . $label .
-                     '"></span>';
+                $html[] = '<span class="pull-left glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' .
+                     $label . '"></span>';
             }
 
             $next_node = $current_node->get_next();
@@ -539,12 +540,17 @@ abstract class TabComponent extends Manager implements DelegateComponent
             {
                 $label = Translation :: get('NextNa');
 
-                $html[] = '<span class="glyphicon glyphicon-arrow-right disabled" alt="' . $label . '" title="' . $label .
-                     '"></span>';
+                $html[] = '<span class="pull-right glyphicon glyphicon-arrow-right disabled" alt="' . $label .
+                     '" title="' . $label . '"></span>';
             }
 
+            $html[] = '<a href="#"><span class="glyphicon glyphicon-list"></span></a>';
+
+            // $html[] = '<span class="pull-right">';
+            // $html[] = '<span class="glyphicon glyphicon-list"></span>';
+            // $html[] = '</span>';
+
             $html[] = '</div>';
-            $html[] = '<div class="clearfix"></div>';
         }
 
         return implode(PHP_EOL, $html);
