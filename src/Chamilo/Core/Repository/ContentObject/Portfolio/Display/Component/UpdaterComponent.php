@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class UpdaterComponent extends TabComponent
+class UpdaterComponent extends ItemComponent
 {
 
     /**

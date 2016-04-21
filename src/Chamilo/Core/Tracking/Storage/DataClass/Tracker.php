@@ -124,18 +124,4 @@ abstract class Tracker extends DataClass
     {
         return DataManager :: count($class_name, new DataClassCountParameters($condition));
     }
-
-    /**
-     *
-     * @param $type string
-     * @param $application string
-     * @param $condition Condition
-     * @return boolean
-     */
-    public static function remove_data($class_name, $application, $condition = null)
-    {
-        $table_name = call_user_func(array($class_name, 'get_table_name'));
-
-        return self :: get_data_manager()->remove_tracker_items($table_name, $condition);
-    }
 }

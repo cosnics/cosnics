@@ -91,23 +91,12 @@ ul.tree-menu li div a.portfolio, ul.tree-menu li div a.type_portfolio,
 	padding-top: 5px;
 }
 
-.portfolio-photo {
+.panel.panel-default.panel-portfolio .portfolio-photo {
 	width: 100%;
-	max-width: 200px;
+	max-width: 100%;
 	padding: 0px;
 }
 
-.portfolio-photo img {
-	width: 100%;
-	max-width: 200px;
-	border: 1px solid grey;
-}
-
-.portfolio-virtual-user {
-	max-width: 180px;
-	background-color: #FFF8AA;
-	border: 1px solid #FFD89B;
-	color: #996900;
-	padding: 10px;
-	margin-bottom: 10px;
+.portfolio-tree-menu {
+	overflow: auto;
 }
