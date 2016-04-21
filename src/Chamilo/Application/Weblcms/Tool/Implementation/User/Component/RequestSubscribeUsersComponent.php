@@ -254,14 +254,14 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_BROWSER)),
-                Translation:: get('UserToolSubscribeBrowserComponent')
+                Translation:: get('SubscribeBrowserComponent')
             )
         );
 
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_BROWSER)),
-                Translation:: get('UserToolRequestSubscribeUsersComponent')
+                Translation:: get('RequestSubscribeUsersComponent')
             )
         );
     }
