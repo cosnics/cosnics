@@ -14,17 +14,21 @@ class HtmlFullContentObjectRendition extends HtmlContentObjectRendition
 
         $html = array();
 
-        $html[] = '<div class="content_object" style="background-image: url(' . $object->get_icon_path() . ');">';
-        $html[] = '<div class="title">' . $object->get_title() . '</div>';
+        $html[] = '<div class="panel panel-default">';
 
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . $object->get_icon_image() . ' ' . $object->get_title() . '</h3>';
+        $html[] = '</div>';
+
+        $html[] = '<div class="panel-body">';
         $html[] = ContentObjectRenditionImplementation :: launch(
             $object,
             ContentObjectRendition :: FORMAT_HTML,
             ContentObjectRendition :: VIEW_DESCRIPTION,
             $this->get_context());
+        $html[] = '</div>';
 
         $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
 
         return implode(PHP_EOL, $html);
     }

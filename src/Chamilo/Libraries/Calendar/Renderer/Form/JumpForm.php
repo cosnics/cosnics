@@ -102,8 +102,10 @@ class JumpForm extends FormValidator
     public function render()
     {
         $html = array();
-        $html[] = '<div class="content_object" style="margin-top:10px;padding:10px;">';
+        $html[] = '<div class="panel panel-default">';
+        $html[] = '<div class="panel-body">';
         $html[] = $this->renderer->toHTML();
+        $html[] = '</div>';
         $html[] = '</div>';
         return implode('', $html);
     }

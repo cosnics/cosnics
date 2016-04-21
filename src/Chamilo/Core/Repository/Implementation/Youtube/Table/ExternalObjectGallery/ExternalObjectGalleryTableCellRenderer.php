@@ -8,17 +8,24 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGalleryTableCellRenderer
 {
 
-    public function render_cell($object)
+    public function renderContent($object)
     {
         $html = array();
-        $html[] = '<h4>' . StringUtilities :: getInstance()->truncate($object->get_title(), 25) . ' (' . DatetimeUtilities :: format_seconds_to_minutes(
-            $object->get_duration()) . ')</h4>';
+
         $html[] = '<a href="' . $this->get_component()->get_external_repository_object_viewing_url($object) .
              '"><img class="thumbnail" src="' . $object->get_thumbnail() . '"/></a> <br/>';
         $html[] = '<i>' . StringUtilities :: getInstance()->truncate($object->get_description(), 100) . '</i><br/>';
-        $html[] = '<div class="thumbnail_action">';
-        $html[] = $this->get_actions($object);
-        $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTableCellRenderer::renderTitle()
+     */
+    public function renderTitle($content_object)
+    {
+        return StringUtilities :: getInstance()->truncate($content_object->get_title(), 25) . ' (' . DatetimeUtilities :: format_seconds_to_minutes(
+            $content_object->get_duration()) . ')';
     }
 }

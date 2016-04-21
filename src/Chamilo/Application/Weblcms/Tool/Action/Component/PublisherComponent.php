@@ -94,6 +94,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         }
 
         $this->publicationForm = new ContentObjectPublicationForm(
+            $this->get_application()->context(),
             $this->getUser(),
             ContentObjectPublicationForm :: TYPE_CREATE,
             $publications,
