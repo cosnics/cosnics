@@ -7,10 +7,6 @@ ul.tree-menu li div a.file, ul.tree-menu li div a.type_file, ul.tree-menu li div
 	margin-bottom: 15px;
 }
 
-.media-element-js-playback-error {
-	display: none;
-}
-
 .media-element-js-playback-error .btn-toolbar {
 	margin-top: 15px;
 	margin-bottom: 0px;
