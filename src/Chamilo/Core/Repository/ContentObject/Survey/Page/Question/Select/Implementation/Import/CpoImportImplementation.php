@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Implementation\Import;
+namespace Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Common\Import;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Implementation\Export\CpoExportImplementation;
-use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Implementation\ImportImplementation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Common\Export\CpoExportImplementation;
+use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Common\ImportImplementation;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataClass\SelectOption;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataManager;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -60,9 +60,7 @@ class CpoImportImplementation extends ImportImplementation
             
             $dm = DataManager :: get_instance();
             $conditions = array();
-            $conditions[] = new EqualityCondition(
-                SelectOption :: PROPERTY_QUESTION_ID, 
-                $content_object->get_id());
+            $conditions[] = new EqualityCondition(SelectOption :: PROPERTY_QUESTION_ID, $content_object->get_id());
             $conditions[] = new EqualityCondition(SelectOption :: PROPERTY_DISPLAY_ORDER, $display_order);
             $condition = new AndCondition($conditions);
             $option = $dm->retrieve_survey_select_question_options($condition)->next_result();

@@ -11,19 +11,19 @@ $(function() {
 			'Z' ];
 
 	function getDeleteIconMatches() {
-		return $('.data_table.matches > tbody > tr:first td:last .remove_match')
+		return $('.table-data.matches > tbody > tr:first td:last .remove_match')
 				.attr('src').replace('_na.png', '.png');
 	}
 
 	function getDeleteIconOptions() {
 		return $(
-				'.data_table.options > tbody > tr:first td:last .remove_option')
+				'.table-data.options > tbody > tr:first td:last .remove_option')
 				.attr('src').replace('_na.png', '.png');
 	}
 
 	function getSelectOptions() {
 		return $(
-				'.data_table.options > tbody > tr:first select[name*="matches_to"]')
+				'.table-data.options > tbody > tr:first select[name*="matches_to"]')
 				.html();
 	}
 
@@ -35,7 +35,7 @@ $(function() {
 		deleteField = '<input id="remove_match_$option_number" class="remove_match" type="image" src="'
 				+ getDeleteIconMatches()
 				+ '" name="remove_match[$option_number]" />';
-		rows = $('.data_table.matches > tbody > tr');
+		rows = $('.table-data.matches > tbody > tr');
 
 		if (rows.size() <= 2) {
 			deleteField = deleteImage;
@@ -69,7 +69,7 @@ $(function() {
 		deleteField = '<input id="remove_option_$option_number" class="remove_option" type="image" src="'
 				+ getDeleteIconOptions()
 				+ '" name="remove_option[$option_number]" />';
-		rows = $('.data_table.options > tbody > tr');
+		rows = $('.table-data.options > tbody > tr');
 
 		if (rows.size() <= 2) {
 			deleteField = deleteImage;
@@ -166,7 +166,7 @@ $(function() {
 				+ '</td><td>' + fieldScore + '</td><td>' + fieldDelete
 				+ '</td></tr>';
 
-		$('.data_table.options > tbody').append(string);
+		$('.table-data.options > tbody').append(string);
 
 		processOptions();
 	}
@@ -194,7 +194,7 @@ $(function() {
 			row += 1;
 		});
 
-		selectBox = $('.data_table.options select[name*="matches_to"]');
+		selectBox = $('.table-data.options select[name*="matches_to"]');
 		$('option[value="' + id + '"]', selectBox).remove();
 
 		selectBox.each(function() {
@@ -240,9 +240,9 @@ $(function() {
 				+ '"><td>' + fieldOption + '</td><td>' + fieldAnswer
 				+ '</td><td>' + fieldDelete + '</td></tr>';
 
-		$('.data_table.matches > tbody').append(string);
+		$('.table-data.matches > tbody').append(string);
 
-		selectBox = $('.data_table.options select[name*="matches_to"]');
+		selectBox = $('.table-data.options select[name*="matches_to"]');
 		selectBox.append('<option value="' + numberOfMatches + '">'
 				+ labels[numberOfMatches - skippedMatches] + '</option>');
 

@@ -592,28 +592,28 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             null,
             Translation :: get('Nobody'),
             CourseManagementRights :: RIGHT_OPTION_NOBODY,
-            array('class' => 'other_option_selected'));
+            array('class' => 'rights_selector'));
         $group[] = & $this->createElement(
             'radio',
             null,
             null,
             Translation :: get('Everyone'),
             CourseManagementRights :: RIGHT_OPTION_ALL,
-            array('class' => 'other_option_selected'));
+            array('class' => 'rights_selector'));
         $group[] = & $this->createElement(
             'radio',
             null,
             null,
             Translation :: get('OnlyForMe'),
             CourseManagementRights :: RIGHT_OTPION_ME,
-            array('class' => 'other_option_selected'));
+            array('class' => 'rights_selector'));
         $group[] = & $this->createElement(
             'radio',
             null,
             null,
             Translation :: get('SelectSpecificEntities'),
             CourseManagementRights :: RIGHT_OPTION_SELECT,
-            array('class' => 'entity_option_selected'));
+            array('class' => 'rights_selector specific_rights_selector'));
 
         $this->addGroup($group, $name, Translation :: get('Target'), '');
 

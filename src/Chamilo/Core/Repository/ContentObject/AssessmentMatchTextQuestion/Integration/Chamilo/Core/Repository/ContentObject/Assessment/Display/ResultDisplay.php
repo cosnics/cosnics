@@ -26,36 +26,36 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $valid_answer = $this->get_score() > 0;
         $user_answer = $this->get_answers();
         $answer_option = $this->get_question()->get_option(
-            $user_answer[0],
-            $this->get_question()->get_ignore_case(),
+            $user_answer[0], 
+            $this->get_question()->get_ignore_case(), 
             $this->get_question()->get_use_wildcards());
         $configuration = $this->getViewerApplication()->get_configuration();
-
+        
         $html = array();
-
-        $html[] = '<table class="data_table take_assessment">';
+        
+        $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th style="width: 50%;">' . Translation :: get('YourAnswer') . '</th>';
-
+        
         if ($configuration->show_answer_feedback())
         {
             $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
         }
-
+        
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
-
+        
         $html[] = '<tr class="row_even">';
-
+        
         if (! is_null($user_answer[0]) && $user_answer[0] != '')
         {
             if ($configuration->show_correction() || $configuration->show_solution())
             {
                 if ($valid_answer && $best_option->matches(
-                    $user_answer[0],
-                    $this->get_question()->get_ignore_case(),
+                    $user_answer[0], 
+                    $this->get_question()->get_ignore_case(), 
                     $this->get_question()->get_use_wildcards()))
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
@@ -80,12 +80,12 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 $result = '';
             }
-
+            
             $html[] = '<td>' . $user_answer[0] . $result . '</td>';
         }
         else
         {
-
+            
             if ($configuration->show_correction() || $configuration->show_solution())
             {
                 $result = ' <img style="vertical-align: middle;" src="' .
@@ -96,20 +96,20 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 $result = '';
             }
-
+            
             $html[] = '<td>' . Translation :: get('NoAnswer') . $result . '</td>';
         }
-
+        
         if (AnswerFeedbackDisplay :: allowed(
-            $configuration,
-            $this->get_complex_content_object_question(),
-            true,
+            $configuration, 
+            $this->get_complex_content_object_question(), 
+            true, 
             $valid_answer))
         {
             if (! is_null($answer_option))
             {
                 $object_renderer = new ContentObjectResourceRenderer(
-                    $this->getViewerApplication(),
+                    $this->getViewerApplication(), 
                     $answer_option->get_feedback());
                 $html[] = '<td>' . $object_renderer->run() . '</td>';
             }
@@ -118,56 +118,56 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<td>-</td>';
             }
         }
-
+        
         $html[] = '</tr>';
-
+        
         $html[] = '</tbody>';
         $html[] = '</table>';
-
+        
         if ($configuration->show_solution())
         {
             if (! $valid_answer || ($valid_answer && ! $best_option->matches(
-                $user_answer[0],
-                $this->get_question()->get_ignore_case(),
+                $user_answer[0], 
+                $this->get_question()->get_ignore_case(), 
                 $this->get_question()->get_use_wildcards())))
             {
-                $html[] = '<table class="data_table take_assessment">';
+                $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
                 $html[] = '<thead>';
                 $html[] = '<tr>';
                 $html[] = '<th style="width: 50%;">' . Translation :: get('BestPossibleAnswer') . '</th>';
-
+                
                 $answer_feedback_display = AnswerFeedbackDisplay :: allowed(
-                    $configuration,
-                    $this->get_complex_content_object_question(),
-                    false,
+                    $configuration, 
+                    $this->get_complex_content_object_question(), 
+                    false, 
                     true);
-
+                
                 if ($answer_feedback_display)
                 {
                     $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
                 }
-
+                
                 $html[] = '</tr>';
                 $html[] = '</thead>';
                 $html[] = '<tbody>';
-
+                
                 $html[] = '<tr class="row_even">';
                 $html[] = '<td>' . $best_option->get_value() . '</td>';
-
+                
                 if ($answer_feedback_display)
                 {
                     $object_renderer = new ContentObjectResourceRenderer(
-                        $this->getViewerApplication(),
+                        $this->getViewerApplication(), 
                         $best_option->get_feedback());
                     $html[] = '<td>' . $object_renderer->run() . '</td>';
                 }
-
+                
                 $html[] = '</tr>';
                 $html[] = '</tbody>';
                 $html[] = '</table>';
             }
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 }

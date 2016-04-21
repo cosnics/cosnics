@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribeBrowserComponent;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -61,6 +62,7 @@ class PlatformgroupMenuRenderer extends GenericTree
     {
         $params = array();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP] = $node_id;
+        $params[Manager :: PARAM_TAB] = UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS;
         return $this->browser->get_url($params);
     }
 
@@ -72,7 +74,7 @@ class PlatformgroupMenuRenderer extends GenericTree
     public function get_current_node_id()
     {
         $currentNodeId = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP);
-        $currentNodeId = !is_null($currentNodeId) ? $currentNodeId : $this->root_ids[0];
+        $currentNodeId = !is_null($currentNodeId) ? $currentNodeId : 0;
 
         return $currentNodeId;
     }
@@ -151,7 +153,7 @@ class PlatformgroupMenuRenderer extends GenericTree
         $url_format .= '&' . \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION . '=' .
              Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION);
         $url_format .= '&' . Manager :: PARAM_BROWSER_TYPE . '=' . Request :: get(Manager :: PARAM_BROWSER_TYPE);
-        $url_format .= '&' . Manager :: PARAM_TAB . '=' . Request :: get(Manager :: PARAM_TAB);
+        $url_format .= '&' . Manager :: PARAM_TAB . '=' . UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS;
         $url_format .= '&' . \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP . '=%s';
         return $url_format;
     }

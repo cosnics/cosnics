@@ -21,7 +21,7 @@ abstract class ContentObjectRenditionImplementation extends AbstractContentObjec
     public static function factory(ContentObject $content_object, $format, $view, $context)
     {
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($content_object);
-        $class = $content_object->package() . '\Implementation\Rendition\\' .
+        $class = $content_object->package() . '\Common\Rendition\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() . '\\' .
              (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() .
              (string) StringUtilities :: getInstance()->createString($view)->upperCamelize() . 'RenditionImplementation';

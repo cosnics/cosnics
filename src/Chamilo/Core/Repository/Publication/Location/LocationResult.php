@@ -115,12 +115,17 @@ abstract class LocationResult
 
             if (! empty($link))
             {
-                $data_row[] = Theme :: getInstance()->getCommonImage(
-                    'Action/Right',
-                    'png',
+                $toolbarItem = new ToolbarItem(
                     Translation :: get('ViewPublication'),
+                    Theme :: getInstance()->getCommonImagePath('Action/Right'),
                     $link,
-                    ToolbarItem :: DISPLAY_ICON);
+                    ToolbarItem :: DISPLAY_ICON,
+                    false,
+                    null,
+                    '_blank'
+                );
+
+                $data_row[] = $toolbarItem->as_html();
             }
             else
             {
