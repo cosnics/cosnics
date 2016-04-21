@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Subscribed\Su
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubscribedGroup\SubSubscribedPlatformGroupTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\SubscribedPlatformGroupMenuRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -367,7 +368,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         $root_ids = $this->get_subscribed_platformgroup_ids($this->get_course_id());
         if (count($root_ids) > 0)
         {
-            return new PlatformgroupMenuRenderer($this, $root_ids, true);
+            return new SubscribedPlatformGroupMenuRenderer($this, $root_ids, true);
         }
         return null;
     }

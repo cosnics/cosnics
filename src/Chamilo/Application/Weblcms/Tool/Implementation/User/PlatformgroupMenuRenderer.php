@@ -74,9 +74,19 @@ class PlatformgroupMenuRenderer extends GenericTree
     public function get_current_node_id()
     {
         $currentNodeId = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP);
-        $currentNodeId = !is_null($currentNodeId) ? $currentNodeId : 0;
+        $currentNodeId = !is_null($currentNodeId) ? $currentNodeId : $this->getDefaultNodeId();
 
         return $currentNodeId;
+    }
+
+    /**
+     * Returns the default node id
+     *
+     * @return int
+     */
+    protected function getDefaultNodeId()
+    {
+        return $this->root_ids[0];
     }
 
     /**
