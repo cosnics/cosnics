@@ -7,7 +7,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Exten
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class HtmlInlineMp3RenditionImplementation extends HtmlInlineMediaElementRenditionImplementation
+class HtmlInlineWmvRenditionImplementation extends HtmlInlineMediaElementRenditionImplementation
 {
 
     /**
@@ -16,7 +16,7 @@ class HtmlInlineMp3RenditionImplementation extends HtmlInlineMediaElementRenditi
      */
     public function getSources($parameters)
     {
-        return '<source type="audio/mp3" src="' . $this->getMediaUrl() . '" />';
+        return '<source type="video/wmv" src="' . $this->getMediaUrl() . '" />';
     }
 
     /**
@@ -25,6 +25,6 @@ class HtmlInlineMp3RenditionImplementation extends HtmlInlineMediaElementRenditi
      */
     public function getMediaElementType()
     {
-        return 'audio';
+        return 'video';
     }
 }

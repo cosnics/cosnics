@@ -1,24 +1,24 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\Extension;
+namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Extension;
 
-use Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\HtmlInlineRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineMediaRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
-abstract class HtmlInlineMediaElementVideoRenditionImplementation extends HtmlInlineRenditionImplementation
+abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineMediaRenditionImplementation
 {
 
     /**
      *
-     * @see \Chamilo\Core\Repository\ContentObject\File\Implementation\Rendition\Html\HtmlInlineRenditionImplementation::render()
+     * @see \Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineRenditionImplementation::render()
      */
     public function render($parameters)
     {
@@ -55,14 +55,7 @@ abstract class HtmlInlineMediaElementVideoRenditionImplementation extends HtmlIn
         $html[] = $this->getSources($parameters);
         $html[] = '</' . $this->getMediaElementType() . '>';
 
-        $downloadAction = $this->renderDownloadAction();
-
-        $html[] = '<div class="alert alert-warning media-element-js-playback-error" width="720" height="300">';
-        $html[] = '<h4>' . Translation :: get('PlaybackNotSupportedTitle') . '</h4>';
-        $html[] = Translation :: get('PlaybackNotSupported');
-        $html[] = '<br />';
-        $html[] = $this->renderDownloadAction('btn-warning');
-        $html[] = '</div>';
+        $html[] = $this->getErrorMessage(false);
 
         $html[] = '<div class="media-element-js-download">';
         $html[] = $this->renderDownloadAction();
@@ -79,12 +72,6 @@ abstract class HtmlInlineMediaElementVideoRenditionImplementation extends HtmlIn
      * @return string
      */
     abstract public function getSources($parameters);
-
-    /**
-     *
-     * @return string
-     */
-    abstract public function getMediaElementType();
 
     /**
      *
