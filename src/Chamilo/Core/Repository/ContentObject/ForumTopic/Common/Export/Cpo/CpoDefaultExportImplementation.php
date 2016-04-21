@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
  *
  * @author Maarten Volckaert - Hogschool Gent
  */
-class CpoDefaultExportImplementation extends CpoExportImplementation
+class CpoDefaultExportImplementation extends \Chamilo\Core\Repository\ContentObject\ForumTopic\Common\Export\CpoExportImplementation
 {
 
     public function render()

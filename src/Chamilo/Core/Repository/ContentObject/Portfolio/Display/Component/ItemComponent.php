@@ -109,7 +109,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = '</div>';
-        $html[] = '<div class="clear">&nbsp;</div>';
+        $html[] = '<div class="clearfix"></div>';
         $html[] = parent :: render_footer();
 
         return implode(PHP_EOL, $html);

@@ -2,3 +2,34 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 	ul.tree-menu li div a.type_learning_path_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
+
+.learning-path-content {
+	padding-bottom: 68px;
+}
+
+.learning-path-tree-menu {
+	overflow: auto;
+	margin-bottom: 15px;
+}
+
+.learning-path-progress {
+	margin-bottom: 15px;
+}
+
+.learning-path-progress .progress {
+	margin-bottom: 0px;
+}
+
+.learning-path-navigation {
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	left: 0px;
+	right: 0px;
+	padding: 15px 15px;
+	z-index: 10000;
+}
+
+.learning-path-navigation .glyphicon {
+	font-size: 48px;
+}
