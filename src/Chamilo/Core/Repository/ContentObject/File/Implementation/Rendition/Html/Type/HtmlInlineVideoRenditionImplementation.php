@@ -12,10 +12,9 @@ class HtmlInlineVideoRenditionImplementation extends HtmlInlineRenditionImplemen
     public function render($parameters)
     {
         $object = $this->get_content_object();
-        $url = Path :: getInstance()->getBasePath(true) .
-             \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-                $object->get_id(),
-                $object->calculate_security_code()) . '&display=1';
+        $url = Path :: getInstance()->getBasePath(true) . \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+            $object->get_id(),
+            $object->calculate_security_code()) . '&display=1';
 
         $height = $parameters[self :: PARAM_HEIGHT] ? $parameters[self :: PARAM_HEIGHT] : self :: DEFAULT_HEIGHT;
         $width = $parameters[self :: PARAM_WIDTH] ? $parameters[self :: PARAM_WIDTH] : self :: DEFAULT_WIDTH;
