@@ -82,7 +82,7 @@ class ShareComponent extends Manager implements TableSupport
         {
             $contentObjectIdentifiers = $this->getSelectedContentObjectIdentifiers();
 
-            if (count($contentObjectIdentifiers) > 1)
+            if (count($contentObjectIdentifiers) >= 1)
             {
                 $contentObjects = DataManager:: retrieves(
                     ContentObject:: class_name(),
@@ -94,7 +94,7 @@ class ShareComponent extends Manager implements TableSupport
                     )
                 );
 
-                $toolbar = new Toolbar();
+                $toolbar = new Toolbar(Toolbar::TYPE_VERTICAL);
 
                 while ($contentObject = $contentObjects->next_result())
                 {
@@ -121,30 +121,34 @@ class ShareComponent extends Manager implements TableSupport
 
                 $selectedObjectsPreviews = array();
 
-                $selectedObjectsPreviews[] = '<div class="alert alert-info">';
-                $selectedObjectsPreviews[] = '<h3>';
+                $selectedObjectsPreviews[] = '<div class="panel panel-default">';
+                $selectedObjectsPreviews[] = '<div class="panel-heading">';
+                $selectedObjectsPreviews[] = '<h3 class="panel-title">';
                 $selectedObjectsPreviews[] = Translation:: get('SelectedContentObjects');
                 $selectedObjectsPreviews[] = '</h3>';
+                $selectedObjectsPreviews[] = '</div>';
+                $selectedObjectsPreviews[] = '<div class="panel-body">';
                 $selectedObjectsPreviews[] = $toolbar->as_html();
+                $selectedObjectsPreviews[] = '</div>';
                 $selectedObjectsPreviews[] = '</div>';
 
                 $selectedObjectsPreview = implode(PHP_EOL, $selectedObjectsPreviews);
             }
-            else
-            {
-                $contentObject = DataManager:: retrieve_by_id(
-                    ContentObject:: class_name(),
-                    array_pop($contentObjectIdentifiers)
-                );
-
-                $renditionImplementation = ContentObjectRenditionImplementation:: factory(
-                    $contentObject,
-                    ContentObjectRendition :: FORMAT_HTML,
-                    ContentObjectRendition :: VIEW_FULL,
-                    $this
-                );
-                $selectedObjectsPreview = $renditionImplementation->render();
-            }
+//            else
+//            {
+//                $contentObject = DataManager:: retrieve_by_id(
+//                    ContentObject:: class_name(),
+//                    array_pop($contentObjectIdentifiers)
+//                );
+//
+//                $renditionImplementation = ContentObjectRenditionImplementation:: factory(
+//                    $contentObject,
+//                    ContentObjectRendition :: FORMAT_HTML,
+//                    ContentObjectRendition :: VIEW_FULL,
+//                    $this
+//                );
+//                $selectedObjectsPreview = $renditionImplementation->render();
+//            }
 
             $table = new ShareTable($this);
 
@@ -160,10 +164,10 @@ class ShareComponent extends Manager implements TableSupport
             $url = $redirect->getUrl();
 
             $html[] = '<div class="alert alert-info" role="alert">' .
-                Translation::getInstance()->getTranslation('ShareInformation', array('WORKSPACE_URL' => $url), Manager::context()) . '</div>';
+                $this->getTranslation('ShareInformation', array('WORKSPACE_URL' => $url)) . '</div>';
 
             $html[] = $selectedObjectsPreview;
-            $html[] = '<br />';
+            $html[] = '<h3 style="margin-bottom: 30px;">' . $this->getTranslation('ShareInWorkspaces') . '</h3>';
             $html[] = $table->as_html();
             $html[] = $this->render_footer();
 
@@ -220,5 +224,18 @@ class ShareComponent extends Manager implements TableSupport
         }
 
         return $this->selectedContentObjectIdentifiers;
+    }
+
+    /**
+     * Translation method helper
+     *
+     * @param string $variable
+     * @param array $parameters
+     *
+     * @return string
+     */
+    protected function getTranslation($variable, $parameters = array())
+    {
+        return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
     }
 }
