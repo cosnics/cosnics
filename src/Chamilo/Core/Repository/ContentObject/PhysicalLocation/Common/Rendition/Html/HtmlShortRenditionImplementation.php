@@ -9,7 +9,6 @@ class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
     public function render()
     {
         $object = $this->get_content_object();
-        return '<span class="content_object">' . htmlentities($object->get_title()) . ' - ' .
-             htmlentities($object->get_location()) . '</span>';
+        return '<span>' . htmlentities($object->get_title()) . ' - ' . htmlentities($object->get_location()) . '</span>';
     }
 }

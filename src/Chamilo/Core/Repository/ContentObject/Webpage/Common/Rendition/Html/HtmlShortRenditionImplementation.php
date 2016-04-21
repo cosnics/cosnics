@@ -14,7 +14,7 @@ class HtmlShortRenditionImplementation extends HtmlRenditionImplementation
             $object->get_id(),
             $object->calculate_security_code());
 
-        return '<span class="content_object"><a href="' . Utilities :: htmlentities($url) . '">' .
-             Utilities :: htmlentities($object->get_title()) . '</a></span>';
+        return '<span><a href="' . Utilities :: htmlentities($url) . '">' .
+        Utilities :: htmlentities($object->get_title()) . '</a></span>';
     }
 }

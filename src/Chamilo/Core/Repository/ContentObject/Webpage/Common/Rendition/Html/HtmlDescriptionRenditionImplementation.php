@@ -21,9 +21,10 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
         $html = array();
 
-        $html[] = '<div style="border: 1px solid grey;"><iframe border="0" style="border: 0;"
-                width="100%" height="500"  src="' . $url .
-             '&display=1"></iframe></div></div>';
+      $html[] = '<div style="border: 1px solid grey;">';
+        $html[] = '<iframe border="0" style="border: 0;"
+                width="100%" height="500"  src="' . $url . '"></iframe>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }

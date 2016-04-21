@@ -34,9 +34,6 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
                  'RenditionImplementation';
         }
 
-//        $parameters[self :: PARAM_HEIGHT] = $parameters[self :: PARAM_HEIGHT] ? $parameters[self :: PARAM_HEIGHT] : self::DEFAULT_HEIGHT;
-//        $parameters[self :: PARAM_WIDTH] = $parameters[self :: PARAM_WIDTH] ? $parameters[self :: PARAM_WIDTH] : self::DEFAULT_WIDTH;
-
         $rendition = new $class($this->get_context(), $this->get_content_object());
         return $rendition->render($parameters);
     }

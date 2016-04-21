@@ -1,8 +1,8 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\Rendition\Html;
+namespace Chamilo\Core\Repository\ContentObject\RssFeed\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
-use Chamilo\Core\Repository\ContentObject\RssFeed\Implementation\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\RssFeed\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 
 class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
