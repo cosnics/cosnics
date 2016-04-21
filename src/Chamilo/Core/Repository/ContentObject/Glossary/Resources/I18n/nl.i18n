@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\glossary
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Woordenlijst"
+CreateItem = "Een item aanmaken"
+Title = "Titel"
+Description = "Beschrijving"
+GlossaryToolBrowserComponent = "Browser"
+GlossaryToolEvaluateComponent = "Evalueer"
+GlossaryToolIntroductionPublisherComponent = "Publiceren een inleidende tekst"
+GlossaryToolMoverComponent = "Verplaatsen"
+GlossaryToolPublisherComponent = "publiceren"
+GlossaryToolUpdaterComponent = "Bewerken"
+GlossaryToolViewerComponent = "Weergeven"

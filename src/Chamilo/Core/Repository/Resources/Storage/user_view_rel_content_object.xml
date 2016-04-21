@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="user_view_rel_content_object">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="user_view_id" type="integer" notnull="1" />
+		<property name="content_object_template_id" type="integer" notnull="1" />
+	</properties>
+
+	<index name="user_view_id">
+		<indexproperty name="user_view_id" />
+	</index>
+	<index name="content_object_template_id">
+		<indexproperty name="content_object_template_id" />
+	</index>
+</object>
