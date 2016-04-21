@@ -39,7 +39,8 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
             $this,
             $request,
             false,
-            Session :: get_user_id());
+            Session:: get_user_id()
+        );
 
         $this->user_ids = $this->get_selected_user_ids();
         $users = $this->retrieve_selected_users($this->user_ids);
@@ -51,10 +52,11 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
             $array_type = array();
             $array_type['go'] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_WEBLCMS_HOME;
             $this->redirect(
-                Translation :: get($success_requests ? 'CourseCreateRequestSent' : 'CourseCreateRequestNotSent'),
+                Translation:: get($success_requests ? 'CourseCreateRequestSent' : 'CourseCreateRequestNotSent'),
                 ($success_requests ? false : true),
                 $array_type,
-                array(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE));
+                array(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE)
+            );
         }
         else
         {
@@ -85,19 +87,19 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
     {
         $user_ids = $this->getRequest()->get(self :: PARAM_OBJECTS);
 
-        if (! $user_ids)
+        if (!$user_ids)
         {
             $user_ids = json_decode($this->form->getSubmitValue('user_ids'));
         }
 
-        if (! is_array($user_ids))
+        if (!is_array($user_ids))
         {
             $user_ids = array($user_ids);
         }
 
         if (count($user_ids) == 0)
         {
-            Throw new NoObjectSelectedException(Translation :: get('User'));
+            Throw new NoObjectSelectedException(Translation:: get('User'));
         }
 
         return $user_ids;
@@ -112,24 +114,25 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         $html = array();
 
         $html[] = '<div class="attachments" style="margin-top: 1em; background-image:url(' .
-             Theme :: getInstance()->getCommonImagePath('Place/Selected') . ')">';
+            Theme:: getInstance()->getCommonImagePath('Place/Selected') . ')">';
 
         if (count($users) > 1)
         {
-            $html[] = '<div class="attachments_title">' . htmlentities(Translation :: get('SelectedUsers')) . '</div>';
+            $html[] = '<div class="attachments_title">' . htmlentities(Translation:: get('SelectedUsers')) . '</div>';
         }
         else
         {
-            $html[] = '<div class="attachments_title">' . htmlentities(Translation :: get('SelectedUser')) . '</div>';
+            $html[] = '<div class="attachments_title">' . htmlentities(Translation:: get('SelectedUser')) . '</div>';
         }
 
         $html[] = '<ul class="attachments_list">';
         foreach ($users as $user)
         {
-            $html[] = '<li><img src="' . Theme :: getInstance()->getImagePath(
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname($user->class_name()),
-                'Logo/' . Theme :: ICON_MINI) . '" alt="' . htmlentities(Translation :: get('TypeName')) . '"/> ' .
-                 $user->get_fullname() . '(' . $user->get_official_code() . ')' . '</li>';
+            $html[] = '<li><img src="' . Theme:: getInstance()->getImagePath(
+                    '\Chamilo\Core\User',
+                    'Logo/' . Theme :: ICON_MINI
+                ) . '" alt="' . htmlentities(Translation:: get('TypeName')) . '"/> ' .
+                $user->get_fullname() . ' (' . $user->get_official_code() . ')' . '</li>';
         }
         $html[] = '</ul>';
         $html[] = '</div>';
@@ -151,12 +154,12 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
 
         foreach ($this->user_ids as $id)
         {
-            if (! $this->check_student_allowed_to_subscribe($id))
+            if (!$this->check_student_allowed_to_subscribe($id))
             {
                 continue;
             }
 
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(User :: class_name(), $id);
+            $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(User:: class_name(), $id);
             if ($user)
             {
                 $allowed_user_ids[] = $id;
@@ -165,9 +168,9 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         }
         $this->user_ids = $allowed_user_ids;
 
-        if (! $users || count($users) == 0)
+        if (!$users || count($users) == 0)
         {
-            Throw new NoObjectSelectedException(Translation :: get('User'));
+            Throw new NoObjectSelectedException(Translation:: get('User'));
         }
 
         return $users;
@@ -179,6 +182,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
      * @param \user\User[] $users
      * @param $request
      * @param String[] $values
+     *
      * @return bool
      */
     protected function create_course_request_for_users($users, $request, $values)
@@ -188,9 +192,11 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         if ($request instanceof \Chamilo\Application\Weblcms\Request\Storage\DataClass\Request)
         {
             $request->set_course_name(
-                $values[\Chamilo\Application\Weblcms\Request\Storage\DataClass\Request :: PROPERTY_NAME]);
+                $values[\Chamilo\Application\Weblcms\Request\Storage\DataClass\Request :: PROPERTY_NAME]
+            );
             $request->set_course_type_id(
-                $values[\Chamilo\Application\Weblcms\Request\Storage\DataClass\Request :: PROPERTY_COURSE_TYPE_ID]);
+                $values[\Chamilo\Application\Weblcms\Request\Storage\DataClass\Request :: PROPERTY_COURSE_TYPE_ID]
+            );
         }
         else
         {
@@ -206,14 +212,14 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         $success_requests = true;
         foreach ($users as $user)
         {
-            if (! $this->check_student_allowed_to_subscribe($user->get_id()))
+            if (!$this->check_student_allowed_to_subscribe($user->get_id()))
             {
                 continue;
             }
 
             $request->set_user_id($user->get_id());
 
-            if (! $request->create())
+            if (!$request->create())
             {
                 $success_requests &= false;
             }
@@ -226,15 +232,17 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
      * Function that will check if a student is allowed to be subscribed to the course.
      *
      * @param int $user_id
+     *
      * @return bool
      */
     protected function check_student_allowed_to_subscribe($user_id)
     {
-        return ($this->get_user()->is_platform_admin() || CourseManagementRights :: get_instance()->is_allowed(
-            CourseManagementRights :: TEACHER_REQUEST_SUBSCRIBE_RIGHT,
-            $this->get_course_id(),
-            CourseManagementRights :: TYPE_COURSE,
-            $user_id));
+        return ($this->get_user()->is_platform_admin() || CourseManagementRights:: get_instance()->is_allowed(
+                CourseManagementRights :: TEACHER_REQUEST_SUBSCRIBE_RIGHT,
+                $this->get_course_id(),
+                CourseManagementRights :: TYPE_COURSE,
+                $user_id
+            ));
     }
 
     /**
@@ -246,11 +254,15 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_BROWSER)),
-                Translation :: get('UserToolSubscribeBrowserComponent')));
+                Translation:: get('UserToolSubscribeBrowserComponent')
+            )
+        );
 
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_BROWSER)),
-                Translation :: get('UserToolRequestSubscribeUsersComponent')));
+                Translation:: get('UserToolRequestSubscribeUsersComponent')
+            )
+        );
     }
 }

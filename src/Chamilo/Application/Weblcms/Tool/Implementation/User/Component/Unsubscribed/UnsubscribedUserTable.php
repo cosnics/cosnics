@@ -21,6 +21,7 @@ class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSu
 
     public function get_implemented_form_actions()
     {
+        $translator = Translation::getInstance();
         if (! Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP))
         {
             // add subscribe options
@@ -31,7 +32,7 @@ class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSu
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE)),
-                    Translation :: get('SubscribeSelectedAsStudent'),
+                    $translator->getTranslation('SubscribeSelectedAsStudent', null, Manager::context()),
                     false));
 
             $actions->add_form_action(
@@ -39,7 +40,7 @@ class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSu
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_SUBSCRIBE_AS_ADMIN)),
-                    Translation :: get('SubscribeSelectedAsAdmin'),
+                    $translator->getTranslation('SubscribeSelectedAsAdmin', null, Manager::context()),
                     false));
 
             // Allowed to request to subscribe an user
@@ -48,8 +49,7 @@ class UnsubscribedUserTable extends DataClassTable implements TableFormActionsSu
                     $this->get_component()->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_REQUEST_SUBSCRIBE_USERS)),
-                    Manager :: ACTION_REQUEST_SUBSCRIBE_USERS,
-                    Translation :: get('RequestUsers'),
+                    $translator->getTranslation('RequestUsers', null, Manager::context()),
                     false));
 
             return $actions;
