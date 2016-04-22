@@ -101,12 +101,6 @@ class Path
         return $this->cache[self :: BASE][(string) $web] = $path;
     }
 
-    public function getRelativePath()
-    {
-        $url_append = \Chamilo\Configuration\Configuration :: get('Chamilo\Configuration', 'general', 'url_append');
-        return $this->cache[self :: RELATIVE] = (substr($url_append, - 1) === '/' ? $url_append : $url_append . '/');
-    }
-
     /**
      *
      * @param string $namespace
