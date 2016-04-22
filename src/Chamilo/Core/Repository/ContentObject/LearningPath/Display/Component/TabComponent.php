@@ -10,7 +10,6 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -81,7 +80,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         {
             $parameters = $this->get_parameters();
             $parameters[self :: PARAM_STEP] = $node_parent->get_id();
-            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+            $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title()));
         }
@@ -415,14 +414,22 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         // Menu
 
-        $classes = array('col-xs-12', 'col-md-3', 'col-lg-2', 'learning-path-tree-menu-container');
+        $classes = array('col-xs-12', 'col-sm-3', 'col-lg-2', 'learning-path-tree-menu-container');
 
         if ($isMenuHidden == 'true')
         {
             $classes[] = 'learning-path-tree-menu-container-hidden';
         }
+        else
+        {
+            $classes[] = 'learning-path-tree-menu-container-visible';
+        }
 
         $html[] = '<div class="' . implode(' ', $classes) . '">';
+
+        $html[] = '<h3>';
+        $html[] = Translation :: get('LearningPathNavigationMenu');
+        $html[] = '</h3>';
 
         $html[] = '<div class="learning-path-tree-menu">';
         $html[] = $this->learning_path_menu->render_as_tree();
@@ -431,7 +438,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         // Content
 
-        $classes = array('col-xs-12', 'col-md-9', 'col-lg-10', 'learning-path-content');
+        $classes = array('col-xs-12', 'col-sm-9', 'col-lg-10', 'learning-path-content');
 
         if ($isMenuHidden == 'true')
         {
@@ -573,8 +580,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
             }
 
             $html[] = '<span class="learning-path-action-menu">';
-            $html[] = '<span class="glyphicon glyphicon-list learning-path-action-menu-show"></span>';
-            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-menu-hide"></span>';
+
+            $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
+
+            $html[] = '<span class="glyphicon glyphicon-list learning-path-action-menu-show' .
+                 ($isMenuHidden == 'false' ? ' hidden' : '') . '"></span>';
+            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-menu-hide' .
+                 ($isMenuHidden == 'true' ? ' hidden' : '') . '"></span>';
             $html[] = '</span>';
 
             $html[] = '</div>';
