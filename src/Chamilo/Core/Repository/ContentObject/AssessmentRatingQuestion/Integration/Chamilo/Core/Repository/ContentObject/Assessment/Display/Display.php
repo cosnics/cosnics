@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: rating_question.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
  */
 class Display extends QuestionDisplay
@@ -53,13 +53,10 @@ class Display extends QuestionDisplay
                     'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion',
                     true) . 'AssessmentRatingQuestion.js'));
 
-        $formvalidator->addElement(
-            'html',
+      $formvalidator->addElement(
+            'html', 
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent(
-                        'Chamilo\Core\Repository\ContentObject\Assessment')) . 'GiveHint.js'));
-    }
+                Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
 
     public function add_borders()
     {

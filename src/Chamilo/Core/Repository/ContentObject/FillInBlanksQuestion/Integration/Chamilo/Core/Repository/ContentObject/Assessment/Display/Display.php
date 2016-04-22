@@ -149,7 +149,7 @@ class Display extends QuestionDisplay
             'html', 
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 7)) . 'GiveHint.js'));
+                    ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 7), true) . 'GiveHint.js'));
     }
 
     public function add_html($html)

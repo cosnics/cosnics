@@ -55,12 +55,7 @@ class CalendarEventForm extends ContentObjectForm
             CalendarEvent :: PROPERTY_START_DATE, 
             null, 
             'id="start_date" style="width:120px;"');
-        $this->addGroup(
-            $start_date, 
-            CalendarEvent :: PROPERTY_START_DATE, 
-            Translation :: get('StartDate'), 
-            '',
-            false);
+        $this->addGroup($start_date, CalendarEvent :: PROPERTY_START_DATE, Translation :: get('StartDate'), '', false);
         $this->get_renderer()->setGroupElementTemplate('{element}', CalendarEvent :: PROPERTY_START_DATE);
         
         $end_date = array();
@@ -91,23 +86,21 @@ class CalendarEventForm extends ContentObjectForm
             'text', 
             CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL, 
             '', 
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $daily_elements[] = $this->createElement('static', '', null, Translation :: get('Days'));
         $this->addGroup($daily_elements, self :: PARAM_DAILY);
         
         $this->addElement('html', '</div>');
-
+        
         $this->addGroupRule(
-            self::PARAM_DAILY, array(
-                CalendarEvent::PROPERTY_FREQUENCY_INTERVAL => array(
+            self :: PARAM_DAILY, 
+            array(
+                CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL => array(
                     array(
-                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES),
-                        'callback', array($this, 'validateFrequencyInterval')
-                    )
-                )
-            )
-        );
-
+                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES), 
+                        'callback', 
+                        array($this, 'validateFrequencyInterval')))));
+        
         // weekly
         $this->addElement('radio', CalendarEvent :: PROPERTY_FREQUENCY, '', Translation :: get('Weekly'), 2);
         $this->addElement('html', '<div style="padding-left:50px;" id="frequency_2" class="frequency">');
@@ -118,21 +111,19 @@ class CalendarEventForm extends ContentObjectForm
             'text', 
             CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL, 
             '', 
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $weekly_elements[] = $this->createElement('static', '', null, Translation :: get('Weeks'));
         $this->addGroup($weekly_elements, self :: PARAM_WEEKLY);
-
+        
         $this->addGroupRule(
-            self::PARAM_WEEKLY, array(
-                CalendarEvent::PROPERTY_FREQUENCY_INTERVAL => array(
+            self :: PARAM_WEEKLY, 
+            array(
+                CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL => array(
                     array(
-                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES),
-                        'callback', array($this, 'validateFrequencyInterval')
-                    )
-                )
-            )
-        );
-
+                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES), 
+                        'callback', 
+                        array($this, 'validateFrequencyInterval')))));
+        
         $this->addElement(
             'select', 
             self :: PARAM_WEEKLY . '[' . CalendarEvent :: PROPERTY_BYDAY . ']', 
@@ -156,21 +147,19 @@ class CalendarEventForm extends ContentObjectForm
             'text', 
             CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL, 
             '', 
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $monthly_elements[] = $this->createElement('static', '', null, Translation :: get('Months'));
         $this->addGroup($monthly_elements, self :: PARAM_MONTHLY);
-
+        
         $this->addGroupRule(
-            self::PARAM_MONTHLY, array(
-                CalendarEvent::PROPERTY_FREQUENCY_INTERVAL => array(
+            self :: PARAM_MONTHLY, 
+            array(
+                CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL => array(
                     array(
-                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES),
-                        'callback', array($this, 'validateFrequencyInterval')
-                    )
-                )
-            )
-        );
-
+                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES), 
+                        'callback', 
+                        array($this, 'validateFrequencyInterval')))));
+        
         $monthly_byday_elements = array();
         $monthly_byday_elements[] = $this->createElement(
             'radio', 
@@ -213,21 +202,19 @@ class CalendarEventForm extends ContentObjectForm
             'text', 
             CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL, 
             '', 
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $yearly_elements[] = $this->createElement('static', '', null, Translation :: get('Years'));
         $this->addGroup($yearly_elements, self :: PARAM_YEARLY);
-
+        
         $this->addGroupRule(
-            self::PARAM_YEARLY, array(
-                CalendarEvent::PROPERTY_FREQUENCY_INTERVAL => array(
+            self :: PARAM_YEARLY, 
+            array(
+                CalendarEvent :: PROPERTY_FREQUENCY_INTERVAL => array(
                     array(
-                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES),
-                        'callback', array($this, 'validateFrequencyInterval')
-                    )
-                )
-            )
-        );
-
+                        Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES), 
+                        'callback', 
+                        array($this, 'validateFrequencyInterval')))));
+        
         $yearly_bymonthday_elements = array();
         $yearly_bymonthday_elements[] = $this->createElement('radio', self :: PARAM_OPTION, '', '', 0);
         $yearly_bymonthday_elements[] = $this->createElement('static', '', null, Translation :: get('Every'));
@@ -278,7 +265,7 @@ class CalendarEventForm extends ContentObjectForm
             'text', 
             CalendarEvent :: PROPERTY_FREQUENCY_COUNT, 
             '', 
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $interval_elements[] = $this->createElement('static', null, null, Translation :: get('Appointments'));
         $this->addGroup($interval_elements, '', '', null, false);
         
@@ -305,7 +292,7 @@ class CalendarEventForm extends ContentObjectForm
 
     /**
      * Validates the frequency interval
-     *
+     * 
      * @param int $frequencyInterval
      *
      * @return bool
@@ -313,14 +300,14 @@ class CalendarEventForm extends ContentObjectForm
     public function validateFrequencyInterval($frequencyInterval)
     {
         $frequencyInterval = (int) $frequencyInterval;
-        if(!is_integer($frequencyInterval))
+        if (! is_integer($frequencyInterval))
         {
             return false;
         }
-
+        
         return $frequencyInterval > 0;
     }
-
+    
     // Inherited
     public function setDefaults($defaults = array ())
     {

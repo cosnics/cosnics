@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 
 /**
  * $Id: multiple_choice_question.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -104,9 +105,7 @@ class Display extends QuestionDisplay
         $formvalidator->addElement(
             'html', 
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent(
-                        'Chamilo\Core\Repository\ContentObject\Assessment')) . 'GiveHint.js'));
+                Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
         
         $formvalidator->setDefaults($defaults);
     }
