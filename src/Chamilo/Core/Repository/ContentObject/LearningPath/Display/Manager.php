@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -26,6 +28,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_BUILD = 'Builder';
     const ACTION_REPORTING = 'Reporting';
     const ACTION_ATTEMPT = 'Attempt';
+    const ACTION_MOVE_DIRECTLY = 'DirectMover';
 
     // Parameters
     const PARAM_STEP = 'step';
@@ -34,6 +37,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_LEARNING_PATH_ITEM_ID = 'learning_path_item_id';
     const PARAM_SORT = 'sort';
     const PARAM_ITEM_ATTEMPT_ID = 'item_attempt_id';
+
+    const PARAM_PARENT_ID = 'parent_id';
+    const PARAM_DISPLAY_ORDER = 'display_order';
 
     // Sorting
     const SORT_UP = 'Up';
@@ -90,7 +96,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * Get the content object linked to the current step
      *
-     * @return \core\repository\ContentObject
+     * @return ContentObject
      */
     public function get_current_content_object()
     {
@@ -100,7 +106,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * Get the complex content object item linked to the current step
      *
-     * @return \core\repository\storage\data_class\ComplexContentObjectItem
+     * @return ComplexContentObjectItem
      */
     public function get_current_complex_content_object_item()
     {
