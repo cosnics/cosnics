@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Form;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
+use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -59,29 +60,30 @@ class ConfigurationForm extends FormValidator
     static public function build(FormValidator $form)
     {
         // Hinting
-        $form->addElement('category', Translation :: get('Hinting'));
-        $form->addElement('checkbox', Configuration :: PROPERTY_ALLOW_HINTS, Translation :: get('AllowHints'));
+        $form->addElement('category', self::getContextTranslation('Hinting'));
+        $form->addElement('checkbox', Configuration :: PROPERTY_ALLOW_HINTS, self::getContextTranslation('AllowHints'));
         $form->addElement('category');
 
         // Feedback
-        $form->addElement('category', Translation :: get('Feedback'));
+        $form->addElement('category', self::getContextTranslation('Feedback'));
         $form->addElement(
             'checkbox',
             Configuration :: PROPERTY_SHOW_SCORE,
-            Translation :: get('ShowScores'),
-            Translation :: get('ShowScoresDetail'));
+            self::getContextTranslation('ShowScores'),
+            self::getContextTranslation('ShowScoresDetail'));
 
         $form->addElement(
             'checkbox',
             Configuration :: PROPERTY_SHOW_CORRECTION,
-            Translation :: get('ShowCorrection'),
-            Translation :: get('ShowCorrectionDetail'));
+            self::getContextTranslation('ShowCorrection'),
+            self::getContextTranslation('ShowCorrectionDetail'));
 
         $form->addElement(
             'checkbox',
             Configuration :: PROPERTY_SHOW_SOLUTION,
-            Translation :: get('ShowSolution'),
-            Translation :: get('ShowSolutionDetail'));
+            self::getContextTranslation('ShowSolution'),
+            self::getContextTranslation('ShowSolutionDetail')
+        );
 
         $form->addElement(
             self :: build_answer_feedback(
@@ -96,15 +98,15 @@ class ConfigurationForm extends FormValidator
                     Configuration :: ANSWER_FEEDBACK_TYPE_ALL)));
 
         $feedback_locations = array();
-        $feedback_locations[Configuration :: FEEDBACK_LOCATION_TYPE_PAGE] = Translation :: get('FeedbackAfterEveryPage');
-        $feedback_locations[Configuration :: FEEDBACK_LOCATION_TYPE_SUMMARY] = Translation :: get('FeedbackAtTheEnd');
-        $feedback_locations[Configuration :: FEEDBACK_LOCATION_TYPE_BOTH] = Translation :: get(
+        $feedback_locations[Configuration :: FEEDBACK_LOCATION_TYPE_PAGE] = self::getContextTranslation('FeedbackAfterEveryPage');
+        $feedback_locations[Configuration :: FEEDBACK_LOCATION_TYPE_SUMMARY] = self::getContextTranslation('FeedbackAtTheEnd');
+        $feedback_locations[Configuration :: FEEDBACK_LOCATION_TYPE_BOTH] = self::getContextTranslation(
             'FeedbackAfterEveryPageAndAtTheEnd');
 
         $form->addElement(
             'select',
             Configuration :: PROPERTY_FEEDBACK_LOCATION,
-            Translation :: get('FeedbackLocation'),
+            self::getContextTranslation('FeedbackLocation'),
             $feedback_locations);
 
         $form->addElement('category');
@@ -142,7 +144,7 @@ class ConfigurationForm extends FormValidator
             'static',
             null,
             null,
-            Translation :: get('ShowAnswerFeedbackDetail'));
+            self::getContextTranslation('ShowAnswerFeedbackDetail'));
 
         $answer_feedback_fields[] = $form->createElement('static', null, null, '&nbsp;');
 
@@ -157,7 +159,7 @@ class ConfigurationForm extends FormValidator
         return $form->createGroup(
             $answer_feedback_fields,
             'answer_feedback_fields',
-            Translation :: get('ShowAnswerFeedback'),
+            self::getContextTranslation('ShowAnswerFeedback'),
             '',
             false);
     }
@@ -187,5 +189,10 @@ class ConfigurationForm extends FormValidator
         $defaults[Configuration :: PROPERTY_FEEDBACK_LOCATION] = $configuration->get_feedback_location();
 
         $form->setDefaults($defaults);
+    }
+
+    static function getContextTranslation($variable, $parameters = array())
+    {
+        return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
     }
 }

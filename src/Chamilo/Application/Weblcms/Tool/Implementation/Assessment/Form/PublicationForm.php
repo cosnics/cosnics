@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Form;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
@@ -29,11 +30,19 @@ class PublicationForm extends ContentObjectPublicationForm
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $action
      * @param boolean $is_course_admin
-     * @throws NoObjectSelectedException
+     *
+     * @param array $selectedContentObjects
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
-    public function __construct(User $user, $form_type, $publications, $course, $action, $is_course_admin)
+    public function __construct(
+        User $user, $form_type, $publications, $course, $action, $is_course_admin, $selectedContentObjects = array()
+    )
     {
-        parent :: __construct($user, $form_type, $publications, $course, $action, $is_course_admin);
+        parent:: __construct(
+            'Chamilo\Application\Weblcms\Tool\Implementation\Assessment', $user, $form_type, $publications, $course,
+            $action, $is_course_admin, $selectedContentObjects
+        );
 
         $publications = $this->get_publications();
 
@@ -43,9 +52,11 @@ class PublicationForm extends ContentObjectPublicationForm
 
             $parameters = new DataClassRetrieveParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLICATION_ID),
-                    new StaticConditionVariable($first_publication->get_id())));
-            $assessment_publication = DataManager :: retrieve(Publication :: class_name(), $parameters);
+                    new PropertyConditionVariable(Publication:: class_name(), Publication :: PROPERTY_PUBLICATION_ID),
+                    new StaticConditionVariable($first_publication->get_id())
+                )
+            );
+            $assessment_publication = DataManager:: retrieve(Publication:: class_name(), $parameters);
             $configuration = $assessment_publication->get_configuration();
         }
         else
@@ -53,7 +64,7 @@ class PublicationForm extends ContentObjectPublicationForm
             $configuration = new Configuration();
         }
 
-        ConfigurationForm :: defaults($this, $configuration);
+        ConfigurationForm:: defaults($this, $configuration);
     }
 
     /**
@@ -61,11 +72,11 @@ class PublicationForm extends ContentObjectPublicationForm
      */
     public function build_basic_create_form()
     {
-        $this->addElement('category', Translation :: get('DefaultProperties'));
-        parent :: build_basic_create_form();
+        $this->addElement('category', Translation:: get('DefaultProperties'));
+        parent:: build_basic_create_form();
         $this->addElement('category');
 
-        ConfigurationForm :: build($this);
+        ConfigurationForm:: build($this);
     }
 
     /**
@@ -73,11 +84,11 @@ class PublicationForm extends ContentObjectPublicationForm
      */
     public function build_basic_update_form()
     {
-        $this->addElement('category', Translation :: get('DefaultProperties'));
-        parent :: build_basic_update_form();
+        $this->addElement('category', Translation:: get('DefaultProperties'));
+        parent:: build_basic_update_form();
         $this->addElement('category');
 
-        ConfigurationForm :: build($this);
+        ConfigurationForm:: build($this);
     }
 
     /**
@@ -88,7 +99,7 @@ class PublicationForm extends ContentObjectPublicationForm
     public function handle_form_submit()
     {
         $values = $this->exportValues();
-        $success = parent :: handle_form_submit();
+        $success = parent:: handle_form_submit();
 
         $allow_hints = isset($values[Configuration :: PROPERTY_ALLOW_HINTS]) ? 1 : 0;
         $show_score = isset($values[Configuration :: PROPERTY_SHOW_SCORE]) ? 1 : 0;
@@ -137,10 +148,13 @@ class PublicationForm extends ContentObjectPublicationForm
                         $parameters = new DataClassRetrieveParameters(
                             new EqualityCondition(
                                 new PropertyConditionVariable(
-                                    Publication :: class_name(),
-                                    Publication :: PROPERTY_PUBLICATION_ID),
-                                new StaticConditionVariable($publication->get_id())));
-                        $assessment_publication = DataManager :: retrieve(Publication :: class_name(), $parameters);
+                                    Publication:: class_name(),
+                                    Publication :: PROPERTY_PUBLICATION_ID
+                                ),
+                                new StaticConditionVariable($publication->get_id())
+                            )
+                        );
+                        $assessment_publication = DataManager:: retrieve(Publication:: class_name(), $parameters);
 
                         $assessment_publication->set_allow_hints($allow_hints);
                         $assessment_publication->set_show_score($show_score);
@@ -152,6 +166,7 @@ class PublicationForm extends ContentObjectPublicationForm
                         break;
                 }
             }
+
             return $succes;
         }
         else
