@@ -46,9 +46,27 @@ $(function()
         setMemory('learningPathMenuIsHidden', 'false');
     }
     
+    function handleMobileLearningPath(e, ui)
+    {
+        e.preventDefault();
+        
+        var displayContainer = $(this).closest('.learning-path-tree-menu-container');
+        
+        console.log(displayContainer.css('position'));
+        
+        if (displayContainer.css('position') == 'fixed')
+        {
+            setMemory('learningPathMenuIsHidden', 'true');
+        }
+        
+        window.location = this.href;
+    }
+    
     $(document).ready(
             function()
             {
+                $(document).on('click', ".learning-path-display .learning-path-tree-menu a", handleMobileLearningPath);
+                
                 $(document).on('click',
                         ".learning-path-display .learning-path-action-menu .learning-path-action-menu-hide", hideMenu);
                 $(document).on('click',
