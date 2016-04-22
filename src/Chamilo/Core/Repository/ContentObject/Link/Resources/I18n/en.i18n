@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\link
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Link"
+TypeCategory = "Content Objects"
+Properties = "Properties"
+URL = "URI"
+ShowInIframe = "Show in iframe"
+Linker = "Linker"
+Title = "Title"
+Description = "Description"
+ShowInIFrame = "Show in Frame"
+DeleteSelected = "Delete selected"
+LinkToolBrowserComponent = "Browse links"
+LinkToolIntroductionPublisherComponent = "Publish introduction text"
+LinkToolMoverComponent = "Move link"
+LinkToolPublisherComponent = "Publish link"
+LinkToolUpdaterComponent = "Update link"
+LinkToolViewerComponent = "View link"
+IFrameNotAllowed = "Due to issues with showing HTTP based links in an iFrame on an HTTPS website it is not possible to use the option 'Show in iFrame' when using an HTTP link"
