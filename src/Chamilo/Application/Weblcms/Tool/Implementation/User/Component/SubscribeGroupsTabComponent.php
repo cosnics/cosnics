@@ -94,10 +94,10 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         $html[] = $this->renderInformationMessage();
 
         $html[] = '<div class="row">';
-        $html[] = '<div class="col-sm-2">';
+        $html[] = '<div class="col-sm-4 col-md-3" style="margin-bottom: 20px;">';
         $html[] = $this->renderGroupMenu();
         $html[] = '</div>';
-        $html[] = '<div class="col-sm-10">';
+        $html[] = '<div class="col-sm-8 col-md-9">';
         $html[] = $this->renderTabs();
         $html[] = '</div>';
         $html[] = '</div>';
