@@ -2,13 +2,18 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Platform\Translation;
 
 class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 {
     const DEFAULT_HEIGHT = 768;
     const DEFAULT_WIDTH = 1024;
-
     const PARAM_WIDTH = 'width';
     const PARAM_HEIGHT = 'height';
     const PARAM_BORDER = 'border';
@@ -36,5 +41,42 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 
         $rendition = new $class($this->get_context(), $this->get_content_object());
         return $rendition->render($parameters);
+    }
+
+    /**
+     *
+     * @param string $classes
+     * @return string
+     */
+    public function renderDownloadAction($classes = '')
+    {
+        $object = $this->get_content_object();
+        $name = $object->get_filename();
+
+        $label = '<small>(' . Filesystem :: format_file_size($object->get_filesize()) . ')</small>';
+
+        $buttonToolBar = new ButtonToolBar();
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        $buttonToolBar->addItem(
+            new Button(
+                Translation :: get('DownloadFile', array('LABEL' => $label)),
+                new BootstrapGlyph('download'),
+                $this->getDownloadUrl(),
+                Button :: DISPLAY_ICON_AND_LABEL,
+                false,
+                $classes,
+                '_blank'));
+
+        return $buttonToolBarRenderer->render();
+    }
+
+    public function getDownloadUrl()
+    {
+        $object = $this->get_content_object();
+
+        return \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+            $object->get_id(),
+            $object->calculate_security_code());
     }
 }

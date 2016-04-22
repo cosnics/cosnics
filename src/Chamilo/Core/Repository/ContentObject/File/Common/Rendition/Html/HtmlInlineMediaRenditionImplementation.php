@@ -1,11 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -57,46 +52,5 @@ abstract class HtmlInlineMediaRenditionImplementation extends HtmlInlineRenditio
         $object = $this->get_content_object();
 
         return $this->getDownloadUrl() . '&display=1';
-    }
-
-    public function getDownloadUrl()
-    {
-        $object = $this->get_content_object();
-
-        return \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-            $object->get_id(),
-            $object->calculate_security_code());
-    }
-
-    /**
-     *
-     * @param string $classes
-     * @return string
-     */
-    public function renderDownloadAction($classes)
-    {
-        $object = $this->get_content_object();
-        $name = $object->get_filename();
-
-        $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-            $object->get_id(),
-            $object->calculate_security_code());
-
-        $label = '<small>(' . Filesystem :: format_file_size($object->get_filesize()) . ')</small>';
-
-        $buttonToolBar = new ButtonToolBar();
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        $buttonToolBar->addItem(
-            new Button(
-                Translation :: get('DownloadFile', array('LABEL' => $label)),
-                new BootstrapGlyph('download'),
-                $this->getDownloadUrl(),
-                Button :: DISPLAY_ICON_AND_LABEL,
-                false,
-                $classes,
-                '_blank'));
-
-        return $buttonToolBarRenderer->render();
     }
 }
