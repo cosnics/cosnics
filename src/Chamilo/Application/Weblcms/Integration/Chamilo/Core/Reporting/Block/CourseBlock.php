@@ -30,21 +30,17 @@ abstract class CourseBlock extends ReportingBlock
 
     public function get_score_bar($score)
     {
-        if ($score < PlatformSetting:: get('passing_percentage'))
-        {
-            $color = 'lightcoral';
-        }
-        else
-        {
-            $color = 'lightgreen';
-        }
+        $type = ($score >= PlatformSetting:: get('passing_percentage')) ? 'progress-bar-success' : '';
 
-        $html[] = '<div style="position: relative; border: 1px solid black; height: 14px; width:100px;">';
-        $html[] = '<div style="background-color: ' . $color . '; height: 14px; width:' . round($score) .
-            'px; text-align: center;">';
+        $html = array();
+
+        $html[] = '<div class="progress" style="width: 150px; margin-bottom: 0;">';
+        $html[] =
+            '<div class="progress-bar ' . $type . ' progress-bar-striped" role="progressbar" aria-valuenow="' .
+            $score . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $score . '%">';
+        $html[] = '<span>' . round($score, 2) . '%</span>';
         $html[] = '</div>';
-        $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round($score) .
-            '%</div></div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
