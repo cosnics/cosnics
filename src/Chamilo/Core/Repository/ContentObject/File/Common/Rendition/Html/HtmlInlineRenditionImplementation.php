@@ -26,11 +26,11 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     public function render($parameters)
     {
         $object = $this->get_content_object();
-
+        
         $class = __NAMESPACE__ . '\Extension\HtmlInline' .
              (string) StringUtilities :: getInstance()->createString($object->get_extension())->upperCamelize() .
              'RenditionImplementation';
-
+        
         if (! class_exists($class))
         {
             $document_type = $object->determine_type();
@@ -38,7 +38,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
                  (string) StringUtilities :: getInstance()->createString($document_type)->upperCamelize() .
                  'RenditionImplementation';
         }
-
+        
         $rendition = new $class($this->get_context(), $this->get_content_object());
         return $rendition->render($parameters);
     }
@@ -48,35 +48,40 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
      * @param string $classes
      * @return string
      */
-    public function renderDownloadAction($classes = '')
+    public function renderActions($classes = '')
+    {
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getButtonToolBar($classes));
+        return $buttonToolBarRenderer->render();
+    }
+
+    public function getButtonToolBar($classes = '')
     {
         $object = $this->get_content_object();
         $name = $object->get_filename();
-
+        
         $label = '<small>(' . Filesystem :: format_file_size($object->get_filesize()) . ')</small>';
-
+        
         $buttonToolBar = new ButtonToolBar();
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
+        
         $buttonToolBar->addItem(
             new Button(
-                Translation :: get('DownloadFile', array('LABEL' => $label)),
-                new BootstrapGlyph('download'),
-                $this->getDownloadUrl(),
-                Button :: DISPLAY_ICON_AND_LABEL,
-                false,
-                $classes,
+                Translation :: get('DownloadFile', array('LABEL' => $label)), 
+                new BootstrapGlyph('download'), 
+                $this->getDownloadUrl(), 
+                Button :: DISPLAY_ICON_AND_LABEL, 
+                false, 
+                $classes, 
                 '_blank'));
-
-        return $buttonToolBarRenderer->render();
+        
+        return $buttonToolBar;
     }
 
     public function getDownloadUrl()
     {
         $object = $this->get_content_object();
-
+        
         return \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-            $object->get_id(),
+            $object->get_id(), 
             $object->calculate_security_code());
     }
 }

@@ -8,6 +8,6 @@ class HtmlInlineDefaultRenditionImplementation extends HtmlInlineRenditionImplem
 
     public function render($parameters)
     {
-        return $this->renderDownloadAction('btn-info');
+        return $this->renderActions('btn-info');
     }
 }
