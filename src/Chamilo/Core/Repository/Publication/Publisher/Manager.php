@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Publisher;
 
-use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 
 abstract class Manager extends Application
