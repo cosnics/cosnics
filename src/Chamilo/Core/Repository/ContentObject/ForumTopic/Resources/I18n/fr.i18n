@@ -1,0 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\forum_topic
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Sujet de forum"
+Topic = "Sujet"
+Nothing = "Rien"
+LastChangedAt = "Dernière modification le {TIME}"
+Top = "Top"
+ReplyOnTopic = "Répondre au sujet"
+ReplyOnPost = "Répondre au message"
+Subscribe = "Suivre le sujet"
+UnSubscribe = "Arrêtez de suivre le sujet"
+SuccesSubscribe = "Le sujet a été suivi"
+UnSuccesSubscribe = "Le sujet n'a pas été suivi"
+SuccesUnSubscribe = "Le sujet n'est plus suivi"
+UnSuccesUnSubscribe = "Le sujet n'est plus suivi"
+Title = "Titre"
+Description = "Description"
+Properties = "Propriétés"
+ForumTopicBuilderBrowserComponent = "Construire sujet de forum"
+ForumTopicBuilderCreatorComponent = "Construire sujet de forum"

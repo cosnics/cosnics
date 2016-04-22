@@ -1,0 +1,93 @@
+ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
+	ul.tree-menu li div a.type_learning_path_default {
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}
+
+.learning-path-content {
+	padding-bottom: 80px;
+}
+
+.learning-path-display .learning-path-tree-menu-container {
+	/* 	position: fixed; */
+	/* 	top: 0px; */
+	/* 	bottom: 0px; */
+	/* 	left: 0px; */
+	/* 	width: auto; padding-top : 15px; */
+	/* 	padding-bottom: 80px; */
+	/* 	z-index: 9999; */
+	/* 	background-color: rgba(255, 255, 255, 0.75); */
+	/* 	z-index: 9999; */
+	/* 	padding-top: 15px; */
+	
+}
+
+.learning-path-display .learning-path-content.learning-path-content-full-screen
+	{
+	width: 100%;
+}
+
+.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-hidden
+	{
+	display: none;
+}
+
+.learning-path-display .learning-path-tree-menu-container .learning-path-tree-menu
+	{
+	overflow: auto;
+}
+
+.learning-path-display .navbar-learning-path {
+	padding: 0px;
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	width: 100%;
+	text-align: center;
+	z-index: 10000;
+	background-color: white;
+	border-top: 1px solid #dddddd;
+}
+
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions
+	{
+	padding: 15px;
+	height: 65px;
+}
+
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions a
+	{
+	height: 32px;
+}
+
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon
+	{
+	font-size: 32px;
+	line-height: 32px;
+	height: 32px;
+	overflow: hidden;
+}
+
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu
+	{
+	color: #337ab7;
+	cursor: pointer;
+}
+
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu:hover,
+	.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu:focus
+	{
+	color: #23527c;
+}
+
+.learning-path-display .navbar-learning-path .navbar-learning-path-progress .progress
+	{
+	margin-bottom: 0px;
+	border-radius: 0px;
+	height: 10px;
+}
+
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu-show
+	{
+	display: none;
+}
