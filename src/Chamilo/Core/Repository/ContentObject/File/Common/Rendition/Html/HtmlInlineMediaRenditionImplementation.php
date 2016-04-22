@@ -27,19 +27,17 @@ abstract class HtmlInlineMediaRenditionImplementation extends HtmlInlineRenditio
     public function getErrorMessage($show = true)
     {
         $html = array();
-
-        $downloadAction = $this->renderDownloadAction();
-
+        
         $titleVariable = StringUtilities :: getInstance()->createString($this->getMediaElementType())->upperCamelize() .
              'PlaybackNotSupportedTitle';
-
+        
         $html[] = '<div class="alert alert-warning media-element-js-playback-error ' . ($show ? 'show' : 'hidden') . '">';
         $html[] = '<h4>' . Translation :: get($titleVariable) . '</h4>';
         $html[] = Translation :: get('PlaybackNotSupported');
         $html[] = '<br />';
-        $html[] = $this->renderDownloadAction('btn-warning');
+        $html[] = $this->renderActions('btn-warning');
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -50,7 +48,7 @@ abstract class HtmlInlineMediaRenditionImplementation extends HtmlInlineRenditio
     public function getMediaUrl()
     {
         $object = $this->get_content_object();
-
+        
         return $this->getDownloadUrl() . '&display=1';
     }
 }
