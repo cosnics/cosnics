@@ -16,7 +16,9 @@ class HtmlInlineHtmRenditionImplementation extends HtmlInlineRenditionImplementa
         $html = array();
 
         $html[] = '<div style="border: 1px solid grey;"><iframe border="0" style="border: 0;"
-                width="100%" height="500"  src="' . $url . '"></iframe></div>';
+                width="100%" height="500"  src="' . $url . '"></iframe></div><br />';
+
+        $html[] = $this->renderDownloadAction();
 
         return implode(PHP_EOL, $html);
     }
