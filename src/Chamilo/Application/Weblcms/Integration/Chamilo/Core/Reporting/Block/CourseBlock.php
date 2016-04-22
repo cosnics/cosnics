@@ -59,7 +59,7 @@ abstract class CourseBlock extends ReportingBlock
         $html[] =
             '<div class="progress-bar ' . $type . ' progress-bar-striped" role="progressbar" aria-valuenow="' .
             $progress . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $progress . '%">';
-        $html[] = '<span>' . $progress . '%</span>';
+        $html[] = '<span>' . round($progress, 2) . '%</span>';
         $html[] = '</div>';
         $html[] = '</div>';
 
