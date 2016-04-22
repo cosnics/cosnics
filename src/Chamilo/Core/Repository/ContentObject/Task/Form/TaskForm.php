@@ -96,7 +96,7 @@ class TaskForm extends ContentObjectForm
             'text',
             Task :: PROPERTY_FREQUENCY_INTERVAL,
             '',
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $daily_elements[] = $this->createElement('static', '', null, Translation :: get('Days'));
         $this->addGroup($daily_elements, self :: PARAM_DAILY);
 
@@ -112,7 +112,7 @@ class TaskForm extends ContentObjectForm
             'text',
             Task :: PROPERTY_FREQUENCY_INTERVAL,
             '',
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $weekly_elements[] = $this->createElement('static', '', null, Translation :: get('Weeks'));
         $this->addGroup($weekly_elements, self :: PARAM_WEEKLY);
 
@@ -139,7 +139,7 @@ class TaskForm extends ContentObjectForm
             'text',
             Task :: PROPERTY_FREQUENCY_INTERVAL,
             '',
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $monthly_elements[] = $this->createElement('static', '', null, Translation :: get('Months'));
         $this->addGroup($monthly_elements, self :: PARAM_MONTHLY);
 
@@ -185,7 +185,7 @@ class TaskForm extends ContentObjectForm
             'text',
             Task :: PROPERTY_FREQUENCY_INTERVAL,
             '',
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $yearly_elements[] = $this->createElement('static', '', null, Translation :: get('Years'));
         $this->addGroup($yearly_elements, self :: PARAM_YEARLY);
 
@@ -239,7 +239,7 @@ class TaskForm extends ContentObjectForm
             'text',
             Task :: PROPERTY_FREQUENCY_COUNT,
             '',
-            array('style' => 'width:20px', 'maxlength' => 2));
+            array('style' => 'width:50px', 'maxlength' => 2));
         $interval_elements[] = $this->createElement('static', null, null, Translation :: get('Appointments'));
         $this->addGroup($interval_elements, '', '', null, false);
 

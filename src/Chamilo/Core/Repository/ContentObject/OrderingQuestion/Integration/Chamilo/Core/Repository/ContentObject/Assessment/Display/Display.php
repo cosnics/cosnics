@@ -78,9 +78,7 @@ class Display extends QuestionDisplay
         $formvalidator->addElement(
             'html', 
             ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent(
-                        'Chamilo\Core\Repository\ContentObject\Assessment')) . 'GiveHint.js'));
+                Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
     }
 
     public function add_border()
