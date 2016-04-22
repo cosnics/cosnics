@@ -36,7 +36,7 @@ class Table extends Html
 
         foreach ($reporting_data->get_rows() as $row)
         {
-            $headers[] = new SortableStaticTableColumn($row); // , true, $this->th_attributes, $this->td_attributes);
+            $headers[] = new SortableStaticTableColumn($row, $row); // , true, $this->th_attributes, $this->td_attributes);
         }
 
         $table = new SortableTableFromArray(
