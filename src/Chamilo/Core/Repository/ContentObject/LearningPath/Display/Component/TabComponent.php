@@ -17,6 +17,9 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Platform\Session\Session;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -398,29 +401,44 @@ abstract class TabComponent extends Manager implements DelegateComponent
      */
     public function render_header()
     {
+        $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
+
         $html = array();
 
         $html[] = parent :: render_header();
 
+        $html[] = '<div class="learning-path-display">';
+
+        $html[] = $this->get_navigation_bar();
+
+        $html[] = '<div class="row">';
+
         // Menu
-        $html[] = '<div class="col-md-3 col-lg-2 col-sm-12 learning-path-content">';
+
+        $classes = array('col-xs-12', 'col-md-3', 'col-lg-2', 'learning-path-tree-menu-container');
+
+        if ($isMenuHidden == 'true')
+        {
+            $classes[] = 'learning-path-tree-menu-container-hidden';
+        }
+
+        $html[] = '<div class="' . implode(' ', $classes) . '">';
 
         $html[] = '<div class="learning-path-tree-menu">';
         $html[] = $this->learning_path_menu->render_as_tree();
         $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-
-        $html[] = '<div class="learning-path-progress">';
-        $html[] = $this->get_progress_bar();
-        $html[] = '</div>';
-        $html[] = '<div class="clearfix"></div>';
-
-        $html[] = $this->get_navigation_bar();
-
         $html[] = '</div>';
 
         // Content
-        $html[] = '<div class="col-md-9 col-lg-10 col-sm-12 learning-path-content">';
+
+        $classes = array('col-xs-12', 'col-md-9', 'col-lg-10', 'learning-path-content');
+
+        if ($isMenuHidden == 'true')
+        {
+            $classes[] = 'learning-path-content-full-screen';
+        }
+
+        $html[] = '<div class="' . implode(' ', $classes) . '">';
 
         return implode(PHP_EOL, $html);
     }
@@ -434,7 +452,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html = array();
 
         $html[] = '</div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
+
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath(Manager :: package(), true) . 'LearningPathMenu.js');
+
         $html[] = parent :: render_footer();
 
         return implode(PHP_EOL, $html);
@@ -496,7 +520,10 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         if ($this->get_action() != self :: ACTION_REPORTING || $this->is_current_step_set())
         {
-            $html[] = '<div class="learning-path-navigation">';
+
+            $html[] = '<div class="navbar-learning-path">';
+
+            $html[] = '<div class="navbar-learning-path-actions">';
 
             $previous_node = $current_node->get_previous();
 
@@ -518,8 +545,8 @@ abstract class TabComponent extends Manager implements DelegateComponent
             {
                 $label = Translation :: get('PreviousNa');
 
-                $html[] = '<span class="glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' . $label .
-                     '"></span>';
+                $html[] = '<span class="pull-left glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' .
+                     $label . '"></span>';
             }
 
             $next_node = $current_node->get_next();
@@ -541,12 +568,22 @@ abstract class TabComponent extends Manager implements DelegateComponent
             {
                 $label = Translation :: get('NextNa');
 
-                $html[] = '<span class="glyphicon glyphicon-arrow-right disabled" alt="' . $label . '" title="' . $label .
-                     '"></span>';
+                $html[] = '<span class="pull-right glyphicon glyphicon-arrow-right disabled" alt="' . $label .
+                     '" title="' . $label . '"></span>';
             }
 
+            $html[] = '<span class="learning-path-action-menu">';
+            $html[] = '<span class="glyphicon glyphicon-list learning-path-action-menu-show"></span>';
+            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-menu-hide"></span>';
+            $html[] = '</span>';
+
             $html[] = '</div>';
-            $html[] = '<div class="clearfix"></div>';
+
+            $html[] = '<div class="navbar-learning-path-progress">';
+            $html[] = $this->get_progress_bar();
+            $html[] = '</div>';
+
+            $html[] = '</div>';
         }
 
         return implode(PHP_EOL, $html);
@@ -576,9 +613,10 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $displayPercent = round($percent);
 
         $html[] = '<div class="progress">';
-        $html[] = '<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="' . $displayPercent .
-             '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $displayPercent . '%; min-width: 2em;">';
-        $html[] = $displayPercent . '%';
+        $html[] = '<div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" aria-valuenow="' .
+             $displayPercent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $displayPercent .
+             '%; min-width: 2em;">';
+        // $html[] = $displayPercent . '%';
         $html[] = '</div>';
         $html[] = '</div>';
 
