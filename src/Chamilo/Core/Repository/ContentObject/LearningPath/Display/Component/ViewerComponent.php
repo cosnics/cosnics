@@ -134,8 +134,8 @@ class ViewerComponent extends TabComponent
             $this->addCreatorButtons($primaryActions, $translator);
             $this->addUpdateButton($current_content_object, $primaryActions, $translator);
             $this->addDeleteButton($primaryActions, $translator);
-            $this->addManageButton($secondaryActions, $translator);
             $this->addMoverButtons($secondaryActions, $translator);
+            $this->addManageButton($secondaryActions, $translator);
 
             if ($this->get_action() != self :: ACTION_REPORTING && $this->is_current_step_set())
             {
