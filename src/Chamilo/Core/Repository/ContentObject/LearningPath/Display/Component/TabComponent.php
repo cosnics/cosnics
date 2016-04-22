@@ -584,7 +584,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
             $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
 
             $html[] = '<span class="glyphicon glyphicon-list learning-path-action-menu-show' .
-                 ($isMenuHidden == 'false' ? ' hidden' : '') . '"></span>';
+                 ($isMenuHidden != 'true' ? ' hidden' : '') . '"></span>';
             $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-menu-hide' .
                  ($isMenuHidden == 'true' ? ' hidden' : '') . '"></span>';
             $html[] = '</span>';

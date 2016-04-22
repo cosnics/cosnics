@@ -86,6 +86,11 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 	overflow: hidden;
 }
 
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon.disabled
+	{
+	opacity: 0.25;
+}
+
 .learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu
 	{
 	color: #337ab7;
