@@ -1,0 +1,140 @@
+@import url('../Aqua/Table.css');
+/*****************************************************
+ *  DATA TABLE STYLES                                *
+ *****************************************************/
+.data_table, div.table {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border-left: 1px solid #CECECE;
+	border-top: 1px solid #CECECE;
+	border-bottom: 1px solid #CECECE;
+	border-spacing: 0px;
+}
+
+.data_table_no_header {
+	border-top: 0px solid #CECECE;
+}
+
+.data_table th, div.header {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #9e021b;
+	border-top: 1px solid white;
+	border-left: 1px solid white;
+	border-right: 1px solid #CECECE;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: left;
+	padding: 6px 10px 6px 10px;
+	background: #d5d5d5 url(../../Images/Ruby/Background/TableHeader.png)
+		repeat-x;
+	overflow: hidden;
+}
+
+.data_table td.header {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #9e021b;
+	border-right: 1px solid #CECECE;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: right;
+	padding: 6px 10px 6px 10px;
+	vertical-align: top;
+	width: 10%;
+	background: #EBEBEB url(../../Images/Ruby/Background/TableHeader.png)
+		repeat-x;
+}
+
+.data_table tr.row_even td.header {
+	background: #EBEBEB
+		url(../../Images/Ruby/Background/TableHeaderGrey.png) repeat-x;
+	color: #7b7b7b;
+}
+
+
+.data_table tr.row_odd, div.row_odd {
+	background-color: #F4F4F4;
+}
+
+.data_table td, div.cell {
+	border-right: 1px solid #CECECE;
+	border-top: 1px solid #CECECE;
+	padding: 6px 10px 6px 10px;
+	color: #797268;
+}
+
+.data_table tr.row_odd td {
+	color: #9e021b;
+}
+
+.data_table th.nobg {
+	border-top: 0;
+	border-left: 0;
+	border-right: 1px solid #CECECE;
+	background: none;
+}
+
+.data_table th.spec {
+	border-left: 1px solid #CECECE;
+	border-top: 0;
+	background: #fff url(images/bullet1.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.data_table th.specalt {
+	border-left: 1px solid #CECECE;
+	border-top: 0;
+	background: #f4f8fc url(images/bullet2.gif) no-repeat;
+	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #797268;
+}
+
+.data_table td.error {
+	background-color: #FFD1D1;
+	color: #B40404;
+	padding: 10px 36px;
+	background-position: 10px 50%;
+	background-repeat: no-repeat;
+	background-image: url("../../Images/Ruby/Status/ErrorMini.png");
+}
+
+.data_table td.highlight, .data_table th.highlight, .data_table tr.highlight
+	{
+	background-color: #C50C2E !important;
+	color: white !important;
+}
+
+/*****************************************************
+ *  GALLERY TABLE STYLES                            *
+ *****************************************************/
+.gallery_table {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border-left: 1px solid #CECECE;
+	border-bottom: 1px solid #CECECE;
+	border-spacing: 0px;
+}
+
+.gallery_table td {
+	border-right: 1px solid #CECECE;
+	border-top: 1px solid #CECECE;
+	padding: 6px 10px 6px 10px;
+	color: #797268;
+	text-align: center;
+	vertical-align: top;
+}
+
+
+.take_assessment th {
+	border-left: 0px solid #F4F4F4;
+	border-top: 0px solid #F4F4F4;
+	padding: 3px 10px 3px 10px;
+	background-color: #F4F4F4;
+	background-image: none;
+}
+
+table.no_border td {
+	border: 0px solid #F4F4F4;
+	padding: 0px 5px 0px 5px;
+}
