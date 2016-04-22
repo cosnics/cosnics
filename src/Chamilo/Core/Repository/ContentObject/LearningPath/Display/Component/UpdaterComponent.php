@@ -32,14 +32,17 @@ class UpdaterComponent extends TabComponent
      */
     public function build()
     {
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) && RightsService :: getInstance()->canEditContentObject(
-            $this->get_user(),
-            $this->get_current_content_object()))
+        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
+            RightsService:: getInstance()->canEditContentObject(
+                $this->get_user(),
+                $this->get_current_content_object()
+            )
+        )
         {
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();
 
-            $form = ContentObjectForm :: factory(
+            $form = ContentObjectForm:: factory(
                 ContentObjectForm :: TYPE_EDIT,
                 new PersonalWorkspace($this->get_user()),
                 $content_object,
@@ -48,7 +51,10 @@ class UpdaterComponent extends TabComponent
                 $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                        self :: PARAM_STEP => $this->get_current_step())));
+                        self :: PARAM_STEP => $this->get_current_step()
+                    )
+                )
+            );
 
             if ($form->validate())
             {
@@ -56,15 +62,17 @@ class UpdaterComponent extends TabComponent
 
                 if ($succes)
                 {
-                    Event :: trigger(
+                    Event:: trigger(
                         'Activity',
-                        \Chamilo\Core\Repository\Manager :: context(),
+                        \Chamilo\Core\Repository\Manager:: context(),
                         array(
                             Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,
                             Activity :: PROPERTY_USER_ID => $this->get_user_id(),
                             Activity :: PROPERTY_DATE => time(),
                             Activity :: PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(),
-                            Activity :: PROPERTY_CONTENT => $content_object->get_title()));
+                            Activity :: PROPERTY_CONTENT => $content_object->get_title()
+                        )
+                    );
                 }
 
                 if ($succes && $form->is_version())
@@ -76,14 +84,17 @@ class UpdaterComponent extends TabComponent
 
                     $condition = new EqualityCondition(
                         new PropertyConditionVariable(
-                            ComplexContentObjectItem :: class_name(),
-                            ComplexContentObjectItem :: PROPERTY_PARENT),
+                            ComplexContentObjectItem:: class_name(),
+                            ComplexContentObjectItem :: PROPERTY_PARENT
+                        ),
                         new StaticConditionVariable($old_id),
-                        ComplexContentObjectItem :: get_table_name());
+                        ComplexContentObjectItem:: get_table_name()
+                    );
                     $parameters = new DataClassRetrievesParameters($condition);
-                    $children = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-                        ComplexContentObjectItem :: class_name(),
-                        $parameters);
+                    $children = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_complex_content_object_items(
+                        ComplexContentObjectItem:: class_name(),
+                        $parameters
+                    );
 
                     $failures = 0;
 
@@ -91,7 +102,7 @@ class UpdaterComponent extends TabComponent
                     {
                         $child->set_parent($new_id);
 
-                        if (! $child->update())
+                        if (!$child->update())
                         {
                             $failures ++;
                         }
@@ -101,31 +112,37 @@ class UpdaterComponent extends TabComponent
                 }
 
                 $message = htmlentities(
-                    Translation :: get(
+                    Translation:: get(
                         ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                        array('OBJECT' => Translation :: get('ContentObject')),
-                        Utilities :: COMMON_LIBRARIES));
+                        array('OBJECT' => Translation:: get('ContentObject')),
+                        Utilities :: COMMON_LIBRARIES
+                    )
+                );
 
                 $params = array();
                 $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-                $this->redirect($message, (! $succes), $params);
+                $this->redirect($message, (!$succes), $params);
             }
             else
             {
                 if ($this->get_current_node()->is_root())
                 {
-                    $title = Translation :: get('ChangeIntroduction');
+                    $title = Translation:: get('ChangeIntroduction');
                 }
                 else
                 {
-                    $title = Translation :: get('EditContentObject');
+                    $title = Translation:: get(
+                        'EditContentObject',
+                        array('CONTENT_OBJECT' => $this->get_current_node()->get_content_object()->get_title())
+                    );
                 }
 
-                $trail = BreadcrumbTrail :: get_instance();
+                $trail = BreadcrumbTrail:: get_instance();
                 $trail->add(
-                    new Breadcrumb($this->get_url(array(self :: PARAM_STEP => $this->get_current_step())), $title));
+                    new Breadcrumb($this->get_url(array(self :: PARAM_STEP => $this->get_current_step())), $title)
+                );
 
                 $html = array();
 

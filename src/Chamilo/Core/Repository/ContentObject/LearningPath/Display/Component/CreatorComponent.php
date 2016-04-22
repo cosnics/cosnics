@@ -12,6 +12,7 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -23,7 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\learning_path\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface
+class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\Viewer\ViewerInterface, DelegateComponent
 {
 
     /**
@@ -40,23 +41,24 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
 
         $selected_template_id = TypeSelector :: get_selection();
 
-        if ($selected_template_id == $template->get_id())
-        {
-            $variable = 'AddFolder';
-        }
-        else
-        {
-            $variable = 'CreatorComponent';
-        }
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
+//        if ($selected_template_id == $template->get_id())
+//        {
+//            $variable = 'AddFolder';
+//        }
+//        else
+//        {
+//            $variable = 'CreatorComponent';
+//        }
+//        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
             $exclude = $this->detemine_excluded_content_object_ids($this->get_current_content_object()->get_id());
 
-            $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
+
+            $factory = new ApplicationFactory(\Chamilo\Core\Repository\Viewer\Manager :: context(), $applicationConfiguration);
             $component = $factory->getComponent();
             $component->set_excluded_objects($exclude);
             return $component->run();

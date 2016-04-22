@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -77,6 +78,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         {
             $parameters = $this->get_parameters();
             $parameters[self :: PARAM_STEP] = $node_parent->get_id();
+            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
             BreadcrumbTrail :: get_instance()->add(
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title()));
         }
