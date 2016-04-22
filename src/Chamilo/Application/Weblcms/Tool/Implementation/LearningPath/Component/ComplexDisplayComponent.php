@@ -69,7 +69,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
         }
 
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+//        BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $context = $this->get_root_content_object()->package() . '\Display';
         $factory = new ApplicationFactory(
