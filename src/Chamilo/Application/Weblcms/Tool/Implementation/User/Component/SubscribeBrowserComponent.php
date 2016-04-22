@@ -72,16 +72,16 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
-            $commonActions = new ButtonGroup();
-            
-            $commonActions->addButton(
-                new Button(
-                    Translation :: get('ViewUsers'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_BROWSER)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            
-            $buttonToolbar->addButtonGroup($commonActions);
+//            $commonActions = new ButtonGroup();
+//
+//            $commonActions->addButton(
+//                new Button(
+//                    Translation :: get('ViewUsers'),
+//                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+//                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_BROWSER)),
+//                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+//
+//            $buttonToolbar->addButtonGroup($commonActions);
             
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }

@@ -172,15 +172,16 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         return $this->buttonToolbarRenderer;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::retrieve_feedbacks()
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
      */
-    public function retrieve_feedbacks()
+    public function retrieve_feedbacks($count, $offset)
     {
         $parameters = new DataClassRetrievesParameters(
             $this->get_feedback_conditions(),
-            null,
-            null,
+            $count,
+            $offset,
             array(
                 new OrderBy(
                     new PropertyConditionVariable(

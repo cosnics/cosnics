@@ -127,7 +127,8 @@ body {
 	position: fixed;
 	right: 15px;
 	top: 15px;
-	left: 15px; text-align : justify;
+	left: 15px;
+	text-align: justify;
 	z-index: 9999999;
 	text-align: justify;
 }
@@ -147,8 +148,7 @@ body {
 	padding: 10px;
 	z-index: 9999;
 	text-align: center;
-	font-weight: bold;
-	text-transform: uppercase;
+	margin-bottom: 15px;
 }
 
 .danger-banner {

@@ -98,7 +98,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
             $this->get_course_id()
         );
 
-        if (!in_array($group->getId(), $this->subscribedGroups) && $isAllowed)
+        if (!in_array($group->getId(), $this->subscribedGroups) && ($this->getUser()->is_platform_admin() || $isAllowed))
         {
             $buttonToolbar->addItem(
                 new Button(

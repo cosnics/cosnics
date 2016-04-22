@@ -78,9 +78,9 @@ class LearningPathBlock extends CourseBlock
                 $progress += $attempt->get_progress();
             }
 
-            if (count($attempts) != 0)
+            if ($attempts->size() != 0)
             {
-                $progress = $this->get_progress_bar($progress / count($attempts));
+                $progress = $this->get_progress_bar($progress / $attempts->size());
             }
 
             $params = $this->get_parent()->get_parameters();

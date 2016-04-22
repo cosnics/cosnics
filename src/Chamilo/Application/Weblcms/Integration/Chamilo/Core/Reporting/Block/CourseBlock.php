@@ -30,42 +30,34 @@ abstract class CourseBlock extends ReportingBlock
 
     public function get_score_bar($score)
     {
-        if ($score < PlatformSetting :: get('passing_percentage'))
-        {
-            $color = 'lightcoral';
-        }
-        else
-        {
-            $color = 'lightgreen';
-        }
+        $type = ($score >= PlatformSetting:: get('passing_percentage')) ? 'progress-bar-success' : '';
 
-        $html[] = '<div style="position: relative; border: 1px solid black; height: 14px; width:100px;">';
-        $html[] = '<div style="background-color: ' . $color . '; height: 14px; width:' . round($score) .
-             'px; text-align: center;">';
+        $html = array();
+
+        $html[] = '<div class="progress" style="width: 150px; margin-bottom: 0;">';
+        $html[] =
+            '<div class="progress-bar ' . $type . ' progress-bar-striped" role="progressbar" aria-valuenow="' .
+            $score . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $score . '%">';
+        $html[] = '<span>' . round($score, 2) . '%</span>';
         $html[] = '</div>';
-        $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round($score) .
-             '%</div></div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
 
     public function get_progress_bar($progress)
     {
-        if ($progress == 100)
-        {
-            $color = 'lightgreen';
-        }
-        else
-        {
-            $color = 'lightblue';
-        }
+        $type = $progress == 100 ? 'progress-bar-success' : '';
 
-        $html[] = '<div style="position: relative; border: 1px solid black; height: 14px; width:100px;">';
-        $html[] = '<div style="background-color: ' . $color . '; height: 14px; width:' . round($progress) .
-             'px; text-align: center;">';
+        $html = array();
+
+        $html[] = '<div class="progress" style="width: 150px; margin-bottom: 0;">';
+        $html[] =
+            '<div class="progress-bar ' . $type . ' progress-bar-striped" role="progressbar" aria-valuenow="' .
+            $progress . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $progress . '%">';
+        $html[] = '<span>' . round($progress, 2) . '%</span>';
         $html[] = '</div>';
-        $html[] = '<div style="width: 100px; text-align: center; position: absolute; top: 0px;">' . round($progress) .
-             '%</div></div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
@@ -79,12 +71,13 @@ abstract class CourseBlock extends ReportingBlock
      */
     public function format_date($timestamp)
     {
-        if (! is_null($timestamp))
+        if (!is_null($timestamp))
         {
-            return DatetimeUtilities :: format_locale_date(
-                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
-                     Translation :: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
-                    $timestamp);
+            return DatetimeUtilities:: format_locale_date(
+                Translation:: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' .
+                Translation:: get('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES),
+                $timestamp
+            );
         }
     }
 
@@ -92,11 +85,12 @@ abstract class CourseBlock extends ReportingBlock
      * Converts from a seconds based time to an hours based time
      *
      * @param $seconds
+     *
      * @return string
      */
     public function convert_seconds_to_hours($seconds)
     {
-        return $seconds ? DatetimeUtilities :: convert_seconds_to_hours($seconds) : '000h 00m 00s';
+        return $seconds ? DatetimeUtilities:: convert_seconds_to_hours($seconds) : '000h 00m 00s';
     }
 
     /**
@@ -113,20 +107,25 @@ abstract class CourseBlock extends ReportingBlock
 
         $publication_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_PUBLISHER_ID),
-            new StaticConditionVariable($user_id));
+                ContentObjectPublication:: class_name(),
+                ContentObjectPublication :: PROPERTY_PUBLISHER_ID
+            ),
+            new StaticConditionVariable($user_id)
+        );
 
         $publication_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID),
-            new StaticConditionVariable($course_id));
+                ContentObjectPublication:: class_name(),
+                ContentObjectPublication :: PROPERTY_COURSE_ID
+            ),
+            new StaticConditionVariable($course_id)
+        );
 
         $publication_condition = new AndCondition($publication_conditions);
 
-        return \Chamilo\Application\Weblcms\Storage\DataManager :: count_content_object_publications(
-            $publication_condition);
+        return \Chamilo\Application\Weblcms\Storage\DataManager:: count_content_object_publications(
+            $publication_condition
+        );
     }
 
     /**
@@ -197,16 +196,18 @@ abstract class CourseBlock extends ReportingBlock
     public function get_course_visit_data_titles()
     {
         return array(
-            Translation :: get('FirstAccess'),
-            Translation :: get('LastAccess'),
-            Translation :: get('TotalVisits'),
-            Translation :: get('TotalTime'));
+            Translation:: get('FirstAccess'),
+            Translation:: get('LastAccess'),
+            Translation:: get('TotalVisits'),
+            Translation:: get('TotalTime')
+        );
     }
 
     /**
      * Extracts the course visit data from the course visit object
      *
      * @param $course_visit
+     *
      * @return string[]
      */
     public function get_course_visit_data_from_course_visit_object($course_visit)
@@ -231,16 +232,18 @@ abstract class CourseBlock extends ReportingBlock
             $total_time = $course_visit[CourseVisit :: PROPERTY_TOTAL_TIME];
         }
 
-        $total_time = $total_time ? DatetimeUtilities :: convert_seconds_to_hours($total_time) : '000h 00m 00s';
+        $total_time = $total_time ? DatetimeUtilities:: convert_seconds_to_hours($total_time) : '000h 00m 00s';
 
-        $first_access_date = $first_access_date ? DatetimeUtilities :: format_locale_date(null, $first_access_date) : '-';
-        $last_access_date = $last_access_date ? DatetimeUtilities :: format_locale_date(null, $last_access_date) : '-';
+        $first_access_date =
+            $first_access_date ? DatetimeUtilities:: format_locale_date(null, $first_access_date) : '-';
+        $last_access_date = $last_access_date ? DatetimeUtilities:: format_locale_date(null, $last_access_date) : '-';
 
         return array(
-            Translation :: get('FirstAccess') => $first_access_date,
-            Translation :: get('LastAccess') => $last_access_date,
-            Translation :: get('TotalVisits') => $total_visits,
-            Translation :: get('TotalTime') => $total_time);
+            Translation:: get('FirstAccess') => $first_access_date,
+            Translation:: get('LastAccess') => $last_access_date,
+            Translation:: get('TotalVisits') => $total_visits,
+            Translation:: get('TotalTime') => $total_time
+        );
     }
 
     /**
@@ -257,11 +260,12 @@ abstract class CourseBlock extends ReportingBlock
 
         $tool_id = $this->get_tool_registration($content_object_publication->get_tool())->get_id();
 
-        return WeblcmsTrackingDataManager :: retrieve_publication_access_summary_data(
+        return WeblcmsTrackingDataManager:: retrieve_publication_access_summary_data(
             $content_object_publication->get_course_id(),
             $tool_id,
             $category_id,
             $content_object_publication->get_id(),
-            $this->get_user_id());
+            $this->get_user_id()
+        );
     }
 }

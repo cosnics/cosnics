@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class RightsComponent extends TabComponent
+class RightsComponent extends ItemComponent
 {
 
     /**
