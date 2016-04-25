@@ -876,8 +876,12 @@ fieldset legend {
 }
 
 div.ui-datepicker {
-	background-color: #F7FBFD;
+	background-color: #F7FBFD !important;
 	border: 1px solid #d7e6ed !important;
 	padding: 10px;
 	margin: 2px;
+}
+
+div.ui-datepicker div.ui-datepicker-header {
+	background-color: #264269 !important;
 }
