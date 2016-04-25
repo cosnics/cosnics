@@ -129,7 +129,7 @@ table.forum .quotecontent, .attachcontent {
 	padding: 5px;
 }
 
-ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default
-	{
+ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default,
+	.treeview .list-group .list-group-item.node-menu .icon.node-icon.type_forum, .treeview .list-group .list-group-item.node-menu .icon.node-icon.type_forum_default {
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }

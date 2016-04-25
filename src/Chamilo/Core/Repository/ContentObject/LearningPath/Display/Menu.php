@@ -3,11 +3,12 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use HTML_Menu;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -16,7 +17,7 @@ use HTML_Menu;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Menu extends HTML_Menu
+class Menu
 {
     const TREE_NAME = __CLASS__;
 
@@ -36,17 +37,21 @@ class Menu extends HTML_Menu
         $this->context = $context;
         $this->path = $this->context->get_complex_content_object_path();
 
-        parent :: __construct($this->get_menu());
+        // header('Content-type:application/json;charset=utf-8');
+        // echo json_encode($this->get_menu());
+        // exit();
 
-        if ($this->context->get_current_step())
-        {
-            $this->forceCurrentUrl($this->get_url($this->context->get_current_step()));
-        }
+        // parent :: __construct($this->get_menu());
 
-        if ($this->context->get_action() == Manager :: ACTION_REPORTING && ! $this->context->is_current_step_set())
-        {
-            $this->forceCurrentUrl($this->get_reporting_url());
-        }
+        // if ($this->context->get_current_step())
+        // {
+        // $this->forceCurrentUrl($this->get_url($this->context->get_current_step()));
+        // }
+
+        // if ($this->context->get_action() == Manager :: ACTION_REPORTING && ! $this->context->is_current_step_set())
+        // {
+        // $this->forceCurrentUrl($this->get_reporting_url());
+        // }
     }
 
     /**
@@ -61,28 +66,28 @@ class Menu extends HTML_Menu
         $menu = array();
 
         $learning_path_item = array();
-        $learning_path_item['title'] = $this->get_title($this->path->get_root());
+        $learning_path_item['text'] = $this->get_title($this->path->get_root());
 
         $objectType = (string) StringUtilities :: getInstance()->createString(
             ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
                 $this->path->get_root()->get_content_object()->package()))->underscored();
 
-        $learning_path_item['class'] = 'type_' . $objectType;
-        $learning_path_item['url'] = $this->get_url($this->path->get_root()->get_id());
+        $learning_path_item['icon'] = 'type_' . $objectType;
+        $learning_path_item['href'] = $this->get_url($this->path->get_root()->get_id());
 
         $sub_items = $this->get_menu_items($this->path->get_root());
 
         if (count($sub_items) > 0)
         {
-            $learning_path_item['sub'] = $sub_items;
+            $learning_path_item['nodes'] = $sub_items;
         }
 
         $menu[] = $learning_path_item;
 
         $progress_item = array();
-        $progress_item['title'] = Translation :: get('Progress');
-        $progress_item['url'] = $this->get_reporting_url();
-        $progress_item['class'] = 'type_statistics';
+        $progress_item['text'] = Translation :: get('Progress');
+        $progress_item['href'] = $this->get_reporting_url();
+        $progress_item['icon'] = 'type_statistics';
 
         $menu[] = $progress_item;
 
@@ -111,7 +116,7 @@ class Menu extends HTML_Menu
         {
             $menu_item = array();
 
-            $menu_item['title'] = $this->get_title($child);
+            $menu_item['text'] = $this->get_title($child);
 
             if ($this->context->get_parent()->is_allowed_to_view_content_object($child))
             {
@@ -119,18 +124,35 @@ class Menu extends HTML_Menu
                     ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
                         $child->get_content_object()->package()))->underscored();
 
-                $menu_item['url'] = $this->get_url($child->get_id());
-                $menu_item['class'] = 'type_' . $objectType;
+                $menu_item['href'] = $this->get_url($child->get_id());
+                $menu_item['icon'] = 'type_' . $objectType;
             }
             else
             {
-                $menu_item['url'] = '#';
-                $menu_item['class'] = 'disabled type_disabled';
+                $menu_item['href'] = '#';
+                $menu_item['icon'] = 'disabled type_disabled';
+            }
+
+            if ($child->is_completed())
+            {
+                $menu_item['icon'] = 'type_completed';
+            }
+
+            $menu_item['state'] = array();
+
+            if ($this->context->get_current_step() == $child->get_id())
+            {
+                $menu_item['state']['selected'] = true;
+            }
+
+            if ($child->is_completed())
+            {
+                $menu_item['state']['checked'] = true;
             }
 
             if ($child->has_children())
             {
-                $menu_item['sub'] = $this->get_menu_items($child);
+                $menu_item['nodes'] = $this->get_menu_items($child);
             }
 
             $menu[] = $menu_item;
@@ -141,14 +163,15 @@ class Menu extends HTML_Menu
 
     public function get_title($node)
     {
-        if ($node->is_completed())
-        {
-            return $node->get_content_object()->get_title() . Theme :: getInstance()->getCommonImage('Status/OkMini');
-        }
-        else
-        {
+//         if ($node->is_completed())
+//         {
+//             return $node->get_content_object()->get_title() . ' ' .
+//                  Theme :: getInstance()->getCommonImage('Status/OkMini');
+//         }
+//         else
+//         {
             return $node->get_content_object()->get_title();
-        }
+//         }
     }
 
     /**
@@ -177,10 +200,43 @@ class Menu extends HTML_Menu
      *
      * @return string
      */
-    public function render_as_tree()
+    public function render()
     {
-        $renderer = new TreeMenuRenderer($this->get_tree_name());
-        $this->render($renderer, 'sitemap');
-        return $renderer->toHTML();
+        $html = array();
+
+        $html[] = '<div id="' . $this->get_tree_name() . '">';
+        $html[] = '</div>';
+
+        $html[] = "<script>
+            $(function()
+            {
+                $(document).ready(function()
+                {
+                    $('#" . $this->get_tree_name() . "').treeview({
+                        enableLinks : true,
+                        expandIcon: 'glyphicon glyphicon-chevron-right',
+                        collapseIcon: 'glyphicon glyphicon-chevron-down',
+                        color: '#428bca',
+                        showBorder: false,
+                        checkedIcon: 'glyphicon glyphicon-ok',
+                        data: " . json_encode($this->get_menu()) . "
+                    });
+                });
+            });
+        </script>";
+
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+                 'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js');
+
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+                 'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.css');
+
+        return implode(PHP_EOL, $html);
+
+        // $renderer = new TreeMenuRenderer($this->get_tree_name());
+        // $this->render($renderer, 'sitemap');
+        // return $renderer->toHTML();
     }
 }

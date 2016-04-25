@@ -2,14 +2,14 @@
 namespace Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion\Integration\Chamilo\Core\Repository\ContentObject\Assessment\Display;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\QuestionDisplay;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: rating_question.class.php 200 2009-11-13 12:30:04Z kariboe $
- * 
+ *
  * @package repository.lib.complex_display.assessment.component.viewer.wizard.inc.question_display
  */
 class Display extends QuestionDisplay
@@ -53,10 +53,11 @@ class Display extends QuestionDisplay
                     'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion',
                     true) . 'AssessmentRatingQuestion.js'));
 
-      $formvalidator->addElement(
-            'html', 
+        $formvalidator->addElement(
+            'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
+    }
 
     public function add_borders()
     {

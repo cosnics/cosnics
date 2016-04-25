@@ -432,7 +432,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = '</h3>';
 
         $html[] = '<div class="learning-path-tree-menu">';
-        $html[] = $this->learning_path_menu->render_as_tree();
+        $html[] = $this->learning_path_menu->render();
         $html[] = '</div>';
         $html[] = '</div>';
 
