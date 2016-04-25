@@ -5,8 +5,7 @@ use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineM
 
 /**
  *
- * @package
- *          Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Extension$HtmlInlineFlvRenditionImplementation
+ * @package Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Extension
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
