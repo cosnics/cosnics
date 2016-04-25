@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Request\Storage\DataClass;
 
+use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -315,7 +316,7 @@ class Request extends DataClass
             'png',
             Translation :: get(self :: decision_string($decision)),
             null,
-            ToolbarItem :: DISPLAY_ICON);
+            ToolbarItem :: DISPLAY_ICON, false, Manager::context());
     }
 
     /**

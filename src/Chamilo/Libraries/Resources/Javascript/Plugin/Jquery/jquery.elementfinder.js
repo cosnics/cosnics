@@ -133,7 +133,7 @@
 							$(inactiveBox).html(ul);
 						} else {
 							displayMessage(getTranslation('NoSearchResults',
-									null, 'libraries'), inactiveBox);
+									null, 'Chamilo\\Libraries'), inactiveBox);
 						}
 					}
 
@@ -188,7 +188,7 @@
 
 						if (query.length === 0 && !settings.loadElements) {
 							displayMessage(getTranslation('EnterSearchQuery',
-									null, 'libraries'), inactiveBox);
+									null, 'Chamilo\\Libraries'), inactiveBox);
 						} else {
 
 							// Filter out stars
@@ -197,12 +197,12 @@
 							if (replacedQuery.length == 0) {
 								displayMessage(getTranslation(
 										'SearchNoWildcards', null,
-										'libraries'), inactiveBox);
+									'Chamilo\\Libraries'), inactiveBox);
 							} else {
 								if (replacedQuery.length < 3) {
 									displayMessage(getTranslation(
 											'SearchTooShort', null,
-											'libraries'), inactiveBox);
+										'Chamilo\\Libraries'), inactiveBox);
 								} else {
 									updateElements();
 								}
@@ -467,7 +467,7 @@
 							updateElements();
 						} else {
 							displayMessage(getTranslation('EnterSearchQuery',
-									null, 'libraries'), inactiveBox);
+									null, 'Chamilo\\Libraries'), inactiveBox);
 						}
 
 						processFinderTree();
@@ -505,7 +505,7 @@
 							updateElements();
 						} else {
 							displayMessage(getTranslation('EnterSearchQuery',
-									null, 'libraries'), inactiveBox);
+									null, 'Chamilo\\Libraries'), inactiveBox);
 						}
 
 						$(activeBox).on("click", "a", deactivateElement);
