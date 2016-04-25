@@ -37,7 +37,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_LEARNING_PATH_ITEM_ID = 'learning_path_item_id';
     const PARAM_SORT = 'sort';
     const PARAM_ITEM_ATTEMPT_ID = 'item_attempt_id';
-
+    const PARAM_FULL_SCREEN = 'full_screen';
     const PARAM_PARENT_ID = 'parent_id';
     const PARAM_DISPLAY_ORDER = 'display_order';
 
@@ -147,7 +147,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP, $this->get_current_step());
+        return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN);
     }
-
 }

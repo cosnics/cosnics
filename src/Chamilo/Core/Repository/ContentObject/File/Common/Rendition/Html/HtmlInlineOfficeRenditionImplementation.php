@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -57,6 +58,9 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
             $html[] = ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(File :: package(), true) . 'OfficeViewer.js');
+            $html[] = ResourceManager :: get_instance()->get_resource_html(
+                Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+                     'Plugin/Jquery/jquery.fullscreen.min.js');
         }
         else
         {

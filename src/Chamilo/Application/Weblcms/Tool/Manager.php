@@ -41,6 +41,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
+use Chamilo\Libraries\Format\Structure\Page;
 
 /**
  * This is the base class for all tools used in applications.
@@ -227,15 +228,19 @@ abstract class Manager extends Application
 
     public function render_header($visible_tools = null, $show_introduction_text = false)
     {
-        if (! $visible_tools)
-        {
-            $visible_tools = $this->get_visible_tools();
-        }
-
         $html = array();
 
         $html[] = parent :: render_header();
-        $html[] = $this->display_course_menus($visible_tools, $show_introduction_text);
+
+        if (Page :: getInstance()->isFullPage())
+        {
+            if (! $visible_tools)
+            {
+                $visible_tools = $this->get_visible_tools();
+            }
+
+            $html[] = $this->display_course_menus($visible_tools, $show_introduction_text);
+        }
 
         return implode(PHP_EOL, $html);
     }
@@ -283,7 +288,7 @@ abstract class Manager extends Application
         $html = array();
 
         $html[] = $this->renderShortcuts($tools);
-//         $html[] = $this->renderHomeActions();
+        // $html[] = $this->renderHomeActions();
         $html[] = '<div class="clearfix"></div>';
 
         return implode(PHP_EOL, $html);
@@ -379,8 +384,6 @@ abstract class Manager extends Application
             $html[] = '</div>';
             $html[] = '</div>';
         }
-
-
 
         return implode(PHP_EOL, $html);
     }

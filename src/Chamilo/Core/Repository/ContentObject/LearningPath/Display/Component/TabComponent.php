@@ -19,6 +19,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Page;
 
 abstract class TabComponent extends Manager implements DelegateComponent
 {
@@ -400,13 +402,20 @@ abstract class TabComponent extends Manager implements DelegateComponent
      */
     public function render_header()
     {
+        $isFullScreen = $this->getRequest()->query->get(self :: PARAM_FULL_SCREEN, false);
         $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
+
+        if ($isFullScreen)
+        {
+            Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+        }
 
         $html = array();
 
         $html[] = parent :: render_header();
 
         $html[] = '<div class="learning-path-display">';
+        $html[] = '<iframe class="learning-path-display-full-screen" src="#"></iframe>';
 
         $html[] = $this->get_navigation_bar();
 
@@ -432,7 +441,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = '</h3>';
 
         $html[] = '<div class="learning-path-tree-menu">';
-        $html[] = $this->learning_path_menu->render_as_tree();
+        $html[] = $this->learning_path_menu->render();
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -465,6 +474,9 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath(Manager :: package(), true) . 'LearningPathMenu.js');
+        $html[] = ResourceManager :: get_instance()->get_resource_html(
+            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+                 'Plugin/Jquery/jquery.fullscreen.min.js');
 
         $html[] = parent :: render_footer();
 
@@ -583,10 +595,12 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
             $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
 
-            $html[] = '<span class="glyphicon glyphicon-list learning-path-action-menu-show' .
+            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-show' .
                  ($isMenuHidden != 'true' ? ' hidden' : '') . '"></span>';
-            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-menu-hide' .
+            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-hide' .
                  ($isMenuHidden == 'true' ? ' hidden' : '') . '"></span>';
+            $html[] = '&nbsp;';
+            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-fullscreen"></span>';
             $html[] = '</span>';
 
             $html[] = '</div>';
