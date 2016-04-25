@@ -33,7 +33,8 @@ class PreviewComponent extends Manager
         $html = array();
 
         $html[] = parent :: render_header();
-        $html[] = '<br /><div style="border: 1px solid #FFD89B;" class="row warning-banner bg-warning text-warning">';
+
+        $html[] = '<div class="alert alert-warning">';
         $html[] = Translation :: get('PreviewModeWarning');
         $html[] = '</div>';
 
@@ -48,6 +49,8 @@ class PreviewComponent extends Manager
         $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);
         $namespace = $contentObjectNamespace . '\Display\Preview';
 
-        return new ApplicationFactory($namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        return new ApplicationFactory(
+            $namespace,
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
     }
 }
