@@ -479,6 +479,13 @@ class CalendarEventForm extends ContentObjectForm
             $defaults[self :: PARAM_RANGE] = 1;
             $defaults[CalendarEvent :: PROPERTY_UNTIL] = null;
             $defaults[CalendarEvent :: PROPERTY_FREQUENCY_COUNT] = 10;
+
+            $defaults[CalendarEvent :: PROPERTY_START_DATE] = DatetimeUtilities :: format_locale_date(
+                '%d-%m-%Y  %H:%M',
+                time());
+            $defaults[CalendarEvent :: PROPERTY_END_DATE] = DatetimeUtilities :: format_locale_date(
+                '%d-%m-%Y  %H:%M',
+               time() + 3600);
         }
         
         parent :: setDefaults($defaults);
