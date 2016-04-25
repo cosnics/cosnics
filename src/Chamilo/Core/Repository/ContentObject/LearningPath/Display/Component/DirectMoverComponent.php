@@ -24,9 +24,9 @@ class DirectMoverComponent extends Manager
         }
 
         $parentId = $this->getRequest()->get(self::PARAM_PARENT_ID);
-        $display_order = $this->getRequest()->get(self::PARAM_DISPLAY_ORDER);
+        $displayOrder = $this->getRequest()->get(self::PARAM_DISPLAY_ORDER);
 
-        if (!$parentId || !$display_order)
+        if (!$parentId || !$displayOrder)
         {
             throw new \RuntimeException(
                 'For the direct mover to work you need to specify a parent and a display order'
@@ -35,9 +35,19 @@ class DirectMoverComponent extends Manager
         $path = $this->get_root_content_object()->get_complex_content_object_path();
         $parentNode = $path->get_node($parentId);
 
+        $parentContentObjectId = $parentNode->get_content_object()->getId();
+
         $complexContentObjectItem = $currentNode->get_complex_content_object_item();
-        $complexContentObjectItem->set_parent($parentNode->get_content_object()->getId());
-        $complexContentObjectItem->set_display_order($display_order);
+
+        if ($complexContentObjectItem->get_parent() == $parentContentObjectId &&
+            $displayOrder > $complexContentObjectItem->get_display_order()
+        )
+        {
+            $displayOrder --;
+        }
+
+        $complexContentObjectItem->set_parent($parentContentObjectId);
+        $complexContentObjectItem->set_display_order($displayOrder);
         $success = $complexContentObjectItem->update();
 
         if ($success)
