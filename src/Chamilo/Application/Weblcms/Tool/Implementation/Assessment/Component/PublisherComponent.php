@@ -2,11 +2,9 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Form\PublicationForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormInterface;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
@@ -16,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 class PublisherComponent extends Manager implements PublisherCustomPublicationFormInterface
 {
+
     /**
      * Constructs the publication form
      *
@@ -31,7 +30,7 @@ class PublisherComponent extends Manager implements PublisherCustomPublicationFo
 
         return new PublicationForm(
             $this->getUser(),
-            PublicationForm::TYPE_CREATE,
+            PublicationForm :: TYPE_CREATE,
             $publications,
             $course,
             $this->get_url(),
@@ -47,6 +46,7 @@ class PublisherComponent extends Manager implements PublisherCustomPublicationFo
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

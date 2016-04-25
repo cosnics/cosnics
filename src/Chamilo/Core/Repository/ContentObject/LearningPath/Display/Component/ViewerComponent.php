@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
@@ -17,8 +18,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -134,7 +135,8 @@ class ViewerComponent extends TabComponent
             $this->addCreatorButtons($primaryActions, $translator);
             $this->addUpdateButton($current_content_object, $primaryActions, $translator);
             $this->addDeleteButton($primaryActions, $translator);
-            $this->addMoverButtons($secondaryActions, $translator);
+//            $this->addMoverButtons($secondaryActions, $translator);
+            $this->addMoveButton($secondaryActions, $translator);
             $this->addManageButton($secondaryActions, $translator);
 
             if ($this->get_action() != self :: ACTION_REPORTING && $this->is_current_step_set())
@@ -369,6 +371,88 @@ class ViewerComponent extends TabComponent
         {
             $buttonGroup->addButton($moveButton);
         }
+    }
+
+    /**
+     * Adds a move button where you can directly select a parent / position to which you want to move the selected
+     * item
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param Translation $translator
+     */
+    protected function addMoveButton(ButtonGroup $buttonGroup, Translation $translator)
+    {
+        if ($this->get_current_node()->is_root() ||
+            !$this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent())
+        )
+        {
+            return;
+        }
+
+        $moveButton = new DropdownButton(
+            $translator->getTranslation('Move', null, Manager::context()), new BootstrapGlyph('random')
+        );
+
+        /** @var ComplexContentObjectPath $path */
+        $path = $this->get_complex_content_object_path();
+        foreach ($path->get_nodes() as $node)
+        {
+
+            $contentObject = $node->get_content_object();
+
+            $margin = 15 * (count($node->get_parents()) - 1);
+
+            if (!$node->is_root())
+            {
+                $title = '<span style="margin-left: ' . $margin . 'px">' .
+                    $translator->getTranslation(
+                        'AfterContentObject', array('CONTENT_OBJECT' => $contentObject->get_title()), Manager::context()
+                    ) . '</span>';
+
+                $moveButton->addSubButton(
+                    new SubButton(
+                        $title,
+                        '',
+                        $this->get_url(
+                            array(
+                                self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
+                                self::PARAM_PARENT_ID => $node->get_parent_id(),
+                                self::PARAM_DISPLAY_ORDER => $node->get_complex_content_object_item()->get_display_order() + 1,
+                                self::PARAM_STEP => $this->get_current_step()
+                            )
+                        )
+                    )
+                );
+            }
+
+            if ($contentObject instanceof LearningPath)
+            {
+                $margin += 15;
+
+                $title = '<span style="margin-left: ' . $margin . 'px">' .
+                    $translator->getTranslation(
+                        'FirstItemBelowContentObject',
+                        array('CONTENT_OBJECT' => $contentObject->get_title()), Manager::context()
+                    ) . '</span>';
+
+                $moveButton->addSubButton(
+                    new SubButton(
+                        $title,
+                        '',
+                        $this->get_url(
+                            array(
+                                self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY,
+                                self::PARAM_PARENT_ID => $node->get_id(),
+                                self::PARAM_DISPLAY_ORDER => 1,
+                                self::PARAM_STEP => $this->get_current_step()
+                            )
+                        )
+                    )
+                );
+            }
+        }
+
+        $buttonGroup->addButton($moveButton);
     }
 
     /**
