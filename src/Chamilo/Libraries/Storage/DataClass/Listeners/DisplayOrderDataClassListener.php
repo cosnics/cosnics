@@ -204,7 +204,7 @@ class DisplayOrderDataClassListener extends DataClassListener
     public function on_before_set_property($name, $value)
     {
         $initial_value = $this->data_class->get_default_property($name);
-        if (is_null($initial_value) || $initial_value == $value)
+        if (is_null($initial_value) || ($initial_value == $value && !isset($this->old_display_order_condition)))
         {
             return true;
         }
