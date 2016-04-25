@@ -28,24 +28,24 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Manager implements 
-    GlossaryDisplaySupport, LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport, 
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Manager implements
+    GlossaryDisplaySupport, LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport,
     BlogDisplaySupport, WikiDisplaySupport
 {
 
     function run()
     {
         $className = $this->get_root_content_object()->package() . '\Display';
-        
+
         $factory = new ApplicationFactory(
-            $className, 
+            $className,
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 
     /**
      * Since this is a preview, no actual view event is triggered.
-     * 
+     *
      * @param $complex_topic_id
      */
     function forum_topic_viewed($complex_topic_id)
@@ -54,7 +54,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Since this is a preview, no views are logged and no count can be retrieved.
-     * 
+     *
      * @param $complex_topic_id
      * @return string
      */
@@ -65,7 +65,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Returns whether or not the logged in user is a forum manager
-     * 
+     *
      * @param $user User
      *
      * @return boolean
@@ -93,7 +93,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Preview mode, so no actual saving done.
-     * 
+     *
      * @param $complex_question_id int
      * @param $answer mixed
      * @param $score int
@@ -104,20 +104,20 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $question_attempt->set_answer($answer);
         $question_attempt->set_score($score);
         $question_attempt->set_hint($hint);
-        
+
         return $question_attempt->update();
     }
 
     /**
      * Preview mode, so no actual total score will be saved.
-     * 
+     *
      * @param $total_score int
      */
     function save_assessment_result($total_score)
     {
         $current_node = $this->get_current_node();
         $item_attempt = $current_node->get_current_attempt();
-        
+
         if (! $item_attempt instanceof AbstractItemAttempt)
         {
             return;
@@ -127,10 +127,10 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
             $item_attempt->set_score($total_score);
             $item_attempt->set_total_time($item_attempt->get_total_time() + (time() - $item_attempt->get_start_time()));
             $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+                ContentObject :: class_name(),
                 $current_node->get_complex_content_object_item()->get_ref());
             $mastery_score = $learning_path_item->get_mastery_score();
-            
+
             if ($mastery_score)
             {
                 $status = ($total_score >= $mastery_score) ? AbstractItemAttempt :: STATUS_PASSED : AbstractItemAttempt :: STATUS_FAILED;
@@ -139,9 +139,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
             {
                 $status = AbstractItemAttempt :: STATUS_COMPLETED;
             }
-            
+
             $item_attempt->set_status($status);
-            
+
             return $item_attempt->update();
         }
     }
@@ -163,13 +163,13 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     function get_assessment_question_attempt($complex_question_id)
     {
         return PreviewStorage :: get_instance()->retrieve_learning_path_question_attempt(
-            $this->get_current_node()->get_current_attempt(), 
+            $this->get_current_node()->get_current_attempt(),
             $complex_question_id);
     }
 
     /**
      * Preview mode is launched in standalone mode, so there's nothing to go back to.
-     * 
+     *
      * @return void
      */
     function get_assessment_back_url()
@@ -178,7 +178,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     /**
      * Preview mode is launched in standalone mode, so there's nothing to continue to.
-     * 
+     *
      * @return void
      */
     function get_assessment_continue_url()
@@ -198,9 +198,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
         $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(), 
+            ContentObject :: class_name(),
             $complex_content_object_item->get_ref());
-        
+
         return $learning_path_item->get_configuration();
     }
 
@@ -217,7 +217,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $attempt = PreviewStorage :: get_instance()->retrieve_learning_path_attempt(
             $this->get_parent()->get_root_content_object()->get_id());
-        
+
         if (! $attempt instanceof AbstractAttempt)
         {
             $attempt = new DummyAttempt();
@@ -258,7 +258,9 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $parameters[Application :: PARAM_ACTION] = \Chamilo\Core\Repository\Preview\Manager :: ACTION_DISPLAY;
         $parameters[\Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP] = '__STEP__';
-        
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_FULL_SCREEN] = $this->getRequest()->query->get(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_FULL_SCREEN);
+
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }
@@ -270,7 +272,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     function create_learning_path_item_tracker($learning_path_attempt, $current_complex_content_object_item)
     {
         $item_attempt = new DummyItemAttempt();
-        
+
         $item_attempt->set_learning_path_attempt_id($learning_path_attempt->get_id());
         $item_attempt->set_learning_path_item_id($current_complex_content_object_item->get_id());
         $item_attempt->set_start_time(time());
@@ -280,13 +282,13 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $item_attempt->set_max_score(0);
         $item_attempt->set_status(AbstractItemAttempt :: STATUS_NOT_ATTEMPTED);
         $item_attempt->create();
-        
+
         return $item_attempt;
     }
 
     /**
      * Get the url of the assessment result
-     * 
+     *
      * @param $complex_content_object_id int
      * @param $details unknown_type
      */
@@ -302,12 +304,12 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     {
         $question_ids = array();
         $attempts = $this->get_assessment_question_attempts();
-        
+
         foreach ($attempts as $attempt)
         {
             $question_ids[] = $attempt->get_question_complex_id();
         }
-        
+
         return $question_ids;
     }
 
@@ -317,7 +319,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
     public function register_question_ids($question_ids)
     {
         $current_node = $this->get_current_node();
-        
+
         foreach ($question_ids as $complex_question_id)
         {
             $attempt = new DummyQuestionAttempt();
@@ -327,7 +329,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
             $attempt->set_score(0);
             $attempt->set_feedback('');
             $attempt->set_hint(0);
-            
+
             $attempt->create();
         }
     }

@@ -62,11 +62,45 @@ $(function()
         window.location = this.href;
     }
     
+    function checkFullScreenSupport()
+    {
+        if ($.fullscreen.isNativelySupported())
+        {
+            $(".learning-path-display .learning-path-action-menu .learning-path-action-fullscreen").show();
+            $(document).on('fscreenchange', handleFullScreenChange);
+            $(document).on('click',
+                    ".learning-path-display .learning-path-action-menu .learning-path-action-fullscreen", goFullScreen);
+        }
+    }
+    
+    function goFullScreen(e, ui)
+    {
+        e.preventDefault();
+        
+        var displayContainer = $(this).closest('.learning-path-display');
+        var frame = $('iframe', displayContainer);
+        
+        frame.attr('src', window.location + '&full_screen=1');
+        
+        $('iframe').fullscreen();
+        frame.show();
+    }
+    
+    function handleFullScreenChange(e, ui)
+    {
+        if (!$.fullscreen.isFullScreen())
+        {
+            var frameUrl = $('iframe').contents().get(0).location.href;
+            window.location = frameUrl.replace("&full_screen=1", "");
+        }
+    }
+    
     $(document).ready(
             function()
             {
-                $(document).on('click', ".learning-path-display .learning-path-tree-menu a", handleMobileLearningPath);
+                checkFullScreenSupport();
                 
+                $(document).on('click', ".learning-path-display .learning-path-tree-menu a", handleMobileLearningPath);
                 $(document).on('click',
                         ".learning-path-display .learning-path-action-menu .learning-path-action-menu-hide", hideMenu);
                 $(document).on('click',

@@ -266,7 +266,14 @@ class Header
             $html[] = $banner->render();
         }
 
-        $html[] = '<div class="container-fluid">';
+        $classes = 'container-fluid';
+
+        if ($this->getViewMode() == Page :: VIEW_MODE_HEADERLESS)
+        {
+            $classes .= ' container-headerless';
+        }
+
+        $html[] = '<div class="' . $classes . '">';
 
         return implode(PHP_EOL, $html);
     }
