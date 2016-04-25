@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Extension;
 
+use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\HtmlInlineMediaElementRenditionImplementation;
+
 /**
  *
  * @package

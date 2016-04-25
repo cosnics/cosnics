@@ -7,6 +7,6 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Exten
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class HtmlInlineHtmRenditionImplementation extends HtmlInlineHtmlRenditionImplementation
+class HtmlInlinePptxRenditionImplementation extends HtmlInlineDocxRenditionImplementation
 {
 }

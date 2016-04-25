@@ -3,22 +3,35 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
-.learning-path-content {
-	padding-bottom: 80px;
+.learning-path-content, .learning-path-tree-menu-container {
+	padding-bottom: 90px;
 }
 
-.learning-path-display .learning-path-tree-menu-container {
-	/* 	position: fixed; */
-	/* 	top: 0px; */
-	/* 	bottom: 0px; */
-	/* 	left: 0px; */
-	/* 	width: auto; padding-top : 15px; */
-	/* 	padding-bottom: 80px; */
-	/* 	z-index: 9999; */
-	/* 	background-color: rgba(255, 255, 255, 0.75); */
-	/* 	z-index: 9999; */
-	/* 	padding-top: 15px; */
-	
+.learning-path-tree-menu-container h3 {
+	display: none;
+}
+
+@media ( max-width : 768px) {
+	.learning-path-tree-menu-container {
+		padding-bottom: 15px;
+	}
+	.learning-path-tree-menu-container h3 {
+		display: block;
+		margin-top: 0px;
+	}
+	.learning-path-display .learning-path-tree-menu-container {
+		position: fixed;
+		top: 0px;
+		bottom: 0px;
+		left: 0px;
+		right: 0px;
+		width: 100%;
+		padding-top: 15px;
+		z-index: 9999;
+		background-color: white;
+		padding-top: 15px;
+		display: none;
+	}
 }
 
 .learning-path-display .learning-path-content.learning-path-content-full-screen
@@ -29,6 +42,11 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 .learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-hidden
 	{
 	display: none;
+}
+
+.learning-path-display .learning-path-tree-menu-container.learning-path-tree-menu-container-visible
+	{
+	display: block;
 }
 
 .learning-path-display .learning-path-tree-menu-container .learning-path-tree-menu
@@ -68,6 +86,11 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 	overflow: hidden;
 }
 
+.learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon.disabled
+	{
+	opacity: 0.25;
+}
+
 .learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu
 	{
 	color: #337ab7;
@@ -86,8 +109,4 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 	border-radius: 0px;
 	height: 10px;
 }
-
-.learning-path-display .navbar-learning-path .navbar-learning-path-actions .learning-path-action-menu-show
-	{
-	display: none;
 }

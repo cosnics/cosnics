@@ -9,7 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Group\Platfor
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Subscribed\SubscribedUserTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubscribedGroup\SubSubscribedPlatformGroupTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\SubscribedPlatformGroupMenuRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
