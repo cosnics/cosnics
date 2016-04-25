@@ -13,16 +13,20 @@ use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImp
 class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
 {
 
+    /**
+     *
+     * @return string
+     */
     public function render()
     {
         $contentObject = $this->get_content_object();
-        
+
         if ($contentObject->is_image())
         {
             $url = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-                $contentObject->get_id(), 
+                $contentObject->get_id(),
                 $contentObject->calculate_security_code());
-            
+
             return '<img src="' . $url . '" alt="' . htmlentities($contentObject->get_title()) . '" class="thumbnail" />';
         }
         else
