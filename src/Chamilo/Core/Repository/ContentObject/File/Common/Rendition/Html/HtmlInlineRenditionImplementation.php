@@ -7,9 +7,15 @@ use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
+/**
+ *
+ * @package Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ */
 class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
 {
     const DEFAULT_HEIGHT = 768;
@@ -23,14 +29,18 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     const PARAM_ALT = 'alt';
     const PARAM_STYLE = 'style';
 
+    /**
+     *
+     * @param unknown $parameters
+     */
     public function render($parameters)
     {
         $object = $this->get_content_object();
-        
+
         $class = __NAMESPACE__ . '\Extension\HtmlInline' .
              (string) StringUtilities :: getInstance()->createString($object->get_extension())->upperCamelize() .
              'RenditionImplementation';
-        
+
         if (! class_exists($class))
         {
             $document_type = $object->determine_type();
@@ -38,7 +48,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
                  (string) StringUtilities :: getInstance()->createString($document_type)->upperCamelize() .
                  'RenditionImplementation';
         }
-        
+
         $rendition = new $class($this->get_context(), $this->get_content_object());
         return $rendition->render($parameters);
     }
@@ -58,30 +68,34 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     {
         $object = $this->get_content_object();
         $name = $object->get_filename();
-        
+
         $label = '<small>(' . Filesystem :: format_file_size($object->get_filesize()) . ')</small>';
-        
+
         $buttonToolBar = new ButtonToolBar();
-        
+
         $buttonToolBar->addItem(
             new Button(
-                Translation :: get('DownloadFile', array('LABEL' => $label)), 
-                new BootstrapGlyph('download'), 
-                $this->getDownloadUrl(), 
-                Button :: DISPLAY_ICON_AND_LABEL, 
-                false, 
-                $classes, 
+                Translation :: get('DownloadFile', array('LABEL' => $label)),
+                new BootstrapGlyph('download'),
+                $this->getDownloadUrl(),
+                Button :: DISPLAY_ICON_AND_LABEL,
+                false,
+                $classes,
                 '_blank'));
-        
+
         return $buttonToolBar;
     }
 
+    /**
+     *
+     * @return string
+     */
     public function getDownloadUrl()
     {
         $object = $this->get_content_object();
-        
+
         return \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-            $object->get_id(), 
+            $object->get_id(),
             $object->calculate_security_code());
     }
 }
