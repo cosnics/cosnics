@@ -19,6 +19,11 @@ mark {
 	text-align: center;
 }
 
+.container-headerless {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
 /**************
  * ACTION BAR *
  **************/
