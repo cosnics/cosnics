@@ -9,9 +9,19 @@ use Chamilo\Libraries\File\ImageManipulation\ImageManipulation;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 
+/**
+ *
+ * @package Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ */
 class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
 {
 
+    /**
+     *
+     * @return string
+     */
     public function render()
     {
         $object = $this->get_content_object();
