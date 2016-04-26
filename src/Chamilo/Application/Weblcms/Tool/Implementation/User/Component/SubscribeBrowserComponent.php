@@ -109,6 +109,8 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('weblcms_user_subscribe_browser');
+
+        $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
     public function get_additional_parameters()
