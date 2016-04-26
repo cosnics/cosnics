@@ -19,7 +19,7 @@ class ComplexTableColumnModel extends \Chamilo\Core\Repository\Table\Complex\Com
 
     public function initialize_columns()
     {
-        parent :: initialize_columns();
+        $this->addBasicColumns();
         $this->add_column(new StaticTableColumn(Translation :: get(self :: WEIGHT)));
     }
 }
