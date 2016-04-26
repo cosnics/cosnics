@@ -1,0 +1,51 @@
+@import url('../Aqua/Stylesheet.css');
+
+.chamilo-menu-bar ul li a img.chamilo-menu-item-icon-account {
+	height: 50px;
+	width: 50px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.chamilo-menu-bar ul li div.chamilo-menu-item-account {
+	display: none;
+	min-width: 332px;
+	height: 106px;
+	overflow: hidden;
+	background-color: #C50C2E;
+	clear: both;
+	white-space: normal;
+	position: fixed;
+	right: 0px;
+	top: 50px;
+	padding: 16px;
+	color: #C50C2E;
+	-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	line-height: normal;
+}
+
+
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo img {
+	width: 72px;
+	height: 72px;
+	border: 1px solid #8f0000;
+	z-index: 10;
+}
+
+
+
+div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
+	border-top: 1px dotted #8b0504;
+	padding: 8px 16px;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+	color: white;
+	line-height: 16px;
+	background-color: #C50C2E;
+}
