@@ -80,7 +80,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
-        // $html[] = '<div id="action_bar_browser">';
+
         $html[] = '<div class="row">';
 
         if ($this->get_menu() == null)
@@ -95,11 +95,13 @@ class BrowserComponent extends Manager implements DelegateComponent
             $menu[] = '</div>';
             $menu = implode(PHP_EOL, $menu);
         }
+
         if ($menu)
         {
             $html[] = $menu;
             $html[] = '<div class="col-md-10">';
         }
+
         $html[] = Renderer :: factory($this->get_parent()->get_renderer(), $this)->as_html();
 
         if ($menu)

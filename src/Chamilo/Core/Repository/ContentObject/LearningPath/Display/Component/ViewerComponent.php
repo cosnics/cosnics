@@ -21,7 +21,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 class ViewerComponent extends TabComponent
 {
@@ -280,66 +279,66 @@ class ViewerComponent extends TabComponent
         }
     }
 
-//    /**
-//     *
-//     * @param ButtonGroup $buttonGroup
-//     * @param Translation $translator
-//     */
-//    protected function addMoverButtons($buttonGroup, $translator)
-//    {
-//        $moveButton = new DropdownButton(
-//            $translator->getTranslation('Move', null, Manager :: context()),
-//            new BootstrapGlyph('random'));
-//
-//        if (! $this->get_current_node()->is_root() &&
-//             $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()))
-//        {
-//            $moveButton->addSubButton(
-//                new SubButton(
-//                    $translator->getTranslation('MoverComponent', null, Manager :: context()),
-//                    new BootstrapGlyph('folder-open'),
-//                    $this->get_url(
-//                        array(
-//                            self :: PARAM_ACTION => self :: ACTION_MOVE,
-//                            self :: PARAM_STEP => $this->get_current_step()))));
-//        }
-//
-//        if (! $this->get_current_node()->is_root() &&
-//             $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()) &&
-//             $this->get_current_node()->has_siblings())
-//        {
-//            if (! $this->get_current_node()->is_last_child())
-//            {
-//                $moveButton->addSubButton(
-//                    new SubButton(
-//                        $translator->getTranslation('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-//                        new BootstrapGlyph('chevron-down'),
-//                        $this->get_url(
-//                            array(
-//                                self :: PARAM_ACTION => self :: ACTION_SORT,
-//                                self :: PARAM_SORT => self :: SORT_DOWN,
-//                                self :: PARAM_STEP => $this->get_current_step()))));
-//            }
-//
-//            if (! $this->get_current_node()->is_first_child())
-//            {
-//                $moveButton->addSubButton(
-//                    new SubButton(
-//                        $translator->getTranslation('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-//                        new BootstrapGlyph('chevron-up'),
-//                        $this->get_url(
-//                            array(
-//                                self :: PARAM_ACTION => self :: ACTION_SORT,
-//                                self :: PARAM_SORT => self :: SORT_UP,
-//                                self :: PARAM_STEP => $this->get_current_step()))));
-//            }
-//        }
-//
-//        if ($moveButton->hasButtons())
-//        {
-//            $buttonGroup->addButton($moveButton);
-//        }
-//    }
+    // /**
+    // *
+    // * @param ButtonGroup $buttonGroup
+    // * @param Translation $translator
+    // */
+    // protected function addMoverButtons($buttonGroup, $translator)
+    // {
+    // $moveButton = new DropdownButton(
+    // $translator->getTranslation('Move', null, Manager :: context()),
+    // new BootstrapGlyph('random'));
+    //
+    // if (! $this->get_current_node()->is_root() &&
+    // $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()))
+    // {
+    // $moveButton->addSubButton(
+    // new SubButton(
+    // $translator->getTranslation('MoverComponent', null, Manager :: context()),
+    // new BootstrapGlyph('folder-open'),
+    // $this->get_url(
+    // array(
+    // self :: PARAM_ACTION => self :: ACTION_MOVE,
+    // self :: PARAM_STEP => $this->get_current_step()))));
+    // }
+    //
+    // if (! $this->get_current_node()->is_root() &&
+    // $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()) &&
+    // $this->get_current_node()->has_siblings())
+    // {
+    // if (! $this->get_current_node()->is_last_child())
+    // {
+    // $moveButton->addSubButton(
+    // new SubButton(
+    // $translator->getTranslation('MoveDown', null, Utilities :: COMMON_LIBRARIES),
+    // new BootstrapGlyph('chevron-down'),
+    // $this->get_url(
+    // array(
+    // self :: PARAM_ACTION => self :: ACTION_SORT,
+    // self :: PARAM_SORT => self :: SORT_DOWN,
+    // self :: PARAM_STEP => $this->get_current_step()))));
+    // }
+    //
+    // if (! $this->get_current_node()->is_first_child())
+    // {
+    // $moveButton->addSubButton(
+    // new SubButton(
+    // $translator->getTranslation('MoveUp', null, Utilities :: COMMON_LIBRARIES),
+    // new BootstrapGlyph('chevron-up'),
+    // $this->get_url(
+    // array(
+    // self :: PARAM_ACTION => self :: ACTION_SORT,
+    // self :: PARAM_SORT => self :: SORT_UP,
+    // self :: PARAM_STEP => $this->get_current_step()))));
+    // }
+    // }
+    //
+    // if ($moveButton->hasButtons())
+    // {
+    // $buttonGroup->addButton($moveButton);
+    // }
+    // }
 
     /**
      * Adds a move button where you can directly select a parent / position to which you want to move the selected
@@ -367,7 +366,7 @@ class ViewerComponent extends TabComponent
         foreach ($path->get_nodes() as $node)
         {
 
-            if($node == $this->get_current_node() || in_array($node, $descendants))
+            if ($node == $this->get_current_node() || in_array($node, $descendants))
             {
                 continue;
             }

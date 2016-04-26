@@ -78,12 +78,6 @@ class Basic extends Renderer
         $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)));
         $isGeneralMode = ($generalMode && $user instanceof User && $user->is_platform_admin());
 
-        if ($isGeneralMode)
-        {
-            $html[] = '<div class="row danger-banner text-danger bg-danger">' .
-                 Translation :: get('HomepageInGeneralMode') . '</div>';
-        }
-
         if ($isEditable)
         {
             $html[] = '<script type="text/javascript" src="' .
@@ -95,6 +89,12 @@ class Basic extends Renderer
         if ($isEditable)
         {
             $html[] = $this->renderTabTitlePanel();
+        }
+
+        if ($isGeneralMode)
+        {
+            $html[] = '<div class="alert alert-danger">' .
+                 Translation :: get('HomepageInGeneralMode') . '</div>';
         }
 
         $html[] = $this->renderPackageContainer();
