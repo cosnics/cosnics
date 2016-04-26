@@ -93,7 +93,7 @@ class Display extends QuestionDisplay
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th class="checkbox"></th>';
+        $table_header[] = '<th></th>';
         $table_header[] = '<th>' . $this->get_instruction() . '</th>';
         $table_header[] = '<th class="action"></th>';
         $table_header[] = '</tr>';

@@ -62,7 +62,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th class="checkbox"></th>';
+        $html[] = '<th></th>';
         $html[] = '<th>' . Translation :: get('HotspotTableTitle') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
