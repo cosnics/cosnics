@@ -99,18 +99,20 @@ class Display extends QuestionDisplay
         {
             $maximum = count($answers);
         }
-        
+
         $match_label = 'A';
         for ($i = 0; $i < $maximum; $i ++)
         {
             $formvalidator->addElement('html', '<tr>');
             
-            $answer = $answers[$i];
+            $answer = current($answers);
+            $answerIndex = key($answers);
+            next($answers);
             
             if ($answer)
             {
                 $answer_number = ($i + 1) . '.';
-                $answer_name = $question_id . '_' . $i;
+                $answer_name = $question_id . '_' . $answerIndex;
                 
                 $formvalidator->addElement('html', '<td>' . $answer_number . '</td>');
                 
@@ -136,7 +138,8 @@ class Display extends QuestionDisplay
                     $formvalidator->addElement('html', '<td style="border-top: 0px;" rowspan="' . $maximum . '"></td>');
                 }
                 
-                $match = $matches[$i];
+                $match = current($matches);
+                next($matches);
                 
                 if ($match)
                 {
