@@ -566,7 +566,7 @@ abstract class HtmlTable extends \HTML_Table
             $this->getOrderColumn(),
             $this->getOrderDirection());
 
-        if ($this->allowPageNavigation && $this->getPager()->getNumberOfPages() > 1)
+        if ($this->allowPageNavigation)
         {
             return $this->getPagerRenderer()->renderPaginationWithPageLimit(
                 $queryParameters,

@@ -118,47 +118,52 @@ class PagerRenderer
         $html[] = '<nav class="pull-right">';
         $html[] = '<ul class="pagination">';
 
-        $isDisabled = ($this->getPager()->getCurrentPageNumber() == 1);
-
-        $html[] = $this->renderDirectionPaginationItem(
-            $queryParameters,
-            $pageNumberParameterName,
-            $isDisabled,
-            '&laquo;',
-            Translation :: get('First'),
-            1);
-
-        $html[] = $this->renderDirectionPaginationItem(
-            $queryParameters,
-            $pageNumberParameterName,
-            $isDisabled,
-            '&lsaquo;',
-            Translation :: get('Previous'),
-            $this->getPager()->getCurrentPageNumber() - 1);
-
-        for ($i = $start; $i <= $end; $i ++)
+        if ($this->getPager()->getNumberOfPages() > 1)
         {
-            $html[] = '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="active"' : '') . '><a href="' .
-                 $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '">' . $i . '</a></li>';
+
+            $isDisabled = ($this->getPager()->getCurrentPageNumber() == 1);
+
+            $html[] = $this->renderDirectionPaginationItem(
+                $queryParameters,
+                $pageNumberParameterName,
+                $isDisabled,
+                '&laquo;',
+                Translation :: get('First'),
+                1);
+
+            $html[] = $this->renderDirectionPaginationItem(
+                $queryParameters,
+                $pageNumberParameterName,
+                $isDisabled,
+                '&lsaquo;',
+                Translation :: get('Previous'),
+                $this->getPager()->getCurrentPageNumber() - 1);
+
+            for ($i = $start; $i <= $end; $i ++)
+            {
+                $html[] = '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="active"' : '') .
+                     '><a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '">' . $i .
+                     '</a></li>';
+            }
+
+            $isDisabled = ($this->getPager()->getCurrentPageNumber() == $this->getPager()->getNumberOfPages());
+
+            $html[] = $this->renderDirectionPaginationItem(
+                $queryParameters,
+                $pageNumberParameterName,
+                $isDisabled,
+                '&rsaquo;',
+                Translation :: get('Next'),
+                $this->getPager()->getCurrentPageNumber() + 1);
+
+            $html[] = $this->renderDirectionPaginationItem(
+                $queryParameters,
+                $pageNumberParameterName,
+                $isDisabled,
+                '&raquo;',
+                Translation :: get('Last'),
+                $this->getPager()->getNumberOfPages());
         }
-
-        $isDisabled = ($this->getPager()->getCurrentPageNumber() == $this->getPager()->getNumberOfPages());
-
-        $html[] = $this->renderDirectionPaginationItem(
-            $queryParameters,
-            $pageNumberParameterName,
-            $isDisabled,
-            '&rsaquo;',
-            Translation :: get('Next'),
-            $this->getPager()->getCurrentPageNumber() + 1);
-
-        $html[] = $this->renderDirectionPaginationItem(
-            $queryParameters,
-            $pageNumberParameterName,
-            $isDisabled,
-            '&raquo;',
-            Translation :: get('Last'),
-            $this->getPager()->getNumberOfPages());
 
         if ($includeRange)
         {
