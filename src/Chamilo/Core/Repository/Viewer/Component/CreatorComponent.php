@@ -106,9 +106,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
         BreadcrumbTrail :: get_instance()->add(
             new Breadcrumb(
-                $this->get_url(
-                    array(
-                        \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS)),
+                $this->get_url(),
                 Translation :: get(
                     'CreateContentType',
                     array(
