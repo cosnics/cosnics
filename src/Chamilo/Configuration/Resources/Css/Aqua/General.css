@@ -37,64 +37,6 @@ body {
 	color: #f00;
 }
 
-/* Message boxes */
-/*.normal-message, .error-message, .warning-message, .confirm-message,
-	.fatal-message {
-	z-index: 9999;
-	position: relative;
-	margin: 10px auto;
-	margin-left: -287px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
-	border-width: 1px;
-	border-style: dotted;
-	background-repeat: no-repeat;
-	background-position: 10px 50%;
-	padding: 10px 36px 10px 36px;
-	text-align: justify;
-}
-
-.normal-message {
-	background-image: url('../../Images/Aqua/Status/NormalMini.png');
-	background-color: #E5EDF9;
-	border: 1px solid #b9d0ef;
-	color: #272761;
-}
-
-.error-message, .fatal-message {
-	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
-	background-color: #FFD1D1;
-	border: 1px solid #ff9b9d;
-	color: #b40404;
-}
-
-.fatal-message {
-	position: fixed;
-	top: 100px;
-}
-
-.warning-message {
-	background-image: url('../../Images/Aqua/Status/WarningMini.png');
-	border: 1px solid #ffd89b;
-	background-color: #fff8aa;
-	color: #996900;
-}
-
-.confirm-message {
-	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
-	border: 1px solid #339900;
-	background-color: #ddffaa;
-	color: #006600;
-}
-
-.normal-message h2, .warning-message h2, .error-message h2,
-	.fatal-message h2, .confirm-message h2 {
-	padding: 0px 0px 5px 0px;
-	margin: 0px;
-	font-size: 120%;
-	font-weight: bold;
-}*/
 .notification {
 	float: right;
 	position: relative;
@@ -143,23 +85,18 @@ body {
 	margin-bottom: 10px;
 }
 
-.warning-banner, .danger-banner {
+.warning-banner {
 	border-bottom: 1px solid #ffd89b;
 	padding: 10px;
 	z-index: 9999;
 	text-align: center;
-	margin-bottom: 15px;
 }
 
-.danger-banner {
-	border-bottom: 1px solid #FF9B9D;
-}
-
-.warning-banner .actions, .danger-banner .actions {
+.warning-banner .actions {
 	float: right;
 }
 
-.warning-banner .action-bar, .danger-banner .action-bar {
+.warning-banner .action-bar {
 	float: left;
 }
 

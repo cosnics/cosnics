@@ -108,7 +108,6 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         $html[] = parent :: render_header();
         $html[] = $this->getButtonToolbarRenderer()->render();
-        $html[] = '<div id="action_bar_browser">';
         $html[] = $this->html;
 
         if ($this->feedback_allowed)
@@ -129,7 +128,6 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
             $html[] = '</div>';
         }
 
-        $html[] = '</div>';
         $html[] = parent :: render_footer();
 
         return implode(PHP_EOL, $html);

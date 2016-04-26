@@ -32,8 +32,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 class ZipAndDownloadComponent extends Manager
 {
 
-    private $action_bar;
-
     private $zip_name;
 
     public function run()
@@ -267,6 +265,7 @@ class ZipAndDownloadComponent extends Manager
     }
 
     /**
+     *
      * @param BreadcrumbTrail $breadcrumbtrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
