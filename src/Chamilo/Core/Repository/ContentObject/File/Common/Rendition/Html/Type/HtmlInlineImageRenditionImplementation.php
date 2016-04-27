@@ -75,7 +75,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
                         title="' . $parameters[self :: PARAM_ALT] . '"
                         style="' . $styles_string . '"><br /><br />';
 
-            $html[] = $this->renderActions();
+//            $html[] = $this->renderActions();
         }
 
         return implode(PHP_EOL, $html);
