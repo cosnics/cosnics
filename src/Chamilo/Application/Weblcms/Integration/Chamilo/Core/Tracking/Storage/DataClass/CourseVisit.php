@@ -21,8 +21,8 @@ class CourseVisit extends Tracker
     const PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
     const PROPERTY_TOTAL_NUMBER_OF_ACCESS = 'total_number_of_access';
     const PROPERTY_TOTAL_TIME = 'total_time';
-    const EVENT_VISIT = 'visit_course';
-    const EVENT_LEAVE = 'leave_course';
+    const TYPE_VISIT = 'visit_course';
+    const TYPE_LEAVE = 'leave_course';
 
     /**
      * **************************************************************************************************************
@@ -41,11 +41,11 @@ class CourseVisit extends Tracker
     {
         $course_visit = $this->validate_parameters($parameters);
 
-        switch ($this->get_event()->get_name())
+        switch ($this->get_event()->getType())
         {
-            case self :: EVENT_VISIT :
+            case self :: TYPE_VISIT :
                 return $this->track_visit($course_visit);
-            case self :: EVENT_LEAVE :
+            case self :: TYPE_LEAVE :
                 return $this->track_leave($course_visit);
         }
 
