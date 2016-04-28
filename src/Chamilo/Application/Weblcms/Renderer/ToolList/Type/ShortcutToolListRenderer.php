@@ -59,6 +59,13 @@ class ShortcutToolListRenderer extends ToolListRenderer
 
         $toolsButton->setDropdownClasses('dropdown-menu-right');
 
+        usort($tools, function($toolA, $toolB) use($translator) {
+            $translationA = $translator->getTranslation('TypeName', null, $toolA->getContext());
+            $translationB = $translator->getTranslation('TypeName', null, $toolB->getContext());
+
+            return strcmp($translationA, $translationB);
+        });
+
         foreach ($tools as $tool)
         {
             if ($tool->get_section_type() == CourseSection :: TYPE_ADMIN && ! $this->is_course_admin)
