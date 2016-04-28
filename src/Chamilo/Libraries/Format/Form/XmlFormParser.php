@@ -69,6 +69,7 @@ class XmlFormParser
     const ELEMENT_TYPE_TEXT = 'text';
     const ELEMENT_TYPE_SELECT = 'select';
     const ELEMENT_TYPE_CHECKBOX = 'checkbox';
+    const ELEMENT_TYPE_TOGGLE = 'checkbox';
     const ELEMENT_TYPE_RADIO = 'radio';
     const ELEMENT_TYPE_STATIC = 'static';
     const ELEMENT_TYPE_HTML_EDITOR = 'html_editor';

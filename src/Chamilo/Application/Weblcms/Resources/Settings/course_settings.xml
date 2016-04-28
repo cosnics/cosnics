@@ -8,7 +8,7 @@
 			<setting name="titular" field="select" default="2">
 				<options type="dynamic" source="get_titulars" />
 			</setting>
-			<setting name="visibility" field="checkbox" default="1" />
+			<setting name="visibility" field="toggle" default="1" />
 			<setting name="language" field="select" default="en">
 				<options type="dynamic" source="get_languages" />
 			</setting>
@@ -56,12 +56,12 @@
 					<option name="course_home" value="3" />
 				</options>
 			</setting>
-			<setting name="tool_shortcut_menu" field="checkbox" default="1" />
-			<setting name="allow_feedback" field="checkbox" default="1" />
-			<setting name="allow_introduction_text" field="checkbox" default="1" />
-			<setting name="show_course_code" field="checkbox" default="1" />
-			<setting name="show_course_titular" field="checkbox" default="1" />
-			<setting name="show_course_language" field="checkbox" default="1" />
+			<setting name="tool_shortcut_menu" field="toggle" default="1" />
+			<setting name="allow_feedback" field="toggle" default="1" />
+			<setting name="allow_introduction_text" field="toggle" default="1" />
+			<setting name="show_course_code" field="toggle" default="1" />
+			<setting name="show_course_titular" field="toggle" default="1" />
+			<setting name="show_course_language" field="toggle" default="1" />
 		</category>
 	</settings>
 </package>
