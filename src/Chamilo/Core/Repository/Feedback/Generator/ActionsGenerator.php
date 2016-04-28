@@ -4,9 +4,9 @@ namespace Chamilo\Core\Repository\Feedback\Generator;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
-use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
-use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\FontAwesomeGlyph;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -37,7 +37,7 @@ class ActionsGenerator extends NavigationGenerator
                 {
                     $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_UNSUBSCRIBER;
 
-                    $actions[] = new SubButton(
+                    $actions[] = new Button(
                         Translation :: get('StopReceivingNotifications'),
                         new BootstrapGlyph('remove'),
                         $application->get_url($baseParameters));
@@ -47,7 +47,7 @@ class ActionsGenerator extends NavigationGenerator
                     $baseParameters = $this->getBaseParameters();
                     $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBER;
 
-                    $actions[] = new SubButton(
+                    $actions[] = new Button(
                         Translation :: get('ReceiveNotifications'),
                         new FontAwesomeGlyph('envelope'),
                         $application->get_url($baseParameters));
