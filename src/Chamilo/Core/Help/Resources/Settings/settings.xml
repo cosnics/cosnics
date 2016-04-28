@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Help">
+	<settings>
+		<category name="general">
+			<setting name="hide_empty_pages" field="toggle" default="1">
+				<options type="static">
+					<option name="hide_empty_pages" value="1" />
+				</options>
+			</setting>
+			<setting name="help_url" field="text" default="http://handbook.chamilo.org/" />
+			<setting name="autocomplete_missing_pages" field="toggle" default="0">
+				<options type="static">
+					<option name="autocomplete_missing_pages" value="1" />
+				</options>
+			</setting>
+			<setting name="autocomplete_all_languages" field="toggle" default="0">
+				<options type="static">
+					<option name="autocomplete_all_languages" value="1" />
+				</options>
+			</setting>
+		</category>
+	</settings>
+</package>
