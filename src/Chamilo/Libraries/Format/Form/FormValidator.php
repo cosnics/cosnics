@@ -873,22 +873,22 @@ EOT;
 					</script>\n");
     }
 
-    public function add_checkbox_javascript()
-    {
-        $html = array();
-
-        $html[] = '<script type="text/javascript">';
-        $html[] = '$(document).ready(function() {';
-        $html[] = '$(\':checkbox:not(.no-toggle-style)\').bootstrapToggle({';
-        $html[] = 'on: \'' . Translation :: get('ConfirmOn', array(), Utilities :: COMMON_LIBRARIES) . '\',';
-        $html[] = 'off: \'' . Translation :: get('ConfirmOff', array(), Utilities :: COMMON_LIBRARIES) . '\',';
-        $html[] = 'size: \'small\'';
-        $html[] = '});';
-        $html[] = '});';
-        $html[] = '</script>';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
-    }
+//    public function add_checkbox_javascript()
+//    {
+//        $html = array();
+//
+//        $html[] = '<script type="text/javascript">';
+//        $html[] = '$(document).ready(function() {';
+//        $html[] = '$(\':checkbox:not(.no-toggle-style)\').bootstrapToggle({';
+//        $html[] = 'on: \'' . Translation :: get('ConfirmOn', array(), Utilities :: COMMON_LIBRARIES) . '\',';
+//        $html[] = 'off: \'' . Translation :: get('ConfirmOff', array(), Utilities :: COMMON_LIBRARIES) . '\',';
+//        $html[] = 'size: \'small\'';
+//        $html[] = '});';
+//        $html[] = '});';
+//        $html[] = '</script>';
+//
+//        $this->addElement('html', implode(PHP_EOL, $html));
+//    }
 
     /**
      * Add a button to the form to add resources.

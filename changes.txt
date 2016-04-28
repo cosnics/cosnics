@@ -6,3 +6,5 @@
 * [Home] Bugfix in home javascript when moving to and from an empty column
 * [LearningPath] Selected path expanded in tree menu
 * [CSS] Fixed toggle options in the course settings form
+* [Weblcms] Removed option "Menu Layout" from course settings since it is no longer used and replaced by much more intuitive "Navigate To"
+* [Weblcms] Translations of course setting "Tool Layout"
