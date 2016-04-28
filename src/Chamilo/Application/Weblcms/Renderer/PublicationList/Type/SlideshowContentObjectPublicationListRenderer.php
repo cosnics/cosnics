@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Format\Slideshow\SlideshowRenderer;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -27,23 +30,36 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
 
         $publications = $this->get_publications($slideshowIndex, 1);
         $publication = $publications[0];
-        $publicationCount = $this->get_publication_count();
-        $contentObject = $this->get_content_object_from_publication($publication);
 
-        $contentObjectRenditionImplementation = ContentObjectRenditionImplementation :: factory(
-            $contentObject,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_PREVIEW,
-            $this);
+        $contentObject = $publicationActions = null;
+        if ($publication)
+        {
+            $contentObject = $this->get_content_object_from_publication($publication);
+            $publicationActions = $this->get_publication_actions($publication, false)->get_items();
+        }
+
+        $publicationCount = $this->get_publication_count();
+
+        $contentObjectRenditionImplementation = null;
+        if($contentObject)
+        {
+            $contentObjectRenditionImplementation = ContentObjectRenditionImplementation:: factory(
+                $contentObject,
+                ContentObjectRendition :: FORMAT_HTML,
+                ContentObjectRendition :: VIEW_PREVIEW,
+                $this
+            );
+        }
 
         $slideshowRender = new SlideshowRenderer(
             $contentObject,
             $publicationCount,
             $contentObjectRenditionImplementation,
-            $this->get_publication_actions($publication, false)->get_items(),
+            $publicationActions,
             $toolbrowser->get_parameters(),
             $slideshowIndex,
-            $slideshowAutoPlay);
+            $slideshowAutoPlay
+        );
 
         return $slideshowRender->render();
     }

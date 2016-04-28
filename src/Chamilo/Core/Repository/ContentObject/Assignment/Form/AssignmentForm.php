@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Form;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
@@ -301,20 +303,34 @@ class AssignmentForm extends ContentObjectForm
 
     public function get_allowed_content_object_types()
     {
-        $types = \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types(true);
+        $configuration = Configuration::get_instance();
+
+        $types = array();
+
+        $integrationPackages = $configuration->getIntegrationRegistrations('Chamilo\Core\Repository\ContentObject\Assignment');
+        foreach($integrationPackages as $basePackage => $integrationPackageData)
+        {
+            if($integrationPackageData['status'] != Registration::STATUS_ACTIVE)
+            {
+                continue;
+            }
+
+            $types[] = $basePackage;
+        }
 
         $return_types = array();
         foreach ($types as $index => $type)
         {
-            $packageClassName = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3);
+            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($type);
+            $typeClass = $type . '\Storage\DataClass\\' . $typeName;
 
-            if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($packageClassName))
+            if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($type))
             {
                 unset($types[$index]);
                 continue;
             }
 
-            $return_types[$type] = Translation :: get('TypeName', array(), $packageClassName);
+            $return_types[$typeClass] = Translation :: get('TypeName', array(), $type);
         }
 
         asort($return_types);

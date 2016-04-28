@@ -61,11 +61,11 @@ class CourseSettingsXmlFormParserResult extends XmlFormParserResult
             $element_label = $element->getLabel();
             
             $form->addElement(
-                XmlFormParser :: ELEMENT_TYPE_CHECKBOX, 
+                XmlFormParser :: ELEMENT_TYPE_CHECKBOX,
                 CourseSettingsController :: SETTING_PARAM_LOCKED_PREFIX . $element_name, 
                 Translation :: get('SettingLocked', array('SETTING' => $element_label)), 
                 '', 
-                array('class' => 'no-toggle-style'),
+                array(),
                 '1', 
                 '0');
         }

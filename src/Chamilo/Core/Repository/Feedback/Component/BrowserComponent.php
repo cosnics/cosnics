@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Feedback\Component;
 
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
+use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
@@ -10,6 +11,9 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -53,36 +57,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $success = $feedback->create();
 
-            if ($this->get_parent() instanceof FeedbackNotificationSupport)
-            {
-                if ($success && $this->get_parent()->is_allowed_to_view_feedback())
-                {
-                    $notification_requested = isset($values[FeedbackForm :: PROPERTY_NOTIFICATIONS]) ? true : false;
-                    $notification = $this->get_parent()->retrieve_notification();
-
-                    if ($notification instanceof Notification && ! $notification_requested)
-                    {
-                        $success = $notification->delete();
-                    }
-                    elseif ($notification instanceof Notification && $notification_requested)
-                    {
-                        $notification->set_modification_date(time());
-
-                        $success = $notification->update();
-                    }
-                    elseif (! $notification instanceof Notification && $notification_requested)
-                    {
-                        $notification = $this->get_parent()->get_notification();
-
-                        $notification->set_user_id($this->get_user_id());
-                        $notification->set_creation_date(time());
-                        $notification->set_modification_date(time());
-
-                        $success = $notification->create();
-                    }
-                }
-            }
-
             $this->redirect(
                 Translation :: get(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated',
@@ -95,12 +69,18 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $html = array();
 
+            $buttonToolbar = $this->getFeedbackButtonToolbar();
+            $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+
+
             $feedbacks = $this->get_parent()->retrieve_feedbacks(
                 $this->getPager()->getNumberOfItemsPerPage(),
                 $this->getPager()->getCurrentRangeOffset());
 
             if ($feedbacks->size() == 0 && ! $this->get_parent()->is_allowed_to_create_feedback())
             {
+                $html[] = $buttonToolbarRenderer->render();
+                $html[] = '<div class="clearfix"></div>';
                 $html[] = '<div class="alert alert-info">';
                 $html[] = Translation :: get('NoFeedbackYet');
                 $html[] = '</div>';
@@ -109,7 +89,14 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($feedbacks->size() > 0)
             {
                 $html[] = '<h3>';
+
+                if (!$this->get_parent()->is_allowed_to_create_feedback())
+                {
+                    $html[] = $buttonToolbarRenderer->render();
+                }
+
                 $html[] = Translation :: get('Feedback');
+                $html[] = '<div class="clearfix"></div>';
                 $html[] = '</h3>';
 
                 $html[] = '<div class="panel panel-default panel-feedback">';
@@ -166,7 +153,9 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($this->get_parent()->is_allowed_to_create_feedback())
             {
                 $html[] = '<h3>';
+                $html[] = $buttonToolbarRenderer->render();
                 $html[] = Translation :: get('AddFeedback');
+                $html[] = '<div class="clearfix"></div>';
                 $html[] = '</h3>';
 
                 $html[] = $form->toHtml();
@@ -174,6 +163,48 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             return implode(PHP_EOL, $html);
         }
+    }
+
+    protected function getFeedbackButtonToolbar()
+    {
+        $buttonToolbar = new ButtonToolBar(null, array(), array('pull-right'));
+
+        if(!$this->get_application() instanceof FeedbackNotificationSupport)
+        {
+            return $buttonToolbar;
+        }
+
+        $isAllowedToViewFeedback = $this->get_parent()->is_allowed_to_view_feedback();
+        $isAllowedToCreateFeedback = $this->get_parent()->is_allowed_to_create_feedback();
+
+        if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
+        {
+            $baseParameters = array();
+
+            if ($isAllowedToViewFeedback)
+            {
+                $feedbackCount = $this->get_parent()->count_feedbacks();
+                $portfolioNotification = $this->get_parent()->retrieve_notification();
+                $hasNotification = $portfolioNotification instanceof Notification;
+            }
+            else
+            {
+                $feedbackCount = 0;
+                $hasNotification = false;
+            }
+
+            $actionsGenerator = new ActionsGenerator(
+                $this->get_application(),
+                $baseParameters,
+                $isAllowedToViewFeedback,
+                $feedbackCount,
+                $hasNotification);
+
+            $buttonToolbar->addItems($actionsGenerator->run());
+        }
+
+        return $buttonToolbar;
+
     }
 
     /**
@@ -188,12 +219,11 @@ class BrowserComponent extends Manager implements DelegateComponent
                 Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
                 Manager :: PARAM_FEEDBACK_ID => $feedback_publication->get_id()));
 
+        $bootstrapGlyph = new BootstrapGlyph('remove');
         $title = Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES);
-
-        $delete_link = '<a href="' . $delete_url . '" onclick="return confirm(\'' .
-             addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('Action/Delete') . '"  alt="' . $title . '" title="' . $title .
-             '"/></a>';
+        $delete_link = '<a title="' . $title . '" href="' . $delete_url . '" onclick="return confirm(\'' .
+            addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');">' .
+            $bootstrapGlyph->render() . '</a>';
 
         return $delete_link;
     }
@@ -210,10 +240,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                 Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
                 Manager :: PARAM_FEEDBACK_ID => $feedback_publication->get_id()));
 
+        $bootstrapGlyph = new BootstrapGlyph('pencil');
         $title = Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES);
-        $update_link = '<a href="' . $update_url . '"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('Action/Edit') . '"  alt="' . $title . '" title="' . $title .
-             '"/></a>';
+        $update_link = '<a title="' . $title . '" href="' . $update_url . '">' . $bootstrapGlyph->render() . '</a>';
 
         return $update_link;
     }
