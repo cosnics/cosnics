@@ -117,6 +117,17 @@ class ButtonToolBar
     }
 
     /**
+     * @param AbstractButtonToolBarItem[]  $buttonToolbarItems
+     */
+    public function addItems($buttonToolbarItems = array())
+    {
+        foreach($buttonToolbarItems as $buttonToolbarItem)
+        {
+            $this->addItem($buttonToolbarItem);
+        }
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem $buttonToolBarItem
      */
