@@ -38,17 +38,6 @@
 					<option name="three_columns_group_inactive" value="4" />
 				</options>
 			</setting>
-			<setting name="menu_layout" field="select" default="1">
-				<options type="static">
-					<option name="confirm_off" value="1" />
-					<option name="menu_left_with_icons" value="2" />
-					<option name="menu_left_with_text" value="3" />
-					<option name="menu_left_both" value="4" />
-					<option name="menu_right_with_icons" value="5" />
-					<option name="menu_right_with_text" value="6" />
-					<option name="menu_right_both" value="7" />
-				</options>
-			</setting>
 			<setting name="breadcrumb_layout" field="select" default="1">
 				<options type="static">
 					<option name="title" value="1" />

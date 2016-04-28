@@ -69,7 +69,7 @@ class XmlFormParser
     const ELEMENT_TYPE_TEXT = 'text';
     const ELEMENT_TYPE_SELECT = 'select';
     const ELEMENT_TYPE_CHECKBOX = 'checkbox';
-    const ELEMENT_TYPE_TOGGLE = 'checkbox';
+    const ELEMENT_TYPE_TOGGLE = 'toggle';
     const ELEMENT_TYPE_RADIO = 'radio';
     const ELEMENT_TYPE_STATIC = 'static';
     const ELEMENT_TYPE_HTML_EDITOR = 'html_editor';
@@ -204,6 +204,9 @@ class XmlFormParser
             case self :: ELEMENT_TYPE_CHECKBOX :
                 $this->create_checkbox_element($element_node, $element_name, $element_title);
                 break;
+            case self :: ELEMENT_TYPE_TOGGLE :
+                $this->create_toggle_element($element_node, $element_name, $element_title);
+                break;
             case self :: ELEMENT_TYPE_TEXT :
                 $this->create_text_element($element_node, $element_name, $element_title);
                 break;
@@ -292,6 +295,18 @@ class XmlFormParser
     protected function create_checkbox_element($element_node, $element_name, $element_title)
     {
         $this->create_and_add_element(self :: ELEMENT_TYPE_CHECKBOX, $element_name, $element_title, '', null, '1', '0');
+    }
+
+    /**
+     * Creates a toggle element on the form
+     *
+     * @param \DOMElement $element_node
+     * @param string $element_name
+     * @param string $element_title
+     */
+    protected function create_toggle_element($element_node, $element_name, $element_title)
+    {
+        $this->create_and_add_element(self :: ELEMENT_TYPE_TOGGLE, $element_name, $element_title, '', null, '1', '0');
     }
 
     /**

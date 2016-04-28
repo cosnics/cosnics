@@ -483,11 +483,11 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             {
                 $this->addElement('html', '<td class="tools_column_toggle">');
                 $this->addElement(
-                    'toggle',
+                    'checkbox',
                     $locked_prefix . $active_element_name,
                     '',
                     '',
-                    array('class' => 'no-toggle-style'),
+                    array(),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
@@ -514,11 +514,11 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             {
                 $this->addElement('html', '<td class="tools_column_toggle">');
                 $this->addElement(
-                    'toggle',
+                    'checkbox',
                     $locked_prefix . $visible_element_name,
                     '',
                     '',
-                    array('class' => 'no-toggle-style'),
+                    array(),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
@@ -641,11 +641,9 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         if ($this instanceof FormLockedSettingsSupport)
         {
             $this->addElement(
-                'toggle',
+                'checkbox',
                 $locked_name,
-                Translation :: get('Locked'),
-                '',
-                array('class' => 'no-toggle-style'));
+                Translation :: get('Locked'));
 
             if (CourseManagementRights :: get_instance()->is_right_locked_for_base_object($this->base_object, $right_id))
             {

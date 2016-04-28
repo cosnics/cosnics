@@ -34,7 +34,6 @@ class CourseSettingsConnector
     const OPEN_COURSE_ACCESS_TYPE = 'open_course_access_type';
     const THEME = 'theme';
     const TOOL_LAYOUT = 'tool_layout';
-    const MENU_LAYOUT = 'menu_layout';
     const BREADCRUMB_LAYOUT = 'breadcrumb_layout';
     const TOOL_SHORTCUT_MENU = 'tool_shortcut_menu';
     const ALLOW_FEEDBACK = 'allow_feedback';
@@ -57,13 +56,6 @@ class CourseSettingsConnector
     const TOOL_LAYOUT_THREE_COLUMNS = 2;
     const TOOL_LAYOUT_TWO_COLUMNS_GROUP_INACTIVE = 3;
     const TOOL_LAYOUT_THREE_COLUMNS_GROUP_INACTIVE = 4;
-    const MENU_LAYOUT_OFF = 1;
-    const MENU_LAYOUT_LEFT_WITH_ICONS = 2;
-    const MENU_LAYOUT_LEFT_WITH_TEXT = 3;
-    const MENU_LAYOUT_LEFT_BOTH = 4;
-    const MENU_LAYOUT_RIGHT_WITH_ICONS = 5;
-    const MENU_LAYOUT_RIGHT_WITH_TEXT = 6;
-    const MENU_LAYOUT_RIGHT_BOTH = 7;
     const BREADCRUMB_LAYOUT_TITLE = 1;
     const BREADCRUMB_LAYOUT_VISUAL_CODE = 2;
     const BREADCRUMB_LAYOUT_COURSE_HOME = 3;
