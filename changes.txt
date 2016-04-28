@@ -1,0 +1,8 @@
+[29/04/2016]
+
+* [Weblcms] Navigate to menu: alphabetical order
+* [Portfolio] Changes to the feedback subscribe button
+* [Portfolio] Feedback icons changed
+* [Home] Bugfix in home javascript when moving to and from an empty column
+* [LearningPath] Selected path expanded in tree menu
+* [CSS] Fixed toggle options in the course settings form
