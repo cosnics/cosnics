@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -213,12 +214,11 @@ class BrowserComponent extends Manager implements DelegateComponent
                 Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
                 Manager :: PARAM_FEEDBACK_ID => $feedback_publication->get_id()));
 
+        $bootstrapGlyph = new BootstrapGlyph('remove');
         $title = Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES);
-
-        $delete_link = '<a href="' . $delete_url . '" onclick="return confirm(\'' .
-             addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('Action/Delete') . '"  alt="' . $title . '" title="' . $title .
-             '"/></a>';
+        $delete_link = '<a title="' . $title . '" href="' . $delete_url . '" onclick="return confirm(\'' .
+            addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');">' .
+            $bootstrapGlyph->render() . '</a>';
 
         return $delete_link;
     }
@@ -235,10 +235,9 @@ class BrowserComponent extends Manager implements DelegateComponent
                 Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
                 Manager :: PARAM_FEEDBACK_ID => $feedback_publication->get_id()));
 
+        $bootstrapGlyph = new BootstrapGlyph('pencil');
         $title = Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES);
-        $update_link = '<a href="' . $update_url . '"><img src="' .
-             Theme :: getInstance()->getCommonImagePath('Action/Edit') . '"  alt="' . $title . '" title="' . $title .
-             '"/></a>';
+        $update_link = '<a title="' . $title . '" href="' . $update_url . '">' . $bootstrapGlyph->render() . '</a>';
 
         return $update_link;
     }
