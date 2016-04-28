@@ -169,6 +169,11 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $buttonToolbar = new ButtonToolBar(null, array(), array('pull-right'));
 
+        if(!$this->get_application() instanceof FeedbackNotificationSupport)
+        {
+            return $buttonToolbar;
+        }
+
         $isAllowedToViewFeedback = $this->get_parent()->is_allowed_to_view_feedback();
         $isAllowedToCreateFeedback = $this->get_parent()->is_allowed_to_create_feedback();
 
