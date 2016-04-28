@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Event;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 
 /**
@@ -21,5 +22,10 @@ class LeaveCourse extends Event
     {
         return array(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit :: class_name());
+    }
+
+    public function getType()
+    {
+        return CourseVisit::TYPE_LEAVE;
     }
 }

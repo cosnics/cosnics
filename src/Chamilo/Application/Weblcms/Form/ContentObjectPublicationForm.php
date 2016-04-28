@@ -377,6 +377,39 @@ class ContentObjectPublicationForm extends BasePublicationForm
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+
+        $this->addLeaveWarning();
+    }
+
+    /**
+     * Adds a warning when you leave the screen and the submit button is not clicked
+     */
+    protected function addLeaveWarning()
+    {
+        $html = array();
+
+        $html[] = '<script type="text/javascript">';
+        $html[] = '$(document).ready( function() {';
+        $html[] = 'var leaveHandler = function() { return "' . $this->getTranslation('LeavePublicationPage') . '"; }';
+        $html[] = '$(window).on("beforeunload", leaveHandler);';
+        $html[] = '$(\'[type="submit"]\').on("click", function() { $(window).unbind("beforeunload", leaveHandler) });';
+        $html[] = '})';
+        $html[] = '</script>';
+
+        $this->addElement('html', implode(PHP_EOL, $html));
+    }
+
+    /**
+     * Helper Function
+     *
+     * @param string $variable
+     * @param array $parameters
+     *
+     * @return string
+     */
+    protected function getTranslation($variable, $parameters = array())
+    {
+        return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
     }
 
     /**
