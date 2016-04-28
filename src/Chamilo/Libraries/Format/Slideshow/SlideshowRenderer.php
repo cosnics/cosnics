@@ -238,7 +238,7 @@ class SlideshowRenderer
 
         if ($contentObjectCount == 0)
         {
-            $html[] = Display :: normal_message(Translation :: get('NoContentAvailable'), true);
+            $html[] = Display :: normal_message(Translation :: get('SlideshowNoContentAvailable'), true);
             return implode(PHP_EOL, $html);
         }
 
