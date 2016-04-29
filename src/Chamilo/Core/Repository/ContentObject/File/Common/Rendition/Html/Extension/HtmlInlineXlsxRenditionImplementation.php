@@ -20,4 +20,22 @@ class HtmlInlineXlsxRenditionImplementation extends HtmlInlineOfficeRenditionImp
     {
         return 5 * 1024 * 1024;
     }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getViewerFrameClasses()
+    {
+        return array('office-viewer-frame');
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function allowsFullScreen()
+    {
+        return true;
+    }
 }

@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -17,7 +18,56 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditionImplementation
 {
-    const VIEWER_BASE_URL = 'https://view.officeapps.live.com/op/view.aspx?src=';
+    // View type
+    const VIEW_TYPE_FULL = 'full';
+    const VIEW_TYPE_EMBED = 'embed';
+
+    // Viewer URL
+    const VIEWER_URL_FULL = 'https://view.officeapps.live.com/op/view.aspx?src=';
+    const VIEWER_URL_EMBED = 'https://view.officeapps.live.com/op/embed.aspx?src=';
+
+    /**
+     *
+     * @return string
+     */
+    public function getViewerType()
+    {
+        $viewerType = Configuration :: get_instance()->get_setting(array(File :: package(), 'office_viewer_type'));
+
+        if (is_null($viewerType))
+        {
+            return self :: VIEW_TYPE_EMBED;
+            return self :: VIEW_TYPE_FULL;
+        }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getViewerBaseUrl()
+    {
+        switch ($this->getViewerType())
+        {
+            case self :: VIEW_TYPE_FULL :
+                return self :: VIEW_TYPE_FULL;
+                break;
+            case self :: VIEW_TYPE_EMBED :
+                return self :: VIEWER_URL_EMBED;
+                break;
+        }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getIFrameSource()
+    {   return $this->getViewerBaseUrl() .
+             urlencode(
+                'http://desiderius.ehb.be/index.php?application=Chamilo%5CCore%5CRepository&go=DocumentDownloader&object=996311&security_code=6a50835b34be4840c32ee870d4cc5b2eee383ddb');
+        return $this->getViewerBaseUrl() . urlencode($this->getDownloadUrl());
+    }
 
     /**
      *
@@ -29,8 +79,6 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
         if ($this->canBeDisplayed())
         {
-            $iframeSource = self :: VIEWER_BASE_URL . urlencode($this->getDownloadUrl());
-
             $html[] = '<div class="office-viewer-container">';
 
             $html[] = '<div class="office-viewer-content">';
@@ -46,9 +94,11 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
             $html[] = implode(' ', $alertText);
             $html[] = '</div>';
-            $html[] = '<iframe class="office-viewer-frame" data-url="' . $iframeSource . '">';
 
+            $html[] = '<iframe class="' . implode(' ', $this->getViewerFrameClasses()) . '" data-url="' .
+                 $this->getIFrameSource() . '">';
             $html[] = '</iframe>';
+
             $html[] = '</div>';
 
             $html[] = $this->renderActions();
@@ -69,18 +119,51 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     *
+     * @return string[]
+     */
+    public function getViewerFrameClasses()
+    {
+        $classes = array('office-viewer-frame');
+
+        if ($this->getViewerType() == self :: VIEW_TYPE_EMBED)
+        {
+            $classes[] = 'office-viewer-frame-embed';
+        }
+
+        return $classes;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function allowsFullScreen()
+    {
+        return $this->getViewerType() != self :: VIEW_TYPE_EMBED;
+    }
+
+    /**
+     *
+     * @param string $classes
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar
+     */
     public function getButtonToolbar($classes = '')
     {
         $buttonToolBar = parent :: getButtonToolBar($classes);
 
-        $buttonToolBar->addItem(
-            new Button(
-                Translation :: get('ViewFullScreen'),
-                new BootstrapGlyph('fullscreen'),
-                '#',
-                Button :: DISPLAY_ICON_AND_LABEL,
-                false,
-                'btn-office-viewer-full-screen'));
+        if ($this->allowsFullScreen())
+        {
+            $buttonToolBar->addItem(
+                new Button(
+                    Translation :: get('ViewFullScreen'),
+                    new BootstrapGlyph('fullscreen'),
+                    '#',
+                    Button :: DISPLAY_ICON_AND_LABEL,
+                    false,
+                    'btn-office-viewer-full-screen'));
+        }
 
         return $buttonToolBar;
     }

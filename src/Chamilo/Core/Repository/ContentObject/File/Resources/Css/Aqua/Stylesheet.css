@@ -1,5 +1,7 @@
 ul.tree-menu li div a.file, ul.tree-menu li div a.type_file, ul.tree-menu li div a.type_file_default,
-	.treeview .list-group .list-group-item .icon.node-icon.type_file, .treeview .list-group .list-group-item .icon.node-icon.type_file_default {
+	.treeview .list-group .list-group-item .icon.node-icon.type_file,
+	.treeview .list-group .list-group-item .icon.node-icon.type_file_default
+	{
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
@@ -37,6 +39,13 @@ ul.tree-menu li div a.file, ul.tree-menu li div a.type_file, ul.tree-menu li div
 	border: 1px solid #dddddd;
 }
 
+.office-viewer-container .office-viewer-frame.office-viewer-frame-embed
+	{
+	max-width: 816px;
+	border-left: 0px solid #dddddd;
+	border-top: 0px solid #dddddd;
+}
+
 .office-viewer-container .office-viewer-frame.office-viewer-frame-full-screen
 	{
 	position: fixed;
@@ -52,8 +61,7 @@ ul.tree-menu li div a.file, ul.tree-menu li div a.type_file, ul.tree-menu li div
 
 @media ( max-width : 767px) {
 	.office-viewer-container .office-viewer-content,
-		.office-viewer-container .btn-office-viewer-full-screen
-		{
+		.office-viewer-container .btn-office-viewer-full-screen {
 		display: none;
 	}
 }
