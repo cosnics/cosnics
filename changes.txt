@@ -24,3 +24,4 @@
 * [Portfolio] Changed tabs to buttons
 * [LearningPath] Changed progressbar
 * [LearningPath] Changed previous and next buttons
+* [Menu] Added the homepage link to the navbar brand
