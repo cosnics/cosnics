@@ -47,7 +47,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
             $html[] = implode(' ', $alertText);
             $html[] = '</div>';
             $html[] = '<iframe class="office-viewer-frame" src="' . $iframeSource .
-                 '" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts">';
+                 '" sandbox="allow-top-navigation allow-popups allow-forms allow-pointer-lock allow-same-origin allow-scripts">';
 
             $html[] = '</iframe>';
             $html[] = '</div>';
