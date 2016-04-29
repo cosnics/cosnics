@@ -1,0 +1,10 @@
+.panel.panel-default .panel-feedback-profile {
+	max-width: 40px;
+	max-height: 40px;
+	margin-right: 15px;
+}
+
+.feedback-pagination ul.pagination {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
