@@ -3,6 +3,7 @@ namespace Chamilo\Core\Menu\Renderer\Menu\Type;
 
 use Chamilo\Core\Menu\Renderer\Menu\Renderer;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 
@@ -71,7 +72,8 @@ class Bar extends Renderer
             $brandSource = Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
         }
 
-        return '<a class="navbar-brand" href="#"><img alt="' . $siteName . '" src="' . $brandSource . '"></a>';
+        return '<a class="navbar-brand" href="' . Path::getInstance()->getBasePath(true) . '">' .
+            '<img alt="' . $siteName . '" src="' . $brandSource . '"></a>';
     }
 
     /**
