@@ -36,7 +36,6 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
         if (is_null($viewerType))
         {
-            return self :: VIEW_TYPE_EMBED;
             return self :: VIEW_TYPE_FULL;
         }
     }
@@ -63,9 +62,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      * @return string
      */
     public function getIFrameSource()
-    {   return $this->getViewerBaseUrl() .
-             urlencode(
-                'http://desiderius.ehb.be/index.php?application=Chamilo%5CCore%5CRepository&go=DocumentDownloader&object=996311&security_code=6a50835b34be4840c32ee870d4cc5b2eee383ddb');
+    {
         return $this->getViewerBaseUrl() . urlencode($this->getDownloadUrl());
     }
 
