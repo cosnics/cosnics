@@ -268,7 +268,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th class="checkbox"></th>';
+        $table_header[] = '<th></th>';
         $table_header[] = '<th>' . Translation :: get('Answer') . '</th>';
         $table_header[] = '<th>' . Translation :: get('Feedback') . '</th>';
         $table_header[] = '<th class="numeric">' . Translation :: get('Score') . '</th>';

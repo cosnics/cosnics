@@ -553,6 +553,45 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         return $this->buttonToolBar;
     }
 
+    protected function getFeedbackButtonToolbar()
+    {
+        $buttonToolbar = new ButtonToolBar();
+
+        $isAllowedToViewFeedback = $this->get_parent()->is_allowed_to_view_feedback($this->get_current_node());
+        $isAllowedToCreateFeedback = $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node());
+
+        if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
+        {
+            $baseParameters = array(
+                self :: PARAM_ACTION => self :: ACTION_FEEDBACK,
+                self :: PARAM_STEP => $this->get_current_step());
+
+            if ($isAllowedToViewFeedback)
+            {
+                $feedbackCount = $this->get_parent()->count_portfolio_feedbacks($this->get_current_node());
+                $portfolioNotification = $this->get_parent()->retrieve_portfolio_notification($this->get_current_node());
+                $hasNotification = $portfolioNotification instanceof Notification;
+            }
+            else
+            {
+                $feedbackCount = 0;
+                $hasNotification = false;
+            }
+
+            $actionsGenerator = new ActionsGenerator(
+                $this,
+                $baseParameters,
+                $isAllowedToViewFeedback,
+                $feedbackCount,
+                $hasNotification);
+
+            $buttonToolbar->addItems($actionsGenerator->run());
+        }
+
+        return $buttonToolbar;
+
+    }
+
     public function getExtraButton()
     {
         $extraButton = new DropdownButton(Translation :: get('Extra'), new BootstrapGlyph('cog'));
@@ -565,8 +604,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                     array(
                         self :: PARAM_ACTION => self :: ACTION_ACTIVITY,
                         self :: PARAM_STEP => $this->get_current_step()))));
-
-        $extraButton->addSubButtons($this->getFeedbackSubButtons());
 
         $areBookmarksAllowed = $this->get_parent() instanceof PortfolioBookmarkSupport &&
              ! $this->get_parent()->is_own_portfolio();
@@ -602,44 +639,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         }
 
         return $extraButton;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SubButton[]
-     */
-    public function getFeedbackSubButtons()
-    {
-        $isAllowedToViewFeedback = $this->get_parent()->is_allowed_to_view_feedback($this->get_current_node());
-        $isAllowedToCreateFeedback = $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node());
-
-        if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
-        {
-            $baseParameters = array(
-                self :: PARAM_ACTION => self :: ACTION_FEEDBACK,
-                self :: PARAM_STEP => $this->get_current_step());
-
-            if ($isAllowedToViewFeedback)
-            {
-                $feedbackCount = $this->get_parent()->count_portfolio_feedbacks($this->get_current_node());
-                $portfolioNotification = $this->get_parent()->retrieve_portfolio_notification($this->get_current_node());
-                $hasNotification = $portfolioNotification instanceof Notification;
-            }
-            else
-            {
-                $feedbackCount = 0;
-                $hasNotification = false;
-            }
-
-            $actionsGenerator = new ActionsGenerator(
-                $this,
-                $baseParameters,
-                $isAllowedToViewFeedback,
-                $feedbackCount,
-                $hasNotification);
-
-            return $actionsGenerator->run();
-        }
     }
 
     /**

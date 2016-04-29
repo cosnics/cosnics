@@ -204,6 +204,9 @@ $(function()
                     
                     tab.append(json.properties.html);
                     $(".portal-tab:visible .portal-action-column-delete").removeClass('hidden').addClass('show');
+
+                    makeBlocksSortable();
+                    makeColumnsResizable();
                 });
         
     }
@@ -534,6 +537,19 @@ $(function()
             type : "POST",
             url : ajaxUri,
             data : parameters
+        });
+
+        $('.portal-column').each(function() {
+
+            var count = $('.portal-block', $(this)).length;
+            var portalColumnEmpty = $('.portal-column-empty', $(this));
+
+            if(count == 0) {
+                portalColumnEmpty.removeClass('hidden').addClass('show');
+            }
+            else {
+                portalColumnEmpty.removeClass('show').addClass('hidden');
+            }
         });
     }
     

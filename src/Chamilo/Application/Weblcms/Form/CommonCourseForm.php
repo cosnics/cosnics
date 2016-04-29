@@ -118,7 +118,6 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
         $this->set_default_values();
-        $this->add_checkbox_javascript();
     }
 
     /**
@@ -465,7 +464,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             $this->addElement('html', '<td class="tools_column_toggle">');
             $active_element = $this->addElement(
-                'checkbox',
+                'toggle',
                 $active_element_name,
                 Translation :: get('Active'),
                 '',
@@ -488,7 +487,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                     $locked_prefix . $active_element_name,
                     '',
                     '',
-                    array('class' => 'no-toggle-style'),
+                    array(),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
@@ -496,7 +495,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             $this->addElement('html', '<td class="tools_column_toggle">');
             $visible_element = $this->addElement(
-                'checkbox',
+                'toggle',
                 $visible_element_name,
                 Translation :: get('Visible'),
                 '',
@@ -519,7 +518,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                     $locked_prefix . $visible_element_name,
                     '',
                     '',
-                    array('class' => 'no-toggle-style'),
+                    array(),
                     '1',
                     '0');
                 $this->addElement('html', '</div></td>');
@@ -644,9 +643,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $this->addElement(
                 'checkbox',
                 $locked_name,
-                Translation :: get('Locked'),
-                '',
-                array('class' => 'no-toggle-style'));
+                Translation :: get('Locked'));
 
             if (CourseManagementRights :: get_instance()->is_right_locked_for_base_object($this->base_object, $right_id))
             {

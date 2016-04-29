@@ -486,7 +486,11 @@ class User extends DataClass
 
             if (! $profilePictureIdentifier)
             {
-                $profilePictureIdentifier = rand(0, 75);
+                $imagesPath = Theme::getInstance()->getImagesPath(self::package(), false) . 'Unknown' . DIRECTORY_SEPARATOR;
+                $files = Filesystem::get_directory_content($imagesPath, Filesystem::LIST_FILES, false);
+                $count = count($files);
+
+                $profilePictureIdentifier = rand(0, $count);
                 \Chamilo\Libraries\Platform\Session\Session :: register(
                     'profile_picture_identifier',
                     $profilePictureIdentifier);
