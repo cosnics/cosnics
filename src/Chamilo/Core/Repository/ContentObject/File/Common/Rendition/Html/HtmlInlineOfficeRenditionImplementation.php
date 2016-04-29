@@ -17,7 +17,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditionImplementation
 {
-    const VIEWER_BASE_URL = 'http://view.officeapps.live.com/op/view.aspx?src=';
+    const VIEWER_BASE_URL = 'https://view.officeapps.live.com/op/view.aspx?src=';
 
     /**
      *
