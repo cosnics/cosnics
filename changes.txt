@@ -11,3 +11,16 @@
 * [Assignment Tool] Limited the amount of allowed content object types in the creation form of an assignment
 * [Weblcms] Bugfixes to the course visit tracking
 * [Weblcms] Added a warning when the user leaves the publication form without publishing
+* [Assets] Added a timestamp for client cache clearing
+* [Assessment] Removed subitems in the builder of the complex content object because assessment doesn't have subpaths
+* [File CO] Removed buttons for inline image rendering
+* [File CO] Added clickable download link on inline images
+* [Learning Path] Allow HTML5 full screen display of learning paths
+* [Learning Path] Use Bootstrap TreeView for the learning path
+* [Calendar Event] Added default value for start and end time + fixes for aqua theme for layout
+* [Calendar Event] Fixed css for datepicker
+* [LearningPath] A new mover component in which you can move an item directly to a new parent and a new position
+* [LearningPath] Changed tabs to buttons
+* [Portfolio] Changed tabs to buttons
+* [LearningPath] Changed progressbar
+* [LearningPath] Changed previous and next buttons
