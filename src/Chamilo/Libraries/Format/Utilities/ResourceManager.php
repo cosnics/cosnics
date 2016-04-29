@@ -6,6 +6,8 @@ namespace Chamilo\Libraries\Format\Utilities;
  * 
  * @package common
  */
+use Chamilo\Libraries\File\Path;
+
 /**
  * Manages resources, ensuring that they are only loaded when necessary.
  * Currently only relevant for JavaScript and CSS
@@ -52,15 +54,23 @@ class ResourceManager
 
     private function _get_resource_html($path)
     {
+        $pathUtil = Path::getInstance();
+
+        $webPath = $pathUtil->getBasePath(true);
+        $basePath = $pathUtil->getBasePath();
+
+        $systemPath = str_replace($webPath, $basePath, $path);
+        $modificationTime = filemtime($systemPath);
+
         $matches = array();
         preg_match('/[^.]*$/', $path, $matches);
         $extension = $matches[0];
         switch (strtolower($extension))
         {
             case 'css' :
-                return '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($path) . '"/>';
+                return '<link rel="stylesheet" type="text/css" href="' . htmlspecialchars($path) . '?' . $modificationTime . '"/>';
             case 'js' :
-                return '<script type="text/javascript" src="' . htmlspecialchars($path) . '"></script>';
+                return '<script type="text/javascript" src="' . htmlspecialchars($path) . '?' . $modificationTime . '"></script>';
             default :
                 die('Unknown resource type: ' . $path);
         }

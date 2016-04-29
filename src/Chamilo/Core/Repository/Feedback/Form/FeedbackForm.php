@@ -51,20 +51,6 @@ class FeedbackForm extends FormValidator
 
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', Feedback :: PROPERTY_COMMENT);
 
-        if ($this->application->get_parent() instanceof FeedbackNotificationSupport)
-        {
-            if ($this->application->get_parent()->is_allowed_to_view_feedback())
-            {
-                $this->addElement(
-                    'checkbox',
-                    self :: PROPERTY_NOTIFICATIONS,
-                    null,
-                    Translation :: get('ReceiveNotifications'));
-
-                $renderer->setElementTemplate('<div class="form-group">{element}</div>', self :: PROPERTY_NOTIFICATIONS);
-            }
-        }
-
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
@@ -91,19 +77,6 @@ class FeedbackForm extends FormValidator
         if ($feedback && $feedback->is_identified())
         {
             $defaults[Feedback :: PROPERTY_COMMENT] = $feedback->get_comment();
-        }
-        if ($this->application->get_parent() instanceof FeedbackNotificationSupport)
-        {
-
-            if ($this->application->get_parent()->is_allowed_to_view_feedback())
-            {
-                $notification = $this->application->get_parent()->retrieve_notification();
-
-                if ($notification instanceof Notification)
-                {
-                    $defaults[self :: PROPERTY_NOTIFICATIONS] = 1;
-                }
-            }
         }
 
         $this->setDefaults($defaults);

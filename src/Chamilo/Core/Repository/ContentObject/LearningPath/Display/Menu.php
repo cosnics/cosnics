@@ -49,6 +49,7 @@ class Menu
 
         $learning_path_item = array();
         $learning_path_item['text'] = $this->path->get_root()->get_content_object()->get_title();
+        $learning_path_item['step-id'] = $this->path->get_root()->get_id();
 
         $objectType = (string) StringUtilities :: getInstance()->createString(
             ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
@@ -104,6 +105,7 @@ class Menu
             $menu_item = array();
 
             $menu_item['text'] = $child->get_content_object()->get_title();
+            $menu_item['node-id'] = $child->get_id();
 
             if ($this->context->get_parent()->is_allowed_to_view_content_object($child))
             {
@@ -180,6 +182,13 @@ class Menu
                         checkedIcon: 'glyphicon glyphicon-ok',
                         data: " . json_encode($this->getNodes()) . "
                     });
+                            
+                    $('#learning_path_menu').treeview(
+                            'revealNode',
+                            [ $('#learning_path_menu li[data-node-id=\"". $this->context->get_current_step() ."\"]'),
+                                { silent: true }
+                            ]
+                    );
                 });
             });
         </script>";
