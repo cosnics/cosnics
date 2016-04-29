@@ -25,3 +25,4 @@
 * [LearningPath] Changed progressbar
 * [LearningPath] Changed previous and next buttons
 * [Menu] Added the homepage link to the navbar brand
+* [File Content Object] Display docx and other office documents inline using the official office viewer
