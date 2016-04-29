@@ -49,7 +49,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
         switch ($this->getViewerType())
         {
             case self :: VIEW_TYPE_FULL :
-                return self :: VIEW_TYPE_FULL;
+                return self :: VIEWER_URL_FULL;
                 break;
             case self :: VIEW_TYPE_EMBED :
                 return self :: VIEWER_URL_EMBED;
