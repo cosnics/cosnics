@@ -9,4 +9,21 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html\Exten
  */
 class HtmlInlinePptxRenditionImplementation extends HtmlInlineDocxRenditionImplementation
 {
+    /**
+     *
+     * @return string[]
+     */
+    public function getViewerFrameClasses()
+    {
+        return array('office-viewer-frame');
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function allowsFullScreen()
+    {
+        return true;
+    }
 }
