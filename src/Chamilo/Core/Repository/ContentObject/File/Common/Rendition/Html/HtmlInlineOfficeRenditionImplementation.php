@@ -30,6 +30,9 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
         if ($this->canBeDisplayed())
         {
             $iframeSource = self :: VIEWER_BASE_URL . urlencode($this->getDownloadUrl());
+            $iframeSource = self :: VIEWER_BASE_URL .
+                 urlencode(
+                    'http://desiderius.ehb.be/index.php?application=Chamilo%5CCore%5CRepository&go=DocumentDownloader&object=685072&security_code=2f7b768a4f85d7fcd29d0e01db8ed3a6646e78c0');
 
             $html[] = '<div class="office-viewer-container">';
 
@@ -46,8 +49,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
             $html[] = implode(' ', $alertText);
             $html[] = '</div>';
-            $html[] = '<iframe class="office-viewer-frame" src="' . $iframeSource .
-                 '" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts">';
+            $html[] = '<iframe class="office-viewer-frame" data-url="' . $iframeSource . '">';
 
             $html[] = '</iframe>';
             $html[] = '</div>';

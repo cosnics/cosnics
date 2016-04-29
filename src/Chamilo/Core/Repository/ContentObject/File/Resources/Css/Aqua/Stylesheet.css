@@ -50,9 +50,9 @@ ul.tree-menu li div a.file, ul.tree-menu li div a.type_file, ul.tree-menu li div
 	border: 0px solid white;
 }
 
-@media ( max-width : 768px) {
+@media ( max-width : 767px) {
 	.office-viewer-container .office-viewer-content,
-		.office-viewer-container .office-viewer-content .btn-office-viewer-full-screen
+		.office-viewer-container .btn-office-viewer-full-screen
 		{
 		display: none;
 	}
