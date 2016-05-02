@@ -128,8 +128,6 @@ class RightsForm extends FormValidator
             null,
             RightsService :: RIGHT_COPY);
 
-        $this->add_warning_message(null, null, Translation :: get('ManageRightWarning'), true);
-
         $this->addElement(
             'checkbox',
             self :: PROPERTY_MANAGE,
@@ -139,6 +137,8 @@ class RightsForm extends FormValidator
             RightsService :: RIGHT_VIEW | RightsService :: RIGHT_ADD | RightsService :: RIGHT_EDIT |
                  RightsService :: RIGHT_DELETE | RightsService :: RIGHT_USE | RightsService :: RIGHT_COPY |
                  RightsService :: RIGHT_MANAGE);
+
+        $this->add_warning_message(null, null, Translation :: get('ManageRightWarning'), true);
 
         $this->addElement(
             'html',

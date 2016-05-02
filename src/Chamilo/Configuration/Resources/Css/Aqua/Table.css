@@ -226,7 +226,7 @@
 .table-gallery tr.row td .panel.panel-gallery .panel-body.panel-body-thumbnail
 	{
 	text-align: center;
-	height: 230px;
+	min-height: 230px;
 	position: relative;
 }
 

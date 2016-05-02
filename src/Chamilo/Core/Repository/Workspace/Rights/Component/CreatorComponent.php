@@ -26,10 +26,10 @@ class CreatorComponent extends TabComponent
 
         if ($form->validate())
         {
+            $values = $form->exportValues();
+
             try
             {
-                $values = $form->exportValues();
-
                 $entityRelationService = new EntityRelationService(new EntityRelationRepository());
                 $rightsService = RightsService:: getInstance();
 
@@ -55,10 +55,20 @@ class CreatorComponent extends TabComponent
                 $message = $ex->getMessage();
             }
 
-            $action = $values['submit'] == Translation:: get('SaveAndAddNew', null, Manager::context()) ?
-                self::ACTION_CREATE : self::ACTION_BROWSE;
+            $parameters = $filters = array();
 
-            $this->redirect($message, !$success, array(self :: PARAM_ACTION => $action));
+            if($values['submit'] == Translation:: get('SaveAndAddNew', null, Manager::context()))
+            {
+                $parameters[self::PARAM_ACTION] = self::ACTION_CREATE;
+            }
+            else
+            {
+                $filters[] = self::PARAM_ACTION;
+                $parameters[\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION] =
+                    $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
+            }
+
+            $this->redirect($message, !$success, $parameters, $filters);
         }
         else
         {

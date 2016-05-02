@@ -11,6 +11,7 @@ class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGaller
     public function renderContent($object)
     {
         $html = array();
+
         $display = ExternalObjectDisplay :: factory($object);
         $html[] = '<a href="' . $this->get_component()->get_external_repository_object_viewing_url($object) . '">' . $display->get_preview(
             true) . '</a>';
