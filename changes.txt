@@ -1,0 +1,28 @@
+[29/04/2016]
+
+* [Weblcms] Navigate to menu: alphabetical order
+* [Portfolio] Changes to the feedback subscribe button
+* [Portfolio] Feedback icons changed
+* [Home] Bugfix in home javascript when moving to and from an empty column
+* [LearningPath] Selected path expanded in tree menu
+* [CSS] Fixed toggle options in the course settings form
+* [Weblcms] Removed option "Menu Layout" from course settings since it is no longer used and replaced by much more intuitive "Navigate To"
+* [Weblcms] Translations of course setting "Tool Layout"
+* [Assignment Tool] Limited the amount of allowed content object types in the creation form of an assignment
+* [Weblcms] Bugfixes to the course visit tracking
+* [Weblcms] Added a warning when the user leaves the publication form without publishing
+* [Assets] Added a timestamp for client cache clearing
+* [Assessment] Removed subitems in the builder of the complex content object because assessment doesn't have subpaths
+* [File CO] Removed buttons for inline image rendering
+* [File CO] Added clickable download link on inline images
+* [Learning Path] Allow HTML5 full screen display of learning paths
+* [Learning Path] Use Bootstrap TreeView for the learning path
+* [Calendar Event] Added default value for start and end time + fixes for aqua theme for layout
+* [Calendar Event] Fixed css for datepicker
+* [LearningPath] A new mover component in which you can move an item directly to a new parent and a new position
+* [LearningPath] Changed tabs to buttons
+* [Portfolio] Changed tabs to buttons
+* [LearningPath] Changed progressbar
+* [LearningPath] Changed previous and next buttons
+* [Menu] Added the homepage link to the navbar brand
+* [File Content Object] Display docx and other office documents inline using the official office viewer
