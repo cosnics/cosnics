@@ -44,14 +44,12 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
      */
     protected function doDelete($identifier)
     {
-        $success = parent::doDelete($identifier);
-
         $filename = $this->getFilename($identifier);
         if(function_exists('opcache_invalidate'))
         {
             opcache_invalidate($filename, true);
         }
 
-        return $success;
+        return parent::doDelete($identifier);
     }
 }
