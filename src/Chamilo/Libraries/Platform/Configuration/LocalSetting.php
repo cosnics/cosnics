@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Platform\Configuration;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -204,6 +205,7 @@ class LocalSetting
     public function resetCache()
     {
         $this->getLocalSettingCacheService()->clearForIdentifier($this->userIdentifier);
+        DataClassCache::truncate(UserSetting::class_name());
         $this->localSettings = $this->getLocalSettingCacheService()->getForUserIdentifier($this->userIdentifier);
     }
 }
