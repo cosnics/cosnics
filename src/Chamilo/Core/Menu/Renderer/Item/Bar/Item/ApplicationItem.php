@@ -31,14 +31,7 @@ class ApplicationItem extends Bar
             return;
         }
 
-        if ($application == 'root')
-        {
-            $url = 'index.php';
-        }
-        else
-        {
-            $url = 'index.php?application=' . $this->getItem()->get_application();
-        }
+        $url = $this->getUrl($application);
 
         // if ($this->isSelected())
         // {
@@ -82,5 +75,20 @@ class ApplicationItem extends Bar
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param $application
+     *
+     * @return string
+     */
+    protected function getUrl($application)
+    {
+        if ($application == 'root')
+        {
+            return 'index.php';
+        }
+
+        return 'index.php?application=' . $this->getItem()->get_application();
     }
 }

@@ -43,3 +43,4 @@
 * [Workspaces] Translation: Shared Workspaces => Workspaces shared with me
 * [Streaming Videos] Translation: Streaming Video's
 * [CSS/Javascript] Fixed client caching of resources
+* [Caching] Fixed issue between PhpFileCache and OpCache
