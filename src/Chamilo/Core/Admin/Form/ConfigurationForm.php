@@ -598,6 +598,8 @@ class ConfigurationForm extends FormValidator
             }
         }
 
+        LocalSetting::getInstance()->resetCache();
+
         if ($problems > 0)
         {
             return false;

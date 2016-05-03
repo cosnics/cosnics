@@ -197,4 +197,13 @@ class LocalSetting
             return $this->getLocalSettingCacheService()->clearAndWarmUpForIdentifiers(array($this->getUserIdentifier()));
         }
     }
+
+    /**
+     * Resets the local settings cache for the current instance
+     */
+    public function resetCache()
+    {
+        $this->getLocalSettingCacheService()->clearForIdentifier($this->userIdentifier);
+        $this->localSettings = $this->getLocalSettingCacheService()->getForUserIdentifier($this->userIdentifier);
+    }
 }

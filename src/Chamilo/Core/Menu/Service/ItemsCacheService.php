@@ -107,4 +107,14 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
     {
         return $this->getForIdentifier(self :: IDENTIFIER_ITEMS);
     }
+
+    /**
+     * Resets the cache
+     *
+     * @return bool
+     */
+    public function resetCache()
+    {
+        return $this->clearForIdentifier(self::IDENTIFIER_ITEMS);
+    }
 }
