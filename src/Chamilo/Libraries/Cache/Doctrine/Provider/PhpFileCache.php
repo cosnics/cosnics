@@ -49,7 +49,7 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
         $filename = $this->getFilename($identifier);
         if(function_exists('opcache_invalidate'))
         {
-            opcache_invalidate($filename);
+            opcache_invalidate($filename, true);
         }
 
         return $success;
