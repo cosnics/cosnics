@@ -180,4 +180,19 @@ abstract class AsseticCacheService implements CacheResetterInterface
     {
         return $this->getAssetCache()->dump();
     }
+
+    /**
+     * Returns the last modification time of the resource
+     *
+     * @return int
+     */
+    public function getLastModificationTime()
+    {
+        if(!file_exists($this->getCachePath()))
+        {
+            return 0;
+        }
+
+        return filemtime($this->getCachePath());
+    }
 }

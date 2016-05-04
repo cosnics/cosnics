@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Format\Structure;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
+use Chamilo\Libraries\Cache\Assetic\StylesheetCacheService;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
@@ -172,7 +174,12 @@ class Header
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
+        $stylesheetCacheService = new StylesheetCacheService(Path::getInstance(), Theme::getInstance());
+        $cssModified = $stylesheetCacheService->getLastModificationTime();
+        $cssModified = $cssModified ? $cssModified : time();
+
         $parameters[ResourceUtilities :: PARAM_TYPE] = 'css';
+        $parameters['modified'] = $cssModified;
 
         $this->addCssFile(Path :: getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
 
@@ -186,7 +193,13 @@ class Header
         $this->addHtmlHeader(
             '<script type="text/javascript">var rootWebPath="' . Path :: getInstance()->getBasePath(true) . '";</script>');
 
+
+        $javascriptCacheService = new JavascriptCacheService(Path::getInstance());
+        $javascriptModified = $javascriptCacheService->getLastModificationTime();
+        $javascriptModified = $javascriptModified ? $javascriptModified : time();
+
         $parameters[ResourceUtilities :: PARAM_TYPE] = 'javascript';
+        $parameters['modified'] = $javascriptModified;
         $this->addJavascriptFile(
             Path :: getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
 
