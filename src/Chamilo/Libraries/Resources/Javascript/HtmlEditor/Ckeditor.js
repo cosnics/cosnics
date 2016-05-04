@@ -6,7 +6,7 @@ For licensing, see LICENSE.html or http://ckeditor.com/license
 CKEDITOR.editorConfig = function(config) {
 	// // Define changes to default configuration here. For example:
 	config.uiColor = '#F5F5F5';
-	config.plugins = 'a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,chamilo,chamilofakeobjects';
+	config.plugins = 'a11yhelp,about,basicstyles,bidi,blockquote,button,clipboard,colorbutton,colordialog,contextmenu,dialog,dialogadvtab,dialogui,div,enterkey,entities,fakeobjects,find,flash,floatingspace,floatpanel,font,format,forms,horizontalrule,htmlwriter,iframe,image,indent,indentblock,indentlist,justify,link,list,listblock,liststyle,magicline,maximize,menu,menubutton,newpage,pagebreak,panel,panelbutton,pastefromword,pastetext,popup,preview,print,removeformat,resize,richcombo,save,scayt,selectall,showblocks,showborders,smiley,sourcearea,specialchar,stylescombo,tab,table,tabletools,templates,toolbar,undo,wsc,wysiwygarea,chamilo,chamilofakeobjects,eqneditor';
 	// config.removePlugins = 'elementspath,resize';
 
 	config.menu_groups = 'clipboard,'
@@ -33,7 +33,7 @@ CKEDITOR.editorConfig = function(config) {
 					'Blockquote' ],
 			[ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
 			[ 'Link', 'Unlink', 'Anchor' ],
-			[ 'Chamilo', 'Image', 'Table', 'HorizontalRule', 'Smiley',
+			[ 'Chamilo', 'Image', 'EqnEditor', 'Table', 'HorizontalRule', 'Smiley',
 					'SpecialChar', 'PageBreak' ], '/',
 			[ 'Styles', 'Format', 'Font', 'FontSize' ],
 			[ 'TextColor', 'BGColor' ],
@@ -77,7 +77,7 @@ CKEDITOR.editorConfig = function(config) {
 					'Indent' ],
 			'/',
 			[ 'Link', 'Unlink', '-', 'TextColor', 'BGColor', '-', 'Table',
-					'Chamilo', 'Image',/* 'latex', */'Smiley', '-',
+					'Chamilo', 'Image', 'EqnEditor', 'Smiley', '-',
 					'Templates', 'SpecialChar', '-', 'Source' ] ];
 	//	
 	// config.toolbar_BasicMarkup =

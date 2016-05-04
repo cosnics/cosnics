@@ -11,6 +11,9 @@ class Session
 
     public static function start()
     {
+        /** Disables PHP automatically provided cache headers */
+        session_cache_limiter('');
+
         $configuration = \Chamilo\Configuration\Configuration::get_instance();
 
         if ($configuration->is_available() && $configuration->is_connectable())

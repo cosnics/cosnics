@@ -19,6 +19,8 @@ class CssUtilities extends ResourceUtilities
 
         $response = new Response();
         $response->setContent($stylesheetCacheService->get());
+        $response->setPublic();
+        $response->setMaxAge(3600 * 24); //24 hours cache
         $response->headers->set('Content-Type', 'text/css');
         $response->send();
         exit();

@@ -17,6 +17,6 @@ class ResourceComponent extends \Chamilo\Libraries\Ajax\Manager implements NoAut
 
     public function run()
     {
-        \Chamilo\Libraries\Format\Utilities\ResourceUtilities :: launch();
+        \Chamilo\Libraries\Format\Utilities\ResourceUtilities :: launch($this->getRequest());
     }
 }
