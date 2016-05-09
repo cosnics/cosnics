@@ -5,21 +5,21 @@ use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
 /**
  *
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ObjectTypeMenu extends HTML_Menu
+class ObjectTypeMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -56,7 +56,7 @@ class ObjectTypeMenu extends HTML_Menu
         $this->category_format = $category_format;
         $this->repository_manager = $repository_manager;
         parent :: __construct($this->get_menu_items());
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
 
         if (isset($selected_type))
         {

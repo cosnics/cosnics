@@ -6,15 +6,15 @@ use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 
 /**
  * This class provides a navigation menu to allow a user to browse through his reservations categories
  *
  * @author Sven Vanpoucke
  */
-class Menu extends HTML_Menu
+class Menu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
     const ACTION_CREATE = 'create';
@@ -40,7 +40,7 @@ class Menu extends HTML_Menu
         // $menu = $this->get_menu();
         parent :: __construct($menu_items);
 
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url());
     }
 

@@ -5,11 +5,11 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
 /**
  * $Id: course_category_menu.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -21,7 +21,7 @@ use HTML_Menu_ArrayRenderer;
  *
  * @author Bart Mollet
  */
-class CourseCategoryMenu extends HTML_Menu
+class CourseCategoryMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -49,7 +49,7 @@ class CourseCategoryMenu extends HTML_Menu
         $this->urlFmt = $url_format;
         $menu = $this->get_menu_items($extra_items);
         parent :: __construct($menu);
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_category_url($current_category));
     }
 

@@ -2,9 +2,9 @@
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
-use HTML_Menu;
 
 /**
  *
@@ -16,7 +16,7 @@ use HTML_Menu;
  * @author Pieterjan Broekaert - Original Author
  * @author Sven Vanpoucke - Refactoring + Comments
  */
-abstract class GenericTree extends HTML_Menu implements GenericTreeInterface
+abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
 {
     const TREE_NAME = __CLASS__;
 

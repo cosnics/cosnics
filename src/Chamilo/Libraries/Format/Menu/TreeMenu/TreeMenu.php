@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu\TreeMenu;
 
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
-class TreeMenu extends HTML_Menu
+class TreeMenu extends HtmlMenu
 {
 
     private $name;
@@ -21,7 +21,7 @@ class TreeMenu extends HTML_Menu
 
         parent :: __construct($this->get_menu_items());
 
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->data_provider->get_selected_tree_menu_item_url());
     }
 

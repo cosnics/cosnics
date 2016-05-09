@@ -1,24 +1,28 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu;
 
-use HTML_Menu_ArrayRenderer;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
+
 /**
  * $Id: options_menu_renderer.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ *
  * @package common.html.menu
  */
 /**
  * Renderer which can be used to create an array of options to use in a select
- * list. The options are displayed in a hierarchical way in the select list.
+ * list.
+ * The options are displayed in a hierarchical way in the select list.
  */
-class OptionsMenuRenderer extends HTML_Menu_ArrayRenderer
+class OptionsMenuRenderer extends HtmlMenuArrayRenderer
 {
     const KEY_ID = 'id';
 
     /**
      * Create a new OptionsMenuRenderer
+     *
      * @param array $exclude Which items should be excluded (based on the $key
-     * value in the menu items). The whole submenu of which the elements of the
-     * exclude array are the root elements will be excluded.
+     *        value in the menu items). The whole submenu of which the elements of the
+     *        exclude array are the root elements will be excluded.
      */
     public function __construct($exclude = array())
     {
@@ -27,8 +31,8 @@ class OptionsMenuRenderer extends HTML_Menu_ArrayRenderer
     }
 
     /*
-	 * Inherited
-	 */
+     * Inherited
+     */
     public function renderEntry($node, $level, $type)
     {
         // If this node is in the exclude list, add all its child-nodes to the exclude list
@@ -42,7 +46,7 @@ class OptionsMenuRenderer extends HTML_Menu_ArrayRenderer
                 }
             }
         }
-        //         else
+        // else
         {
             unset($node['sub']);
             $node['level'] = $level;

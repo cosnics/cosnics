@@ -15,8 +15,8 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
  * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -28,7 +28,7 @@ use HTML_Menu_ArrayRenderer;
  *
  * @author Bart Mollet
  */
-class GroupMenu extends HTML_Menu
+class GroupMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -56,7 +56,7 @@ class GroupMenu extends HTML_Menu
      * @param int $owner The ID of the owner of the categories to provide in this menu.
      * @param int $current_category The ID of the current category in the menu.
      * @param string $url_format The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *            string "?category=%s".
+     *        string "?category=%s".
      * @param array $extra_items An array of extra tree items, added to the root.
      */
     public function __construct($current_category, $url_format = '?application=group&go=browser&group_id=%s', $include_root = true, $show_complete_tree = false,
@@ -93,7 +93,7 @@ class GroupMenu extends HTML_Menu
         $this->urlFmt = $url_format;
         $menu = $this->get_menu();
         parent :: __construct($menu);
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($this->current_category->get_id()));
     }
 

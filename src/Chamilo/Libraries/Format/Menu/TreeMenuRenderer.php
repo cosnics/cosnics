@@ -1,13 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Menu;
 
-use HTML_Menu_DirectTreeRenderer;
-
-/**
- * $Id: tree_menu_renderer.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
- * @package common.html.menu
- */
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuDirectTreeRenderer;
 
 /**
  * Renderer which can be used to include a tree menu on your page.
@@ -15,7 +9,7 @@ use HTML_Menu_DirectTreeRenderer;
  * @author Bart Mollet
  * @author Tim De Pauw
  */
-class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
+class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
 {
 
     /**
@@ -41,14 +35,10 @@ class TreeMenuRenderer extends HTML_Menu_DirectTreeRenderer
         $this->item_url = $item_url;
         $this->collapsed = $collapsed;
 
-        // $entryTemplates = array (HTML_MENU_ENTRY_INACTIVE => '<a href="{url}" onclick="{onclick}" id="{id}"
-        // class="{class}">{title}</a>', HTML_MENU_ENTRY_ACTIVE => '<!--A--><a href="{url}" onclick="{onclick}"
-        // id="{id}" class="{class}">{title}</a>', HTML_MENU_ENTRY_ACTIVEPATH => '<!--P--><a href="{url}"
-        // onclick="{onclick}" id="{id}" class="{class}">{title}</a>');
         $entryTemplates = array();
-        $entryTemplates[HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
-        $entryTemplates[HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
-        $entryTemplates[HTML_MENU_ENTRY_ACTIVEPATH] = '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
+        $entryTemplates[self :: HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
+        $entryTemplates[self :: HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
+        $entryTemplates[self :: HTML_MENU_ENTRY_ACTIVEPATH] = '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
         $this->setEntryTemplate($entryTemplates);
         $this->setItemTemplate('<li>', '</li>' . "\n");
     }
