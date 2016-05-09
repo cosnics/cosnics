@@ -10,7 +10,6 @@ use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use DOMDocument;
 
 /**
@@ -342,10 +341,5 @@ abstract class Installer extends Action
     public static function get_additional_packages()
     {
         return array();
-    }
-
-    public function extract_xml_file($file)
-    {
-        return Utilities :: extract_xml_file($file);
     }
 }

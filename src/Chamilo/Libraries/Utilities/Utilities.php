@@ -297,38 +297,6 @@ class Utilities
         return implode(PHP_EOL, $html);
     }
 
-    public static function extract_xml_file($file, $extra_options = array())
-    {
-        require_once 'XML/Unserializer.php';
-        if (file_exists($file))
-        {
-            $unserializer = new XML_Unserializer();
-            $unserializer->setOption(XML_UNSERIALIZER_OPTION_COMPLEXTYPE, 'array');
-            $unserializer->setOption(XML_UNSERIALIZER_OPTION_ATTRIBUTES_PARSE, true);
-            $unserializer->setOption(XML_UNSERIALIZER_OPTION_RETURN_RESULT, true);
-            $unserializer->setOption(XML_UNSERIALIZER_OPTION_GUESS_TYPES, true);
-
-            foreach ($extra_options as $op => $value)
-                $unserializer->setOption($op, $value);
-
-                // userialize the document
-            $status = $unserializer->unserialize($file, true);
-            if (PEAR :: isError($status))
-            {
-                return false;
-            }
-            else
-            {
-                $data = $unserializer->getUnserializedData();
-                return $data;
-            }
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     /**
      *
      * @param $value mixed
