@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\portfolio
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "FAQ"
+TypeCategory = "Content Objects"
+View = "View"
+Edit = "Edit"
+Add = "Add an item"
+Delete = "Delete item"
+CreatedOn = "Created on {DATE}"
+CreatedOnBy = "Created on {DATE} by {USER}"
+LastModifiedOn = "Last edited on {DATE}"
+ChangeIntroduction = "Change introduction"
