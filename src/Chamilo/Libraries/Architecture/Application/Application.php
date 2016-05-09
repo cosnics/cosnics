@@ -209,12 +209,21 @@ abstract class Application
 
     /**
      * Displays the header
+     *
+     * @param string $pageTitle
+     *
+     * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
+        if(!$pageTitle)
+        {
+            $pageTitle = $this->renderPageTitle();
+        }
+
         if ($this->get_application())
         {
-            return $this->get_application()->render_header();
+            return $this->get_application()->render_header($pageTitle);
         }
 
         $breadcrumbtrail = BreadcrumbTrail :: get_instance();
@@ -243,13 +252,9 @@ abstract class Application
                 $html[] = '<div class="col-xs-12">';
             }
 
-            if ($breadcrumbtrail->size() > 0)
-            {
-                $title = $breadcrumbtrail->get_last()->get_name();
 
-                $html[] = '<h3 id="page-title" title="' . strip_tags($title) . '">' . $title . '</h3>';
-                $html[] = '<div class="clearfix"></div>';
-            }
+            $html[] = $pageTitle;
+            $html[] = '<div class="clearfix"></div>';
         }
 
         if (PlatformSetting :: get('maintenance_mode'))
@@ -289,6 +294,25 @@ abstract class Application
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Renders the page title
+     *
+     * @return string
+     */
+    protected function renderPageTitle()
+    {
+        $breadcrumbTrail = BreadcrumbTrail::get_instance();
+
+        if($breadcrumbTrail->size() > 0)
+        {
+            $pageTitle = BreadcrumbTrail::get_instance()->get_last()->get_name();
+
+            return '<h3 id="page-title" title="' . strip_tags($pageTitle) . '">' . $pageTitle . '</h3>';
+        }
+
+        return '';
     }
 
     /**

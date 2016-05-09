@@ -71,7 +71,7 @@ class WeblcmsRights extends RightsUtil
             Translation:: get('AddRight') => self :: ADD_RIGHT,
             Translation:: get('EditRight') => self :: EDIT_RIGHT,
             Translation:: get('DeleteRight') => self :: DELETE_RIGHT,
-            Translation::getInstance()->getTranslation('ManageCategoriesRight') => self::MANAGE_CATEGORIES_RIGHT
+            Translation::getInstance()->getTranslation('ManageCategoriesRight', null, Manager::context()) => self::MANAGE_CATEGORIES_RIGHT
         );
     }
 

@@ -33,6 +33,18 @@ $(function() {
 																+ ajaxResult.properties.id)
 														.trigger('activate');
 												$('button#select_attachment_expand_button').trigger('click');
+											},
+											'onSelectError': function(file, errorCode) {
+												var errorMessage = null;
+
+												switch(errorCode) {
+													case -120:
+														errorMessage = getTranslation('ZeroByteFile', null, 'Chamilo\\Libraries');
+												}
+
+												if(errorMessage) {
+													this.queueData.errorMsg = errorMessage;
+												}
 											}
 										});
 					});
