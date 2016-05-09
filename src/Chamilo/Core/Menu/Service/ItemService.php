@@ -77,4 +77,13 @@ class ItemService
         $rightsCacheService = new RightsCacheService($this);
         return $rightsCacheService->getForUser($user);
     }
+
+    /**
+     * Resets the cache for the menu items
+     */
+    public function resetCache()
+    {
+        $cacheService = new ItemsCacheService($this->itemRepository);
+        $cacheService->resetCache();
+    }
 }

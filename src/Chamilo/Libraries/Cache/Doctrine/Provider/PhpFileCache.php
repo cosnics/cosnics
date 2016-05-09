@@ -34,4 +34,22 @@ class PhpFileCache extends \Doctrine\Common\Cache\PhpFileCache
         return $this->getDirectory() . DIRECTORY_SEPARATOR . md5($id) . DIRECTORY_SEPARATOR .
              preg_replace($this->disallowedCharacterPatterns, $this->replacementCharacters, $id) . $this->getExtension();
     }
+
+    /**
+     * Extension of the doDelete function to invalidate the opcache
+     *
+     * @param string $identifier
+     *
+     * @return bool
+     */
+    protected function doDelete($identifier)
+    {
+        $filename = $this->getFilename($identifier);
+        if(function_exists('opcache_invalidate'))
+        {
+            opcache_invalidate($filename, true);
+        }
+
+        return parent::doDelete($identifier);
+    }
 }

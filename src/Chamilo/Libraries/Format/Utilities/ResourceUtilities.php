@@ -58,13 +58,23 @@ abstract class ResourceUtilities
     private $classnameUtilties;
 
     /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+    /**
      *
      * @param string $serverType
      * @param string $context
      * @param Theme $themeUtilities
+     * @param Path $pathUtilities
+     * @param ClassnameUtilities $classnameUtilities
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct($serverType = 'production', $context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities,
-        ClassnameUtilities $classnameUtilities)
+    public function __construct(
+        $serverType = 'production', $context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities,
+        ClassnameUtilities $classnameUtilities, \Symfony\Component\HttpFoundation\Request $request
+    )
     {
         $this->serverType = $serverType;
         $this->context = $context;
@@ -72,6 +82,7 @@ abstract class ResourceUtilities
         $this->themeUtilities = $themeUtilities;
         $this->pathUtilities = $pathUtilities;
         $this->classnameUtilities = $classnameUtilities;
+        $this->request = $request;
     }
 
     /**
@@ -174,6 +185,22 @@ abstract class ResourceUtilities
     }
 
     /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilties
      */
@@ -182,30 +209,33 @@ abstract class ResourceUtilities
         $this->classnameUtilties = $classnameUtilties;
     }
 
-    static public function launch()
+    static public function launch(\Symfony\Component\HttpFoundation\Request $request)
     {
-        $type = Request :: get(self :: PARAM_TYPE, null);
+        $type = Request:: get(self :: PARAM_TYPE, null);
 
         if ($type)
         {
-            $classname = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
-                 'Utilities';
+            $classname = __NAMESPACE__ . '\\' . StringUtilities:: getInstance()->createString($type)->upperCamelize() .
+                'Utilities';
 
             if (class_exists($classname))
             {
-                $theme = Request :: get(self :: PARAM_THEME);
-                $serverType = Request :: get(self :: PARAM_SERVER_TYPE, 'production');
-                $context = Request :: get(self :: PARAM_CONTEXT, __NAMESPACE__);
+                $theme = Request:: get(self :: PARAM_THEME);
+                $serverType = Request:: get(self :: PARAM_SERVER_TYPE, 'production');
+                $context = Request:: get(self :: PARAM_CONTEXT, __NAMESPACE__);
 
                 $themeUtilities = new Theme(
                     $theme,
-                    StringUtilities :: getInstance(),
-                    ClassnameUtilities :: getInstance(),
-                    Path :: getInstance());
-                $pathUtilities = Path :: getInstance();
-                $classnameUtilities = ClassnameUtilities :: getInstance();
+                    StringUtilities:: getInstance(),
+                    ClassnameUtilities:: getInstance(),
+                    Path:: getInstance()
+                );
+                $pathUtilities = Path:: getInstance();
+                $classnameUtilities = ClassnameUtilities:: getInstance();
 
-                $utilities = new $classname($serverType, $context, $themeUtilities, $pathUtilities, $classnameUtilities);
+                $utilities = new $classname(
+                    $serverType, $context, $themeUtilities, $pathUtilities, $classnameUtilities, $request
+                );
                 $utilities->run();
             }
         }

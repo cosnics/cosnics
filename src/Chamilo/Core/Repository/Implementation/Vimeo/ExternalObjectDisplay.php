@@ -29,7 +29,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
         $html = array();
         if ($is_thumbnail)
         {
-            $html[] = '<img class="' . 'thumbnail' . '" src="' . $object->get_thumbnail() . '" />';
+            $html[] = '<img style="margin-bottom: 10px;" class="" src="' . $object->get_thumbnail() . '" />';
         }
         else
         {

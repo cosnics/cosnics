@@ -4,6 +4,8 @@ namespace Chamilo\Core\Menu\Component;
 use Chamilo\Core\Menu\Form\ItemForm;
 use Chamilo\Core\Menu\ItemTitles;
 use Chamilo\Core\Menu\Manager;
+use Chamilo\Core\Menu\Repository\ItemRepository;
+use Chamilo\Core\Menu\Service\ItemService;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -84,6 +86,9 @@ class CreatorComponent extends Manager implements DelegateComponent
                         array('OBJECT' => Translation :: get('ManagerItem')),
                         Utilities :: COMMON_LIBRARIES);
                 }
+
+                $itemService = new ItemService(new ItemRepository());
+                $itemService->resetCache();
 
                 $this->redirect(
                     $message,

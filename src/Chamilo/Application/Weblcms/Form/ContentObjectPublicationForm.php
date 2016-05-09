@@ -424,6 +424,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
             ContentObjectPublication :: PROPERTY_EMAIL_SENT,
             Translation:: get('SendByEMail')
         );
+
+        $this->addElement(
+            'checkbox',
+            ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE,
+            Translation:: get('ShowOnHomepage')
+        );
     }
 
     /**
@@ -455,6 +461,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
     public function build_basic_update_form()
     {
         $this->build_basic_form();
+
+        $this->addElement(
+            'checkbox',
+            ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE,
+            Translation:: get('ShowOnHomepage')
+        );
     }
 
     /**
@@ -506,12 +518,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
             'checkbox',
             ContentObjectPublication :: PROPERTY_HIDDEN,
             Translation:: get('Hidden', null, Utilities :: COMMON_LIBRARIES)
-        );
-
-        $this->addElement(
-            'checkbox',
-            ContentObjectPublication :: PROPERTY_SHOW_ON_HOMEPAGE,
-            Translation:: get('ShowOnHomepage')
         );
 
         $force_collaborate = PlatformSetting:: get('force_collaborate', Manager:: package()) === 1 ? true : false;
@@ -728,7 +734,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             '</div>'
         );
 
-        $this->addElement('html', '</div></div>');
+        $this->addElement('html', '</div></div><div style="margin-bottom: 20px;"></div>');
 
         $this->addElement(
             'html',

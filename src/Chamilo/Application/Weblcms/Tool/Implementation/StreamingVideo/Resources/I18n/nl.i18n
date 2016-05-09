@@ -3,7 +3,7 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Streaming videos"
+TypeName = "Streaming video's"
 TypeNameSingle = "Streaming video"
 BrowserComponent = "Streaming videos"
 ViewerComponent = "Bekijk streaming video"

@@ -21,9 +21,13 @@ $(function ()
         $(document).on('click', '.rights_selector:not(.inherit_rights_selector):not(.specific_rights_selector)',  otherOptionSelected);
         $(document).on('click', '.rights_selector.specific_rights_selector', specificEntitiesSelected );
 
-        $('.specific_rights_selector:checked').each(specificEntitiesSelected);
-        $('.inherit_rights_selector:checked').each(inheritedRightsSelected);
-        $('.rights_selector:not(.inherit_rights_selector):not(.specific_rights_selector):checked').each(otherOptionSelected);
+        var initialize = function() {
+            $('.specific_rights_selector:checked').each(specificEntitiesSelected);
+            $('.inherit_rights_selector:checked').each(inheritedRightsSelected);
+            $('.rights_selector:not(.inherit_rights_selector):not(.specific_rights_selector):checked').each(otherOptionSelected);
+        };
+
+        initialize();
 
         var createTargetEntityItem = function(targetEntity, containerClass) {
             var newItem = $('<li class="list-group-item"></li>');
@@ -97,6 +101,8 @@ $(function ()
             $(this).hide();
             retrieveTargetEntities();
         });
+
+        $('#content_object_publication_form').on('reset', function() { setTimeout(function () { initialize(); })});
 
         retrieveTargetEntities();
     });

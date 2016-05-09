@@ -26,3 +26,21 @@
 * [LearningPath] Changed previous and next buttons
 * [Menu] Added the homepage link to the navbar brand
 * [File Content Object] Display docx and other office documents inline using the official office viewer
+
+[06/05/2016]
+
+* [User] Fixed user settings that could not be updated
+* [Menu] Fixed cache reset of menu items when editing the menu
+* [Workspaces] Visualize the workspace description in the workspace
+* [Portfolio] Fixes for the portfolio breadcrumbs
+* [User] Fixed the asynchronous loading of the userpicture in the menu
+* [Vimeo] Fixed vimeo browse layout
+* [Weblcms] Added some changes to the publication form to have a more distinct view between several options
+* [Weblcms] Fixed the reset button bug in the publication form
+* [Admin] Translations whois online page
+* [Workspaces] Moved the "manager" option in the rights form above the warning message
+* [Workspaces] Redirect to browser when saving the rights form
+* [Workspaces] Translation: Shared Workspaces => Workspaces shared with me
+* [Streaming Videos] Translation: Streaming Video's
+* [CSS/Javascript] Fixed client caching of resources
+* [Caching] Fixed issue between PhpFileCache and OpCache
