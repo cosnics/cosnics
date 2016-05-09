@@ -403,21 +403,14 @@ EOT;
         $html_editor->add();
     }
 
-    /*
-     * Adds tabs to a form @param array $tabs An array of tab objects that specifies the tabs that are going to be
-     * created @param int $selected_tab The tab that is selected @author Tristan Verheecke
+    /**
+     * Adds tabs to a form
+     *
+     * @param array $tabs
+     * @param int $selected_tab The tab that is selected
      */
     public function add_tabs($tabs, $selected_tab)
     {
-        // $renderer_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true);
-        // $course_tabs = new DynamicTabsRenderer($renderer_name);
-        //
-        // foreach ($tabs as $index => $tab)
-        // {
-        // $course_tabs->add_tab(new DynamicContentTab($index, $tab[1], null, $this->display_courses($tab[0], $index)));
-        // }
-        //
-        // $html[] = $course_tabs->render();
         $this->addElement('html', '<div id="form_tabs">');
         $this->addElement('html', '<ul>');
         foreach ($tabs as $index => $tab)

@@ -71,9 +71,10 @@
 }
 
 .installation-step-successful {
-/* 	border: 1px solid #339900; */
-/* 	background-color: #ddffaa; */
-/* 	color: #006600; */
+	/* 	border: 1px solid #339900; */
+	/* 	background-color: #ddffaa; */
+	/* 	color: #006600; */
+	
 }
 
 .installation-step-failed {
@@ -142,4 +143,8 @@ div.package-list-item-core {
 	border: 1px solid #f0f0f0;
 	background-color: #fafafa;
 	color: #666666;
+}
+
+div.package-list-item .checkbox, div.package-list-item-core .checkbox {
+	display: none;
 }
