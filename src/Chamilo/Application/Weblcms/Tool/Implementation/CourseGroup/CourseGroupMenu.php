@@ -4,14 +4,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
 /**
  * $Id: group_menu.class.php 224 2009-11-13 14:40:30Z kariboe $
@@ -24,7 +24,7 @@ use HTML_Menu_ArrayRenderer;
  *
  * @author Sven Vanpoucke
  */
-class CourseGroupMenu extends HTML_Menu
+class CourseGroupMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -58,7 +58,7 @@ class CourseGroupMenu extends HTML_Menu
      * @param $owner int The ID of the owner of the categories to provide in this menu.
      * @param $current_group int The ID of the current group in the menu.
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
-     *            string "?category=%s".
+     *        string "?category=%s".
      */
     public function __construct($course, $current_group,
         $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&tool_action=Details&course=%s&course_group=%s')
@@ -79,7 +79,7 @@ class CourseGroupMenu extends HTML_Menu
 
         $menu = $this->get_menu();
         parent :: __construct($menu);
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($url);
     }
 
@@ -156,11 +156,10 @@ class CourseGroupMenu extends HTML_Menu
         return htmlentities(
             sprintf(
                 str_replace(
-                    'tool_action=Details', 'tool_action=Browser', str_replace('&course_group=%s', '', $this->urlFmt)
-                ),
-                $this->course->get_id()
-            )
-        );
+                    'tool_action=Details',
+                    'tool_action=Browser',
+                    str_replace('&course_group=%s', '', $this->urlFmt)),
+                $this->course->get_id()));
     }
 
     /**

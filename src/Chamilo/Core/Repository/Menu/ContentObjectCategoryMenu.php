@@ -14,8 +14,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
  * $Id: content_object_category_menu.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -28,7 +28,7 @@ use HTML_Menu_ArrayRenderer;
  *
  * @author Bart Mollet
  */
-class ContentObjectCategoryMenu extends HTML_Menu
+class ContentObjectCategoryMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -86,7 +86,7 @@ class ContentObjectCategoryMenu extends HTML_Menu
 
         $menu = $this->get_menu_items($extra_items);
         parent :: __construct($menu);
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_category_url($current_category));
     }
 

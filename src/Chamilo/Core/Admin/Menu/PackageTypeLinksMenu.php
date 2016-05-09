@@ -4,12 +4,12 @@ namespace Chamilo\Core\Admin\Menu;
 use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
-class PackageTypeLinksMenu extends HTML_Menu
+class PackageTypeLinksMenu extends HtmlMenu
 {
 
     private $format;
@@ -25,7 +25,7 @@ class PackageTypeLinksMenu extends HTML_Menu
                 $this->get_items(
                     \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list())));
 
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));
     }
 

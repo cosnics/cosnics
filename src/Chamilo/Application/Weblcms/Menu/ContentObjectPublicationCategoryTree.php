@@ -19,8 +19,8 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 
 /**
  * $Id: content_object_publication_category_tree.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -30,7 +30,7 @@ use HTML_Menu_ArrayRenderer;
 /**
  * A tree menu to display categories in a tool
  */
-class ContentObjectPublicationCategoryTree extends HTML_Menu
+class ContentObjectPublicationCategoryTree extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -226,7 +226,7 @@ class ContentObjectPublicationCategoryTree extends HTML_Menu
 
     public function get_breadcrumbs()
     {
-        $array_renderer = new HTML_Menu_ArrayRenderer();
+        $array_renderer = new HtmlMenuArrayRenderer();
         $this->render($array_renderer, 'urhere');
         $breadcrumbs = $array_renderer->toArray();
         foreach ($breadcrumbs as &$crumb)

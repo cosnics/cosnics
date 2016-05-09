@@ -7,6 +7,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -16,8 +18,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
 /**
  * $Id: complex_menu.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -29,7 +29,7 @@ use HTML_Menu_ArrayRenderer;
  *
  * @author Sven Vanpoucke
  */
-class Menu extends HTML_Menu
+class Menu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -86,7 +86,7 @@ class Menu extends HTML_Menu
 
         $menu = $this->get_menu($root);
         parent :: __construct($menu);
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_cloi_url($cloi));
     }
 

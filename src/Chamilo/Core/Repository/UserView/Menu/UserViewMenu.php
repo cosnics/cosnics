@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\UserView\Manager;
 use Chamilo\Core\Repository\UserView\Storage\DataClass\UserView;
 use Chamilo\Core\Repository\UserView\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -15,8 +17,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
 /**
  *
@@ -25,7 +25,7 @@ use HTML_Menu_ArrayRenderer;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UserViewMenu extends HTML_Menu
+class UserViewMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -63,7 +63,7 @@ class UserViewMenu extends HTML_Menu
 
         parent :: __construct($this->get_menu_items());
 
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
 
         if ($current_user_view_id)
         {

@@ -7,23 +7,24 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Menu\CollapsedTreeMenuRenderer;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use HTML_Menu;
-use HTML_Menu_ArrayRenderer;
 
 /**
  * Displays course's categories in a tree.
  * Tree is collapsed by default.
- * 
+ *
  * @copyright (c) 2010 University of Geneva
  * @license GNU General Public License
  * @author laurent.opprecht@unige.ch
  * @package application.lib.weblcms.course
  */
-class CourseCategoryCatalogMenu extends HTML_Menu
+class CourseCategoryCatalogMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -39,7 +40,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
 
     /**
      * If true display the number of items per category beside the category's title.
-     * 
+     *
      * @var bool
      */
     private $display_child_count = true;
@@ -47,14 +48,14 @@ class CourseCategoryCatalogMenu extends HTML_Menu
     /**
      * If true the menu has been initialized with a tree structure.
      * If false it has not been initialized.
-     * 
+     *
      * @var bool
      */
     private $initialized = false;
 
     /**
      * Creates a new category navigation menu.
-     * 
+     *
      * @param $url_format string The format to use for the URL of a category. Passed to sprintf(). Defaults to the
      *        string "?category=%s".
      * @param $extra_items array An array of extra tree items, added to the root.
@@ -74,7 +75,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
      * If true displays the number of children belonging to the category.
      * If false do not display the number of
      * children.
-     * 
+     *
      * @return bool
      */
     public function get_display_child_count()
@@ -101,7 +102,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
 
     /**
      * Returns the menu items.
-     * 
+     *
      * @param $extra_items array An array of extra tree items, added to the root.
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
@@ -109,7 +110,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
     public function get_menu($extra_items = array())
     {
         $usercategories = DataManager :: retrieve_course_categories_ordered_by_name();
-        
+
         $categories = array();
         while ($category = $usercategories->next_result())
         {
@@ -125,7 +126,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
 
     /**
      * Returns the items of the sub menu.
-     * 
+     *
      * @param $categories array The categories to include in this menu.
      * @param $parent int The parent category ID.
      * @return array An array with all menu items. The structure of this array is the structure needed by
@@ -137,15 +138,15 @@ class CourseCategoryCatalogMenu extends HTML_Menu
         foreach ($categories[$parent] as $category)
         {
             $menu_item = array();
-            
+
             if ($this->get_display_child_count())
             {
                 $count = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: count(
-                    Course :: class_name(), 
+                    Course :: class_name(),
                     new EqualityCondition(
-                        new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_CATEGORY), 
+                        new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_CATEGORY),
                         new StaticConditionVariable($category->get_id())));
-                
+
                 $count_text = " ($count)'";
             }
             else
@@ -175,7 +176,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
 
     /**
      * Gets the URL of a given category
-     * 
+     *
      * @param $category int The id of the category
      * @return string The requested URL
      */
@@ -187,7 +188,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
 
     /**
      * Renders the menu as a tree
-     * 
+     *
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
@@ -203,7 +204,7 @@ class CourseCategoryCatalogMenu extends HTML_Menu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     * 
+     *
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -212,8 +213,8 @@ class CourseCategoryCatalogMenu extends HTML_Menu
         {
             $this->init();
         }
-        
-        $array_renderer = new HTML_Menu_ArrayRenderer();
+
+        $array_renderer = new HtmlMenuArrayRenderer();
         $this->render($array_renderer, 'urhere');
         $breadcrumbs = $array_renderer->toArray();
         foreach ($breadcrumbs as $crumb)

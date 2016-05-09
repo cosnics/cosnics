@@ -8,13 +8,14 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use HTML_Menu;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 
 /**
  * $Id: content_object_category_menu.class.php 204 2009-11-13 12:51:30Z tristan $
  *
  * @package repository.lib
  */
-class RightsTreeRenderer extends HTML_Menu
+class RightsTreeRenderer extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 

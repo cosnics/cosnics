@@ -3,9 +3,9 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use HTML_Menu;
 
 /**
  * The portfolio structure represented as a tree-menu
@@ -13,7 +13,7 @@ use HTML_Menu;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class Menu extends HTML_Menu
+class Menu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 

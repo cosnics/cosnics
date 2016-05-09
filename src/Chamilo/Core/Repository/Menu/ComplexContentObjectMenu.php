@@ -6,13 +6,14 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
+use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use HTML_Menu_ArrayRenderer;
 
 /**
  * $Id: complex_content_object_menu.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -24,7 +25,7 @@ use HTML_Menu_ArrayRenderer;
  *
  * @author Sven Vanpoucke
  */
-class ComplexContentObjectMenu extends \HTML_Menu
+class ComplexContentObjectMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
@@ -74,7 +75,7 @@ class ComplexContentObjectMenu extends \HTML_Menu
         $this->urlFmt = $url_format;
         $menu = $this->get_menu($root);
         parent :: __construct($menu);
-        $this->array_renderer = new HTML_Menu_ArrayRenderer();
+        $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_cloi_url($current_item));
     }
 
