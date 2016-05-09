@@ -244,9 +244,4 @@ abstract class Remover extends Action
     {
         return array();
     }
-
-    public function extract_xml_file($file)
-    {
-        return Utilities :: extract_xml_file($file);
-    }
 }
