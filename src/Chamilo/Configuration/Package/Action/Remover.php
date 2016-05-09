@@ -8,7 +8,6 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 use DOMDocument;
 
 /**

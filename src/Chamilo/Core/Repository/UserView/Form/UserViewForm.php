@@ -112,21 +112,13 @@ class UserViewForm extends FormValidator
         }
 
         $elem = &$this->addElement(
-            'advmultiselect',
+            'select',
             'types',
             Translation :: get('SelectTypesToShow'),
             $content_object_template_ids,
-            array('style' => 'width:300px; height: 300px'));
-
-        // $template = '
-        // <table{class}>
-        // <!-- BEGIN label_3 --><tr><th>{label_3}</th></tr><!-- END label_3 -->
-        // <tr>
-        // <td>{selected}</td>
-        // </tr>
-        // </table>
-        // ';
-        // $elem->setElementTemplate($template);
+            array(
+                'multiple' => 'true',
+                'size' => (count($content_object_template_ids) > 10 ? 10 : count($content_object_template_ids))));
 
         $this->setDefaults(array('types' => $defaults));
     }

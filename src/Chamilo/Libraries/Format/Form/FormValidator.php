@@ -57,150 +57,39 @@ class FormValidator extends HTML_QuickForm
      * @param bool $trackSubmit (optional)Whether to track if the form was submitted by adding a special hidden field
      *        (default = true)
      */
-    public function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $trackSubmit = true)
+    public function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = array(), $trackSubmit = true)
     {
-        if (is_null($attributes))
-        {
-            $attributes = array();
-        }
         $attributes['onreset'] = 'resetElements()';
 
         HTML_QuickForm :: HTML_QuickForm($form_name, $method, $action, $target, $attributes, $trackSubmit);
-        // Load some custom elements and rules
-        $dir = __DIR__ . '/';
 
-        $this->registerElementType(
-            'radio',
-            $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
-            'HTML_QuickForm_bootstrap_radio');
-
-        $this->registerElementType(
-            'datepicker',
-            $dir . 'Element/HTML_QuickForm_datepicker.php',
-            'HTML_QuickForm_datepicker');
-        $this->registerElementType(
-            'timepicker',
-            $dir . 'Element/HTML_QuickForm_timepicker.php',
-            'HTML_QuickForm_timepicker');
-        $this->registerElementType(
-            'receivers',
-            $dir . 'Element/HTML_QuickForm_receivers.php',
-            'HTML_QuickForm_receivers');
-        $this->registerElementType(
-            'select_language',
-            $dir . 'Element/HTML_QuickForm_select_language.php',
-            'HTML_QuickForm_Select_Language');
-        $this->registerElementType(
-            'upload_or_create',
-            $dir . 'Element/HTML_QuickForm_upload_or_create.php',
-            'HTML_QuickForm_upload_or_create');
-        $this->registerElementType(
-            'element_finder',
-            $dir . 'Element/HTML_QuickForm_element_finder.php',
-            'HTML_QuickForm_element_finder');
-        $this->registerElementType(
-            'advanced_element_finder',
-            $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
-            'HTML_QuickForm_advanced_element_finder');
-        $this->registerElementType(
-            'advmultiselect',
-            $dir . 'Element/HTML_QuickForm_advmultiselect_chamilo.php',
-            'HTML_QuickForm_advmultiselect_chamilo');
-        $this->registerElementType(
-            'image_selecter',
-            $dir . 'Element/HTML_QuickForm_image_selecter.php',
-            'HTML_QuickForm_image_selecter');
-
-        $this->registerElementType(
-            'user_group_finder',
-            $dir . 'Element/HTML_QuickForm_user_group_finder.php',
-            'HTML_QuickForm_user_group_finder');
-        $this->registerElementType(
-            'option_orderer',
-            $dir . 'Element/HTML_QuickForm_option_orderer.php',
-            'HTML_QuickForm_option_orderer');
-        $this->registerElementType('category', $dir . 'Element/HTML_QuickForm_category.php', 'HTML_QuickForm_category');
-        $this->registerElementType('splitter', $dir . 'Element/HTML_QuickForm_splitter.php', 'HTML_QuickForm_splitter');
-        $this->registerElementType(
-            'style_button',
-            $dir . 'Element/HTML_QuickForm_stylebutton.php',
-            'HTML_QuickForm_stylebutton');
-        $this->registerElementType(
-            'style_submit_button',
-            $dir . 'Element/HTML_QuickForm_stylesubmitbutton.php',
-            'HTML_QuickForm_stylesubmitbutton');
-        $this->registerElementType(
-            'style_reset_button',
-            $dir . 'Element/HTML_QuickForm_styleresetbutton.php',
-            'HTML_QuickForm_styleresetbutton');
-        $this->registerElementType(
-            'checkbox',
-            $dir . 'Element/HTML_QuickForm_extended_checkbox.php',
-            'HTML_QuickForm_extended_checkbox');
-        $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
-
-        $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/HTML_QuickForm_Rule_Date.php');
-        $this->registerRule(
-            'date_compare',
-            null,
-            'HTML_QuickForm_Rule_DateCompare',
-            $dir . 'Rule/HTML_QuickForm_Rule_DateCompare.php');
-        $this->registerRule(
-            'number_compare',
-            null,
-            'HTML_QuickForm_Rule_NumberCompare',
-            $dir . 'Rule/HTML_QuickForm_Rule_NumberCompare.php');
-        $this->registerRule(
-            'username_available',
-            null,
-            'HTML_QuickForm_Rule_UsernameAvailable',
-            $dir . 'Rule/HTML_QuickForm_Rule_UsernameAvailable.php');
-        $this->registerRule(
-            'username',
-            null,
-            'HTML_QuickForm_Rule_Username',
-            $dir . 'Rule/HTML_QuickForm_Rule_Username.php');
-        $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/HTML_QuickForm_Rule_Url.php');
-        $this->registerRule(
-            'filetype',
-            null,
-            'HTML_QuickForm_Rule_Filetype',
-            $dir . 'Rule/HTML_QuickForm_Rule_Filetype.php');
-
-        $this->registerRule(
-            'disk_quota',
-            null,
-            'HTML_QuickForm_Rule_DiskQuota',
-            $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php');
-
-        $this->registerRule(
-            'jquery_date',
-            null,
-            'HTML_QuickForm_Rule_JqueryDate',
-            $dir . 'Rule/HTML_QuickForm_Rule_JqueryDate.php');
-        $this->registerRule(
-            'jquery_time',
-            null,
-            'HTML_QuickForm_Rule_JqueryTime',
-            $dir . 'Rule/HTML_QuickForm_Rule_JqueryTime.php');
+        $this->registerAdditionalElements();
+        $this->registerAdditionalRules();
 
         $this->addElement(
             'html',
             '<script type="text/javascript" src="' . Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                  'Reset.js"></script>');
 
-        // Modify the default templates
+        $this->setDefaultTemplates();
+
+        foreach ($this->_submitValues as $index => & $value)
+        {
+            $value = Security :: remove_XSS($value);
+        }
+    }
+
+    public function setDefaultTemplates()
+    {
         $this->renderer = $this->defaultRenderer();
 
         $form_template = <<<EOT
-
 <form {attributes}>
 {content}
 	<div class="clear">
 		&nbsp;
 	</div>
 </form>
-
 EOT;
         $this->renderer->setFormTemplate($form_template);
 
@@ -239,10 +128,111 @@ EOT;
 	</div>
 EOT;
         $this->renderer->setRequiredNoteTemplate($required_note_template);
-        foreach ($this->_submitValues as $index => & $value)
-        {
-            $value = Security :: remove_XSS($value);
-        }
+    }
+
+    public function registerAdditionalElements()
+    {
+        $dir = __DIR__ . '/';
+
+        // Date and timepicker elements
+        $this->registerElementType(
+            'datepicker',
+            $dir . 'Element/HTML_QuickForm_datepicker.php',
+            'HTML_QuickForm_datepicker');
+        $this->registerElementType(
+            'timepicker',
+            $dir . 'Element/HTML_QuickForm_timepicker.php',
+            'HTML_QuickForm_timepicker');
+
+        // Element finder elements
+        $this->registerElementType(
+            'upload_or_create',
+            $dir . 'Element/HTML_QuickForm_upload_or_create.php',
+            'HTML_QuickForm_upload_or_create');
+        $this->registerElementType(
+            'element_finder',
+            $dir . 'Element/HTML_QuickForm_element_finder.php',
+            'HTML_QuickForm_element_finder');
+        $this->registerElementType(
+            'advanced_element_finder',
+            $dir . 'Element/HTML_QuickForm_advanced_element_finder.php',
+            'HTML_QuickForm_advanced_element_finder');
+        $this->registerElementType(
+            'image_selecter',
+            $dir . 'Element/HTML_QuickForm_image_selecter.php',
+            'HTML_QuickForm_image_selecter');
+
+        $this->registerElementType(
+            'user_group_finder',
+            $dir . 'Element/HTML_QuickForm_user_group_finder.php',
+            'HTML_QuickForm_user_group_finder');
+
+        // Button elements
+        $this->registerElementType(
+            'style_button',
+            $dir . 'Element/HTML_QuickForm_stylebutton.php',
+            'HTML_QuickForm_stylebutton');
+        $this->registerElementType(
+            'style_submit_button',
+            $dir . 'Element/HTML_QuickForm_stylesubmitbutton.php',
+            'HTML_QuickForm_stylesubmitbutton');
+        $this->registerElementType(
+            'style_reset_button',
+            $dir . 'Element/HTML_QuickForm_styleresetbutton.php',
+            'HTML_QuickForm_styleresetbutton');
+
+        // Checkbox and radio elements
+        $this->registerElementType(
+            'radio',
+            $dir . 'Element/HTML_QuickForm_bootstrap_radio.php',
+            'HTML_QuickForm_bootstrap_radio');
+
+        $this->registerElementType(
+            'checkbox',
+            $dir . 'Element/HTML_QuickForm_extended_checkbox.php',
+            'HTML_QuickForm_extended_checkbox');
+
+        $this->registerElementType('toggle', $dir . 'Element/HTML_QuickForm_toggle.php', 'HTML_QuickForm_toggle');
+
+        $this->registerElementType('category', $dir . 'Element/HTML_QuickForm_category.php', 'HTML_QuickForm_category');
+    }
+
+    public function registerAdditionalRules()
+    {
+        $dir = __DIR__ . '/';
+
+        $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/HTML_QuickForm_Rule_Date.php');
+        $this->registerRule(
+            'date_compare',
+            null,
+            'HTML_QuickForm_Rule_DateCompare',
+            $dir . 'Rule/HTML_QuickForm_Rule_DateCompare.php');
+        $this->registerRule(
+            'number_compare',
+            null,
+            'HTML_QuickForm_Rule_NumberCompare',
+            $dir . 'Rule/HTML_QuickForm_Rule_NumberCompare.php');
+        $this->registerRule(
+            'username_available',
+            null,
+            'HTML_QuickForm_Rule_UsernameAvailable',
+            $dir . 'Rule/HTML_QuickForm_Rule_UsernameAvailable.php');
+        $this->registerRule(
+            'username',
+            null,
+            'HTML_QuickForm_Rule_Username',
+            $dir . 'Rule/HTML_QuickForm_Rule_Username.php');
+        $this->registerRule(
+            'filetype',
+            null,
+            'HTML_QuickForm_Rule_Filetype',
+            $dir . 'Rule/HTML_QuickForm_Rule_Filetype.php');
+
+        $this->registerRule(
+            'disk_quota',
+            null,
+            'HTML_QuickForm_Rule_DiskQuota',
+            $dir . 'Rule/HTML_QuickForm_Rule_DiskQuota.php');
     }
 
     public function set_error_reporting($enabled)
@@ -515,26 +505,6 @@ EOT;
     }
 
     /**
-     * Add a option_orderer element to the form
-     *
-     * @param string $label The label for the form-element
-     * @param string $name The element name
-     * @return HTML_QuickForm_datepicker The element.
-     */
-    public function add_option_orderer($name, $label, $options, $separator)
-    {
-        $element = $this->addElement(
-            'option_orderer',
-            $name,
-            $label,
-            $options,
-            $separator,
-            array('form_name' => $this->getAttribute('name'), 'class' => $name));
-
-        return $element;
-    }
-
-    /**
      * Add a timepicker element to the form
      *
      * @param string $label The label for the form-element
@@ -704,7 +674,8 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName .
+                 " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');
@@ -873,22 +844,22 @@ EOT;
 					</script>\n");
     }
 
-//    public function add_checkbox_javascript()
-//    {
-//        $html = array();
-//
-//        $html[] = '<script type="text/javascript">';
-//        $html[] = '$(document).ready(function() {';
-//        $html[] = '$(\':checkbox:not(.no-toggle-style)\').bootstrapToggle({';
-//        $html[] = 'on: \'' . Translation :: get('ConfirmOn', array(), Utilities :: COMMON_LIBRARIES) . '\',';
-//        $html[] = 'off: \'' . Translation :: get('ConfirmOff', array(), Utilities :: COMMON_LIBRARIES) . '\',';
-//        $html[] = 'size: \'small\'';
-//        $html[] = '});';
-//        $html[] = '});';
-//        $html[] = '</script>';
-//
-//        $this->addElement('html', implode(PHP_EOL, $html));
-//    }
+    // public function add_checkbox_javascript()
+    // {
+    // $html = array();
+    //
+    // $html[] = '<script type="text/javascript">';
+    // $html[] = '$(document).ready(function() {';
+    // $html[] = '$(\':checkbox:not(.no-toggle-style)\').bootstrapToggle({';
+    // $html[] = 'on: \'' . Translation :: get('ConfirmOn', array(), Utilities :: COMMON_LIBRARIES) . '\',';
+    // $html[] = 'off: \'' . Translation :: get('ConfirmOff', array(), Utilities :: COMMON_LIBRARIES) . '\',';
+    // $html[] = 'size: \'small\'';
+    // $html[] = '});';
+    // $html[] = '});';
+    // $html[] = '</script>';
+    //
+    // $this->addElement('html', implode(PHP_EOL, $html));
+    // }
 
     /**
      * Add a button to the form to add resources.
@@ -1343,10 +1314,12 @@ EOT;
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '<div class="file-upload-buttons">';
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-warning cancel">';
-        $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>' . $this->getTranslation('Cancel') . '</span>';
+        $dropzoneHtml[] = '<i class="glyphicon glyphicon-ban-circle"></i> <span>' . $this->getTranslation('Cancel') .
+             '</span>';
         $dropzoneHtml[] = '</button>';
         $dropzoneHtml[] = '<button data-dz-remove class="btn btn-danger delete">';
-        $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') . '</span>';
+        $dropzoneHtml[] = '<i class="glyphicon glyphicon-trash"></i> <span>' . $this->getTranslation('Delete') .
+             '</span>';
         $dropzoneHtml[] = '</button>';
         $dropzoneHtml[] = '</div>';
         $dropzoneHtml[] = '</div>';
@@ -1423,6 +1396,6 @@ EOT;
      */
     protected function getTranslation($variable, $parameters = array())
     {
-        return Translation::getInstance()->getTranslation($variable, $parameters, Utilities::COMMON_LIBRARIES);
+        return Translation :: getInstance()->getTranslation($variable, $parameters, Utilities :: COMMON_LIBRARIES);
     }
 }

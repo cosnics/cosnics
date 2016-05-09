@@ -248,9 +248,17 @@ class Manager implements PublicationInterface
         $registration = Configuration :: registration(
             ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__));
 
-        $form->addElement(
-            'splitter',
-            Translation :: get('PublicationDetails', null, \Chamilo\Application\Weblcms\Manager :: context()));
+        $splitterHtml = array();
+
+        $splitterHtml[] = '<div class="form_splitter" >';
+        $splitterHtml[] = '<span class="category">' .
+             Translation :: get('PublicationDetails', null, \Chamilo\Application\Weblcms\Manager :: context()) .
+             '</span>';
+        $splitterHtml[] = '<div style="clear: both;"></div>';
+        $splitterHtml[] = '</div>';
+
+        $form->addElement('html', implode(PHP_EOL, $splitterHtml));
+
         $form->addElement(
             'checkbox',
             \Chamilo\Core\Repository\Publication\Manager :: WIZARD_OPTION . '[' .

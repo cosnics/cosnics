@@ -130,16 +130,6 @@ class SortableTableFromArray extends SortableTable
      */
     protected function initializeTable()
     {
-        // $table = new SortableTable(
-        // $this->getTableName(),
-        // array($this, 'countData'),
-        // array($this, 'getData'),
-        // $this->getDefaultOrderColumn(),
-        // $this->getDefaultPerPage(),
-        // $this->getDefaultOrderDirection(),
-        // $this->getAllowPageSelection(),
-        // $this->getAllowPageNavigation()
-        // );
         $this->setAdditionalParameters($this->getAdditionalParameters());
 
         foreach ($this->getTableColumns() as $key => $tableColumn)
@@ -182,13 +172,6 @@ class SortableTableFromArray extends SortableTable
     {
         return count($this->getTableData());
     }
-
-    // public function getFrom()
-    // {
-    // $pager = $this->getPager();
-    // $offset = $pager->getOffsetByPageId();
-    // return $offset[0] - 1;
-    // }
 
     /**
      *

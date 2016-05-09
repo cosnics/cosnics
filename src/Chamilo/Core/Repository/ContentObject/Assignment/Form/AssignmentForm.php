@@ -159,14 +159,17 @@ class AssignmentForm extends ContentObjectForm
 
         // Allowed content types for submissions
         $types = $this->get_allowed_content_object_types();
+
         $advanced_select = $this->createElement(
-            'advmultiselect',
+            'select',
             Assignment :: PROPERTY_ALLOWED_TYPES,
             Translation :: get('AllowedContentTypes'),
             $types,
-            array('style' => 'width: 200px;', 'class' => 'advanced_select_question'));
-        $advanced_select->setButtonAttributes('add', 'class="add"');
-        $advanced_select->setButtonAttributes('remove', 'class="remove"');
+            array(
+                'multiple' => 'true',
+                'class' => 'advanced_select_question',
+                'size' => (count($types) > 10 ? 10 : count($types))));
+
         $this->addElement($advanced_select);
 
         $this->addRule(
@@ -303,14 +306,15 @@ class AssignmentForm extends ContentObjectForm
 
     public function get_allowed_content_object_types()
     {
-        $configuration = Configuration::get_instance();
+        $configuration = Configuration :: get_instance();
 
         $types = array();
 
-        $integrationPackages = $configuration->getIntegrationRegistrations('Chamilo\Core\Repository\ContentObject\Assignment');
-        foreach($integrationPackages as $basePackage => $integrationPackageData)
+        $integrationPackages = $configuration->getIntegrationRegistrations(
+            'Chamilo\Core\Repository\ContentObject\Assignment');
+        foreach ($integrationPackages as $basePackage => $integrationPackageData)
         {
-            if($integrationPackageData['status'] != Registration::STATUS_ACTIVE)
+            if ($integrationPackageData['status'] != Registration :: STATUS_ACTIVE)
             {
                 continue;
             }
@@ -321,7 +325,7 @@ class AssignmentForm extends ContentObjectForm
         $return_types = array();
         foreach ($types as $index => $type)
         {
-            $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($type);
+            $typeName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($type);
             $typeClass = $type . '\Storage\DataClass\\' . $typeName;
 
             if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($type))

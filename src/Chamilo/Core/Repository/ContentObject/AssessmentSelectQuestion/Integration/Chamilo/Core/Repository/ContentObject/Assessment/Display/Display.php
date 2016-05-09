@@ -59,13 +59,14 @@ class Display extends QuestionDisplay
         if ($type == AssessmentSelectQuestion :: ANSWER_TYPE_CHECKBOX)
         {
             $advanced_select = $formvalidator->createElement(
-                'advmultiselect',
+                'select',
                 $question_name,
                 '',
                 $answers,
-                array('style' => 'width: 200px;', 'class' => 'advanced_select_question'));
-            $advanced_select->setButtonAttributes('add', 'class="add"');
-            $advanced_select->setButtonAttributes('remove', 'class="remove"');
+                array(
+                    'multiple' => 'true',
+                    'class' => 'advanced_select_question',
+                    'size' => (count($answers) > 10 ? 10 : count($answers))));
             $formvalidator->addElement($advanced_select);
         }
         else

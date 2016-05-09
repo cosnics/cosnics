@@ -70,15 +70,22 @@ class OperatingSystem extends User
      */
     public function load_operating_system()
     {
-        $buffer = split(
+        $buffer = explode(
             "#",
             "Windows 95|Win 95#Windows_95|Win 95#Windows 98|Win 98#Windows NT|Win NT#Windows NT 5.0|Win 2000#Windows NT 5.1|Win XP#Windows 2000|Win 2000#Windows XP|Win XP#Windows ME|Win Me#Win95|Win 95#Win98|Win 98#WinNT|Win NT#linux-2.2|Linux 2#Linux|Linux#Linux 2|Linux 2#Macintosh|Mac#Mac_PPC|Mac#Mac_PowerPC|Mac#SunOS 5|SunOS 5#SunOS 6|SunOS 6#FreeBSD|FreeBSD#beOS|beOS#InternetSeer|InternetSeer#Googlebot|Googlebot#Teleport Pro|Teleport Pro");
+
+        $list_operating_system = array();
         $i = 0;
+
         foreach ($buffer as $buffer1)
         {
-            list($list_operating_system[$i][0], $list_operating_system[$i][1]) = split('[|]', $buffer1);
-            $i += 1;
+            $data = explode('[|]', $buffer1);
+            $list_operating_system[$i][0] = $data[0];
+            $list_operating_system[$i][1] = $data[1];
+
+            $i ++;
         }
+
         return $list_operating_system;
     }
 }
