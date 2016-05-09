@@ -20,26 +20,32 @@ class FileContentObjectImportForm extends ContentObjectImportForm
 
     public function build_basic_form()
     {
-        parent :: build_basic_form();
+        parent:: build_basic_form();
 
         $this->addElement(
             'radio',
             self :: PARAM_DOCUMENT_TYPE,
-            Translation :: get('File'),
-            Translation :: get('Upload'),
-            self :: DOCUMENT_UPLOAD);
+            Translation:: get('File'),
+            Translation:: get('Upload'),
+            self :: DOCUMENT_UPLOAD
+        );
 
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="document_upload">');
 
         $calculator = new Calculator(
-            \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-                (int) $this->get_application()->get_user_id()));
+            \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User:: class_name(),
+                (int) $this->get_application()->get_user_id()
+            )
+        );
 
         $uploadUrl = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager :: context(),
-                \Chamilo\Core\Repository\Ajax\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager :: ACTION_IMPORT_FILE));
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager:: context(),
+                \Chamilo\Core\Repository\Ajax\Manager :: PARAM_ACTION =>
+                    \Chamilo\Core\Repository\Ajax\Manager :: ACTION_IMPORT_FILE
+            )
+        );
 
         $this->addFileDropzone(
             self :: IMPORT_FILE_NAME,
@@ -49,30 +55,40 @@ class FileContentObjectImportForm extends ContentObjectImportForm
                 'uploadUrl' => $uploadUrl->getUrl(),
                 'successCallbackFunction' => 'chamilo.core.repository.import.processUploadedFile',
                 'sendingCallbackFunction' => 'chamilo.core.repository.import.prepareRequest',
-                'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'),
-            false);
+                'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'
+            ),
+            false
+        );
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Manager :: context(), true) .
-                     'Plugin/jquery.file.upload.import.js'));
+            ResourceManager:: get_instance()->get_resource_html(
+                Path:: getInstance()->getJavascriptPath(Manager:: context(), true) .
+                'Plugin/jquery.file.upload.import.js'
+            )
+        );
 
         $this->addElement('html', '</div>');
 
-        $this->addElement('radio', self :: PARAM_DOCUMENT_TYPE, null, Translation :: get('Link'), self :: DOCUMENT_LINK);
+        $this->addElement(
+            'radio', self :: PARAM_DOCUMENT_TYPE, null,
+            Translation::getInstance()->getTranslation('ImportFromLink', null, Manager::context()),
+            self :: DOCUMENT_LINK
+        );
 
         $this->addElement('html', '<div style="padding-left: 25px; display: block;" id="document_link">');
         $this->add_textfield(self :: PROPERTY_LINK, null, false);
         $this->addElement('html', '</div>');
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
-        parent :: setDefaults(
+        parent:: setDefaults(
             array(
                 self :: PARAM_DOCUMENT_TYPE => self :: DOCUMENT_UPLOAD,
                 self :: PROPERTY_TYPE => ContentObjectImport :: FORMAT_FILE,
-                self :: PROPERTY_LINK => 'http://'));
+                self :: PROPERTY_LINK => 'http://'
+            )
+        );
     }
 }

@@ -26,7 +26,6 @@ class ListHomeRenderer extends HomeRenderer
 
         $html = array();
 
-        $html[] = $this->getHomeTool()->renderShortcuts($this->getCourseTools());
         $html[] = $this->getHomeTool()->renderHomeActions();
 
         $html[] = '<div class="clearfix"></div>';

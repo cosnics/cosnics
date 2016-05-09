@@ -132,6 +132,9 @@ class RightsEditorComponent extends Manager
                     (string) StringUtilities :: getInstance()->createString(
                         Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL))->upperCamelize());
 
+                $context = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool;
+                $tool = Translation::getInstance()->getTranslation('TypeName', null, $context);
+
                 $selectedTool = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL);
                 if ($selectedTool && $selectedTool != 'Rights')
                 {

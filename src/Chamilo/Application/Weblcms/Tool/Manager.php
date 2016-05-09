@@ -226,21 +226,30 @@ abstract class Manager extends Application
         return $this->get_parent()->get_tool_registration();
     }
 
-    public function render_header($visible_tools = null, $show_introduction_text = false)
+    /**
+     * Renders the page title
+     *
+     * @return string
+     */
+    protected function renderPageTitle()
     {
         $html = array();
 
-        $html[] = parent :: render_header();
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-md-9">';
+        $html[] = parent::renderPageTitle();
+        $html[] = '</div>';
 
         if (Page :: getInstance()->isFullPage())
         {
-            if (! $visible_tools)
-            {
-                $visible_tools = $this->get_visible_tools();
-            }
+            $visible_tools = $this->get_visible_tools();
 
-            $html[] = $this->display_course_menus($visible_tools, $show_introduction_text);
+            $html[] = '<div class="col-md-3">';
+            $html[] = $this->display_course_menus($visible_tools, false);
+            $html[] = '</div>';
         }
+
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
