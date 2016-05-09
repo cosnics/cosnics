@@ -423,7 +423,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         // Menu
 
-        $classes = array('col-xs-12', 'col-sm-3', 'col-lg-2', 'learning-path-tree-menu-container');
+        $classes = array('col-xs-12', 'col-sm-3', 'col-lg-3', 'learning-path-tree-menu-container');
 
         if ($isMenuHidden == 'true')
         {
@@ -447,7 +447,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         // Content
 
-        $classes = array('col-xs-12', 'col-sm-9', 'col-lg-10', 'learning-path-content');
+        $classes = array('col-xs-12', 'col-sm-9', 'col-lg-9', 'learning-path-content');
 
         if ($isMenuHidden == 'true')
         {
