@@ -14,12 +14,11 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Table\Pager;
-use Chamilo\Libraries\Format\Table\PagerRenderer;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -72,7 +71,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             $buttonToolbar = $this->getFeedbackButtonToolbar();
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
 
-
             $feedbacks = $this->get_parent()->retrieve_feedbacks(
                 $this->getPager()->getNumberOfItemsPerPage(),
                 $this->getPager()->getCurrentRangeOffset());
@@ -90,7 +88,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $html[] = '<h3>';
 
-                if (!$this->get_parent()->is_allowed_to_create_feedback())
+                if (! $this->get_parent()->is_allowed_to_create_feedback())
                 {
                     $html[] = $buttonToolbarRenderer->render();
                 }
@@ -169,7 +167,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $buttonToolbar = new ButtonToolBar(null, array(), array('pull-right'));
 
-        if(!$this->get_application() instanceof FeedbackNotificationSupport)
+        if (! $this->get_application() instanceof FeedbackNotificationSupport)
         {
             return $buttonToolbar;
         }
@@ -204,7 +202,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $buttonToolbar;
-
     }
 
     /**
@@ -222,8 +219,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         $bootstrapGlyph = new BootstrapGlyph('remove');
         $title = Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES);
         $delete_link = '<a title="' . $title . '" href="' . $delete_url . '" onclick="return confirm(\'' .
-            addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');">' .
-            $bootstrapGlyph->render() . '</a>';
+             addslashes(Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');">' .
+             $bootstrapGlyph->render() . '</a>';
 
         return $delete_link;
     }

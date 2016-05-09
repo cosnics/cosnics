@@ -95,7 +95,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
             $question_forms = array();
             foreach ($values as $key => $value)
             {
-                $split = split('_', $key);
+                $split = explode('_', $key);
                 if (is_numeric($split[0]))
                 {
                     $question_forms[$split[0]][$split[1]] = $value;

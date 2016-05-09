@@ -281,10 +281,16 @@ class DatetimeUtilities
      */
     public static function time_from_datepicker($string)
     {
-        list($date, $time) = split(' ', $string);
-        list($year, $month, $day) = split('-', $date);
-        list($hours, $minutes, $seconds) = split(':', $time);
-        return mktime($hours, $minutes, $seconds, $month, $day, $year);
+        $dateTime = explode(' ', $string);
+        $yearMonthDday = explode('-', $dateTime[0]);
+        $hoursMinutesSeconds = explode(':', $dateTime[1]);
+        return mktime(
+            $hoursMinutesSeconds[0],
+            $hoursMinutesSeconds[1],
+            $hoursMinutesSeconds[2],
+            $yearMonthDday[1],
+            $yearMonthDday[2],
+            $yearMonthDday[0]);
     }
 
     /**
@@ -296,8 +302,8 @@ class DatetimeUtilities
      */
     public static function time_from_datepicker_without_timepicker($string, $h = 0, $m = 0, $s = 0)
     {
-        list($year, $month, $day) = split('-', $string);
-        return mktime($h, $m, $s, $month, $day, $year);
+        $yearMonthDday = explode('-', $string);
+        return mktime($h, $m, $s, $yearMonthDday[1], $yearMonthDday[2], $yearMonthDday[0]);
     }
 
     public static function format_seconds_to_hours($seconds)

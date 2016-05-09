@@ -12,62 +12,15 @@ class TableSort
 {
 
     /**
-     * TODO: Not UTF-8 compatible Changes a string to lowercase (keep accents).
-     *
-     * @param string $txt The string to convert
-     * @author René Haentjens This function is 8859-1 specific and should be adapted when Chamilo is used with other
-     *         charsets.
-     */
-    public function strtolower_keepaccents($txt)
-    {
-        return strtolower(strtr($txt, "������������������������������", "������������������������������"));
-    }
-
-    /**
-     * TODO: Not UTF-8 compatible Changes a string to lowercase.
-     *
-     * @param string $txt The string to convert
-     * @author René Haentjens This function is 8859-1 specific and should be adapted when Chamilo is used with other
-     *         charsets.
-     */
-    public function strtolower_eorlatin($txt)
-    {
-        return str_replace(
-            array("�", "�"),
-            array("ae", "ss"),
-            strtr(
-                TableSort :: strtolower_keepaccents($txt),
-                "�����������������������������",
-                "aaaaaaceeeeiiiidnoooooouuuuyy"));
-
-        // do not replace "�" by "th", leave it at the end of the alphabet...
-        // do not replace any of "$&��������", though they resemble letters...
-    }
-
-    /**
-     * TODO: Not UTF-8 compatible Creates a string to use in sorting.
-     *
-     * @param string $txt The string to convert
-     * @author René Haentjens This function is 8859-1 specific and should be adapted when Chamilo is used with other
-     *         charsets. See http://anubis.dkuug.dk/CEN/TC304/EOR/eorhome.html Function 'orderingstring' can be used to
-     *         implement EOR level 1 ordering, for 8859- 1.
-     */
-    public function orderingstring($txt)
-    {
-        return ereg_replace("[^0-9a-z�]", "", TableSort :: strtolower_eorlatin($txt));
-    }
-
-    /**
      * Sorts a 2-dimensional table.
      *
      * @param array $data The data to be sorted.
      * @param int $column The column on which the data should be sorted (default = 0)
      * @param string $direction The direction to sort (SORT_ASC (default) or SORT_DESC)
-     * @param constant $type How should data be sorted (SORT_REGULAR, SORT_NUMERIC, SORT_STRING,SORT_DATE,SORT_IMAGE)
      * @return array The sorted dataset
      * @author digitaal-leren@hogent.be
      */
-    public function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR)
+    public function sort_table($data, $column = 0, $direction = SORT_ASC)
     {
         if (! is_array($data) || empty($data))
         {
@@ -84,27 +37,25 @@ class TableSort
             return $data;
         }
 
-        if ($type == SORT_REGULAR)
+        if (TableSort :: is_image_column($data, $column))
         {
-            if (TableSort :: is_image_column($data, $column))
-            {
-                $type = SORT_IMAGE;
-            }
-            elseif (TableSort :: is_date_column($data, $column))
-            {
-                $type = SORT_DATE;
-            }
-            elseif (TableSort :: is_numeric_column($data, $column))
-            {
-                $type = SORT_NUMERIC;
-            }
-            else
-            {
-                $type = SORT_STRING;
-            }
+            $type = SORT_IMAGE;
+        }
+        elseif (TableSort :: is_date_column($data, $column))
+        {
+            $type = SORT_DATE;
+        }
+        elseif (TableSort :: is_numeric_column($data, $column))
+        {
+            $type = SORT_NUMERIC;
+        }
+        else
+        {
+            $type = SORT_STRING;
         }
 
         $compare_operator = $direction == SORT_ASC ? '>' : '<=';
+
         switch ($type)
         {
             case SORT_NUMERIC :
@@ -112,18 +63,16 @@ class TableSort
                      $column . ']);';
                 break;
             case SORT_IMAGE :
-                $compare_function = 'return strnatcmp(Chamilo\Libraries\Format\Table\TableSort::orderingstring(strip_tags($a[' .
-                     $column . '], "<img>")), Chamilo\Libraries\Format\Table\TableSort::orderingstring(strip_tags($b[' .
-                     $column . '], "<img>"))) ' . $compare_operator . ' 0;';
+                $compare_function = 'return strnatcmp(strip_tags($a[' . $column . '], "<img>"), strip_tags($b[' . $column .
+                     '], "<img>")) ' . $compare_operator . ' 0;';
                 break;
             case SORT_DATE :
                 $compare_function = 'return strtotime(strip_tags($a[' . $column . '])) ' . $compare_operator .
                      ' strtotime(strip_tags($b[' . $column . ']));';
             case SORT_STRING :
             default :
-                $compare_function = 'return strnatcmp(Chamilo\Libraries\Format\Table\TableSort::orderingstring(strip_tags($a[' .
-                     $column . '])), Chamilo\Libraries\Format\Table\TableSort::orderingstring(strip_tags($b[' . $column .
-                     ']))) ' . $compare_operator . ' 0;';
+                $compare_function = 'return strnatcmp(strip_tags($a[' . $column . ']), strip_tags($b[' . $column . '])) ' .
+                     $compare_operator . ' 0;';
                 break;
         }
 

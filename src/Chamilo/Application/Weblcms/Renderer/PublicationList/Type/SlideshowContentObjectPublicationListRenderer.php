@@ -1,13 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
-use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Libraries\Format\Slideshow\SlideshowRenderer;
-use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -41,14 +38,13 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
         $publicationCount = $this->get_publication_count();
 
         $contentObjectRenditionImplementation = null;
-        if($contentObject)
+        if ($contentObject)
         {
-            $contentObjectRenditionImplementation = ContentObjectRenditionImplementation:: factory(
+            $contentObjectRenditionImplementation = ContentObjectRenditionImplementation :: factory(
                 $contentObject,
                 ContentObjectRendition :: FORMAT_HTML,
                 ContentObjectRendition :: VIEW_PREVIEW,
-                $this
-            );
+                $this);
         }
 
         $slideshowRender = new SlideshowRenderer(
@@ -58,8 +54,7 @@ class SlideshowContentObjectPublicationListRenderer extends ContentObjectPublica
             $publicationActions,
             $toolbrowser->get_parameters(),
             $slideshowIndex,
-            $slideshowAutoPlay
-        );
+            $slideshowAutoPlay);
 
         return $slideshowRender->render();
     }

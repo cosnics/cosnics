@@ -40,13 +40,15 @@ class CourseSectionToolSelectorForm extends FormValidator
 
     public function build_basic_form()
     {
+        $tools = $this->get_tools();
+
         // $sel = &
         $this->addElement(
-            'advmultiselect',
+            'select',
             'tools',
             Translation :: get('SelectTools'),
-            $this->get_tools(),
-            array('style' => 'width:200px;'));
+            $tools,
+            array('multiple' => 'true', 'size' => (count($tools) > 10 ? 10 : count($tools))));
 
         $buttons[] = $this->createElement(
             'style_submit_button',

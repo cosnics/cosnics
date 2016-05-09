@@ -23,7 +23,6 @@
         "pear-pear.php.net/HTML_Table" : "*",
         "pear-pear.php.net/HTML_QuickForm" : "*",
         "pear-pear.php.net/HTML_QuickForm_Controller" : "*",
-        "pear-pear.php.net/HTML_QuickForm_advmultiselect" : "*",
         "pear-pear.php.net/PEAR" : "*",
         "pear-pear.php.net/Pager" : "*",
         "pear-pear.php.net/Net_URL" : "*",

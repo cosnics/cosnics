@@ -7,7 +7,6 @@ use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\User\Storage\DataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -249,8 +248,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
             array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
 
         // add action for view as user
-        if ($userViewAllowed ||
-             $this->get_component()->get_user()->is_platform_admin())
+        if ($userViewAllowed || $this->get_component()->get_user()->is_platform_admin())
         {
             if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)) // ->get_parent()->is_teacher())
             {
@@ -286,14 +284,6 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
                     }
                 }
             }
-        }
-
-        // add actions from connectors
-
-        $connector_items = DataManager :: get_connector_toolbar_items($user_id);
-        foreach ($connector_items as $item)
-        {
-            $toolbar->add_item($item);
         }
 
         // return

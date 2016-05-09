@@ -650,23 +650,6 @@ abstract class ContentObjectPublicationListRenderer
         return $this->tool_browser->is_allowed($right, $publication);
     }
 
-    /**
-     */
-    protected function object2color($object)
-    {
-        $color_number = substr(ereg_replace('[0a-zA-Z]', '', md5(serialize($object))), 0, 9);
-        $rgb = array();
-        $rgb['r'] = substr($color_number, 0, 3) % 255;
-        $rgb['g'] = substr($color_number, 2, 3) % 255;
-        $rgb['b'] = substr($color_number, 4, 3) % 255;
-
-        $rgb['fr'] = round(($rgb['r'] + 234) / 2);
-        $rgb['fg'] = round(($rgb['g'] + 234) / 2);
-        $rgb['fb'] = round(($rgb['b'] + 234) / 2);
-
-        return $rgb;
-    }
-
     public static function factory($type, $tool_browser)
     {
         $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
@@ -768,7 +751,8 @@ abstract class ContentObjectPublicationListRenderer
         // currently only mail button for announcements; this outer check can be removed, but then all
         // tools must have a <ToolName>PublicationMailerComponent class
         // (see: application/weblcms/tool/announcement/php/lib/component/publication_mailer.class.php)
-        if ($has_edit_right && $publication[ContentObjectPublicationCategory :: PROPERTY_TOOL] == self :: TOOL_TYPE_ANNOUNCEMENT)
+        if ($has_edit_right &&
+             $publication[ContentObjectPublicationCategory :: PROPERTY_TOOL] == self :: TOOL_TYPE_ANNOUNCEMENT)
         {
 
             if (! $publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
@@ -990,11 +974,11 @@ abstract class ContentObjectPublicationListRenderer
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
                 $visibility_image = 'Action/Invisible';
-                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager::context());
+                $visibilityTranslation = Translation :: get('MakeVisible', null, Manager :: context());
             }
             else
             {
-                $visibilityTranslation = Translation :: get('MakeInvisible', null, Manager::context());
+                $visibilityTranslation = Translation :: get('MakeInvisible', null, Manager :: context());
                 $visibility_image = 'Action/Visible';
             }
 
@@ -1006,11 +990,12 @@ abstract class ContentObjectPublicationListRenderer
                     ToolbarItem :: DISPLAY_ICON));
 
             // Move the publication
-            if ($this->get_tool_browser()->get_parent() instanceof Categorizable && $this->get_tool_browser()->hasCategories())
+            if ($this->get_tool_browser()->get_parent() instanceof Categorizable &&
+                 $this->get_tool_browser()->hasCategories())
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('MoveToCategory', null, Manager::context()),
+                        Translation :: get('MoveToCategory', null, Manager :: context()),
                         Theme :: getInstance()->getCommonImagePath('Action/Move'),
                         $this->get_url(
                             array(

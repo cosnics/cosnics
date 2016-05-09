@@ -37,7 +37,8 @@ class Filesystem
     const LIST_DIRECTORIES = 3;
 
     /**
-     * Creates a directory. This function creates all missing directories in a given path.
+     * Creates a directory.
+     * This function creates all missing directories in a given path.
      *
      * @param $path string
      * @param $mode string
@@ -75,7 +76,7 @@ class Filesystem
 
         foreach ($uncreated_directories as $path)
         {
-            $perms =\Fileperms($path);
+            $perms = \Fileperms($path);
             $current_perm_str = substr(decoct($perms), - 4);
             $target_perm_str = decoct($mode);
             // only try to chmod if needed
@@ -113,7 +114,8 @@ class Filesystem
     }
 
     /**
-     * Copies a file. If the destination directory doesn't exist, this function tries to create the directory using the
+     * Copies a file.
+     * If the destination directory doesn't exist, this function tries to create the directory using the
      * Filesystem::create_dir function.
      *
      * @param $source string The full path to the source file
@@ -195,7 +197,8 @@ class Filesystem
     }
 
     /**
-     * Moves a file. If the destination directory doesn't exist, this function tries to create the directory using the
+     * Moves a file.
+     * If the destination directory doesn't exist, this function tries to create the directory using the
      * Filesystem::create_dir function. Path cannot have a '/' at the end
      *
      * @param $source string The full path to the source file
@@ -217,7 +220,8 @@ class Filesystem
     }
 
     /**
-     * Creates a unique name for a file or a directory. This function will also use the function
+     * Creates a unique name for a file or a directory.
+     * This function will also use the function
      * Filesystem::create_safe_name to make sure the resulting name is safe to use.
      *
      * @param $desired_path string The path
@@ -257,7 +261,7 @@ class Filesystem
      */
     public static function create_safe_name($desired_name)
     {
-        return StringUtilities:: getInstance()->createString($desired_name)->toAscii()->__toString();
+        return StringUtilities :: getInstance()->createString($desired_name)->toAscii()->__toString();
         // Change encoding
         $safe_name = mb_convert_encoding($desired_name, "ISO-8859-1", "UTF-8");
         // Replace .php by .phps
@@ -279,7 +283,8 @@ class Filesystem
     }
 
     /**
-     * Scans all files and directories in the given path and subdirectories. If a file or directory name isn't
+     * Scans all files and directories in the given path and subdirectories.
+     * If a file or directory name isn't
      * considered as safe, it will be renamed to a safe name.
      *
      * @param $path string The full path to the directory. This directory will not be renamed, only its content.
@@ -311,7 +316,8 @@ class Filesystem
     }
 
     /**
-     * Writes content to a file. This function will try to create the path and the file if they don't exist yet.
+     * Writes content to a file.
+     * This function will try to create the path and the file if they don't exist yet.
      *
      * @param $file string The full path to the file
      * @param $content string
@@ -388,7 +394,7 @@ class Filesystem
     {
         $result = array();
 
-        if (!file_exists($path))
+        if (! file_exists($path))
         {
             return $result;
         }
@@ -604,13 +610,10 @@ class Filesystem
      */
     public static function file_send_for_download($full_file_name, $forced = false, $name = '', $content_type = '')
     {
-
         if (! is_file($full_file_name))
         {
             return false;
         }
-
-
 
         $filename = ($name == '') ? basename($full_file_name) : $name;
         $len = filesize($full_file_name);
@@ -691,9 +694,10 @@ class Filesystem
     }
 
     /**
-     * Call the chmod function on the given file path. The chmod value must be the octal value, with or without its
-     * leading zero Ex: Filesystem :: chmod('/path/to/file', '666')		OK Filesystem :: chmod('/path/to/file', '0666')	OK
-     * Filesystem :: chmod('/path/to/file', 666)		OK Filesystem :: chmod('/path/to/file', 0666)		OK Note: This function
+     * Call the chmod function on the given file path.
+     * The chmod value must be the octal value, with or without its
+     * leading zero Ex: Filesystem :: chmod('/path/to/file', '666') OK Filesystem :: chmod('/path/to/file', '0666') OK
+     * Filesystem :: chmod('/path/to/file', 666) OK Filesystem :: chmod('/path/to/file', 0666) OK Note: This function
      * was written to facilitate the storage of a chmod value. The PHP chmod value must be called with an octal number,
      * but it is not easy to store a value with a leading 0 that is a number and not a string.
      *

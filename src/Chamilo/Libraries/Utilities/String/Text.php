@@ -26,42 +26,6 @@ class Text
 {
 
     /**
-     * function make_clickable($string)
-     * completes url contained in the text with "<a href .
-     * ..".
-     * However the function simply returns the submitted text without any
-     * transformation if it already contains some "<a href:" or "<img src=".
-     *
-     * @param string $text text to be converted
-     * @return text after conversion
-     * @author Rewritten by Nathan Codding - Feb 6, 2001.
-     *         completed by Hugues Peeters - July 22, 2002
-     *         Actually this function is taken from the PHP BB 1.4 script
-     *         - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
-     *         to that URL
-     *         - Goes through the given string, and replaces www.xxxx.yyyy[zzzz] with an HTML <a> tag linking
-     *         to http://www.xxxx.yyyy[/zzzz]
-     *         - Goes through the given string, and replaces xxxx@yyyy with an HTML mailto: tag linking
-     *         to that email address
-     *         - Only matches these 2 patterns either after a space, or at the beginning of a line
-     *         Notes: the email one might get annoying - it's easy to make it more restrictive, though.. maybe
-     *         have it require something like xxxx@yyyy.zzzz or such. We'll see.
-     */
-    public static function make_clickable($string)
-    {
-        if (! stristr($string, ' src=') && ! stristr($string, ' href='))
-        {
-            $string = eregi_replace(
-                "(https?|ftp)://([a-z0-9#?/&=._+:~%-]+)",
-                "<a href=\"\\1://\\2\" target=\"_blank\">\\1://\\2</a>",
-                $string);
-            $string = eregi_replace("([a-z0-9_.-]+@[a-z0-9.-]+)", "<a href=\"mailto:\\1\">\\1</a>", $string);
-        }
-
-        return $string;
-    }
-
-    /**
      * Get the ordinal suffix of an int (e.g.
      * th, rd, st, etc.)
      *
