@@ -19,7 +19,6 @@
         "doctrine/dbal" : "2.5.*",
         "doctrine/cache" : "1.5.*",
         "pear-pear.php.net/HTML_Common" : "*",
-        "pear-pear.php.net/HTML_Menu" : "*",
         "pear-pear.php.net/HTML_Table" : "*",
         "pear-pear.php.net/HTML_QuickForm" : "*",
         "pear-pear.php.net/HTML_QuickForm_Controller" : "*",

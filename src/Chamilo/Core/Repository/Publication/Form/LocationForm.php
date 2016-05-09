@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\Publication\Wizard\Pages;
+namespace Chamilo\Core\Repository\Publication\Form;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: location_selection_publisher_wizard_page.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -25,7 +27,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * Class for application settings page Displays a form where the user can enter the installation settings regarding the
  * applications
  */
-class LocationSelectionPublisherWizardPage extends PublisherWizardPage
+class LocationForm extends FormValidator
 {
 
     /**
@@ -33,6 +35,12 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
      * @var \core\repository\ContentObject[]
      */
     private $content_objects;
+
+    /**
+     *
+     * @var integer[]
+     */
+    private $contentObjectIdentifiers;
 
     /**
      *
@@ -44,30 +52,40 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
     /**
      *
-     * @param string $name
-     * @param PublisherComponent $parent
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    public function __construct($name, $parent)
+    private $application;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @throws NoObjectSelectedException
+     * @throws NotAllowedException
+     * @throws \Exception
+     */
+    public function __construct(Application $application, $action)
     {
-        parent :: __construct($name, $parent);
+        $this->application = $application;
+        parent :: __construct('page_locations', 'post', $action);
 
-        $ids = $parent->getRequest()->get(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        $this->contentObjectIdentifiers = $this->getApplication()->getRequest()->get(
+            \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
 
-        if (empty($ids))
+        if (empty($this->contentObjectIdentifiers))
         {
             throw new NoObjectSelectedException(Translation :: get('ContentObject'));
         }
 
-        if (! is_array($ids))
+        if (! is_array($this->contentObjectIdentifiers))
         {
-            $ids = array($ids);
+            $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
         }
 
         $this->content_objects = array();
         $this->type = null;
 
         // Check whether the selected objects exist and perform the necessary rights checks
-        foreach ($ids as $id)
+        foreach ($this->contentObjectIdentifiers as $id)
         {
             $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
                 ContentObject :: class_name(),
@@ -80,7 +98,9 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             }
 
             // Check the USE-right
-            if (! RightsService :: getInstance()->canUseContentObject($this->get_parent()->get_user(), $content_object))
+            if (! RightsService :: getInstance()->canUseContentObject(
+                $this->getApplication()->get_user(),
+                $content_object))
             {
                 throw new NotAllowedException();
             }
@@ -103,15 +123,13 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
                 throw new \Exception(Translation :: get('ObjectsNotSameType'));
             }
         }
+
+        $this->buildForm();
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_title()
+    public function getApplication()
     {
-        return Translation :: get('LocationSelection');
+        return $this->application;
     }
 
     /**
@@ -186,7 +204,7 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
             $locations = $manager_class :: get_content_object_publication_locations(
                 $this->content_objects[0],
-                $this->get_parent()->get_user());
+                $this->getApplication()->get_user());
 
             $total_locations += $locations->size();
 
@@ -213,15 +231,13 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
 
             $this->addElement('html', '<br /><br />');
 
-            $prevnext[] = $this->createElement(
-                'style_button',
-                $this->getButtonName('next'),
+            $this->addElement(
+                'style_submit_button',
+                'publish',
                 Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
                 null,
                 null,
-                'arrow-right');
-
-            $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
+                'ok-sign');
         }
         else
         {
@@ -235,8 +251,6 @@ class LocationSelectionPublisherWizardPage extends PublisherWizardPage
             '<script type="text/javascript" src="' .
                  Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Publication', true) . 'Visibility.js' .
                  '"></script>');
-
-        $this->setDefaultAction('next');
     }
 
     /**
