@@ -179,12 +179,16 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Add a header when viewing course as another user.
+     *
+     * @param null $pageTitle
+     *
+     * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 
-        $html[] = parent :: render_header();
+        $html[] = parent :: render_header($pageTitle);
         $va_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_ID);
         $course_id = Session :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_VIEW_AS_COURSE_ID);
 

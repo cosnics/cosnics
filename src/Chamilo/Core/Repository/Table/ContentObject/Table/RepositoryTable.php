@@ -91,7 +91,7 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
                         array(
                             Application :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
                             \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_SHARE)),
-                    Translation :: get('ShareSelected'),
+                    Translation :: get('ShareSelected', null, Manager::context()),
                     false));
         }
         else
@@ -102,7 +102,7 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
                         array(
                             Application :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
                             \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE)),
-                    Translation :: get('UnshareSelected'),
+                    Translation :: get('UnshareSelected', null, Manager::context()),
                     false));
         }
 

@@ -273,6 +273,18 @@
                         var ajaxResult = eval('(' + data + ')');
                         setSelectedImage(ajaxResult.properties);
                         $('input[name="' + settings.name + '"]').trigger('change');
+                    },
+                    'onSelectError': function(file, errorCode) {
+                        var errorMessage = null;
+
+                        switch(errorCode) {
+                            case -120:
+                                errorMessage = getTranslation('ZeroByteFile', null, 'Chamilo\\Libraries');
+                        }
+
+                        if(errorMessage) {
+                            this.queueData.errorMsg = errorMessage;
+                        }
                     }
                 });
 
