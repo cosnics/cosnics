@@ -17,7 +17,7 @@
 * [File CO] Added clickable download link on inline images
 * [Learning Path] Allow HTML5 full screen display of learning paths
 * [Learning Path] Use Bootstrap TreeView for the learning path
-* [Calendar Event] Added default value for start and end time + fixes for aqua theme for layout
+* [Calendar Event] fixes for aqua theme for layout
 * [Calendar Event] Fixed css for datepicker
 * [LearningPath] A new mover component in which you can move an item directly to a new parent and a new position
 * [LearningPath] Changed tabs to buttons
@@ -44,3 +44,17 @@
 * [Streaming Videos] Translation: Streaming Video's
 * [CSS/Javascript] Fixed client caching of resources
 * [Caching] Fixed issue between PhpFileCache and OpCache
+
+[13/05/2016]
+
+* [CSS] Fixed the z-index for notifications and dropdown menu's
+* [Weblcms] Fixed translations in the manage rights component
+* [Repository] Fixed translations when a file is uploaded through uploadify (attachments)
+* [Repository] Fixed translations
+* [User Tool] Fixed translations
+* [Weblcms] Fixed publisher translations
+* [Weblcms] Navigate to overlaps with the course title on smaller screens
+* [Course Groups] Changed the color of "unsubscribe yourself" button to red
+* [Personal Calendar] Moved publish button to front
+* [Home] Fixed translations
+* [CSS] Alerts on smaller screen are now responsive

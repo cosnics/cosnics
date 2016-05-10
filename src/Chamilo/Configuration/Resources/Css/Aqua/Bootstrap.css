@@ -469,7 +469,7 @@ ol.breadcrumb a {
 .alert-message {
 	z-index: 9999;
 	position: relative;
-	margin: 10px auto 10px -287px;
+	margin: 10px auto 10px -250px;
 	width: 500px;
 	left: 50%;
 	right: 50%;
@@ -477,6 +477,15 @@ ol.breadcrumb a {
 	text-align: justify;
 	background-repeat: no-repeat;
 	background-position: 10px 50%;
+}
+
+@media (max-width: 768px) {
+	.alert-message {
+		margin: 10px 0 0 0;
+		width: 100%;
+		left: 0;
+		right: 0;
+	}
 }
 
 .alert-message h2 {

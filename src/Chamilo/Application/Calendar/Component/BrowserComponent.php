@@ -150,8 +150,6 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $actions = array();
 
-        $actions[] = $this->getGeneralActions();
-
         $extensionRegistrations = Configuration :: registrations_by_type(
             \Chamilo\Application\Calendar\Manager :: package() . '\Extension');
 
@@ -169,6 +167,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                 }
             }
         }
+
+        $actions[] = $this->getGeneralActions();
 
         return $actions;
     }

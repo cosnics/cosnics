@@ -333,7 +333,18 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             CourseTool :: class_name(),
             new DataClassRetrievesParameters($tools_condition));
 
-        while ($tool = $tools->next_result())
+        $toolsArray = $tools->as_array();
+        usort($toolsArray, function($toolA, $toolB) {
+            $toolANamespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($toolA->get_name());
+            $toolBNamespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($toolB->get_name());
+
+            $toolATranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolANamespace);
+            $toolBTranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolBNamespace);
+
+            return strcmp($toolATranslation, $toolBTranslation);
+        });
+
+        foreach($toolsArray as $tool)
         {
             $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name());
             $tool_title = Translation :: get('TypeName', null, $tool_namespace);
@@ -433,7 +444,15 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             CourseTool :: class_name(),
             new DataClassRetrievesParameters($tools_condition));
 
-        while ($tool = $tools->next_result())
+        $toolsArray = $tools->as_array();
+        usort($toolsArray, function($toolA, $toolB) {
+            $toolATranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolA->getContext());
+            $toolBTranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolB->getContext());
+
+            return strcmp($toolATranslation, $toolBTranslation);
+        });
+
+        foreach($toolsArray as $tool)
         {
             $tool_name = $tool->get_name();
 
