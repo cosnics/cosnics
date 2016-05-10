@@ -34,13 +34,20 @@ class Banner
 
     /**
      *
+     * @var string
+     */
+    private $containerMode;
+
+    /**
+     *
      * @param Application $application
      * @param integer $viewMode
      */
-    public function __construct(Application $application = null, $viewMode)
+    public function __construct(Application $application = null, $viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
     {
         $this->application = $application;
         $this->viewMode = $viewMode;
+        $this->containerMode = $containerMode;
     }
 
     /**
@@ -77,6 +84,24 @@ class Banner
     public function setViewMode($viewMode)
     {
         $this->viewMode = $viewMode;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
     }
 
     /**
@@ -120,13 +145,18 @@ class Banner
 
         $menuRenderer = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
 
-        $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml($menuRenderer, $request, $user);
+        $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
+            $menuRenderer,
+            $this->getContainerMode(),
+            $request,
+            $user);
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
             if ($this->getViewMode() == Page :: VIEW_MODE_FULL)
             {
                 $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+                $breadcrumbtrail->setContainerMode($this->getContainerMode());
 
                 if ($breadcrumbtrail->size() > 0)
                 {

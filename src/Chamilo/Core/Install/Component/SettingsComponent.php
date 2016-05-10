@@ -85,23 +85,23 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
         $html[] = Translation :: get('SettingsComponentInformation');
         $html[] = '<br /><br />';
 
-        $html[] = '<div style="background-image: url(' . Theme :: getInstance()->getImagePath(
+        $html[] = '<a class="btn btn-default" disabled="disabled"><img src="' . Theme :: getInstance()->getImagePath(
             'Chamilo\Configuration',
-            'Logo/22') . ')" class="package-list-item-core">';
+            'Logo/22Na') . '"> ';
         $html[] = Translation :: get('CorePackage');
-        $html[] = '</div>';
+        $html[] = '</a>';
 
-        $html[] = '<div style="background-image: url(' . Theme :: getInstance()->getImagePath(
+        $html[] = '<a class="btn btn-default"><img src="' . Theme :: getInstance()->getImagePath(
             'Chamilo\Configuration',
-            'Logo/22') . ')" class="package-list-item">';
+            'Logo/22') . '"> ';
         $html[] = Translation :: get('AvailablePackage');
-        $html[] = '</div>';
+        $html[] = '</a>';
 
-        $html[] = '<div style="background-image: url(' . Theme :: getInstance()->getImagePath(
+        $html[] = '<a class="btn btn-success"><img src="' . Theme :: getInstance()->getImagePath(
             'Chamilo\Configuration',
-            'Logo/22') . ')" class="package-list-item package-list-item-selected">';
+            'Logo/22') . '"> ';
         $html[] = Translation :: get('SelectedPackage');
-        $html[] = '</div>';
+        $html[] = '</a>';
 
         return implode(PHP_EOL, $html);
     }

@@ -31,6 +31,12 @@ class Header
     private $viewMode;
 
     /**
+     *
+     * @var string
+     */
+    private $containerMode;
+
+    /**
      * The html headers which will be added in the <head> tag of the html document.
      *
      * @var string[]
@@ -55,9 +61,10 @@ class Header
      * @param string $languageCode
      * @param string $textDirection
      */
-    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $languageCode = 'en', $textDirection = 'ltr')
+    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid', $languageCode = 'en', $textDirection = 'ltr')
     {
         $this->viewMode = $viewMode;
+        $this->containerMode = $containerMode;
         $this->languageCode = $languageCode;
         $this->textDirection = $textDirection;
 
@@ -121,6 +128,24 @@ class Header
 
     /**
      *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
+    }
+
+    /**
+     *
      * @return string[]
      */
     public function getHtmlHeaders()
@@ -174,7 +199,7 @@ class Header
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
-        $stylesheetCacheService = new StylesheetCacheService(Path::getInstance(), Theme::getInstance());
+        $stylesheetCacheService = new StylesheetCacheService(Path :: getInstance(), Theme :: getInstance());
         $cssModified = $stylesheetCacheService->getLastModificationTime();
         $cssModified = $cssModified ? $cssModified : time();
 
@@ -193,8 +218,7 @@ class Header
         $this->addHtmlHeader(
             '<script type="text/javascript">var rootWebPath="' . Path :: getInstance()->getBasePath(true) . '";</script>');
 
-
-        $javascriptCacheService = new JavascriptCacheService(Path::getInstance());
+        $javascriptCacheService = new JavascriptCacheService(Path :: getInstance());
         $javascriptModified = $javascriptCacheService->getLastModificationTime();
         $javascriptModified = $javascriptModified ? $javascriptModified : time();
 
@@ -274,12 +298,12 @@ class Header
 
         if ($this->getViewMode() != Page :: VIEW_MODE_HEADERLESS)
         {
-            $banner = new Banner($this->getApplication(), $this->getViewMode());
+            $banner = new Banner($this->getApplication(), $this->getViewMode(), $this->getContainerMode());
 
             $html[] = $banner->render();
         }
 
-        $classes = 'container-fluid';
+        $classes = $this->getContainerMode();
 
         if ($this->getViewMode() == Page :: VIEW_MODE_HEADERLESS)
         {

@@ -42,13 +42,19 @@ class BreadcrumbTrail
 
     /**
      *
+     * @var string
+     */
+    private $containerMode;
+
+    /**
+     *
      * @return BreadcrumbTrail
      */
     public static function get_instance()
     {
         if (self :: $instance == null)
         {
-            self :: $instance = new BreadcrumbTrail();
+            self :: $instance = new BreadcrumbTrail(true, 'container-fluid');
         }
 
         return self :: $instance;
@@ -58,10 +64,11 @@ class BreadcrumbTrail
      *
      * @param boolean $include_main_index
      */
-    public function __construct($include_main_index = true)
+    public function __construct($include_main_index = true, $containerMode = 'container-fluid')
     {
         $this->breadcrumbtrail = array();
         $this->extra_items = array();
+        $this->containerMode = $containerMode;
 
         if ($include_main_index)
         {
@@ -72,6 +79,24 @@ class BreadcrumbTrail
                     null,
                     'home'));
         }
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
     }
 
     /**
@@ -163,9 +188,11 @@ class BreadcrumbTrail
     {
         $html = array();
 
+        $html[] = '<div class="container-breadcrumb">';
+        $html[] = '<div class="' . $this->getContainerMode() . '"';
         $html[] = $this->render_breadcrumbs();
-        // $html[] = $this->render_help();
-        // $html[] = $this->render_extra();
+        $html[] = '</div>';
+        $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
     }
