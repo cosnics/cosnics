@@ -320,12 +320,12 @@ abstract class ViewRenderer extends Renderer
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
 
-        $buttonToolBar->addItem($this->renderTypeButton());
-
         foreach ($this->getViewActions() as $viewAction)
         {
             $buttonToolBar->addItem($viewAction);
         }
+
+        $buttonToolBar->addItem($this->renderTypeButton());
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

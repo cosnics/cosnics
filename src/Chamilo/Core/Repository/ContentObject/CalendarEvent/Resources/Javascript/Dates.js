@@ -20,7 +20,7 @@
             startDateTextBox,
             endDateTextBox,
             {
-                minInterval: (1000*60), // 1hr
+                minInterval: (1000*60*60), // 1hr
                 dateFormat: 'dd-mm-yy', 
                 timeFormat: 'HH:mm',
                 start: {controlType: 'select'}, // start picker options
