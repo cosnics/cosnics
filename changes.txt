@@ -56,3 +56,5 @@
 * [Weblcms] Navigate to overlaps with the course title on smaller screens
 * [Course Groups] Changed the color of "unsubscribe yourself" button to red
 * [Personal Calendar] Moved publish button to front
+* [Home] Fixed translations
+* [CSS] Alerts on smaller screen are now responsive
