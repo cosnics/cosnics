@@ -22,7 +22,6 @@
         "pear-pear.php.net/HTML_Table" : "*",
         "pear-pear.php.net/HTML_QuickForm" : "*",
         "pear-pear.php.net/PEAR" : "*",
-        "pear-pear.php.net/Pager" : "*",
         "pear-pear.php.net/Net_URL" : "*",
         "pear-pear.php.net/Net_Socket" : "*",
         "pear-pear.php.net/HTTP_Request" : "*",

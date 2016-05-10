@@ -18,7 +18,7 @@ abstract class HtmlMenuRenderer
      *
      * @var string
      */
-    private $_menuType;
+    public $_menuType;
 
     /**
      *
