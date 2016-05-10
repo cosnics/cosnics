@@ -219,7 +219,7 @@ class DetailsComponent extends TabComponent implements TableSupport
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_UNSUBSCRIBE)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL,
                     false,
-                    'btn-warning'
+                    'btn-danger'
                 )
             );
         }
