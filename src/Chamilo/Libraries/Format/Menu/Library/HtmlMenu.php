@@ -191,7 +191,7 @@ class HtmlMenu
      * @param int current depth in the tree structure
      */
     private function _renderTree($menu, $level = 0)
-    {
+    {        
         foreach ($menu as $node_id => $node)
         {
             $type = $this->_findNodeType($node_id, $node['url'], $level);

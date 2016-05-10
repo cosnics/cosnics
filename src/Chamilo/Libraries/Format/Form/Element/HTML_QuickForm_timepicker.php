@@ -19,7 +19,7 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
     /**
      * Constructor
      */
-    public function HTML_QuickForm_timepicker($elementName = null, $elementLabel = null, $attributes = null,
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null,
         $include_minutes_picker = true)
     {
         if (! isset($attributes['form_name']))

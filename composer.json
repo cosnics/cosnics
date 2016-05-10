@@ -18,9 +18,7 @@
         "twig/twig" : "1.*",
         "doctrine/dbal" : "2.5.*",
         "doctrine/cache" : "1.5.*",
-        "pear-pear.php.net/HTML_Common" : "*",
-        "pear-pear.php.net/HTML_Table" : "*",
-        "pear-pear.php.net/HTML_QuickForm" : "*",
+        "chamilo/pear-libraries" : "*",
         "pear-pear.php.net/PEAR" : "*",
         "pear-pear.php.net/Net_URL" : "*",
         "pear-pear.php.net/Net_Socket" : "*",
@@ -42,7 +40,11 @@
     "repositories" : [
         {
             "type" : "pear",
-            "url" : "http://pear.php.net"
+            "url" : "https://pear.php.net"
+        },
+        {
+            "type": "vcs",
+            "url": "https://bitbucket.org/chamilo/pear-libraries"
         }
     ],
     "autoload": {
