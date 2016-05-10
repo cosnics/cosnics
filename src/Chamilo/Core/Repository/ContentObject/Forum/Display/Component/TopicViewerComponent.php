@@ -17,6 +17,8 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Table\Pager;
+use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -27,7 +29,6 @@ use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 use HTML_Table;
-use Pager;
 
 /**
  * $Id: topic_viewer.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -152,8 +153,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $pager = $this->get_pager();
 
         // Set the starting position for the data retrievement
-        $offset = $pager->getOffsetByPageId();
-        $from = $offset[0] - 1;
+        $offset = $pager->getCurrentRangeStart();
+        $from = $offset - 1;
 
         $table = new HTML_Table(array('class' => 'forum', 'cellspacing' => 2));
 
@@ -553,29 +554,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     {
         if (is_null($this->pager))
         {
-            $total_number_of_items = $this->total_number_of_items;
-            $params['mode'] = 'Sliding';
-            $params['perPage'] = $this->per_page;
-            $params['totalItems'] = $total_number_of_items;
-            $params['urlVar'] = $this->param_prefix . 'page_nr';
-            $params['prevImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Prev') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['nextImg'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Next') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['firstPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/First') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['lastPageText'] = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Last') .
-                 '"  style="vertical-align: middle;"/>';
-            $params['firstPagePre'] = '';
-            $params['lastPagePre'] = '';
-            $params['firstPagePost'] = '';
-            $params['lastPagePost'] = '';
-            $params['spacesBeforeSeparator'] = '';
-            $params['spacesAfterSeparator'] = '';
-            $params['currentPage'] = $this->page_nr;
-            $params['excludeVars'] = array('message');
-
-            $this->pager = Pager :: factory($params);
+            $this->pager = new Pager($this->per_page, 1, $this->total_number_of_items, $this->page_nr);
         }
 
         return $this->pager;
@@ -586,10 +565,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
      */
     public function get_navigation_html()
     {
-        $pager = $this->get_pager();
-        $pager_links = $pager->getLinks();
-        return $pager_links['first'] . ' ' . $pager_links['back'] . ' ' . $pager->getCurrentPageId() . ' / ' .
-             $pager->numPages() . ' ' . $pager_links['next'] . ' ' . $pager_links['last'];
+        $pagerRenderer = new PagerRenderer($this->get_pager());
+        return $pagerRenderer->renderPaginationWithPageLimit($this->get_parameters(), $this->param_prefix . 'page_nr');
     }
 
     /**

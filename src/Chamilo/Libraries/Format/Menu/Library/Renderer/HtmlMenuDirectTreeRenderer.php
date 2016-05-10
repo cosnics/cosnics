@@ -21,7 +21,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
      *
      * @var string
      */
-    private $_html = '';
+    public $_html = '';
 
     /**
      *

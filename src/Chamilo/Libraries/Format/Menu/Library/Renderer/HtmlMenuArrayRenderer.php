@@ -18,13 +18,13 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
      *
      * @var array
      */
-    private $_ary = array();
+    public $_ary = array();
 
     /**
      *
      * @var array
      */
-    private $_menuAry = array();
+    public $_menuAry = array();
 
     /**
      *
