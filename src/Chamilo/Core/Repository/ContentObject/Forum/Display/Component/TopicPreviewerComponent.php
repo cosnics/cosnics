@@ -136,8 +136,7 @@ class TopicPreviewerComponent extends Manager implements DelegateComponent
         $pager = $this->get_pager();
 
         // Set the starting position for the data retrievement
-        $offset = $pager->getCurrentRangeStart();
-        $from = $offset - 1;
+        $from = $pager->getCurrentRangeOffset();
 
         $table = new HTML_Table(array('class' => 'forum', 'cellspacing' => 2));
 
