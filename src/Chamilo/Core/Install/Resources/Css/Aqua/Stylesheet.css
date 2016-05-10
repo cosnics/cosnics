@@ -42,6 +42,10 @@
 	margin-top: 20px;
 }
 
+.form-install-settings .form-group {
+	margin-bottom: 5px;
+}
+
 .package-list-header {
 	margin-bottom: 10px;
 }

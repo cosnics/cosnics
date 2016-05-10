@@ -3,6 +3,7 @@ namespace Chamilo\Core\Install\Component;
 
 use Chamilo\Core\Install\Form\SettingsForm;
 use Chamilo\Core\Install\Manager;
+use Chamilo\Core\Install\SettingsOverview;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -31,8 +33,16 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
 
         if ($form->validate())
         {
+            $settingsValues = $form->exportValues();
+            Session :: register(self :: PARAM_SETTINGS, serialize($settingsValues));
+
+            $settingsDisplayer = new SettingsOverview($settingsValues);
+            $wizardHeader = $this->getWizardHeader();
+            $wizardHeader->setSelectedStepIndex(array_search(self :: ACTION_OVERVIEW, $this->getWizardHeaderActions()));
+
             $content = array();
 
+            $content[] = $settingsDisplayer->render();
             $content[] = $this->getButtons();
 
             $content = implode(PHP_EOL, $content);
@@ -67,12 +77,12 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
 
         $buttonToolBar->addItem(
             new Button(
-                Translation :: get('Next'),
-                new BootstrapGlyph('chevron-right'),
+                Translation :: get('Install'),
+                new BootstrapGlyph('ok'),
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_INSTALL_PLATFORM)),
                 Button :: DISPLAY_ICON_AND_LABEL,
                 false,
-                'btn-primary'));
+                'btn-success'));
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 

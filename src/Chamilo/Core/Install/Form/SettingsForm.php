@@ -16,6 +16,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Core\Install\Manager;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *
@@ -274,17 +275,13 @@ class SettingsForm extends FormValidator
     {
         $html = array();
 
-        $html[] = '<br />';
-        $html[] = '<small>';
-        $html[] = '<a class="label label-default package-list-select-all">';
-        $html[] = '<span class="glyphicon glyphicon-check"></span>';
         $html[] = '&nbsp;';
+        $html[] = '<small>';
+        $html[] = '<a class="label label-success package-list-select-all">';
         $html[] = Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES);
         $html[] = '</a>';
         $html[] = '&nbsp;';
         $html[] = '<a class="label label-default package-list-select-none">';
-        $html[] = '<span class="glyphicon glyphicon-unchecked"></span>';
-        $html[] = '&nbsp;';
         $html[] = Translation :: get('UnselectAll', null, Utilities :: COMMON_LIBRARIES);
         $html[] = '</a>';
         $html[] = '</small>';
@@ -299,10 +296,10 @@ class SettingsForm extends FormValidator
         $html[] = '<div class="package-selection">';
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
-        $html[] = '<h3>';
+        $html[] = '<h4>';
         $html[] = Translation :: get('AllPackages');
         $html[] = $this->addPackageSelectionToggle();
-        $html[] = '</h3>';
+        $html[] = '</h4>';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -370,7 +367,7 @@ class SettingsForm extends FormValidator
 
             $html[] = '<div class="row package-list-header">';
             $html[] = '<div class="col-xs-12">';
-            $html[] = '<h3>';
+            $html[] = '<h4>';
             $html[] = $packageType;
 
             if ($this->hasSelectablePackages($packages))
@@ -378,7 +375,7 @@ class SettingsForm extends FormValidator
                 $html[] = $this->addPackageSelectionToggle();
             }
 
-            $html[] = '</h3>';
+            $html[] = '</h4>';
             $html[] = '</div>';
             $html[] = '</div>';
 
@@ -492,7 +489,23 @@ class SettingsForm extends FormValidator
         {
             if ($extra['default-install'])
             {
-                $classes[] = 'btn-success';
+                $sessionSettings = $this->getSessionSettings();
+
+                if (! empty($sessionSettings))
+                {
+                    if ($sessionSettings['install'][$package->get_context()])
+                    {
+                        $classes[] = 'btn-success';
+                    }
+                    else
+                    {
+                        $classes[] = 'btn-default';
+                    }
+                }
+                else
+                {
+                    $classes[] = 'btn-success';
+                }
             }
             else
             {
@@ -503,45 +516,79 @@ class SettingsForm extends FormValidator
         return implode(' ', $classes);
     }
 
+    /**
+     *
+     * @return string[]
+     */
+    protected function getSessionSettings()
+    {
+        if (! isset($this->sessionSettings))
+        {
+            $sessionSettings = Session :: retrieve(Manager :: PARAM_SETTINGS);
+
+            if (is_null($sessionSettings))
+            {
+                $sessionSettings = array();
+            }
+            else
+            {
+                $sessionSettings = unserialize($sessionSettings);
+            }
+
+            $this->sessionSettings = $sessionSettings;
+        }
+
+        return $this->sessionSettings;
+    }
+
     public function setDefaults($defaults = array())
     {
-        // Database
-        $defaults['database_driver'] = 'mysqli';
-        $defaults['database_host'] = 'localhost';
-        $defaults['database_name'] = 'chamilo';
+        $sessionSettings = $this->getSessionSettings();
 
-        // General settings
-
-        $defaults['platform_language'] = Translation :: getInstance()->getLanguageIsocode();
-        $urlAppendPath = str_replace('/index.php', '', $_SERVER['PHP_SELF']);
-        $defaults['platform_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $urlAppendPath . '/';
-        $defaults['admin_email'] = $_SERVER['SERVER_ADMIN'];
-        $email_parts = explode('@', $defaults['admin_email']);
-        if ($email_parts[1] == 'localhost')
+        if (! empty($sessionSettings))
         {
-            $defaults['admin_email'] .= '.localdomain';
+            $defaults = $sessionSettings;
         }
-        $defaults['admin_surname'] = 'Doe';
-        $defaults['admin_firstname'] = mt_rand(0, 1) ? 'John' : 'Jane';
-        $defaults['admin_username'] = 'admin';
-        $defaults['platform_name'] = Translation :: get('MyChamilo');
-        $defaults['organization_name'] = Translation :: get('Chamilo');
-        $defaults['organization_url'] = 'http://www.chamilo.org';
-        $defaults['self_reg'] = 0;
-        $defaults['encrypt_password'] = 1;
-        $defaults['hashing_algorithm'] = 'Sha1';
-        $defaults['server_type'] = 'production';
+        else
+        {
+            // Database
+            $defaults['database_driver'] = 'mysqli';
+            $defaults['database_host'] = 'localhost';
+            $defaults['database_name'] = 'chamilo';
 
-        // Storage paths
-        $defaults['archive_path'] = Path :: getInstance()->getStoragePath('archive');
-        $defaults['cache_path'] = Path :: getInstance()->getStoragePath('cache');
-        $defaults['garbage_path'] = Path :: getInstance()->getStoragePath('garbage');
-        $defaults['hotpotatoes_path'] = Path :: getInstance()->getStoragePath('hotpotatoes');
-        $defaults['logs_path'] = Path :: getInstance()->getStoragePath('logs');
-        $defaults['repository_path'] = Path :: getInstance()->getStoragePath('repository');
-        $defaults['scorm_path'] = Path :: getInstance()->getStoragePath('scorm');
-        $defaults['temp_path'] = Path :: getInstance()->getStoragePath('temp');
-        $defaults['userpictures_path'] = Path :: getInstance()->getStoragePath('userpictures');
+            // General settings
+
+            $defaults['platform_language'] = Translation :: getInstance()->getLanguageIsocode();
+            $urlAppendPath = str_replace('/index.php', '', $_SERVER['PHP_SELF']);
+            $defaults['platform_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $urlAppendPath . '/';
+            $defaults['admin_email'] = $_SERVER['SERVER_ADMIN'];
+            $email_parts = explode('@', $defaults['admin_email']);
+            if ($email_parts[1] == 'localhost')
+            {
+                $defaults['admin_email'] .= '.localdomain';
+            }
+            $defaults['admin_surname'] = 'Doe';
+            $defaults['admin_firstname'] = mt_rand(0, 1) ? 'John' : 'Jane';
+            $defaults['admin_username'] = 'admin';
+            $defaults['platform_name'] = Translation :: get('MyChamilo');
+            $defaults['organization_name'] = Translation :: get('Chamilo');
+            $defaults['organization_url'] = 'http://www.chamilo.org';
+            $defaults['self_reg'] = 0;
+            $defaults['encrypt_password'] = 1;
+            $defaults['hashing_algorithm'] = 'Sha1';
+            $defaults['server_type'] = 'production';
+
+            // Storage paths
+            $defaults['archive_path'] = Path :: getInstance()->getStoragePath('archive');
+            $defaults['cache_path'] = Path :: getInstance()->getStoragePath('cache');
+            $defaults['garbage_path'] = Path :: getInstance()->getStoragePath('garbage');
+            $defaults['hotpotatoes_path'] = Path :: getInstance()->getStoragePath('hotpotatoes');
+            $defaults['logs_path'] = Path :: getInstance()->getStoragePath('logs');
+            $defaults['repository_path'] = Path :: getInstance()->getStoragePath('repository');
+            $defaults['scorm_path'] = Path :: getInstance()->getStoragePath('scorm');
+            $defaults['temp_path'] = Path :: getInstance()->getStoragePath('temp');
+            $defaults['userpictures_path'] = Path :: getInstance()->getStoragePath('userpictures');
+        }
 
         parent :: setDefaults($defaults);
     }

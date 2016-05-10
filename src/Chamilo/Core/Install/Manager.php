@@ -14,14 +14,10 @@ use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
 use Chamilo\Libraries\Platform\Session\Session;
 
 /**
- * $Id: install_manager.class.php 225 2009-11-13 14:43:20Z vanpouckesven $
  *
- * @package install.lib.installmanager
- */
-/**
- * An install manager provides some functionalities to the end user to install his Chamilo platform
- *
- * @author Hans De Bisschop
+ * @package Chamilo\Core\Install
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 abstract class Manager extends Application implements NoContextComponent
 {
@@ -39,16 +35,17 @@ abstract class Manager extends Application implements NoContextComponent
 
     // Parameters
     const PARAM_LANGUAGE = 'install_language';
+    const PARAM_SETTINGS = 'install_settings';
 
     /**
-     * Property of this repository manager.
-     */
-    private $breadcrumbs;
-
-    /**
-     * Constructor
      *
-     * @param $user_id int The user id of current user
+     * @var \Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader
+     */
+    private $wizardHeader;
+
+    /**
+     *
+     * @param ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -63,7 +60,7 @@ abstract class Manager extends Application implements NoContextComponent
         ini_set("max_execution_time", "7200");
 
         // Display language
-        $language = $this->getRequest()->query->get(self :: PARAM_LANGUAGE);
+        $language = $this->getRequest()->query->get(self :: PARAM_LANGUAGE, 'en');
 
         if ($language)
         {
@@ -150,40 +147,62 @@ abstract class Manager extends Application implements NoContextComponent
         return $language_list;
     }
 
+    /**
+     *
+     * @return string
+     */
     protected function renderWizardHeader()
     {
-        $currentAction = $this->get_action();
-        $wizardActions = array(
-            self :: ACTION_INTRODUCTION,
-            self :: ACTION_REQUIREMENTS,
-            self :: ACTION_LICENSE,
-            self :: ACTION_SETTINGS,
-            self :: ACTION_OVERVIEW);
+        $wizardHeaderRenderer = new WizardHeaderRenderer($this->getWizardHeader());
 
         $html = array();
 
         $html[] = '<div class="container-install-wizard">';
+        $html[] = $wizardHeaderRenderer->render();
+        $html[] = '</div>';
 
-        if (in_array($currentAction, $wizardActions))
+        return implode(PHP_EOL, $html);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader
+     */
+    protected function getWizardHeader()
+    {
+        if (! isset($this->wizardHeader))
         {
-            $wizardHeader = new WizardHeader();
-            $wizardHeader->setStepTitles(
+            $currentAction = $this->get_action();
+            $wizardActions = $this->getWizardHeaderActions();
+
+            $this->wizardHeader = new WizardHeader();
+            $this->wizardHeader->setStepTitles(
                 array(
                     Translation :: get('IntroductionComponentTitle'),
                     Translation :: get('RequirementsComponentTitle'),
                     Translation :: get('LicenseComponentTitle'),
                     Translation :: get('SettingsComponentTitle'),
-                    Translation :: get('OverviewComponentTitle')));
+                    Translation :: get('OverviewComponentTitle'),
+                    Translation :: get('InstallerComponentTitle')));
 
-            $wizardHeader->setSelectedStepIndex(array_search($currentAction, $wizardActions));
-
-            $wizardHeaderRenderer = new WizardHeaderRenderer($wizardHeader);
-
-            $html[] = $wizardHeaderRenderer->render();
+            $this->wizardHeader->setSelectedStepIndex(array_search($currentAction, $wizardActions));
         }
 
-        $html[] = '</div>';
+        return $this->wizardHeader;
+    }
 
-        return implode(PHP_EOL, $html);
+    /**
+     *
+     * @return string[]
+     */
+    protected function getWizardHeaderActions()
+    {
+        return array(
+            self :: ACTION_INTRODUCTION,
+            self :: ACTION_REQUIREMENTS,
+            self :: ACTION_LICENSE,
+            self :: ACTION_SETTINGS,
+            self :: ACTION_OVERVIEW,
+            self :: ACTION_INSTALL_PLATFORM);
     }
 }

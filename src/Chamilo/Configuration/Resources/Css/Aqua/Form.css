@@ -3,6 +3,12 @@ div.column {
 	margin-right: 10px;
 }
 
+.form-category {
+	border-bottom: 1px solid #dddddd;
+	padding-bottom: 5px;
+	margin-bottom: 15px;
+}
+
 /****************
  *  FORM STYLES *
  ****************/
@@ -44,7 +50,8 @@ form div.formw input[type=text], form div.form-row div.formw input[type=password
 form div.formw input[type=text]:hover, form div.form-row div.formw input[type=text]:focus,
 	form div.form-row div.formw input[type=password]:hover, form div.form-row div.formw input[type=password]:focus,
 	form div.form-row div.formw select:hover, form div.form-row div.formw select:focus
-form div.form-row div.formw textarea:hover, form div.form-row div.formw textarea:focus {
+form div.form-row div.formw textarea:hover, form div.form-row div.formw textarea:focus
+	{
 	background-color: #f7fbfd;
 	border-color: #4171B5;
 }
@@ -53,8 +60,8 @@ form div.formw input[type=text].input_conflict, form div.form-row div.formw inpu
 	form div.form-row div.formw select.input_conflict
 		form div.formw input[type=text].input_conflict:hover, form div.form-row div.formw input[type=password].input_conflict:hover,
 	form div.form-row div.formw select.input_conflict:hover, form div.formw input[type=text].input_conflict:focus,
-	form div.form-row div.formw input[type=password].input_conflict:focus, form div.form-row div.formw select.input_conflict:focus
-	{
+	form div.form-row div.formw input[type=password].input_conflict:focus,
+	form div.form-row div.formw select.input_conflict:focus {
 	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
 	background-color: #FFD1D1 !important;
 	border: 1px solid #ff9b9d !important;
@@ -64,8 +71,9 @@ form div.formw input[type=text].input_conflict, form div.form-row div.formw inpu
 
 form div.formw input[type=text].input_valid, form div.form-row div.formw input[type=password].input_valid,
 	form div.form-row div.formw select.input_valid, form div.formw input[type=text].input_valid:hover,
-	form div.form-row div.formw input[type=password].input_valid:hover, form div.form-row div.formw select.input_valid:hover,
-	form div.formw input[type=text].input_valid:focus, form div.form-row div.formw input[type=password].input_valid:focus,
+	form div.form-row div.formw input[type=password].input_valid:hover,
+	form div.form-row div.formw select.input_valid:hover, form div.formw input[type=text].input_valid:focus,
+	form div.form-row div.formw input[type=password].input_valid:focus,
 	form div.form-row div.formw select.input_valid:focus {
 	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
 	border: 1px solid #339900 !important;
@@ -78,8 +86,8 @@ form div.formw input[type=text].input_warning, form div.form-row div.formw input
 	form div.form-row div.formw select.input_warning
 		form div.formw input[type=text].input_warning:hover, form div.form-row div.formw input[type=password].input_warning:hover,
 	form div.form-row div.formw select.input_warning:hover, form div.formw input[type=text].input_warning:focus,
-	form div.form-row div.formw input[type=password].input_warning:focus, form div.form-row div.formw select.input_warning:focus
-	{
+	form div.form-row div.formw input[type=password].input_warning:focus,
+	form div.form-row div.formw select.input_warning:focus {
 	background-image: url('../../Images/Aqua/Status/WarningMini.png');
 	border: 1px solid #ffd89b !important;
 	background-color: #fff8aa !important;
@@ -106,14 +114,15 @@ form div.dynamic_search_action input[type=text], form div.dynamic_search_action 
 	margin-right: 10px;
 }
 
-form div.form-row div.formwa, form div.form-row div.formwa_no_margin, form div.form-row div.formc,
-	form div.form-row div.formc_no_margin, form div.form-row div.forme, form div.form-row div.forme_no_margin
-	{
+form div.form-row div.formwa, form div.form-row div.formwa_no_margin,
+	form div.form-row div.formc, form div.form-row div.formc_no_margin,
+	form div.form-row div.forme, form div.form-row div.forme_no_margin {
 	margin-left: 20%;
 }
 
-form div.form-row div.forme h2, form div.form-row div.forme_no_margin h2, form div.form-row div.formwa h2,
-	form div.form-row div.formwa_no_margin h2, form div.form-row div.formc h2, form div.form-row div.formc_no_margin h2
+form div.form-row div.forme h2, form div.form-row div.forme_no_margin h2,
+	form div.form-row div.formwa h2, form div.form-row div.formwa_no_margin h2,
+	form div.form-row div.formc h2, form div.form-row div.formc_no_margin h2
 	{
 	padding: 0px 0px 5px 0px;
 	margin: 0px;
@@ -125,12 +134,14 @@ form div.form-row div.forme_no_margin, form div.form-row div.formwa_no_margin,
 	margin-left: 0px;
 }
 
-[dir=ltr] form div.form-row div.form-label, [dir=rtl] form div.form-row div.formw {
+[dir=ltr] form div.form-row div.form-label, [dir=rtl] form div.form-row div.formw
+	{
 	float: left;
 	text-align: right;
 }
 
-[dir=rtl] form div.form-row div.form-label, [dir=ltr] form div.form-row div.formw {
+[dir=rtl] form div.form-row div.form-label, [dir=ltr] form div.form-row div.formw
+	{
 	float: right;
 	text-align: left;
 }
@@ -180,8 +191,7 @@ form input.liteoption {
 	font-weight: normal;
 }
 
-form select, form input[type=button],
-	input[type=submit] {
+form select, form input[type=button], input[type=submit] {
 	cursor: pointer;
 	font-size: 12px;
 }
@@ -202,7 +212,8 @@ form .input_numeric {
 	text-align: right;
 }
 
-form input.rating_question_low_value, form input.rating_question_high_value {
+form input.rating_question_low_value, form input.rating_question_high_value
+	{
 	background-image: url(../../Images/Aqua/Buttons/Low.png);
 	background-position: 4px center;
 	background-repeat: no-repeat;
