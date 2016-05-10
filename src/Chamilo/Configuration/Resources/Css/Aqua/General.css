@@ -11,6 +11,13 @@ body {
 
 .container-breadcrumb {
 	background-color: #f5f5f5;
+	margin-bottom: 20px;
+}
+
+.container-breadcrumb ol.breadcrumb {
+	margin-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 /*****************************************************
