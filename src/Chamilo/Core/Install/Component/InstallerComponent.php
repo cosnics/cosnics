@@ -61,8 +61,10 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
                 echo $wizardProcess->render_footer();
                 flush();
 
+                session_start();
                 Session :: unregister(self :: PARAM_SETTINGS);
                 Session :: unregister(self :: PARAM_LANGUAGE);
+                session_write_close();
             });
 
         $response->send();
