@@ -23,6 +23,12 @@ class Page
 
     /**
      *
+     * @var string
+     */
+    private $containerMode;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Format\Structure\Header
      */
     private $header;
@@ -54,10 +60,14 @@ class Page
     {
         if (is_null(static :: $instance))
         {
-            $header = new Header(self :: VIEW_MODE_FULL, Translation :: getInstance()->getLanguageIsocode(), 'ltr');
+            $header = new Header(
+                self :: VIEW_MODE_FULL,
+                'container-fluid',
+                Translation :: getInstance()->getLanguageIsocode(),
+                'ltr');
             $footer = new Footer(self :: VIEW_MODE_FULL);
 
-            self :: $instance = new static(self :: VIEW_MODE_FULL, $header, $footer);
+            self :: $instance = new static(self :: VIEW_MODE_FULL, 'container-fluid', $header, $footer);
         }
 
         return static :: $instance;
@@ -68,9 +78,10 @@ class Page
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param integer $viewMode
      */
-    public function __construct($viewMode = self :: VIEW_MODE_FULL, Header $header, Footer $footer)
+    public function __construct($viewMode = self :: VIEW_MODE_FULL, $containerMode = 'container-fluid', Header $header, Footer $footer)
     {
         $this->viewMode = $viewMode;
+        $this->containerMode = $containerMode;
         $this->header = $header;
         $this->footer = $footer;
     }
@@ -94,6 +105,27 @@ class Page
 
         $this->getHeader()->setViewMode($this->viewMode);
         $this->getFooter()->setViewMode($this->viewMode);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
+
+        $this->getHeader()->setContainerMode($this->containerMode);
+        $this->getFooter()->setContainerMode($this->containerMode);
     }
 
     /**

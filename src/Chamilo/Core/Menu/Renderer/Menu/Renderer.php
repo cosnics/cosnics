@@ -32,7 +32,7 @@ abstract class Renderer
 
     /**
      * The layout of the menubar
-     * 
+     *
      * @var String
      */
     protected $html;
@@ -45,10 +45,17 @@ abstract class Renderer
 
     /**
      *
+     * @var string
+     */
+    private $containerMode;
+
+    /**
+     *
      * @param $user User|null
      */
-    public function __construct(Request $request = null, $user = null)
+    public function __construct($containerMode, Request $request = null, $user = null)
     {
+        $this->containerMode = $containerMode;
         $this->user = $user;
         $this->request = $request;
     }
@@ -69,14 +76,32 @@ abstract class Renderer
 
     /**
      *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
+    }
+
+    /**
+     *
      * @param $type string
      * @param $user User|null
      * @return Renderer
      */
-    public static function factory($type, Request $request = null, $user = null)
+    public static function factory($type, $containerMode, Request $request = null, $user = null)
     {
         $class = __NAMESPACE__ . '\Type\\' . $type;
-        return new $class($request, $user);
+        return new $class($containerMode, $request, $user);
     }
 
     /**
@@ -85,9 +110,9 @@ abstract class Renderer
      * @param $user User|null
      * @return string
      */
-    public static function toHtml($type, Request $request = null, $user = null)
+    public static function toHtml($type, $containerMode = 'container-fluid', Request $request = null, $user = null)
     {
-        return self :: factory($type, $request, $user)->render();
+        return self :: factory($type, $containerMode, $request, $user)->render();
     }
 
     /**
@@ -100,7 +125,7 @@ abstract class Renderer
         {
             $this->itemService = new ItemService(new ItemRepository());
         }
-        
+
         return $this->itemService;
     }
 
@@ -111,26 +136,26 @@ abstract class Renderer
 
     /**
      * Renders the menu
-     * 
+     *
      * @return string
      */
     public function render()
     {
         $user = $this->get_user();
-        
+
         if (! $user instanceof User && ! $this->isMenuAvailableAnonymously())
         {
             return;
         }
-        
+
         $html = array();
-        
+
         $html[] = $this->display_menu_header();
-        
+
         if ($user)
         {
             $userRights = $this->getItemService()->determineRightsForUser($user);
-            
+
             foreach ($this->getRootItems() as $item)
             {
                 if ($userRights[$item->get_id()])
@@ -142,9 +167,9 @@ abstract class Renderer
                 }
             }
         }
-        
+
         $html[] = $this->display_menu_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 

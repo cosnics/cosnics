@@ -73,11 +73,12 @@ class SettingsForm extends FormValidator
     protected function buildForm()
     {
         $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab('package', Translation :: get('PackageComponentTitle'), null, 'addPackageSettings'));
+        $this->getTabsGenerator()->add_tab(
             new DynamicFormTab('database', Translation :: get('DatabaseComponentTitle'), null, 'addDatabaseSettings'));
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab('general', Translation :: get('SettingsComponentTitle'), null, 'addGeneralSettings'));
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('package', Translation :: get('PackageComponentTitle'), null, 'addPackageSettings'));
+
         $this->getTabsGenerator()->render();
 
         $buttons = array();
@@ -269,28 +270,82 @@ class SettingsForm extends FormValidator
         return $drivers;
     }
 
+    protected function addPackageSelectionToggle()
+    {
+        $html = array();
+
+        $html[] = '<br />';
+        $html[] = '<small>';
+        $html[] = '<a class="label label-default package-list-select-all">';
+        $html[] = '<span class="glyphicon glyphicon-check"></span>';
+        $html[] = '&nbsp;';
+        $html[] = Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES);
+        $html[] = '</a>';
+        $html[] = '&nbsp;';
+        $html[] = '<a class="label label-default package-list-select-none">';
+        $html[] = '<span class="glyphicon glyphicon-unchecked"></span>';
+        $html[] = '&nbsp;';
+        $html[] = Translation :: get('UnselectAll', null, Utilities :: COMMON_LIBRARIES);
+        $html[] = '</a>';
+        $html[] = '</small>';
+
+        return implode(PHP_EOL, $html);
+    }
+
     public function addPackageSettings()
     {
-        $this->addElement('html', '<div class="package-selection">');
-
         $html = array();
+
+        $html[] = '<div class="package-selection">';
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
         $html[] = '<h3>';
         $html[] = Translation :: get('AllPackages');
-        $html[] = '<img src = "' . Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/CheckChecked') .
-             '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Configuration',
-                'Form/CheckUnchecked') . '" class="package-list-select-none" />';
+        $html[] = $this->addPackageSelectionToggle();
         $html[] = '</h3>';
+        $html[] = '</div>';
+        $html[] = '</div>';
+
         $this->addElement('html', implode(PHP_EOL, $html));
 
-        $packageList = PlatformPackageBundles :: getInstance()->get_package_list();
-        $this->renderPackages($packageList);
+        $this->renderPackages(PlatformPackageBundles :: getInstance()->get_package_list());
 
         $html = array();
+
         $html[] = '<script type="text/javascript" src="' .
              Path :: getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
         $html[] = '</div>';
+
         $this->addElement('html', implode(PHP_EOL, $html));
+    }
+
+    protected function hasSelectablePackages($packages)
+    {
+        if (count($packages) <= 1)
+        {
+            return false;
+        }
+        else
+        {
+            $numberOfCorePackages = 0;
+
+            foreach ($packages as $package)
+            {
+                $extra = $package->get_extra();
+
+                if ($extra['core-install'])
+                {
+                    $numberOfCorePackages ++;
+                }
+            }
+
+            if ($numberOfCorePackages == count($packages))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -301,8 +356,6 @@ class SettingsForm extends FormValidator
     {
         $html = array();
 
-        $html[] = '<div class="clear"></div>';
-
         $renderer = $this->defaultRenderer();
         $packages = $this->determinePackages($packageList);
 
@@ -312,39 +365,58 @@ class SettingsForm extends FormValidator
             $packageType = Translation :: get('TypeCategory', null, $firstPackage->get_context());
 
             $html = array();
+
             $html[] = '<div class="package-list">';
+
+            $html[] = '<div class="row package-list-header">';
+            $html[] = '<div class="col-xs-12">';
             $html[] = '<h3>';
             $html[] = $packageType;
-            $html[] = '<img src = "' .
-                 Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'Form/CheckChecked') .
-                 '" class="package-list-select-all" /><img src = "' . Theme :: getInstance()->getImagePath(
-                    'Chamilo\Configuration',
-                    'Form/CheckUnchecked') . '" class="package-list-select-none" />';
+
+            if ($this->hasSelectablePackages($packages))
+            {
+                $html[] = $this->addPackageSelectionToggle();
+            }
+
             $html[] = '</h3>';
-            $html[] = '<div class="package-list-items">';
+            $html[] = '</div>';
+            $html[] = '</div>';
+
+            $html[] = '<div class="package-list-items row">';
+
             $this->addElement('html', implode(PHP_EOL, $html));
 
             foreach ($packages as $package)
             {
+                $extraPackageInfo = $package->get_extra();
+
                 $title = Translation :: get('TypeName', null, $package->get_context());
+                $packageClasses = $this->getPackageClasses($package);
+
+                if ($extraPackageInfo['core-install'])
+                {
+                    $iconSource = Theme :: getInstance()->getImagePath($package->get_context(), 'Logo/22Na');
+                    $disabled = ' disabled="disabled"';
+                }
+                else
+                {
+                    $iconSource = Theme :: getInstance()->getImagePath($package->get_context(), 'Logo/22');
+                    $disabled = '';
+                }
 
                 $html = array();
-                $html[] = '<div class="' . $this->getPackageClasses($package) . '" style="background-image: url(' .
-                     Theme :: getInstance()->getImagePath($package->get_context(), 'Logo/22') . ')">';
+                $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
+                $html[] = '<a class="' . $packageClasses . '"' . $disabled . '><img src="' . $iconSource . '"> ';
                 $this->addElement('html', implode(PHP_EOL, $html));
 
                 $checkbox_name = 'install_' .
                      ClassnameUtilities :: getInstance()->getNamespaceId($package->get_context());
-                $this->addElement(
-                    'checkbox',
-                    'install[' . $package->get_context() . ']',
-                    '',
-                    '',
-                    array('style' => 'display: none'));
+                $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
                 $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
 
                 $html = array();
                 $html[] = $title;
+                $html[] = '</a>';
                 $html[] = '</div>';
                 $this->addElement('html', implode(PHP_EOL, $html));
 
@@ -408,19 +480,27 @@ class SettingsForm extends FormValidator
      */
     private function getPackageClasses(Package $package)
     {
+        $classes = array('btn');
+
         $extra = $package->get_extra();
 
         if ($extra['core-install'])
         {
-            return 'package-list-item-core';
+            $classes[] = 'btn-default';
         }
-
-        if ($extra['default-install'])
+        else
         {
-            return 'package-list-item package-list-item-selected';
+            if ($extra['default-install'])
+            {
+                $classes[] = 'btn-success';
+            }
+            else
+            {
+                $classes[] = 'btn-default';
+            }
         }
 
-        return 'package-list-item';
+        return implode(' ', $classes);
     }
 
     public function setDefaults($defaults = array())

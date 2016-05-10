@@ -24,13 +24,13 @@ class Bar extends Renderer
 
         $class = 'navbar navbar-chamilo navbar-default';
 
-        if(!$this->get_user() instanceof User)
+        if (! $this->get_user() instanceof User)
         {
             $class .= ' navbar-no-items';
         }
 
         $html[] = '<nav class="' . $class . '">';
-        $html[] = '<div class="container-fluid">';
+        $html[] = '<div class="' . $this->getContainerMode() . '">';
         $html[] = '<div class="navbar-header">';
 
         $html[] = '<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu-navbar-collapse" aria-expanded="false">';
@@ -72,8 +72,8 @@ class Bar extends Renderer
             $brandSource = Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
         }
 
-        return '<a class="navbar-brand" href="' . Path::getInstance()->getBasePath(true) . '">' .
-            '<img alt="' . $siteName . '" src="' . $brandSource . '"></a>';
+        return '<a class="navbar-brand" href="' . Path :: getInstance()->getBasePath(true) . '">' . '<img alt="' .
+             $siteName . '" src="' . $brandSource . '"></a>';
     }
 
     /**

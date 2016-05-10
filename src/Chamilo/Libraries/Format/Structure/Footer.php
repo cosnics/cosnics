@@ -31,11 +31,18 @@ class Footer
 
     /**
      *
+     * @var string
+     */
+    private $containerMode;
+
+    /**
+     *
      * @param integer $viewMode
      */
-    public function __construct($viewMode = Page :: VIEW_MODE_FULL)
+    public function __construct($viewMode = Page :: VIEW_MODE_FULL, $containerMode = 'container-fluid')
     {
         $this->viewMode = $viewMode;
+        $this->containerMode = $containerMode;
     }
 
     /**
@@ -75,6 +82,24 @@ class Footer
     }
 
     /**
+     *
+     * @return string
+     */
+    public function getContainerMode()
+    {
+        return $this->containerMode;
+    }
+
+    /**
+     *
+     * @param string $containerMode
+     */
+    public function setContainerMode($containerMode)
+    {
+        $this->containerMode = $containerMode;
+    }
+
+    /**
      * Returns the HTML code for the footer
      */
     public function toHtml()
@@ -101,7 +126,8 @@ class Footer
 
             $stringUtilities = StringUtilities :: getInstance();
 
-            $html[] = '<div class="container-fluid">';
+            $html[] = '<footer>';
+            $html[] = '<div class="' . $this->getContainerMode() . '">';
             $html[] = '<div class="row footer">';
             $html[] = '<div class="col-xs-12">';
 
@@ -152,13 +178,14 @@ class Footer
                     'WhoisOnline') . '?</a>';
             }
 
-            $links[] = '&copy;&nbsp;' . date('Y');
-
             $html[] = implode(' | ', $links);
+
+            $html[] = '&nbsp;&copy;&nbsp;' . date('Y');
 
             $html[] = '</div>';
             $html[] = '</div>';
             $html[] = '</div> <!-- end of .container-fluid" -->';
+            $html[] = '</footer>';
         }
 
         $html[] = '</body>';

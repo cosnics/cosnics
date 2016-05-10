@@ -17,5 +17,8 @@
 				</dependency>
 			</dependencies>
 		</pre-depends>
+		<extra>
+			<core-install>1</core-install>
+		</extra>
 	</package>
 </packages>
