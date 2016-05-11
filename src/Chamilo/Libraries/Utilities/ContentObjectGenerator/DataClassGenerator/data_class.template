@@ -1,0 +1,53 @@
+/**
+ * {DESCRIPTION}
+ *
+ * @package repository.lib.content_object.{TYPE}
+ * @author {AUTHOR}
+ */
+
+class {OBJECT_CLASS} extends ContentObject
+{
+	const CLASS_NAME = __CLASS__;
+	
+	/**
+	 * {OBJECT_CLASS} properties
+	 */	 
+	<!-- BEGIN CONSTS -->
+	const {CONSTS.PROPERTY_CONST} = '{CONSTS.PROPERTY_NAME}';
+	<!-- END CONSTS -->
+	
+	/**
+	 * Get the additional properties
+	 * @return array The property names.
+	 */
+	static function get_additional_property_names()
+	{
+		return array ({ADDITIONAL_PROPERTY_NAMES});
+	}
+
+	<!-- BEGIN PROPERTY -->
+	/**
+	 * Returns the {PROPERTY.PROPERTY_NAME} of this {OBJECT_CLASS}.
+	 * @return the {PROPERTY.PROPERTY_NAME}.
+	 */
+	function get_{PROPERTY.PROPERTY_NAME}()
+	{
+		return $this->get_additional_property(self :: {PROPERTY.PROPERTY_CONST});
+	}
+	
+	/**
+	 * Sets the {PROPERTY.PROPERTY_NAME} of this {OBJECT_CLASS}.
+	 * @param {PROPERTY.PROPERTY_NAME}
+	 */
+	function set_{PROPERTY.PROPERTY_NAME}(${PROPERTY.PROPERTY_NAME})
+	{
+		$this->set_additional_property(self :: {PROPERTY.PROPERTY_CONST}, ${PROPERTY.PROPERTY_NAME});
+	}
+	
+	<!-- END PROPERTY -->
+	
+	static function get_type_name() 
+	{
+		return Utilities :: camelcase_to_underscores(self :: CLASS_NAME);
+	}
+}
