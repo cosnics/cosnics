@@ -8,6 +8,9 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\CourseGroupMenu;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
+use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
+use Chamilo\Core\Repository\Viewer\ActionSelector;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -188,21 +191,29 @@ abstract class TabComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         Translation :: get('Create'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Create'),
+                        new BootstrapGlyph('plus'),
                         $this->get_url($param_add_course_group),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
 
             if (! $this->introduction_text && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
             {
-                $commonActions->addButton(
-                    new Button(
-                        Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Introduce'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                $label = Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES);
+                $glyph = new BootstrapGlyph('info-sign');
+                $allowedContentObjectTypes = array(Introduction :: class_name());
+
+                $parameters = $this->get_parameters();
+                $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
+                    \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION;
+
+                $actionSelector = new ActionSelector(
+                    $this,
+                    $this->getUser()->getId(),
+                    $allowedContentObjectTypes,
+                    $parameters
+                );
+
+                $commonActions->addButton($actionSelector->getActionButton($label, $glyph));
             }
 
             if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
@@ -210,7 +221,7 @@ abstract class TabComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         Translation :: get('ViewSubscriptions'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                        new BootstrapGlyph('th-list'),
                         $this->get_url(
                             $param_subscriptions_overview,
                             array(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE_GROUP)),
