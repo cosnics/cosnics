@@ -3,7 +3,7 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Mijn agenda"
+TypeName = "Mijn kalender"
 Jump = "Spring"
 ComponentFailedToLoad = "Fout bij het laden"
 File = "Bestand"
@@ -34,4 +34,4 @@ SharedCalendarName = "Gedeelde items"
 SharedCalendarDescription = "Items die met mij gedeeld zijn"
 TypeCategory = "Calendar Extensions"
 AddEvent = "Publiceer"
-PrinterComponent = "Print agenda"
+PrinterComponent = "Print kalender"

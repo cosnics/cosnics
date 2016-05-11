@@ -9,10 +9,12 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  *
@@ -83,6 +85,29 @@ class ContentObjectRelationRepository
             WorkspaceContentObjectRelation :: class_name(),
             new DataClassRetrieveParameters($relationCondition));
     }
+
+    /**
+    * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+    * @return ResultSet
+    */
+    public function findContentObjectRelationsForContentObject(ContentObject $contentObject)
+    {
+        $relationConditions = array();
+
+        $relationConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                WorkspaceContentObjectRelation :: class_name(),
+                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($contentObject->getId()));
+
+        $relationCondition = new AndCondition($relationConditions);
+
+        return DataManager :: retrieves(
+            WorkspaceContentObjectRelation :: class_name(),
+            new DataClassRetrievesParameters($relationCondition));
+    }
+
+
 
     /**
      *

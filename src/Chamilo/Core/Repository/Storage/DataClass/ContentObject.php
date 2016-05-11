@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -1002,7 +1004,19 @@ class ContentObject extends CompositeDataClass
     // create a version
     public function version()
     {
-        return $this->create();
+        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+        $contentObjectRelations = $contentObjectRelationService->getContentObjectRelationsForContentObject($this);
+
+        $success = $this->create();
+
+        while($contentObjectRelation = $contentObjectRelations->next_result())
+        {
+            /** @var WorkspaceContentObjectRelation $contentObjectRelation */
+            $contentObjectRelation->setContentObjectId($this->getId());
+            $contentObjectRelation->update();
+        }
+
+        return $success;
     }
 
     /**

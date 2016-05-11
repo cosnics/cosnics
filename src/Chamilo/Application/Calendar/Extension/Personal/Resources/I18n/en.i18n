@@ -3,7 +3,7 @@
 ; Language = en
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "My Agenda"
+TypeName = "My Calendar"
 TypeCategory = "Calendar Extensions"
 Jump = "Jump"
 ComponentFailedToLoad = "Failed to load"
@@ -20,7 +20,7 @@ PersonalCalendar = "Personal calendar"
 IcalImported = "The iCal was successfully imported"
 OnlyIcsAllowed = "Only ICS files are allowed"
 ExportIcal = "Export iCal"
-MyAgenda = "My agenda"
+MyAgenda = "My calendar"
 PersonalCalendarManagerPublisherComponent = "Publish"
 Day = "Day calendar"
 Month = "Month calendar"
@@ -34,4 +34,4 @@ SharedCalendarName = "Other events"
 SharedCalendarDescription = "Events shared with me"
 TypeCategory = "Calendar Extensions"
 AddEvent = "Publish"
-PrinterComponent = "Print agenda"
+PrinterComponent = "Print calendar"
