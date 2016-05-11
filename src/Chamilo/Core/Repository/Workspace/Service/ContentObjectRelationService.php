@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  *
@@ -78,6 +79,16 @@ class ContentObjectRelationService
         return $this->getContentObjectRelationRepository()->findContentObjectRelationForWorkspaceAndContentObject(
             $workspace,
             $contentObject);
+    }
+
+    /**
+     * @param ContentObject $contentObject
+     *
+     * @return ResultSet
+     */
+    public function getContentObjectRelationsForContentObject(ContentObject $contentObject)
+    {
+        return $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObject($contentObject);
     }
 
     /**

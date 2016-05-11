@@ -134,7 +134,7 @@ class ViewerComponent extends TabComponent
             $this->addMoveButton($secondaryActions, $translator);
             $this->addManageButton($secondaryActions, $translator);
 
-            if ($this->get_action() != self :: ACTION_REPORTING && $this->is_current_step_set())
+            if ($this->get_action() != self :: ACTION_REPORTING)
             {
                 $this->addReportingButtons($secondaryActions, $translator);
             }
