@@ -55,7 +55,7 @@
 * [Home] Fixed translations
 * [Installer] Complete visual redesign using Bootstrap
 * [Learning Path] Made the menu wider
-* [Personal Calendar] Moved publish button to front
+* [Personal Calendar] Moved publish button to front, make sure primary buttons like the publish button are always placed first 
 * [PHP7] Eliminated dependencies on old non-compatible libraries and/or provided working alternatives whenever necessary
 * [Platform] Allow the layout container to be either fixed or fluid on demand
 * [Repository] Fixed translations when a file is uploaded through uploadify (attachments)
