@@ -33,10 +33,6 @@
     },
     "repositories" : [
         {
-            "type" : "pear",
-            "url" : "https://pear.php.net"
-        },
-        {
             "type": "vcs",
             "url": "https://bitbucket.org/chamilo/pear-libraries"
         }
