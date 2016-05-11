@@ -19,12 +19,6 @@
         "doctrine/dbal" : "2.5.*",
         "doctrine/cache" : "1.5.*",
         "chamilo/pear-libraries" : "*",
-        "pear-pear.php.net/PEAR" : "*",
-        "pear-pear.php.net/Net_URL" : "*",
-        "pear-pear.php.net/Net_Socket" : "*",
-        "pear-pear.php.net/HTTP_Request" : "*",
-        "pear-pear.php.net/MDB2" : "*",
-        "pear-pear.php.net/MDB2_Driver_mysqli" : "*",
         "glenscott/soundcloud": "dev-psr-4",
         "google/apiclient": "*"
     },
