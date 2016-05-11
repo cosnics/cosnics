@@ -19,7 +19,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     /**
      * Constructor
      */
-    public function HTML_QuickForm_datepicker($elementName = null, $elementLabel = null, $attributes = null,
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null,
         $include_time_picker = true)
     {
         if (! isset($attributes['form_name']))

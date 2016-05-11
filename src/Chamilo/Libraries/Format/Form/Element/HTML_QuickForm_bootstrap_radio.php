@@ -48,9 +48,9 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
      * @access public
      * @return void
      */
-    function HTML_QuickForm_bootstrap_radio($elementName = null, $elementLabel = null, $text = null, $value = null, $attributes = null)
+    function __construct($elementName = null, $elementLabel = null, $text = null, $value = null, $attributes = null)
     {
-        parent :: HTML_QuickForm_radio($elementName, $elementLabel, $text, $value, $attributes);
+        parent :: __construct($elementName, $elementLabel, $text, $value, $attributes);
     }
 
     /**

@@ -61,7 +61,7 @@ class FormValidator extends HTML_QuickForm
     {
         $attributes['onreset'] = 'resetElements()';
 
-        HTML_QuickForm :: HTML_QuickForm($form_name, $method, $action, $target, $attributes, $trackSubmit);
+        parent :: __construct($form_name, $method, $action, $target, $attributes, $trackSubmit);
 
         $this->registerAdditionalElements();
         $this->registerAdditionalRules();
