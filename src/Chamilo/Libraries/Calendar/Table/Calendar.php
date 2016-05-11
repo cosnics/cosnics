@@ -43,7 +43,7 @@ abstract class Calendar extends HTML_Table
 
         array_unshift($classes, 'table-calendar');
 
-        parent :: HTML_Table(array('class' => implode(' ', $classes), 'cellspacing' => 0));
+        parent :: __construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
     }
 
     /**
