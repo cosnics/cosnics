@@ -128,7 +128,7 @@ class CourseMenu extends Block
             $HREF = $this->getUrl(
                 array(
                     Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                    Application :: PARAM_ACTION => self :: ACTION_REQUEST,
+                    Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_REQUEST,
                     \Chamilo\Application\Weblcms\Request\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager :: ACTION_CREATE));
 
             $TEXT = htmlspecialchars(Translation :: get('CourseRequest'));
