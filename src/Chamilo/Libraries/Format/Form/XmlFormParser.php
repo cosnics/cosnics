@@ -389,11 +389,6 @@ class XmlFormParser
     {
         $element = call_user_func_array(array($this->form_builder, 'createElement'), func_get_args());
 
-        if ($element instanceof \HTML_QuickForm_Error)
-        {
-            throw new \Exception($element->getMessage());
-        }
-
         $this->get_xml_form_parser_result()->add_element($element);
 
         return $element;
