@@ -17,5 +17,11 @@ interface ActionsInterface
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
      */
-    public function get(Application $application);
+    public function getAdditional(Application $application);
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[]
+     */
+    public function getPrimary(Application $application);
 }

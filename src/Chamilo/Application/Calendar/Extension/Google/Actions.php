@@ -22,9 +22,18 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
 
     /**
      *
-     * @see \Chamilo\Application\Calendar\ActionsInterface::get()
+     * @see \Chamilo\Application\Calendar\ActionsInterface::getPrimary()
      */
-    public function get(Application $application)
+    public function getPrimary(Application $application)
+    {
+        return array();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Application\Calendar\ActionsInterface::getAdditional()
+     */
+    public function getAdditional(Application $application)
     {
         $dropdownButton = new DropdownButton(
             Translation :: get('TypeName', null, __NAMESPACE__),

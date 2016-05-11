@@ -20,7 +20,20 @@ use Chamilo\Libraries\Platform\Translation;
 class Actions implements \Chamilo\Application\Calendar\ActionsInterface
 {
 
-    public function get(Application $application)
+    /**
+     *
+     * @see \Chamilo\Application\Calendar\ActionsInterface::getPrimary()
+     */
+    public function getPrimary(Application $application)
+    {
+        return array();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Application\Calendar\ActionsInterface::getAdditional()
+     */
+    public function getAdditional(Application $application)
     {
         $dropdownButton = new DropdownButton(
             Translation :: get('TypeName', null, __NAMESPACE__),

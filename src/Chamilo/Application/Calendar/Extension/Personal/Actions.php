@@ -19,7 +19,11 @@ use Chamilo\Libraries\Platform\Translation;
 class Actions implements \Chamilo\Application\Calendar\ActionsInterface
 {
 
-    public function get(Application $application)
+    /**
+     *
+     * @see \Chamilo\Application\Calendar\ActionsInterface::getPrimary()
+     */
+    public function getPrimary(Application $application)
     {
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
@@ -31,9 +35,8 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
             $this->getAllowedContentObjectTypes(),
             $parameters);
 
-        $createButton = $actionSelector->getActionButton(
-            Translation :: get('AddEvent'),
-            new BootstrapGlyph('plus'));
+        $createButton = $actionSelector->getActionButton(Translation :: get('AddEvent'), new BootstrapGlyph('plus'));
+        $createButton->setClasses('btn-primary');
 
         return array($createButton);
     }
@@ -59,5 +62,14 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
         }
 
         return $types;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Application\Calendar\ActionsInterface::getAdditional()
+     */
+    public function getAdditional(Application $application)
+    {
+        return array();
     }
 }
