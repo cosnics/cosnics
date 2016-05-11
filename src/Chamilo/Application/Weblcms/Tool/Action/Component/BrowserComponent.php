@@ -22,6 +22,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
@@ -452,7 +453,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $publishActions->addButton(
                         $this->getPublicationButton(
                             Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                            new BootstrapGlyph('info-sign'),
+                            new FontAwesomeGlyph('book'),//new BootstrapGlyph('info-sign'),
                             array(Introduction :: class_name()),
                             $parameters));
                 }

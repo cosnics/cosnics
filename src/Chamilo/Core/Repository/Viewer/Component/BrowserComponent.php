@@ -61,6 +61,8 @@ class BrowserComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
 
+        $this->registerQuery();
+
         $html[] = '<div class="row row-search">';
         $html[] = '<div class="col-xs-12">';
         $html[] = $this->getForm()->toHtml();
@@ -94,6 +96,15 @@ class BrowserComponent extends Manager implements TableSupport
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Registers the query as parameter to be used in other links
+     */
+    protected function registerQuery()
+    {
+        $query = $this->get_query();
+        $this->set_parameter(self::PARAM_QUERY, $query);
     }
 
     /**
@@ -180,7 +191,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_menu($allow_shared = true)
     {
-        $url = $this->get_url($this->get_parameters()) . '&' . self :: PROPERTY_CATEGORY . '=%s';
+        $url = $this->get_url($this->get_parameters(), array(self::PARAM_QUERY)) . '&' . self :: PROPERTY_CATEGORY . '=%s';
 
         $extra = array();
 
@@ -270,7 +281,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_category_url($category_id)
     {
-        return $this->get_url(array(self :: PROPERTY_CATEGORY => $category_id));
+        return $this->get_url(array(self :: PROPERTY_CATEGORY => $category_id), array(self::PARAM_QUERY));
     }
 
     /**
