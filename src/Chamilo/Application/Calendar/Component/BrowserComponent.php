@@ -153,20 +153,25 @@ class BrowserComponent extends Manager implements DelegateComponent
         $extensionRegistrations = Configuration :: registrations_by_type(
             \Chamilo\Application\Calendar\Manager :: package() . '\Extension');
 
+        $primaryExtensionActions = array();
+        $additionalExtensionActions = array();
+
         foreach ($extensionRegistrations as $extensionRegistration)
         {
             if ($extensionRegistration[Registration :: PROPERTY_STATUS] == 1)
             {
                 $actionRendererClass = $extensionRegistration[Registration :: PROPERTY_CONTEXT] . '\Actions';
                 $actionRenderer = new $actionRendererClass();
-                $extensionActions = $actionRenderer->get($this);
 
-                foreach ($extensionActions as $extensionAction)
-                {
-                    $actions[] = $extensionAction;
-                }
+                $primaryExtensionActions = array_merge($primaryExtensionActions, $actionRenderer->getPrimary($this));
+                $additionalExtensionActions = array_merge(
+                    $additionalExtensionActions,
+                    $actionRenderer->getAdditional($this));
             }
         }
+
+        $actions = array_merge($actions, $primaryExtensionActions);
+        $actions = array_merge($actions, $additionalExtensionActions);
 
         $actions[] = $this->getGeneralActions();
 

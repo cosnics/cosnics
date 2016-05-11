@@ -1,60 +1,66 @@
 [29/04/2016]
 
-* [Weblcms] Navigate to menu: alphabetical order
+* [Assessment] Removed subitems in the builder of the complex content object because assessment doesn't have subpaths
+* [Assets] Added a timestamp for client cache clearing
+* [Assignment Tool] Limited the amount of allowed content object types in the creation form of an assignment
+* [Calendar Event] Fixed css for datepicker
+* [Calendar Event] fixes for aqua theme for layout
+* [CSS] Fixed toggle options in the course settings form
+* [File Content Object] Added clickable download link on inline images
+* [File Content Object] Display docx and other office documents inline using the official office viewer
+* [File Content Object] Removed buttons for inline image rendering
+* [Home] Bugfix in home javascript when moving to and from an empty column
+* [Learning Path] Changed tabs to buttons
+* [Learning Path] A new mover component in which you can move an item directly to a new parent and a new position
+* [Learning Path] Allow HTML5 full screen display of learning paths
+* [Learning Path] Changed previous and next buttons
+* [Learning Path] Changed progressbar
+* [Learning Path] Selected path expanded in tree menu
+* [Learning Path] Use Bootstrap TreeView for the learning path
+* [Menu] Added the homepage link to the navbar brand
+* [Portfolio] Changed tabs to buttons
 * [Portfolio] Changes to the feedback subscribe button
 * [Portfolio] Feedback icons changed
-* [Home] Bugfix in home javascript when moving to and from an empty column
-* [LearningPath] Selected path expanded in tree menu
-* [CSS] Fixed toggle options in the course settings form
+* [Weblcms] Added a warning when the user leaves the publication form without publishing
+* [Weblcms] Bugfixes to the course visit tracking
+* [Weblcms] Navigate to menu: alphabetical order
 * [Weblcms] Removed option "Menu Layout" from course settings since it is no longer used and replaced by much more intuitive "Navigate To"
 * [Weblcms] Translations of course setting "Tool Layout"
-* [Assignment Tool] Limited the amount of allowed content object types in the creation form of an assignment
-* [Weblcms] Bugfixes to the course visit tracking
-* [Weblcms] Added a warning when the user leaves the publication form without publishing
-* [Assets] Added a timestamp for client cache clearing
-* [Assessment] Removed subitems in the builder of the complex content object because assessment doesn't have subpaths
-* [File CO] Removed buttons for inline image rendering
-* [File CO] Added clickable download link on inline images
-* [Learning Path] Allow HTML5 full screen display of learning paths
-* [Learning Path] Use Bootstrap TreeView for the learning path
-* [Calendar Event] fixes for aqua theme for layout
-* [Calendar Event] Fixed css for datepicker
-* [LearningPath] A new mover component in which you can move an item directly to a new parent and a new position
-* [LearningPath] Changed tabs to buttons
-* [Portfolio] Changed tabs to buttons
-* [LearningPath] Changed progressbar
-* [LearningPath] Changed previous and next buttons
-* [Menu] Added the homepage link to the navbar brand
-* [File Content Object] Display docx and other office documents inline using the official office viewer
 
 [06/05/2016]
 
-* [User] Fixed user settings that could not be updated
+* [Admin] Translations whois online page
+* [Caching] Fixed issue between PhpFileCache and OpCache
+* [CSS/Javascript] Fixed client caching of resources
 * [Menu] Fixed cache reset of menu items when editing the menu
-* [Workspaces] Visualize the workspace description in the workspace
 * [Portfolio] Fixes for the portfolio breadcrumbs
+* [Streaming Videos] Translation: Streaming Video's
 * [User] Fixed the asynchronous loading of the userpicture in the menu
+* [User] Fixed user settings that could not be updated
 * [Vimeo] Fixed vimeo browse layout
 * [Weblcms] Added some changes to the publication form to have a more distinct view between several options
 * [Weblcms] Fixed the reset button bug in the publication form
-* [Admin] Translations whois online page
 * [Workspaces] Moved the "manager" option in the rights form above the warning message
 * [Workspaces] Redirect to browser when saving the rights form
 * [Workspaces] Translation: Shared Workspaces => Workspaces shared with me
-* [Streaming Videos] Translation: Streaming Video's
-* [CSS/Javascript] Fixed client caching of resources
-* [Caching] Fixed issue between PhpFileCache and OpCache
+* [Workspaces] Visualize the workspace description in the workspace
 
 [13/05/2016]
 
+* [Course Groups] Changed the color of "unsubscribe yourself" button to red
+* [CSS] Alerts on smaller screen are now responsive
+* [CSS] Change the way categories in forms are displayed
 * [CSS] Fixed the z-index for notifications and dropdown menu's
-* [Weblcms] Fixed translations in the manage rights component
+* [CSS] Platform footer re-implemented to be more bootstrap compliant
+* [Home] Fixed translations
+* [Installer] Complete visual redesign using Bootstrap
+* [Learning Path] Made the menu wider
+* [Personal Calendar] Moved publish button to front
+* [PHP7] Eliminated dependencies on old non-compatible libraries and/or provided working alternatives whenever necessary
+* [Platform] Allow the layout container to be either fixed or fluid on demand
 * [Repository] Fixed translations when a file is uploaded through uploadify (attachments)
 * [Repository] Fixed translations
 * [User Tool] Fixed translations
 * [Weblcms] Fixed publisher translations
+* [Weblcms] Fixed translations in the manage rights component
 * [Weblcms] Navigate to overlaps with the course title on smaller screens
-* [Course Groups] Changed the color of "unsubscribe yourself" button to red
-* [Personal Calendar] Moved publish button to front
-* [Home] Fixed translations
-* [CSS] Alerts on smaller screen are now responsive

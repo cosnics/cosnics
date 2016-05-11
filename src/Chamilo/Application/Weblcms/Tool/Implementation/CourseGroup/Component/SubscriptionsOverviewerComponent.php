@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\C
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\GroupUser\CourseGroupUserTable;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -219,7 +220,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
                 $commonActions->addButton(
                     new Button(
                         Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Backup'),
+                        new BootstrapGlyph('download'),
                         $this->get_url($param_export_subscriptions_overview),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             }
