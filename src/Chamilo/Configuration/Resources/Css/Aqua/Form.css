@@ -134,16 +134,11 @@ form div.form-row div.forme_no_margin, form div.form-row div.formwa_no_margin,
 	margin-left: 0px;
 }
 
-[dir=ltr] form div.form-row div.form-label, [dir=rtl] form div.form-row div.formw
-	{
-	float: left;
-	text-align: right;
-}
-
-[dir=rtl] form div.form-row div.form-label, [dir=ltr] form div.form-row div.formw
-	{
-	float: right;
-	text-align: left;
+@media ( max-width : 768px) {
+	form div.form-row div.form-label {
+		text-align: left;
+		text-overflow: ellipsis;
+	}
 }
 
 form div.form-row div.feedback {
