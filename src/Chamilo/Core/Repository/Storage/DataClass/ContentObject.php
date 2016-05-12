@@ -1118,11 +1118,12 @@ class ContentObject extends CompositeDataClass
     public function delete_links()
     {
         // Delete links with workspaces
+        // TODO: We should only remove the link with the workspace if there are no versions of this object left
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
                 WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($this->get_id()));
+            new StaticConditionVariable($this->get_object_number()));
 
         if (! DataManager :: deletes(WorkspaceContentObjectRelation :: class_name(), $condition))
         {

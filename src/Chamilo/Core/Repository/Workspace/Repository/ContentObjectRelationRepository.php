@@ -42,7 +42,7 @@ class ContentObjectRelationRepository
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
                 WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($contentObject->getId()));
+            new StaticConditionVariable($contentObject->get_object_number()));
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
@@ -71,7 +71,7 @@ class ContentObjectRelationRepository
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
                 WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($contentObject->getId()));
+            new StaticConditionVariable($contentObject->get_object_number()));
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -100,6 +100,7 @@ class ContentObjectRelationRepository
      *
      * @return ResultSet
      */
+    // TODO: Where is this used? A content object number should be passed !
     public function findContentObjectRelationsForContentObjectById($contentObjectId)
     {
         if(empty($contentObjectId))
@@ -133,7 +134,7 @@ class ContentObjectRelationRepository
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
                 WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($contentObject->getId()));
+            new StaticConditionVariable($contentObject->get_object_number()));
 
         return DataManager :: distinct(
             WorkspaceContentObjectRelation :: class_name(),
