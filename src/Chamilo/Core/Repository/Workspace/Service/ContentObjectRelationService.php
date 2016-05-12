@@ -92,6 +92,43 @@ class ContentObjectRelationService
     }
 
     /**
+     * Updates the content object id of all WorkspaceContentObjectRelations based on an old content object id
+     *
+     * @param int $oldContentObjectId
+     * @param int $newContentObjectId
+     */
+    public function updateContentObjectIdInAllWorkspaces($oldContentObjectId, $newContentObjectId)
+    {
+        if(empty($oldContentObjectId))
+        {
+            throw new \InvalidArgumentException('The given old content object id can not be empty');
+        }
+
+        if(empty($newContentObjectId))
+        {
+            throw new \InvalidArgumentException('The given new content object id can not be empty');
+        }
+
+        $contentObjectRelations = $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObjectById(
+            $oldContentObjectId
+        );
+
+        while($contentObjectRelation = $contentObjectRelations->next_result())
+        {
+            /** @var WorkspaceContentObjectRelation $contentObjectRelation */
+            $contentObjectRelation->setContentObjectId($newContentObjectId);
+            if(!$contentObjectRelation->update())
+            {
+                throw new \RuntimeException(
+                    sprintf(
+                        'Could not update the WorkspaceContentObjectRelation object with id %s',
+                        $contentObjectRelation->getId())
+                );
+            }
+        }
+    }
+
+    /**
      *
      * @param integer $workspaceId
      * @param integer $contentObjectId

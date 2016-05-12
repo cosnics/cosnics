@@ -64,3 +64,16 @@
 * [Weblcms] Fixed publisher translations
 * [Weblcms] Fixed translations in the manage rights component
 * [Weblcms] Navigate to overlaps with the course title on smaller screens
+* [Calendar] Changed every translation from "Agenda" To "Calendar" for more consistency in translations
+* [Weblcms] Changed introduction publisher icon
+* [LearningPath] Fixed bug with multiple selected items when viewing the results
+* [LearningPath] Fixed the abscence of the extra button when the learning path is first opened
+* [LearningPath] Fixed the completed icon on the root of the learning path
+* [Repository] Always include the latest version of content objects in the workspaces
+* [Weblcms] Changed icons in list view for select / unselect all
+* [Course Groups] Fixes for breadcrumbs
+* [Repository] Fixed a bug where the search parameters in a workspace could not be removed
+* [Repository] Fixed a bug where adding an existing content object doesn't keep track of the selected category in the workspaces
+* [Repository] Remember the search parameter when navigating in the repo viewer
+* [Weblcms] Fixed a fatal error in the course menu home block
+* [Course Groups] Added a complete introduction text publisher where you can create a new introduction or select / import an existing one.

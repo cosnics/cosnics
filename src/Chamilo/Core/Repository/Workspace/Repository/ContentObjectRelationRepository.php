@@ -92,13 +92,28 @@ class ContentObjectRelationRepository
     */
     public function findContentObjectRelationsForContentObject(ContentObject $contentObject)
     {
+        return $this->findContentObjectRelationsForContentObjectById($contentObject->getId());
+    }
+
+    /**
+     * @param int $contentObjectId
+     *
+     * @return ResultSet
+     */
+    public function findContentObjectRelationsForContentObjectById($contentObjectId)
+    {
+        if(empty($contentObjectId))
+        {
+            throw new \InvalidArgumentException('The given content object id can not be empty');
+        }
+
         $relationConditions = array();
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
                 WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($contentObject->getId()));
+            new StaticConditionVariable($contentObjectId));
 
         $relationCondition = new AndCondition($relationConditions);
 
@@ -106,8 +121,6 @@ class ContentObjectRelationRepository
             WorkspaceContentObjectRelation :: class_name(),
             new DataClassRetrievesParameters($relationCondition));
     }
-
-
 
     /**
      *

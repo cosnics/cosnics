@@ -1004,17 +1004,14 @@ class ContentObject extends CompositeDataClass
     // create a version
     public function version()
     {
-        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-        $contentObjectRelations = $contentObjectRelationService->getContentObjectRelationsForContentObject($this);
-
+        $currentContentObjectId = $this->getId();
         $success = $this->create();
+        $newContentObjectId = $this->getId();
 
-        while($contentObjectRelation = $contentObjectRelations->next_result())
-        {
-            /** @var WorkspaceContentObjectRelation $contentObjectRelation */
-            $contentObjectRelation->setContentObjectId($this->getId());
-            $contentObjectRelation->update();
-        }
+        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+        $contentObjectRelationService->updateContentObjectIdInAllWorkspaces(
+            $currentContentObjectId, $newContentObjectId
+        );
 
         return $success;
     }
@@ -1041,13 +1038,28 @@ class ContentObject extends CompositeDataClass
 
                     if ($count > 0)
                     {
-                        $new_latest_content_object = DataManager :: retrieve_most_recent_content_object_version(
-                            $content_object);
+                        $new_latest_content_object =
+                            DataManager :: retrieve_best_candidate_for_most_recent_content_object_version(
+                                $content_object->get_object_number()
+                            );
 
                         $new_latest_content_object->set_current(
                             ($count > 1 ? $content_object :: CURRENT_MULTIPLE : $content_object :: CURRENT_SINGLE));
 
-                        return $new_latest_content_object->update();
+                        $success = $new_latest_content_object->update();
+
+                        if($success)
+                        {
+                            $contentObjectRelationService = new ContentObjectRelationService(
+                                new ContentObjectRelationRepository()
+                            );
+
+                            $contentObjectRelationService->updateContentObjectIdInAllWorkspaces(
+                                $this->getId(), $new_latest_content_object->getId()
+                            );
+                        }
+
+                        return $success;
                     }
 
                     return true;
