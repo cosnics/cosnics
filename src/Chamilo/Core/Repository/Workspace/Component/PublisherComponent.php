@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -67,10 +68,12 @@ class PublisherComponent extends Manager
 
             foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {
+                $contentObject = DataManager :: retrieve_by_id(ContentObject::class_name(), $selectedContentObjectIdentifier);
+
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
                 $contentObjectRelationService->createContentObjectRelation(
                     $this->getCurrentWorkspace()->getId(),
-                    $selectedContentObjectIdentifier,
+                    $contentObject->get_object_number(),
                     $parentId
                 );
             }
@@ -102,6 +105,7 @@ class PublisherComponent extends Manager
         return $types;
     }
 
+    // TODO: This should return ALL ids of ALL content object ids attached to the object numbers
     public function getExcludedObjects()
     {
         $workspace = $this->get_application()->getWorkspace();

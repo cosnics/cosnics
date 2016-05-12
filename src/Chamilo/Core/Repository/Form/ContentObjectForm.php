@@ -903,14 +903,14 @@ EOT;
                 $contentObjectRelationService->updateContentObjectRelation(
                     $contentObjectRelation,
                     $this->workspace->getId(),
-                    $object->getId(),
+                    $object->get_object_number(),
                     $parent_id);
             }
             else
             {
                 $contentObjectRelationService->createContentObjectRelation(
                     $this->workspace->getId(),
-                    $object->getId(),
+                    $object->get_object_number(),
                     $parent_id);
             }
         }
