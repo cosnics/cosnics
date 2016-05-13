@@ -726,7 +726,6 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->addElement('html', '<div style="margin-left:25px; display:none;" class="entity_selector_box">');
         $this->addElement('advanced_element_finder', self :: PROPERTY_TARGETS, null, $types);
 
-        $this->addElement('</div>');
         $this->addElement(
             'static', '', '',
             '<div class="alert alert-info" style="margin-top: 10px;">' .
