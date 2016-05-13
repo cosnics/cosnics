@@ -16,55 +16,54 @@ use Chamilo\Core\Repository\Workspace\Table\Share\ShareTableDataProvider;
  */
 class SharedInTableDataProvider extends ShareTableDataProvider
 {
+
     /**
+     *
      * @var ContentObjectRelationService
      */
     protected $contentObjectRelationService;
 
     /**
+     *
      * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
      */
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getContentObjectRelationService()->getWorkspacesForContentObject(
             $this->getWorkspaceService(),
-            $this->getSelectedContentObject()
-        );
+            $this->getSelectedContentObject());
     }
 
     /**
+     *
      * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::count_data()
      */
     public function count_data($condition)
     {
         return $this->getContentObjectRelationService()->countWorkspacesForContentObject(
-            $this->getSelectedContentObject()
-        );
+            $this->getSelectedContentObject());
     }
 
     /**
+     *
      * @return \Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService
      */
     protected function getContentObjectRelationService()
     {
         if (! isset($this->contentObjectRelationService))
         {
-            $this->contentObjectRelationService = new ContentObjectRelationService(
-                new ContentObjectRelationRepository()
-            );
+            $this->contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
         }
 
         return $this->contentObjectRelationService;
     }
 
     /**
+     *
      * @return ContentObject
      */
     protected function getSelectedContentObject()
     {
-        $contentObject = new ContentObject();
-        $contentObject->setId($this->get_component()->get_parameter(Manager::PARAM_CONTENT_OBJECT_ID));
-
-        return $contentObject;
+        return $this->get_table()->get_component()->get_object();
     }
 }

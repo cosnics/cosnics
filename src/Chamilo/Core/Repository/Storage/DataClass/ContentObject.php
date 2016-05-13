@@ -6,8 +6,6 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -959,10 +957,7 @@ class ContentObject extends CompositeDataClass
         {
             return false;
         }
-        /*
-         * $state = $this->get_state(); if ($state == $this->oldState) { return true; } $child_ids = self ::
-         * get_child_ids($this->get_id()); $dm->set_content_object_states($child_ids, $state);
-         */
+
         /*
          * We return true here regardless of the result of the child update, since the object itself did get updated.
          */
@@ -1004,16 +999,7 @@ class ContentObject extends CompositeDataClass
     // create a version
     public function version()
     {
-        $currentContentObjectId = $this->getId();
-        $success = $this->create();
-        $newContentObjectId = $this->getId();
-
-        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-        $contentObjectRelationService->updateContentObjectIdInAllWorkspaces(
-            $currentContentObjectId, $newContentObjectId
-        );
-
-        return $success;
+        return $this->create();
     }
 
     /**
@@ -1047,17 +1033,6 @@ class ContentObject extends CompositeDataClass
                             ($count > 1 ? $content_object :: CURRENT_MULTIPLE : $content_object :: CURRENT_SINGLE));
 
                         $success = $new_latest_content_object->update();
-
-                        if($success)
-                        {
-                            $contentObjectRelationService = new ContentObjectRelationService(
-                                new ContentObjectRelationRepository()
-                            );
-
-                            $contentObjectRelationService->updateContentObjectIdInAllWorkspaces(
-                                $this->getId(), $new_latest_content_object->getId()
-                            );
-                        }
 
                         return $success;
                     }

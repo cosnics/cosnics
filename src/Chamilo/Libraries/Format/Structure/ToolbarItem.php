@@ -31,6 +31,8 @@ class ToolbarItem
 
     private $confirm_message;
 
+    private $extraAttributes;
+
     /**
      *
      * @param string $label
@@ -43,7 +45,7 @@ class ToolbarItem
      * @param string $confirm_message
      */
     public function __construct($label = null, $image = null, $href = null, $display = self :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $class = null, $target = null,
-        $confirm_message = null)
+        $confirm_message = null, $extraAttributes = null)
     {
         $this->label = $label;
         $this->display = $display;
@@ -60,6 +62,7 @@ class ToolbarItem
         {
             $this->confirm_message = $confirm_message;
         }
+        $this->extraAttributes = $extraAttributes;
     }
 
     public function get_label()
@@ -144,6 +147,24 @@ class ToolbarItem
         }
     }
 
+    /**
+     *
+     * @return string
+     */
+    public function getExtraAttributes()
+    {
+        return $this->extraAttributes;
+    }
+
+    /**
+     *
+     * @param string $extraAttributes
+     */
+    public function setExtraAttributes($extraAttributes)
+    {
+        $this->extraAttributes = $extraAttributes;
+    }
+
     public function as_html()
     {
         $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
@@ -191,14 +212,25 @@ class ToolbarItem
             if ($this->target)
             {
                 $target = ' target="' . $this->target . '"';
-                $button = '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' . $label . '"' . ($this->needs_confirmation() ? ' onclick="return confirm(\'' .
-                     addslashes(htmlentities($this->get_confirmation())) . '\');"' : '') . '>' . $button . '</a>';
             }
             else
             {
-                $button = '<a' . $class . ' href="' . htmlentities($this->href) . '" title="' . $label . '"' . ($this->needs_confirmation() ? ' onclick="return confirm(\'' .
-                     addslashes(htmlentities($this->confirm_message)) . '\');"' : '') . '>' . $button . '</a>';
+                $target = '';
             }
+
+            $extraAttributesString = array();
+
+            foreach ($this->getExtraAttributes() as $extraAttributeKey => $extraAttributeValue)
+            {
+                $extraAttributesString[] = $extraAttributeKey . '="' . $extraAttributeValue . '"';
+            }
+
+            $extraAttributesString = implode(' ', $extraAttributesString);
+
+            $button = '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' . $label . '"' .
+                 ($this->needs_confirmation() ? ' onclick="return confirm(\'' .
+                 addslashes(htmlentities($this->get_confirmation())) . '\');"' : '') . ' ' . $extraAttributesString . '>' .
+                 $button . '</a>';
         }
 
         return $button;
