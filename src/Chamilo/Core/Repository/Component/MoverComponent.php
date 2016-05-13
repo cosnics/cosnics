@@ -106,7 +106,7 @@ class MoverComponent extends Manager
                                     if (! $contentObjectRelationService->updateContentObjectRelation(
                                         $contentObjectRelation,
                                         $this->getWorkspace()->getId(),
-                                        $object->getId(),
+                                        $object->get_object_number(),
                                         $destination))
                                     {
                                         $failures ++;
@@ -116,7 +116,7 @@ class MoverComponent extends Manager
                                 {
                                     if (! $contentObjectRelationService->createContentObjectRelation(
                                         $this->getWorkspace()->getId(),
-                                        $object->getId(),
+                                        $object->get_object_number(),
                                         $destination))
                                     {
                                         $failures ++;

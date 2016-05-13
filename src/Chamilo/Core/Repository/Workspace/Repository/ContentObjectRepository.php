@@ -123,7 +123,7 @@ class ContentObjectRepository
     private function getWorkspaceJoins()
     {
         $joinCondition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OBJECT_NUMBER),
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
                 WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID));

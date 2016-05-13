@@ -21,12 +21,13 @@ class WorkspaceConfigureItem extends Bar
     public function isItemSelected()
     {
         $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
+
         return $currentContext == Manager :: package();
     }
 
     public function getContent()
     {
-        $selected = $this->isSelected();
+        $selected = $this->isItemSelected();
 
         if ($selected)
         {
@@ -47,7 +48,7 @@ class WorkspaceConfigureItem extends Bar
         {
             $imagePath = Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu',
-                'ConfigureWorkspaces' . ($this->isSelected() ? 'Selected' : ''));
+                'ConfigureWorkspaces' . ($selected ? 'Selected' : ''));
 
             $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
                  $title . '" />';

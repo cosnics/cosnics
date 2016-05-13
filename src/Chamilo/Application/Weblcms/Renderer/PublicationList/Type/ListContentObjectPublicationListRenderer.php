@@ -966,7 +966,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $buttonToolBar->addItem(
             new Button(
                 Translation :: get('SelectAll', null, Utilities :: COMMON_LIBRARIES),
-                new BootstrapGlyph('check'),
+                new BootstrapGlyph('unchecked'),
                 '#',
                 Button :: DISPLAY_ICON_AND_LABEL,
                 false,
@@ -975,7 +975,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $buttonToolBar->addItem(
             new Button(
                 Translation :: get('UnselectAll', null, Utilities :: COMMON_LIBRARIES),
-                new BootstrapGlyph('unchecked'),
+                new BootstrapGlyph('check'),
                 '#',
                 Button :: DISPLAY_ICON_AND_LABEL,
                 false,

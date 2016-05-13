@@ -30,7 +30,9 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         $file = $this->getFile();
         $document = new File();
 
-        $document->set_title($file->getClientOriginalName());
+        $title = substr($file->getClientOriginalName(), 0, - (strlen($file->getClientOriginalExtension()) + 1));
+
+        $document->set_title($title);
         $document->set_description($file->getClientOriginalName());
         $document->set_owner_id($this->get_user_id());
         $document->set_parent_id($this->getPostDataValue(self :: PARAM_PARENT_ID));
