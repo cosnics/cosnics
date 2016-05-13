@@ -203,7 +203,6 @@ class CasAuthentication extends ExternalAuthentication
                 $this->hasBeenInitialized = true;
 
                 // SSL validation for the CAS server
-                phpCAS :: setExtraCurlOption(CURLOPT_SSLVERSION, 3);
                 phpCAS :: setCasServerCACert($settings['certificate']);
 
                 // force CAS authentication
