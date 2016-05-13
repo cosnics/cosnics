@@ -77,3 +77,4 @@
 * [Repository] Remember the search parameter when navigating in the repo viewer
 * [Weblcms] Fixed a fatal error in the course menu home block
 * [Course Groups] Added a complete introduction text publisher where you can create a new introduction or select / import an existing one.
+* [Repository] Links between workspaces and objects are now based on content object numbers instead of content object ids
