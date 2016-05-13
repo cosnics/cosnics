@@ -98,7 +98,7 @@ class ExportParameters
                                         WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
                                     new PropertyConditionVariable(
                                         ContentObject :: class_name(),
-                                        ContentObject :: PROPERTY_ID))));
+                                        ContentObject :: PROPERTY_OBJECT_NUMBER))));
 
                         $condition = new EqualityCondition(
                             new PropertyConditionVariable(

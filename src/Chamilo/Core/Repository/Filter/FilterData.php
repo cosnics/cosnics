@@ -317,7 +317,7 @@ class FilterData
 
     /**
      *
-     * @return \core\repository\filter\FilterData
+     * @return FilterData
      */
     public static function get_instance(WorkspaceInterface $workspaceImplementation)
     {

@@ -58,9 +58,17 @@ class Menu
         $learning_path_item['icon'] = 'type_' . $objectType;
         $learning_path_item['href'] = $this->getUrl($this->path->get_root()->get_id());
 
-        if ($this->context->get_current_step() == $this->path->get_root()->get_id())
+        if (
+            $this->context->get_action() !=  Manager :: ACTION_REPORTING &&
+            $this->context->get_current_step() == $this->path->get_root()->get_id()
+        )
         {
             $learning_path_item['state'] = array('selected' => true);
+        }
+
+        if ($this->path->get_root()->is_completed())
+        {
+            $learning_path_item['icon'] = 'type_completed';
         }
 
         $sub_items = $this->getSubNodes($this->path->get_root());

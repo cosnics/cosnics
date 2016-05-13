@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  *
@@ -78,6 +79,53 @@ class ContentObjectRelationService
         return $this->getContentObjectRelationRepository()->findContentObjectRelationForWorkspaceAndContentObject(
             $workspace,
             $contentObject);
+    }
+
+    /**
+     * @param ContentObject $contentObject
+     *
+     * @return ResultSet
+     */
+    public function getContentObjectRelationsForContentObject(ContentObject $contentObject)
+    {
+        return $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObject($contentObject);
+    }
+
+    /**
+     * Updates the content object id of all WorkspaceContentObjectRelations based on an old content object id
+     *
+     * @param int $oldContentObjectId
+     * @param int $newContentObjectId
+     */
+    public function updateContentObjectIdInAllWorkspaces($oldContentObjectId, $newContentObjectId)
+    {
+        if(empty($oldContentObjectId))
+        {
+            throw new \InvalidArgumentException('The given old content object id can not be empty');
+        }
+
+        if(empty($newContentObjectId))
+        {
+            throw new \InvalidArgumentException('The given new content object id can not be empty');
+        }
+
+        $contentObjectRelations = $this->getContentObjectRelationRepository()->findContentObjectRelationsForContentObjectById(
+            $oldContentObjectId
+        );
+
+        while($contentObjectRelation = $contentObjectRelations->next_result())
+        {
+            /** @var WorkspaceContentObjectRelation $contentObjectRelation */
+            $contentObjectRelation->setContentObjectId($newContentObjectId);
+            if(!$contentObjectRelation->update())
+            {
+                throw new \RuntimeException(
+                    sprintf(
+                        'Could not update the WorkspaceContentObjectRelation object with id %s',
+                        $contentObjectRelation->getId())
+                );
+            }
+        }
     }
 
     /**

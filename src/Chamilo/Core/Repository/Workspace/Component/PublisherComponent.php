@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Component;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
@@ -19,6 +20,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  *
@@ -61,13 +63,19 @@ class PublisherComponent extends Manager
         {
             $selectedContentObjectIdentifiers = (array) \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
 
+            $parentId = $this->getRequest()->get(FilterData::FILTER_CATEGORY);
+            $parentId = $parentId ? $parentId : 0;
+
             foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {
+                $contentObject = DataManager :: retrieve_by_id(ContentObject::class_name(), $selectedContentObjectIdentifier);
+
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
                 $contentObjectRelationService->createContentObjectRelation(
                     $this->getCurrentWorkspace()->getId(),
-                    $selectedContentObjectIdentifier,
-                    0);
+                    $contentObject->get_object_number(),
+                    $parentId
+                );
             }
 
             $this->redirect(
@@ -97,6 +105,7 @@ class PublisherComponent extends Manager
         return $types;
     }
 
+    // TODO: This should return ALL ids of ALL content object ids attached to the object numbers
     public function getExcludedObjects()
     {
         $workspace = $this->get_application()->getWorkspace();

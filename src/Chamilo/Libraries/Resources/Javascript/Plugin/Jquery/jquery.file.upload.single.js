@@ -14,7 +14,8 @@ dropzoneCallbacks.chamilo = {
                     
                     if (titleField.val() == '')
                     {
-                        titleField.val(file.name);
+                        var title = file.name.substr(0, file.name.lastIndexOf('.'));
+                        titleField.val(title);
                     }
                 }
                 

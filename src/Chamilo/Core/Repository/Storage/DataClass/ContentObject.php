@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -1002,7 +1004,16 @@ class ContentObject extends CompositeDataClass
     // create a version
     public function version()
     {
-        return $this->create();
+        $currentContentObjectId = $this->getId();
+        $success = $this->create();
+        $newContentObjectId = $this->getId();
+
+        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+        $contentObjectRelationService->updateContentObjectIdInAllWorkspaces(
+            $currentContentObjectId, $newContentObjectId
+        );
+
+        return $success;
     }
 
     /**
@@ -1027,13 +1038,28 @@ class ContentObject extends CompositeDataClass
 
                     if ($count > 0)
                     {
-                        $new_latest_content_object = DataManager :: retrieve_most_recent_content_object_version(
-                            $content_object);
+                        $new_latest_content_object =
+                            DataManager :: retrieve_best_candidate_for_most_recent_content_object_version(
+                                $content_object->get_object_number()
+                            );
 
                         $new_latest_content_object->set_current(
                             ($count > 1 ? $content_object :: CURRENT_MULTIPLE : $content_object :: CURRENT_SINGLE));
 
-                        return $new_latest_content_object->update();
+                        $success = $new_latest_content_object->update();
+
+                        if($success)
+                        {
+                            $contentObjectRelationService = new ContentObjectRelationService(
+                                new ContentObjectRelationRepository()
+                            );
+
+                            $contentObjectRelationService->updateContentObjectIdInAllWorkspaces(
+                                $this->getId(), $new_latest_content_object->getId()
+                            );
+                        }
+
+                        return $success;
                     }
 
                     return true;
@@ -1092,11 +1118,12 @@ class ContentObject extends CompositeDataClass
     public function delete_links()
     {
         // Delete links with workspaces
+        // TODO: We should only remove the link with the workspace if there are no versions of this object left
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation :: class_name(),
                 WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID),
-            new StaticConditionVariable($this->get_id()));
+            new StaticConditionVariable($this->get_object_number()));
 
         if (! DataManager :: deletes(WorkspaceContentObjectRelation :: class_name(), $condition))
         {

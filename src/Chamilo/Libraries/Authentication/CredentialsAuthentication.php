@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 
 /**
@@ -94,7 +95,7 @@ abstract class CredentialsAuthentication extends Authentication
     {
         parent :: logout($user);
 
-        $redirect = new Redirect();
+        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
         $redirect->toUrl();
         exit();
     }
