@@ -17,6 +17,7 @@ use HTML_QuickForm_Rule_Required;
  *
  * @package repository.lib.content_object.document
  */
+
 /**
  * A form to create/update a document.
  * A destinction is made between HTML documents and other documents. For HTML
@@ -30,9 +31,17 @@ class WebpageForm extends ContentObjectForm
         $description_options = array();
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
-        parent :: build_creation_form($description_options);
+        parent:: build_creation_form($description_options);
 
-        $this->addElement('category', Translation :: get('Content', null, Utilities :: COMMON_LIBRARIES));
+        $this->addElement('category', Translation:: get('Content', null, Utilities :: COMMON_LIBRARIES));
+
+        $this->addMessage(
+            'warning', 'webpage_information', '',
+            Translation::getInstance()->getTranslation(
+                'WebpageInformation', null, 'Chamilo\Core\Repository\ContentObject\Webpage'
+            ), true
+        );
+
         $this->add_html_editor(
             'html_content',
             null,
@@ -41,7 +50,9 @@ class WebpageForm extends ContentObjectForm
                 FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '500',
                 FormValidatorHtmlEditorOptions :: OPTION_WIDTH => '100%',
                 FormValidatorHtmlEditorOptions :: OPTION_FULL_PAGE => true,
-                FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR => 'Webpage'));
+                FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR => 'Webpage'
+            )
+        );
         $this->addFormRule(array($this, 'check_document_form'));
 
         $renderer = $this->get_renderer();
@@ -55,10 +66,17 @@ class WebpageForm extends ContentObjectForm
         $description_options = array();
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
-        parent :: build_editing_form($description_options);
+        parent:: build_editing_form($description_options);
 
-        $this->addElement('category', Translation :: get('Content', null, Utilities :: COMMON_LIBRARIES));
+        $this->addElement('category', Translation:: get('Content', null, Utilities :: COMMON_LIBRARIES));
         $object = $this->get_content_object();
+
+        $this->addMessage(
+            'warning', 'webpage_information', '',
+            Translation::getInstance()->getTranslation(
+                'WebpageInformation', null, 'Chamilo\Core\Repository\ContentObject\Webpage'
+            ), true
+        );
 
         $this->add_html_editor(
             'html_content',
@@ -68,11 +86,14 @@ class WebpageForm extends ContentObjectForm
                 FormValidatorHtmlEditorOptions :: OPTION_HEIGHT => '500',
                 FormValidatorHtmlEditorOptions :: OPTION_WIDTH => '100%',
                 FormValidatorHtmlEditorOptions :: OPTION_FULL_PAGE => true,
-                FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR => 'Webpage'));
+                FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR => 'Webpage'
+            )
+        );
         $this->addRule(
             'html_content',
-            Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
-            'disk_quota');
+            Translation:: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
+            'disk_quota'
+        );
 
         $renderer = $this->get_renderer();
         $renderer->setElementTemplate('{element}', 'html_content');
@@ -80,11 +101,11 @@ class WebpageForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         $object = $this->get_content_object();
         $defaults['html_content'] = file_get_contents($this->get_upload_path() . $object->get_path());
-        parent :: setDefaults($defaults);
+        parent:: setDefaults($defaults);
     }
 
     public function create_content_object()
@@ -99,12 +120,12 @@ class WebpageForm extends ContentObjectForm
         $object->set_in_memory_file($renderer->run());
 
         $this->set_content_object($object);
-        $document = parent :: create_content_object();
+        $document = parent:: create_content_object();
 
         $owner = $this->get_owner_id();
         $owner_path = $this->get_upload_path() . $owner;
 
-        $permissions_new_files = PlatformSetting :: get('permissions_new_files');
+        $permissions_new_files = PlatformSetting:: get('permissions_new_files');
 
         return $document;
     }
@@ -119,7 +140,7 @@ class WebpageForm extends ContentObjectForm
 
         $document->set_in_memory_file($renderer->run());
 
-        if ((isset($values['version']) && $values['version'] == 0) || ! isset($values['version']))
+        if ((isset($values['version']) && $values['version'] == 0) || !isset($values['version']))
         {
             $document->set_save_as_new_version(false);
         }
@@ -128,7 +149,7 @@ class WebpageForm extends ContentObjectForm
             $document->set_save_as_new_version(true);
         }
 
-        return parent :: update_content_object();
+        return parent:: update_content_object();
     }
 
     protected function check_document_form($fields)
@@ -136,24 +157,25 @@ class WebpageForm extends ContentObjectForm
         // TODO: Do the errors need htmlentities()?
         $errors = array();
 
-        $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-            (int) $this->get_owner_id());
+        $owner = \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
+            \Chamilo\Core\User\Storage\DataClass\User:: class_name(),
+            (int) $this->get_owner_id()
+        );
 
         $calculator = new Calculator($owner);
 
         // Create an HTML-document
-        $file['size'] = Filesystem :: guess_disk_space($fields['html_content']);
+        $file['size'] = Filesystem:: guess_disk_space($fields['html_content']);
 
-        if (! $calculator->canUpload($file['size']))
+        if (!$calculator->canUpload($file['size']))
         {
-            $errors['upload_or_create'] = Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES);
+            $errors['upload_or_create'] = Translation:: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES);
         }
         else
         {
-            if (! HTML_QuickForm_Rule_Required :: validate($fields['html_content']))
+            if (!HTML_QuickForm_Rule_Required:: validate($fields['html_content']))
             {
-                $errors['upload_or_create'] = Translation :: get('NoFileCreated');
+                $errors['upload_or_create'] = Translation:: get('NoFileCreated');
             }
         }
 
@@ -167,6 +189,6 @@ class WebpageForm extends ContentObjectForm
 
     private static function get_upload_path()
     {
-        return Path :: getInstance()->getRepositoryPath();
+        return Path:: getInstance()->getRepositoryPath();
     }
 }
