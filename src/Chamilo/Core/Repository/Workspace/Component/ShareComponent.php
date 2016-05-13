@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 
 /**
  *
@@ -53,15 +54,27 @@ class ShareComponent extends Manager implements TableSupport
 
         if (! empty($selectedWorkspaceIdentifiers))
         {
+            $selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
+                \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID,
+                array());
+
+            $selectedContentObjectNumbers = DataManager :: distinct(
+                ContentObject :: class_name(),
+                new DataClassDistinctParameters(
+                    new InCondition(
+                        new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                        $selectedContentObjectIdentifiers),
+                    ContentObject :: PROPERTY_OBJECT_NUMBER));
+
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
 
             foreach ($selectedWorkspaceIdentifiers as $selectedWorkspaceIdentifier)
             {
-                foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
+                foreach ($selectedContentObjectNumbers as $selectedContentObjectNumber)
                 {
                     $contentObjectRelationService->createContentObjectRelation(
                         $selectedWorkspaceIdentifier,
-                        $selectedContentObjectIdentifier,
+                        $selectedContentObjectNumber,
                         0);
                 }
             }
@@ -122,21 +135,6 @@ class ShareComponent extends Manager implements TableSupport
 
                 $selectedObjectsPreview = implode(PHP_EOL, $selectedObjectsPreviews);
             }
-            // else
-            // {
-            // $contentObject = DataManager:: retrieve_by_id(
-            // ContentObject:: class_name(),
-            // array_pop($contentObjectIdentifiers)
-            // );
-            //
-            // $renditionImplementation = ContentObjectRenditionImplementation:: factory(
-            // $contentObject,
-            // ContentObjectRendition :: FORMAT_HTML,
-            // ContentObjectRendition :: VIEW_FULL,
-            // $this
-            // );
-            // $selectedObjectsPreview = $renditionImplementation->render();
-            // }
 
             $table = new ShareTable($this);
 

@@ -28,13 +28,16 @@ class ImpactViewRecyclerComponent extends Manager
 {
 
     /**
+     *
      * @var ImpactViewRenderer
      */
     private $impact_view_renderer;
 
-    /****************************************************************************************************************
+    /**
+     * **************************************************************************************************************
      * Main component functionality
-     ****************************************************************************************************************/
+     * **************************************************************************************************************
+     */
 
     /**
      * Runs this component and displays its output if applicable.
@@ -42,7 +45,7 @@ class ImpactViewRecyclerComponent extends Manager
     public function run()
     {
         $co_ids = $this->get_selected_co_ids();
-        if (!is_array($co_ids))
+        if (! is_array($co_ids))
         {
             $co_ids = array($co_ids);
         }
@@ -63,9 +66,8 @@ class ImpactViewRecyclerComponent extends Manager
     public function get_parameters($include_search = false)
     {
         return array_merge(
-            array(self::PARAM_CATEGORY_ID => $this->getRequest()->get(self::PARAM_CATEGORY_ID)),
-            parent:: get_parameters($include_search)
-        );
+            array(self :: PARAM_CATEGORY_ID => $this->getRequest()->get(self :: PARAM_CATEGORY_ID)),
+            parent :: get_parameters($include_search));
     }
 
     /**
@@ -79,59 +81,58 @@ class ImpactViewRecyclerComponent extends Manager
     {
         $failures = 0;
 
-        $condition =
-            new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObjectPublication::PROPERTY_ID),
-                $co_ids
-            );
+        $condition = new InCondition(
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObjectPublication :: PROPERTY_ID),
+            $co_ids);
 
         $parameters = new DataClassRetrievesParameters($condition);
 
-        $objects = DataManager:: retrieves(ContentObject:: class_name(), $parameters);
+        $objects = DataManager :: retrieves(ContentObject :: class_name(), $parameters);
 
         while ($content_object = $objects->next_result())
         {
             $versions = $content_object->get_content_object_versions();
             foreach ($versions as $version)
             {
-                if (!$version->delete_links())
+                if (! $version->delete_links())
                 {
                     $failures ++;
                     continue;
                 }
-                if (!$version->recycle())
+                if (! $version->recycle())
                 {
                     $failures ++;
                     continue;
                 }
                 else
                 {
-                    Event:: trigger(
+                    Event :: trigger(
                         'Activity',
-                        Manager::context(),
+                        Manager :: context(),
                         array(
                             Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_RECYCLE,
                             Activity :: PROPERTY_USER_ID => $this->get_user_id(),
                             Activity :: PROPERTY_DATE => time(),
                             Activity :: PROPERTY_CONTENT_OBJECT_ID => $version->get_id(),
-                            Activity :: PROPERTY_CONTENT => $version->get_title()
-                        )
-                    );
+                            Activity :: PROPERTY_CONTENT => $version->get_title()));
                 }
             }
         }
 
         $result = $this->get_result(
-            $failures, count($co_ids), 'ContentObjectNotDeleted', 'ContentObjectsNotDeleted',
-            'ContentObjectDeleted', 'ContentObjectsDeleted'
-        );
+            $failures,
+            count($co_ids),
+            'ContentObjectNotDeleted',
+            'ContentObjectsNotDeleted',
+            'ContentObjectDeleted',
+            'ContentObjectsDeleted');
 
         $this->redirect(
-            $result, $failures > 0, array(
+            $result,
+            $failures > 0,
+            array(
                 self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS,
-                self :: PARAM_CATEGORY_ID => $this->getRequest()->get(self::PARAM_CATEGORY_ID)
-            )
-        );
+                self :: PARAM_CATEGORY_ID => $this->getRequest()->get(self :: PARAM_CATEGORY_ID)));
     }
 
     /**
@@ -146,10 +147,8 @@ class ImpactViewRecyclerComponent extends Manager
      *
      * @return string
      */
-    public function get_result(
-        $failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single,
-        $succes_message_multiple
-    )
+    public function get_result($failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single,
+        $succes_message_multiple)
     {
         if ($failures)
         {
@@ -160,17 +159,19 @@ class ImpactViewRecyclerComponent extends Manager
             $message = $count == 1 ? $succes_message_single : $succes_message_multiple;
         }
 
-        return Translation::getInstance()->getTranslation($message, array(), Manager::context());
+        return Translation :: getInstance()->getTranslation($message, array(), Manager :: context());
     }
 
     protected function get_selected_co_ids()
     {
-        return $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
+        return $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
     }
 
-    /****************************************************************************************************************
+    /**
+     * **************************************************************************************************************
      * Inherited
-     ****************************************************************************************************************/
+     * **************************************************************************************************************
+     */
 
     /**
      * Checks if the selected content object(id)s are clear for deletion.
@@ -181,27 +182,24 @@ class ImpactViewRecyclerComponent extends Manager
      */
     public function has_impact(array $selected_ids = array())
     {
-        $condition =
-            new InCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObjectPublication::PROPERTY_ID),
-                $selected_ids
-            );
+        $condition = new InCondition(
+            new PropertyConditionVariable(ContentObject :: class_name(), ContentObjectPublication :: PROPERTY_ID),
+            $selected_ids);
 
         $parameters = new DataClassRetrievesParameters($condition);
 
-        $objects = DataManager:: retrieves(ContentObject:: class_name(), $parameters);
+        $objects = DataManager :: retrieves(ContentObject :: class_name(), $parameters);
 
         $failed = 0;
         while ($content_object = $objects->next_result())
         {
-            if (!DataManager:: content_object_deletion_allowed($content_object))
+            if (! DataManager :: content_object_deletion_allowed($content_object))
             {
                 $failed ++;
             }
         }
 
         return $failed > 0;
-        //return !($objects->is_empty());
     }
 
     /**
@@ -217,17 +215,14 @@ class ImpactViewRecyclerComponent extends Manager
         foreach ($selected_ids as $selected_co_id)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject :: PROPERTY_ID),
-                new StaticConditionVariable($selected_co_id)
-            );
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+                new StaticConditionVariable($selected_co_id));
         }
 
         return new AndCondition(
             new OrCondition($conditions),
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class_name(), ContentObject :: PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject :: STATE_NORMAL)
-            )
-        );
+                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
+                new StaticConditionVariable(ContentObject :: STATE_NORMAL)));
     }
 }
