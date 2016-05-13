@@ -480,27 +480,7 @@ class User extends DataClass
         }
         else
         {
-            $profilePictureIdentifier = \Chamilo\Libraries\Platform\Session\Session :: get(
-                'profile_picture_identifier',
-                false);
-
-            if (! $profilePictureIdentifier)
-            {
-                $imagesPath = Theme::getInstance()->getImagesPath(self::package(), false) . 'Unknown' . DIRECTORY_SEPARATOR;
-                $files = Filesystem::get_directory_content($imagesPath, Filesystem::LIST_FILES, false);
-                $count = count($files);
-
-                $profilePictureIdentifier = rand(0, $count);
-                \Chamilo\Libraries\Platform\Session\Session :: register(
-                    'profile_picture_identifier',
-                    $profilePictureIdentifier);
-            }
-
-            return Theme :: getInstance()->getImagePath(
-                self :: package(),
-                'Unknown' . DIRECTORY_SEPARATOR . $profilePictureIdentifier,
-                'png',
-                false);
+            return Theme :: getInstance()->getImagePath(self :: package(), 'Unknown', 'png', false);
         }
     }
 
@@ -706,17 +686,17 @@ class User extends DataClass
 
     public function get_groups($only_retrieve_ids = false)
     {
-//         if (! $only_retrieve_ids)
-//         {
-            return \Chamilo\Core\Group\Storage\DataManager :: retrieve_all_subscribed_groups_array(
-                $this->getId(),
-                $only_retrieve_ids);
-//         }
-//         else
-//         {
-//             $userGroupMembershipCacheService = new UserGroupMembershipCacheService();
-//             return $userGroupMembershipCacheService->getMembershipsForUserAndType($this, $only_retrieve_ids);
-//         }
+        // if (! $only_retrieve_ids)
+        // {
+        return \Chamilo\Core\Group\Storage\DataManager :: retrieve_all_subscribed_groups_array(
+            $this->getId(),
+            $only_retrieve_ids);
+        // }
+        // else
+        // {
+        // $userGroupMembershipCacheService = new UserGroupMembershipCacheService();
+        // return $userGroupMembershipCacheService->getMembershipsForUserAndType($this, $only_retrieve_ids);
+        // }
     }
 
     public function get_user_groups()
