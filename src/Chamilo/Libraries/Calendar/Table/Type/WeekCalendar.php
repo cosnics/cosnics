@@ -16,6 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class WeekCalendar extends Calendar
 {
+    const TIME_PLACEHOLDER = '__TIME__';
 
     /**
      * The number of hours for one table cell.
@@ -46,9 +47,10 @@ class WeekCalendar extends Calendar
      * @param int $displayTime A time in the week to be displayed
      * @param int $hourStep The number of hours for one table cell. Defaults to 2.
      */
-    public function __construct($displayTime, $hourStep = 2, $startHour = 0, $endHour = 24, $hideOtherHours = false,
-        $classes = array())
+    public function __construct($displayTime, $dayUrlTemplate = null, $hourStep = 2, $startHour = 0, $endHour = 24,
+        $hideOtherHours = false, $classes = array())
     {
+        $this->dayUrlTemplate = $dayUrlTemplate;
         $this->hourStep = $hourStep;
         $this->startHour = $startHour;
         $this->endHour = $endHour;
@@ -218,18 +220,14 @@ class WeekCalendar extends Calendar
 
         for ($day = 0; $day < 7; $day ++)
         {
-            $week_day = strtotime('+' . $day . ' days', $firstDay);
-            $header->setHeaderContents(
-                0,
-                $day + 1,
-                Translation :: get(date('l', $week_day) . 'Short', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                     date('d/m', $week_day));
+            $weekDayTime = strtotime('+' . $day . ' days', $firstDay);
+            $header->setHeaderContents(0, $day + 1, $this->getHeaderContent($weekDayTime));
 
             for ($hour = $start; $hour < $end; $hour += $this->getHourStep())
             {
                 $row = ($hour / $this->getHourStep()) - $start;
 
-                $classes = $this->determineCellClasses($today, $week_day, $hour, $workingStart, $workingEnd);
+                $classes = $this->determineCellClasses($today, $weekDayTime, $hour, $workingStart, $workingEnd);
 
                 if (count($classes) > 0)
                 {
@@ -238,6 +236,28 @@ class WeekCalendar extends Calendar
 
                 $this->setCellContents($row, $day + 1, '');
             }
+        }
+    }
+
+    /**
+     *
+     * @param integer $weekDayTime
+     * @return string
+     */
+    protected function getHeaderContent($weekDayTime)
+    {
+        $dayLabel = Translation :: get(date('l', $weekDayTime) . 'Short', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+             date('d/m', $weekDayTime);
+
+        $dayUrlTemplate = $this->getDayUrlTemplate();
+
+        if (is_null($dayUrlTemplate))
+        {
+            return $dayLabel;
+        }
+        else
+        {
+            return '<a href="' . $this->getDayUrl($weekDayTime) . '">' . $dayLabel . '</a>';
         }
     }
 
@@ -323,5 +343,33 @@ class WeekCalendar extends Calendar
     {
         $this->addEvents();
         return $this->toHtml();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getDayUrlTemplate()
+    {
+        return $this->dayUrlTemplate;
+    }
+
+    /**
+     *
+     * @param string $dayUrlTemplate
+     */
+    public function setDayUrlTemplate($dayUrlTemplate)
+    {
+        $this->dayUrlTemplate = $dayUrlTemplate;
+    }
+
+    /**
+     *
+     * @param integer $time
+     * @return string
+     */
+    public function getDayUrl($time)
+    {
+        return str_replace(self :: TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
     }
 }

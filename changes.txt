@@ -85,3 +85,12 @@
 * [Repository] Links between workspaces and objects are now based on content object numbers instead of content object ids
 * [Webpage] Added usability fixes to make a distinct difference between page and webpage
 * [Assignment] Bugfix for reporting of course group submissions
+
+[20/05/2016]
+* [Repository] Changed the files importer to add a message when a file is imported
+* [Repository] Bugfix in the workspaces for the "make favourite" action as table actions
+* [Course Groups] Added better course group form layout
+* [User] Added a retry button when a login has failed
+* [Portfolio] Use the same menu structure as the learning path
+* [Course Copier] Cleanup of the form layout
+* [Course Truncater] Cleanup of the form layout
