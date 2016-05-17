@@ -1,0 +1,192 @@
+@font-face {
+	font-family: 'ConnectIdents';
+	src: url('ConnectIdents.ttf') format('truetype'),
+		url('ConnectIdents.woff') format('woff'), url('ConnectIdents.eot')
+		format('eot'), url('ConnectIdents.svg?#ConnectIdents') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.connect-icon {
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'ConnectIdents';
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.connect-icon-announcement:before {
+	content: "\e700";
+}
+
+.connect-icon-blog:before {
+	content: "\e701";
+}
+
+.connect-icon-course-description:before {
+	content: "\e702";
+}
+
+.connect-icon-course-group:before {
+	content: "\e703";
+}
+
+.connect-icon-document:before {
+	content: "\e704";
+}
+
+.connect-icon-ephorus:before {
+	content: "\e705";
+}
+
+.connect-icon-forum:before {
+	content: "\e706";
+}
+
+.connect-icon-chat:before {
+	content: "\e707";
+}
+
+.connect-icon-user:before {
+	content: "\e708";
+}
+
+.connect-icon-calendar:before {
+	content: "\e709";
+}
+
+.connect-icon-link:before {
+	content: "\e70a";
+}
+
+.connect-icon-location:before {
+	content: "\e70b";
+}
+
+.connect-icon-note:before {
+	content: "\e70c";
+}
+
+.connect-icon-assessment:before {
+	content: "\e70d";
+}
+
+.connect-icon-assignment:before {
+	content: "\e70e";
+}
+
+.connect-icon-streaming-video:before {
+	content: "\e70f";
+}
+
+.connect-icon-wiki:before {
+	content: "\e710";
+}
+
+.connect-icon-glossary:before {
+	content: "\e711";
+}
+
+.connect-icon-peer-assessment:before {
+	content: "\e712";
+}
+
+.connect-icon-search:before {
+	content: "\e713";
+}
+
+.connect-icon-course-copier:before {
+	content: "\e714";
+}
+
+.connect-icon-course-truncater:before {
+	content: "\e715";
+}
+
+.connect-icon-course-deleter:before {
+	content: "\e716";
+}
+
+.connect-icon-course-settings:before {
+	content: "\e717";
+}
+
+.connect-icon-rights:before {
+	content: "\e718";
+}
+
+.connect-icon-reporting:before {
+	content: "\e719";
+}
+
+.connect-icon-course-sections:before {
+	content: "\e71a";
+}
+
+.connect-icon-learning-path:before {
+	content: "\e71b";
+}
+
+.connect-icon-weblcms:before {
+	content: "\e71c";
+}
+
+.connect-icon-portfolio:before {
+	content: "\e71d";
+}
+
+.connect-icon-home:before {
+	content: "\e71e";
+}
+
+.connect-icon-repository:before {
+	content: "\e71f";
+}
+
+.connect-icon-workspaces:before {
+	content: "\e720";
+}
+
+.connect-icon-admin:before {
+	content: "\e721";
+}
+
+.connect-icon-group:before {
+	content: "\e722";
+}
+
+.connect-icon-help:before {
+	content: "\e723";
+}
+
+.connect-icon-menu:before {
+	content: "\e724";
+}
+
+.connect-icon-lynx:before {
+	content: "\e725";
+}
+
+.connect-icon-metadata:before {
+	content: "\e726";
+}
+
+.connect-icon-cas-storage:before {
+	content: "\e727";
+}
+
+.connect-icon-cache:before {
+	content: "\e728";
+}
+
+.connect-icon-tracking:before {
+	content: "\e729";
+}
+
+.connect-icon-install:before {
+	content: "\e72a";
+}
