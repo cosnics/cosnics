@@ -55,8 +55,15 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
             new ToolbarItem(
                 Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Preview'),
-                'javascript:openPopup(\'' . $this->get_content_object_preview_url($object) . '\');void(0);',
-                ToolbarItem :: DISPLAY_ICON));
+                $this->get_content_object_preview_url($object),
+                ToolbarItem :: DISPLAY_ICON,
+                false,
+                null,
+                null,
+                null,
+                array(
+                    'onclick' => 'javascript:openPopup(\'' . $this->get_content_object_preview_url($object) .
+                         '\');return false;')));
 
         return $toolbar->as_html();
     }
