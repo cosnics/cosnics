@@ -87,11 +87,15 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
 
         // Tree menu
-        $portfolioMenu = new Menu($this);
+        $portfolioMenu = new Menu(
+            $this,
+            $this->get_root_content_object()->get_complex_content_object_path(),
+            $this->get_parent()->get_portfolio_tree_menu_url(),
+            'portfolio-menu');
 
         $html[] = '<div class="clearfix"></div>';
         $html[] = '<div class="portfolio-tree-menu">';
-        $html[] = $portfolioMenu->render_as_tree();
+        $html[] = $portfolioMenu->render();
         $html[] = '</div>';
         $html[] = '</div>';
 

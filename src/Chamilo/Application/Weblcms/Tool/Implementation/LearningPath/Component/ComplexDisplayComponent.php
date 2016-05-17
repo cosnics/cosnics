@@ -35,6 +35,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Menu;
 
 class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
     ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
@@ -219,7 +220,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION] = $this->publication->get_id();
         $parameters[\Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP] = '__STEP__';
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP] = Menu :: NODE_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
