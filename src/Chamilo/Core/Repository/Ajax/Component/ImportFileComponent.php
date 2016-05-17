@@ -3,6 +3,8 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Filter\FilterData;
+use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Redirect;
@@ -31,12 +33,13 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         $file = $this->getFile();
         $document = new File();
 
+        $categoryId = $this->getPostDataValue(self :: PARAM_PARENT_ID);
         $title = substr($file->getClientOriginalName(), 0, - (strlen($file->getClientOriginalExtension()) + 1));
 
         $document->set_title($title);
         $document->set_description($file->getClientOriginalName());
         $document->set_owner_id($this->get_user_id());
-        $document->set_parent_id($this->getPostDataValue(self :: PARAM_PARENT_ID));
+        $document->set_parent_id($categoryId);
         $document->set_filename($file->getClientOriginalName());
 
         // $hash = md5_file($file->getRealPath());
@@ -62,7 +65,8 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $uploadedMessage = array();
             $uploadedMessage[] = '<div class="alert alert-success alert-import-success">';
             $uploadedMessage[] = Translation::getInstance()->getTranslation(
-                'FileImported', null, \Chamilo\Core\Repository\Manager::context()
+                'FileImported', array('CATEGORY' => $this->getCategoryTitle($categoryId)),
+                \Chamilo\Core\Repository\Manager::context()
             );
             $uploadedMessage[] = '</div>';
 
@@ -80,6 +84,32 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         {
             JsonAjaxResult:: general_error(Translation:: get('ObjectNotImported'));
         }
+    }
+
+    /**
+     * Returns the title of a given category
+     *
+     * @param $categoryId
+     *
+     * @return string
+     */
+    protected function getCategoryTitle($categoryId)
+    {
+        if(!$categoryId)
+        {
+            return Translation::getInstance()->getTranslation('MyRepository', null, Manager::context());
+        }
+
+        $category = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            RepositoryCategory::class_name(), $categoryId
+        );
+
+        if(!$category)
+        {
+            return null;
+        }
+
+        return $category->get_name();
     }
 
     /**
