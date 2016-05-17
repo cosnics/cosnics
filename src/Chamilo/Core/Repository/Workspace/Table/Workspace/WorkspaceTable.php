@@ -33,15 +33,22 @@ class WorkspaceTable extends DataClassTable implements TableFormActionsSupport
                 $this->get_component()->get_url(
                     array(
                         Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
-                        \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE)),
-                Translation :: get('FavouriteSelected', null, Manager::context()),
-                true));
+                        \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION =>
+                            \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE
+                    )
+                ),
+                Translation:: get('FavouriteSelected', null, Manager::context()),
+                false
+            )
+        );
 
         $actions->add_form_action(
             new TableFormAction(
                 $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
-                Translation :: get('DeleteSelected', null, Utilities :: COMMON_LIBRARIES),
-                true));
+                Translation:: get('DeleteSelected', null, Utilities :: COMMON_LIBRARIES),
+                true
+            )
+        );
 
         return $actions;
     }
