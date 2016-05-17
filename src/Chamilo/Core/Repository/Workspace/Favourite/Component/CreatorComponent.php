@@ -5,8 +5,6 @@ use Chamilo\Core\Repository\Workspace\Favourite\Manager;
 use Chamilo\Core\Repository\Workspace\Favourite\Repository\FavouriteRepository;
 use Chamilo\Core\Repository\Workspace\Favourite\Service\FavouriteService;
 use Chamilo\Core\Repository\Workspace\Favourite\Storage\DataClass\WorkspaceUserFavourite;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -26,16 +24,16 @@ class CreatorComponent extends Manager
         $workspaceIdentifiers = $this->getRequest()->get(
             \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
 
-        $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
+        $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager :: PARAM_BROWSER_SOURCE);
 
         try
         {
             if (empty($workspaceIdentifiers))
             {
-                throw new NoObjectSelectedException(Translation:: get('Workspace'));
+                throw new NoObjectSelectedException(Translation :: get('Workspace'));
             }
 
-            if (!is_array($workspaceIdentifiers))
+            if (! is_array($workspaceIdentifiers))
             {
                 $workspaceIdentifiers = array($workspaceIdentifiers);
             }
@@ -46,42 +44,38 @@ class CreatorComponent extends Manager
             {
                 $workspaceUserFavourite = $favouriteService->createWorkspaceUserFavourite(
                     $this->get_user(),
-                    $workspaceIdentifier
-                );
+                    $workspaceIdentifier);
 
-                if (!$workspaceUserFavourite instanceof WorkspaceUserFavourite)
+                if (! $workspaceUserFavourite instanceof WorkspaceUserFavourite)
                 {
                     throw new \RuntimeException(
-                        Translation::getInstance()->getTranslation(
-                            'CouldNotCreateWorkspaceFavorite', $workspaceIdentifier, null, Manager::context()
-                        )
-                    );
+                        Translation :: getInstance()->getTranslation(
+                            'CouldNotCreateWorkspaceFavorite',
+                            $workspaceIdentifier,
+                            null,
+                            Manager :: context()));
                 }
             }
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             $this->redirect(
-                Translation:: get(
+                Translation :: get(
                     'ObjectNotCreated',
-                    array('OBJECT' => Translation:: get('WorkspaceUserFavourite')),
-                    Utilities :: COMMON_LIBRARIES
-                ),
+                    array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
+                    Utilities :: COMMON_LIBRARIES),
                 true,
-                array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
-                array(self::PARAM_ACTION)
-            );
+                array(\Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => $action),
+                array(self :: PARAM_ACTION));
         }
 
         $this->redirect(
-            Translation:: get(
+            Translation :: get(
                 'ObjectCreated',
-                array('OBJECT' => Translation:: get('WorkspaceUserFavourite', null, Manager::context())),
-                Utilities :: COMMON_LIBRARIES
-            ),
+                array('OBJECT' => Translation :: get('WorkspaceUserFavourite', null, Manager :: context())),
+                Utilities :: COMMON_LIBRARIES),
             false,
-            array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
-            array(self::PARAM_ACTION)
-        );
+            array(\Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => $action),
+            array(self :: PARAM_ACTION));
     }
 }

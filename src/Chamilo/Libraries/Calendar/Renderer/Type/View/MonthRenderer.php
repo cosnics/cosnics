@@ -5,6 +5,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Table\Type\MonthCalendar;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -22,7 +23,12 @@ class MonthRenderer extends FullTableRenderer
      */
     public function initializeCalendar()
     {
-        return new MonthCalendar($this->getDisplayTime(), array('table-calendar-month'));
+        $displayParameters = $this->getDataProvider()->getDisplayParameters();
+        $displayParameters[self :: PARAM_TIME] = MonthCalendar :: TIME_PLACEHOLDER;
+        $displayParameters[self :: PARAM_TYPE] = self :: TYPE_DAY;
+        $dayUrlTemplate = new Redirect($displayParameters);
+
+        return new MonthCalendar($this->getDisplayTime(), $dayUrlTemplate->getUrl(), array('table-calendar-month'));
     }
 
     /**

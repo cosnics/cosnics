@@ -16,6 +16,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class MonthCalendar extends Calendar
 {
+    const TIME_PLACEHOLDER = '__TIME__';
 
     /**
      * Keep mapping of dates and their corresponding table cells
@@ -25,14 +26,23 @@ class MonthCalendar extends Calendar
     private $cellMapping;
 
     /**
+     *
+     * @var string
+     */
+    private $dayUrlTemplate;
+
+    /**
      * Creates a new month calendar
      *
      * @param integer $displayTime A time in the month to be displayed
      */
-    public function __construct($displayTime, $classes = array())
+    public function __construct($displayTime, $dayUrlTemplate = null, $classes = array())
     {
         parent :: __construct($displayTime, $classes);
+
         $this->cellMapping = array();
+        $this->dayUrlTemplate = $dayUrlTemplate;
+
         $this->buildTable();
     }
 
@@ -194,7 +204,17 @@ class MonthCalendar extends Calendar
      */
     protected function determineCellContent($tableDate)
     {
-        return date('j', $tableDate);
+        $dayLabel = date('j', $tableDate);
+        $dayUrlTemplate = $this->getDayUrlTemplate();
+
+        if (is_null($dayUrlTemplate))
+        {
+            return $dayLabel;
+        }
+        else
+        {
+            return '<a href="' . $this->getDayUrl($tableDate) . '">' . $dayLabel . '</a>';
+        }
     }
 
     /**
@@ -237,5 +257,33 @@ class MonthCalendar extends Calendar
     public function getCellMapping()
     {
         return $this->cellMapping;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getDayUrlTemplate()
+    {
+        return $this->dayUrlTemplate;
+    }
+
+    /**
+     *
+     * @param string $dayUrlTemplate
+     */
+    public function setDayUrlTemplate($dayUrlTemplate)
+    {
+        $this->dayUrlTemplate = $dayUrlTemplate;
+    }
+
+    /**
+     *
+     * @param integer $time
+     * @return string
+     */
+    public function getDayUrl($time)
+    {
+        return str_replace(self :: TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
     }
 }

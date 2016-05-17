@@ -44,7 +44,7 @@ class CourseCopierForm extends FormValidator
         $defaults = array();
         $translations = array();
 
-        $this->addElement('html', '<h5>' . Translation :: get('Publications') . '</h5>');
+        $this->addElement('category', Translation :: get('Publications'));
         $this->addElement('html', '<div id="categories" style="display: none;">');
 
         foreach($this->categories as $index => $category)
@@ -90,7 +90,8 @@ class CourseCopierForm extends FormValidator
         $defaults['content_object_categories'] = false;
 
         $this->setDefaults($defaults);
-        $this->addElement('html', '<h5>' . Translation :: get('SelectCourse') . '</h5>');
+
+        $this->addElement('category', Translation :: get('SelectCourse'));
 
         $current_code = $this->parent->get_course_id();
         $options = array();
@@ -110,15 +111,20 @@ class CourseCopierForm extends FormValidator
         );
         $this->addRule('course', Translation :: get('Required', null, Utilities :: COMMON_LIBRARIES), 'required');
 
-        $this->addElement('html', '<h5>' . Translation :: get('CopyThisCourseInformation') . '</h5>');
+        $this->addElement('category', Translation :: get('CopyThisCourseInformation'));
+
         $this->addElement('checkbox', 'confirm', Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES));
         $this->addRule(
             'confirm', Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 'required'
         );
         $prevnext = array();
+
         $prevnext[] = $this->createElement(
-            'submit',$this->parent->get_url(), Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES)
+            'style_submit_button',
+            self :: PARAM_SUBMIT,
+            Translation:: get('Copy')
         );
+
         $this->addGroup($prevnext, 'buttons', '', ' ', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));
     }

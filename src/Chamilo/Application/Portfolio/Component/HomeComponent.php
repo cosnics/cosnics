@@ -34,6 +34,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 
 /**
  * Main portfolio viewing component
@@ -211,9 +212,10 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
         return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
              Manager :: context() . '&' . Application :: PARAM_ACTION . '=' . Manager :: ACTION_HOME . '&' .
              Manager :: PARAM_USER_ID . '=' . $this->get_current_user_id() . '&' .
-             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_ACTION . '=' .
-             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT
-             . '&' . \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_STEP . '=%s';
+             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_ACTION . '=' .
+             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT . '&' .
+             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_STEP . '=' .
+             Menu :: NODE_PLACEHOLDER;
     }
 
     /**

@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -32,8 +35,14 @@ class AuthenticationException extends \Chamilo\Libraries\Architecture\Exceptions
 
         $this->errorMessage = $message;
 
+        $redirect = new Redirect();
+        $currentUrl = $redirect->getCurrentUrl();
+
         $html = array();
         $html[] = $message;
+        $html[] = '<p style="margin-top: 10px;"><a href="' . $currentUrl . '" class="btn btn-success">';
+        $html[] = Translation::getInstance()->getTranslation('LoginTryAgain', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '</a></p>';
 //        $html[] = $this->getLoginForm()->toHtml();
 
         \Exception :: __construct(implode(PHP_EOL, $html), $code, $previous);

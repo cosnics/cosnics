@@ -53,7 +53,7 @@ class CourseTruncaterForm extends FormValidator
         $defaults = array();
         $translations = array();
 
-        $this->addElement('html', '<h3>' . Translation :: get('Publications') . '</h3>');
+        $this->addElement('category', Translation :: get('Publications'));
 
         $this->addElement('html', '<div id="categories" style="display: none;">');
         foreach ($this->categories as $category)
@@ -118,7 +118,7 @@ class CourseTruncaterForm extends FormValidator
 
         $this->setDefaults($defaults);
 
-        $this->addElement('html', '<h3>' . Translation :: get('EmptyThisCourseInformation') . '</h3>');
+        $this->addElement('category', Translation :: get('EmptyThisCourseInformation'));
         $this->addElement('checkbox', 'confirm', Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES));
         $this->addRule(
             'confirm',
@@ -126,9 +126,10 @@ class CourseTruncaterForm extends FormValidator
             'required');
         $prevnext = array();
         $prevnext[] = $this->createElement(
-            'submit',
-            $this->parent->get_url(),
-            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button',
+            self :: PARAM_SUBMIT,
+            Translation:: get('Truncate')
+        );
         $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));
     }

@@ -20,6 +20,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Menu;
 
 /**
  *
@@ -257,7 +258,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
         $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Repository\Preview\Manager :: context();
         $parameters[Application :: PARAM_ACTION] = \Chamilo\Core\Repository\Preview\Manager :: ACTION_DISPLAY;
         $parameters[\Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP] = '__STEP__';
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP] = Menu :: NODE_PLACEHOLDER;
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_FULL_SCREEN] = $this->getRequest()->query->get(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_FULL_SCREEN);
 
