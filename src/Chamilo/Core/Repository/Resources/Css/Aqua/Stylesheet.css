@@ -105,3 +105,10 @@ div.quota_statistics .data_table td.header {
 	{
 	opacity: 0.5;
 }
+
+.alert-import-success
+{
+	padding: 5px;
+	margin-bottom: 10px;
+	text-align: center;
+}

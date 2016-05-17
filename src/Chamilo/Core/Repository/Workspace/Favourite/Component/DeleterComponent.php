@@ -77,7 +77,7 @@ class DeleterComponent extends Manager
         {
             $this->redirect(
                 Translation:: get(
-                    'ObjectCreated',
+                    'ObjectDeleted',
                     array('OBJECT' => Translation:: get('WorkspaceUserFavourite')),
                     Utilities :: COMMON_LIBRARIES
                 ),
