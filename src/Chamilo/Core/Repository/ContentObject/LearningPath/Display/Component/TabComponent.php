@@ -65,7 +65,11 @@ abstract class TabComponent extends Manager implements DelegateComponent
             return $this->display_error_page(Translation :: get('NoObjectSelected'));
         }
 
-        $this->learning_path_menu = new Menu($this);
+        $this->learning_path_menu = new Menu(
+            $this,
+            $this->get_complex_content_object_path(),
+            $this->get_parent()->get_learning_path_tree_menu_url(),
+            'learning-path-menu');
 
         $this->set_complex_content_object_item($this->get_current_complex_content_object_item());
 
