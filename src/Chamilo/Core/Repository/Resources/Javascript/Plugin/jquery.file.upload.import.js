@@ -5,11 +5,15 @@ dropzoneCallbacks.chamilo = {
                 processUploadedFile : function(environment, file, serverResponse)
                 {
                     var viewButton = $(serverResponse.properties.viewButton);
+                    var uploadedMessage = $(serverResponse.properties.uploadedMessage);
                     var contentObjectId = serverResponse.properties.contentObjectId;
                     var previewElement = $(file.previewElement);
-                    
+
                     previewElement.data('content-object-id', contentObjectId);
-                    $('.file-upload-buttons', previewElement).prepend(viewButton);
+                    var fileUploadButton = $('.file-upload-buttons', previewElement);
+                    fileUploadButton.prepend(viewButton);
+
+                    uploadedMessage.insertBefore(fileUploadButton);
                 },
                 prepareRequest : function(environment, file, xhrObject, formData)
                 {
@@ -19,16 +23,16 @@ dropzoneCallbacks.chamilo = {
                 deleteUploadedFile : function(environment, file, serverResponse)
                 {
                     var contentObjectId = $(file.previewElement).data('content-object-id');
-                    
+
                     var ajaxUri = getPath('WEB_PATH') + 'index.php';
                     var temporaryFileName = $(file.previewElement).data('temporary-file-name');
-                    
+
                     var parameters = {
                         'application' : 'Chamilo\\Core\\Repository\\Ajax',
                         'go' : 'DeleteFile',
                         'content_object_id' : contentObjectId
                     };
-                    
+
                     var response = $.ajax({
                         type : "POST",
                         url : ajaxUri,
@@ -46,7 +50,7 @@ dropzoneCallbacks.chamilo = {
     {
         var documentType = $('input[name="document_type"]:checked');
         var buttonContainer = $('#import_button').parent();
-        
+
         if (documentType.val() == 0)
         {
             $('div#document_upload').show();
@@ -62,7 +66,7 @@ dropzoneCallbacks.chamilo = {
             $('button:not(#import_button)', buttonContainer).hide();
         }
     }
-    
+
     $(document).ready(function()
     {
         $(document).on('change', 'input[name="document_type"]', setDocumentTypeField);
