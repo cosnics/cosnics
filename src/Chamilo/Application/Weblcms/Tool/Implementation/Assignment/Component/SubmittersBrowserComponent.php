@@ -381,7 +381,6 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
                         $submitter[User :: PROPERTY_ID]);
                     break;
                 case AssignmentSubmission :: SUBMITTER_TYPE_COURSE_GROUP :
-                    break;
                 case AssignmentSubmission :: SUBMITTER_TYPE_PLATFORM_GROUP :
                     $submissions_tracker = $this->get_submissions_tracker($submitter_type, $submitter->get_id());
                     $feedbacks_tracker = $this->get_submitter_feedbacks($submitter_type, $submitter->get_id());

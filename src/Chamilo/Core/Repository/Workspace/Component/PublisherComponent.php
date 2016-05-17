@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 
 /**
  *
@@ -63,19 +64,20 @@ class PublisherComponent extends Manager
         {
             $selectedContentObjectIdentifiers = (array) \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
 
-            $parentId = $this->getRequest()->get(FilterData::FILTER_CATEGORY);
+            $parentId = $this->getRequest()->get(FilterData :: FILTER_CATEGORY);
             $parentId = $parentId ? $parentId : 0;
 
             foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {
-                $contentObject = DataManager :: retrieve_by_id(ContentObject::class_name(), $selectedContentObjectIdentifier);
+                $contentObject = DataManager :: retrieve_by_id(
+                    ContentObject :: class_name(),
+                    $selectedContentObjectIdentifier);
 
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
                 $contentObjectRelationService->createContentObjectRelation(
                     $this->getCurrentWorkspace()->getId(),
                     $contentObject->get_object_number(),
-                    $parentId
-                );
+                    $parentId);
             }
 
             $this->redirect(
@@ -116,9 +118,17 @@ class PublisherComponent extends Manager
                 WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
             new StaticConditionVariable($workspace->getId()));
 
-        return DataManager :: distinct(
+        $contentObjectNumbers = DataManager :: distinct(
             WorkspaceContentObjectRelation :: class_name(),
             new DataClassDistinctParameters($condition, WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID));
+
+        return DataManager :: distinct(
+            ContentObject :: class_name(),
+            new DataClassDistinctParameters(
+                new InCondition(
+                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OBJECT_NUMBER),
+                    $contentObjectNumbers),
+                ContentObject :: PROPERTY_ID));
     }
 
     public function getCurrentWorkspace()

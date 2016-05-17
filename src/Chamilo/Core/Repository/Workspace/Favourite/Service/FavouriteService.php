@@ -56,6 +56,15 @@ class FavouriteService
      */
     public function createWorkspaceUserFavourite(User $user, $workspaceIdentifier)
     {
+        $existingWorkspaceUserFavorite = $this->getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(
+            $user, $workspaceIdentifier
+        );
+
+        if($existingWorkspaceUserFavorite)
+        {
+            return $existingWorkspaceUserFavorite;
+        }
+
         $workspaceUserFavourite = new WorkspaceUserFavourite();
 
         $workspaceUserFavourite->set_user_id($user->getId());

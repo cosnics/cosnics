@@ -77,3 +77,11 @@
 * [Repository] Remember the search parameter when navigating in the repo viewer
 * [Weblcms] Fixed a fatal error in the course menu home block
 * [Course Groups] Added a complete introduction text publisher where you can create a new introduction or select / import an existing one.
+* [Repository] Fixed the update of the content object versions in workspaces
+* [Repository] Removed translations with {ICON} in them
+* [Repository] Fixed the selected icon in the menu item for workspaces when navigating in a workspace
+* [Repository] Changed the titles of the imported content objects through drag and drop to exclude file extensions
+* [User] Fixed correct redirect after user logout
+* [Repository] Links between workspaces and objects are now based on content object numbers instead of content object ids
+* [Webpage] Added usability fixes to make a distinct difference between page and webpage
+* [Assignment] Bugfix for reporting of course group submissions
