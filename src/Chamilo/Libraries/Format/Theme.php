@@ -20,7 +20,6 @@ class Theme
     const ICON_SMALL = 22;
     const ICON_MEDIUM = 32;
     const ICON_BIG = 48;
-    const ICON_HUGE = 64;
 
     /**
      *
@@ -188,22 +187,22 @@ class Theme
      *
      * @param string $namespace
      * @param boolean $web
-     * @param boolean $includeTheme If True path will contain the selected theme as well, e.g. .../Chamilo/Configuration/Resources/Css/Aqua/. 
+     * @param boolean $includeTheme If True path will contain the selected theme as well, e.g. .../Chamilo/Configuration/Resources/Css/Aqua/.
      *                              Else, selected theme will be ignored, e.g. .../Chamilo/Configuration/Resources/Css/
      * @return string
      */
     public function getCssPath($namespace = null, $web = true, $includeTheme = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
-        
+
         $cssPath = $this->pathUtilities->getResourcesPath($namespace, $web) . 'Css' . $directory_separator;
-        
+
         if ($includeTheme)
         {
             $cssPath .= $this->getTheme() . $directory_separator;
         }
-        
-        return $cssPath;        
+
+        return $cssPath;
     }
 
     /**

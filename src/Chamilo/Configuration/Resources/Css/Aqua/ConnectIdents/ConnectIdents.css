@@ -7,7 +7,7 @@
 	font-style: normal;
 }
 
-.connect-icon {
+.ident {
 	position: relative;
 	top: 1px;
 	display: inline-block;
@@ -17,176 +17,214 @@
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	color: #666666;
+	vertical-align: middle;
 }
 
-.connect-icon-announcement:before {
+.ident-announcement:before {
 	content: "\e700";
 }
 
-.connect-icon-blog:before {
+.ident-blog:before {
 	content: "\e701";
 }
 
-.connect-icon-course-description:before {
+.ident-course-description:before {
 	content: "\e702";
 }
 
-.connect-icon-course-group:before {
+.ident-course-group:before {
 	content: "\e703";
 }
 
-.connect-icon-document:before {
+.ident-document:before {
 	content: "\e704";
 }
 
-.connect-icon-ephorus:before {
+.ident-ephorus:before {
 	content: "\e705";
 }
 
-.connect-icon-forum:before {
+.ident-forum:before {
 	content: "\e706";
 }
 
-.connect-icon-chat:before {
+.ident-chat:before {
 	content: "\e707";
 }
 
-.connect-icon-user:before {
+.ident-user:before {
 	content: "\e708";
 }
 
-.connect-icon-calendar:before {
+.ident-calendar:before {
 	content: "\e709";
 }
 
-.connect-icon-link:before {
+.ident-link:before {
 	content: "\e70a";
 }
 
-.connect-icon-location:before {
+.ident-location:before {
 	content: "\e70b";
 }
 
-.connect-icon-note:before {
+.ident-note:before {
 	content: "\e70c";
 }
 
-.connect-icon-assessment:before {
+.ident-assessment:before {
 	content: "\e70d";
 }
 
-.connect-icon-assignment:before {
+.ident-assignment:before {
 	content: "\e70e";
 }
 
-.connect-icon-streaming-video:before {
+.ident-streaming-video:before {
 	content: "\e70f";
 }
 
-.connect-icon-wiki:before {
+.ident-wiki:before {
 	content: "\e710";
 }
 
-.connect-icon-glossary:before {
+.ident-glossary:before {
 	content: "\e711";
 }
 
-.connect-icon-peer-assessment:before {
+.ident-peer-assessment:before {
 	content: "\e712";
 }
 
-.connect-icon-search:before {
+.ident-search:before {
 	content: "\e713";
 }
 
-.connect-icon-course-copier:before {
+.ident-course-copier:before {
 	content: "\e714";
 }
 
-.connect-icon-course-truncater:before {
+.ident-course-truncater:before {
 	content: "\e715";
 }
 
-.connect-icon-course-deleter:before {
+.ident-course-deleter:before {
 	content: "\e716";
 }
 
-.connect-icon-course-settings:before {
+.ident-course-settings:before {
 	content: "\e717";
 }
 
-.connect-icon-rights:before {
+.ident-rights:before {
 	content: "\e718";
 }
 
-.connect-icon-reporting:before {
+.ident-reporting:before {
 	content: "\e719";
 }
 
-.connect-icon-course-sections:before {
+.ident-course-sections:before {
 	content: "\e71a";
 }
 
-.connect-icon-learning-path:before {
+.ident-learning-path:before {
 	content: "\e71b";
 }
 
-.connect-icon-weblcms:before {
+.ident-weblcms:before {
 	content: "\e71c";
 }
 
-.connect-icon-portfolio:before {
+.ident-portfolio:before {
 	content: "\e71d";
 }
 
-.connect-icon-home:before {
+.ident-home:before {
 	content: "\e71e";
 }
 
-.connect-icon-repository:before {
+.ident-repository:before {
 	content: "\e71f";
 }
 
-.connect-icon-workspaces:before {
+.ident-workspaces:before {
 	content: "\e720";
 }
 
-.connect-icon-admin:before {
+.ident-admin:before {
 	content: "\e721";
 }
 
-.connect-icon-group:before {
+.ident-group:before {
 	content: "\e722";
 }
 
-.connect-icon-help:before {
+.ident-help:before {
 	content: "\e723";
 }
 
-.connect-icon-menu:before {
+.ident-menu:before {
 	content: "\e724";
 }
 
-.connect-icon-lynx:before {
+.ident-lynx:before {
 	content: "\e725";
 }
 
-.connect-icon-metadata:before {
+.ident-metadata:before {
 	content: "\e726";
 }
 
-.connect-icon-cas-storage:before {
+.ident-cas-storage:before {
 	content: "\e727";
 }
 
-.connect-icon-cache:before {
+.ident-cache:before {
 	content: "\e728";
 }
 
-.connect-icon-tracking:before {
+.ident-tracking:before {
 	content: "\e729";
 }
 
-.connect-icon-install:before {
+.ident-install:before {
 	content: "\e72a";
+}
+
+.ident-xs {
+	font-size: 16px;
+}
+
+.ident-sm {
+	font-size: 20px;
+}
+
+.ident-md {
+	font-size: 28px;
+}
+
+.ident-lg {
+	font-size: 40px;
+}
+
+.ident-disabled:before {
+	opacity: 0.3;
+}
+
+.ident-new:before {
+	opacity: 0.5;
+}
+
+.ident-new:after {
+	display: inline-block;
+	background-color: #f57900;
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+	content: "";
 }
