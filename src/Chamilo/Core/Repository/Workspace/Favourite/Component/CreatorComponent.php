@@ -23,40 +23,43 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $workspaceIdentifier = $this->getRequest()->get(
-            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID
-        );
+        $workspaceIdentifiers = $this->getRequest()->get(
+            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
 
-        if (!$workspaceIdentifier)
+        $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
+
+        try
         {
-            throw new NoObjectSelectedException(Translation:: get('Workspace'));
+            if (empty($workspaceIdentifiers))
+            {
+                throw new NoObjectSelectedException(Translation:: get('Workspace'));
+            }
+
+            if (!is_array($workspaceIdentifiers))
+            {
+                $workspaceIdentifiers = array($workspaceIdentifiers);
+            }
+
+            $favouriteService = new FavouriteService(new FavouriteRepository());
+
+            foreach ($workspaceIdentifiers as $workspaceIdentifier)
+            {
+                $workspaceUserFavourite = $favouriteService->createWorkspaceUserFavourite(
+                    $this->get_user(),
+                    $workspaceIdentifier
+                );
+
+                if (!$workspaceUserFavourite instanceof WorkspaceUserFavourite)
+                {
+                    throw new \RuntimeException(
+                        Translation::getInstance()->getTranslation(
+                            'CouldNotCreateWorkspaceFavorite', $workspaceIdentifier, null, Manager::context()
+                        )
+                    );
+                }
+            }
         }
-
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        $workspace = $workspaceService->getWorkspaceByIdentifier($workspaceIdentifier);
-
-        $favouriteService = new FavouriteService(new FavouriteRepository());
-        $workspaceUserFavourite = $favouriteService->createWorkspaceUserFavourite(
-            $this->get_user(),
-            $workspaceIdentifier
-        );
-
-        if ($workspaceUserFavourite instanceof WorkspaceUserFavourite)
-        {
-            $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
-
-            $this->redirect(
-                Translation:: get(
-                    'ObjectCreated',
-                    array('OBJECT' => Translation:: get('WorkspaceUserFavourite')),
-                    Utilities :: COMMON_LIBRARIES
-                ),
-                false,
-                array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
-                array(self::PARAM_ACTION)
-            );
-        }
-        else
+        catch(\Exception $ex)
         {
             $this->redirect(
                 Translation:: get(
@@ -65,8 +68,20 @@ class CreatorComponent extends Manager
                     Utilities :: COMMON_LIBRARIES
                 ),
                 true,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE)
+                array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
+                array(self::PARAM_ACTION)
             );
         }
+
+        $this->redirect(
+            Translation:: get(
+                'ObjectCreated',
+                array('OBJECT' => Translation:: get('WorkspaceUserFavourite', null, Manager::context())),
+                Utilities :: COMMON_LIBRARIES
+            ),
+            false,
+            array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
+            array(self::PARAM_ACTION)
+        );
     }
 }

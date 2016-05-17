@@ -13,6 +13,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
     const PARAM_PARENT_ID = 'parentId';
     const PROPERTY_CONTENT_OBJECT_ID = 'contentObjectId';
     const PROPERTY_VIEW_BUTTON = 'viewButton';
+    const PROPERTY_UPLOADED_MESSAGE = 'uploadedMessage';
 
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
@@ -44,28 +45,40 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         if ($document->create())
         {
-            $viewLink = new Redirect(
-                array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager :: context(),
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS,
-                    \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $document->get_id(),
-                    FilterData :: FILTER_CATEGORY => $document->get_parent_id()));
+            $previewLink = \Chamilo\Core\Repository\Preview\Manager::get_content_object_default_action_link($document);
+            $onclick = 'onclick="javascript:openPopup(\'' . $previewLink . '\'); return false;';
 
             $viewButton = array();
-            $viewButton[] = '<a class="btn btn-primary view" target="_blank" href="' . $viewLink->getUrl() . '">';
-            $viewButton[] = '<i class="glyphicon glyphicon-file"></i> <span>' . Translation :: get('View') . '</span>';
+            $viewButton[] = '<a class="btn btn-primary view" target="_blank" ' . $onclick . ' ">';
+            $viewButton[] = '<i class="glyphicon glyphicon-file"></i> <span>';
+
+            $viewButton[] = Translation::getInstance()->getTranslation(
+                'ViewImportedObject', null, \Chamilo\Core\Repository\Manager::context()
+            );
+
+            $viewButton[] ='</span>';
             $viewButton[] = '</a>';
+
+            $uploadedMessage = array();
+            $uploadedMessage[] = '<div class="alert alert-success alert-import-success">';
+            $uploadedMessage[] = Translation::getInstance()->getTranslation(
+                'FileImported', null, \Chamilo\Core\Repository\Manager::context()
+            );
+            $uploadedMessage[] = '</div>';
 
             $jsonAjaxResult = new JsonAjaxResult();
             $jsonAjaxResult->set_properties(
                 array(
                     self :: PROPERTY_CONTENT_OBJECT_ID => $document->getId(),
-                    self :: PROPERTY_VIEW_BUTTON => implode(PHP_EOL, $viewButton)));
+                    self :: PROPERTY_VIEW_BUTTON => implode(PHP_EOL, $viewButton),
+                    self::PROPERTY_UPLOADED_MESSAGE => implode(PHP_EOL, $uploadedMessage)
+                )
+            );
             $jsonAjaxResult->display();
         }
         else
         {
-            JsonAjaxResult :: general_error(Translation :: get('ObjectNotImported'));
+            JsonAjaxResult:: general_error(Translation:: get('ObjectNotImported'));
         }
     }
 
@@ -76,6 +89,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
     public function getFile()
     {
         $filePropertyName = $this->getRequest()->request->get('filePropertyName');
+
         return $this->getRequest()->files->get($filePropertyName);
     }
 }
