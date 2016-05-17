@@ -2,10 +2,7 @@
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Core\Repository\Filter\FilterData;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
 
 class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
@@ -45,25 +42,27 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
         if ($document->create())
         {
-            $previewLink = \Chamilo\Core\Repository\Preview\Manager::get_content_object_default_action_link($document);
+            $previewLink = \Chamilo\Core\Repository\Preview\Manager :: get_content_object_default_action_link($document);
             $onclick = 'onclick="javascript:openPopup(\'' . $previewLink . '\'); return false;';
 
             $viewButton = array();
             $viewButton[] = '<a class="btn btn-primary view" target="_blank" ' . $onclick . ' ">';
             $viewButton[] = '<i class="glyphicon glyphicon-file"></i> <span>';
 
-            $viewButton[] = Translation::getInstance()->getTranslation(
-                'ViewImportedObject', null, \Chamilo\Core\Repository\Manager::context()
-            );
+            $viewButton[] = Translation :: getInstance()->getTranslation(
+                'ViewImportedObject',
+                null,
+                \Chamilo\Core\Repository\Manager :: context());
 
-            $viewButton[] ='</span>';
+            $viewButton[] = '</span>';
             $viewButton[] = '</a>';
 
             $uploadedMessage = array();
             $uploadedMessage[] = '<div class="alert alert-success alert-import-success">';
-            $uploadedMessage[] = Translation::getInstance()->getTranslation(
-                'FileImported', null, \Chamilo\Core\Repository\Manager::context()
-            );
+            $uploadedMessage[] = Translation :: getInstance()->getTranslation(
+                'FileImported',
+                null,
+                \Chamilo\Core\Repository\Manager :: context());
             $uploadedMessage[] = '</div>';
 
             $jsonAjaxResult = new JsonAjaxResult();
@@ -71,14 +70,12 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
                 array(
                     self :: PROPERTY_CONTENT_OBJECT_ID => $document->getId(),
                     self :: PROPERTY_VIEW_BUTTON => implode(PHP_EOL, $viewButton),
-                    self::PROPERTY_UPLOADED_MESSAGE => implode(PHP_EOL, $uploadedMessage)
-                )
-            );
+                    self :: PROPERTY_UPLOADED_MESSAGE => implode(PHP_EOL, $uploadedMessage)));
             $jsonAjaxResult->display();
         }
         else
         {
-            JsonAjaxResult:: general_error(Translation:: get('ObjectNotImported'));
+            JsonAjaxResult :: general_error(Translation :: get('ObjectNotImported'));
         }
     }
 
