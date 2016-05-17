@@ -1,0 +1,2 @@
+GeneralPasswordRequirements = "Wachtwoordvereisten"
+CasAuthenticationError = "Je werd succesvol ingelogd in CAS maar we ondervinden wat problemen om je in te loggen in {PLATFORM}. Contacteer zo snel mogelijk je systeembeheerder."
