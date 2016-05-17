@@ -24,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Format\Structure\IdentRenderer;
 
 /**
  * $Id: fixed_location_tool_list_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
@@ -497,19 +498,10 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $course_settings_controller = CourseSettingsController :: get_instance();
 
-        // if ($count % $this->number_of_columns == 0)
-        // {
         $html[] = '<div class="row">';
-        // }
 
         foreach ($tools as $tool)
         {
-            // if ($count > 0 && $count % $this->number_of_columns == 0)
-            // {
-            // $html[] = '</div>';
-            // $html[] = '<div class="row">';
-            // }
-
             $html[] = '<div class="' . $columnClass . '">';
 
             $tool_namespace = $tool->getContext();
@@ -519,30 +511,30 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
                 $tool->get_id());
 
+            $isNew = false;
+            $isDisabled = false;
+
             if ($tool_visible || $section->get_type() == CourseSection :: TYPE_ADMIN)
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_INVISIBLE;
-                $visible_image = 'Action/Visible';
-                $new = '';
+                $visibleClass = 'eye-open';
+
                 if ($parent->tool_has_new_publications($tool->get_name(), $this->course))
                 {
-                    $new = 'New';
+                    $isNew = true;
                 }
-                $tool_image = Theme :: ICON_MEDIUM . $new;
+
                 $link_class = '';
             }
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_VISIBLE;
-                $visible_image = 'Action/Invisible';
-                $tool_image = Theme :: ICON_MEDIUM . 'Na';
+                $visibleClass = 'eye-closed';
+                $isDisabled = true;
                 $link_class = ' class="invisible-tool"';
             }
 
             $title = Translation :: get('TypeName', null, $tool_namespace);
-
-            // $row = $count / $this->number_of_columns;
-            // $col = $count % $this->number_of_columns;
 
             if ($section->get_type() == CourseSection :: TYPE_TOOL ||
                  $section->get_type() == CourseSection :: TYPE_DISABLED)
@@ -563,17 +555,20 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                         array(
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_ACTION => $lcms_action,
                             \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: PARAM_TOOL => $tool->get_name())) .
-                     '"><img class="tool_visible" src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
-                     '" style="vertical-align: middle;" alt="" /></a>';
+                     '"><span class="glyphicon glyphicon-' . $visibleClass . '"></span></a>';
                 $html[] = '&nbsp;&nbsp;&nbsp;';
             }
 
             // Show tool-icon + name
-            $html[] = '<img class="tool_image"' . $id . ' src="' . Theme :: getInstance()->getImagePath(
-                $tool_namespace,
-                'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
-                 Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
+            // $html[] = '<img class="tool_image"' . $id . ' src="' . Theme :: getInstance()->getImagePath(
+            // $tool_namespace,
+            // 'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
+            // Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
+            $identRenderer = new IdentRenderer($tool_namespace, $isNew, $isDisabled);
+            $html[] = $identRenderer->render();
+
             $html[] = '&nbsp;';
+
             $html[] = '<a id="tool_text" href="' . $parent->get_url(
                 array(Manager :: PARAM_TOOL => $tool->get_name()),
                 array(
@@ -582,6 +577,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE,
                     Manager :: PARAM_CATEGORY),
                 true) . '" ' . $link_class . '>';
+
             $html[] = $title;
             $html[] = '</a>';
 
