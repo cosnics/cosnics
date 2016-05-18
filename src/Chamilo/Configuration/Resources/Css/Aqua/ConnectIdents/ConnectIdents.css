@@ -221,10 +221,29 @@
 	display: inline-block;
 	background-color: #f57900;
 	position: absolute;
-	right: 0px;
-	bottom: 0px;
+	content: "";
+}
+
+.ident-xs.ident-new:after {
+	width: 6px;
+	height: 6px;
+	border-radius: 3px;
+}
+
+.ident-sm.ident-new:after {
+	width: 8px;
+	height: 8px;
+	border-radius: 4px;
+}
+
+.ident-md.ident-new:after {
 	width: 12px;
 	height: 12px;
 	border-radius: 6px;
-	content: "";
+}
+
+.ident-lg.ident-new:after {
+	width: 16px;
+	height: 16px;
+	border-radius: 8px;
 }
