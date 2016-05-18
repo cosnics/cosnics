@@ -9,6 +9,7 @@ use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
 use Chamilo\Application\Portfolio\Storage\DataManager;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioDisplaySupport;
@@ -22,8 +23,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -34,7 +35,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 
 /**
  * Main portfolio viewing component

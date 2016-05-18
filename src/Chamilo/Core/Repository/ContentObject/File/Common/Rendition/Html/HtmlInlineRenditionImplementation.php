@@ -3,10 +3,10 @@ namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
