@@ -19,11 +19,19 @@ abstract class InlineGlyph
 
     /**
      *
-     * @param string $type
+     * @var string[]
      */
-    public function __construct($type)
+    private $extraClasses;
+
+    /**
+     *
+     * @param string $type
+     * @param string[] $extraClasses
+     */
+    public function __construct($type, $extraClasses = array())
     {
         $this->type = $type;
+        $this->extraClasses = $extraClasses;
     }
 
     /**
@@ -46,16 +54,48 @@ abstract class InlineGlyph
 
     /**
      *
-     * @return string
+     * @return string[]
      */
-    public function render()
+    public function getExtraClasses()
     {
-        return '<span class="inline-glyph ' . $this->getClassNames() . '"></span>';
+        return $this->extraClasses;
+    }
+
+    /**
+     *
+     * @param string[]
+     */
+    public function setExtraClasses($extraClasses)
+    {
+        $this->extraClasses = $extraClasses;
     }
 
     /**
      *
      * @return string
      */
-    abstract public function getClassNames();
+    public function render()
+    {
+        return '<span class="' . implode(' ', $this->getClassNames()) . '"></span>';
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getBaseClassNames()
+    {
+        $baseClassNames[] = 'inline-glyph';
+
+        return $baseClassNames;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getClassNames()
+    {
+        return array_merge($this->getBaseClassNames(), $this->getExtraClasses());
+    }
 }
