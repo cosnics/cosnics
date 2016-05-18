@@ -182,7 +182,8 @@ div.announcements {
 	float: left;
 	padding: 0px;
 	margin: 0px;
-	margin-bottom: 5px;
+	margin-bottom: 15px;
+	height: 30px;
 }
 
 div.questionform input[type=text], div.form-row div.questionform input[type=password],

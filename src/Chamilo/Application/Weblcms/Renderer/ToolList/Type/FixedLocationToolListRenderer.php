@@ -365,15 +365,15 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             if ($publication->is_hidden() == 0)
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_HIDE_PUBLICATION;
-                $visible_image = 'Action/Visible';
-                $tool_image = Theme :: ICON_MEDIUM;
+                $visibleClass = 'eye-open';
+                $isDisabled = false;
                 $link_class = '';
             }
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_SHOW_PUBLICATION;
-                $visible_image = 'Action/Invisible';
-                $tool_image = Theme :: ICON_MEDIUM . 'Na';
+                $visibleClass = 'eye-closed';
+                $isDisabled = true;
                 $link_class = ' class="invisible"';
             }
 
@@ -391,8 +391,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $lcms_action,
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><img src="' . Theme :: getInstance()->getCommonImagePath($visible_image) .
-                         '" style="vertical-align: middle;" alt=""/></a>';
+                         '"><span class="glyphicon glyphicon-' . $visibleClass . '"></span></a>';
                 }
 
                 // Show delete-icon
@@ -403,8 +402,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_DELETE_LINKS,
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id())) .
-                         '"><img src="' . Theme :: getInstance()->getCommonImagePath('Action/Delete') .
-                         '" style="vertical-align: middle;" alt=""/></a>';
+                         '"><span class="glyphicon glyphicon-remove text-danger"></span></a>';
                 }
 
                 $html[] = '</div>';
@@ -433,10 +431,15 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                     $target = '';
                 }
 
+                $toolNamespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace(
+                    $publication->get_tool());
+
+                $identRenderer = new IdentRenderer($toolNamespace, false, $isDisabled);
+
+                $html[] = $identRenderer->render();
+                $html[] = '&nbsp;';
                 $html[] = '<a href="' . $url . '"' . $target . $link_class . '>';
-                $html[] = '<img src="' . Theme :: getInstance()->getImagePath(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($publication->get_tool()),
-                    'Logo/' . $tool_image) . '" class="tool-link-image" />' . $title;
+                $html[] = $title;
                 $html[] = '</a>';
 
                 $count ++;
@@ -559,11 +562,6 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 $html[] = '&nbsp;&nbsp;&nbsp;';
             }
 
-            // Show tool-icon + name
-            // $html[] = '<img class="tool_image"' . $id . ' src="' . Theme :: getInstance()->getImagePath(
-            // $tool_namespace,
-            // 'Logo/' . $tool_image) . '" style="vertical-align: middle;" alt="' . $title . '" width="' .
-            // Theme :: ICON_MEDIUM . '" height="' . Theme :: ICON_MEDIUM . '"/>';
             $identRenderer = new IdentRenderer($tool_namespace, $isNew, $isDisabled);
             $html[] = $identRenderer->render();
 
