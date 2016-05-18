@@ -18,6 +18,27 @@
 	width: 14em;
 }
 
+.forum.table th.cell-stat-3x {
+	width: 18em;
+}
+
+.forum.table th.cell-stat-4x {
+	width: 28em;
+}
+
+.forum.table .btn-action-toolbar {
+	margin-bottom: 0px;
+}
+
+.forum.table .btn-action-toolbar .btn {
+	padding: 0px 3px;
+}
+
+.forum.table .forum-row-icon
+{
+	font-size: 150%;
+}
+
 /**table.forum {
 	background-color: #A9B8C2;
 	width: 100%;
