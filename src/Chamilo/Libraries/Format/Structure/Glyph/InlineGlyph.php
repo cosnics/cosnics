@@ -25,13 +25,20 @@ abstract class InlineGlyph
 
     /**
      *
+     * @var string
+     */
+    private $title;
+
+    /**
+     *
      * @param string $type
      * @param string[] $extraClasses
      */
-    public function __construct($type, $extraClasses = array())
+    public function __construct($type, $extraClasses = array(), $title = null)
     {
         $this->type = $type;
         $this->extraClasses = $extraClasses;
+        $this->title = $title;
     }
 
     /**
@@ -74,9 +81,28 @@ abstract class InlineGlyph
      *
      * @return string
      */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     *
+     * @param string
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     *
+     * @return string
+     */
     public function render()
     {
-        return '<span class="' . implode(' ', $this->getClassNames()) . '"></span>';
+        $title = $this->getTitle() ? ' title="' . $this->getTitle() . '"' : '';
+        return '<span class="' . implode(' ', $this->getClassNames()) . '"' . $title . '></span>';
     }
 
     /**
