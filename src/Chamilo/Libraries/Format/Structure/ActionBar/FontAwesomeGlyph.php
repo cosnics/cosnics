@@ -13,10 +13,15 @@ class FontAwesomeGlyph extends InlineGlyph
 
     /**
      *
-     * @return string
+     * @see \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph::getBaseClassNames()
      */
-    public function getClassNames()
+    public function getBaseClassNames()
     {
-        return 'fa fa-' . $this->getType();
+        $baseClassNames = parent :: getBaseClassNames();
+
+        $baseClassNames[] = 'fa';
+        $baseClassNames[] = 'fa-' . $this->getType();
+
+        return $baseClassNames;
     }
 }
