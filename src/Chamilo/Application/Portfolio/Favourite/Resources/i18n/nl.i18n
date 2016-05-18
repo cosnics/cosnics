@@ -1,0 +1,4 @@
+TypeName = "Favoriete gebruikers"
+CreateFavourite = "Voeg toe als favoriete gebruiker"
+DeleteFavourite = "Verwijder als favoriete gebruiker"
+UserFavourite = "Favoriete gebruiker"
