@@ -1,9 +1,9 @@
 <?php
-namespace Chamilo\Libraries\Format\Structure\ActionBar;
+namespace Chamilo\Libraries\Format\Structure\Glyph;
 
 /**
  *
- * @package Chamilo\Libraries\Format\Structure\ActionBar
+ * @package Chamilo\Libraries\Format\Structure\Glyph
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -13,7 +13,7 @@ class BootstrapGlyph extends InlineGlyph
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph::getBaseClassNames()
+     * @see \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph::getBaseClassNames()
      */
     public function getBaseClassNames()
     {
