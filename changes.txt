@@ -94,4 +94,5 @@
 * [Portfolio] Use the same menu structure as the learning path
 * [Course Copier] Cleanup of the form layout
 * [Course Truncater] Cleanup of the form layout
+* [LearningPath] Changed the mover of items to a new layout with separate parent and position
 * [Calendar] Added links to the day-view in the month and week views
