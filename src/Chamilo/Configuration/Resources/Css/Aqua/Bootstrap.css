@@ -24,6 +24,10 @@ mark {
 	padding-bottom: 20px;
 }
 
+.glyphicon {
+	top: 2px;
+}
+
 /**************
  * ACTION BAR *
  **************/
@@ -479,7 +483,7 @@ ol.breadcrumb a {
 	background-position: 10px 50%;
 }
 
-@media (max-width: 768px) {
+@media ( max-width : 768px) {
 	.alert-message {
 		margin: 10px 0 0 0;
 		width: 100%;
@@ -551,8 +555,7 @@ ol.breadcrumb a {
 	line-height: 132px;
 }
 
-.file-upload-buttons,
-.file-upload .thumbnail .preview {
+.file-upload-buttons, .file-upload .thumbnail .preview {
 	text-align: center;
 }
 
@@ -717,8 +720,8 @@ ul.nav-wizard.publication-wizard {
 }
 
 .treeview .list-group .list-group-item .indent, .treeview .list-group .list-group-item .icon.glyphicon,
-	.treeview .list-group .list-group-item .icon.node-icon,
-	.treeview .list-group .list-group-item a {
+	.treeview .list-group .list-group-item .icon.node-icon, .treeview .list-group .list-group-item a
+	{
 	display: table-cell;
 }
 
@@ -726,8 +729,8 @@ ul.nav-wizard.publication-wizard {
 	width: 20px;
 }
 
-.treeview .list-group .list-group-item .icon.node-icon,
-	.treeview .list-group .list-group-item .icon.glyphicon {
+.treeview .list-group .list-group-item .icon.node-icon, .treeview .list-group .list-group-item .icon.glyphicon
+	{
 	width: 21px;
 }
 
@@ -750,8 +753,7 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/Feed.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.streaming
-	{
+.treeview .list-group .list-group-item .icon.node-icon.streaming {
 	background-image: url(../../Images/Aqua/Treemenu/Streaming.png);
 }
 
@@ -759,8 +761,7 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/Trash.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.trash_full
-	{
+.treeview .list-group .list-group-item .icon.node-icon.trash_full {
 	background-image: url(../../Images/Aqua/Treemenu/TrashFull.png);
 }
 
@@ -768,18 +769,15 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/Quota.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.userview
-	{
+.treeview .list-group .list-group-item .icon.node-icon.userview {
 	background-image: url(../../Images/Aqua/Treemenu/Userview.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.publication
-	{
+.treeview .list-group .list-group-item .icon.node-icon.publication {
 	background-image: url(../../Images/Aqua/Treemenu/Publication.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.create
-	{
+.treeview .list-group .list-group-item .icon.node-icon.create {
 	background-image: url(../../Images/Aqua/Treemenu/Create.png);
 }
 
@@ -787,18 +785,15 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/Add.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.manage
-	{
+.treeview .list-group .list-group-item .icon.node-icon.manage {
 	background-image: url(../../Images/Aqua/Treemenu/Manage.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.rights
-	{
+.treeview .list-group .list-group-item .icon.node-icon.rights {
 	background-image: url(../../Images/Aqua/Treemenu/Rights.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.import
-	{
+.treeview .list-group .list-group-item .icon.node-icon.import {
 	background-image: url(../../Images/Aqua/Treemenu/Import.png);
 }
 
@@ -807,33 +802,27 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/ExternalInstance.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.search_results
-	{
+.treeview .list-group .list-group-item .icon.node-icon.search_results {
 	background-image: url(../../Images/Aqua/Treemenu/Search.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.shared_objects
-	{
+.treeview .list-group .list-group-item .icon.node-icon.shared_objects {
 	background-image: url(../../Images/Aqua/Treemenu/SharedObjects.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.template
-	{
+.treeview .list-group .list-group-item .icon.node-icon.template {
 	background-image: url(../../Images/Aqua/Treemenu/Template.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.hidden
-	{
+.treeview .list-group .list-group-item .icon.node-icon.hidden {
 	background-image: url(../../Images/Aqua/Treemenu/Hidden.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.survey
-	{
+.treeview .list-group .list-group-item .icon.node-icon.survey {
 	background-image: url(../../Images/Aqua/Treemenu/Survey.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.survey_finished
-	{
+.treeview .list-group .list-group-item .icon.node-icon.survey_finished {
 	background-image: url(../../Images/Aqua/Treemenu/SurveyFinished.png);
 }
 
@@ -843,8 +832,7 @@ ul.nav-wizard.publication-wizard {
 		left no-repeat;
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.type_category
-	{
+.treeview .list-group .list-group-item .icon.node-icon.type_category {
 	background: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png) 0 0
 		no-repeat;
 }
@@ -855,14 +843,12 @@ ul.nav-wizard.publication-wizard {
 /* 	background: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png) top left */
 /* 		no-repeat; */
 /* } */
-.treeview .list-group .list-group-item .icon.node-icon.new_category
-	{
+.treeview .list-group .list-group-item .icon.node-icon.new_category {
 	background-image:
 		url(../../Images/Aqua/Treemenu/TreeFolderClosedNew.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.type_user
-	{
+.treeview .list-group .list-group-item .icon.node-icon.type_user {
 	background-image: url(../../Images/Aqua/Treemenu/User.png);
 }
 
@@ -871,13 +857,11 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Treemenu/UserPlatform.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.type_group
-	{
+.treeview .list-group .list-group-item .icon.node-icon.type_group {
 	background-image: url(../../Images/Aqua/Treemenu/Group.png);
 }
 
-.treeview .list-group .list-group-item .icon.node-icon.type_completed
-	{
+.treeview .list-group .list-group-item .icon.node-icon.type_completed {
 	background-image: url(../../Images/Aqua/Status/OkMini.png);
 	opacity: 1;
 }

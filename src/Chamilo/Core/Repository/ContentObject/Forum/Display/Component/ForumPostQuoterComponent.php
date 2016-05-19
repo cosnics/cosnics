@@ -45,10 +45,19 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
         }
 
         $this->forumpost->set_title($reply);
-        $content = '[quote="' . \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
+
+        $quoteUser = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-            (int) $quote_lo->get_user_id())->get_fullname() . '"]' . $quote_lo->get_content() . '[/quote]';
-        $this->forumpost->set_content($content);
+            (int) $quote_lo->get_user_id());
+
+        $quoteContent = array();
+
+        $quoteContent[] = '<blockquote>';
+        $quoteContent[] = $quoteUser->get_fullname() . ' ' . Translation :: get('Wrote') . ':';
+        $quoteContent[] = $quote_lo->get_content();
+        $quoteContent[] = '</blockquote>';
+
+        $this->forumpost->set_content(implode(PHP_EOL, $quoteContent));
 
         $this->form = new ForumPostForm(
             ForumPostForm :: TYPE_QUOTE,
