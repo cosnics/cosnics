@@ -28,6 +28,11 @@ mark {
 	top: 2px;
 }
 
+blockquote {
+	font-size: inherit;
+	opacity: 0.7;
+}
+
 /**************
  * ACTION BAR *
  **************/
