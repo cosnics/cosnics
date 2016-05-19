@@ -53,8 +53,8 @@ class ForumPostQuoterComponent extends ForumPostFormActionCreate
         $quoteContent = array();
 
         $quoteContent[] = '<blockquote>';
-        $quoteContent[] = $quoteUser->get_fullname() . ' ' . Translation :: get('Wrote') . ':';
         $quoteContent[] = $quote_lo->get_content();
+        $quoteContent[] = '<footer>'. $quoteUser->get_fullname() .'</footer>';
         $quoteContent[] = '</blockquote>';
 
         $this->forumpost->set_content(implode(PHP_EOL, $quoteContent));
