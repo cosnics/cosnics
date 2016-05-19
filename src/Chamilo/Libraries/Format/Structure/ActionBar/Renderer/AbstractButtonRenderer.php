@@ -132,7 +132,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
 
         if ($displayLabel)
         {
-            $html[] = '<span>' . $label . '</span>';
+            $html[] = '<span>' . $label . '</span> ';
         }
 
         return implode('', $html);

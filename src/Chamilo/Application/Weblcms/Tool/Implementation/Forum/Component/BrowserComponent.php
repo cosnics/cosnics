@@ -12,19 +12,20 @@ use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager as ForumDataManager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Viewer\ActionSelector;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
-use Chamilo\Libraries\Format\Structure\Toolbar;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -93,30 +94,27 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->size = 0;
         $this->allowed = $this->is_allowed(WeblcmsRights :: DELETE_RIGHT) ||
              $this->is_allowed(WeblcmsRights :: EDIT_RIGHT);
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-
-        $table = $this->get_table_html();
-
-        $html = array();
-
-        $html[] = $this->render_header();
 
         $intro_text_allowed = CourseSettingsController :: get_instance()->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
+
+        $html = array();
+
+        $html[] = $this->render_header();
 
         if ($intro_text_allowed)
         {
             $html[] = $this->display_introduction_text($this->introduction_text);
         }
 
-        $html[] = $this->buttonToolbarRenderer->render();
-        $html[] = $table;
+        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = $this->renderForum();
 
         if ($this->size == 0)
         {
-            $html[] = '<br><div style="text-align: center"><h3>' .
-                 Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES) . '</h3></div>';
+            $html[] = '<div class="alert alert-info text-center">' .
+                 Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES) . '</div>';
         }
 
         $html[] = $this->render_footer();
@@ -128,7 +126,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      *
      * @return string
      */
-    public function get_table_html()
+    public function renderForum()
     {
         $html = array();
 
@@ -261,25 +259,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $categoryId = 0;
         }
 
-        if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
-        {
-            $user_id = array();
-            $course_group_ids = array();
-        }
-        else
-        {
-            $user_id = $this->get_user_id();
-            $course_groups = $this->get_course_groups();
-
-            $course_group_ids = array();
-
-            foreach ($course_groups as $course_group)
-            {
-                $course_group_ids[] = $course_group->get_id();
-            }
-        }
-
         $conditions = array();
+
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
@@ -310,15 +291,16 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $condition = new AndCondition($conditions);
 
-        $location = $this->get_location($categoryId);
+        $order = array();
         $order[] = new OrderBy(
             new PropertyConditionVariable(
                 ContentObjectPublication :: class_name(),
                 ContentObjectPublication :: PROPERTY_DISPLAY_ORDER_INDEX));
+
         if (! $this->get_course()->is_course_admin($this->get_user()))
         {
             $publications = WeblcmsDataManager :: retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                $location,
+                $this->get_location($categoryId),
                 $this->get_entities(),
                 $condition,
                 $order,
@@ -359,35 +341,30 @@ class BrowserComponent extends Manager implements DelegateComponent
                     \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $forum->get_last_topic_changed_cloi(),
                     \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager :: PARAM_LAST_POST => $lastPost->get_id()));
 
+            $html[] = DatetimeUtilities :: format_locale_date(null, $lastPost->get_creation_date());
+
             $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                 $lastPost->get_user_id());
 
-            if (! $user)
+            if ($user instanceof User)
             {
-                $name = Translation :: get(
-                    'UserNotFound',
-                    null,
-                    ContentObject :: get_content_object_type_namespace('forum'));
+                $html[] = '<br />';
+                $html[] = '<span class="text-primary">' . $user->get_fullname() . '</span>';
             }
-            else
-            {
-                $name = $user->get_fullname();
-            }
-
-            $html[] = DatetimeUtilities :: format_locale_date(null, $lastPost->get_creation_date());
-            $html[] = '<br />';
-            $html[] = $name;
 
             if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT) || ! $forum->get_locked())
             {
+                $fileBootstrapGlyph = new BootstrapGlyph(
+                    'file',
+                    array(),
+                    Translation :: get('ViewLastPost', null, Forum :: package()));
+
                 $html[] = '&nbsp;';
                 $html[] = '<a href="' . $link . '">';
-                $html[] = '<img title="' .
-                     Translation :: get('ViewLastPost', null, 'Chamilo\Core\Repository\ContentObject\Forum') . '" src="' . Theme :: getInstance()->getImagePath(
-                        'Chamilo\Application\Weblcms\Tool\Implementation\Forum',
-                        'Forum/IconTopicLatest',
-                        'gif') . '" />';
+                $html[] = '<small>';
+                $html[] = $fileBootstrapGlyph->render();
+                $html[] = '</small>';
                 $html[] = '</a>';
             }
         }
@@ -429,7 +406,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $titleParts[] = '<br />';
-
         $titleParts[] = '<small>';
         $titleParts[] = strip_tags($forum->get_description());
         $titleParts[] = '</small>';
@@ -438,7 +414,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
         {
-            $title = '<span style="color: grey;">' . $title . '</span>';
+            $title = '<span class="text-muted">' . $title . '</span>';
         }
 
         $title = '<h4>' . $title . '</h4>';
@@ -473,12 +449,12 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $forumGlyph = new BootstrapGlyph($forumGlyphType, array('text-muted'));
 
                     $table->setCellContents($row, 0, $forumGlyph->render());
-                    $table->setCellAttributes($row, 0, array('class' => 'text-center'));
+                    $table->setCellAttributes($row, 0, array('class' => 'text-center forum-row-icon'));
                     $table->setCellContents($row, 1, $this->renderTableForumTitle($publication, $forum));
-                    $table->setCellContents($row, 2, '<a>' . $forum->get_total_topics() . '</a>');
-                    $table->setCellAttributes($row, 2, array('class' => 'text-center hidden-xs hidden-sm'));
-                    $table->setCellContents($row, 3, '<a>' . $forum->get_total_posts() . '</a>');
-                    $table->setCellAttributes($row, 3, array('class' => 'text-center hidden-xs hidden-sm'));
+                    $table->setCellContents($row, 2, $forum->get_total_topics());
+                    $table->setCellAttributes($row, 2, array('class' => 'text-primary text-center hidden-xs hidden-sm'));
+                    $table->setCellContents($row, 3, $forum->get_total_posts());
+                    $table->setCellAttributes($row, 3, array('class' => 'text-primary text-center hidden-xs hidden-sm'));
                     $table->setCellContents($row, 4, $this->renderLastPost($publication, $forum));
                     $table->setCellAttributes($row, 4, array('class' => 'hidden-xs hidden-sm'));
 
@@ -486,6 +462,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $row,
                         5,
                         $this->getForumActions($publication, $publications->is_first(), $publications->is_last()));
+                    $table->setCellAttributes($row, 5, array('class' => 'text-center'));
 
                     $row ++;
                 }
@@ -502,173 +479,18 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function getForumActions($publication, $first, $last)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+        $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            Forum :: class_name(),
+            $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
 
-        if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
-        {
-            if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Invisible'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY)),
-                        ToolbarItem :: DISPLAY_ICON));
-            }
-            else
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('Hide', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Visible'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY)),
-                        ToolbarItem :: DISPLAY_ICON));
-            }
+        $buttonToolBar = new ButtonToolBar();
 
-            if ($first)
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('MoveUpNA', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/UpNa'),
-                        null,
-                        ToolbarItem :: DISPLAY_ICON));
-            }
-            else
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Up'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION_UP)),
-                        ToolbarItem :: DISPLAY_ICON));
-            }
-
-            if ($last)
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('MoveDownNA', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/DownNa'),
-                        null,
-                        ToolbarItem :: DISPLAY_ICON));
-            }
-            else
-            {
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Down'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION_DOWN)),
-                        ToolbarItem :: DISPLAY_ICON));
-            }
-
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Move'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY)),
-                    ToolbarItem :: DISPLAY_ICON));
-
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('EditContentObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_CONTENT_OBJECT)),
-                    ToolbarItem :: DISPLAY_ICON));
-
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Manager :: context(),
-                        'Action/EditPublication'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION)),
-                    ToolbarItem :: DISPLAY_ICON));
-
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Build'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT)),
-                    ToolbarItem :: DISPLAY_ICON));
-
-            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                Forum :: class_name(),
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-
-            if ($forum->get_locked())
-            {
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
-                $parameters[self :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('Unlock'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Unlock'),
-                        $this->get_url($parameters),
-                        ToolbarItem :: DISPLAY_ICON));
-            }
-            else
-            {
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
-                $parameters[self :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
-
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('Lock'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Lock'),
-                        $this->get_url($parameters),
-                        ToolbarItem :: DISPLAY_ICON));
-            }
-        }
-        else
-        {
-            $forum = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                Forum :: class_name(),
-                $publication[ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID]);
-        }
-
-        if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE)),
-                    ToolbarItem :: DISPLAY_ICON,
-                    true));
-        }
-
-        $forum_namespace = ContentObject :: get_content_object_type_namespace('Forum');
+        $dropdownButton = new DropdownButton(
+            Translation :: get('Actions'),
+            new BootstrapGlyph('cog'),
+            Button :: DISPLAY_ICON,
+            'btn-link');
+        $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
         if (! $forum->get_locked())
         {
@@ -680,13 +502,14 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $parameters[self :: PARAM_FORUM_ID] = $forum->get_id();
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
 
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('Subscribe', null, $forum_namespace),
-                        Theme :: getInstance()->getImagePath($forum_namespace, 'Action/Mail'),
+                $buttonToolBar->addItem(
+                    new Button(
+                        Translation :: get('Subscribe', null, Forum :: package()),
+                        new BootstrapGlyph('envelope'),
                         $this->get_url($parameters),
-                        ToolbarItem :: DISPLAY_ICON,
-                        true));
+                        Button :: DISPLAY_ICON,
+                        true,
+                        'btn-link'));
             }
             else
             {
@@ -695,16 +518,194 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = self :: ACTION_FORUM_UNSUBSCRIBE;
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
 
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('UnSubscribe', null, $forum_namespace),
-                        Theme :: getInstance()->getImagePath($forum_namespace, 'Action/Unmail'),
+                $buttonToolBar->addItem(
+                    new Button(
+                        Translation :: get('UnSubscribe', null, Forum :: package()),
+                        new BootstrapGlyph('remove-circle'),
                         $this->get_url($parameters),
-                        ToolbarItem :: DISPLAY_ICON,
-                        true));
+                        Button :: DISPLAY_ICON,
+                        true,
+                        'btn-link'));
             }
         }
-        return '<div style="float: right;">' . $toolbar->as_html() . '</div>';
+
+        if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        {
+            $buttonToolBar->addItem(
+                new Button(
+                    Translation :: get('EditContentObject', null, Utilities :: COMMON_LIBRARIES),
+                    new BootstrapGlyph('pencil'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_CONTENT_OBJECT)),
+                    Button :: DISPLAY_ICON,
+                    false,
+                    'btn-link'));
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation :: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
+                    new BootstrapGlyph('cog'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION)),
+                    SubButton :: DISPLAY_LABEL,
+                    false,
+                    'btn-link'));
+
+            $dropdownButton->addSubButton(new SubButtonDivider());
+
+            if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('eye-closed'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY)),
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'btn-link'));
+            }
+            else
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation :: get('Hide', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('eye-open'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_TOGGLE_VISIBILITY)),
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'btn-link'));
+            }
+
+            if ($forum->get_locked())
+            {
+                $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
+                $parameters[self :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
+
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation :: get('Unlock'),
+                        new FontAwesomeGlyph('unlock'),
+                        $this->get_url($parameters),
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'btn-link'));
+            }
+            else
+            {
+                $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
+                $parameters[self :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
+
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation :: get('Lock'),
+                        new BootstrapGlyph('lock'),
+                        $this->get_url($parameters),
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'btn-link'));
+            }
+
+            $dropdownButton->addSubButton(new SubButtonDivider());
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
+                    new BootstrapGlyph('folder-open'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE_TO_CATEGORY)),
+                    SubButton :: DISPLAY_LABEL,
+                    false,
+                    'btn-link'));
+
+            if (! $first)
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation :: get('MoveUp', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('chevron-up'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION_UP)),
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'btn-link'));
+            }
+
+            if (! $last)
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation :: get('MoveDown', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('chevron-down'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_MOVE,
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION => \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION_DOWN)),
+                        SubButton :: DISPLAY_LABEL,
+                        false,
+                        'btn-link'));
+            }
+        }
+
+        if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT))
+        {
+            $buttonToolBar->addItem(
+                new Button(
+                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                    new BootstrapGlyph('remove'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DELETE)),
+                    Button :: DISPLAY_ICON,
+                    true,
+                    'btn-link'));
+        }
+
+        $buttonToolBar->addItem($dropdownButton);
+
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        return $buttonToolBarRenderer->render();
+    }
+
+    /**
+     *
+     * @param string $label
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph $glyph
+     * @param string[] $allowedContentObjectTypes
+     * @param string[] $parameters
+     * @param array $extraActions
+     * @param string $classes
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
+     */
+    public function getPublicationButton($label, $glyph, $allowedContentObjectTypes, $parameters,
+        $extraActions = array(), $classes = null)
+    {
+        $actionSelector = new ActionSelector(
+            $this,
+            $this->getUser()->getId(),
+            $allowedContentObjectTypes,
+            $parameters,
+            $extraActions,
+            $classes);
+
+        return $actionSelector->getActionButton($label, $glyph);
     }
 
     public function getButtonToolbarRenderer()
@@ -713,67 +714,21 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
+            $publishActions = new ButtonGroup();
+
+            $publishParameters = $this->get_parameters();
+            $publishParameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH;
+
             if ($this->is_allowed(WeblcmsRights :: ADD_RIGHT))
             {
-                // added tool dependent publish button
-                $tool_dependent_publish = PlatformSetting :: get(
-                    'tool_dependent_publish_button',
-                    \Chamilo\Application\Weblcms\Manager :: context());
-
-                if ($tool_dependent_publish == \Chamilo\Application\Weblcms\Tool\Manager :: PUBLISH_INDEPENDENT)
-                {
-                    $commonActions->addButton(
-                        new Button(
-                            Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-                            $this->get_url(
-                                array(
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-                }
-                else
-                {
-                    $tool = Request :: get('tool');
-                    $commonActions->addButton(
-                        new Button(
-                            Translation :: get(
-                                'PublishToolDependent',
-                                array(
-                                    'TYPE' => Translation :: get(
-                                        'TypeNameSingle',
-                                        null,
-                                        'application\weblcms\tool\\' . $tool)),
-                                Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-                            $this->get_url(
-                                array(
-                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH)),
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-                }
-            }
-
-            if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
-            {
-                $commonActions->addButton(
-                    new Button(
-                        Translation :: get('ManageCategories', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Category'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            }
-
-            if ($this->get_course()->is_course_admin($this->get_user()) || $this->get_user()->is_platform_admin())
-            {
-                $commonActions->addButton(
-                    new Button(
-                        Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Rights'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS)),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                $publishActions->addButton(
+                    $this->getPublicationButton(
+                        Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('plus'),
+                        $this->get_allowed_types(),
+                        $publishParameters,
+                        array(),
+                        'btn-primary'));
             }
 
             $intro_text_allowed = CourseSettingsController :: get_instance()->get_course_setting(
@@ -782,16 +737,39 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if (! $this->introduction_text && $intro_text_allowed && $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
             {
-                $commonActions->addButton(
-                    new Button(
+                $publishActions->addButton(
+                    $this->getPublicationButton(
                         Translation :: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Introduce'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_PUBLISH_INTRODUCTION)),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        new FontAwesomeGlyph('book'),
+                        array(Introduction :: class_name()),
+                        $publishParameters));
             }
 
+            if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('ManageCategories', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('folder-close'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_MANAGE_CATEGORIES)),
+                        Button :: DISPLAY_ICON_AND_LABEL));
+            }
+
+            if ($this->get_course()->is_course_admin($this->get_user()) || $this->get_user()->is_platform_admin())
+            {
+                $commonActions->addButton(
+                    new Button(
+                        Translation :: get('ManageRights', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('lock'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_EDIT_RIGHTS)),
+                        Button :: DISPLAY_ICON_AND_LABEL));
+            }
+
+            $buttonToolbar->addButtonGroup($publishActions);
             $buttonToolbar->addButtonGroup($commonActions);
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
