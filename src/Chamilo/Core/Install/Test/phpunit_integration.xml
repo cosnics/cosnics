@@ -1,0 +1,7 @@
+<phpunit bootstrap="./TestBootstrap.php" colors="true" syntaxCheck="true" convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true" convertWarningsToExceptions="true">
+	<testsuite name="install">
+		<directory>./integration</directory>
+	</testsuite>
+
+</phpunit>

@@ -1,0 +1,98 @@
+[29/04/2016]
+
+* [Assessment] Removed subitems in the builder of the complex content object because assessment doesn't have subpaths
+* [Assets] Added a timestamp for client cache clearing
+* [Assignment Tool] Limited the amount of allowed content object types in the creation form of an assignment
+* [Calendar Event] Fixed css for datepicker
+* [Calendar Event] fixes for aqua theme for layout
+* [CSS] Fixed toggle options in the course settings form
+* [File Content Object] Added clickable download link on inline images
+* [File Content Object] Display docx and other office documents inline using the official office viewer
+* [File Content Object] Removed buttons for inline image rendering
+* [Home] Bugfix in home javascript when moving to and from an empty column
+* [Learning Path] Changed tabs to buttons
+* [Learning Path] A new mover component in which you can move an item directly to a new parent and a new position
+* [Learning Path] Allow HTML5 full screen display of learning paths
+* [Learning Path] Changed previous and next buttons
+* [Learning Path] Changed progressbar
+* [Learning Path] Selected path expanded in tree menu
+* [Learning Path] Use Bootstrap TreeView for the learning path
+* [Menu] Added the homepage link to the navbar brand
+* [Portfolio] Changed tabs to buttons
+* [Portfolio] Changes to the feedback subscribe button
+* [Portfolio] Feedback icons changed
+* [Weblcms] Added a warning when the user leaves the publication form without publishing
+* [Weblcms] Bugfixes to the course visit tracking
+* [Weblcms] Navigate to menu: alphabetical order
+* [Weblcms] Removed option "Menu Layout" from course settings since it is no longer used and replaced by much more intuitive "Navigate To"
+* [Weblcms] Translations of course setting "Tool Layout"
+
+[06/05/2016]
+
+* [Admin] Translations whois online page
+* [Caching] Fixed issue between PhpFileCache and OpCache
+* [CSS/Javascript] Fixed client caching of resources
+* [Menu] Fixed cache reset of menu items when editing the menu
+* [Portfolio] Fixes for the portfolio breadcrumbs
+* [Streaming Videos] Translation: Streaming Video's
+* [User] Fixed the asynchronous loading of the userpicture in the menu
+* [User] Fixed user settings that could not be updated
+* [Vimeo] Fixed vimeo browse layout
+* [Weblcms] Added some changes to the publication form to have a more distinct view between several options
+* [Weblcms] Fixed the reset button bug in the publication form
+* [Workspaces] Moved the "manager" option in the rights form above the warning message
+* [Workspaces] Redirect to browser when saving the rights form
+* [Workspaces] Translation: Shared Workspaces => Workspaces shared with me
+* [Workspaces] Visualize the workspace description in the workspace
+
+[13/05/2016]
+
+* [Course Groups] Changed the color of "unsubscribe yourself" button to red
+* [CSS] Alerts on smaller screen are now responsive
+* [CSS] Change the way categories in forms are displayed
+* [CSS] Fixed the z-index for notifications and dropdown menu's
+* [CSS] Platform footer re-implemented to be more bootstrap compliant
+* [Home] Fixed translations
+* [Installer] Complete visual redesign using Bootstrap
+* [Learning Path] Made the menu wider
+* [Personal Calendar] Moved publish button to front, make sure primary buttons like the publish button are always placed first 
+* [PHP7] Eliminated dependencies on old non-compatible libraries and/or provided working alternatives whenever necessary
+* [Platform] Allow the layout container to be either fixed or fluid on demand
+* [Repository] Fixed translations when a file is uploaded through uploadify (attachments)
+* [Repository] Fixed translations
+* [User Tool] Fixed translations
+* [Weblcms] Fixed publisher translations
+* [Weblcms] Fixed translations in the manage rights component
+* [Weblcms] Navigate to overlaps with the course title on smaller screens
+* [Calendar] Changed every translation from "Agenda" To "Calendar" for more consistency in translations
+* [Weblcms] Changed introduction publisher icon
+* [LearningPath] Fixed bug with multiple selected items when viewing the results
+* [LearningPath] Fixed the abscence of the extra button when the learning path is first opened
+* [LearningPath] Fixed the completed icon on the root of the learning path
+* [Repository] Always include the latest version of content objects in the workspaces
+* [Weblcms] Changed icons in list view for select / unselect all
+* [Course Groups] Fixes for breadcrumbs
+* [Repository] Fixed a bug where the search parameters in a workspace could not be removed
+* [Repository] Fixed a bug where adding an existing content object doesn't keep track of the selected category in the workspaces
+* [Repository] Remember the search parameter when navigating in the repo viewer
+* [Weblcms] Fixed a fatal error in the course menu home block
+* [Course Groups] Added a complete introduction text publisher where you can create a new introduction or select / import an existing one.
+* [Repository] Fixed the update of the content object versions in workspaces
+* [Repository] Removed translations with {ICON} in them
+* [Repository] Fixed the selected icon in the menu item for workspaces when navigating in a workspace
+* [Repository] Changed the titles of the imported content objects through drag and drop to exclude file extensions
+* [User] Fixed correct redirect after user logout
+* [Repository] Links between workspaces and objects are now based on content object numbers instead of content object ids
+* [Webpage] Added usability fixes to make a distinct difference between page and webpage
+* [Assignment] Bugfix for reporting of course group submissions
+
+[20/05/2016]
+* [Repository] Changed the files importer to add a message when a file is imported
+* [Repository] Bugfix in the workspaces for the "make favourite" action as table actions
+* [Course Groups] Added better course group form layout
+* [User] Added a retry button when a login has failed
+* [Portfolio] Use the same menu structure as the learning path
+* [Course Copier] Cleanup of the form layout
+* [Course Truncater] Cleanup of the form layout
+* [Calendar] Added links to the day-view in the month and week views
+* [Forum] Layout redesign to use bootstrap elements 
