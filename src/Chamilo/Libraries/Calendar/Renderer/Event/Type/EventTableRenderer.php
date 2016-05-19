@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Calendar\Renderer\Event\Type;
 
 use Chamilo\Libraries\Calendar\Renderer\Event\EventRenderer;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 
 /**
  *
@@ -47,6 +47,7 @@ abstract class EventTableRenderer extends EventRenderer
     }
 
     /**
+     *
      * @return string
      */
     public function renderFullTitle()
@@ -54,7 +55,7 @@ abstract class EventTableRenderer extends EventRenderer
         $fullTitle = '';
 
         $prefix = $this->renderPrefix();
-        if($prefix)
+        if ($prefix)
         {
             $fullTitle .= $prefix . ' ';
         }
@@ -62,7 +63,7 @@ abstract class EventTableRenderer extends EventRenderer
         $fullTitle .= htmlentities($this->getEvent()->getTitle());
 
         $postfix = $this->renderPostfix();
-        if($postfix)
+        if ($postfix)
         {
             $fullTitle .= ' ' . $postfix;
         }

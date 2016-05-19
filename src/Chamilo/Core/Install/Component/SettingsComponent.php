@@ -5,14 +5,14 @@ use Chamilo\Core\Install\Form\SettingsForm;
 use Chamilo\Core\Install\Manager;
 use Chamilo\Core\Install\SettingsOverview;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  *

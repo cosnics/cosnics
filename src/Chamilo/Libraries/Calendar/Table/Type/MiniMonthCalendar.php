@@ -20,7 +20,7 @@ class MiniMonthCalendar extends MonthCalendar
      */
     public function __construct($displayTime)
     {
-        parent:: __construct($displayTime, array('table-calendar-mini'));
+        parent :: __construct($displayTime, null, array('table-calendar-mini'));
     }
 
     /**
@@ -72,8 +72,7 @@ class MiniMonthCalendar extends MonthCalendar
                     $row,
                     $column,
                     '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
-                    $this->getCellContents($row, $column) . '</span>'
-                );
+                         $this->getCellContents($row, $column) . '</span>');
             }
         }
     }
@@ -97,7 +96,7 @@ class MiniMonthCalendar extends MonthCalendar
      */
     protected function determineCellContent($tableDate)
     {
-        $cellContent = parent:: determineCellContent($tableDate);
+        $cellContent = parent :: determineCellContent($tableDate);
 
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))

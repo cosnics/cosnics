@@ -1,7 +1,24 @@
 /*****************************************************
  *  FORUM PHPBB STYLE                                *
  *****************************************************/
-table.forum {
+.forum.table>tbody>tr>td {
+	vertical-align: middle;
+}
+
+.forum .fa {
+	width: 1em;
+	text-align: center;
+}
+
+.forum.table th.cell-stat {
+	width: 6em;
+}
+
+.forum.table th.cell-stat-2x {
+	width: 14em;
+}
+
+/**table.forum {
 	background-color: #A9B8C2;
 	width: 100%;
 	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
@@ -47,12 +64,12 @@ table.forum th {
 table.forum td.spacer {
 	background-color: #D1D7DC;
 	height: 5px;
-}
+}*/
 
 /*****************************************************
  *  FORUM CHAMILO STYLE                                *
  *****************************************************/
-table.forum {
+/**table.forum {
 	background-color: #c6d8ec;
 	width: 100%;
 	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
@@ -72,7 +89,6 @@ table.forum .row2 {
 
 table.forum td.category {
 	background-color: #aec7e4;
-	/*background-image: url('../../Images/Aqua/Backgrounds/cellpic1.png');*/
 	background-image: none;
 	height: 28px;
 	border: 0 none;
@@ -88,7 +104,6 @@ table.forum td.category_right {
 
 table.forum th {
 	background-color: #6694cc;
-	/*background-image:url('../../Images/Aqua/Backgrounds/cellpic3.png');*/
 	background-image: none;
 	color: #2b3f57;
 	font-weight: bold;
@@ -127,9 +142,10 @@ table.forum .quotecontent, .attachcontent {
 	line-height: 1.4em;
 	margin: 0 5px 10px;
 	padding: 5px;
-}
-
+}*/
 ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default,
-	.treeview .list-group .list-group-item .icon.node-icon.type_forum, .treeview .list-group .list-group-item .icon.node-icon.type_forum_default {
+	.treeview .list-group .list-group-item .icon.node-icon.type_forum,
+	.treeview .list-group .list-group-item .icon.node-icon.type_forum_default
+	{
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }

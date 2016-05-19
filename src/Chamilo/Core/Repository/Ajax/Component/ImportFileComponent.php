@@ -2,10 +2,8 @@
 namespace Chamilo\Core\Repository\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
-use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -64,10 +62,10 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
             $uploadedMessage = array();
             $uploadedMessage[] = '<div class="alert alert-success alert-import-success">';
-            $uploadedMessage[] = Translation::getInstance()->getTranslation(
-                'FileImported', array('CATEGORY' => $this->getCategoryTitle($categoryId)),
-                \Chamilo\Core\Repository\Manager::context()
-            );
+            $uploadedMessage[] = Translation :: getInstance()->getTranslation(
+                'FileImported',
+                array('CATEGORY' => $this->getCategoryTitle($categoryId)),
+                \Chamilo\Core\Repository\Manager :: context());
             $uploadedMessage[] = '</div>';
 
             $jsonAjaxResult = new JsonAjaxResult();
@@ -88,21 +86,20 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
      * Returns the title of a given category
      *
      * @param $categoryId
-     *
      * @return string
      */
     protected function getCategoryTitle($categoryId)
     {
-        if(!$categoryId)
+        if (! $categoryId)
         {
-            return Translation::getInstance()->getTranslation('MyRepository', null, Manager::context());
+            return Translation :: getInstance()->getTranslation('MyRepository', null, Manager :: context());
         }
 
-        $category = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-            RepositoryCategory::class_name(), $categoryId
-        );
+        $category = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            RepositoryCategory :: class_name(),
+            $categoryId);
 
-        if(!$category)
+        if (! $category)
         {
             return null;
         }

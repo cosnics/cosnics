@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar\Renderer;
 
 use Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 
 /**
  *

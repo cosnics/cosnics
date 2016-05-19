@@ -7,6 +7,7 @@ use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -143,8 +144,14 @@ class WeekRenderer extends FullTableRenderer
      */
     public function initializeCalendar()
     {
+        $displayParameters = $this->getDataProvider()->getDisplayParameters();
+        $displayParameters[self :: PARAM_TIME] = WeekCalendar :: TIME_PLACEHOLDER;
+        $displayParameters[self :: PARAM_TYPE] = self :: TYPE_DAY;
+        $dayUrlTemplate = new Redirect($displayParameters);
+
         return new WeekCalendar(
             $this->getDisplayTime(),
+            $dayUrlTemplate->getUrl(),
             $this->getHourStep(),
             $this->getStartHour(),
             $this->getEndHour(),

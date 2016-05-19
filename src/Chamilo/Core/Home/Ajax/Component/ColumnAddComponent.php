@@ -5,7 +5,7 @@ use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
