@@ -222,6 +222,8 @@
 	background-color: #f57900;
 	position: absolute;
 	content: "";
+	right: 0px;
+	bottom: 0px;
 }
 
 .ident-xs.ident-new:after {
