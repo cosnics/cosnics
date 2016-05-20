@@ -16,6 +16,8 @@ abstract class Manager extends Application
     const PARAM_FAVOURITE_USER_ID = 'favourite_user_id';
     const PARAM_ACTION = 'favourite_action';
 
+    const PARAM_SOURCE = 'source';
+
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
@@ -23,6 +25,9 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
+
+    const SOURCE_USER_BROWSER = 'user_browser';
+    const SOURCE_FAVOURITES_BROWSER = 'favourites_browser';
 
     /**
      * The favourite service
