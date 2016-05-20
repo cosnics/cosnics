@@ -74,9 +74,12 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                     }
                 }
 
+                $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+                $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
+
                 $factory = new ApplicationFactory(
                     \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                    $applicationConfiguration);
                 $component = $factory->getComponent();
                 $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
                 $component->set_parameter(self :: PARAM_ACTION, self :: ACTION_CREATE_SUBFORUM);
@@ -84,6 +87,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                     self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
                     $this->get_complex_content_object_item_id());
                 $component->set_excluded_objects($exclude);
+
                 return $component->run();
             }
             else

@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\DropdownButtonRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -94,7 +95,8 @@ class ShortcutToolListRenderer extends ToolListRenderer
 
             $toolButton = new SubButton(
                 $title,
-                $themeUtilities->getImagePath($tool->getContext(), 'Logo/' . $tool_image),
+                new IdentGlyph(md5($tool->getContext())),
+//                 $themeUtilities->getImagePath($tool->getContext(), 'Logo/' . $tool_image),
                 $url,
                 Button :: DISPLAY_ICON_AND_LABEL);
 

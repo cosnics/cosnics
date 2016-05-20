@@ -62,6 +62,6 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
         $html[] = parent :: renderLinkContent();
         $html[] = $this->renderCaret();
 
-        return implode(PHP_EOL, $html);
+        return implode('', $html);
     }
 }

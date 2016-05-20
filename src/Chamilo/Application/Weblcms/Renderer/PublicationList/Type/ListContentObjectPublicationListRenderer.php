@@ -12,13 +12,14 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
@@ -26,7 +27,6 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 
 /**
  *
@@ -206,7 +206,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW));
         $dropdownButton->addSubButton(
             new SubButton(
-                Translation :: get('ViewDetails', null, Manager::context()),
+                Translation :: get('ViewDetails', null, Manager :: context()),
                 Theme :: getInstance()->getCommonImagePath('Action/Details'),
                 $details_url,
                 SubButton :: DISPLAY_LABEL));
@@ -357,40 +357,41 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
             // New functionality in old code
 
-//            if ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
-//                 $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
-//            {
-//                $variable = 'PeriodForever';
-//                $visibility_image = 'Action/Period';
-//            }
-//            else
-//            {
-//                if (time() < $publication[ContentObjectPublication :: PROPERTY_FROM_DATE])
-//                {
-//                    $variable = 'PeriodBefore';
-//                    $visibility_image = 'Action/PeriodBefore';
-//                }
-//                elseif (time() > $publication[ContentObjectPublication :: PROPERTY_TO_DATE])
-//                {
-//                    $variable = 'PeriodAfter';
-//                    $visibility_image = 'Action/PeriodAfter';
-//                }
-//                else
-//                {
-//                    $variable = 'PeriodCurrent';
-//                    $visibility_image = 'Action/Period';
-//                }
-//            }
-//
-//            $dropdownButton->addSubButton(
-//                new SubButton(
-//                    Translation :: get($variable, null, Utilities :: COMMON_LIBRARIES),
-//                    Theme :: getInstance()->getCommonImagePath($visibility_image),
-//                    $this->get_url(
-//                        array(
-//                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
-//                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
-//                    SubButton :: DISPLAY_LABEL));
+            // if ($publication[ContentObjectPublication :: PROPERTY_FROM_DATE] == 0 &&
+            // $publication[ContentObjectPublication :: PROPERTY_TO_DATE] == 0)
+            // {
+            // $variable = 'PeriodForever';
+            // $visibility_image = 'Action/Period';
+            // }
+            // else
+            // {
+            // if (time() < $publication[ContentObjectPublication :: PROPERTY_FROM_DATE])
+            // {
+            // $variable = 'PeriodBefore';
+            // $visibility_image = 'Action/PeriodBefore';
+            // }
+            // elseif (time() > $publication[ContentObjectPublication :: PROPERTY_TO_DATE])
+            // {
+            // $variable = 'PeriodAfter';
+            // $visibility_image = 'Action/PeriodAfter';
+            // }
+            // else
+            // {
+            // $variable = 'PeriodCurrent';
+            // $visibility_image = 'Action/Period';
+            // }
+            // }
+            //
+            // $dropdownButton->addSubButton(
+            // new SubButton(
+            // Translation :: get($variable, null, Utilities :: COMMON_LIBRARIES),
+            // Theme :: getInstance()->getCommonImagePath($visibility_image),
+            // $this->get_url(
+            // array(
+            // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager ::
+            // ACTION_UPDATE_PUBLICATION,
+            // \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id)),
+            // SubButton :: DISPLAY_LABEL));
 
             if ($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
             {
@@ -399,7 +400,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             }
             else
             {
-                $visibilityTranslation = Translation :: get('MakeInvisible', null, Manager::context());
+                $visibilityTranslation = Translation :: get('MakeInvisible', null, Manager :: context());
                 $visibility_image = 'Action/Visible';
             }
 
@@ -411,11 +412,12 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     SubButton :: DISPLAY_LABEL));
 
             // Move the publication
-            if ($this->get_tool_browser()->get_parent() instanceof Categorizable && $this->get_tool_browser()->hasCategories())
+            if ($this->get_tool_browser()->get_parent() instanceof Categorizable &&
+                 $this->get_tool_browser()->hasCategories())
             {
                 $dropdownButton->addSubButton(
                     new SubButton(
-                        Translation :: get('MoveToCategory', null, Manager::context()),
+                        Translation :: get('MoveToCategory', null, Manager :: context()),
                         Theme :: getInstance()->getCommonImagePath('Action/Move'),
                         $this->get_url(
                             array(

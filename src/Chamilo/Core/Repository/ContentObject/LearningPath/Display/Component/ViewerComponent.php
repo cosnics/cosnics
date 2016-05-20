@@ -1,24 +1,24 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
-use Chamilo\Core\Repository\ContentObject\LearningPath\ComplexContentObjectPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Form\DirectMoverForm;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\PrerequisitesTranslator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Libraries\Format\Structure\ActionBar\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
-use Chamilo\Libraries\Format\Structure\ActionBar\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -105,6 +105,7 @@ class ViewerComponent extends TabComponent
 
         $html[] = $this->render_header();
         $html[] = $buttonToolbarRenderer->render();
+        $html[] = $this->renderMovePanel();
         $html[] = $embedder->run();
         $html[] = $this->render_footer();
 
@@ -354,68 +355,88 @@ class ViewerComponent extends TabComponent
         {
             return;
         }
+        //
+        // $moveButton = new DropdownButton(
+        // $translator->getTranslation('Move', null, Manager:: context()),
+        // new BootstrapGlyph('random')
+        // );
+        //
+        // $descendants = $this->get_current_node()->get_descendants();
+        //
+        // /** @var ComplexContentObjectPath $path */
+        // $path = $this->get_complex_content_object_path();
+        // foreach ($path->get_nodes() as $node)
+        // {
+        //
+        // if ($node == $this->get_current_node() || in_array($node, $descendants))
+        // {
+        // continue;
+        // }
+        //
+        // $contentObject = $node->get_content_object();
+        //
+        // $margin = 15 * (count($node->get_parents()) - 1);
+        //
+        // if (!$node->is_root())
+        // {
+        // $title = '<span style="margin-left: ' . $margin . 'px">' . $translator->getTranslation(
+        // 'AfterContentObject',
+        // array('CONTENT_OBJECT' => $contentObject->get_title()),
+        // Manager:: context()
+        // ) . '</span>';
+        //
+        // $moveButton->addSubButton(
+        // new SubButton(
+        // $title,
+        // '',
+        // $this->get_url(
+        // array(
+        // self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY,
+        // self :: PARAM_PARENT_ID => $node->get_parent_id(),
+        // self :: PARAM_DISPLAY_ORDER => $node->get_complex_content_object_item()
+        // ->get_display_order() +
+        // 1,
+        // self :: PARAM_STEP => $this->get_current_step()
+        // )
+        // )
+        // )
+        // );
+        // }
+        //
+        // if ($contentObject instanceof LearningPath)
+        // {
+        // $margin += 15;
+        //
+        // $title = '<span style="margin-left: ' . $margin . 'px">' . $translator->getTranslation(
+        // 'FirstItemBelowContentObject',
+        // array('CONTENT_OBJECT' => $contentObject->get_title()),
+        // Manager:: context()
+        // ) . '</span>';
+        //
+        // $moveButton->addSubButton(
+        // new SubButton(
+        // $title,
+        // '',
+        // $this->get_url(
+        // array(
+        // self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY,
+        // self :: PARAM_PARENT_ID => $node->get_id(),
+        // self :: PARAM_DISPLAY_ORDER => 1,
+        // self :: PARAM_STEP => $this->get_current_step()
+        // )
+        // )
+        // )
+        // );
+        // }
+        // }
 
-        $moveButton = new DropdownButton(
+        $moveButton = new Button(
             $translator->getTranslation('Move', null, Manager :: context()),
-            new BootstrapGlyph('random'));
-
-        $descendants = $this->get_current_node()->get_descendants();
-
-        /** @var ComplexContentObjectPath $path */
-        $path = $this->get_complex_content_object_path();
-        foreach ($path->get_nodes() as $node)
-        {
-
-            if ($node == $this->get_current_node() || in_array($node, $descendants))
-            {
-                continue;
-            }
-
-            $contentObject = $node->get_content_object();
-
-            $margin = 15 * (count($node->get_parents()) - 1);
-
-            if (! $node->is_root())
-            {
-                $title = '<span style="margin-left: ' . $margin . 'px">' . $translator->getTranslation(
-                    'AfterContentObject',
-                    array('CONTENT_OBJECT' => $contentObject->get_title()),
-                    Manager :: context()) . '</span>';
-
-                $moveButton->addSubButton(
-                    new SubButton(
-                        $title,
-                        '',
-                        $this->get_url(
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY,
-                                self :: PARAM_PARENT_ID => $node->get_parent_id(),
-                                self :: PARAM_DISPLAY_ORDER => $node->get_complex_content_object_item()->get_display_order() +
-                                     1,
-                                    self :: PARAM_STEP => $this->get_current_step()))));
-            }
-
-            if ($contentObject instanceof LearningPath)
-            {
-                $margin += 15;
-
-                $title = '<span style="margin-left: ' . $margin . 'px">' . $translator->getTranslation(
-                    'FirstItemBelowContentObject',
-                    array('CONTENT_OBJECT' => $contentObject->get_title()),
-                    Manager :: context()) . '</span>';
-
-                $moveButton->addSubButton(
-                    new SubButton(
-                        $title,
-                        '',
-                        $this->get_url(
-                            array(
-                                self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY,
-                                self :: PARAM_PARENT_ID => $node->get_id(),
-                                self :: PARAM_DISPLAY_ORDER => 1,
-                                self :: PARAM_STEP => $this->get_current_step()))));
-            }
-        }
+            new BootstrapGlyph('random'),
+            '#',
+            Button :: DISPLAY_ICON_AND_LABEL,
+            false,
+            'mover-open');
 
         $buttonGroup->addButton($moveButton);
     }
@@ -450,5 +471,41 @@ class ViewerComponent extends TabComponent
                         self :: PARAM_STEP => $this->get_current_step()))));
 
         $buttonGroup->addButton($extraButton);
+    }
+
+    /**
+     * Renders the move panel that will be made visible when the move button is pressed
+     *
+     * @return string
+     */
+    protected function renderMovePanel()
+    {
+        $translator = Translation :: getInstance();
+
+        $form = new DirectMoverForm(
+            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY)),
+            $this->get_complex_content_object_path(),
+            $this->get_current_node());
+
+        $html = array();
+
+        $html[] = '<div class="panel panel-default" id="mover" style="display: none;">';
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">';
+        $html[] = '<div class="pull-right">';
+        $html[] = '<a href="#" id="mover-close" style="color: black; opacity: 0.5">';
+        $html[] = '<span class="inline-glyph glyphicon glyphicon-remove"></span>';
+        $html[] = '</a>';
+        $html[] = '</div>';
+        $html[] = $translator->getTranslation('Move', null, Manager :: context());
+        $html[] = '</h3>';
+        $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+        $html[] = '<div class="panel-body">';
+        $html[] = $form->toHtml();
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        return implode(PHP_EOL, $html);
     }
 }
