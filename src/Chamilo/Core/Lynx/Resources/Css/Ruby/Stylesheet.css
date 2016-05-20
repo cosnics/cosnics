@@ -1,0 +1,11 @@
+@import url('../Aqua/Stylesheet.css');
+
+div.package_upgrade div.package div.title {
+	font-weight: bold;
+	width: 100%;
+	font-size: 18px;
+	border: 0px solid white;
+	color: #C60A28;
+	margin: 0px;
+	padding: 0px;
+}

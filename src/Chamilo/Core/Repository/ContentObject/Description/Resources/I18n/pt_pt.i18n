@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\description
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Description"
+Title = ""
+Properties = ""
+Description = ""
+DescriptionToolBrowserComponent = ""
+DescriptionToolEvaluateComponent = ""
+DescriptionToolIntroductionPublisherComponent = ""
+DescriptionToolMoverComponent = ""
+DescriptionToolPublisherComponent = ""
+DescriptionToolUpdaterComponent = ""
+DescriptionToolViewerComponent = ""
