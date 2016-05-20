@@ -83,11 +83,18 @@ abstract class LocationSelector
 
         if ($locations->size() > 1)
         {
-            $table_header[] = '<th class="checkbox"><input class="select-all" type="checkbox" /></th>';
+            $table_header[] = '<th>';
+            $table_header[] = '<div class="checkbox no-toggle-style">';
+            $table_header[] = '<input class="select-all" type="checkbox" />';
+            $table_header[] = '<label></label>';
+            $table_header[] = '</div>';
+
+
+//             $table_header[] = '<th><input class="select-all" type="checkbox" /></th>';
         }
         else
         {
-            $table_header[] = '<th class="checkbox"></th>';
+            $table_header[] = '<th></th>';
         }
 
         $table_header[] = $this->get_header();

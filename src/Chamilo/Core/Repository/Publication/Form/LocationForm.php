@@ -141,16 +141,7 @@ class LocationForm extends FormValidator
         $category_title = htmlentities(
             Translation :: get(count($this->content_objects) > 1 ? 'LocationSelectionsInfo' : 'LocationSelectionInfo'));
 
-        $category = Theme :: getInstance()->getImage(
-            'Logo/22',
-            'png',
-            $category_title,
-            null,
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-            false,
-            \Chamilo\Core\Repository\Manager :: context());
-
-        $this->addElement('category', $category, 'publication-location');
+        $this->addElement('category', $category_title, 'publication-location');
 
         Utilities :: order_content_objects_by_title($this->content_objects);
 
@@ -158,7 +149,7 @@ class LocationForm extends FormValidator
 
         foreach ($this->content_objects as $content_object)
         {
-            $table_data[] = array($content_object->get_icon_image(), $content_object->get_title());
+            $table_data[] = array($content_object->get_icon_image(Theme :: ICON_MINI), $content_object->get_title());
         }
 
         $type_image = Theme :: getInstance()->getCommonImage(
@@ -169,7 +160,7 @@ class LocationForm extends FormValidator
             ToolbarItem :: DISPLAY_ICON);
 
         $header = array();
-        $header[] = new StaticTableColumn($type_image);
+        $header[] = new StaticTableColumn('category', $type_image);
         $header[] = new StaticTableColumn(
             Translation :: get('Title', null, \Chamilo\Core\Repository\Manager :: context()));
 
@@ -262,16 +253,10 @@ class LocationForm extends FormValidator
     {
         $this->applications[] = $locations->get_context();
 
-        $category = Theme :: getInstance()->getImage(
-            'Logo/22',
-            'png',
+        $this->addElement(
+            'category',
             Translation :: get('TypeName', null, $locations->get_application()),
-            null,
-            ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-            false,
-            $locations->get_application());
-
-        $this->addElement('category', $category, 'publication-location');
+            'publication-location');
 
         $renderer_class = $locations->get_context() . '\LocationSelector';
         $renderer = new $renderer_class($this, $locations);
