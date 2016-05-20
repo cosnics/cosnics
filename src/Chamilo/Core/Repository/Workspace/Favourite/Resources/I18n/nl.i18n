@@ -1,0 +1,9 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+BrowserComponent = "Favorieten"
+TypeName = "Favorieten"
+FavouritesInfo = "Voeg jouw eigen workspaces of workspaces die gedeeld zijn met jou toe als favoriet door middel van het ster-icoon naast de workspace. Favoriete workspaces verschijnen bovenaan in de menu-balk."
+WorkspaceUserFavourite = "Workspace favoriet"
