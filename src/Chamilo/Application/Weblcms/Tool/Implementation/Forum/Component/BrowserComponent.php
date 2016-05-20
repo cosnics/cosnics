@@ -475,7 +475,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $table->setCellContents(0, 1, Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES));
+            $table->setCellContents(0, 1, Translation :: get('NoPublications'));
         }
     }
 
