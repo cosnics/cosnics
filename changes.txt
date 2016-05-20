@@ -97,3 +97,9 @@
 * [LearningPath] Changed the mover of items to a new layout with separate parent and position
 * [Calendar] Added links to the day-view in the month and week views
 * [Forum] Layout redesign to use bootstrap elements 
+* [Javascript] CKEditor updated to version 4.5.9 (was 4.4.7)
+* [Javascript] Switched CKEditor theme to "moono" (was "moonokolor")
+* [Javascript] Added OEmbed plugin to CKEditor to allow easy adding of a multitude of media elements
+* [Layout] Use webfont-based identification logos for Weblcms tools instead of rendered images
+* [Portfolio] Allow "favouriting" of portfolios
+* [Weblcms] Added subscription dates to course memberships
