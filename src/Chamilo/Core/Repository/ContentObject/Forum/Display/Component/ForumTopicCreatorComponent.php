@@ -61,14 +61,18 @@ class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Reposi
                 }
             }
 
+            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
+
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                $applicationConfiguration);
             $component = $factory->getComponent();
             $component->set_parameter(self :: PARAM_ACTION, self :: ACTION_CREATE_TOPIC);
             $component->set_parameter(
                 self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
                 $this->get_complex_content_object_item_id());
+
             return $component->run();
         }
         else

@@ -16,6 +16,7 @@ abstract class Manager extends Application
 
     // Actions
     const ACTION_BROWSE = 'Browser';
+    const ACTION_BROWSE_FAVOURITES = 'Favourites';
     const ACTION_HOME = 'Home';
 
     // Default action

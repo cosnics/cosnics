@@ -126,7 +126,7 @@ class Footer
 
             $stringUtilities = StringUtilities :: getInstance();
 
-            $html[] = '<footer>';
+            $html[] = '<footer class="chamilo-footer">';
             $html[] = '<div class="' . $this->getContainerMode() . '">';
             $html[] = '<div class="row footer">';
             $html[] = '<div class="col-xs-12">';

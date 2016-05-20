@@ -1,7 +1,74 @@
 /*****************************************************
  *  FORUM PHPBB STYLE                                *
  *****************************************************/
-table.forum {
+.forum.table>tbody>tr>td {
+	vertical-align: middle;
+}
+
+.forum .fa {
+	width: 1em;
+	text-align: center;
+}
+
+.forum.table th.cell-stat {
+	width: 6em;
+}
+
+.forum.table th.cell-stat-2x {
+	width: 14em;
+}
+
+.forum.table th.cell-stat-3x {
+	width: 18em;
+}
+
+.forum.table th.cell-stat-4x {
+	width: 28em;
+}
+
+.forum.table .btn-action-toolbar, .forum.media-list .btn-action-toolbar
+	{
+	margin-bottom: 0px;
+}
+
+.forum.table .btn-action-toolbar .btn, .forum.media-list .btn-action-toolbar .btn
+	{
+	padding: 0px 3px;
+}
+
+.forum.table .forum-row-icon {
+	font-size: 150%;
+}
+
+.forum .forum-post-panel {
+	margin-bottom: 1em;
+}
+
+.forum.media-list li img.avatar {
+	display: block;
+	margin: 0 auto;
+}
+
+.forum.media-list li .user-info {
+	text-align: center;
+	width: 8em;
+}
+
+@media ( max-width : 760px) {
+	.forum.media-list li .user-info {
+		float: none;
+		width: 100%;
+		margin-bottom: 1em;
+	}
+}
+
+.forum.media-list .media-body .media-body-title {
+	margin-top: 0px;
+	margin-bottom: 5px;
+	text-transform: uppercase;
+}
+
+/**table.forum {
 	background-color: #A9B8C2;
 	width: 100%;
 	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
@@ -47,12 +114,12 @@ table.forum th {
 table.forum td.spacer {
 	background-color: #D1D7DC;
 	height: 5px;
-}
+}*/
 
 /*****************************************************
  *  FORUM CHAMILO STYLE                                *
  *****************************************************/
-table.forum {
+/**table.forum {
 	background-color: #c6d8ec;
 	width: 100%;
 	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
@@ -72,7 +139,6 @@ table.forum .row2 {
 
 table.forum td.category {
 	background-color: #aec7e4;
-	/*background-image: url('../../Images/Aqua/Backgrounds/cellpic1.png');*/
 	background-image: none;
 	height: 28px;
 	border: 0 none;
@@ -88,7 +154,6 @@ table.forum td.category_right {
 
 table.forum th {
 	background-color: #6694cc;
-	/*background-image:url('../../Images/Aqua/Backgrounds/cellpic3.png');*/
 	background-image: none;
 	color: #2b3f57;
 	font-weight: bold;
@@ -127,9 +192,10 @@ table.forum .quotecontent, .attachcontent {
 	line-height: 1.4em;
 	margin: 0 5px 10px;
 	padding: 5px;
-}
-
+}*/
 ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default,
-	.treeview .list-group .list-group-item .icon.node-icon.type_forum, .treeview .list-group .list-group-item .icon.node-icon.type_forum_default {
+	.treeview .list-group .list-group-item .icon.node-icon.type_forum,
+	.treeview .list-group .list-group-item .icon.node-icon.type_forum_default
+	{
 	background-image: url(../../Images/Aqua/Logo/16.png);
 }
