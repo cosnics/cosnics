@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Portfolio\Component;
 
-use Chamilo\Application\Portfolio\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -11,12 +10,12 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class FavouritesComponent extends Manager implements DelegateComponent
+class FavouritesComponent extends TabComponent implements DelegateComponent
 {
     /**
      * Executes this component
      */
-    public function run()
+    public function build()
     {
         $factory = new ApplicationFactory(
             \Chamilo\Application\Portfolio\Favourite\Manager::context(),

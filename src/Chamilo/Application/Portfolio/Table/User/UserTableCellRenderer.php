@@ -97,10 +97,13 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
                                 \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_ACTION =>
                                     \Chamilo\Application\Portfolio\Favourite\Manager::ACTION_DELETE,
                                 \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_FAVOURITE_ID =>
-                                    $favouriteUser->getId()
+                                    $favouriteUser->getId(),
+                                \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_SOURCE =>
+                                    \Chamilo\Application\Portfolio\Favourite\Manager::SOURCE_USER_BROWSER
                             )
                         ),
-                        ToolbarItem :: DISPLAY_ICON
+                        ToolbarItem :: DISPLAY_ICON,
+                        true
                     )
                 );
             }
