@@ -40,6 +40,7 @@ use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
@@ -110,12 +111,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html[] = $this->getButtonToolbarRenderer()->render();
         $html[] = $this->renderForum();
-
-        if ($this->size == 0)
-        {
-            $html[] = '<div class="alert alert-info text-center">' .
-                 Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES) . '</div>';
-        }
 
         $html[] = $this->render_footer();
 
@@ -190,10 +185,14 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $header->setHeaderContents(0, 1, implode(' ', $categoryTitle));
 
-        $header->setHeaderContents(0, 2, Translation :: get("Topic", null, Forum :: package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comments', array(), Translation :: get("Topics", null, Forum :: package()));
+        $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
-        $header->setHeaderContents(0, 3, Translation :: get("Posts", null, Forum :: package()));
+
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', array(), Translation :: get("Posts", null, Forum :: package()));
+        $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
+
         $header->setHeaderContents(0, 4, Translation :: get("LastPostForum", null, Forum :: package()));
         $header->setCellAttributes(0, 4, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
         $header->setHeaderContents(0, 5, '');
@@ -405,10 +404,16 @@ class BrowserComponent extends Manager implements DelegateComponent
             $titleParts[] = '</a>';
         }
 
-        $titleParts[] = '<br />';
-        $titleParts[] = '<small>';
-        $titleParts[] = strip_tags($forum->get_description());
-        $titleParts[] = '</small>';
+        $description = $forum->get_description();
+        $descriptionString = StringUtilities :: getInstance()->createString(strip_tags($description));
+
+        if (! $descriptionString->isBlank())
+        {
+            $titleParts[] = '<br />';
+            $titleParts[] = '<small>';
+            $titleParts[] = $descriptionString->safeTruncate(200, '&hellip;');
+            $titleParts[] = '</small>';
+        }
 
         $title = implode('', $titleParts);
 
@@ -468,6 +473,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                 }
             }
         }
+        else
+        {
+            $table->setCellContents(0, 1, Translation :: get('NoPublications'));
+        }
     }
 
     /**
@@ -505,7 +514,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation :: get('Subscribe', null, Forum :: package()),
-                        new BootstrapGlyph('envelope'),
+                        new FontAwesomeGlyph('envelope'),
                         $this->get_url($parameters),
                         Button :: DISPLAY_ICON,
                         true,
@@ -521,7 +530,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation :: get('UnSubscribe', null, Forum :: package()),
-                        new BootstrapGlyph('remove-circle'),
+                        new FontAwesomeGlyph('envelope-o'),
                         $this->get_url($parameters),
                         Button :: DISPLAY_ICON,
                         true,
@@ -534,7 +543,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $buttonToolBar->addItem(
                 new Button(
                     Translation :: get('EditContentObject', null, Utilities :: COMMON_LIBRARIES),
-                    new BootstrapGlyph('pencil'),
+                    new FontAwesomeGlyph('pencil'),
                     $this->get_url(
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -562,7 +571,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $dropdownButton->addSubButton(
                     new SubButton(
                         Translation :: get('Show', null, Utilities :: COMMON_LIBRARIES),
-                        new BootstrapGlyph('eye-closed'),
+                        new FontAwesomeGlyph('eye-slash'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -576,7 +585,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $dropdownButton->addSubButton(
                     new SubButton(
                         Translation :: get('Hide', null, Utilities :: COMMON_LIBRARIES),
-                        new BootstrapGlyph('eye-open'),
+                        new FontAwesomeGlyph('eye'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],

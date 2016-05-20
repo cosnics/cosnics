@@ -371,7 +371,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_SHOW_PUBLICATION;
-                $visibleClass = 'eye-closed';
+                $visibleClass = 'eye-close text-muted ident-disabled';
                 $isDisabled = true;
                 $link_class = ' class="invisible"';
             }
@@ -531,7 +531,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             else
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager :: ACTION_MAKE_TOOL_VISIBLE;
-                $visibleClass = 'eye-closed';
+                $visibleClass = 'eye-close text-muted ident-disabled';
                 $isDisabled = true;
                 $link_class = ' class="invisible-tool"';
             }

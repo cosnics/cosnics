@@ -10,160 +10,48 @@
 	text-align: center;
 }
 
-.forum.table th.cell-stat {
-	width: 6em;
-}
-
-.forum.table th.cell-stat-2x {
-	width: 14em;
-}
-
-.forum.table th.cell-stat-3x {
-	width: 18em;
-}
-
-.forum.table th.cell-stat-4x {
-	width: 28em;
-}
-
-.forum.table .btn-action-toolbar {
+.forum.table .btn-action-toolbar, .forum.media-list .btn-action-toolbar
+	{
 	margin-bottom: 0px;
 }
 
-.forum.table .btn-action-toolbar .btn {
+.forum.table .btn-action-toolbar .btn, .forum.media-list .btn-action-toolbar .btn
+	{
 	padding: 0px 3px;
 }
 
-.forum.table .forum-row-icon
-{
+.forum.table .forum-row-icon {
 	font-size: 150%;
 }
 
-/**table.forum {
-	background-color: #A9B8C2;
-	width: 100%;
-	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
-		sans-serif;
-	font-size: 90%;
+.forum .forum-post-panel {
+	margin-bottom: 1em;
 }
 
-table.forum .row1 {
-	background-color: #ECECEC;
-	padding: 4px;
+.forum.media-list li img.avatar {
+	display: block;
+	margin: 0 auto;
 }
 
-table.forum .row2 {
-	background-color: #DCE1E5;
-	padding: 4px;
+.forum.media-list li .user-info {
+	text-align: center;
+	width: 8em;
 }
 
-table.forum td.category {
-	background-color: #C7D0D7;
-	background-image: url('../../Images/Aqua/Backgrounds/Cellpic1.gif');
-	height: 28px;
-	border: 0 none;
-	margin: 0;
-	padding: 0;
-	text-indent: 4px;
+@media ( max-width : 760px) {
+	.forum.media-list li .user-info {
+		float: none;
+		width: 100%;
+		margin-bottom: 1em;
+	}
 }
 
-table.forum td.category_right {
-	background-image: url('../../Images/Aqua/Backgrounds/Cellpic2.jpg');
-	height: 28px;
+.forum.media-list .media-body .media-body-title {
+	margin-top: 0px;
+	margin-bottom: 5px;
+	text-transform: uppercase;
 }
 
-table.forum th {
-	background-color: #006699;
-	background-image: url(../../Images/Aqua/Backgrounds/Cellpic3.gif);
-	color: #FFA34F;
-	font-weight: bold;
-	padding: 7px 5px;
-	white-space: nowrap;
-	font-size: 1.1em;
-}
-
-table.forum td.spacer {
-	background-color: #D1D7DC;
-	height: 5px;
-}*/
-
-/*****************************************************
- *  FORUM CHAMILO STYLE                                *
- *****************************************************/
-/**table.forum {
-	background-color: #c6d8ec;
-	width: 100%;
-	font-family: Ubuntu, "Lucida Grande", Verdana, Helvetica, Arial,
-		sans-serif;
-	font-size: 90%;
-}
-
-table.forum .row1 {
-	background-color: #f4f8fb;
-	padding: 4px;
-}
-
-table.forum .row2 {
-	background-color: #e8eff7;
-	padding: 4px;
-}
-
-table.forum td.category {
-	background-color: #aec7e4;
-	background-image: none;
-	height: 28px;
-	border: 0 none;
-	margin: 0;
-	padding: 0;
-	text-indent: 4px;
-}
-
-table.forum td.category_right {
-	background-image: url('../../Images/Aqua/Backgrounds/Cellpic2.png');
-	height: 28px;
-}
-
-table.forum th {
-	background-color: #6694cc;
-	background-image: none;
-	color: #2b3f57;
-	font-weight: bold;
-	padding: 7px 5px;
-	white-space: nowrap;
-	font-size: 1.1em;
-}
-
-table.forum td.spacer {
-	background-color: #aec7e4;
-	height: 5px;
-}
-
-table.forum .quotetitle, .attachtitle {
-	background-color: #A9B8C2;
-	border-color: #A9B8C2;
-	border-style: solid;
-	border-width: 1px 1px 0;
-	color: #333333;
-	font-size: 0.85em;
-	font-weight: bold;
-	margin: 10px 5px 0;
-	padding: 4px;
-}
-
-table.forum .quotecontent, .attachcontent {
-	background-color: #FAFAFA;
-	border-color: #A9B8C2;
-	border-style: solid;
-	border-width: 0 1px 1px;
-	color: #4B5C77;
-	font-family: Ubuntu, "Lucida Grande", "Trebuchet MS", Helvetica, Arial,
-		sans-serif;
-	font-size: 1em;
-	font-weight: normal;
-	line-height: 1.4em;
-	margin: 0 5px 10px;
-	padding: 5px;
-}*/
 ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default,
 	.treeview .list-group .list-group-item .icon.node-icon.type_forum,
 	.treeview .list-group .list-group-item .icon.node-icon.type_forum_default

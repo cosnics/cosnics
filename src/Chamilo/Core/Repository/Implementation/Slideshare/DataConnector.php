@@ -29,11 +29,29 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         parent :: __construct($external_repository_instance);
         
         $this->consumer_key = Setting :: get('consumer_key', $this->get_external_repository_instance_id());
-        $this->consumer_secret = Setting :: get('consumer_secret', $this->get_external_repository_instance_id());
-        $this->user = Setting :: get('username', $this->get_external_repository_instance_id());
-        $this->password = Setting :: get('password', $this->get_external_repository_instance_id());
-        $this->slideshare = new RestClient('https://www.slideshare.net/api/2/');
+        $this->consumer_secret = Setting :: get('consumer_secret', $this->get_external_repository_instance_id());        
+        
+        $this->slideshare = new \GuzzleHttp\Client(['base_url' => 'https://www.slideshare.net/api/2/']);
+        $this->login();
     }
+    
+    public function login()
+    {
+        $login = Setting :: get('username', $this->get_external_repository_instance_id());
+        $password = Setting :: get('password', $this->get_external_repository_instance_id());
+       
+        $request = $this->slideshare->createRequest('POST', '');
+        $postBody = $request->getBody();
+        $postBody->setField('action', 'login');
+        $postBody->setField('lgname', $login);
+        $postBody->setField('lgpassword', $password);
+        $postBody->setField('format', 'xml');
+        $postBody->setField('redirects', true);
+            
+        $response = $this->slideshare->send($request);
+    }
+    
+    
 
     /**
      *
@@ -59,7 +77,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['limit'] = $count;
         $params['offset'] = $offset;
         
-        $result = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
+        $result = $this->slideshare->get('get_slideshows_by_tag', ['query' => $params]);
         $slideshows = (array) $result->get_response_content();
         
         $objects = array();
@@ -108,7 +126,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['hash'] = $hash;
         $params['tag'] = $condition;
         
-        $result = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshows_by_tag', $params);
+        $result = $this->slideshare->get('get_slideshows_by_tag', ['query' => $params]);
         $slideshows = (array) $result->get_response_content();
         
         $objects = array();
@@ -173,7 +191,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         
         return array();
     }
-    
+
     /*
      * (non-PHPdoc) @see
      * common/extensions/external_repository_manager/ManagerConnector#retrieve_external_repository_object()
@@ -187,7 +205,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $params['api_key'] = $this->consumer_key;
         $params['ts'] = $date;
         $params['hash'] = $hash;
-        $slideshow = $this->slideshare->send_request(RestClient :: METHOD_GET, 'get_slideshow', $params);
+        $slideshow = $this->slideshare->get('get_slideshow', ['query' => $params]);
         $slideshow = (array) $slideshow->get_response_content();
         
         $object = new ExternalObject();
@@ -280,7 +298,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
          * $date = time(); $hash = sha1($this->consumer_secret . $date); $params = array(); $params['api_key'] =
          * $this->consumer_key; $params['ts'] = $date; $params['hash'] = $hash; $params['slideshow_id'] = $id;
          * $params['username'] = $this->user; $params['password'] = $this->password; $slideshow =
-         * $this->slideshare->send_request(SlideshareRestClient :: METHOD_GET, 'delete_slideshow', $params); $slideshow =
+         * $this->slideshare->send_request(SlideshareRestClient :: METHOD_GET, 'delete_slideshow', $params); $slideshow
+         * =
          * (array) $slideshow->get_response_content();
          */
     }

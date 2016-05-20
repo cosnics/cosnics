@@ -9,10 +9,9 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\IdentRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Course list renderer to render the course list (used in courses home, courses sorter, courses block...)
@@ -250,6 +249,7 @@ class CourseListRenderer
                 $course,
                 CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
                 $tool->get_id());
+
             $visible = $course_settings_controller->get_course_setting(
                 $course,
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
@@ -262,14 +262,12 @@ class CourseListRenderer
 
             if ($active && $visible && $hasNewPublications)
             {
+                $identRenderer = new IdentRenderer($tool->getContext(), true, false, IdentRenderer :: SIZE_XS);
+                $toolUrl = htmlspecialchars($this->get_tool_url($tool->get_name(), $course));
 
-                $html[] = '<a href="' . htmlspecialchars($this->get_tool_url($tool->get_name(), $course)) . '"' . $target .
-                     '>';
-                $html[] = '<img src="' . htmlspecialchars(
-                    Theme :: getInstance()->getImagePath(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name()),
-                        'Logo/' . Theme :: ICON_MINI . 'New')) . '" alt="' .
-                     htmlspecialchars(Translation :: get('New', null, Utilities :: COMMON_LIBRARIES)) . '"/></a>';
+                $html[] = '<a href="' . $toolUrl . '"' . $target . '>';
+                $html[] = $identRenderer->render();
+                $html[] = '</a>';
             }
         }
 
