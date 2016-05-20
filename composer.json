@@ -18,15 +18,7 @@
         "twig/twig" : "1.*",
         "doctrine/dbal" : "2.5.*",
         "doctrine/cache" : "1.5.*",
-        "pear-pear.php.net/HTML_Common" : "*",
-        "pear-pear.php.net/HTML_Table" : "*",
-        "pear-pear.php.net/HTML_QuickForm" : "*",
-        "pear-pear.php.net/PEAR" : "*",
-        "pear-pear.php.net/Net_URL" : "*",
-        "pear-pear.php.net/Net_Socket" : "*",
-        "pear-pear.php.net/HTTP_Request" : "*",
-        "pear-pear.php.net/MDB2" : "*",
-        "pear-pear.php.net/MDB2_Driver_mysqli" : "*",
+        "chamilo/pear-libraries" : "*",
         "glenscott/soundcloud": "dev-psr-4",
         "google/apiclient": "*"
     },
@@ -41,8 +33,8 @@
     },
     "repositories" : [
         {
-            "type" : "pear",
-            "url" : "https://pear.php.net"
+            "type": "vcs",
+            "url": "https://bitbucket.org/chamilo/pear-libraries"
         }
     ],
     "autoload": {
