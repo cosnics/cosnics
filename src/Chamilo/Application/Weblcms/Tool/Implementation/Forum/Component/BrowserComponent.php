@@ -112,12 +112,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->getButtonToolbarRenderer()->render();
         $html[] = $this->renderForum();
 
-        if ($this->size == 0)
-        {
-            $html[] = '<div class="alert alert-info text-center">' .
-                 Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES) . '</div>';
-        }
-
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
@@ -478,6 +472,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $row ++;
                 }
             }
+        }
+        else
+        {
+            $table->setCellContents(0, 1, Translation :: get('NoPublications', null, Utilities :: COMMON_LIBRARIES));
         }
     }
 

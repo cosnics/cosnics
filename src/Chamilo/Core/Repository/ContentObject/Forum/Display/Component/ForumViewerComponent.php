@@ -283,11 +283,6 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderTopics()
     {
-        if (count($this->getTopics()) == 0)
-        {
-            return '<div class="alert alert-info text-center">' . Translation :: get('NoTopics') . '</div>';
-        }
-
         $table = new HTML_Table(array('class' => 'table forum table-striped'));
 
         $header = $table->getHeader();
@@ -315,32 +310,39 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         $row = 0;
 
-        foreach ($this->getTopics() as $topic)
+        if (count($this->getTopics()) > 0)
         {
-            $title = '<a href="' . $this->get_url(
-                array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_TOPIC,
-                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id())) . '">' .
-                 $topic->get_ref()->get_title() . '</a>';
+            foreach ($this->getTopics() as $topic)
+            {
+                $title = '<a href="' . $this->get_url(
+                    array(
+                        self :: PARAM_ACTION => self :: ACTION_VIEW_TOPIC,
+                        self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id())) . '">' .
+                     $topic->get_ref()->get_title() . '</a>';
 
-            $count = $topic->get_ref()->get_total_posts();
+                $count = $topic->get_ref()->get_total_posts();
 
-            $table->setCellContents($row, 0, $this->renderTopicGlyph($topic));
-            $table->setCellAttributes($row, 0, array('class' => 'text-center'));
-            $table->setCellContents($row, 1, $title);
+                $table->setCellContents($row, 0, $this->renderTopicGlyph($topic));
+                $table->setCellAttributes($row, 0, array('class' => 'text-center'));
+                $table->setCellContents($row, 1, $title);
 
-            $table->setCellContents($row, 2, $this->renderAuthor($topic));
-            $table->setCellAttributes($row, 2, array('class' => 'text-primary text-center'));
-            $table->setCellContents($row, 3, ($count > 0) ? $count - 1 : $count);
-            $table->setCellAttributes($row, 3, array('class' => 'text-primary text-center'));
-            $table->setCellContents($row, 4, $this->forum_count_topic_views($topic->get_id()));
-            $table->setCellAttributes($row, 4, array('class' => 'text-primary text-center hidden-xs hidden-sm'));
-            $table->setCellContents($row, 5, $this->renderTopicLastPost($topic));
-            $table->setCellAttributes($row, 5, array('class' => 'hidden-xs hidden-sm'));
-            $table->setCellContents($row, 6, $this->renderTopicActions($topic));
-            $table->setCellAttributes($row, 6, array('class' => 'text-center'));
+                $table->setCellContents($row, 2, $this->renderAuthor($topic));
+                $table->setCellAttributes($row, 2, array('class' => 'text-primary text-center'));
+                $table->setCellContents($row, 3, ($count > 0) ? $count - 1 : $count);
+                $table->setCellAttributes($row, 3, array('class' => 'text-primary text-center'));
+                $table->setCellContents($row, 4, $this->forum_count_topic_views($topic->get_id()));
+                $table->setCellAttributes($row, 4, array('class' => 'text-primary text-center hidden-xs hidden-sm'));
+                $table->setCellContents($row, 5, $this->renderTopicLastPost($topic));
+                $table->setCellAttributes($row, 5, array('class' => 'hidden-xs hidden-sm'));
+                $table->setCellContents($row, 6, $this->renderTopicActions($topic));
+                $table->setCellAttributes($row, 6, array('class' => 'text-center'));
 
-            $row ++;
+                $row ++;
+            }
+        }
+        else
+        {
+            $table->setCellContents($row, 1, Translation :: get('NoTopics', null, Utilities :: COMMON_LIBRARIES));
         }
 
         return $table->toHtml();
