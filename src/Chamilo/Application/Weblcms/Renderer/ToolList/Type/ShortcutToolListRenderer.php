@@ -16,12 +16,6 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
- * $Id: shortcut_tool_list_renderer.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
- * @package application.lib.weblcms.tool_list_renderer
- */
-
-/**
  * Tool list renderer to display a navigation menu.
  */
 class ShortcutToolListRenderer extends ToolListRenderer
@@ -60,12 +54,14 @@ class ShortcutToolListRenderer extends ToolListRenderer
 
         $toolsButton->setDropdownClasses('dropdown-menu-right');
 
-        usort($tools, function($toolA, $toolB) use($translator) {
-            $translationA = $translator->getTranslation('TypeName', null, $toolA->getContext());
-            $translationB = $translator->getTranslation('TypeName', null, $toolB->getContext());
+        usort(
+            $tools,
+            function ($toolA, $toolB) use($translator) {
+                $translationA = $translator->getTranslation('TypeName', null, $toolA->getContext());
+                $translationB = $translator->getTranslation('TypeName', null, $toolB->getContext());
 
-            return strcmp($translationA, $translationB);
-        });
+                return strcmp($translationA, $translationB);
+            });
 
         foreach ($tools as $tool)
         {
@@ -96,7 +92,6 @@ class ShortcutToolListRenderer extends ToolListRenderer
             $toolButton = new SubButton(
                 $title,
                 new IdentGlyph(md5($tool->getContext())),
-//                 $themeUtilities->getImagePath($tool->getContext(), 'Logo/' . $tool_image),
                 $url,
                 Button :: DISPLAY_ICON_AND_LABEL);
 

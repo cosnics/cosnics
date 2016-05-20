@@ -9,11 +9,9 @@ use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\IdentRenderer;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\IdentRenderer;
 
 /**
  * Course list renderer to render the course list (used in courses home, courses sorter, courses block...)
