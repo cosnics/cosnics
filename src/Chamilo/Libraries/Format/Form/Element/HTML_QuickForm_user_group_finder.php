@@ -14,7 +14,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_element_finder.php'
 class HTML_QuickForm_user_group_finder extends HTML_QuickForm_element_finder
 {
 
-    public function HTML_QuickForm_user_group_finder($elementName, $elementLabel, $search_url, 
+    public function __construct($elementName, $elementLabel, $search_url, 
         $locale = array ('Display' => 'Display'), $default_values = array (), $options = array())
     {
         parent :: __construct($elementName, $elementLabel, $search_url, $locale, $default_values, $options);

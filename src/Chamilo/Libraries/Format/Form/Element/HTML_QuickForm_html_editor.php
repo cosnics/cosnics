@@ -18,7 +18,7 @@ abstract class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      * @param string HTML editor label
      * @param string Attributes for the textarea
      */
-    public function HTML_QuickForm_html_editor($elementName = null, $elementLabel = null, $attributes = null, $options = array())
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $options = array())
     {
         $this->options['width'] = (isset($options['width']) ? $options['width'] : '650');
         $this->options['height'] = (isset($options['height']) ? $options['height'] : '150');
