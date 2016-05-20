@@ -29,22 +29,22 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
     public function run()
     {
-        $publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $publication_id);
+        $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
-        $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(),
+        $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(),
             $publication_id);
 
-        if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication))
+        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
-                Translation :: get("NotAllowed", null, Utilities :: COMMON_LIBRARIES),
+                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
                 true,
                 array(),
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
         }
 
         $context = $this->publication->get_content_object()->package() . '\Display';
@@ -63,25 +63,25 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {
-        $hasWorkspaceRight = RightsService :: getInstance()->canEditContentObject(
+        $hasWorkspaceRight = RightsService::getInstance()->canEditContentObject(
             $this->get_user(),
             $this->publication->get_content_object());
 
-        $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+        $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService::getInstance();
 
         $hasPublicationContentRight = $weblcmsRightsService->canEditPublicationContentObject(
             $this->get_user(),
             $this->get_application()->get_course(),
-            $this->publication);
+            $this->publication->get_default_properties());
 
-        $hasPublictionRight = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $this->publication);
+        $hasPublictionRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
 
         return $hasWorkspaceRight || $hasPublicationContentRight || $hasPublictionRight;
     }
 
     public function is_allowed_to_view_content_object()
     {
-        return $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication);
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }
 
     public function is_allowed_to_add_child()
@@ -96,11 +96,11 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
     public function is_allowed_to_delete_feedback()
     {
-        return $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $this->publication);
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
     public function is_allowed_to_edit_feedback()
     {
-        return $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $this->publication);
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 }

@@ -18,6 +18,7 @@ abstract class FormValidatorHtmlEditorOptions
      * @var Array The array containing all the options
      */
     private $options;
+    const OPTION_SKIN = 'skin';
 
     /**
      * The name of the toolbar set e.g.
@@ -78,14 +79,15 @@ abstract class FormValidatorHtmlEditorOptions
     public function get_option_names()
     {
         return array(
-            self :: OPTION_COLLAPSE_TOOLBAR,
-            self :: OPTION_CONFIGURATION,
-            self :: OPTION_FULL_PAGE,
-            self :: OPTION_LANGUAGE,
-            self :: OPTION_TEMPLATES,
-            self :: OPTION_TOOLBAR,
-            self :: OPTION_HEIGHT,
-            self :: OPTION_WIDTH);
+            self::OPTION_COLLAPSE_TOOLBAR,
+            self::OPTION_CONFIGURATION,
+            self::OPTION_FULL_PAGE,
+            self::OPTION_LANGUAGE,
+            self::OPTION_TEMPLATES,
+            self::OPTION_TOOLBAR,
+            self::OPTION_SKIN,
+            self::OPTION_HEIGHT,
+            self::OPTION_WIDTH);
     }
 
     /**
@@ -183,26 +185,26 @@ abstract class FormValidatorHtmlEditorOptions
             {
                 switch ($available_option)
                 {
-                    case self :: OPTION_LANGUAGE :
-                        $editor_lang = Translation :: getInstance()->getLanguageIsocode();
+                    case self::OPTION_LANGUAGE :
+                        $editor_lang = Translation::getInstance()->getLanguageIsocode();
                         $this->set_option($available_option, $editor_lang);
                         break;
 
-                    case self :: OPTION_TOOLBAR :
+                    case self::OPTION_TOOLBAR :
                         $this->set_option($available_option, 'Basic');
                         break;
-                    case self :: OPTION_COLLAPSE_TOOLBAR :
+                    case self::OPTION_COLLAPSE_TOOLBAR :
                         $this->set_option($available_option, false);
                         break;
 
-                    case self :: OPTION_WIDTH :
+                    case self::OPTION_WIDTH :
                         $this->set_option($available_option, 595);
                         break;
-                    case self :: OPTION_HEIGHT :
+                    case self::OPTION_HEIGHT :
                         $this->set_option($available_option, 200);
                         break;
 
-                    case self :: OPTION_FULL_PAGE :
+                    case self::OPTION_FULL_PAGE :
                         $this->set_option($available_option, false);
                         break;
                 }
@@ -233,7 +235,7 @@ abstract class FormValidatorHtmlEditorOptions
 
             foreach ($value as $element)
             {
-                $elements[] = self :: format_for_javascript($element);
+                $elements[] = self::format_for_javascript($element);
             }
 
             return '[' . implode(',', $elements) . ']';
@@ -253,7 +255,7 @@ abstract class FormValidatorHtmlEditorOptions
     public static function factory($type, $options = array())
     {
         $class = __NAMESPACE__ . '\\' . 'FormValidator' .
-             StringUtilities :: getInstance()->createString($type)->upperCamelize() . 'HtmlEditorOptions';
+             StringUtilities::getInstance()->createString($type)->upperCamelize() . 'HtmlEditorOptions';
 
         if (class_exists($class))
         {
