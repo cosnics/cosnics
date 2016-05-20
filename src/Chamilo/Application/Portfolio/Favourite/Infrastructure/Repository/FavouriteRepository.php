@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -25,6 +26,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class FavouriteRepository
 {
+    const PROPERTY_USER_ID = 'user_id';
+
     /**
      * Finds a user favourite by a given id
      *
@@ -113,6 +116,11 @@ class FavouriteRepository
         $properties = array();
 
         $properties[] = new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_ID);
+
+        $properties[] = new FixedPropertyConditionVariable(
+            User::class_name(), User::PROPERTY_ID, self::PROPERTY_USER_ID
+        );
+
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);

@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -205,7 +206,7 @@ class FavouriteService
      * @param int $count
      * @param OrderBy[] $orderProperty
      *
-     * @return mixed
+     * @return ResultSet
      */
     public function findFavouriteUsers(
         User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null

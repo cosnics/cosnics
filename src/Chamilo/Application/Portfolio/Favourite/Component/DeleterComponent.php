@@ -40,13 +40,22 @@ class DeleterComponent extends Manager
             $message = $ex->getMessage();
         }
 
-        $this->redirect(
-            $message, !$success,
-            array(
+        $source = $this->getRequest()->get(self::PARAM_SOURCE);
+        if(!$source || $source == self::SOURCE_FAVOURITES_BROWSER)
+        {
+            $returnParameters = array(self::PARAM_ACTION => self::ACTION_BROWSE);
+            $filterParameters = array();
+        }
+        else
+        {
+            $returnParameters = array(
                 \Chamilo\Application\Portfolio\Manager::PARAM_ACTION =>
                     \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE
-            ),
-            array(self::PARAM_ACTION)
-        );
+            );
+
+            $filterParameters = array(self::PARAM_ACTION);
+        }
+
+        $this->redirect($message, !$success, $returnParameters, $filterParameters);
     }
 }

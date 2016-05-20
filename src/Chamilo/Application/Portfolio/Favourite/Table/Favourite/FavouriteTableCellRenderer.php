@@ -42,10 +42,13 @@ class FavouriteTableCellRenderer extends RecordTableCellRenderer implements Tabl
                         \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_ACTION =>
                             \Chamilo\Application\Portfolio\Favourite\Manager::ACTION_DELETE,
                         \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_FAVOURITE_ID =>
-                            $result[UserFavourite::PROPERTY_ID]
+                            $result[UserFavourite::PROPERTY_ID],
+                        \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_SOURCE =>
+                            \Chamilo\Application\Portfolio\Favourite\Manager::SOURCE_FAVOURITES_BROWSER
                     )
                 ),
-                ToolbarItem :: DISPLAY_ICON
+                ToolbarItem :: DISPLAY_ICON,
+                true
             )
         );
 
