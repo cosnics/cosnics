@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Over
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 
 /**
  * * ***************************************************************************
@@ -10,7 +11,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
  * subscribed through (sub-)groups.
  * ****************************************************************************
  */
-class CourseGroupUserTableDataProvider extends DataClassTableDataProvider
+class CourseGroupUserTableDataProvider extends RecordTableDataProvider
 {
     // **************************************************************************
     // GENERAL FUNCTIONS
@@ -27,7 +28,7 @@ class CourseGroupUserTableDataProvider extends DataClassTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: retrieve_course_group_users(
+        return DataManager :: retrieve_course_group_users_with_subscription_time(
             $this->get_component()->get_table_course_group_id(),
             $condition,
             $offset,
