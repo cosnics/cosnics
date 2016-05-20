@@ -436,3 +436,31 @@ div.thumbnail_container {
 		width: 40px;
 	}
 }
+
+.table th.cell-stat-x4, .table td.cell-stat-x4 {
+	width: 1em;
+}
+
+.table th.cell-stat-x3, .table td.cell-stat-x3 {
+	width: 2em;
+}
+
+.table th.cell-stat-x2, .table td.cell-stat-x2 {
+	width: 3em;
+}
+
+.table th.cell-stat, .table td.cell-stat {
+	width: 6em;
+}
+
+.table th.cell-stat-2x, .table td.cell-stat-2x {
+	width: 14em;
+}
+
+.table th.cell-stat-3x, .table td.cell-stat-3x {
+	width: 18em;
+}
+
+.table th.cell-stat-4x, .table td.cell-stat-4x {
+	width: 28em;
+}

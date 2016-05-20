@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+use Chamilo\Libraries\Platform\Security;
+
 /**
  * Sortable table which can be used for data available in an array
  */
@@ -134,7 +136,20 @@ class SortableTableFromArray extends SortableTable
 
         foreach ($this->getTableColumns() as $key => $tableColumn)
         {
-            $this->setColumnHeader($key, $tableColumn->get_title(), $tableColumn->is_sortable());
+            $headerAttributes = array();
+
+            $cssClasses = $tableColumn->getCssClasses();
+
+            if (! empty($cssClasses))
+            {
+                $headerAttributes['class'] = $cssClasses;
+            }
+
+            $this->setColumnHeader(
+                $key,
+                Security :: remove_XSS($tableColumn->get_title()),
+                $tableColumn->is_sortable(),
+                $headerAttributes);
         }
     }
 

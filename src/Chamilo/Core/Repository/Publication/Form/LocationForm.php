@@ -160,7 +160,7 @@ class LocationForm extends FormValidator
             ToolbarItem :: DISPLAY_ICON);
 
         $header = array();
-        $header[] = new StaticTableColumn('category', $type_image);
+        $header[] = new StaticTableColumn('category', $type_image, 'cell-stat-x2');
         $header[] = new StaticTableColumn(
             Translation :: get('Title', null, \Chamilo\Core\Repository\Manager :: context()));
 
