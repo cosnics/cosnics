@@ -342,7 +342,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $table->setCellContents($row, 1, Translation :: get('NoTopics', null, Utilities :: COMMON_LIBRARIES));
+            $table->setCellContents($row, 1, Translation :: get('NoTopics'));
         }
 
         return $table->toHtml();
