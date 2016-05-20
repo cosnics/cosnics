@@ -37,6 +37,11 @@ class DynamicTabsRenderer
         return $this->tabs;
     }
 
+    public function hasTabs()
+    {
+        return count($this->get_tabs()) > 0;
+    }
+
     /**
      *
      * @param $name the $name to set
@@ -198,19 +203,22 @@ class DynamicTabsRenderer
 
     public function render()
     {
-        $html = array();
-        $html[] = $this->header();
-
-        // Tab content
-        $tabs = $this->get_tabs();
-
-        foreach ($tabs as $key => $tab)
+        if ($this->hasTabs())
         {
-            $html[] = $tab->body($this->name . '-' . $tab->get_id());
+            $html = array();
+            $html[] = $this->header();
+
+            // Tab content
+            $tabs = $this->get_tabs();
+
+            foreach ($tabs as $key => $tab)
+            {
+                $html[] = $tab->body($this->name . '-' . $tab->get_id());
+            }
+
+            $html[] = $this->footer();
+
+            return implode(PHP_EOL, $html);
         }
-
-        $html[] = $this->footer();
-
-        return implode(PHP_EOL, $html);
     }
 }

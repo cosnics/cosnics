@@ -39,6 +39,10 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  * $Id: viewer.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -176,8 +180,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
-            $commonActions = new ButtonGroup();
-            $toolActions = new ButtonGroup();
+            $baseActions = new ButtonGroup();
+            $publishActions = new ButtonGroup();
+            $stateActions = new ButtonGroup();
 
             $rightsService = RightsService :: getInstance();
 
@@ -192,24 +197,24 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     if (! $isRecycled)
                     {
                         $recycle_url = $this->get_content_object_recycling_url($contentObject);
-                        $toolActions->addButton(
+                        $stateActions->addButton(
                             new Button(
                                 Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'),
+                                new BootstrapGlyph('trash'),
                                 $recycle_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                Button :: DISPLAY_ICON_AND_LABEL));
                     }
 
                     // Delete permanently
                     if ($contentObjectDeletionAllowed && $isRecycled)
                     {
                         $delete_url = $this->get_content_object_deletion_url($contentObject);
-                        $toolActions->addButton(
+                        $stateActions->addButton(
                             new Button(
                                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                                new BootstrapGlyph('remove'),
                                 $delete_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                Button :: DISPLAY_ICON_AND_LABEL,
                                 Translation :: get('ConfirmDelete', null, Utilities :: COMMON_LIBRARIES)));
                     }
 
@@ -220,12 +225,13 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_UNLINK_CONTENT_OBJECTS,
                                 self :: PARAM_CONTENT_OBJECT_ID => $contentObject->get_id()));
-                        $toolActions->addButton(
+
+                        $stateActions->addButton(
                             new Button(
                                 Translation :: get('Unlink', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Unlink'),
+                                new BootstrapGlyph('link'),
                                 $unlink_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                Button :: DISPLAY_ICON_AND_LABEL,
                                 true));
                     }
 
@@ -233,12 +239,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     if ($isRecycled)
                     {
                         $restore_url = $this->get_content_object_restoring_url($contentObject);
-                        $toolActions->addButton(
+                        $stateActions->addButton(
                             new Button(
                                 Translation :: get('Restore', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Restore'),
+                                new BootstrapGlyph('repeat'),
                                 $restore_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                Button :: DISPLAY_ICON_AND_LABEL,
                                 true));
                     }
                 }
@@ -249,42 +255,43 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     {
                         // Edit
                         $edit_url = $this->get_content_object_editing_url($contentObject);
-                        $commonActions->addButton(
+                        $baseActions->addButton(
                             new Button(
                                 Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                                new BootstrapGlyph('pencil'),
                                 $edit_url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                Button :: DISPLAY_ICON_AND_LABEL));
 
                         // Move
                         if (DataManager :: workspace_has_categories($this->getWorkspace()))
                         {
                             $move_url = $this->get_content_object_moving_url($contentObject);
-                            $commonActions->addButton(
+                            $baseActions->addButton(
                                 new Button(
                                     Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES),
-                                    Theme :: getInstance()->getCommonImagePath('Action/Move'),
+                                    new BootstrapGlyph('folder-open'),
                                     $move_url,
-                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                    Button :: DISPLAY_ICON_AND_LABEL));
                         }
 
                         if (\Chamilo\Core\Repository\Builder\Manager :: exists($contentObject->package()))
                         {
-                            $commonActions->addButton(
+                            $baseActions->addButton(
                                 new Button(
                                     Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES),
-                                    Theme :: getInstance()->getCommonImagePath('Action/Build'),
+                                    new FontAwesomeGlyph('cubes'),
                                     $this->get_browse_complex_content_object_url($contentObject),
-                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                    Button :: DISPLAY_ICON_AND_LABEL));
 
                             $preview_url = $this->get_preview_content_object_url($contentObject);
                             $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-                            $commonActions->addButton(
+
+                            $baseActions->addButton(
                                 new Button(
                                     Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                                    Theme :: getInstance()->getCommonImagePath('Action/Preview'),
+                                    new FontAwesomeGlyph('desktop'),
                                     $preview_url,
-                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                    Button :: DISPLAY_ICON_AND_LABEL,
                                     false,
                                     $onclick,
                                     '_blank'));
@@ -293,22 +300,23 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         {
                             if ($contentObject instanceof ComplexContentObjectSupport)
                             {
-                                $image = Theme :: getInstance()->getCommonImagePath('Action/BuildPreview');
+                                $image = new FontAwesomeGlyph('cubes');
                                 $variable = 'BuildPreview';
                             }
                             else
                             {
-                                $image = Theme :: getInstance()->getCommonImagePath('Action/Preview');
+                                $image = new FontAwesomeGlyph('desktop');
                                 $variable = 'Preview';
                             }
                             $preview_url = $this->get_preview_content_object_url($contentObject);
                             $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-                            $commonActions->addButton(
+
+                            $baseActions->addButton(
                                 new Button(
                                     Translation :: get($variable, null, Utilities :: COMMON_LIBRARIES),
                                     $image,
                                     $preview_url,
-                                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                    Button :: DISPLAY_ICON_AND_LABEL,
                                     false,
                                     $onclick,
                                     '_blank'));
@@ -319,30 +327,30 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 // Copy
                 if ($rightsService->canCopyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
                 {
-                    $commonActions->addButton(
+                    $baseActions->addButton(
                         new Button(
                             Translation :: get('Duplicate', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Copy'),
+                            new BootstrapGlyph('duplicate'),
                             $this->get_copy_content_object_url($contentObject->get_id())));
                 }
 
                 // Publish
                 if ($rightsService->canUseContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
                 {
-                    $commonActions->addButton(
+                    $publishActions->addButton(
                         new Button(
                             Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Publish'),
+                            new BootstrapGlyph('share'),
                             $this->get_publish_content_object_url($contentObject)));
                 }
 
                 // Share
                 if ($this->getWorkspace() instanceof PersonalWorkspace)
                 {
-                    $commonActions->addButton(
+                    $publishActions->addButton(
                         new Button(
                             Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Rights'),
+                            new FontAwesomeGlyph('lock'),
                             $this->get_url(
                                 array(
                                     Manager :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
@@ -359,12 +367,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                                 \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE,
                                 Manager :: PARAM_CONTENT_OBJECT_ID => $contentObject->getId()));
 
-                        $toolActions->addButton(
+                        $stateActions->addButton(
                             new Button(
                                 Translation :: get('Unshare', null, Utilities :: COMMON_LIBRARIES),
-                                Theme :: getInstance()->getCommonImagePath('Action/Unshare'),
+                                new FontAwesomeGlyph('unlock'),
                                 $url,
-                                ToolbarItem :: DISPLAY_ICON_AND_LABEL,
+                                Button :: DISPLAY_ICON_AND_LABEL,
                                 true));
                     }
                 }
@@ -375,29 +383,32 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 if ($rightsService->canEditContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
                 {
                     $revert_url = $this->get_content_object_revert_url($contentObject, 'version');
-                    $toolActions->addButton(
+                    $stateActions->addButton(
                         new Button(
                             Translation :: get('Revert', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Revert'),
+                            new BootstrapGlyph('repeat'),
                             $revert_url,
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                            Button :: DISPLAY_ICON_AND_LABEL));
                 }
 
                 // Delete
                 if ($rightsService->canDestroyContentObject($this->get_user(), $contentObject, $this->getWorkspace()))
                 {
                     $deleteUrl = $this->get_content_object_deletion_url($contentObject, 'version');
-                    $toolActions->addButton(
+                    $stateActions->addButton(
                         new Button(
                             Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                            Theme :: getInstance()->getCommonImagePath('Action/Remove'),
+                            new BootstrapGlyph('remove'),
                             $deleteUrl,
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                            Button :: DISPLAY_ICON_AND_LABEL));
                 }
             }
 
-            $buttonToolbar->addButtonGroup($commonActions);
-            $buttonToolbar->addButtonGroup($toolActions);
+            $buttonToolbar->addItem($baseActions);
+            $buttonToolbar->addItem($publishActions);
+            $this->addExportButton($buttonToolbar);
+            $buttonToolbar->addItem($stateActions);
+
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
@@ -460,15 +471,6 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $browser->as_html()));
             }
         }
-
-        // EXPORT
-        $parameters[DynamicTabsRenderer :: PARAM_SELECTED_TAB] = 'export';
-        $this->tabs->add_tab(
-            new DynamicContentTab(
-                'export',
-                Translation :: get('Export'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'PlaceMini/Export'),
-                $this->get_export_types()));
 
         // LINKS | PARENTS
         if ($content_object->has_parents())
@@ -554,49 +556,57 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         return $this->object;
     }
 
-    public function get_export_types()
+    public function addExportButton(ButtonToolBar $buttonToolBar)
     {
         $types = ContentObjectExportImplementation :: get_types_for_object($this->object->package());
 
-        $html = array();
-
-        $html[] = '<div class="btn-group">';
-
-        foreach ($types as $type)
+        if (count($types) >= 0)
         {
-            $link = $this->get_content_object_exporting_url($this->object, $type);
-            $html[] = '<a class="btn btn-default" href="' . $link . '">';
-            $url = Theme :: getInstance()->getImagePath(
-                ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
-                'Export/' . $type,
-                'png',
-                false);
-
-            if (file_exists($url))
+            if (count($types) > 1)
             {
-                $imagePath = Theme :: getInstance()->getImagePath(
-                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object),
-                    'Export/' . $type);
-                $translation = Translation :: get(
-                    'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize(),
-                    null,
-                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->object));
+                $dropdownButton = new DropdownButton(Translation :: get('Export'), new BootstrapGlyph('export'));
+
+                foreach ($types as $type)
+                {
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            $this->getExportTypeLabel($type),
+                            null,
+                            $this->get_content_object_exporting_url($this->object, $type)));
+                }
+
+                $buttonToolBar->addItem($dropdownButton);
             }
             else
             {
-                $imagePath = Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Export/' . $type);
-                $translation = Translation :: get(
-                    'ExportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize());
+                $exportType = array_pop($types);
+                $buttonToolBar->addItem(
+                    new Button(
+                        $this->getExportTypeLabel($exportType),
+                        new BootstrapGlyph('export'),
+                        $this->get_content_object_exporting_url($this->object, $exportType)));
             }
+        }
+    }
 
-            $html[] = '<img src="' . $imagePath . '" /> ' . $translation;
+    /**
+     *
+     * @param string $type
+     * @return string
+     */
+    private function getExportTypeLabel($type)
+    {
+        $translationVariable = 'ExportType' .
+             StringUtilities :: getInstance()->createString($type)->upperCamelize()->__toString();
+        $translation = Translation :: get($translationVariable, null, $this->object->package());
 
-            $html[] = '</a>';
+        if ($translation == $translationVariable)
+        {
+            $imagePath = Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Export/' . $type);
+            $translation = Translation :: get($translationVariable);
         }
 
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $translation;
     }
 
     public function get_table_condition($table_class_name)

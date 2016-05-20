@@ -5,7 +5,6 @@ namespace Chamilo\Application\Portfolio\Favourite\Table\Favourite;
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Service\FavouriteService;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository;
 
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
