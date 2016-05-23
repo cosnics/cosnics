@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
+use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
@@ -55,7 +55,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
         $typeSelectorFactory = new TypeSelectorFactory($this->get_allowed_content_object_types(), $this->get_user_id());
         $type_selector = $typeSelectorFactory->getTypeSelector();
 
-        $type_selector_renderer = new FullTypeSelectorRenderer($this, $type_selector);
+        $type_selector_renderer = new BasicTypeSelectorRenderer($this, $type_selector);
 
         $this->template_id = TypeSelector :: get_selection();
 

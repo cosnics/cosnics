@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\Selector\Renderer;
 
-use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorOption;
@@ -9,10 +8,6 @@ use Chamilo\Core\Repository\Selector\TypeSelectorRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -21,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Core\Repository\Selector\Option\ContentObjectTypeSelectorOption;
 
 /**
  *
@@ -55,7 +51,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
     public function __construct(Application $parent, TypeSelector $type_selector, $additional_links = array(),
         $use_general_statistics = false)
     {
-        parent :: __construct($parent, $type_selector);
+        parent::__construct($parent, $type_selector);
 
         if (! $parent instanceof TabsTypeSelectorSupport)
         {
@@ -104,79 +100,85 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
     {
         $html = array();
 
+        $html[] = $this->renderMostUsedOptions();
+        $html[] = $this->renderAllOptions();
+        $html[] = $this->renderAdditionalLinks();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    protected function renderAdditionalLinks()
+    {
+        if ($this->has_additional_links() > 0)
+        {
+            return $this->renderOptions('extra-options', Translation::get('Extra'), $this->get_additional_links());
+        }
+    }
+
+    protected function renderMostUsedOptions()
+    {
         if ($this->get_type_selector()->count_options() > 15)
         {
-            $mostUsedButtons = $this->getMostUsedButtons();
-
-            if (count($mostUsedButtons) > 0)
-            {
-                $html[] = $this->renderPanel(
-                    Translation :: get('MostUsed'),
-                    Theme :: getInstance()->getImagePath(Manager :: context(), 'TypeSelector/Tab/MostUsed'),
-                    $mostUsedButtons);
-            }
+            return $this->renderOptions('most-used-options', Translation::get('MostUsed'), $this->getMostOptions());
         }
+    }
 
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">';
-        $html[] = '</h3>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
+    protected function renderAllOptions()
+    {
+        $options = array();
 
         foreach ($this->get_type_selector()->get_categories() as $category)
         {
-            $html[] = $this->renderCategory($category);
+            foreach ($category->get_options() as $option)
+            {
+                $options[] = $option;
+            }
         }
 
-        $html[] = '</div>';
-        $html[] = '</div>';
+        $this->sortOptions($options);
 
-        if ($this->has_additional_links() > 0)
-        {
-            $html[] = $this->renderPanel(
-                Translation :: get('Extra'),
-                Theme :: getInstance()->getImagePath(Manager :: context(), 'TypeSelector/Tab/Extra'),
-                $this->getAdditionalButtons());
-        }
-
-        return implode(PHP_EOL, $html);
+        return $this->renderOptions('all-options', Translation::get('AllContentTypes'), $options);
     }
 
-    public function renderPanel($title, $imagePath, $buttons)
+    protected function sortOptions(&$options)
+    {
+        usort(
+            $options,
+            function ($option_left, $option_right)
+            {
+                return strcasecmp($option_left->get_name(), $option_right->get_name());
+            });
+    }
+
+    protected function renderOptions($id, $title, $options)
     {
         $html = array();
 
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">';
-        $html[] = '<img src="' . $imagePath . '" /> ' . $title;
-        $html[] = '</h3>';
-        $html[] = '</div>';
-        $html[] = '<div class="panel-body">';
+        $html[] = '<div class="content-object-options">';
+        $html[] = '<div id="' . $id . '" class="content-object-options-type">';
+        $html[] = '<h4>' . $title . '</h4>';
+        $html[] = '<ul class="list-group">';
 
-        $html[] = $this->renderToolBar($buttons);
+        foreach ($options as $option)
+        {
+            if ($option instanceof ContentObjectTypeSelectorOption)
+            {
+                $url = $this->get_parent()->get_content_object_type_creation_url(
+                    $option->get_template_registration_id());
+            }
+            else
+            {
+                $url = $option->get_url();
+            }
 
+            $html[] = $this->renderOption($option, $url);
+        }
+
+        $html[] = '</ul>';
         $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function renderToolBar($buttons)
-    {
-        $buttonToolBar = new ButtonToolBar();
-        $buttonGroup = new ButtonGroup();
-
-        foreach ($buttons as $button)
-        {
-            $buttonGroup->addButton($button);
-        }
-
-        $buttonToolBar->addButtonGroup($buttonGroup);
-        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
-        return $buttonToolBarRenderer->render();
     }
 
     /**
@@ -184,12 +186,12 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
      *
      * @return string
      */
-    public function getMostUsedButtons()
+    protected function getMostOptions()
     {
         if (! $this->get_use_general_statistics())
         {
             $statistics_condition = new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
+                new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->get_parent()->get_user_id()));
         }
         else
@@ -213,20 +215,18 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        ContentObject :: class_name(),
-                        ContentObject :: PROPERTY_TEMPLATE_REGISTRATION_ID),
+                        ContentObject::class_name(),
+                        ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID),
                     new StaticConditionVariable($option->get_template_registration_id()));
                 $condition = new AndCondition($conditions);
 
                 $context = $option->get_template_registration()->get_content_object_type();
-                $package = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($context);
+                $package = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context);
                 $type = $context . '\Storage\DataClass\\' .
-                     (string) StringUtilities :: getInstance()->createString($package)->upperCamelize();
+                     (string) StringUtilities::getInstance()->createString($package)->upperCamelize();
 
                 $parameters = new DataClassCountParameters($condition);
-                $count = \Chamilo\Core\Repository\Storage\DataManager :: count_active_content_objects(
-                    $type,
-                    $parameters);
+                $count = \Chamilo\Core\Repository\Storage\DataManager::count_active_content_objects($type, $parameters);
 
                 if ($count > 0)
                 {
@@ -242,48 +242,23 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
 
         uasort(
             $content_object_type_counts,
-            function ($count_a, $count_b) {
+            function ($count_a, $count_b)
+            {
                 return $count_a < $count_b;
             });
 
         $mostUsedTypes = array_slice($content_object_type_counts, 0, 10);
 
-        $buttons = array();
+        $options = array();
 
         foreach ($mostUsedTypes as $typeOption => $count)
         {
-            $typeOption = unserialize($typeOption);
-            $url = $this->get_parent()->get_content_object_type_creation_url(
-                $typeOption->get_template_registration_id());
-
-            $buttons[] = $this->getButton($typeOption, $url);
+            $options[] = unserialize($typeOption);
         }
 
-        return $buttons;
-    }
+        $this->sortOptions($options);
 
-    /**
-     * Render one category / content object type tab
-     *
-     * @param TypeSelectorCategory $category
-     * @return string
-     */
-    public function renderCategory($category)
-    {
-        $buttons = array();
-
-        foreach ($category->get_options() as $option)
-        {
-            $url = $this->get_parent()->get_content_object_type_creation_url($option->get_template_registration_id());
-            $buttons[] = $this->getButton($option, $url);
-        }
-
-        return $this->renderToolBar($buttons);
-
-        return $this->renderPanel(
-            $category->get_name(),
-            Theme :: getInstance()->getImagePath(Manager :: context(), 'TypeSelector/Tab/' . $category->get_type()),
-            $buttons);
+        return $options;
     }
 
     /**
@@ -291,9 +266,19 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
      * @param TypeSelectorOption $option
      * @return string
      */
-    public function getButton(TypeSelectorOption $option, $url)
+    protected function renderOption(TypeSelectorOption $option, $url)
     {
-        return new Button($option->get_label(), $option->get_image_path(), $url);
+        $html = array();
+
+        $html[] = '<li class="list-group-item">';
+        $html[] = '<img src="' . $option->get_image_path(Theme::ICON_MEDIUM) . '" />';
+        $html[] = '&nbsp;&nbsp;';
+        $html[] = '<a href="' . $url . '" title="' . $option->get_label() . '">';
+        $html[] = $option->get_label();
+        $html[] = '</a>';
+        $html[] = '</li>';
+
+        return implode('', $html);
     }
 
     /**
@@ -301,7 +286,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
      *
      * @return string
      */
-    public function getAdditionalSubButtons()
+    protected function getAdditionalSubButtons()
     {
         $buttons = array();
 

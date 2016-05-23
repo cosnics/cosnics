@@ -18,7 +18,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Builder\Action\Manager :: context(),
+            \Chamilo\Core\Repository\Builder\Action\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
@@ -31,29 +31,29 @@ class BrowserComponent extends Manager implements DelegateComponent
         $links = array();
 
         $links[] = new LinkTypeSelectorOption(
-            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            self::package(),
             'MergeAssessment',
             $this->get_url(
-                array(\Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_MERGE_ASSESSMENT)));
+                array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_MERGE_ASSESSMENT)));
 
         $links[] = new LinkTypeSelectorOption(
-            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            self::package(),
             'SelectQuestions',
             $this->get_url(
                 array(
-                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER)));
+                    \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER)));
 
         $links[] = new LinkTypeSelectorOption(
-            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            self::package(),
             'RandomizeQuestionOptions',
-            $this->get_url(array(\Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_RANDOMIZE)));
+            $this->get_url(array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_RANDOMIZE)));
 
         $links[] = new LinkTypeSelectorOption(
-            'Chamilo/Core/Repository/ContentObject/Assessment/Builder',
+            self::package(),
             'AnswerFeedbackType',
             $this->get_url(
-                array(\Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => self :: ACTION_ANSWER_FEEDBACK_TYPE)));
+                array(\Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => self::ACTION_ANSWER_FEEDBACK_TYPE)));
 
         return $links;
     }
