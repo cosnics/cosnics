@@ -7,7 +7,6 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormActions;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * A table which represents all users which have portfolios published
@@ -17,12 +16,10 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class UserTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = \Chamilo\Application\Portfolio\Manager :: PARAM_USER_ID;
+    const TABLE_IDENTIFIER = \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID;
 
     /**
      * Returns the implemented form actions
-     *
-     *
      *
      * @return TableFormActions
      */
@@ -34,15 +31,10 @@ class UserTable extends DataClassTable implements TableFormActionsSupport
             new TableFormAction(
                 $this->get_component()->get_url(
                     array(
-                        \Chamilo\Application\Portfolio\Manager::PARAM_ACTION =>
-                            \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES,
-                        Manager :: PARAM_ACTION => Manager :: ACTION_CREATE
-                    )
-                ),
+                        \Chamilo\Application\Portfolio\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Manager::ACTION_BROWSE_FAVOURITES,
+                        Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
                 Translation::getInstance()->getTranslation('CreateFavourites', null, Manager::context()),
-                false
-            )
-        );
+                false));
 
         return $actions;
     }

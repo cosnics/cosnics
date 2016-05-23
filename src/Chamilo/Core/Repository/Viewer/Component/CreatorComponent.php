@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Viewer\Component;
 
 use Chamilo\Core\Repository\Form\ContentObjectForm;
-use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
@@ -17,13 +16,14 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 
 class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSelectorSupport
 {
 
     public function run($params = array())
     {
-        $content_object_id = Request :: get(self :: PARAM_EDIT_ID);
+        $content_object_id = Request::get(self::PARAM_EDIT_ID);
 
         if ($content_object_id)
         {
@@ -31,7 +31,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         }
         else
         {
-            $type_selection = TypeSelector :: get_selection();
+            $type_selection = TypeSelector::get_selection();
 
             if ($type_selection)
             {
@@ -43,7 +43,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 if (! in_array($type_selection, $all_types))
                 {
                     throw new NoObjectSelectedException(
-                        Translation :: get('ContentObject', \Chamilo\Core\Repository\Manager :: context()));
+                        Translation::get('ContentObject', \Chamilo\Core\Repository\Manager::context()));
                 }
 
                 return $this->get_creation_form($type_selection);
@@ -63,7 +63,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 }
                 else
                 {
-                    $type_selector_renderer = new FullTypeSelectorRenderer($this, $type_selector);
+                    $type_selector_renderer = new BasicTypeSelectorRenderer($this, $type_selector);
 
                     $html = array();
 
@@ -85,7 +85,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
     public function get_content_object_type_creation_url($template_registration_id)
     {
         $object_type_parameters = $this->get_parameters();
-        $object_type_parameters[TypeSelector :: PARAM_SELECTION] = $template_registration_id;
+        $object_type_parameters[TypeSelector::PARAM_SELECTION] = $template_registration_id;
         return $this->get_url($object_type_parameters);
     }
 
@@ -95,7 +95,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     protected function get_creation_form($template_id)
     {
-        $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($template_id);
+        $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($template_id);
         $template = $template_registration->get_template();
 
         $object = $template->get_content_object();
@@ -104,38 +104,38 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
         $content_object_type_image = 'Logo/template/' . $template_registration->get_name() . '/16';
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail::get_instance()->add(
             new Breadcrumb(
                 $this->get_url(),
-                Translation :: get(
+                Translation::get(
                     'CreateContentType',
                     array(
                         'OBJECTTYPE' => strtolower(
-                            Translation :: get(
+                            Translation::get(
                                 $template->translate('TypeName'),
                                 null,
                                 $template_registration->get_content_object_type())),
-                        'ICON' => Theme :: getInstance()->getImage(
+                        'ICON' => Theme::getInstance()->getImage(
                             $content_object_type_image,
                             'png',
-                            Translation :: get(
+                            Translation::get(
                                 $template->translate('TypeName'),
                                 null,
                                 $template_registration->get_content_object_type()),
                             null,
-                            ToolbarItem :: DISPLAY_ICON,
+                            ToolbarItem::DISPLAY_ICON,
                             false,
                             $template_registration->get_content_object_type())))));
 
-        $form = ContentObjectForm :: factory(
-            ContentObjectForm :: TYPE_CREATE,
+        $form = ContentObjectForm::factory(
+            ContentObjectForm::TYPE_CREATE,
             new PersonalWorkspace($this->get_user()),
             $object,
             'create',
             'post',
-            $this->get_url(array_merge(array(TypeSelector :: PARAM_SELECTION => $template_id), $this->get_parameters())));
+            $this->get_url(array_merge(array(TypeSelector::PARAM_SELECTION => $template_id), $this->get_parameters())));
 
-        return $this->handle_form($form, ContentObjectForm :: TYPE_CREATE);
+        return $this->handle_form($form, ContentObjectForm::TYPE_CREATE);
     }
 
     /**
@@ -144,36 +144,36 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
      */
     protected function get_editing_form($content_object_id)
     {
-        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(),
             $content_object_id);
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail::get_instance()->add(
             new Breadcrumb(
                 null,
-                Translation :: get(
+                Translation::get(
                     'UpdateContentType',
                     array(
-                        'OBJECTTYPE' => strtolower(Translation :: get('TypeName', null, $content_object->get_type())),
-                        'ICON' => Theme :: getInstance()->getImage(
+                        'OBJECTTYPE' => strtolower(Translation::get('TypeName', null, $content_object->get_type())),
+                        'ICON' => Theme::getInstance()->getImage(
                             'Logo/16',
                             'png',
-                            Translation :: get('TypeName', null, $content_object->get_type()),
+                            Translation::get('TypeName', null, $content_object->get_type()),
                             null,
-                            ToolbarItem :: DISPLAY_ICON,
+                            ToolbarItem::DISPLAY_ICON,
                             false,
                             $content_object->get_type())),
-                    \Chamilo\Core\Repository\Manager :: context())));
+                    \Chamilo\Core\Repository\Manager::context())));
 
-        $form = ContentObjectForm :: factory(
-            ContentObjectForm :: TYPE_EDIT,
+        $form = ContentObjectForm::factory(
+            ContentObjectForm::TYPE_EDIT,
             new PersonalWorkspace($this->get_user()),
             $content_object,
             'edit',
             'post',
-            $this->get_url(array_merge($this->get_parameters(), array(self :: PARAM_EDIT_ID => $content_object_id))));
+            $this->get_url(array_merge($this->get_parameters(), array(self::PARAM_EDIT_ID => $content_object_id))));
 
-        return $this->handle_form($form, ContentObjectForm :: TYPE_EDIT);
+        return $this->handle_form($form, ContentObjectForm::TYPE_EDIT);
     }
 
     /*
@@ -183,7 +183,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
     {
         if ($form->validate())
         {
-            if ($type == ContentObjectForm :: TYPE_EDIT)
+            if ($type == ContentObjectForm::TYPE_EDIT)
             {
                 $form->update_content_object();
                 $content_object = $form->get_content_object();
@@ -197,8 +197,8 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             {
                 $redirect_params = array_merge(
                     $this->get_parameters(),
-                    array(self :: PARAM_ACTION => self :: ACTION_CREATOR));
-                $this->redirect(Translation :: get('ContentObjectNotCreated'), true, $redirect_params);
+                    array(self::PARAM_ACTION => self::ACTION_CREATOR));
+                $this->redirect(Translation::get('ContentObjectNotCreated'), true, $redirect_params);
             }
 
             if (is_array($content_object))
@@ -214,7 +214,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 $content_object_ids = $content_object->get_id();
             }
 
-            $redirect_parameters = array_merge($this->get_parameters(), array(self :: PARAM_ID => $content_object_ids));
+            $redirect_parameters = array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object_ids));
 
             $this->redirect(null, false, $redirect_parameters);
         }
@@ -237,6 +237,6 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_EDIT_ID, self :: PARAM_CONTENT_OBJECT_TYPE);
+        return array(self::PARAM_EDIT_ID, self::PARAM_CONTENT_OBJECT_TYPE);
     }
 }

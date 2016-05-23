@@ -2,7 +2,7 @@
 namespace Chamilo\Core\Repository\Builder;
 
 use Chamilo\Core\Repository\Builder\Interfaces\MenuSupport;
-use Chamilo\Core\Repository\Selector\Renderer\FullTypeSelectorRenderer;
+use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 use Chamilo\Core\Repository\Selector\TabsTypeSelectorSupport;
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
@@ -20,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\Selector\Renderer\BasicTypeSelectorRenderer;
 
 abstract class Manager extends Application implements TabsTypeSelectorSupport, TableSupport
 {
@@ -48,7 +47,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     const ACTION_PREVIEW = 'Preview';
 
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     protected $menu;
 
@@ -75,21 +74,21 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent::__construct($applicationConfiguration);
 
-        $complex_content_object_item_id = Request :: get(self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $complex_content_object_item_id = Request::get(self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         if ($complex_content_object_item_id)
         {
             $this->complex_content_object_item = $this->get_complex_content_object_by_id(
                 $complex_content_object_item_id);
         }
 
-        $selected_complex_content_object_item_id = Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $selected_complex_content_object_item_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
         if ($selected_complex_content_object_item_id)
         {
             $this->set_parameter(
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
                 $selected_complex_content_object_item_id);
 
             if (! is_array($selected_complex_content_object_item_id))
@@ -115,7 +114,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     public static function factory($type, $application)
     {
         $class = 'Chamilo\Core\Repository\ContentObject\\' .
-             StringUtilities :: getInstance()->createString($type)->upperCamelize() . '\Builder\Manager';
+             StringUtilities::getInstance()->createString($type)->upperCamelize() . '\Builder\Manager';
         return new $class($application->get_user(), $application);
     }
 
@@ -128,18 +127,18 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     protected function get_complex_content_object_by_id($complex_content_object_item_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ComplexContentObjectItem :: class_name(),
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ComplexContentObjectItem::class_name(),
             $complex_content_object_item_id);
 
         if (is_null($complex_content_object_item))
         {
             throw new ObjectNotExistException(
-                Translation :: get('ComplexContentObjectItem'),
+                Translation::get('ComplexContentObjectItem'),
                 $complex_content_object_item_id);
         }
 
-        if (! \Chamilo\Core\Repository\Storage\DataManager :: is_child_of_content_object(
+        if (! \Chamilo\Core\Repository\Storage\DataManager::is_child_of_content_object(
             $this->get_root_content_object_id(),
             $complex_content_object_item->get_ref()))
         {
@@ -199,8 +198,8 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     {
         if (! $this->parent_content_object)
         {
-            $this->parent_content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+            $this->parent_content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(),
                 $this->get_parent_content_object_id());
         }
         return $this->parent_content_object;
@@ -233,17 +232,17 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         {
             return new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_PARENT),
+                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_complex_content_object_item()->get_ref()),
-                ComplexContentObjectItem :: get_table_name());
+                ComplexContentObjectItem::get_table_name());
         }
         return new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_PARENT),
+                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($this->get_root_content_object_id()),
-            ComplexContentObjectItem :: get_table_name());
+            ComplexContentObjectItem::get_table_name());
     }
 
     public function get_complex_content_object_menu()
@@ -269,7 +268,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         $this->menu = new Menu(
             $this->get_root_content_object(),
             $this->get_complex_content_object_item(),
-            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)));
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)));
     }
 
     // url building
@@ -277,71 +276,71 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     public function get_complex_content_object_item_copy_url($selected_content_object_item_id)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_COPY_COMPLEX_CONTENT_OBJECT_ITEM,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     public function get_complex_content_object_item_delete_url($selected_content_object_item_id)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     public function get_complex_content_object_item_view_url($selected_content_object_item_id)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT_ITEM,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     public function get_complex_content_object_item_move_url($selected_content_object_item_id, $direction)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
-                self :: PARAM_DIRECTION => $direction));
+                self::PARAM_ACTION => self::ACTION_MOVE_COMPLEX_CONTENT_OBJECT_ITEM,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(),
+                self::PARAM_DIRECTION => $direction));
     }
 
     public function get_complex_content_object_parent_changer_url($selected_content_object_item_id)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_CHANGE_PARENT,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_CHANGE_PARENT,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_content_object_item_id,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     public function get_browse_url()
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_BROWSE,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     public function get_create_complex_content_object_item_url()
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     /**
@@ -357,9 +356,9 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                TypeSelector :: PARAM_SELECTION => $template_registration_id,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                TypeSelector::PARAM_SELECTION => $template_registration_id,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 
     /**
@@ -369,7 +368,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     public function get_preview_content_object_url()
     {
-        return $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_PREVIEW));
+        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_PREVIEW));
     }
 
     public function get_creation_links($content_object, $content_object_types = array())
@@ -389,8 +388,8 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
             false,
             $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())));
+                    self::PARAM_ACTION => self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id())));
 
         return $type_selector_renderer->render();
     }
@@ -399,8 +398,8 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_VIEW_ATTACHMENT,
-                self :: PARAM_ATTACHMENT_ID => $attachment->get_id()));
+                self::PARAM_ACTION => self::ACTION_VIEW_ATTACHMENT,
+                self::PARAM_ATTACHMENT_ID => $attachment->get_id()));
     }
 
     /**
@@ -442,6 +441,6 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
     }
 }

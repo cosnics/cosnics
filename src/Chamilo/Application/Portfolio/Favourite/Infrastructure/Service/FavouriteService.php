@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Portfolio\Favourite\Infrastructure\Service;
 
 use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository;
@@ -9,7 +8,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -20,12 +18,15 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class FavouriteService
 {
+
     /**
+     *
      * @var FavouriteRepository
      */
     protected $favouriteRepository;
 
     /**
+     *
      * @var Translation
      */
     protected $translator;
@@ -50,12 +51,12 @@ class FavouriteService
      */
     public function createUserFavouritesByUserIds(User $sourceUser, $favouriteUserIds = array())
     {
-        if(!is_array($favouriteUserIds))
+        if (! is_array($favouriteUserIds))
         {
             $favouriteUserIds = array($favouriteUserIds);
         }
 
-        foreach($favouriteUserIds as $favouriteUserId)
+        foreach ($favouriteUserIds as $favouriteUserId)
         {
             /** @var User $favouriteUser */
             $favouriteUser = $this->favouriteRepository->findUserById($favouriteUserId);
@@ -76,33 +77,31 @@ class FavouriteService
      */
     public function createUserFavourite($sourceUser, $favouriteUser)
     {
-        if(!$sourceUser instanceof User)
+        if (! $sourceUser instanceof User)
         {
             throw new \InvalidArgumentException(
-                $this->translator->getTranslation('InvalidSourceUser', null, Manager::context())
-            );
+                $this->translator->getTranslation('InvalidSourceUser', null, Manager::context()));
         }
 
-        if(!$favouriteUser instanceof User)
+        if (! $favouriteUser instanceof User)
         {
             throw new \InvalidArgumentException(
-                $this->translator->getTranslation('InvalidFavouriteUser', null, Manager::context())
-            );
+                $this->translator->getTranslation('InvalidFavouriteUser', null, Manager::context()));
         }
 
         $userFavourite = new UserFavourite();
         $userFavourite->setSourceUserId($sourceUser->getId());
         $userFavourite->setFavouriteUserId($favouriteUser->getId());
 
-        if(!$userFavourite->create())
+        if (! $userFavourite->create())
         {
             $objectTranslation = $this->getObjectTranslation();
 
             throw new \RuntimeException(
                 $this->translator->getTranslation(
-                    'ObjectNotCreated', array('OBJECT' => $objectTranslation), Utilities::COMMON_LIBRARIES
-                )
-            );
+                    'ObjectNotCreated',
+                    array('OBJECT' => $objectTranslation),
+                    Utilities::COMMON_LIBRARIES));
         }
 
         return $userFavourite;
@@ -117,12 +116,12 @@ class FavouriteService
      */
     public function deleteUserFavouritesById($userFavouriteIds = array())
     {
-        if(!is_array($userFavouriteIds))
+        if (! is_array($userFavouriteIds))
         {
             $userFavouriteIds = array($userFavouriteIds);
         }
 
-        foreach($userFavouriteIds as $userFavouriteId)
+        foreach ($userFavouriteIds as $userFavouriteId)
         {
             $this->deleteUserFavouriteById($userFavouriteId);
         }
@@ -140,18 +139,18 @@ class FavouriteService
         $objectTranslation = $this->getObjectTranslation();
 
         $userFavourite = $this->favouriteRepository->findUserFavouriteById($userFavouriteId);
-        if(!$userFavourite)
+        if (! $userFavourite)
         {
             throw new ObjectNotExistException($objectTranslation, $userFavouriteId);
         }
 
-        if(!$userFavourite->delete())
+        if (! $userFavourite->delete())
         {
             throw new \RuntimeException(
                 $this->translator->getTranslation(
-                    'ObjectNotCreated', array('OBJECT' => $objectTranslation), Utilities::COMMON_LIBRARIES
-                )
-            );
+                    'ObjectNotCreated',
+                    array('OBJECT' => $objectTranslation),
+                    Utilities::COMMON_LIBRARIES));
         }
     }
 
@@ -166,8 +165,8 @@ class FavouriteService
     public function findUserFavouriteBySourceAndFavouriteUser($sourceUser, $possibleFavouriteUser)
     {
         return $this->favouriteRepository->findUserFavouriteBySourceAndFavouriteUserId(
-            $sourceUser->getId(), $possibleFavouriteUser->getId()
-        );
+            $sourceUser->getId(),
+            $possibleFavouriteUser->getId());
     }
 
     /**
@@ -180,8 +179,7 @@ class FavouriteService
      */
     public function isUserFavourite($sourceUser, $possibleFavouriteUser)
     {
-        return $this->findUserFavouriteBySourceAndFavouriteUser($sourceUser, $possibleFavouriteUser)
-            instanceof UserFavourite;
+        return $this->findUserFavouriteBySourceAndFavouriteUser($sourceUser, $possibleFavouriteUser) instanceof UserFavourite;
     }
 
     /**
@@ -208,9 +206,7 @@ class FavouriteService
      *
      * @return ResultSet
      */
-    public function findFavouriteUsers(
-        User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null
-    )
+    public function findFavouriteUsers(User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null)
     {
         return $this->favouriteRepository->findFavouriteUsers($sourceUser, $condition, $offset, $count, $orderProperty);
     }
@@ -224,5 +220,4 @@ class FavouriteService
     {
         return $this->translator->getTranslation('UserFavourite', null, Manager::context());
     }
-
 }

@@ -33,41 +33,41 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
     {
         $html = array();
 
-        $html[] = parent :: render_header();
+        $html[] = parent::render_header();
 
         $type_selection = $this->get_type_selection();
         $content_object = $this->get_parent_content_object();
 
         if ($type_selection)
         {
-            $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($type_selection);
+            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($type_selection);
             $template = $template_registration->get_template();
 
             $html[] = '<h4>';
-            $html[] = Translation :: get(
+            $html[] = Translation::get(
                 'AddOrCreateNewTo',
                 array(
                     'NEW_TYPE' => $template->translate('TypeName'),
-                    'PARENT_TYPE' => Translation :: get(
+                    'PARENT_TYPE' => Translation::get(
                         'TypeName',
                         null,
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type())),
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->get_type())),
                     'TITLE' => $content_object->get_title()),
-                \Chamilo\Core\Repository\Manager :: context());
+                \Chamilo\Core\Repository\Manager::context());
             $html[] = '</h4><br />';
         }
         else
         {
-            $title[] = Translation :: get(
+            $title[] = Translation::get(
                 'AddOrCreateNewTo',
                 array(
-                    'NEW_TYPE' => Translation :: get('Items'),
-                    'PARENT_TYPE' => Translation :: get(
+                    'NEW_TYPE' => Translation::get('Items'),
+                    'PARENT_TYPE' => Translation::get(
                         'TypeName',
                         null,
-                        ClassnameUtilities :: getInstance()->getNamespaceFromClassname($content_object->get_type())),
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->get_type())),
                     'TITLE' => $content_object->get_title()),
-                \Chamilo\Core\Repository\Manager :: context());
+                \Chamilo\Core\Repository\Manager::context());
         }
 
         return implode(PHP_EOL, $html);
@@ -77,24 +77,27 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
     {
         $this->get_complex_content_object_breadcrumbs();
 
-        $this->type_selection = TypeSelector :: get_selection();
+        $this->type_selection = TypeSelector::get_selection();
 
         $exclude = $this->retrieve_used_items($this->get_root_content_object()->get_id());
         $exclude[] = $this->get_root_content_object()->get_id();
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
+        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
+            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
+
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                \Chamilo\Core\Repository\Viewer\Manager::context(),
+                $applicationConfiguration);
 
             $component = $factory->getComponent();
 
             $component->set_parameter(
-                \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+                \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
                 $this->get_parent()->get_complex_content_object_item_id());
 
-            $component->set_parameter(TypeSelector :: PARAM_SELECTION, $this->type_selection);
+            $component->set_parameter(TypeSelector::PARAM_SELECTION, $this->type_selection);
 
             $component->set_excluded_objects($exclude);
 
@@ -102,7 +105,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         }
         else
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
+            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
 
             if (! is_array($objects))
             {
@@ -111,8 +114,8 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
             foreach ($objects as $content_object_id)
             {
-                $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
-                    ContentObject :: class_name(),
+                $type = \Chamilo\Core\Repository\Storage\DataManager::determineDataClassType(
+                    ContentObject::class_name(),
                     $content_object_id);
 
                 if (method_exists($this->get_parent(), 'get_helper_object'))
@@ -126,22 +129,22 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 }
 
                 // gets the type of the helper object
-                $type = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
-                    ContentObject :: class_name(),
+                $type = \Chamilo\Core\Repository\Storage\DataManager::determineDataClassType(
+                    ContentObject::class_name(),
                     $content_object_id);
 
                 $this->create_complex_content_object_item($type, $content_object_id);
             }
 
             $this->redirect(
-                Translation :: get(
+                Translation::get(
                     'ObjectAdded',
-                    array('OBJECT' => Translation :: get('ContentObject')),
-                    Utilities :: COMMON_LIBRARIES),
+                    array('OBJECT' => Translation::get('ContentObject')),
+                    Utilities::COMMON_LIBRARIES),
                 false,
                 array(
-                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_BROWSE,
-                    \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id()));
+                    \Chamilo\Core\Repository\Builder\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager::ACTION_BROWSE,
+                    \Chamilo\Core\Repository\Builder\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id()));
         }
     }
 
@@ -149,14 +152,14 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
     {
         $items = array();
 
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: class_name(),
+        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: class_name(),
-                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: PROPERTY_PARENT),
+                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::class_name(),
+                    \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($parent),
-                \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: get_table_name()));
+                \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::get_table_name()));
         while ($complex_content_object_item = $complex_content_object_items->next_result())
         {
             if ($complex_content_object_item->is_complex())
@@ -181,13 +184,13 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
     public function create_complex_content_object_item($type, $content_object_id)
     {
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: factory(
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::factory(
             $type);
         $complex_content_object_item->set_ref($content_object_id);
         $parent_id = $this->get_parent_content_object_id();
         $complex_content_object_item->set_parent($parent_id);
         $complex_content_object_item->set_display_order(
-            \Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order($parent_id));
+            \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($parent_id));
         $complex_content_object_item->set_user_id($this->get_user_id());
         $complex_content_object_item->create();
     }
@@ -199,14 +202,14 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
     public function is_shared_object_browser()
     {
-        return (Request :: get(\Chamilo\Core\Repository\Viewer\Component\BrowserComponent :: SHARED_BROWSER) == 1);
+        return (Request::get(\Chamilo\Core\Repository\Viewer\Component\BrowserComponent::SHARED_BROWSER) == 1);
     }
 
     public function get_type_selection()
     {
         if (! isset($this->type_selection))
         {
-            $this->type_selection = TypeSelector :: get_selection();
+            $this->type_selection = TypeSelector::get_selection();
         }
 
         return $this->type_selection;

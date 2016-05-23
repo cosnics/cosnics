@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Selector\Option;
 use Chamilo\Core\Repository\Selector\TypeSelectorOption;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *

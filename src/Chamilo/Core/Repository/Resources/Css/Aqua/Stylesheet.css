@@ -112,8 +112,7 @@ div.quota_statistics .data_table td.header {
 	text-align: center;
 }
 
-.content-object-options .content-object-options-type
-	{
+.content-object-options .content-object-options-type {
 	border: 1px solid #dddddd;
 }
 
@@ -130,6 +129,13 @@ div.quota_statistics .data_table td.header {
 	margin-bottom: 0px;
 	-moz-column-width: 200px;
 	-moz-column-rule: 1px dashed rgb(221, 221, 221);
+	-moz-column-count: 4;
+	-webkit-column-width: 200px;
+	-webkit-column-rule: 1px dashed rgb(221, 221, 221);
+	-webkit-column-count: 4;
+	column-width: 200px;
+	column-rule: 1px dashed rgb(221, 221, 221);
+	column-count: 4;
 }
 
 .content-object-options {
