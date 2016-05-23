@@ -526,7 +526,7 @@ EOT;
             ContentObject :: PROPERTY_TITLE,
             Translation :: get('Title', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)),
             true,
-            array('size' => '100', 'id' => 'title', 'style' => 'width: 95%'));
+            array('id' => 'title', 'class' => 'form-control'));
 
         if ($this->allows_category_selection())
         {
@@ -535,7 +535,7 @@ EOT;
                 'select',
                 ContentObject :: PROPERTY_PARENT_ID,
                 Translation :: get('CategoryTypeName'),
-                $this->get_categories());
+                $this->get_categories(), array('class' => 'form-control'));
             $category_group[] = $this->createElement(
                 'image',
                 'add_category',
