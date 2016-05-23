@@ -106,9 +106,48 @@ div.quota_statistics .data_table td.header {
 	opacity: 0.5;
 }
 
-.alert-import-success
-{
+.alert-import-success {
 	padding: 5px;
 	margin-bottom: 10px;
 	text-align: center;
+}
+
+.content-object-options .content-object-options-type
+	{
+	border: 1px solid #dddddd;
+}
+
+.content-object-options h4 {
+	width: 100%;
+	line-height: 32px;
+	height: 52px;
+	margin: 0px;
+	padding: 10px 15px;
+	border-bottom: 1px dashed rgb(221, 221, 221);
+}
+
+.content-object-options .list-group {
+	margin-bottom: 0px;
+	-moz-column-width: 200px;
+	-moz-column-rule: 1px dashed rgb(221, 221, 221);
+}
+
+.content-object-options {
+	margin-bottom: 20px;
+}
+
+.content-object-options .list-group .list-group-item {
+	border: 0px solid white;
+	height: 52px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.content-object-options .list-group .list-group-item img {
+	max-width: 32px;
+	max-height: 32px;
+}
+
+.content-object-options .list-group .list-group-item a {
+	line-height: 32px;
 }

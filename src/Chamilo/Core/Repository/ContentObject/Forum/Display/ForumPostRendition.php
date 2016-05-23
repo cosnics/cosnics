@@ -114,12 +114,12 @@ class ForumPostRendition
             foreach ($attachments as $attachment)
             {
                 $params = array();
-                $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_ATTACHMENT;
-                $params[self :: PARAM_FORUM_TOPIC_ID] = $forumPost->get_forum_topic_id();
-                $params[self :: PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
-                $params[self :: PARAM_ATTACHMENT_ID] = $attachment->get_id();
+                $params[Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_ATTACHMENT;
+                $params[Manager :: PARAM_FORUM_TOPIC_ID] = $forumPost->get_forum_topic_id();
+                $params[Manager :: PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
+                $params[Manager :: PARAM_ATTACHMENT_ID] = $attachment->get_id();
 
-                $url = $this->get_url($params);
+                $url = $this->getApplication()->get_url($params);
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
 
                 $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme :: getInstance()->getImagePath(

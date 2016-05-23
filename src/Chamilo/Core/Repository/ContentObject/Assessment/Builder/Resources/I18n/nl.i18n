@@ -4,7 +4,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Builder"
-
 AssessmentComplexDisplayResultsViewerComponent = "Oefening pogingen"
 Exercise = "Oefening"
 Assignment = "Opdracht"
