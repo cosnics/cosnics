@@ -13,7 +13,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -53,13 +52,11 @@ class FavouriteRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID),
-            new StaticConditionVariable($sourceUserId)
-        );
+            new StaticConditionVariable($sourceUserId));
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID),
-            new StaticConditionVariable($favouriteUserId)
-        );
+            new StaticConditionVariable($favouriteUserId));
 
         $condition = new AndCondition($conditions);
 
@@ -91,8 +88,8 @@ class FavouriteRepository
     public function countFavouriteUsers(User $sourceUser, $condition = null)
     {
         $parameters = new DataClassCountParameters(
-            $this->getUserFavouriteCondition($sourceUser, $condition), $this->getFavouriteUsersJoins()
-        );
+            $this->getUserFavouriteCondition($sourceUser, $condition),
+            $this->getFavouriteUsersJoins());
 
         return DataManager::count(User::class_name(), $parameters);
     }
@@ -108,17 +105,13 @@ class FavouriteRepository
      *
      * @return mixed
      */
-    public function findFavouriteUsers(
-        User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null
-    )
+    public function findFavouriteUsers(User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null)
     {
         $properties = array();
 
         $properties[] = new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_ID);
 
-        $properties[] = new FixedPropertyConditionVariable(
-            User::class_name(), User::PROPERTY_ID, self::PROPERTY_USER_ID
-        );
+        $properties[] = new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_ID, self::PROPERTY_USER_ID);
 
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
@@ -129,9 +122,10 @@ class FavouriteRepository
         $parameters = new RecordRetrievesParameters(
             $dataClassProperties,
             $this->getUserFavouriteCondition($sourceUser, $condition),
-            $count, $offset, $orderProperty,
-            $this->getFavouriteUsersJoins()
-        );
+            $count,
+            $offset,
+            $orderProperty,
+            $this->getFavouriteUsersJoins());
 
         return DataManager::records(User::class_name(), $parameters);
     }
@@ -169,8 +163,7 @@ class FavouriteRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID),
-            new StaticConditionVariable($sourceUser->getId())
-        );
+            new StaticConditionVariable($sourceUser->getId()));
     }
 
     /**
@@ -186,12 +179,7 @@ class FavouriteRepository
                 UserFavourite::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
-                    new PropertyConditionVariable(
-                        UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID
-                    )
-                )
-            )
-        );
+                    new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID))));
 
         return $joins;
     }
