@@ -6,14 +6,16 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Stora
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
-use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
-use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * $Id: assessment_multiple_choice_question_form.class.php $
@@ -53,14 +55,15 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         {
             $object = $this->get_content_object();
             $defaults[AssessmentMultipleChoiceQuestion::PROPERTY_HINT] = $object->get_hint();
+
             if ($object->get_number_of_options() != 0)
             {
                 $options = $object->get_options();
 
                 foreach ($options as $index => $option)
                 {
-                    $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
-                    $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_SCORE][$index] = $option->get_score();
+                    $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE][$index] = $option->get_value() ? $option->get_value() : 0;
+                    $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 0;
                     $defaults[AssessmentMultipleChoiceQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
 
                     if ($object->get_answer_type() == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX)
@@ -75,7 +78,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
             }
             else
             {
-                $number_of_options = intval($_SESSION['mc_number_of_options']);
+                $number_of_options = (int) Session::retrieve('mc_number_of_options');
 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
@@ -115,6 +118,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
+        $answerType = Session::retrieve('mc_answer_type');
 
         $object->set_hint($values[AssessmentMultipleChoiceQuestion::PROPERTY_HINT]);
 
@@ -125,7 +129,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
             $score = $values[AssessmentMultipleChoiceQuestionOption::PROPERTY_SCORE][$option_id];
             $feedback = $values[AssessmentMultipleChoiceQuestionOption::PROPERTY_FEEDBACK][$option_id];
 
-            if ($_SESSION['mc_answer_type'] == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
+            if ($answerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
             {
                 $correct = $values[AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT] == $option_id;
             }
@@ -137,8 +141,56 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
             $options[] = new AssessmentMultipleChoiceQuestionOption($value, $correct, $score, $feedback);
         }
 
-        $object->set_answer_type($_SESSION['mc_answer_type']);
+        $object->set_answer_type($answerType);
         $object->set_options($options);
+    }
+
+    public function setOptionsSessionValues()
+    {
+        if (! $this->isSubmitted())
+        {
+            Session::unregister('mc_number_of_options');
+            Session::unregister('mc_skip_options');
+            Session::unregister('mc_answer_type');
+        }
+
+        Session::registerIfNotSet('mc_number_of_options', 3);
+        Session::registerIfNotSet('mc_skip_options', array());
+        Session::registerIfNotSet('mc_answer_type', AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO);
+
+        $extraOptionRequested = Request::post('add');
+        $removedOptions = Request::post('remove');
+        $answerTypeChanged = Request::post('change_answer_type');
+
+        if (isset($extraOptionRequested))
+        {
+            Session::register('mc_number_of_options', (Session::retrieve('mc_number_of_options') + 1));
+        }
+
+        if (isset($removedOptions))
+        {
+            $indexes = array_keys($removedOptions);
+            $skippedOptions = Session::retrieve('mc_skip_options');
+            $skippedOptions[] = $indexes[0];
+
+            Session::register('mc_skip_options', $skippedOptions);
+        }
+
+        if (isset($answerTypeChanged))
+        {
+            $currentAnswerType = Session::retrieve('mc_answer_type');
+            $newAnswerType = ($currentAnswerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO ? AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX : AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO);
+
+            Session::register('mc_answer_type', $newAnswerType);
+        }
+
+        $object = $this->get_content_object();
+
+        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
+        {
+            Session::register('mc_number_of_options', $object->get_number_of_options());
+            Session::register('mc_answer_type', $object->get_answer_type());
+        }
     }
 
     /**
@@ -147,54 +199,17 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
     public function add_options()
     {
         $renderer = $this->get_renderer();
-
-        if (! $this->isSubmitted())
-        {
-            unset($_SESSION['mc_number_of_options']);
-            unset($_SESSION['mc_skip_options']);
-            unset($_SESSION['mc_answer_type']);
-        }
-        if (! isset($_SESSION['mc_number_of_options']))
-        {
-            $_SESSION['mc_number_of_options'] = 3;
-        }
-        if (! isset($_SESSION['mc_skip_options']))
-        {
-            $_SESSION['mc_skip_options'] = array();
-        }
-        if (! isset($_SESSION['mc_answer_type']))
-        {
-            $_SESSION['mc_answer_type'] = AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO;
-        }
-        if (isset($_POST['add']))
-        {
-            $_SESSION['mc_number_of_options'] = $_SESSION['mc_number_of_options'] + 1;
-        }
-        if (isset($_POST['remove']))
-        {
-            $indexes = array_keys($_POST['remove']);
-            $_SESSION['mc_skip_options'][] = $indexes[0];
-        }
-        if (isset($_POST['change_answer_type']))
-        {
-            $_SESSION['mc_answer_type'] = $_SESSION['mc_answer_type'] ==
-                 AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO ? AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX : AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO;
-        }
-        $object = $this->get_content_object();
-        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
-        {
-            $_SESSION['mc_number_of_options'] = $object->get_number_of_options();
-            $_SESSION['mc_answer_type'] = $object->get_answer_type();
-        }
-        $number_of_options = intval($_SESSION['mc_number_of_options']);
+        $number_of_options = (int) Session::retrieve('mc_number_of_options');
+        $skippedOptions = Session::retrieve('mc_skip_options');
+        $answerType = Session::retrieve('mc_answer_type');
 
         $this->addElement('category', Translation::get('Options'));
 
-        $this->addElement('hidden', 'mc_answer_type', $_SESSION['mc_answer_type'], array('id' => 'mc_answer_type'));
+        $this->addElement('hidden', 'mc_answer_type', $answerType, array('id' => 'mc_answer_type'));
         $this->addElement(
             'hidden',
             'mc_number_of_options',
-            $_SESSION['mc_number_of_options'],
+            Session::retrieve('mc_number_of_options'),
             array('id' => 'mc_number_of_options'));
 
         $htmlEditorOptions = array();
@@ -208,47 +223,34 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
-            if (! in_array($option_number, $_SESSION['mc_skip_options']))
+            if (! in_array($option_number, $skippedOptions))
             {
-                $this->addElement(
-                    'html',
-                    '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
-                         '">');
-
-                $group = array();
+                $this->addElement('html', '<tr data-option-id="' . $option_number . '">');
 
                 // Checkbox or radio button
-                if ($_SESSION['mc_answer_type'] == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX)
-                {
-                    $this->addElement(
-                        'checkbox',
-                        AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']',
-                        Translation::get('Correct'),
-                        '',
-                        array(
-                            'class' => AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE,
-                            'id' => AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']'));
+                $attributes = array('class' => 'option-value', 'data-option-id' => $option_number);
 
-                    $renderer->setElementTemplate(
-                        '<td class="table-cell-selection">{element}</td>',
-                        AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']');
+                if ($answerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX)
+                {
+                    $selectionName = AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT . '[' . $option_number .
+                         ']';
+                    $this->addElement('checkbox', $selectionName, Translation::get('Correct'), '', $attributes);
                 }
                 else
                 {
+                    $selectionName = AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT;
                     $this->addElement(
                         'radio',
-                        AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT,
+                        $selectionName,
                         Translation::get('Correct'),
                         '',
                         $option_number,
-                        array(
-                            'class' => AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE,
-                            'id' => AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']'));
-
-                    $renderer->setElementTemplate(
-                        '<td class="table-cell-selection cell-stat-x2">{element}</td>',
-                        AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT);
+                        $attributes);
                 }
+
+                $renderer->setElementTemplate(
+                    '<td class="table-cell-selection cell-stat-x2">{element}</td>',
+                    $selectionName);
 
                 $this->addElement('html', '<td>');
 
@@ -260,8 +262,9 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                     $htmlEditorOptions);
 
                 $renderer->setElementTemplate(
-                    '<div data-element="' . AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE . '[' . $option_number .
-                         ']' . '">{element}</div>',
+                    '<div class="option-answer-field" data-element="' .
+                         AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']' .
+                         '">{element}</div>',
                         AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']');
 
                 // Feedback
@@ -272,7 +275,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                     $htmlEditorOptions);
 
                 $renderer->setElementTemplate(
-                    '<div class="form-assessment-extra-container" data-element="' .
+                    '<div class="option-feedback-field form-assessment-extra-container" data-element="' .
                          AssessmentMultipleChoiceQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']' .
                          '"><label>{label}</label>{element}</div>',
                         AssessmentMultipleChoiceQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']');
@@ -285,7 +288,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                     'size="2"  class="input_numeric form-control"');
 
                 $renderer->setElementTemplate(
-                    '<div class="form-assessment-extra-container form-inline" data-element="' .
+                    '<div class="option-score-field form-assessment-extra-container form-inline" data-element="' .
                          AssessmentMultipleChoiceQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' .
                          '"><label>{label}:</label> {element}</div>',
                         AssessmentMultipleChoiceQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']');
@@ -296,7 +299,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
                 $actionButtons = array();
 
-                if ($number_of_options - count($_SESSION['mc_skip_options']) > 2)
+                if ($number_of_options - count($skippedOptions) > 2)
                 {
                     $removeClass = 'text-danger';
                 }
@@ -306,11 +309,11 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                 }
 
                 $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-comment glyphicon glyphicon-comment text-primary"></span>';
+                     '" class="option-action option-feedback fa fa-comment text-primary"></span>';
                 $actionButtons[] = '<span data-option-id="' . $option_number .
-                     '" class="option-score glyphicon glyphicon-piggy-bank text-primary"></span>';
-                $actionButtons[] = '<span id="remove_' . $option_number .
-                     '" class="remove_option glyphicon glyphicon-remove ' . $removeClass . '"></span>';
+                     '" class="option-action option-score fa fa-percent text-primary"></span>';
+                $actionButtons[] = '<span data-option-id="' . $option_number .
+                     '" class="option-action option-remove fa fa-trash ' . $removeClass . '"></span>';
 
                 $this->addElement('html', implode('<br />' . PHP_EOL, $actionButtons));
 
@@ -326,11 +329,13 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     protected function addOptionsButtons()
     {
-        if ($_SESSION['mc_answer_type'] == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
+        $answerType = Session::retrieve('mc_answer_type');
+
+        if ($answerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
         {
             $switchLabel = Translation::get('SwitchToCheckboxes');
         }
-        elseif ($_SESSION['mc_answer_type'] == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX)
+        else
         {
             $switchLabel = Translation::get('SwitchToRadioButtons');
         }
@@ -361,21 +366,29 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     public function validate()
     {
-        if (isset($_POST['add']) || isset($_POST['remove']) || isset($_POST['change_answer_type']))
+        $extraOptionRequested = Request::post('add');
+        $removedOptions = Request::post('remove');
+        $answerTypeChanged = Request::post('change_answer_type');
+
+        if (isset($extraOptionRequested) || isset($removedOptions) || isset($answerTypeChanged))
         {
             return false;
         }
+
         return parent::validate();
     }
 
     public function validate_selected_answers($fields)
     {
+        $answerType = Session::retrieve('mc_answer_type');
+
         if (! isset($fields[AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT]))
         {
-            $message = $_SESSION['mc_answer_type'] == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX ? Translation::get(
+            $message = $answerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX ? Translation::get(
                 'SelectAtLeastOneCorrectAnswer') : Translation::get('SelectACorrectAnswer');
             return array('change_answer_type' => $message);
         }
+
         return true;
     }
 
@@ -393,7 +406,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
             new DynamicFormTab(
                 'add-hint',
                 Translation::get('AddHint'),
-                Theme::getInstance()->getImagePath(AssessmentMultipleChoiceQuestion::package(), 'Tab/Hint'),
+                new FontAwesomeGlyph('magic', array('ident-sm')),
                 'buildHintForm'));
     }
 
@@ -403,7 +416,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
             new DynamicFormTab(
                 'view-instructions',
                 Translation::get('ViewInstructions'),
-                Theme::getInstance()->getImagePath(AssessmentMultipleChoiceQuestion::package(), 'Tab/Instructions'),
+                new FontAwesomeGlyph('question-circle', array('ident-sm')),
                 'buildInstructionsForm'));
     }
 
@@ -426,9 +439,5 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
             Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             false,
             $htmlEditorOptions);
-
-        $this->get_renderer()->setElementTemplate(
-            '{element}<div class="clear"></div>',
-            AssessmentMultipleChoiceQuestion::PROPERTY_HINT);
     }
 }

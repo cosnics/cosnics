@@ -7,7 +7,7 @@ ul.tree-menu li div a.assessment_multiple_choice_question, ul.tree-menu li div a
 }
 
 .table.table-assessment-question-form>tbody>tr>td {
-	padding-bottom: 10px;
+	padding-bottom: 20px;
 	border: 0px solid white;
 }
 
@@ -18,9 +18,19 @@ ul.tree-menu li div a.assessment_multiple_choice_question, ul.tree-menu li div a
 
 .table.table-assessment-question-form>tbody>tr>td.table-cell-selection,
 	.table.table-assessment-question-form>tbody>tr>td.table-cell-action {
-	vertical-align: middle;
+	vertical-align: top;
 }
 
 .table.table-assessment-question-form>tbody>tr>td.table-cell-action {
 	font-size: 18px;
+}
+
+.table.table-assessment-question-form>tbody>tr>td.table-cell-action .option-action
+	{
+	cursor: pointer;
+}
+
+.table.table-assessment-question-form>tbody>tr>td.table-cell-action .option-action.text-muted
+	{
+	cursor: default;
 }

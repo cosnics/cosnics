@@ -38,6 +38,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -112,7 +113,7 @@ abstract class ContentObjectForm extends FormValidator
     public function __construct($form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = 'post',
         $action = null, $extra = null, $additional_elements, $allow_new_version = true)
     {
-        parent :: __construct($form_name, $method, $action);
+        parent::__construct($form_name, $method, $action);
 
         $this->form_type = $form_type;
         $this->workspace = $workspace;
@@ -125,7 +126,7 @@ abstract class ContentObjectForm extends FormValidator
         $this->prepareTabs();
         $this->getTabsGenerator()->render();
 
-        if ($this->form_type != self :: TYPE_COMPARE)
+        if ($this->form_type != self::TYPE_COMPARE)
         {
             $this->add_progress_bar(2);
             $this->add_footer();
@@ -179,7 +180,7 @@ abstract class ContentObjectForm extends FormValidator
 
     protected function get_content_object_class()
     {
-        return (string) StringUtilities :: getInstance()->createString($this->get_content_object_type())->upperCamelize();
+        return (string) StringUtilities::getInstance()->createString($this->get_content_object_type())->upperCamelize();
     }
 
     /**
@@ -190,7 +191,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         if (! isset($this->tabsGenerator))
         {
-            $this->tabsGenerator = new DynamicFormTabsRenderer(Manager :: TABS_CONTENT_OBJECT, $this);
+            $this->tabsGenerator = new DynamicFormTabsRenderer(Manager::TABS_CONTENT_OBJECT, $this);
         }
         return $this->tabsGenerator;
     }
@@ -204,13 +205,13 @@ abstract class ContentObjectForm extends FormValidator
     public function addDefaultTab()
     {
         $typeName = $this->get_content_object()->get_template_registration()->get_template()->translate('TypeName');
-        $typeLogo = Theme :: getInstance()->getImagePath(
+        $typeLogo = Theme::getInstance()->getImagePath(
             $this->get_content_object()->package(),
             'Logo/' . ($this->get_content_object()->get_template_registration_id() ? 'Template/' .
                  $this->get_content_object()->get_template_registration()->get_name() . '/' : '') . '22');
 
         $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(self :: TAB_CONTENT_OBJECT, $typeName, $typeLogo, 'build_general_form'));
+            new DynamicFormTab(self::TAB_CONTENT_OBJECT, $typeName, $typeLogo, 'build_general_form'));
     }
 
     public function addMetadataTabs()
@@ -218,7 +219,7 @@ abstract class ContentObjectForm extends FormValidator
         $relationService = new RelationService();
         $entityService = new EntityService();
 
-        $entityFactory = DataClassEntityFactory :: getInstance();
+        $entityFactory = DataClassEntityFactory::getInstance();
         $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
 
         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($relationService, $entity);
@@ -237,7 +238,7 @@ abstract class ContentObjectForm extends FormValidator
                     new DynamicFormTab(
                         'schema-' . $schemaInstance->get_id(),
                         $schema->get_name(),
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
+                        new FontAwesomeGlyph('info-circle', array('ident-sm')),
                         'build_metadata_form',
                         array($schemaInstance)));
             }
@@ -245,23 +246,23 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'add-schema',
-                    Translation :: get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_ADD_METADATA),
+                    Translation::get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
+                    new FontAwesomeGlyph('plus', array('ident-sm')),
                     'build_metadata_choice_form'));
         }
     }
 
     public function build_general_form()
     {
-        if ($this->form_type == self :: TYPE_EDIT || $this->form_type == self :: TYPE_REPLY)
+        if ($this->form_type == self::TYPE_EDIT || $this->form_type == self::TYPE_REPLY)
         {
             $this->build_editing_form();
         }
-        elseif ($this->form_type == self :: TYPE_CREATE)
+        elseif ($this->form_type == self::TYPE_CREATE)
         {
             $this->build_creation_form();
         }
-        elseif ($this->form_type == self :: TYPE_COMPARE)
+        elseif ($this->form_type == self::TYPE_COMPARE)
         {
             $this->build_version_compare_form();
         }
@@ -332,7 +333,7 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function build_metadata_form(SchemaInstance $schemaInstance)
     {
-        $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClass($this->get_content_object());
+        $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($this->get_content_object());
 
         $entityFormService = new EntityFormService(
             $schemaInstance,
@@ -347,7 +348,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $relationService = new RelationService();
         $entityService = new EntityService();
-        $entity = DataClassEntityFactory :: getInstance()->getEntity(
+        $entity = DataClassEntityFactory::getInstance()->getEntity(
             $this->get_content_object()->class_name(),
             $this->get_content_object()->get_id());
 
@@ -359,7 +360,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         if (! $in_tab)
         {
-            $this->addElement('category', Translation :: get('GeneralProperties'));
+            $this->addElement('category', Translation::get('GeneralProperties'));
         }
 
         $this->build_basic_form($htmleditor_options);
@@ -374,13 +375,11 @@ abstract class ContentObjectForm extends FormValidator
     {
         $object = $this->content_object;
 
-        $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            User :: class_name(),
-            (int) $this->get_owner_id());
+        $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), (int) $this->get_owner_id());
 
         if (! $in_tab)
         {
-            $this->addElement('category', Translation :: get('GeneralProperties'));
+            $this->addElement('category', Translation::get('GeneralProperties'));
         }
 
         $this->build_basic_form($htmleditor_options);
@@ -399,32 +398,32 @@ abstract class ContentObjectForm extends FormValidator
                     $this->addElement(
                         'checkbox',
                         'version',
-                        Translation :: get('CreateAsNewVersion'),
+                        Translation::get('CreateAsNewVersion'),
                         null,
                         array(
-                            'onclick' => 'javascript:showElement(\'' . ContentObject :: PROPERTY_COMMENT . '\')',
+                            'onclick' => 'javascript:showElement(\'' . ContentObject::PROPERTY_COMMENT . '\')',
                             'class' => 'version'));
-                    $this->add_element_hider('begin', ContentObject :: PROPERTY_COMMENT);
+                    $this->add_element_hider('begin', ContentObject::PROPERTY_COMMENT);
                     $this->addElement(
                         'text',
-                        ContentObject :: PROPERTY_COMMENT,
-                        Translation :: get('VersionComment'),
+                        ContentObject::PROPERTY_COMMENT,
+                        Translation::get('VersionComment'),
                         array("size" => "50"));
-                    $this->add_element_hider('end', ContentObject :: PROPERTY_COMMENT);
+                    $this->add_element_hider('end', ContentObject::PROPERTY_COMMENT);
                 }
             }
         }
-        $this->addElement('hidden', ContentObject :: PROPERTY_ID, null, array('class' => 'content_object_id'));
+        $this->addElement('hidden', ContentObject::PROPERTY_ID, null, array('class' => 'content_object_id'));
         $this->addElement(
             'hidden',
-            ContentObject :: PROPERTY_MODIFICATION_DATE,
+            ContentObject::PROPERTY_MODIFICATION_DATE,
             null,
             array('class' => 'modification_date'));
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectUpdate.js'));
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectUpdate.js'));
 
         if (! $in_tab)
         {
@@ -507,7 +506,7 @@ EOT;
             $buttons[] = $this->createElement(
                 'style_button',
                 'submit',
-                Translation :: get('CompareVersions'),
+                Translation::get('CompareVersions'),
                 null,
                 null,
                 'transfer');
@@ -520,11 +519,11 @@ EOT;
         $this->addElement('html', '<div id="message"></div>');
         $this->addElement(
             'hidden',
-            ContentObject :: PROPERTY_TEMPLATE_REGISTRATION_ID,
+            ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID,
             $this->get_content_object()->get_template_registration_id());
         $this->add_textfield(
-            ContentObject :: PROPERTY_TITLE,
-            Translation :: get('Title', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)),
+            ContentObject::PROPERTY_TITLE,
+            Translation::get('Title', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             true,
             array('id' => 'title', 'class' => 'form-control'));
 
@@ -533,22 +532,23 @@ EOT;
             $category_group = array();
             $category_group[] = $this->createElement(
                 'select',
-                ContentObject :: PROPERTY_PARENT_ID,
-                Translation :: get('CategoryTypeName'),
-                $this->get_categories(), array('class' => 'form-control'));
+                ContentObject::PROPERTY_PARENT_ID,
+                Translation::get('CategoryTypeName'),
+                $this->get_categories(),
+                array('class' => 'form-control'));
             $category_group[] = $this->createElement(
                 'image',
                 'add_category',
-                Theme :: getInstance()->getCommonImagePath('Action/Add'),
+                Theme::getInstance()->getCommonImagePath('Action/Add'),
                 array('id' => 'add_category', 'style' => 'display:none'));
-            $this->addGroup($category_group, null, Translation :: get('CategoryTypeName'));
+            $this->addGroup($category_group, null, Translation::get('CategoryTypeName'));
 
             $group = array();
-            $group[] = $this->createElement('static', null, null, '<div id="' . self :: NEW_CATEGORY . '">');
-            $group[] = $this->createElement('static', null, null, Translation :: get('AddNewCategory'));
+            $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_CATEGORY . '">');
+            $group[] = $this->createElement('static', null, null, Translation::get('AddNewCategory'));
             $group[] = $this->createElement(
                 'text',
-                self :: NEW_CATEGORY,
+                self::NEW_CATEGORY,
                 null,
                 array(
                     'data-workspace-type' => $this->get_workspace()->getWorkspaceType(),
@@ -557,13 +557,10 @@ EOT;
             $this->addGroup($group);
         }
 
-        $value = PlatformSetting :: get('description_required', Manager :: context());
+        $value = PlatformSetting::get('description_required', Manager::context());
         $required = ($value == 1) ? true : false;
-        $name = Translation :: get(
-            'Description',
-            array(),
-            ClassnameUtilities :: getInstance()->getNamespaceFromObject($this));
-        $this->add_html_editor(ContentObject :: PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
+        $name = Translation::get('Description', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
+        $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
     }
 
     /**
@@ -571,11 +568,11 @@ EOT;
      */
     protected function add_tags_input()
     {
-        $tags = DataManager :: retrieve_content_object_tags_for_user(Session :: get_user_id());
+        $tags = DataManager::retrieve_content_object_tags_for_user(Session::get_user_id());
 
         if ($this->content_object->is_identified())
         {
-            $default_tags = DataManager :: retrieve_content_object_tags_for_content_object(
+            $default_tags = DataManager::retrieve_content_object_tags_for_content_object(
                 $this->content_object->get_id());
         }
 
@@ -590,9 +587,9 @@ EOT;
     {
         $content_object = $this->get_content_object();
         $type = $content_object->get_type();
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type);
-        $name = Translation :: get('TypeName', array(), $namespace);
-        $img = '<img src="' . $content_object->get_icon_path(Theme :: ICON_MINI) . '" title="' . htmlentities($name) .
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($type);
+        $name = Translation::get('TypeName', array(), $namespace);
+        $img = '<img src="' . $content_object->get_icon_path(Theme::ICON_MINI) . '" title="' . htmlentities($name) .
              '"/>';
 
         return $img . ' <b>' . $name . '</b>';
@@ -606,19 +603,18 @@ EOT;
         // separated uplaod and check behaviour into independent javascript files
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'));
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'));
         // added platform option 'omit_content_object_title_check'
         // when NULL (platform option not set) or FALSE (platform option set to false)
         // check title duplicates of content objects; when it is both set and true,
         // omit this check. (this way, the platform setting is unobtrusive).
-        if (PlatformSetting :: get('omit_content_object_title_check', __NAMESPACE__) != 1)
+        if (PlatformSetting::get('omit_content_object_title_check', __NAMESPACE__) != 1)
         {
             $this->addElement(
                 'html',
-                ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) .
-                         'ContentObjectFormCheck.js'));
+                ResourceManager::get_instance()->get_resource_html(
+                    Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormCheck.js'));
         }
 
         $buttons = array();
@@ -627,35 +623,35 @@ EOT;
         // javascrip file
         switch ($this->form_type)
         {
-            case self :: TYPE_COMPARE :
+            case self::TYPE_COMPARE :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Compare', null, Utilities :: COMMON_LIBRARIES),
+                    Translation::get('Compare', null, Utilities::COMMON_LIBRARIES),
                     null,
                     null,
                     'transfer');
                 break;
-            case self :: TYPE_CREATE :
+            case self::TYPE_CREATE :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
                 break;
-            case self :: TYPE_EDIT :
+            case self::TYPE_EDIT :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
+                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
                     null,
                     null,
                     'arrow-right');
                 break;
-            case self :: TYPE_REPLY :
+            case self::TYPE_REPLY :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Reply', null, Utilities :: COMMON_LIBRARIES),
+                    Translation::get('Reply', null, Utilities::COMMON_LIBRARIES),
                     null,
                     null,
                     'envelope');
@@ -664,14 +660,14 @@ EOT;
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
                 break;
         }
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -689,45 +685,45 @@ EOT;
             $html[] = 'var support_attachments = true';
             $html[] = '</script>';
             $this->addElement('html', implode(PHP_EOL, $html));
-            if ($this->form_type != self :: TYPE_REPLY)
+            if ($this->form_type != self::TYPE_REPLY)
             {
                 $attached_objects = $object->get_attachments();
-                $attachments = Utilities :: content_objects_for_element_finder($attached_objects);
+                $attachments = Utilities::content_objects_for_element_finder($attached_objects);
             }
             else
             {
                 $attachments = array();
             }
 
-            $url = Path :: getInstance()->getBasePath(true) .
+            $url = Path::getInstance()->getBasePath(true) .
                  'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
             $locale = array();
-            $locale['Display'] = Translation :: get('AddAttachments');
-            $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
-            $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
-            $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
+            $locale['Display'] = Translation::get('AddAttachments');
+            $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
+            $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
+            $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
             $hidden = true;
 
             $this->addElement(
                 'html',
-                ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
+                ResourceManager::get_instance()->get_resource_html(
+                    Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                          'Plugin/Uploadify/jquery.uploadify.min.js'));
             $this->addElement(
                 'html',
-                ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
+                ResourceManager::get_instance()->get_resource_html(
+                    Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
 
             $this->addElement(
                 'category',
-                '<a href="#">' . Translation :: get('Attachments') . '</a>',
+                '<a href="#">' . Translation::get('Attachments') . '</a>',
                 'content_object_attachments collapsible collapsed');
 
-            $this->addElement('static', 'uploadify', Translation :: get('UploadDocument'), '<div id="uploadify"></div>');
+            $this->addElement('static', 'uploadify', Translation::get('UploadDocument'), '<div id="uploadify"></div>');
             $elem = $this->addElement(
                 'element_finder',
                 'attachments',
-                Translation :: get('SelectAttachment'),
+                Translation::get('SelectAttachment'),
                 $url,
                 $locale,
                 $attachments);
@@ -758,7 +754,7 @@ EOT;
 
             if ($count > 0)
             {
-                $this->addElement('category', Translation :: get('AdditionalProperties'));
+                $this->addElement('category', Translation::get('AdditionalProperties'));
                 foreach ($this->additional_elements as $element)
                 {
                     $this->addElement($element);
@@ -778,40 +774,40 @@ EOT;
     public function setDefaults($defaults = array())
     {
         $content_object = $this->content_object;
-        $defaults[ContentObject :: PROPERTY_ID] = $content_object->get_id();
-        $defaults[ContentObject :: PROPERTY_MODIFICATION_DATE] = $content_object->get_modification_date();
-        $defaults[ContentObject :: PROPERTY_PARENT_ID] = $content_object->get_parent_id();
-        $defaults[ContentObject :: PROPERTY_TEMPLATE_REGISTRATION_ID] = $content_object->get_template_registration_id();
+        $defaults[ContentObject::PROPERTY_ID] = $content_object->get_id();
+        $defaults[ContentObject::PROPERTY_MODIFICATION_DATE] = $content_object->get_modification_date();
+        $defaults[ContentObject::PROPERTY_PARENT_ID] = $content_object->get_parent_id();
+        $defaults[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] = $content_object->get_template_registration_id();
 
-        if ($this->form_type == self :: TYPE_REPLY)
+        if ($this->form_type == self::TYPE_REPLY)
         {
-            $defaults[ContentObject :: PROPERTY_TITLE] = Translation :: get(
+            $defaults[ContentObject::PROPERTY_TITLE] = Translation::get(
                 'ReplyShort',
                 null,
-                Utilities :: COMMON_LIBRARIES) . ' ' . $content_object->get_title();
+                Utilities::COMMON_LIBRARIES) . ' ' . $content_object->get_title();
         }
         else
         {
-            $defaults[ContentObject :: PROPERTY_TITLE] = $defaults[ContentObject :: PROPERTY_TITLE] == null ? $content_object->get_title() : $defaults[ContentObject :: PROPERTY_TITLE];
-            $defaults[ContentObject :: PROPERTY_DESCRIPTION] = $content_object->get_description();
+            $defaults[ContentObject::PROPERTY_TITLE] = $defaults[ContentObject::PROPERTY_TITLE] == null ? $content_object->get_title() : $defaults[ContentObject::PROPERTY_TITLE];
+            $defaults[ContentObject::PROPERTY_DESCRIPTION] = $content_object->get_description();
         }
 
-        if ($content_object instanceof ForcedVersionSupport && $this->form_type == self :: TYPE_EDIT)
+        if ($content_object instanceof ForcedVersionSupport && $this->form_type == self::TYPE_EDIT)
         {
             $defaults['version'] = 1;
         }
 
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     public function setParentDefaults($defaults)
     {
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     public function set_values($defaults)
     {
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     public function create_content_object()
@@ -821,9 +817,9 @@ EOT;
         $object = $this->content_object;
         $object->set_owner_id($this->get_owner_id());
         $object->set_template_registration_id(
-            $values[ContentObject :: PROPERTY_TEMPLATE_REGISTRATION_ID] ? $values[ContentObject :: PROPERTY_TEMPLATE_REGISTRATION_ID] : null);
-        $object->set_title($values[ContentObject :: PROPERTY_TITLE]);
-        $desc = $values[ContentObject :: PROPERTY_DESCRIPTION] ? $values[ContentObject :: PROPERTY_DESCRIPTION] : '';
+            $values[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] ? $values[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] : null);
+        $object->set_title($values[ContentObject::PROPERTY_TITLE]);
+        $desc = $values[ContentObject::PROPERTY_DESCRIPTION] ? $values[ContentObject::PROPERTY_DESCRIPTION] : '';
         $object->set_description($desc);
 
         if ($this->allows_category_selection() && $this->workspace instanceof PersonalWorkspace)
@@ -846,12 +842,12 @@ EOT;
         $values = $this->exportValues();
 
         // Process includes
-        ContentObjectIncludeParser :: parse_includes($this);
+        ContentObjectIncludeParser::parse_includes($this);
 
         // Process attachments
         if ($object instanceof AttachmentSupport)
         {
-            $object->attach_content_objects($values['attachments']['lo'], ContentObject :: ATTACHMENT_NORMAL);
+            $object->attach_content_objects($values['attachments']['lo'], ContentObject::ATTACHMENT_NORMAL);
         }
 
         return $object;
@@ -875,10 +871,10 @@ EOT;
      */
     public function set_category_from_values($object, $values)
     {
-        $parent_id = $values[ContentObject :: PROPERTY_PARENT_ID];
-        $new_category_name = $values[self :: NEW_CATEGORY];
+        $parent_id = $values[ContentObject::PROPERTY_PARENT_ID];
+        $new_category_name = $values[self::NEW_CATEGORY];
 
-        if (! StringUtilities :: getInstance()->isNullOrEmpty($new_category_name, true))
+        if (! StringUtilities::getInstance()->isNullOrEmpty($new_category_name, true))
         {
             $new_category = $this->create_new_category($new_category_name, $parent_id);
             if ($new_category)
@@ -947,9 +943,9 @@ EOT;
         $object = $this->content_object;
         $values = $this->exportValues();
 
-        $object->set_title($values[ContentObject :: PROPERTY_TITLE]);
+        $object->set_title($values[ContentObject::PROPERTY_TITLE]);
 
-        $desc = $values[ContentObject :: PROPERTY_DESCRIPTION] ? $values[ContentObject :: PROPERTY_DESCRIPTION] : '';
+        $desc = $values[ContentObject::PROPERTY_DESCRIPTION] ? $values[ContentObject::PROPERTY_DESCRIPTION] : '';
         $object->set_description($desc ? $desc : '');
 
         $move = false;
@@ -961,10 +957,10 @@ EOT;
 
         if (isset($values['version']) && $values['version'] == 1)
         {
-            $object->set_comment(nl2br($values[ContentObject :: PROPERTY_COMMENT]));
+            $object->set_comment(nl2br($values[ContentObject::PROPERTY_COMMENT]));
             $result = $object->version();
 
-            $versions = DataManager :: retrieve_content_object_versions($object);
+            $versions = DataManager::retrieve_content_object_versions($object);
             foreach ($versions as $version)
             {
                 if ($version->get_parent_id() != $object->get_parent_id())
@@ -984,7 +980,7 @@ EOT;
         }
 
         // Process includes
-        ContentObjectIncludeParser :: parse_includes($this);
+        ContentObjectIncludeParser::parse_includes($this);
 
         // $include_parser->parse_editors();
 
@@ -997,9 +993,9 @@ EOT;
              */
             foreach ($object->get_attachments() as $attached_object_id)
             {
-                $object->detach_content_object($attached_object_id->get_id(), ContentObject :: ATTACHMENT_NORMAL);
+                $object->detach_content_object($attached_object_id->get_id(), ContentObject::ATTACHMENT_NORMAL);
             }
-            $object->attach_content_objects($values['attachments']['lo'], ContentObject :: ATTACHMENT_NORMAL);
+            $object->attach_content_objects($values['attachments']['lo'], ContentObject::ATTACHMENT_NORMAL);
         }
 
         return $result;
@@ -1014,8 +1010,8 @@ EOT;
 
     protected function allows_category_selection()
     {
-        return ($this->form_type == self :: TYPE_CREATE || $this->form_type == self :: TYPE_REPLY ||
-             $this->form_type == self :: TYPE_EDIT) && Session :: get_user_id() == $this->get_owner_id();
+        return ($this->form_type == self::TYPE_CREATE || $this->form_type == self::TYPE_REPLY ||
+             $this->form_type == self::TYPE_EDIT) && Session::get_user_id() == $this->get_owner_id();
     }
 
     /**
@@ -1037,7 +1033,7 @@ EOT;
 
         if ($form_variant)
         {
-            $class = $base_class_name . StringUtilities :: getInstance()->createString($form_variant)->upperCamelize() .
+            $class = $base_class_name . StringUtilities::getInstance()->createString($form_variant)->upperCamelize() .
                  'Form';
         }
         else
@@ -1068,7 +1064,7 @@ EOT;
         {
             $values = $this->exportValues();
 
-            if ($this->form_type == self :: TYPE_COMPARE)
+            if ($this->form_type == self::TYPE_COMPARE)
             {
                 if (! isset($values['object']) || ! isset($values['compare']))
                 {
@@ -1077,7 +1073,7 @@ EOT;
             }
         }
 
-        return parent :: validate();
+        return parent::validate();
     }
 
     /**
@@ -1087,20 +1083,20 @@ EOT;
     {
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
 
         $this->addElement(
             'category',
-            '<a href="#">' . Translation :: get('Instructions', null, Utilities :: COMMON_LIBRARIES) . '</a>',
+            '<a href="#">' . Translation::get('Instructions', null, Utilities::COMMON_LIBRARIES) . '</a>',
             'content_object_attachments collapsible collapsed');
 
         $this->addElement(
             'html',
-            '<div>' . Translation :: get(
+            '<div>' . Translation::get(
                 'InstructionsText',
                 null,
-                ClassnameUtilities :: getInstance()->getNamespaceFromClassname(get_class($this))) . '</div>');
+                ClassnameUtilities::getInstance()->getNamespaceFromClassname(get_class($this))) . '</div>');
 
         $this->addElement('category');
     }

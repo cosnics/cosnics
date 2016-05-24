@@ -11,14 +11,16 @@ class Session
 
     public static function start()
     {
-        /** Disables PHP automatically provided cache headers */
+        /**
+         * Disables PHP automatically provided cache headers
+         */
         session_cache_limiter('');
 
         $configuration = \Chamilo\Configuration\Configuration::get_instance();
 
         if ($configuration->is_available() && $configuration->is_connectable())
         {
-            if($configuration->get_setting(array('Chamilo\Configuration', 'session', 'session_handler')) == 'chamilo')
+            if ($configuration->get_setting(array('Chamilo\Configuration', 'session', 'session_handler')) == 'chamilo')
             {
                 $session_handler = new SessionHandler();
                 session_set_save_handler(
@@ -27,14 +29,10 @@ class Session
                     array($session_handler, 'read'),
                     array($session_handler, 'write'),
                     array($session_handler, 'destroy'),
-                    array($session_handler, 'garbage')
-                );
+                    array($session_handler, 'garbage'));
             }
 
-            $session_key = \Chamilo\Configuration\Configuration :: get(
-                'Chamilo\Configuration',
-                'general',
-                'security_key');
+            $session_key = \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'general', 'security_key');
             if (is_null($session_key))
             {
                 $session_key = 'dk_sid';
@@ -52,6 +50,16 @@ class Session
     public static function register($variable, $value)
     {
         $_SESSION[$variable] = $value;
+    }
+
+    public static function registerIfNotSet($variable, $value)
+    {
+        $sessionValue = self::retrieve($variable);
+
+        if (is_null($sessionValue))
+        {
+            self::register($variable, $value);
+        }
     }
 
     public static function unregister($variable)
@@ -99,6 +107,6 @@ class Session
 
     public static function get_user_id()
     {
-        return self :: retrieve('_uid');
+        return self::retrieve('_uid');
     }
 }

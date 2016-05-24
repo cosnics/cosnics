@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Tabs;
 
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
+
 abstract class DynamicTab
 {
 
@@ -91,8 +93,15 @@ abstract class DynamicTab
         $html[] = '<span class="category">';
         if ($this->image)
         {
-            $html[] = '<img src="' . $this->image . '" border="0" style="vertical-align: middle; " alt="' . $this->name .
-                 '" title="' . $this->name . '"/>';
+            if (! $this->image instanceof InlineGlyph)
+            {
+                $html[] = '<img src="' . $this->image . '" border="0" style="vertical-align: middle; " alt="' .
+                     $this->name . '" title="' . $this->name . '"/>';
+            }
+            else
+            {
+                $html[] = $this->image->render();
+            }
         }
 
         if ($this->image && $this->name)
