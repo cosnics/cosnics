@@ -1,0 +1,255 @@
+@font-face {
+	font-family: 'ConnectIdents';
+	src: url('ConnectIdents.ttf') format('truetype'),
+		url('ConnectIdents.woff') format('woff'), url('ConnectIdents.eot')
+		format('eot'), url('ConnectIdents.svg?#ConnectIdents') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.ident {
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'ConnectIdents';
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #666666;
+	vertical-align: middle;
+}
+
+.ident-announcement:before {
+	content: "\e700";
+}
+
+.ident-blog:before {
+	content: "\e701";
+}
+
+.ident-course-description:before {
+	content: "\e702";
+}
+
+.ident-course-group:before {
+	content: "\e703";
+}
+
+.ident-document:before {
+	content: "\e704";
+}
+
+.ident-ephorus:before {
+	content: "\e705";
+}
+
+.ident-forum:before {
+	content: "\e706";
+}
+
+.ident-chat:before {
+	content: "\e707";
+}
+
+.ident-user:before {
+	content: "\e708";
+}
+
+.ident-calendar:before {
+	content: "\e709";
+}
+
+.ident-link:before {
+	content: "\e70a";
+}
+
+.ident-location:before {
+	content: "\e70b";
+}
+
+.ident-note:before {
+	content: "\e70c";
+}
+
+.ident-assessment:before {
+	content: "\e70d";
+}
+
+.ident-assignment:before {
+	content: "\e70e";
+}
+
+.ident-streaming-video:before {
+	content: "\e70f";
+}
+
+.ident-wiki:before {
+	content: "\e710";
+}
+
+.ident-glossary:before {
+	content: "\e711";
+}
+
+.ident-peer-assessment:before {
+	content: "\e712";
+}
+
+.ident-search:before {
+	content: "\e713";
+}
+
+.ident-course-copier:before {
+	content: "\e714";
+}
+
+.ident-course-truncater:before {
+	content: "\e715";
+}
+
+.ident-course-deleter:before {
+	content: "\e716";
+}
+
+.ident-course-settings:before {
+	content: "\e717";
+}
+
+.ident-rights:before {
+	content: "\e718";
+}
+
+.ident-reporting:before {
+	content: "\e719";
+}
+
+.ident-course-sections:before {
+	content: "\e71a";
+}
+
+.ident-learning-path:before {
+	content: "\e71b";
+}
+
+.ident-weblcms:before {
+	content: "\e71c";
+}
+
+.ident-portfolio:before {
+	content: "\e71d";
+}
+
+.ident-home:before {
+	content: "\e71e";
+}
+
+.ident-repository:before {
+	content: "\e71f";
+}
+
+.ident-workspaces:before {
+	content: "\e720";
+}
+
+.ident-admin:before {
+	content: "\e721";
+}
+
+.ident-group:before {
+	content: "\e722";
+}
+
+.ident-help:before {
+	content: "\e723";
+}
+
+.ident-menu:before {
+	content: "\e724";
+}
+
+.ident-lynx:before {
+	content: "\e725";
+}
+
+.ident-metadata:before {
+	content: "\e726";
+}
+
+.ident-cas-storage:before {
+	content: "\e727";
+}
+
+.ident-cache:before {
+	content: "\e728";
+}
+
+.ident-tracking:before {
+	content: "\e729";
+}
+
+.ident-install:before {
+	content: "\e72a";
+}
+
+.ident-xs {
+	font-size: 16px;
+	vertical-align: middle;
+}
+
+.ident-sm {
+	font-size: 20px;
+	vertical-align: middle;
+}
+
+.ident-md {
+	font-size: 28px;
+	vertical-align: middle;
+}
+
+.ident-lg {
+	font-size: 40px;
+	vertical-align: middle;
+}
+
+.ident-disabled:before {
+	opacity: 0.3;
+}
+
+.ident-new:before {
+	opacity: 0.5;
+}
+
+.ident-new:after {
+	display: inline-block;
+	background-color: #f57900;
+	position: absolute;
+	content: "";
+	right: 0px;
+	bottom: 0px;
+}
+
+.ident-xs.ident-new:after {
+	width: 6px;
+	height: 6px;
+	border-radius: 3px;
+}
+
+.ident-sm.ident-new:after {
+	width: 8px;
+	height: 8px;
+	border-radius: 4px;
+}
+
+.ident-md.ident-new:after {
+	width: 12px;
+	height: 12px;
+	border-radius: 6px;
+}
+
+.ident-lg.ident-new:after {
+	width: 16px;
+	height: 16px;
+	border-radius: 8px;
+}
