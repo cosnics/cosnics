@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matrix_question
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Matrix vraag"
+Options = "Opties"
+SwitchToMultipleMatches = "Sta meerdere matches toe"
+SwitchToSingleMatch = "Sta één match toe"
+AddMatrixQuestionOption = "Voeg optie toe"
+Answer = "Antwoord"
+Matches = "Matches"
+Feedback = "Feedback"
+Score = "Score"
+Weight = "Gewicht"
+Title = "Titel"
+Description = "Vraag"
+AddMatch = "Voeg match toe"
+Match = "Match"
+RecalculateWeight = "Herbereken gewicht"
+RandomizeOptions = "Randomiseer opties en matches"
+FeedbackAnswer = "Enkel feedback bij fout antwoord"
