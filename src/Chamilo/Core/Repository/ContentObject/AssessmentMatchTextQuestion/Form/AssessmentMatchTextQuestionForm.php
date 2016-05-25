@@ -6,10 +6,16 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Storage\Da
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -20,74 +26,47 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
 
     protected function build_creation_form()
     {
-        parent :: build_creation_form();
-        $this->addElement('category', Translation :: get('Options'));
-        $this->addElement(
-            'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion', 
-                    true) . 'AssessmentMatchTextQuestion.js'));
-        $this->add_options();
-        $this->addElement('category');
-        
-        $this->addElement('category', Translation :: get('Hint'));
-        
-        $html_editor_options = array();
-        $html_editor_options['width'] = '100%';
-        $html_editor_options['height'] = '100';
-        $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
-        $renderer = $this->defaultRenderer();
-        $this->add_html_editor(
-            AssessmentMatchTextQuestion :: PROPERTY_HINT, 
-            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)), 
-            false, 
-            $html_editor_options);
-        $renderer->setElementTemplate(
-            '{element}<div class="clear"></div>', 
-            AssessmentMatchTextQuestion :: PROPERTY_HINT);
-        $this->addElement('category');
-        
-        $this->add_example_box();
+        parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
+        $this->buildBasicQuestionForm();
     }
 
     protected function build_editing_form()
     {
-        parent :: build_editing_form();
-        $this->addElement('category', Translation :: get('Options'));
-        $this->addElement(
-            'html', 
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion', 
-                    true) . 'AssessmentMatchTextQuestion.js'));
+        parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
+        $this->buildBasicQuestionForm();
+    }
+
+    protected function getDescriptionHtmlEditorOptions()
+    {
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '100';
+        $htmlEditorOptions['collapse_toolbar'] = false;
+        $htmlEditorOptions['show_tags'] = false;
+        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
+
+        return $htmlEditorOptions;
+    }
+
+    protected function buildBasicQuestionForm()
+    {
         $this->add_options();
-        $this->addElement('category');
-        
-        $this->addElement('category', Translation :: get('Hint'));
-        
-        $html_editor_options = array();
-        $html_editor_options['width'] = '100%';
-        $html_editor_options['height'] = '100';
-        $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['show_tags'] = false;
-        $html_editor_options['toolbar_set'] = 'RepositoryQuestion';
-        
-        $renderer = $this->defaultRenderer();
-        $this->add_html_editor(
-            AssessmentMatchTextQuestion :: PROPERTY_HINT, 
-            Translation :: get('Hint', array(), ClassnameUtilities :: getInstance()->getNamespaceFromObject($this)), 
-            false, 
-            $html_editor_options);
-        $renderer->setElementTemplate(
-            '{element}<div class="clear"></div>', 
-            AssessmentMatchTextQuestion :: PROPERTY_HINT);
-        $this->addElement('category');
-        
-        $this->add_example_box();
+
+        $this->addElement('category', Translation::get('Configuration'));
+
+        $this->addElement(
+            'checkbox',
+            AssessmentMatchTextQuestion::PROPERTY_USE_WILDCARDS,
+            Translation::get('UseWildcards'));
+
+        $this->addElement('checkbox', AssessmentMatchTextQuestion::PROPERTY_IGNORE_CASE, Translation::get('IgnoreCase'));
+
+        $this->addElement(
+            'html',
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(
+                    'Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion',
+                    true) . 'AssessmentMatchTextQuestion.js'));
     }
 
     public function setDefaults($defaults = array ())
@@ -95,74 +74,130 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         if (! $this->isSubmitted())
         {
             $object = $this->get_content_object();
-            $defaults[AssessmentMatchTextQuestion :: PROPERTY_HINT] = $object->get_hint();
+            $defaults[AssessmentMatchTextQuestion::PROPERTY_HINT] = $object->get_hint();
+
             if ($object->get_number_of_options() != 0)
             {
                 $options = $object->get_options();
+
                 foreach ($options as $index => $option)
                 {
-                    $defaults['option'][$index] = $option->get_value();
-                    $defaults['option_weight'][$index] = $option->get_score();
-                    $defaults['comment'][$index] = $option->get_feedback();
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 0;
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
                 }
-                $defaults['use_wildcards'] = $object->get_use_wildcards();
-                $defaults['ignore_case'] = $object->get_ignore_case();
+
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_USE_WILDCARDS] = $object->get_use_wildcards();
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_IGNORE_CASE] = $object->get_ignore_case();
             }
             else
             {
-                $defaults['use_wildcards'] = true;
-                $defaults['ignore_case'] = true;
-                $number_of_options = intval($_SESSION['match_number_of_options']);
-                
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_USE_WILDCARDS] = true;
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_IGNORE_CASE] = true;
+
+                $number_of_options = (int) Session::retrieve('match_number_of_options');
+
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
-                    $defaults['option_weight'][$option_number] = 0;
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$option_number] = 0;
                 }
             }
         }
-        parent :: setDefaults($defaults);
+
+        parent::setDefaults($defaults);
     }
 
     public function create_content_object()
     {
-        $object = new AssessmentMatchTextQuestion();
-        $object->set_hint($this->exportValue(AssessmentMatchTextQuestion :: PROPERTY_HINT));
-        $this->set_content_object($object);
-        $this->add_options_to_object();
-        $result = parent :: create_content_object();
-        return $result;
+        $this->set_content_object(new AssessmentMatchTextQuestion());
+        $this->processSubmittedData();
+
+        return parent::create_content_object();
     }
 
     public function update_content_object()
     {
-        $this->get_content_object()->set_hint($this->exportValue(AssessmentMatchTextQuestion :: PROPERTY_HINT));
+        $this->processSubmittedData();
+        return parent::update_content_object();
+    }
+
+    public function processSubmittedData()
+    {
+        $values = $this->exportValues();
+        $object = $this->get_content_object();
+
+        $object->set_hint($values[AssessmentMatchTextQuestion::PROPERTY_HINT]);
+        $object->set_use_wildcards($values[AssessmentMatchTextQuestion::PROPERTY_USE_WILDCARDS]);
+        $object->set_ignore_case($values[AssessmentMatchTextQuestion::PROPERTY_IGNORE_CASE]);
+
         $this->add_options_to_object();
-        return parent :: update_content_object();
     }
 
     private function add_options_to_object()
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
+
         $options = array();
-        foreach ($values['option'] as $option_id => $value)
+
+        foreach ($values[AssessmentMatchTextQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
-            $score = $values['option_weight'][$option_id];
-            $feedback = $values['comment'][$option_id];
+            $score = $values[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$option_id];
+            $feedback = $values[AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK][$option_id];
+
             $options[] = new AssessmentMatchTextQuestionOption($value, $score, $feedback);
         }
-        $object->set_use_wildcards($values['use_wildcards']);
-        $object->set_ignore_case($values['ignore_case']);
+
         $object->set_options($options);
     }
 
     public function validate()
     {
-        if (isset($_POST['add']) || isset($_POST['remove']) || isset($_POST['change_answer_type']))
+        $extraOptionRequested = Request::post('add');
+        $removedOptions = Request::post('remove');
+
+        if (isset($extraOptionRequested) || isset($removedOptions))
         {
             return false;
         }
-        return parent :: validate();
+
+        return parent::validate();
+    }
+
+    public function setOptionsSessionValues()
+    {
+        if (! $this->isSubmitted())
+        {
+            Session::unregister('match_number_of_options');
+            Session::unregister('match_skip_options');
+        }
+
+        Session::registerIfNotSet('match_number_of_options', 3);
+        Session::registerIfNotSet('match_skip_options', array());
+
+        $extraOptionRequested = Request::post('add');
+        $removedOptions = Request::post('remove');
+
+        if (isset($extraOptionRequested))
+        {
+            Session::register('match_number_of_options', (Session::retrieve('match_number_of_options') + 1));
+        }
+
+        if (isset($removedOptions))
+        {
+            $indexes = array_keys($removedOptions);
+            $skippedOptions = Session::retrieve('match_skip_options');
+            $skippedOptions[] = $indexes[0];
+
+            Session::register('match_skip_options', $skippedOptions);
+        }
+
+        $object = $this->get_content_object();
+
+        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
+        {
+            Session::register('match_number_of_options', $object->get_number_of_options());
+        }
     }
 
     /**
@@ -170,217 +205,164 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
      */
     private function add_options()
     {
-        $renderer = $this->defaultRenderer();
-        
-        if (! $this->isSubmitted())
-        {
-            unset($_SESSION['match_number_of_options']);
-            unset($_SESSION['match_skip_options']);
-        }
-        if (! isset($_SESSION['match_number_of_options']))
-        {
-            $_SESSION['match_number_of_options'] = 3;
-        }
-        if (! isset($_SESSION['match_skip_options']))
-        {
-            $_SESSION['match_skip_options'] = array();
-        }
-        if (isset($_POST['add']))
-        {
-            $_SESSION['match_number_of_options'] = $_SESSION['match_number_of_options'] + 1;
-        }
-        if (isset($_POST['remove']))
-        {
-            $indexes = array_keys($_POST['remove']);
-            $_SESSION['match_skip_options'][] = $indexes[0];
-        }
-        $object = $this->get_content_object();
-        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
-        {
-            $_SESSION['match_number_of_options'] = $object->get_number_of_options();
-        }
-        $number_of_options = intval($_SESSION['match_number_of_options']);
-        
+        $renderer = $this->get_renderer();
+        $this->setOptionsSessionValues();
+
+        $number_of_options = (int) Session::retrieve('match_number_of_options');
+        $skippedOptions = Session::retrieve('match_skip_options');
+
+        $this->addElement('category', Translation::get('Options'));
         $this->addElement(
-            'hidden', 
-            'match_number_of_options', 
-            $_SESSION['match_number_of_options'], 
+            'hidden',
+            'match_number_of_options',
+            $number_of_options,
             array('id' => 'match_number_of_options'));
-        
-        $use_wildcard_group = array();
-        $use_wildcard_group[] = & $this->createElement(
-            'checkbox', 
-            AssessmentMatchTextQuestion :: PROPERTY_USE_WILDCARDS, 
-            Translation :: get('UseWildcards')); // ,
-                                                 // '',
-                                                 // array('class'
-                                                 // =>
-                                                 // MultipleChoiceQuestionOption
-                                                 // ::
-                                                 // PROPERTY_VALUE,
-                                                 // 'id'
-                                                 // =>
-                                                 // AssessmentMultipleChoiceQuestionOption
-                                                 // ::
-                                                 // PROPERTY_CORRECT
-                                                 // .
-                                                 // '['
-                                                 // .
-                                                 // $option_number
-                                                 // .
-                                                 // ']'));
-        $this->addGroup($use_wildcard_group, 'use_wildcards', Translation :: get('UseWildcards'), '', false);
-        
-        $use_wildcard_group = array();
-        $use_wildcard_group[] = & $this->createElement(
-            'checkbox', 
-            AssessmentMatchTextQuestion :: PROPERTY_IGNORE_CASE, 
-            Translation :: get('IgnoreCase')); // ,
-                                               // '',
-                                               // array('class'
-                                               // =>
-                                               // MultipleChoiceQuestionOption
-                                               // ::
-                                               // PROPERTY_VALUE,
-                                               // 'id'
-                                               // =>
-                                               // AssessmentMultipleChoiceQuestionOption
-                                               // ::
-                                               // PROPERTY_CORRECT
-                                               // .
-                                               // '['
-                                               // .
-                                               // $option_number
-                                               // .
-                                               // ']'));
-        $this->addGroup($use_wildcard_group, 'ignore_case', Translation :: get('IgnoreCase'), '', false);
-        
-        $buttons = array();
-        // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
-        // clicking an image button
-        $buttons[] = $this->createElement(
-            'style_button', 
-            'add[]', 
-            Translation :: get('AddItem'), 
-            array('id' => 'add_option'), 
-            null, 
-            'plus');
-        $this->addGroup($buttons, 'question_buttons', null, '', false);
-        
-        $html_editor_options = array();
-        $html_editor_options['width'] = '100%';
-        $html_editor_options['height'] = '65';
-        $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['toolbar'] = 'RepositoryQuestion';
-        
-        $table_header = array();
-        $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
-        $table_header[] = '<thead>';
-        $table_header[] = '<tr>';
-        $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th>' . Translation :: get('PossibleAnswer') . '</th>';
-        $table_header[] = '<th>' . Translation :: get('Feedback') . '</th>';
-        $table_header[] = '<th class="numeric">' . Translation :: get('Score') . '</th>';
-        $table_header[] = '<th class="action"></th>';
-        $table_header[] = '</tr>';
-        $table_header[] = '</thead>';
-        $table_header[] = '<tbody>';
-        $this->addElement('html', implode(PHP_EOL, $table_header));
-        
-        $textarea_height = $html_editor_options['height'];
-        $textarea_width = $html_editor_options['width'];
-        
-        if (strpos($textarea_height, '%') === false)
-        {
-            $textarea_height .= 'px';
-        }
-        if (strpos($textarea_width, '%') === false)
-        {
-            $textarea_width .= 'px';
-        }
-        
-        $i = 1;
-        
+
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '65';
+        $htmlEditorOptions['collapse_toolbar'] = true;
+        $htmlEditorOptions['show_tags'] = false;
+        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
+
+        $this->addElement('html', '<table class="table table-assessment-question-form"><tbody>');
+
+        $optionLabelCounter = 1;
+
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
-            if (! in_array($option_number, $_SESSION['match_skip_options']))
+            if (! in_array($option_number, $skippedOptions))
             {
-                $group = array();
-                
-                $group[] = & $this->createElement('static', null, null, $i . '.');
-                $group[] = $this->createElement(
-                    'textarea', 
-                    "option[$option_number]", 
-                    Translation :: get('Answer'), 
-                    array('style' => 'width: 100%; height:' . $textarea_height));
-                $group[] = $this->create_html_editor(
-                    "comment[$option_number]", 
-                    Translation :: get('Comment'), 
-                    $html_editor_options);
-                $group[] = & $this->createElement(
-                    'text', 
-                    "option_weight[$option_number]", 
-                    Translation :: get('Weight'), 
-                    'size="2"  class="input_numeric"');
-                
-                if ($number_of_options - count($_SESSION['match_skip_options']) > 2)
+                $this->addElement('html', '<tr data-option-id="' . $option_number . '">');
+                $this->addElement(
+                    'html',
+                    '<td class="table-cell-selection cell-stat-x3">' . $optionLabelCounter . '.</td>');
+
+                $this->addElement('html', '<td>');
+
+                // Answer
+                $this->addElement(
+                    'textarea',
+                    AssessmentMatchTextQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
+                    Translation::get('Answer'),
+                    array('class' => 'form-control', 'style' => 'height: 80px;'));
+
+                $renderer->setElementTemplate(
+                    '<div class="option-answer-field" data-element="' . AssessmentMatchTextQuestionOption::PROPERTY_VALUE .
+                         '[' . $option_number . ']' . '">{element}</div>',
+                        AssessmentMatchTextQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']');
+
+                // Feedback
+                $this->add_html_editor(
+                    AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']',
+                    Translation::get('Feedback'),
+                    false,
+                    $htmlEditorOptions);
+
+                $renderer->setElementTemplate(
+                    '<div class="option-feedback-field form-assessment-extra-container" data-element="' .
+                         AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']' .
+                         '"><label>{label}</label>{element}</div>',
+                        AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']');
+
+                // Score
+                $this->addElement(
+                    'text',
+                    AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
+                    Translation::get('Score'),
+                    'size="2"  class="input_numeric form-control"');
+
+                $renderer->setElementTemplate(
+                    '<div class="option-score-field form-assessment-extra-container form-inline" data-element="' .
+                         AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' .
+                         '"><label>{label}:</label> {element}</div>',
+                        AssessmentMatchTextQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']');
+
+                $this->addElement('html', '</td>');
+
+                $this->addElement('html', '<td class="table-cell-action cell-stat-x3 text-right">');
+
+                $actionButtons = array();
+
+                if ($number_of_options - count($skippedOptions) > 2)
                 {
-                    $group[] = & $this->createElement(
-                        'image', 
-                        'remove[' . $option_number . ']', 
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
-                        array('class' => 'remove_option', 'id' => $option_number));
+                    $removeClass = 'text-danger';
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
-                        'static', 
-                        null, 
-                        null, 
-                        '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/DeleteNa') .
-                             '" class="remove_option" />');
+                    $removeClass = 'text-muted';
                 }
-                
-                $this->addGroup($group, 'option_' . $option_number, null, '', false);
-                $this->addGroupRule(
-                    'option_' . $option_number, 
-                    array(
-                        "option_weight[$option_number]" => array(
-                            array(
-                                Translation :: get('ThisFieldShouldBeNumeric', null, Utilities :: COMMON_LIBRARIES), 
-                                'numeric'))));
-                
-                $renderer->setElementTemplate(
-                    '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
-                         '">{element}</tr>', 
-                        'option_' . $option_number);
-                $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $option_number);
-                
-                $i ++;
+
+                $actionButtons[] = '<span data-option-id="' . $option_number .
+                     '" class="option-action option-feedback fa fa-comment text-primary"></span>';
+                $actionButtons[] = '<span data-option-id="' . $option_number .
+                     '" class="option-action option-score fa fa-percent text-primary"></span>';
+                $actionButtons[] = '<span data-option-id="' . $option_number .
+                     '" class="option-action option-remove fa fa-trash ' . $removeClass . '"></span>';
+
+                $this->addElement('html', implode('<br />' . PHP_EOL, $actionButtons));
+
+                $this->addElement('html', '</td>');
+                $this->addElement('html', '</tr>');
+
+                $optionLabelCounter ++;
             }
         }
-        
-        $table_footer[] = '</tbody>';
-        $table_footer[] = '</table>';
-        $this->addElement('html', implode(PHP_EOL, $table_footer));
-        
-        $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>', 
-            'question_buttons');
-        $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>', 
-            'question_buttons');
-        
-        $buttons = array();
-        // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
-        // clicking an image button
-        $buttons[] = $this->createElement(
-            'style_button', 
-            'add[]', 
-            Translation :: get('AddItem'), 
-            array('id' => 'add_option'), 
-            null, 
-            'plus');
-        $this->addGroup($buttons, 'question_buttons', null, '', false);
+
+        $this->addElement('html', '</tbody></table>');
+
+        $this->addOptionsButtons();
+    }
+
+    protected function addOptionsButtons()
+    {
+        $buttonToolBar = new ButtonToolBar();
+
+        $buttonToolBar->addItem(
+            new Button(
+                Translation::get('AddMatchTextOption'),
+                new BootstrapGlyph('plus'),
+                ' ',
+                Button::DISPLAY_ICON_AND_LABEL,
+                false,
+                'btn-primary add-option'));
+
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        $this->addElement('html', $buttonToolBarRenderer->render());
+    }
+
+    public function prepareTabs()
+    {
+        $this->addDefaultTab();
+        $this->addHintTab();
+        $this->addInstructionsTab();
+        $this->addMetadataTabs();
+    }
+
+    public function addHintTab()
+    {
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab(
+                'add-hint',
+                Translation::get('AddHint'),
+                new FontAwesomeGlyph('magic', array('ident-sm')),
+                'buildHintForm'));
+    }
+
+    public function buildHintForm()
+    {
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '100';
+        $htmlEditorOptions['collapse_toolbar'] = true;
+        $htmlEditorOptions['show_tags'] = false;
+        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
+
+        $this->add_html_editor(
+            AssessmentMatchTextQuestion::PROPERTY_HINT,
+            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
+            false,
+            $htmlEditorOptions);
     }
 }

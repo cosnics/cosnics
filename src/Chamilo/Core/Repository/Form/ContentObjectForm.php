@@ -542,7 +542,7 @@ EOT;
                 'add_category',
                 Theme::getInstance()->getCommonImagePath('Action/Add'),
                 array('id' => 'add_category', 'style' => 'display:none'));
-            $this->addGroup($category_group, 'category_form_group', Translation::get('CategoryTypeName'));
+            $this->addGroup($category_group, 'category_form_group', Translation::get('CategoryTypeName'), null, false);
 
             $this->setInlineElementTemplate('category_form_group');
 
