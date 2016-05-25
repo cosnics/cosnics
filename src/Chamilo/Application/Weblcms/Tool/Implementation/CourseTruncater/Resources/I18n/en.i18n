@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_truncater
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Truncate this course"
+TypeCategory = "Course Tools"
+EmptyConfirmationQuestion = "Are you sure you want to empty this course?"
+AllSelectedObjectsRemoved = "All selected opbjects are removed"
+NotAllSelectedObjectsRemoved = "Not all selected objects are removed"
+EmptyThisCourse = "Empty this course"
+EmptyThisCourseInformation = "2. Confirm"
+SelectAItem = "Select at least 1 item"
+Course = "Course"
+Publications = "1. Select the publications and / or publication categories that you want to remove"
+NoPublications = "There are no publications and sections in this course"
+SelectPublications = "Select publications"
+CategoryTypeName = "Category type name"
+CourseSections = "Course sections"
+CourseAdministration = "Course administration"
+PublicationCategories = "Remove the publication categories"
+ContentObjectNotImported = "Content object not imported"
+CourseDeleteFailed = "Course not deleted"
+Other = "Other"
+BrowserComponent = "Truncate course"
+Truncate = "Truncate"
