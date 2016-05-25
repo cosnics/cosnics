@@ -49,18 +49,19 @@ class ResultsViewerComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $pid = Request :: get(self :: PARAM_ASSESSMENT);
+        $pid = Request:: get(self :: PARAM_ASSESSMENT);
 
         $this->set_parameter(self :: PARAM_ASSESSMENT, $pid);
-        $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(),
-            $pid);
+        $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
+            ContentObjectPublication:: class_name(),
+            $pid
+        );
 
         $assessment = $this->publication->get_content_object();
 
         $this->add_assessment_title_breadcrumb($assessment);
 
-        if (! $this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication))
+        if (!$this->is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->publication))
         {
             throw new NotAllowedException();
         }
@@ -79,8 +80,10 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
-        $html[] = '<img src="' . Theme :: getInstance()->getImagePath(Assessment :: context(), 'Logo/16') . '" /> ' .
-             $assessment->get_title();
+        $html[] = '<img src="' .
+            Theme:: getInstance()->getImagePath('Chamilo\Core\Repository\ContentObject\Assessment', 'Logo/16') .
+            '" /> ' .
+            $assessment->get_title();
         $html[] = '</h3>';
         $html[] = '</div>';
 
@@ -107,53 +110,68 @@ class ResultsViewerComponent extends Manager implements TableSupport
     {
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
-            if (! isset($this->buttonToolbarRenderer))
+            if (!isset($this->buttonToolbarRenderer))
             {
                 $buttonToolbar = new ButtonToolBar($this->get_url());
                 $commonActions = new ButtonGroup();
 
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+                        Translation:: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
+                        Theme:: getInstance()->getCommonImagePath('Action/Browser'),
                         $this->get_url(),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
+                    )
+                );
 
-                $aid = Request :: get(self :: PARAM_ASSESSMENT);
+                $aid = Request:: get(self :: PARAM_ASSESSMENT);
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('DownloadDocuments'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Download'),
+                        Translation:: get('DownloadDocuments'),
+                        Theme:: getInstance()->getCommonImagePath('Action/Download'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SAVE_DOCUMENTS,
-                                self :: PARAM_ASSESSMENT => $aid)),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                                self :: PARAM_ASSESSMENT => $aid
+                            )
+                        ),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
+                    )
+                );
 
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('DeleteAllResults'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                        Translation:: get('DeleteAllResults'),
+                        Theme:: getInstance()->getCommonImagePath('Action/Delete'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_DELETE_RESULTS,
-                                self :: PARAM_ASSESSMENT => $aid)),
+                                self :: PARAM_ASSESSMENT => $aid
+                            )
+                        ),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                        true));
+                        true
+                    )
+                );
 
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('RawExportResults'),
-                        Theme :: getInstance()->getCommonImagePath('Action/Export'),
+                        Translation:: get('RawExportResults'),
+                        Theme:: getInstance()->getCommonImagePath('Action/Export'),
                         $this->get_url(
                             array(
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_RAW_EXPORT_RESULTS,
-                                self :: PARAM_ASSESSMENT => Request :: get(self :: PARAM_ASSESSMENT))),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-            }
-            $buttonToolbar->addButtonGroup($commonActions);
+                                self :: PARAM_ASSESSMENT => Request:: get(self :: PARAM_ASSESSMENT)
+                            )
+                        ),
+                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
+                    )
+                );
 
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+                $buttonToolbar->addButtonGroup($commonActions);
+
+                $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+            }
         }
 
         return $this->buttonToolbarRenderer;
@@ -166,12 +184,13 @@ class ResultsViewerComponent extends Manager implements TableSupport
      */
     protected function add_assessment_title_breadcrumb($assessment)
     {
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail:: get_instance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
             $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_RESULTS)),
-            Translation :: get('ViewResultsForAssessment', array('TITLE' => $assessment->get_title())));
+            Translation:: get('ViewResultsForAssessment', array('TITLE' => $assessment->get_title()))
+        );
 
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
     }
@@ -188,14 +207,18 @@ class ResultsViewerComponent extends Manager implements TableSupport
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt :: class_name(), AssessmentAttempt :: PROPERTY_ASSESSMENT_ID),
-            new StaticConditionVariable(Request :: get(self :: PARAM_ASSESSMENT)));
+            new PropertyConditionVariable(
+                AssessmentAttempt:: class_name(), AssessmentAttempt :: PROPERTY_ASSESSMENT_ID
+            ),
+            new StaticConditionVariable(Request:: get(self :: PARAM_ASSESSMENT))
+        );
 
-        if (! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(AssessmentAttempt :: class_name(), AssessmentAttempt :: PROPERTY_USER_ID),
-                new StaticConditionVariable($this->get_user_id()));
+                new PropertyConditionVariable(AssessmentAttempt:: class_name(), AssessmentAttempt :: PROPERTY_USER_ID),
+                new StaticConditionVariable($this->get_user_id())
+            );
         }
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -204,9 +227,9 @@ class ResultsViewerComponent extends Manager implements TableSupport
         {
             $search_properties = array();
 
-            $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME);
-            $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME);
-            $search_properties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE);
+            $search_properties[] = new PropertyConditionVariable(User:: class_name(), User :: PROPERTY_FIRSTNAME);
+            $search_properties[] = new PropertyConditionVariable(User:: class_name(), User :: PROPERTY_LASTNAME);
+            $search_properties[] = new PropertyConditionVariable(User:: class_name(), User :: PROPERTY_OFFICIAL_CODE);
 
             $search_conditions = $this->buttonToolbarRenderer->getConditions($search_properties);
             if ($search_conditions)
