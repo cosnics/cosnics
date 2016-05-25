@@ -128,7 +128,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $object->set_title($file->title);
         $object->set_created(strtotime($file->createdDate));
-        $object->set_type($file->iconLink);
+        $object->set_type($file->mimeType);
+        $object->set_icon_link($file->iconLink);
 
         if ($file->lastViewedByMeDate != null)
         {
@@ -263,7 +264,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_title($file_item['title']);
             $object->set_created(strtotime($file_item['createdDate']));
 
-            $object->set_type($file_item['iconLink']);
+            $object->set_type($file_item['mimeType']);
+            $object->set_icon_link($file_item['iconLink']);
             if ($file_item['lastViewedByMeDate'] != null)
             {
                 $object->set_viewed(strtotime($file_item['lastViewedByMeDate']));
