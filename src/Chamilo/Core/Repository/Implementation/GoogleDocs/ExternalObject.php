@@ -10,6 +10,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const PROPERTY_CONTENT = 'content';
     const PROPERTY_MODIFIER_ID = 'modifier_id';
     const PROPERTY_PREVIEW = 'preview';
+    const PROPERTY_ICON_LINK = 'icon_link';
 
     public static function get_default_property_names($extended_property_names = array())
     {
@@ -57,6 +58,16 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return $this->set_default_property(self :: PROPERTY_PREVIEW, $preview);
     }
 
+    public function get_icon_link()
+    {
+        return $this->get_default_property(self::PROPERTY_ICON_LINK);
+    }
+
+    public function set_icon_link($icon_link)
+    {
+        $this->set_default_property(self::PROPERTY_ICON_LINK, $icon_link);
+    }
+
     public static function get_object_type()
     {
         return self :: OBJECT_TYPE;
@@ -66,13 +77,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         switch ($this->get_type())
         {
-            case 'document' :
+            case 'application/vnd.google-apps.document' :
                 return array('pdf', 'odt', 'docx');
                 break;
-            case 'presentation' :
+            case 'application/vnd.google-apps.presentation' :
                 return array('pdf', 'pptx'); // 'swf');
                 break;
-            case 'spreadsheet' :
+            case 'application/vnd.google-apps.spreadsheet' :
                 return array('pdf', 'xlsx');
                 break;
             case 'pdf' :
@@ -94,14 +105,14 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         switch ($this->get_type())
         {
-            case 'document' :
+            case 'application/vnd.google-apps.document' :
                 $url = $this->get_content() . '&format=' . $export_format;
 
                 break;
-            case 'presentation' :
+            case 'application/vnd.google-apps.presentation' :
                 $url = $this->get_content() . '&exportFormat=' . $export_format;
                 break;
-            case 'spreadsheet' :
+            case 'application/vnd.google-apps.spreadsheet' :
                 $url = $this->get_content() . '&fmcmd=' . $export_format;
                 break;
             default :
@@ -118,6 +129,6 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_icon_image()
     {
-        return '<img src="' . $this->get_type() . '" />';
+        return '<img src="' . $this->get_icon_link() . '" />';
     }
 }
