@@ -1,142 +1,124 @@
 $(function()
 {
-    var skippedOptions = 0, baseWebPath = getPath('WEB_PATH'), currentNumberOfOptions;
+    var skippedOptions = 0;
+    var ajaxContext = 'Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatchTextQuestion\\Ajax';
+    var ajaxUri = getPath('WEB_PATH') + 'index.php';
+    var translationContext = 'Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatchTextQuestion';
     
-    function getDeleteIcon()
-    {
-        return $('.table-data > tbody > tr:first > td:last .remove_option').attr('src').replace('_na.png', '.png');
-    }
-    
-    function getSelectOptions()
-    {
-        return $('.table-data > tbody > tr:first select[name*="option_order"]').html();
-    }
-    
-    function processItems()
+    function processOptions()
     {
         var deleteImage, deleteField, rows;
         
-        deleteImage = '<img class="remove_option" src="' + getDeleteIcon().replace('.png', '_na.png') + '"/>';
-        deleteField = '<input id="remove_$option_number" class="remove_option" type="image" src="' + getDeleteIcon()
-                + '" name="remove[$option_number]" />';
-        rows = $('.table-data > tbody > tr');
+        rows = $('.table.table-assessment-question-form > tbody > tr');
         
-        if (rows.size() <= 1)
+        if (rows.size() <= 2)
         {
-            deleteField = deleteImage;
+            $('.option-remove', rows).addClass('text-muted');
+            $('.option-remove', rows).removeClass('text-danger');
+        }
+        else
+        {
+            $('.option-remove', rows).removeClass('text-muted');
+            $('.option-remove', rows).addClass('text-danger');
         }
         
-        var i = 1;
-        
-        rows.each(function()
+        rows.each(function(index)
         {
-            var weightField, weightFieldName, id, appendField;
+            var row = $(this);
             
-            weightField = $('input[name*="option_weight"]', this);
-            weightFieldName = weightField.attr('name');
-            id = weightFieldName.substr(14, weightFieldName.length - 15);
-            appendField = deleteField.replace(/\$option_number/g, id);
-            
-            $('.remove_option', this).remove();
-            $('td:last', this).append(appendField);
-            $('td:first', this).empty();
-            $('td:first', this).append(i);
-            
-            i++;
+            $('.table-cell-selection', row).text((parseInt(index, 10) + 1) + '.');
         });
-        
-        currentNumberOfOptions = rows.size();
     }
     
     function removeOption(ev, ui)
     {
         ev.preventDefault();
         
-        var tableBody, id, rows, row, response;
+        var isConfirmed = confirm(getTranslation('ConfirmOptionDelete', null, translationContext));
         
-        tableBody = $(this).parent().parent().parent();
-        id = $(this).attr('id');
-        id = id.replace('remove_', '');
-        destroyHtmlEditor('comment[' + id + ']');
-        $('tr#option_' + id, tableBody).remove();
-        
-        rows = $('tr', tableBody);
-        
-        row = 0;
-        
-        response = $.ajax({
-            type : "POST",
-            url : baseWebPath + "libraries/ajax/match_question.php",
-            data : {
-                action : 'skip_match',
-                value : id
-            },
-            async : false
-        }).responseText;
-        
-        rows.each(function()
+        if (!isConfirmed)
         {
-            var rowClass = row % 2 === 0 ? 'row_even' : 'row_odd';
-            $(this).attr('class', rowClass);
-            row += 1;
+            return false;
+        }
+        
+        var deleteButton = $(this);
+        var optionIdentifier = deleteButton.data('option-id');
+        
+        destroyHtmlEditor('feedback[' + optionIdentifier + ']');
+        $('.table.table-assessment-question-form tr[data-option-id="' + optionIdentifier + '"]').remove();
+        
+        var parameters = {
+            'application' : ajaxContext,
+            'go' : 'SkipOption',
+            'option-number' : optionIdentifier
+        };
+        
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters
+        }).success(function(json)
+        {
+            if (json.result_code == 200)
+            {
+                skippedOptions += 1;
+                processOptions();
+            }
         });
-        
-        skippedOptions += 1;
-        
-        processItems();
     }
     
     function addOption(ev, ui)
     {
         ev.preventDefault();
         
-        var numberOfOptions, newNumber, response, rowClass, id, fieldAnswer, fieldFeedback, fieldWeight, fieldDelete, string, parameters, editorName, highestOptionValue;
+        var numberOfOptions = $('#match_number_of_options').val(), newNumber = (parseInt(numberOfOptions, 10) + 1), name, value, fieldOption, fieldAnswer, fieldComment, fieldScore, fieldDelete, string, htmlEditorOptions, editorNameAnswer, editorNameComment, type;
         
-        numberOfOptions = $('#match_number_of_options').val();
-        newNumber = parseInt(numberOfOptions, 10) + 1;
-        
-        $('#match_number_of_options').val(newNumber);
-        
-        rowClass = (numberOfOptions - skippedOptions) % 2 === 0 ? 'row_even' : 'row_odd';
-        id = 'correct[' + numberOfOptions + ']';
-        
-        var visibleNumber = numberOfOptions - skippedOptions + 1;
-        
-        parameters = {
+        htmlEditorOptions = {
             "width" : "100%",
             "height" : "65",
             "toolbar" : "RepositoryQuestion",
             "collapse_toolbar" : true
         };
-        editorName = 'comment[' + numberOfOptions + ']';
         
-        fieldAnswer = '<textarea name="option[' + numberOfOptions + ']" style="width: 100%; height: 65px;"></textarea>';
-        fieldFeedback = renderHtmlEditor(editorName, parameters);
-        fieldWeight = '<input class="input_numeric" type="text" value="0" name="option_weight[' + numberOfOptions
-                + ']" size="2" />';
-        fieldDelete = '<input id="remove_' + numberOfOptions + '" class="remove_option" type="image" src="'
-                + getDeleteIcon() + '" name="remove[' + numberOfOptions + ']" />';
-        string = '<tr id="option_' + numberOfOptions + '" class="' + rowClass + '"><td>' + visibleNumber + '</td><td>'
-                + fieldAnswer + '</td><td>' + fieldFeedback + '</td><td>' + fieldWeight + '</td><td>' + fieldDelete
-                + '</td></tr>';
+        setMemory('match_number_of_options', newNumber);
+        $('#match_number_of_options').val(newNumber);
         
-        $('.table-data > tbody').append(string);
+        fieldSelection = newNumber + '.';
         
-        processItems();
+        fieldAnswer = '<textarea class="form-control" style="height: 80px;" name="value[' + numberOfOptions
+                + ']"></textarea>';
         
-        highestOptionValue = $('.table-data tbody tr:first select[name*="option_order"] option:last').val();
-        $('.table-data > tbody > tr:last select[name*="option_order"]').val(highestOptionValue);
+        fieldFeedback = '<div class="option-feedback-field form-assessment-extra-container" data-element="feedback['
+                + numberOfOptions + ']">';
+        fieldFeedback += '<label>' + getTranslation('Feedback', null, translationContext) + '</label>';
+        fieldFeedback += renderHtmlEditor('feedback[' + numberOfOptions + ']', htmlEditorOptions);
+        fieldFeedback += '</div>';
         
-        response = $.ajax({
-            type : "POST",
-            url : baseWebPath + "libraries/ajax/memory.php",
-            data : {
-                action : 'set',
-                variable : 'match_number_of_options',
-                value : newNumber
-            },
-            async : false
-        }).responseText;
+        fieldScore = '<div class="option-score-field form-assessment-extra-container form-inline" data-element="score['
+                + numberOfOptions + ']">';
+        fieldScore += '<label>' + getTranslation('Score', null, translationContext) + ':</label> ';
+        fieldScore += '<input size="2" class="input_numeric form-control" name="score[' + numberOfOptions
+                + ']" value="0" type="text">';
+        fieldScore += '</div>';
+        
+        fieldActions = '<span data-option-id="' + numberOfOptions
+                + '" class="option-action option-feedback fa fa-comment text-primary"></span>';
+        fieldActions += '<br>';
+        fieldActions += '<span data-option-id="' + numberOfOptions
+                + '" class="option-action option-score fa fa-percent text-primary"></span>';
+        fieldActions += '<br>';
+        fieldActions += '<span data-option-id="' + numberOfOptions
+                + '" class="option-action option-remove fa fa-trash text-danger"></span>';
+        
+        tableRow = '<tr data-option-id="' + numberOfOptions + '">';
+        tableRow += '<td class="table-cell-selection cell-stat-x3">' + fieldSelection + '</td>';
+        tableRow += '<td>' + fieldAnswer + fieldFeedback + fieldScore + '</td>';
+        tableRow += '<td class="table-cell-action cell-stat-x2 text-right">' + fieldActions + '</td>';
+        tableRow += '</tr>';
+        
+        $('.table.table-assessment-question-form > tbody').append(tableRow);
+        
+        processOptions();
     }
     
     function lockWeight(ev, ui)
