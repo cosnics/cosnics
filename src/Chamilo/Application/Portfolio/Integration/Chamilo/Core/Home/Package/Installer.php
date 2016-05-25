@@ -52,7 +52,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
             $block->setParentId($column->getId());
             $block->setContext(\Chamilo\Application\Portfolio\Manager:: context());
-            $block->setBlockType('Login');
+            $block->setBlockType('FavouriteUsers');
             $block->setVisibility(true);
             $block->setTitle(Translation:: get('User', null, \Chamilo\Application\Portfolio\Manager:: context()));
             $block->setUserId(0);
