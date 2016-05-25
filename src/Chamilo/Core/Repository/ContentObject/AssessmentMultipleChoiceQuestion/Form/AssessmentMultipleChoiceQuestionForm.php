@@ -27,14 +27,26 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     protected function build_creation_form()
     {
-        parent::build_creation_form();
+        parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
     }
 
     protected function build_editing_form()
     {
-        parent::build_editing_form();
+        parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
+    }
+
+    protected function getDescriptionHtmlEditorOptions()
+    {
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '100';
+        $htmlEditorOptions['collapse_toolbar'] = false;
+        $htmlEditorOptions['show_tags'] = false;
+        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
+
+        return $htmlEditorOptions;
     }
 
     protected function buildBasicQuestionForm()
@@ -102,7 +114,6 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     public function update_content_object()
     {
-        $object = $this->get_content_object();
         $this->processSubmittedData();
 
         return parent::update_content_object();
@@ -119,8 +130,6 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
         $answerType = Session::retrieve('mc_answer_type');
-
-        $object->set_hint($values[AssessmentMultipleChoiceQuestion::PROPERTY_HINT]);
 
         $options = array();
 

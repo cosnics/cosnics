@@ -12,6 +12,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AssessmentMatchTextQuestionOption
 {
+    const PROPERTY_VALUE = 'value';
+    const PROPERTY_SCORE = 'score';
+    const PROPERTY_FEEDBACK = 'feedback';
 
     private $value;
 
@@ -43,7 +46,7 @@ class AssessmentMatchTextQuestionOption
 
     public function has_feedback()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_feedback(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_feedback(), true);
     }
 
     public function set_feedback($value)

@@ -27,14 +27,26 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     protected function build_creation_form()
     {
-        parent::build_creation_form();
+        parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
     }
 
     protected function build_editing_form()
     {
-        parent::build_editing_form();
+        parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
+    }
+
+    protected function getDescriptionHtmlEditorOptions()
+    {
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '100';
+        $htmlEditorOptions['collapse_toolbar'] = false;
+        $htmlEditorOptions['show_tags'] = false;
+        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
+
+        return $htmlEditorOptions;
     }
 
     protected function buildBasicQuestionForm()
@@ -94,20 +106,22 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     public function create_content_object()
     {
-        $object = new AssessmentSelectQuestion();
-        $object->set_hint($this->exportValue(AssessmentSelectQuestion::PROPERTY_HINT));
-        $this->set_content_object($object);
-        $this->add_options_to_object();
+        $this->set_content_object(new AssessmentSelectQuestion());
+        $this->processSubmittedData();
 
         return parent::create_content_object();
     }
 
     public function update_content_object()
     {
+        $this->processSubmittedData();
+        return parent::update_content_object();
+    }
+
+    public function processSubmittedData()
+    {
         $this->get_content_object()->set_hint($this->exportValue(AssessmentSelectQuestion::PROPERTY_HINT));
         $this->add_options_to_object();
-
-        return parent::update_content_object();
     }
 
     public function validate()
@@ -145,6 +159,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $answerType = Session::retrieve('select_answer_type');
 
         $options = array();
+
         foreach ($values[AssessmentSelectQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
             $score = $values[AssessmentSelectQuestionOption::PROPERTY_SCORE][$option_id];
@@ -372,7 +387,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
         $buttonToolBar->addItem(
             new Button(
-                Translation::get('AddMultipleChoiceOption'),
+                Translation::get('AddSelectOption'),
                 new BootstrapGlyph('plus'),
                 ' ',
                 Button::DISPLAY_ICON_AND_LABEL,

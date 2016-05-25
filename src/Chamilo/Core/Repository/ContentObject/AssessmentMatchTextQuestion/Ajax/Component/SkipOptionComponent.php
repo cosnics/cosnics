@@ -1,11 +1,11 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Ajax\Component;
+namespace Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Ajax\Component;
 
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
  *
- * @package Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Ajax
+ * @package Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Ajax
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -29,7 +29,7 @@ class SkipOptionComponent extends \Chamilo\Core\Repository\ContentObject\Assessm
      */
     public function run()
     {
-        $_SESSION['select_skip_options'][] = $this->getPostDataValue(self::PARAM_OPTION_NUMBER);
+        $_SESSION['match_skip_options'][] = $this->getPostDataValue(self::PARAM_OPTION_NUMBER);
         JsonAjaxResult::success();
     }
 }
