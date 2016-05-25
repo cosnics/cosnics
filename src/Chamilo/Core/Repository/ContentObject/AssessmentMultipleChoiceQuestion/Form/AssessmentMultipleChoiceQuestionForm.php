@@ -179,7 +179,15 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         if (isset($answerTypeChanged))
         {
             $currentAnswerType = Session::retrieve('mc_answer_type');
-            $newAnswerType = ($currentAnswerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO ? AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX : AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO);
+
+            if ($currentAnswerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
+            {
+                $newAnswerType = AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX;
+            }
+            else
+            {
+                $newAnswerType = AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO;
+            }
 
             Session::register('mc_answer_type', $newAnswerType);
         }
@@ -199,6 +207,8 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
     public function add_options()
     {
         $renderer = $this->get_renderer();
+        $this->setOptionsSessionValues();
+
         $number_of_options = (int) Session::retrieve('mc_number_of_options');
         $skippedOptions = Session::retrieve('mc_skip_options');
         $answerType = Session::retrieve('mc_answer_type');
@@ -384,8 +394,8 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
         if (! isset($fields[AssessmentMultipleChoiceQuestionOption::PROPERTY_CORRECT]))
         {
-            $message = $answerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX ? Translation::get(
-                'SelectAtLeastOneCorrectAnswer') : Translation::get('SelectACorrectAnswer');
+            $message = ($answerType == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX ? Translation::get(
+                'SelectAtLeastOneCorrectAnswer') : Translation::get('SelectACorrectAnswer'));
             return array('change_answer_type' => $message);
         }
 
@@ -408,21 +418,6 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
                 Translation::get('AddHint'),
                 new FontAwesomeGlyph('magic', array('ident-sm')),
                 'buildHintForm'));
-    }
-
-    public function addInstructionsTab()
-    {
-        $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab(
-                'view-instructions',
-                Translation::get('ViewInstructions'),
-                new FontAwesomeGlyph('question-circle', array('ident-sm')),
-                'buildInstructionsForm'));
-    }
-
-    public function buildInstructionsForm()
-    {
-        $this->add_example_box();
     }
 
     public function buildHintForm()

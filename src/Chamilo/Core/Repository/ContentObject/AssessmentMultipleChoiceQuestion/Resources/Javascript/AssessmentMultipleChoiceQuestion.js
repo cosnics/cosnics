@@ -214,7 +214,7 @@ $(function()
             var scoreValue = scoreField.val();
             var inputFieldIsChecked = inputField.is(':checked');
             
-            if (inputFieldIsChecked && scoreValue == 0)
+            if (inputFieldIsChecked && scoreValue <= 0)
             {
                 scoreField.val(1);
             }
