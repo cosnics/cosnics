@@ -216,11 +216,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $this->addElement('category', Translation::get('Options'));
 
         $this->addElement('hidden', 'mc_answer_type', $answerType, array('id' => 'mc_answer_type'));
-        $this->addElement(
-            'hidden',
-            'mc_number_of_options',
-            Session::retrieve('mc_number_of_options'),
-            array('id' => 'mc_number_of_options'));
+        $this->addElement('hidden', 'mc_number_of_options', $number_of_options, array('id' => 'mc_number_of_options'));
 
         $htmlEditorOptions = array();
         $htmlEditorOptions['width'] = '100%';

@@ -1,8 +1,3 @@
-/*
- * global $, document, renderFckEditor, getPath, getTranslation, getTheme,
- * setMemory, doAjaxPost
- */
-
 $(function()
 {
     var skippedOptions = 0;
@@ -41,7 +36,7 @@ $(function()
         }
         else
         {
-            newType = 1
+            newType = 1;
             newLabel = getTranslation('SwitchToCheckboxes', null, translationContext)
         }
         
@@ -82,6 +77,13 @@ $(function()
     function removeOption(ev, ui)
     {
         ev.preventDefault();
+        
+        var isConfirmed = confirm(getTranslation('ConfirmOptionDelete', null, translationContext));
+        
+        if (!isConfirmed)
+        {
+            return false;
+        }
         
         var deleteButton = $(this);
         var optionIdentifier = deleteButton.data('option-id');
