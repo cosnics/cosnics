@@ -966,7 +966,7 @@ abstract class Manager extends Application
     {
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)),
+                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE), array(self::PARAM_PUBLICATION_ID)),
                 Translation :: getInstance()->getTranslation('BrowserComponent', array(), $this->context())));
     }
 
