@@ -45,11 +45,13 @@ class LastAccessToToolsBlock extends ToolAccessBlock
             $publications = $this->count_tool_publications($tool_name);
             if ($publications > 0)
             {
+                $filter = array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
+
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = ToolPublicationsDetailTemplate :: class_name();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
                 $params[\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_REPORTING_TOOL] = $tool_name;
-                $url = $this->get_parent()->get_url($params);
+                $url = $this->get_parent()->get_url($params, $filter);
 
                 $toolbar = new Toolbar();
                 $toolbar->add_item(
@@ -68,7 +70,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = AssignmentScoresTemplate :: class_name();
                         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course_id;
 
-                        $url_detail = $this->get_parent()->get_url($params);
+                        $url_detail = $this->get_parent()->get_url($params, $filter);
 
                         $toolbar->add_item(
                             new ToolbarItem(
@@ -85,7 +87,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = AssessmentScoresTemplate :: class_name();
                         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course_id;
 
-                        $url_detail = $this->get_parent()->get_url($params);
+                        $url_detail = $this->get_parent()->get_url($params, $filter);
 
                         $toolbar->add_item(
                             new ToolbarItem(
@@ -102,7 +104,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
                         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = LearningPathProgressTemplate :: class_name();
                         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course_id;
 
-                        $url_detail = $this->get_parent()->get_url($params);
+                        $url_detail = $this->get_parent()->get_url($params, $filter);
 
                         $toolbar->add_item(
                             new ToolbarItem(
