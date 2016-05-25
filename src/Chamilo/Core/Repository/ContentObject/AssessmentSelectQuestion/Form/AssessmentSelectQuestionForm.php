@@ -6,14 +6,16 @@ use Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataC
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: assessment_select_question_form.class.php $
@@ -25,22 +27,30 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     protected function build_creation_form()
     {
-        parent::build_creation_form();
-        $this->addElement('category', Translation::get('Options'));
-        $this->add_options();
-
-        $this->addElement(
-            'html',
-            ResourceManager::get_instance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath(
-                    'Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion',
-                    true) . 'AssessmentSelectQuestion.js'));
+        parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
+        $this->buildBasicQuestionForm();
     }
 
     protected function build_editing_form()
     {
-        parent::build_editing_form();
-        $this->addElement('category', Translation::get('Options'));
+        parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
+        $this->buildBasicQuestionForm();
+    }
+
+    protected function getDescriptionHtmlEditorOptions()
+    {
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '100';
+        $htmlEditorOptions['collapse_toolbar'] = false;
+        $htmlEditorOptions['show_tags'] = false;
+        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
+
+        return $htmlEditorOptions;
+    }
+
+    protected function buildBasicQuestionForm()
+    {
         $this->add_options();
 
         $this->addElement(
@@ -61,12 +71,14 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             if ($object->get_number_of_options() != 0)
             {
                 $options = $object->get_options();
+
                 foreach ($options as $index => $option)
                 {
-                    $defaults[AssessmentSelectQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
-                    $defaults[AssessmentSelectQuestionOption::PROPERTY_SCORE][$index] = $option->get_score();
+                    $defaults[AssessmentSelectQuestionOption::PROPERTY_VALUE][$index] = $option->get_value() ? $option->get_value() : 0;
+                    $defaults[AssessmentSelectQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 0;
                     $defaults[AssessmentSelectQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
-                    if ($object->get_answer_type() == 'checkbox')
+
+                    if ($object->get_answer_type() == AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX)
                     {
                         $defaults[AssessmentSelectQuestionOption::PROPERTY_CORRECT][$index] = $option->is_correct();
                     }
@@ -78,12 +90,14 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             }
             else
             {
-                $number_of_options = intval($_SESSION['select_number_of_options']);
+                $number_of_options = (int) Session::retrieve('select_number_of_options');
 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
                     $defaults[AssessmentSelectQuestionOption::PROPERTY_SCORE][$option_number] = 0;
                 }
+
+                $defaults[AssessmentSelectQuestionOption::PROPERTY_CORRECT] = 0;
             }
         }
 
@@ -92,20 +106,22 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     public function create_content_object()
     {
-        $object = new AssessmentSelectQuestion();
-        $object->set_hint($this->exportValue(AssessmentSelectQuestion::PROPERTY_HINT));
-        $this->set_content_object($object);
-        $this->add_options_to_object();
+        $this->set_content_object(new AssessmentSelectQuestion());
+        $this->processSubmittedData();
 
         return parent::create_content_object();
     }
 
     public function update_content_object()
     {
+        $this->processSubmittedData();
+        return parent::update_content_object();
+    }
+
+    public function processSubmittedData()
+    {
         $this->get_content_object()->set_hint($this->exportValue(AssessmentSelectQuestion::PROPERTY_HINT));
         $this->add_options_to_object();
-
-        return parent::update_content_object();
     }
 
     public function validate()
@@ -124,7 +140,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     public function validate_selected_answers($fields)
     {
-        $answerType = Session::retrieve('mc_answer_type');
+        $answerType = Session::retrieve('select_answer_type');
 
         if (! isset($fields[AssessmentSelectQuestionOption::PROPERTY_CORRECT]))
         {
@@ -140,13 +156,16 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
+        $answerType = Session::retrieve('select_answer_type');
 
         $options = array();
+
         foreach ($values[AssessmentSelectQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
             $score = $values[AssessmentSelectQuestionOption::PROPERTY_SCORE][$option_id];
             $feedback = $values[AssessmentSelectQuestionOption::PROPERTY_FEEDBACK][$option_id];
-            if ($_SESSION['select_answer_type'] == 'radio')
+
+            if ($answerType == AssessmentSelectQuestionOption::ANSWER_TYPE_RADIO)
             {
                 $correct = $values[AssessmentSelectQuestionOption::PROPERTY_CORRECT] == $option_id;
             }
@@ -154,11 +173,68 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             {
                 $correct = $values[AssessmentSelectQuestionOption::PROPERTY_CORRECT][$option_id];
             }
+
             $options[] = new AssessmentSelectQuestionOption($value, $correct, $score, $feedback);
         }
 
-        $object->set_answer_type($_SESSION['select_answer_type']);
+        $object->set_answer_type($answerType);
         $object->set_options($options);
+    }
+
+    public function setOptionsSessionValues()
+    {
+        if (! $this->isSubmitted())
+        {
+            Session::unregister('select_number_of_options');
+            Session::unregister('select_skip_options');
+            Session::unregister('select_answer_type');
+        }
+
+        Session::registerIfNotSet('select_number_of_options', 3);
+        Session::registerIfNotSet('select_skip_options', array());
+        Session::registerIfNotSet('select_answer_type', AssessmentSelectQuestion::ANSWER_TYPE_RADIO);
+
+        $extraOptionRequested = Request::post('add');
+        $removedOptions = Request::post('remove');
+        $answerTypeChanged = Request::post('change_answer_type');
+
+        if (isset($extraOptionRequested))
+        {
+            Session::register('select_number_of_options', (Session::retrieve('select_number_of_options') + 1));
+        }
+
+        if (isset($removedOptions))
+        {
+            $indexes = array_keys($removedOptions);
+            $skippedOptions = Session::retrieve('select_skip_options');
+            $skippedOptions[] = $indexes[0];
+
+            Session::register('select_skip_options', $skippedOptions);
+        }
+
+        if (isset($answerTypeChanged))
+        {
+            $currentAnswerType = Session::retrieve('select_answer_type');
+
+            if ($currentAnswerType == AssessmentSelectQuestion::ANSWER_TYPE_RADIO)
+            {
+                $newAnswerType = AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX;
+            }
+            else
+            {
+                $newAnswerType = AssessmentSelectQuestion::ANSWER_TYPE_RADIO;
+            }
+
+            Session::register('select_answer_type', $newAnswerType);
+        }
+
+        $object = $this->get_content_object();
+
+        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
+        {
+            Session::register('select_number_of_options', $object->get_number_of_options());
+            Session::register('select_answer_type', $object->get_answer_type());
+        }
     }
 
     /**
@@ -167,205 +243,168 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
     public function add_options()
     {
         $renderer = $this->defaultRenderer();
+        $this->setOptionsSessionValues();
 
-        if (! $this->isSubmitted())
-        {
-            unset($_SESSION['select_number_of_options']);
-            unset($_SESSION['select_skip_options']);
-            unset($_SESSION['select_answer_type']);
-        }
-        if (! isset($_SESSION['select_number_of_options']))
-        {
-            $_SESSION['select_number_of_options'] = 3;
-        }
-        if (! isset($_SESSION['select_skip_options']))
-        {
-            $_SESSION['select_skip_options'] = array();
-        }
-        if (! isset($_SESSION['select_answer_type']))
-        {
-            $_SESSION['select_answer_type'] = 'radio';
-        }
-        if (isset($_POST['add']))
-        {
-            $_SESSION['select_number_of_options'] = $_SESSION['select_number_of_options'] + 1;
-        }
-        if (isset($_POST['remove']))
-        {
-            $indexes = array_keys($_POST['remove']);
-            $_SESSION['select_skip_options'][] = $indexes[0];
-        }
-        if (isset($_POST['change_answer_type']))
-        {
-            $_SESSION['select_answer_type'] = $_SESSION['select_answer_type'] == 'radio' ? 'checkbox' : 'radio';
-        }
-        $object = $this->get_content_object();
-        if (! $this->isSubmitted() && $object->get_number_of_options() != 0)
-        {
-            $_SESSION['select_number_of_options'] = $object->get_number_of_options();
-            $_SESSION['select_answer_type'] = $object->get_answer_type();
-        }
-        $number_of_options = intval($_SESSION['select_number_of_options']);
+        $number_of_options = (int) Session::retrieve('select_number_of_options');
+        $skippedOptions = Session::retrieve('select_skip_options');
+        $answerType = Session::retrieve('select_answer_type');
 
-        if ($_SESSION['select_answer_type'] == 'radio')
-        {
-            $switch_label = Translation::get('SwitchToMultipleSelect');
-        }
-        elseif ($_SESSION['select_answer_type'] == 'checkbox')
-        {
-            $switch_label = Translation::get('SwitchToSingleSelect');
-        }
+        $this->addElement('category', Translation::get('Options'));
 
-        $this->addElement(
-            'hidden',
-            'select_answer_type',
-            $_SESSION['select_answer_type'],
-            array('id' => 'select_answer_type'));
+        $this->addElement('hidden', 'select_answer_type', $answerType, array('id' => 'select_answer_type'));
         $this->addElement(
             'hidden',
             'select_number_of_options',
-            $_SESSION['select_number_of_options'],
+            $number_of_options,
             array('id' => 'select_number_of_options'));
 
-        $buttons = array();
-        $buttons[] = $this->createElement(
-            'style_button',
-            'change_answer_type',
-            $switch_label,
-            array('id' => 'change_answer_type'),
-            null,
-            'retweet');
-        // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
-        // clicking an image button
-        $buttons[] = $this->createElement(
-            'style_button',
-            'add[]',
-            Translation::get('AddSelectOption'),
-            array('id' => 'add_option'),
-            null,
-            'plus');
-        $this->addGroup($buttons, 'question_buttons', null, '', false);
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '65';
+        $htmlEditorOptions['collapse_toolbar'] = true;
+        $htmlEditorOptions['toolbar'] = 'RepositoryQuestion';
 
-        $html_editor_options = array();
-        $html_editor_options['width'] = '100%';
-        $html_editor_options['height'] = '65';
-        $html_editor_options['collapse_toolbar'] = true;
-        $html_editor_options['toolbar'] = 'RepositoryQuestion';
-
-        $table_header = array();
-        $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
-        $table_header[] = '<thead>';
-        $table_header[] = '<tr>';
-        $table_header[] = '<th></th>';
-        $table_header[] = '<th style="width: 320px;">' . Translation::get('Answer') . '</th>';
-        $table_header[] = '<th>' . Translation::get('Feedback') . '</th>';
-        $table_header[] = '<th class="numeric">' . Translation::get('Score') . '</th>';
-        $table_header[] = '<th class="action"></th>';
-        $table_header[] = '</tr>';
-        $table_header[] = '</thead>';
-        $table_header[] = '<tbody>';
-        $this->addElement('html', implode(PHP_EOL, $table_header));
+        $this->addElement('html', '<table class="table table-assessment-question-form"><tbody>');
 
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
-            if (! in_array($option_number, $_SESSION['select_skip_options']))
+            if (! in_array($option_number, $skippedOptions))
             {
-                $group = array();
+                $this->addElement('html', '<tr data-option-id="' . $option_number . '">');
 
-                if ($_SESSION['select_answer_type'] == 'checkbox')
+                // Checkbox or radio button
+                $attributes = array('class' => 'option-value', 'data-option-id' => $option_number);
+
+                if ($answerType == AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX)
                 {
-                    $group[] = & $this->createElement(
-                        'checkbox',
-                        AssessmentSelectQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']',
-                        Translation::get('Correct'),
-                        '',
-                        array(
-                            'class' => AssessmentSelectQuestionOption::PROPERTY_VALUE,
-                            'id' => AssessmentSelectQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']'));
+                    $selectionName = AssessmentSelectQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']';
+                    $this->addElement('checkbox', $selectionName, Translation::get('Correct'), '', $attributes);
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
+                    $selectionName = AssessmentSelectQuestionOption::PROPERTY_CORRECT;
+                    $this->addElement(
                         'radio',
-                        AssessmentSelectQuestionOption::PROPERTY_CORRECT,
+                        $selectionName,
                         Translation::get('Correct'),
                         '',
                         $option_number,
-                        array(
-                            'class' => AssessmentSelectQuestionOption::PROPERTY_VALUE,
-                            'id' => AssessmentSelectQuestionOption::PROPERTY_CORRECT . '[' . $option_number . ']'));
+                        $attributes);
                 }
 
-                $group[] = & $this->createElement(
+                $renderer->setElementTemplate(
+                    '<td class="table-cell-selection cell-stat-x2">{element}</td>',
+                    $selectionName);
+
+                $this->addElement('html', '<td>');
+
+                // Answer
+                $this->addElement(
                     'text',
                     AssessmentSelectQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']',
                     Translation::get('Answer'),
-                    array('style' => 'width: 300px;'));
-                $group[] = & $this->create_html_editor(
+                    array('class' => 'form-control'));
+
+                $renderer->setElementTemplate(
+                    '<div class="option-answer-field" data-element="' . AssessmentSelectQuestionOption::PROPERTY_VALUE .
+                         '[' . $option_number . ']' . '">{element}</div>',
+                        AssessmentSelectQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']');
+
+                // Feedback
+                $this->add_html_editor(
                     AssessmentSelectQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']',
                     Translation::get('Feedback'),
-                    $html_editor_options);
-                $group[] = & $this->createElement(
+                    false,
+                    $htmlEditorOptions);
+
+                $renderer->setElementTemplate(
+                    '<div class="option-feedback-field form-assessment-extra-container" data-element="' .
+                         AssessmentSelectQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']' .
+                         '"><label>{label}</label>{element}</div>',
+                        AssessmentSelectQuestionOption::PROPERTY_FEEDBACK . '[' . $option_number . ']');
+
+                // Score
+                $this->addElement(
                     'text',
                     AssessmentSelectQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']',
                     Translation::get('Score'),
-                    'size="2"  class="input_numeric"');
+                    'size="2"  class="input_numeric form-control"');
 
-                if ($number_of_options - count($_SESSION['select_skip_options']) > 2)
+                $renderer->setElementTemplate(
+                    '<div class="option-score-field form-assessment-extra-container form-inline" data-element="' .
+                         AssessmentSelectQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' .
+                         '"><label>{label}:</label> {element}</div>',
+                        AssessmentSelectQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']');
+
+                $this->addElement('html', '</td>');
+
+                $this->addElement('html', '<td class="table-cell-action cell-stat text-right">');
+
+                $actionButtons = array();
+
+                if ($number_of_options - count($skippedOptions) > 2)
                 {
-                    $group[] = & $this->createElement(
-                        'image',
-                        'remove[' . $option_number . ']',
-                        Theme::getInstance()->getCommonImagePath('Action/Delete'),
-                        array('class' => 'remove_option', 'id' => 'remove_' . $option_number));
+                    $removeClass = 'text-danger';
                 }
                 else
                 {
-                    $group[] = & $this->createElement(
-                        'static',
-                        null,
-                        null,
-                        '<img class="remove_option" src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') .
-                             '" class="remove_option" />');
+                    $removeClass = 'text-muted';
                 }
 
-                $this->addGroup(
-                    $group,
-                    AssessmentSelectQuestionOption::PROPERTY_VALUE . '_' . $option_number,
-                    null,
-                    '',
-                    false);
+                $actionButtons[] = '<span data-option-id="' . $option_number .
+                     '" class="option-action option-feedback fa fa-comment text-primary"></span>';
+                $actionButtons[] = '<span data-option-id="' . $option_number .
+                     '" class="option-action option-score fa fa-percent text-primary"></span>';
+                $actionButtons[] = '<span data-option-id="' . $option_number .
+                     '" class="option-action option-remove fa fa-trash ' . $removeClass . '"></span>';
 
-                $this->addGroupRule(
-                    AssessmentSelectQuestionOption::PROPERTY_VALUE . '_' . $option_number,
-                    array(
-                        AssessmentSelectQuestionOption::PROPERTY_SCORE . '[' . $option_number . ']' => array(
-                            array(
-                                Translation::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
-                                'numeric'))));
+                $this->addElement('html', implode('&nbsp;&nbsp;', $actionButtons));
 
-                $renderer->setElementTemplate(
-                    '<tr id="option_' . $option_number . '" class="' . ($option_number % 2 == 0 ? 'row_even' : 'row_odd') .
-                         '">{element}</tr>',
-                        AssessmentSelectQuestionOption::PROPERTY_VALUE . '_' . $option_number);
-                $renderer->setGroupElementTemplate(
-                    '<td>{element}</td>',
-                    AssessmentSelectQuestionOption::PROPERTY_VALUE . '_' . $option_number);
+                $this->addElement('html', '</td>');
+                $this->addElement('html', '</tr>');
             }
         }
 
-        $table_footer[] = '</tbody>';
-        $table_footer[] = '</table>';
-        $this->addElement('html', implode(PHP_EOL, $table_footer));
+        $this->addElement('html', '</tbody></table>');
 
-        $this->addGroup($buttons, 'question_buttons', null, '', false);
+        $this->addOptionsButtons();
+    }
 
-        $renderer->setElementTemplate(
-            '<div style="margin: 10px 0px 10px 0px;">{element}<div class="clear"></div></div>',
-            'question_buttons');
-        $renderer->setGroupElementTemplate(
-            '<div style="float:left; text-align: center; margin-right: 10px;">{element}</div>',
-            'question_buttons');
+    protected function addOptionsButtons()
+    {
+        $answerType = Session::retrieve('select_answer_type');
+
+        if ($answerType == AssessmentSelectQuestion::ANSWER_TYPE_RADIO)
+        {
+            $switchLabel = Translation::get('SwitchToMultipleSelect');
+        }
+        else
+        {
+            $switchLabel = Translation::get('SwitchToSingleSelect');
+        }
+
+        $buttonToolBar = new ButtonToolBar();
+
+        $buttonToolBar->addItem(
+            new Button(
+                Translation::get('AddSelectOption'),
+                new BootstrapGlyph('plus'),
+                ' ',
+                Button::DISPLAY_ICON_AND_LABEL,
+                false,
+                'btn-primary add-option'));
+        $buttonToolBar->addItem(
+            new Button(
+                $switchLabel,
+                new BootstrapGlyph('retweet'),
+                ' ',
+                Button::DISPLAY_ICON_AND_LABEL,
+                false,
+                'change-answer-type'));
+
+        $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        $this->addElement('html', $buttonToolBarRenderer->render());
     }
 
     public function prepareTabs()

@@ -69,15 +69,27 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
 
     public function build_creation_form()
     {
-        parent::build_creation_form();
+        parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicForm();
     }
 
     // Inherited
     public function build_editing_form()
     {
-        parent::build_editing_form();
+        parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicForm();
+    }
+
+    protected function getDescriptionHtmlEditorOptions()
+    {
+        $htmlEditorOptions = array();
+        $htmlEditorOptions['width'] = '100%';
+        $htmlEditorOptions['height'] = '100';
+        $htmlEditorOptions['collapse_toolbar'] = false;
+        $htmlEditorOptions['show_tags'] = false;
+        $htmlEditorOptions['toolbar_set'] = 'RepositoryQuestion';
+
+        return $htmlEditorOptions;
     }
 
     protected function processSubmittedValues($contentObject)
