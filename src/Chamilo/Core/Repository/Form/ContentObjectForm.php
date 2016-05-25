@@ -246,7 +246,7 @@ abstract class ContentObjectForm extends FormValidator
             $this->getTabsGenerator()->add_tab(
                 new DynamicFormTab(
                     'add-schema',
-                    Translation::get('AddMetadataSchema', null, 'Chamilo\Core\Metadata'),
+                    Translation::get('AddMetadataSchema'),
                     new FontAwesomeGlyph('plus', array('ident-sm')),
                     'build_metadata_choice_form'));
         }
@@ -536,12 +536,15 @@ EOT;
                 Translation::get('CategoryTypeName'),
                 $this->get_categories(),
                 array('class' => 'form-control'));
+
             $category_group[] = $this->createElement(
                 'image',
                 'add_category',
                 Theme::getInstance()->getCommonImagePath('Action/Add'),
                 array('id' => 'add_category', 'style' => 'display:none'));
-            $this->addGroup($category_group, null, Translation::get('CategoryTypeName'));
+            $this->addGroup($category_group, 'category_form_group', Translation::get('CategoryTypeName'));
+
+            $this->setInlineElementTemplate('category_form_group');
 
             $group = array();
             $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_CATEGORY . '">');
@@ -781,10 +784,8 @@ EOT;
 
         if ($this->form_type == self::TYPE_REPLY)
         {
-            $defaults[ContentObject::PROPERTY_TITLE] = Translation::get(
-                'ReplyShort',
-                null,
-                Utilities::COMMON_LIBRARIES) . ' ' . $content_object->get_title();
+            $defaults[ContentObject::PROPERTY_TITLE] = Translation::get('ReplyShort', null, Utilities::COMMON_LIBRARIES) .
+                 ' ' . $content_object->get_title();
         }
         else
         {
@@ -1077,9 +1078,33 @@ EOT;
     }
 
     /**
-     * Adds an example box
+     *
+     * @deprecated Use buildInstructionsForm() now
      */
     protected function add_example_box()
+    {
+        $this->buildInstructionsForm();
+    }
+
+    public function addInstructionsTab()
+    {
+        $instructions = Translation::get(
+            'InstructionsText',
+            null,
+            ClassnameUtilities::getInstance()->getNamespaceFromClassname(get_class($this)));
+
+        if ($instructions != 'InstructionsText')
+        {
+            $this->getTabsGenerator()->add_tab(
+                new DynamicFormTab(
+                    'view-instructions',
+                    Translation::get('ViewInstructions'),
+                    new FontAwesomeGlyph('question-circle', array('ident-sm')),
+                    'buildInstructionsForm'));
+        }
+    }
+
+    public function buildInstructionsForm()
     {
         $this->addElement(
             'html',
@@ -1097,7 +1122,5 @@ EOT;
                 'InstructionsText',
                 null,
                 ClassnameUtilities::getInstance()->getNamespaceFromClassname(get_class($this))) . '</div>');
-
-        $this->addElement('category');
     }
 }
