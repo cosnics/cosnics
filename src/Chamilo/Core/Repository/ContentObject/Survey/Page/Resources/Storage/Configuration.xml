@@ -13,9 +13,6 @@
 		<property name="updated" type="integer" notnull="1" />
 		<property name="display_order" type="integer" unsigned="1" notnull="1" default="0" />
 	</properties>
-	<index name="id" type="primary">
-		<indexproperty name="id" />
-	</index>
 	<index name="page_id">
 		<indexproperty name="page_id" />
 	</index>
