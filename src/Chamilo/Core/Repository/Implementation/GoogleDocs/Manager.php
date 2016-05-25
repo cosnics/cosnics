@@ -185,10 +185,12 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
             foreach ($export_types as $export_type)
             {
+                $camelizedExportType = StringUtilities :: getInstance()->createString($export_type)->upperCamelize();
+
                 $actions[$export_type] = new ToolbarItem(
                     Translation :: get(
-                        'Import' . StringUtilities :: getInstance()->createString($export_type)->upperCamelize()),
-                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Import/' . $export_type),
+                        'Import' . $camelizedExportType),
+                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Import/' . $camelizedExportType),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,
