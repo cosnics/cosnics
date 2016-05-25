@@ -116,3 +116,6 @@ BrowserComponent = "Course Groups"
 DetailsComponent = "Course Groups"
 EditorComponent = "Course Groups"
 ManageSubscriptionsComponent = "Course Groups"
+
+SubscriptionTime = "Subscription time"
+Users = "Users"

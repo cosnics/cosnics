@@ -12,6 +12,7 @@ class CourseGroupUserRelation extends DataClass
 {
     const PROPERTY_COURSE_GROUP = 'course_group_id';
     const PROPERTY_USER = 'user_id';
+    const PROPERTY_SUBSCRIPTION_TIME = 'subscription_time';
 
     private $defaultProperties;
 
@@ -110,6 +111,39 @@ class CourseGroupUserRelation extends DataClass
     public function set_user($user)
     {
         $this->set_default_property(self :: PROPERTY_USER, $user);
+    }
+
+    /**
+     * Sets the subscription time
+     *
+     * @param int $subscription_time
+     */
+    public function set_subscription_time($subscription_time)
+    {
+        $this->set_default_property(self::PROPERTY_SUBSCRIPTION_TIME, $subscription_time);
+    }
+
+    /**
+     * Returns the subscription time
+     *
+     * @return int
+     */
+    public function get_subscription_time()
+    {
+        return $this->get_default_property(self::PROPERTY_SUBSCRIPTION_TIME);
+    }
+
+    /**
+     * Creates a new subscription and adds the subscription time
+     */
+    public function create()
+    {
+        if(!$this->get_subscription_time())
+        {
+            $this->set_subscription_time(time());
+        }
+
+        parent::create();
     }
 
     /**

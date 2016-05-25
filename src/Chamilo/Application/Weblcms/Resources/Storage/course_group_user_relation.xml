@@ -3,6 +3,7 @@
 	<properties>
 		<property name="course_group_id" type="integer" unsigned="1" notnull="1" />
 		<property name="user_id" type="integer" unsigned="1" notnull="1" />
+		<property name="subscription_time" type="integer" unsigned="1" notnull="1" default="0" />
 	</properties>
 	<index name="course_group_id" type="primary">
 		<indexproperty name="course_group_id" />

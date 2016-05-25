@@ -5,6 +5,7 @@ use Chamilo\Libraries\Calendar\Renderer\Event\EventRendererFactory;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Table\Type\DayCalendar;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  *
@@ -202,7 +203,7 @@ class DayRenderer extends FullTableRenderer
      */
     public function renderTitle()
     {
-        return date('l d F Y', $this->getDisplayTime());
+        return DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getDisplayTime());
     }
 
     /**

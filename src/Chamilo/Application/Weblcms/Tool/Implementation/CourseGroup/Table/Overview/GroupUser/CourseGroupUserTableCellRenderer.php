@@ -2,10 +2,13 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\GroupUser;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
+use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
-class CourseGroupUserTableCellRenderer extends DataClassTableCellRenderer
+class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
 {
 
     /**
@@ -16,17 +19,21 @@ class CourseGroupUserTableCellRenderer extends DataClassTableCellRenderer
      *        includes his subscription status.
      * @return type
      */
-    public function render_cell($column, $user_with_subscription_status_and_type)
+    public function render_cell($column, $user)
     {
         switch ($column->get_name())
         {
-            
-            case CourseGroup :: PROPERTY_ID :
-                return DataManager :: get_course_groups_from_user_as_string(
-                    $user_with_subscription_status_and_type->get_id(), 
-                    $this->get_component()->get_course_id());
+            case CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME:
+                $subscriptionTime = $user[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME];
+
+                if($subscriptionTime)
+                {
+                    return DatetimeUtilities::format_locale_date(null, $subscriptionTime);
+                }
+
+                return null;
         }
         
-        return parent :: render_cell($column, $user_with_subscription_status_and_type);
+        return parent :: render_cell($column, $user);
     }
 }
