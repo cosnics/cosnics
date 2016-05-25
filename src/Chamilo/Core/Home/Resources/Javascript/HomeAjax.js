@@ -423,6 +423,7 @@ $(function()
                 });
                 
                 column.addClass('col-md-' + proposedColumnWidth);
+                column.data('element-width', proposedColumnWidth);
             }
         });
     }
