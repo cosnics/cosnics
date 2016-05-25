@@ -6,18 +6,16 @@ use Chamilo\Core\Repository\ContentObject\AssessmentMatchTextQuestion\Storage\Da
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
-use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
+use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -77,30 +75,35 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         {
             $object = $this->get_content_object();
             $defaults[AssessmentMatchTextQuestion::PROPERTY_HINT] = $object->get_hint();
+
             if ($object->get_number_of_options() != 0)
             {
                 $options = $object->get_options();
+
                 foreach ($options as $index => $option)
                 {
-                    $defaults['option'][$index] = $option->get_value();
-                    $defaults['option_weight'][$index] = $option->get_score();
-                    $defaults['comment'][$index] = $option->get_feedback();
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_VALUE][$index] = $option->get_value();
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$index] = $option->get_score() ? $option->get_score() : 0;
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_FEEDBACK][$index] = $option->get_feedback();
                 }
-                $defaults['use_wildcards'] = $object->get_use_wildcards();
-                $defaults['ignore_case'] = $object->get_ignore_case();
+
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_USE_WILDCARDS] = $object->get_use_wildcards();
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_IGNORE_CASE] = $object->get_ignore_case();
             }
             else
             {
-                $defaults['use_wildcards'] = true;
-                $defaults['ignore_case'] = true;
-                $number_of_options = intval($_SESSION['match_number_of_options']);
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_USE_WILDCARDS] = true;
+                $defaults[AssessmentMatchTextQuestion::PROPERTY_IGNORE_CASE] = true;
+
+                $number_of_options = (int) Session::retrieve('match_number_of_options');
 
                 for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
                 {
-                    $defaults['option_weight'][$option_number] = 0;
+                    $defaults[AssessmentMatchTextQuestionOption::PROPERTY_SCORE][$option_number] = 0;
                 }
             }
         }
+
         parent::setDefaults($defaults);
     }
 
