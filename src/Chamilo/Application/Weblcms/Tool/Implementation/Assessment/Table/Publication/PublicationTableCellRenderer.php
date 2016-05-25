@@ -58,7 +58,7 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID], 
                                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT));
                         
-                        return '<a href="' . $details_url . '">' . parent :: render_cell($column, $publication) . '</a>';
+                        return '<a href="' . $details_url . '">' . $publication[ContentObject::PROPERTY_TITLE] . '</a>';
                     }
                 }
         }
