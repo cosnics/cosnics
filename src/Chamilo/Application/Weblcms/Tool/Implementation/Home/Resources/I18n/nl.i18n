@@ -4,3 +4,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 TypeName = "Startpagina"
+ToolVisibilityChanged = "Zichtbaarheid van tool gewijzigd"

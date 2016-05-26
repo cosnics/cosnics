@@ -2,7 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Home\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Home\Storage\DataManager;
+use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -14,10 +14,10 @@ class ToolVisibilityChangerComponent extends Manager
         $tool = Request :: get(self :: PARAM_TOOL);
         $visibility = Request :: get(self :: PARAM_VISIBILITY);
         
-        $success = DataManager :: set_tool_visibility_by_tool_name($this->get_course_id(), $tool, $visibility);
+        DataManager :: set_tool_visibility_by_tool_name($this->get_course_id(), $tool, $visibility);
         
-        $message = $success ? 'ToolVisibilityChanged' : 'ToolVisibilityNotChanged';
+        $message = 'ToolVisibilityChanged';
         
-        $this->redirect(Translation :: get($message), ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        $this->redirect(Translation :: get($message), false, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
     }
 }
