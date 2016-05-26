@@ -139,6 +139,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_type($file->mimeType);
         $object->set_icon_link($file->iconLink);
 
+        $exportLinks = $file->exportLinks;
+        if (count($exportLinks) > 0)
+        {
+            $object->set_export_links($exportLinks);
+        }
+        else
+        {
+            $object->set_export_links(array($file->mimeType => $file->downloadUrl));
+        }
+
         if ($file->lastViewedByMeDate != null)
         {
             $object->set_viewed(strtotime($file->lastViewedByMeDate));
