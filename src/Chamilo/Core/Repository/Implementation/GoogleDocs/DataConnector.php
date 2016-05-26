@@ -31,36 +31,41 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
+        parent:: __construct($external_repository_instance);
 
-        $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+        $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting:: get(
             'developer_key',
-            $this->get_external_repository_instance_id());
+            $this->get_external_repository_instance_id()
+        );
 
         $this->client = new \Google_Client();
         $this->client->setDeveloperKey($key);
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
-            new StaticConditionVariable('session_token'));
+            new PropertyConditionVariable(Setting:: class_name(), Setting :: PROPERTY_VARIABLE),
+            new StaticConditionVariable('session_token')
+        );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
-            new StaticConditionVariable(Session :: get_user_id()));
+            new PropertyConditionVariable(Setting:: class_name(), Setting :: PROPERTY_USER_ID),
+            new StaticConditionVariable(Session:: get_user_id())
+        );
         $condition = new AndCondition($conditions);
 
-        $setting = DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
+        $setting = DataManager:: retrieve(Setting:: class_name(), new DataClassRetrieveParameters($condition));
         if ($setting instanceof Setting && $setting->get_value())
         {
             $this->client->setAccessToken($setting->get_value());
         }
 
-        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting:: get(
             'client_id',
-            $this->get_external_repository_instance_id());
-        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+            $this->get_external_repository_instance_id()
+        );
+        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting:: get(
             'client_secret',
-            $this->get_external_repository_instance_id());
+            $this->get_external_repository_instance_id()
+        );
 
         $this->client->setClientId($client_id);
         $this->client->setClientSecret($client_secret);
@@ -76,6 +81,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $homeDirectory = getenv("HOMEDRIVE") . getenv("HOMEPATH");
         }
+
         return str_replace('~', realpath($homeDirectory), $path);
     }
 
@@ -83,15 +89,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => Manager :: package(),
+                Application :: PARAM_CONTEXT => Manager:: package(),
                 Manager :: PARAM_ACTION => Manager :: ACTION_LOGIN,
-                Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id()));
+                Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id()
+            )
+        );
 
         $this->client->setRedirectUri($redirect->getUrl());
 
         $this->service = new \Google_Service_Drive($this->client);
 
-        $code = Request :: get('code');
+        $code = Request:: get('code');
 
         if (isset($code))
         {
@@ -100,7 +108,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $this->client->setAccessToken($token);
 
             $user_setting = new Setting();
-            $user_setting->set_user_id(Session :: get_user_id());
+            $user_setting->set_user_id(Session:: get_user_id());
             $user_setting->set_variable('session_token');
             $user_setting->set_value($token);
             $user_setting->set_external_id($this->get_external_repository_instance_id());
@@ -174,13 +182,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function count_external_repository_objects($condition)
     {
-        if (! is_null($condition))
+        if (!is_null($condition))
         {
             $condition = 'title contains \'' . $condition . '\' and ';
         }
         $condition .= 'trashed=false';
 
-        $folder = Request :: get(Manager :: PARAM_FOLDER);
+        $folder = Request:: get(Manager :: PARAM_FOLDER);
         if (is_null($folder))
         {
             $folder = 'root';
@@ -189,6 +197,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         $files = $this->service->files->listFiles(array('q' => $condition));
         $files_items = $files['modelData']['items'];
+
         return count($files_items);
     }
 
@@ -212,6 +221,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $query mixed
+     *
      * @return mixed
      */
     public static function translate_search_query($query)
@@ -238,13 +248,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $orderBy = null;
         }
 
-        if (! is_null($condition))
+        if (!is_null($condition))
         {
             $condition = 'title contains \'' . $condition . '\' and ';
         }
         $condition .= 'trashed=false';
 
-        $folder = Request :: get(Manager :: PARAM_FOLDER);
+        $folder = Request:: get(Manager :: PARAM_FOLDER);
         if (is_null($folder))
         {
             $folder = 'root';
@@ -252,7 +262,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $condition .= ' and \'' . $folder . '\' in parents and mimeType != \'application/vnd.google-apps.folder\'';
 
         $files = $this->service->files->listFiles(
-            array('q' => $condition, 'maxResults' => $count, 'orderBy' => $orderBy));
+            array('q' => $condition, 'maxResults' => $count, 'orderBy' => $orderBy)
+        );
         $files_items = $files['modelData']['items'];
         $objects = array();
 
@@ -282,6 +293,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_modified(strtotime($file_item['modifiedDate']));
             $object->set_owner_id($file_item['owners'][0]['emailAddress']);
             $object->set_owner_name($file_item['owners'][0]['displayName']);
+
+            $exportLinks = $file_item['exportLinks'];
+            if (count($exportLinks) > 0)
+            {
+                $object->set_export_links($exportLinks);
+            }
+            else
+            {
+                $object->set_export_links(array($file_item['mimeType'] => $file_item['downloadUrl']));
+            }
 
             if ($file_item['lastModifyingUser'])
 
@@ -328,14 +349,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_my_folders($id)
     {
         return $this->retrieve_folders(
-            "'" . $id . "' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'");
+            "'" . $id . "' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'"
+        );
     }
 
     public function retrieve_shared_folders($id)
     {
         return $this->retrieve_folders(
             "'" . $id .
-                 "' in parents and sharedWithMe and trashed=false and mimeType = 'application/vnd.google-apps.folder'");
+            "' in parents and sharedWithMe and trashed=false and mimeType = 'application/vnd.google-apps.folder'"
+        );
     }
 
     private function retrieve_folders($query)
@@ -361,6 +384,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $folderId string
+     *
      * @return array
      */
     public function download_external_repository_object($url)
@@ -373,6 +397,28 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         // return file_get_contents($url, false, stream_context_create($opts));
         return file_get_contents($url);
+    }
+
+    public function import_external_repository_object($externalExportURL)
+    {
+        if (!$externalExportURL)
+        {
+            throw new \InvalidArgumentException(
+                'Could not import an Google Drive because the download URL is invalid'
+            );
+        }
+
+        $request = new \Google_Http_Request($externalExportURL, 'GET', null, null);
+
+        $httpRequest = $this->service->getClient()->getAuth()->authenticatedRequest($request);
+        if ($httpRequest->getResponseHttpCode() == 200)
+        {
+            return $httpRequest->getResponseBody();
+        }
+        else
+        {
+            throw new \RuntimeException('Could not import the google drive file');
+        }
     }
 
     public function create_external_repository_object($file, $folder)
@@ -399,6 +445,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $google_file->setParents(array($parent));
 
         $fileCreated = $this->service->files->insert($google_file, array('data' => $data, 'mimeType' => $file['type']));
+
         return $fileCreated->getId();
     }
 
@@ -409,6 +456,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $folder->setId($file['id']);
         $folder->setTitle($file['title']);
         $folder->setParent($file['parents'][0]['id']);
+
         return $folder;
     }
 }
