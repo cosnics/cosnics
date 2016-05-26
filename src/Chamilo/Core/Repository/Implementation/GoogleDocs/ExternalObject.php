@@ -11,11 +11,13 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const PROPERTY_MODIFIER_ID = 'modifier_id';
     const PROPERTY_PREVIEW = 'preview';
     const PROPERTY_ICON_LINK = 'icon_link';
+    const PROPERTY_EXPORT_LINKS = 'export_links';
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_VIEWED, self :: PROPERTY_CONTENT, self :: PROPERTY_MODIFIER_ID));
+        return parent:: get_default_property_names(
+            array(self :: PROPERTY_VIEWED, self :: PROPERTY_CONTENT, self :: PROPERTY_MODIFIER_ID)
+        );
     }
 
     public function get_viewed()
@@ -73,23 +75,31 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return self :: OBJECT_TYPE;
     }
 
+    public function get_export_links()
+    {
+        return $this->get_default_property(self::PROPERTY_EXPORT_LINKS);
+    }
+
     public function get_export_types()
     {
-        switch ($this->get_type())
+        return array_keys($this->get_export_links());
+    }
+
+    public function set_export_links($export_links = array())
+    {
+        $this->set_default_property(self::PROPERTY_EXPORT_LINKS, $export_links);
+    }
+
+    public function get_export_link($exportFormat)
+    {
+        $exportLinks = $this->get_export_links();
+
+        if(!array_key_exists($exportFormat,$exportLinks))
         {
-            case 'application/vnd.google-apps.document' :
-                return array('pdf', 'odt', 'docx');
-                break;
-            case 'application/vnd.google-apps.presentation' :
-                return array('pdf', 'pptx'); // 'swf');
-                break;
-            case 'application/vnd.google-apps.spreadsheet' :
-                return array('pdf', 'xlsx');
-                break;
-            case 'pdf' :
-                // return array('pdf');
-                break;
+            throw new \InvalidArgumentException('Could not find a valid export link for the given format');
         }
+
+        return $exportLinks[$exportFormat];
     }
 
     /**
@@ -101,30 +111,19 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return urlencode($this->get_type() . ':' . $this->get_id());
     }
 
-    public function get_content_data($export_format)
+    public function get_content_data($exportFormat)
     {
-        switch ($this->get_type())
-        {
-            case 'application/vnd.google-apps.document' :
-                $url = $this->get_content() . '&format=' . $export_format;
+        $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager:: retrieve_by_id(
+            Instance:: class_name(),
+            $this->get_external_repository_id()
+        );
 
-                break;
-            case 'application/vnd.google-apps.presentation' :
-                $url = $this->get_content() . '&exportFormat=' . $export_format;
-                break;
-            case 'application/vnd.google-apps.spreadsheet' :
-                $url = $this->get_content() . '&fmcmd=' . $export_format;
-                break;
-            default :
-                // Get the document's content link entry.
-                // return array('pdf');
-                break;
-        }
 
-        $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            Instance :: class_name(),
-            $this->get_external_repository_id());
-        return DataConnector :: get_instance($external_repository)->download_external_repository_object($url);
+        $externalExportURL = $this->get_export_link($exportFormat);
+
+        return DataConnector:: get_instance($external_repository)->import_external_repository_object(
+            $externalExportURL
+        );
     }
 
     public function get_icon_image()

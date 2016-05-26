@@ -45,10 +45,10 @@ class ImporterComponent extends Manager
                 Filesystem :: create_safe_name($external_object->get_title()) . '.' . $export_format);
 
             $document->set_in_memory_file($external_object->get_content_data($export_format));
-            $document->set_in_memory_file(
-                $this->get_external_repository_manager_connector()->download_external_repository_object(
-                    $external_object,
-                    $export_format));
+//            $document->set_in_memory_file(
+//                $this->get_external_repository_manager_connector()->download_external_repository_object(
+//                    $external_object,
+//                    $export_format));
 
             if ($document->create())
             {
