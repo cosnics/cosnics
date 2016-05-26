@@ -26,7 +26,7 @@ class HotpotatoesSaveScoreComponent extends \Chamilo\Application\Weblcms\Ajax\Ma
 
         $tracker = DataManager :: retrieve(
             \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt :: class_name(),
-            new DataClassRetrieveParameters());
+            new DataClassRetrieveParameters($condition));
 
         if ($tracker)
         {
