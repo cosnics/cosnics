@@ -5,3 +5,4 @@
 
 TypeName = "Home"
 TypeCategory = "Course Tools"
+ToolVisibilityChanged = "Tool visibility changed"
