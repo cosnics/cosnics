@@ -57,7 +57,9 @@ class AssessmentUsersBlock extends AssessmentBlock
                 $params = $this->get_parent()->get_parameters();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = AssessmentAttemptsUserTemplate :: class_name();
                 $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user->get_id();
-                $link = '<a href="' . $this->get_parent()->get_url($params) . '">' . $img . '</a>';
+                $filter = array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID);
+
+                $link = '<a href="' . $this->get_parent()->get_url($params, $filter) . '">' . $img . '</a>';
 
                 $reporting_data->add_data_category_row($count, Translation :: get('UserDetails'), $link);
             }
