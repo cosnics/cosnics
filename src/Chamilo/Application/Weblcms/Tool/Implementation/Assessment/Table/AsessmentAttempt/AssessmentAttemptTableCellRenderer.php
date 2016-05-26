@@ -127,7 +127,7 @@ class AssessmentAttemptTableCellRenderer extends RecordTableCellRenderer impleme
 
         $toolbar = new Toolbar();
 
-        if ($assessment->get_type() != Hotpotatoes :: TYPE_HOTPOTATOES && (($assessment_attempt_status ==
+        if ($assessment->get_type() != Hotpotatoes :: class_name() && (($assessment_attempt_status ==
              AssessmentAttempt :: STATUS_COMPLETED && $assessment_publication->get_configuration()->show_feedback()) ||
              $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT)))
         {

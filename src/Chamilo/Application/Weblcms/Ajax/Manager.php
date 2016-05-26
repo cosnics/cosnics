@@ -14,4 +14,6 @@ abstract class Manager extends AjaxManager
 {
     const ACTION_XML_GROUP_MENU_FEED = 'XmlPublicationsTreeFeed';
     const ACTION_XML_COURSE_USER_GROUP_FEED = 'XmlCourseUserGroupFeed';
+    const ACTION_SAVE_HOTPOTATOES_SCORE = 'HotpotatoesSaveScore';
+    const ACTION_SAVE_LEARNING_PATH_HOTPOTATOES_SCORE = 'LpHotpotatoesSaveScore';
 }

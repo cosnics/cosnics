@@ -10,10 +10,12 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -134,8 +136,17 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
             $html[] = $this->render_header();
 
+            $redirect = new Redirect(
+                array(
+                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => 
+                        \Chamilo\Application\Weblcms\Ajax\Manager::context(),
+                    \Chamilo\Application\Weblcms\Manager::PARAM_ACTION =>
+                        \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_SAVE_HOTPOTATOES_SCORE
+                )
+            );
+
             $path = $this->assessment->add_javascript(
-                Path :: getInstance()->getBasePath(true) . 'application/weblcms/php/ajax/hotpotatoes_save_score.php',
+                $redirect->getUrl(),
                 $this->get_assessment_back_url(),
                 $this->assessment_attempt->get_id());
 
