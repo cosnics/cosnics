@@ -1083,6 +1083,16 @@ EOT;
      */
     protected function add_example_box()
     {
+        $this->addElement(
+            'html',
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
+
+        $this->addElement(
+            'category',
+            '<a href="#">' . Translation::get('Instructions', null, Utilities::COMMON_LIBRARIES) . '</a>',
+            'content_object_attachments collapsible collapsed');
+
         $this->buildInstructionsForm();
     }
 
@@ -1106,16 +1116,6 @@ EOT;
 
     public function buildInstructionsForm()
     {
-        $this->addElement(
-            'html',
-            ResourceManager::get_instance()->get_resource_html(
-                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
-
-        $this->addElement(
-            'category',
-            '<a href="#">' . Translation::get('Instructions', null, Utilities::COMMON_LIBRARIES) . '</a>',
-            'content_object_attachments collapsible collapsed');
-
         $this->addElement(
             'html',
             '<div>' . Translation::get(
