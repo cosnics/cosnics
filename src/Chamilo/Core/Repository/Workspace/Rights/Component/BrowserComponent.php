@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
+use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Rights\Table\EntityRelation\EntityRelationTable;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -15,10 +16,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class BrowserComponent extends TabComponent implements TableSupport
+class BrowserComponent extends Manager implements TableSupport
 {
 
-    public function build()
+    public function run()
     {
         $table = new EntityRelationTable($this);
         

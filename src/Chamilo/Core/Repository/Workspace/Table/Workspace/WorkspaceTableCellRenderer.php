@@ -132,7 +132,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Rights', null, Utilities :: COMMON_LIBRARIES),
+                    Translation:: get('CreateRightsComponent'),
                     Theme:: getInstance()->getCommonImagePath('Action/Share'),
                     $this->get_component()->get_url(
                         array(
@@ -149,7 +149,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Rights', null, Utilities :: COMMON_LIBRARIES),
+                    Translation:: get('RightsComponent'),
                     Theme:: getInstance()->getCommonImagePath('Action/Rights'),
                     $this->get_component()->get_url(
                         array(

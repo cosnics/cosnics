@@ -38,8 +38,8 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
-        $trail->add(new Breadcrumb($this->get_url(), Translation :: get('RecycleBin')));
+        $trail = BreadcrumbTrail:: get_instance();
+        $trail->add(new Breadcrumb($this->get_url(), Translation:: get('RecycleBin')));
         $trail->add_help('repository recyclebin');
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -48,10 +48,10 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
 
-        if (Request :: get(self :: PARAM_EMPTY_RECYCLE_BIN))
+        if (Request:: get(self :: PARAM_EMPTY_RECYCLE_BIN))
         {
             $this->empty_recycle_bin();
-            $html[] = $this->display_message(htmlentities(Translation :: get('RecycleBinEmptied')));
+            $html[] = $this->display_message(htmlentities(Translation:: get('RecycleBinEmptied')));
         }
 
         $html[] = $this->buttonToolbarRenderer->render();
@@ -69,6 +69,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
     private function display_content_objects()
     {
         $table = new RecycleBinTable($this);
+
         return $table->as_html();
     }
 
@@ -80,7 +81,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
     private function empty_recycle_bin()
     {
         $parameters = new DataClassRetrievesParameters($this->get_current_user_recycle_bin_conditions());
-        $trashed_objects = DataManager :: retrieve_active_content_objects(ContentObject :: class_name(), $parameters);
+        $trashed_objects = DataManager:: retrieve_active_content_objects(ContentObject:: class_name(), $parameters);
         $count = 0;
         while ($object = $trashed_objects->next_result())
         {
@@ -88,25 +89,27 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
             $count ++;
         }
 
-        DataClassCountCache :: truncate(ContentObject :: class_name());
+        DataClassCountCache:: truncate(ContentObject:: class_name());
 
         return $count;
     }
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
 
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('EmptyRecycleBin'),
-                    Theme :: getInstance()->getCommonImagePath('Treemenu/Trash'),
+                    Translation:: get('EmptyRecycleBin'),
+                    Theme:: getInstance()->getCommonImagePath('Treemenu/Trash'),
                     $this->get_url(array(self :: PARAM_EMPTY_RECYCLE_BIN => 1)),
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                    true));
+                    Translation::get('ConfirmEmptyRecycleBin')
+                )
+            );
 
             $buttonToolbar->addButtonGroup($commonActions);
 
@@ -121,7 +124,9 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation :: get('RepositoryManagerBrowserComponent')));
+                Translation:: get('RepositoryManagerBrowserComponent')
+            )
+        );
         $breadcrumbtrail->add_help('repository_recycle_bin_browser');
     }
 

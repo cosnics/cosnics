@@ -58,11 +58,12 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
         $columnId = $this->getPostDataValue(self :: PARAM_COLUMN);
         $block = $this->getPostDataValue(self :: PARAM_BLOCK);
         $context = ClassnameUtilities :: getInstance()->getNamespaceParent($block, 6);
+        $translationContext = ClassnameUtilities :: getInstance()->getNamespaceParent($block, 2);
         $blockType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($block);
 
         $block = new Block();
         $block->setParentId($columnId);
-        $block->setTitle(Translation :: get($blockType, null, $context));
+        $block->setTitle(Translation :: get($blockType, null, $translationContext));
         $block->setContext($context);
         $block->setBlockType($blockType);
         $block->setVisibility(1);

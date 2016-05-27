@@ -101,11 +101,22 @@ abstract class TabComponent extends Manager
 
         if ($this->get_action() == self :: ACTION_RIGHTS)
         {
+            if($this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION) == \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE)
+            {
+                $icon = Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/RightsCreate');
+                $translation = Translation :: get('CreateRightsComponent');
+            }
+            else
+            {
+                $icon = Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/Rights');
+                $translation = Translation :: get('RightsComponent');
+            }
+
             $this->tabsRenderer->add_tab(
                 new DynamicVisualTab(
                     self :: ACTION_RIGHTS,
-                    Translation :: get(self :: ACTION_RIGHTS . 'Component'),
-                    Theme :: getInstance()->getImagePath(Manager :: package(), 'Tab/' . self :: ACTION_RIGHTS),
+                    $translation,
+                    $icon,
                     $this->get_url(array(self :: ACTION_RIGHTS => self :: ACTION_RIGHTS)),
                     $this->get_action() == self :: ACTION_RIGHTS,
                     false,

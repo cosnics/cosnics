@@ -15,10 +15,10 @@ use Chamilo\Libraries\Platform\Translation;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class CreatorComponent extends TabComponent
+class CreatorComponent extends Manager
 {
 
-    public function build()
+    public function run()
     {
         $workspace = $this->getCurrentWorkspace();
 
