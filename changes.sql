@@ -10,3 +10,7 @@ INSERT IGNORE INTO `configuration_registration` (`id`, `context`, `type`, `categ
 
 ALTER TABLE `chamilo`.`weblcms_course_group_user_relation`
 ADD COLUMN `subscription_time` INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `user_id`;
+
+ALTER TABLE `chamilo`.`repository_workspace_content_object_relation` CHANGE COLUMN `content_object_id` `content_object_id` VARCHAR(36) NOT NULL COMMENT '' ;
+
+UPDATE `chamilo`.`repository_workspace_content_object_relation` SET content_object_id = (SELECT object_number FROM `chamilo`.`repository_content_object` WHERE `chamilo`.`repository_content_object`.id = `chamilo`.`repository_workspace_content_object_relation`.content_object_id)
