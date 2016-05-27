@@ -13,6 +13,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class AssessmentMatchNumericQuestionOption
 {
+    const PROPERTY_VALUE = 'value';
+    const PROPERTY_SCORE = 'score';
+    const PROPERTY_FEEDBACK = 'feedback';
     const PROPERTY_TOLERANCE = 'tolerance';
 
     private $value;
@@ -53,7 +56,7 @@ class AssessmentMatchNumericQuestionOption
 
     public function has_feedback()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_feedback(), true);
+        return StringUtilities::getInstance()->hasValue($this->get_feedback(), true);
     }
 
     public function set_feedback($value)
@@ -66,19 +69,19 @@ class AssessmentMatchNumericQuestionOption
         $answer = floatval(str_replace(',', '.', $answer));
         $value = floatval(str_replace(',', '.', $this->get_value()));
         $tolerance = floatval(str_replace(',', '.', $this->get_tolerance()));
-        
+
         switch ($tolerance_type)
         {
-            case AssessmentMatchNumericQuestion :: TOLERANCE_TYPE_ABSOLUTE :
+            case AssessmentMatchNumericQuestion::TOLERANCE_TYPE_ABSOLUTE :
                 $min = $value - abs($tolerance);
                 $max = $value + abs($tolerance);
                 return $min <= $answer && $answer <= $max;
-            
-            case AssessmentMatchNumericQuestion :: TOLERANCE_TYPE_RELATIVE :
+
+            case AssessmentMatchNumericQuestion::TOLERANCE_TYPE_RELATIVE :
                 $min = $value - abs($value * $tolerance / 100);
                 $max = $value + abs($value * $tolerance / 100);
                 return $min <= $answer && $answer <= $max;
-            
+
             default :
                 throw new \Exception('Unknown tolerance type');
         }
