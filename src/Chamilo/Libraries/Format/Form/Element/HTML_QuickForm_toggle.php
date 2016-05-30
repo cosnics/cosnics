@@ -14,7 +14,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_extended_checkbox.p
 class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 {
 
-    public function HTML_QuickForm_toggle($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1,
+    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1,
         $return_value = null)
     {
         parent :: __construct($elementName, $elementLabel, $text, $attributes, $value, $return_value);

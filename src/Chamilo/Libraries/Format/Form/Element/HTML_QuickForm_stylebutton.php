@@ -29,10 +29,10 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
      * @param string $value
      * @param string $glyph
      */
-    public function HTML_QuickForm_stylebutton($elementName = null, $elementLabel = null, $attributes = null, $value = null,
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null,
         $glyph = null)
     {
-        HTML_QuickForm_element :: HTML_QuickForm_element($elementName, null, $attributes);
+        HTML_QuickForm_element :: __construct($elementName, null, $attributes);
 
         $defaultAttributes = array();
         $defaultAttributes[] = 'btn';
