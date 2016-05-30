@@ -43,7 +43,7 @@ class ImporterComponent extends Manager
             }
 
             $mimeTypeExtensionParser = new MimeTypeExtensionParser();
-            $exportTypeExtension = $mimeTypeExtensionParser->getExtensionForMimeType($export_type);
+            $exportTypeExtension = $mimeTypeExtensionParser->getExtensionForMimeType($export_format);
 
             $document->set_owner_id($this->get_user_id());
             $document->set_filename(
