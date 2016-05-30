@@ -39,7 +39,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
         $selectedCategoryId = $request->get(\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID);
 
-        if(!$selectedCategoryId)
+        if(!isset($selectedCategoryId))
         {
             $request->query->set(
                 \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID,
