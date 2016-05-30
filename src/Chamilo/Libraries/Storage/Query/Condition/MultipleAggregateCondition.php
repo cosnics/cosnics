@@ -16,14 +16,14 @@ abstract class MultipleAggregateCondition extends AggregateCondition
     /**
      * The aggregated conditions
      *
-     * @var multitype:\common\libraries\storage\Condition
+     * @var Condition[]
      */
     private $conditions;
 
     /**
      * Constructor
      *
-     * @param $conditions multitype:\common\libraries\storage\Condition
+     * @param Condition[] $conditions
      */
     public function __construct($conditions)
     {
@@ -33,7 +33,7 @@ abstract class MultipleAggregateCondition extends AggregateCondition
     /**
      * Gets the aggregated conditions
      *
-     * @return multitype:\common\libraries\storage\Condition
+     * @return Condition[]
      */
     public function get_conditions()
     {

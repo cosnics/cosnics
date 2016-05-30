@@ -240,4 +240,36 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         return self::retrieve(UserQuotum::class_name(), new DataClassRetrieveParameters($condition));
     }
+
+    /**
+     * Retrieves an external repository instance user setting
+     * 
+     * @param int $externalInstanceId
+     * @param int $userId
+     * @param string $variable
+     * 
+     * @return Setting
+     */
+    public static function retrieveUserSetting($externalInstanceId, $userId, $variable)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID),
+            new StaticConditionVariable($externalInstanceId)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE),
+            new StaticConditionVariable($variable)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId)
+        );
+        $condition = new AndCondition($conditions);
+
+        return self::retrieve(Setting::class_name(), new DataClassRetrieveParameters($condition));
+    }
 }
