@@ -69,18 +69,33 @@ class GoogleClientService
 
                 if($refreshToken)
                 {
-                    $this->googleClient->refreshToken($refreshToken);
-                    $this->googleClientSettingsProvider->saveAccessToken($this->googleClient->getAccessToken());
+                    try
+                    {
+                        $this->googleClient->refreshToken($refreshToken);
+                        $this->googleClientSettingsProvider->saveAccessToken($this->googleClient->getAccessToken());
+                    }
+                    catch(\Google_Auth_Exception $exception)
+                    {
+                        $this->removeAccessToken();
+                    }
                 }
                 else
                 {
-                    $this->googleClientSettingsProvider->removeAccessToken();
-
-                    $redirect = new Redirect();
-                    $redirect->writeHeader($redirect->getCurrentUrl());
+                    $this->removeAccessToken();
                 }
             }
         }
+    }
+
+    /**
+     * Removes the access token
+     */
+    protected function removeAccessToken()
+    {
+        $this->googleClientSettingsProvider->removeAccessToken();
+
+        $redirect = new Redirect();
+        $redirect->writeHeader($redirect->getCurrentUrl());
     }
 
     /**
