@@ -118,7 +118,6 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
             $this->get_external_repository_id()
         );
 
-
         $externalExportURL = $this->get_export_link($exportFormat);
 
         return DataConnector:: get_instance($external_repository)->import_external_repository_object(

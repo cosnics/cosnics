@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -25,8 +26,9 @@ class ImporterComponent extends Manager
 
             if (! in_array($export_format, $external_object->get_export_types()))
             {
-                $export_format = 'pdf';
+                throw new \RuntimeException('Invalid export type selected');
             }
+
             $document = ContentObject :: factory(File :: class_name());
             $document->set_title($external_object->get_title());
 
@@ -40,15 +42,13 @@ class ImporterComponent extends Manager
                 $document->set_description($external_object->get_description());
             }
 
+            $extension = FileType::get_extensions($export_format);
+
             $document->set_owner_id($this->get_user_id());
             $document->set_filename(
-                Filesystem :: create_safe_name($external_object->get_title()) . '.' . $export_format);
+                Filesystem :: create_safe_name($external_object->get_title()) . '.' . $extension);
 
             $document->set_in_memory_file($external_object->get_content_data($export_format));
-//            $document->set_in_memory_file(
-//                $this->get_external_repository_manager_connector()->download_external_repository_object(
-//                    $external_object,
-//                    $export_format));
 
             if ($document->create())
             {
