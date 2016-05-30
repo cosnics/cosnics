@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_text_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Question de correspondance"
+PossibleAnswer = "Réponse possible"
+Options = "Options"
+UseWildcards = "Utiliser des jokers"
+IgnoreCase = "Ignorer la casse"
+AddItem = "Ajouter un article"
+Feedback = "Feedback"
+Score = "Score"
+Answer = "Réponse"
+Comment = "Commentaire"
+Weight = "Poids"
+Title = "Titre"
+Description = "Description"
+Hint = "Aide"

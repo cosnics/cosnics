@@ -1,0 +1,67 @@
+@import url('../Aqua/Stylesheet.css');
+
+
+/*****************************************************
+ *  FORUM PHPBB STYLE                                *
+ *****************************************************/
+
+table.forum td.category {
+	background-color: #C7D0D7;
+	background-image: url('../../Images/Ruby/Backgrounds/Cellpic1.gif');
+	height: 28px;
+	border: 0 none;
+	margin: 0;
+	padding: 0;
+	text-indent: 4px;
+}
+
+table.forum td.category_right {
+	background-image: url('../../Images/Ruby/Backgrounds/Cellpic2.jpg');
+	height: 28px;
+}
+
+table.forum th {
+	background-color: #006699;
+	background-image: url(../../Images/Ruby/Backgrounds/Cellpic3.gif);
+	color: #FFA34F;
+	font-weight: bold;
+	padding: 7px 5px;
+	white-space: nowrap;
+	font-size: 1.1em;
+}
+
+
+/*****************************************************
+ *  FORUM CHAMILO STYLE                                *
+ *****************************************************/
+table.forum td.category {
+	background-color: #aec7e4;
+	/*background-image: url('../../Images/Ruby/Backgrounds/Cellpic1.png');*/
+	background-image: none;
+	height: 28px;
+	border: 0 none;
+	margin: 0;
+	padding: 0;
+	text-indent: 4px;
+}
+
+table.forum td.category_right {
+	background-image: url('../../Images/Ruby/Backgrounds/Cellpic2.png');
+	height: 28px;
+}
+
+table.forum th {
+	background-color: #6694cc;
+	/*background-image:url('../../Images/Ruby/Backgrounds/Cellpic3.png');*/
+	background-image: none;
+	color: #2b3f57;
+	font-weight: bold;
+	padding: 7px 5px;
+	white-space: nowrap;
+	font-size: 1.1em;
+}
+
+ul.tree-menu li div a.forum, ul.tree-menu li div a.type_forum, ul.tree-menu li div a.type_forum_default
+	{
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
