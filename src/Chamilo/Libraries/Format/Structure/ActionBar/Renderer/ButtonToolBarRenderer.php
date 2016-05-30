@@ -32,10 +32,12 @@ class ButtonToolBarRenderer
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar $buttonToolBar
+     * @param ButtonSearchForm $buttonSearchForm
      */
-    public function __construct(ButtonToolBar $buttonToolBar)
+    public function __construct(ButtonToolBar $buttonToolBar, ButtonSearchForm $buttonSearchForm = null)
     {
         $this->buttonToolBar = $buttonToolBar;
+        $this->searchForm = $buttonSearchForm;
     }
 
     /**
