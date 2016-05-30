@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use ValueObjects\String\String;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
@@ -195,11 +196,14 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                     continue;
                 }
 
+                $camelizedExportTypeExtension = StringUtilities::getInstance()->createString($exportTypeExtension)
+                    ->upperCamelize();
+
                 $actions[$export_type] = new ToolbarItem(
                     Translation::getInstance()->getTranslation(
                         'ImportAs', array('TYPE' => $exportTypeExtension), self::context()
                     ),
-                    Theme :: getInstance()->getFileExtension($exportTypeExtension),
+                    Theme :: getInstance()->getFileExtension($camelizedExportTypeExtension),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,
