@@ -195,8 +195,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                     continue;
                 }
 
-                $camelizedExportType = StringUtilities :: getInstance()->createString($exportTypeExtension)->upperCamelize();
-
                 $actions[$export_type] = new ToolbarItem(
                     Translation::getInstance()->getTranslation(
                         'ImportAs', array('TYPE' => $exportTypeExtension), self::context()

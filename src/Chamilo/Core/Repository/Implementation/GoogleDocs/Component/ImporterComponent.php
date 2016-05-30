@@ -42,12 +42,12 @@ class ImporterComponent extends Manager
                 $document->set_description($external_object->get_description());
             }
 
-            $extensions = FileType::get_extensions($export_format);
-            $extension = array_shift($extensions);
+            $mimeTypeExtensionParser = new MimeTypeExtensionParser();
+            $exportTypeExtension = $mimeTypeExtensionParser->getExtensionForMimeType($export_type);
 
             $document->set_owner_id($this->get_user_id());
             $document->set_filename(
-                Filesystem :: create_safe_name($external_object->get_title()) . '.' . $extension);
+                Filesystem :: create_safe_name($external_object->get_title()) . '.' . $exportTypeExtension);
 
             $document->set_in_memory_file($external_object->get_content_data($export_format));
 
