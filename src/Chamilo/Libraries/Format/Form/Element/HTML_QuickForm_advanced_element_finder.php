@@ -64,10 +64,10 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      */
     private $configuration;
 
-    public function HTML_QuickForm_advanced_element_finder($elementName, $elementLabel, $element_types, $default_values,
+    public function __construct($elementName, $elementLabel, $element_types, $default_values,
         $config = array())
     {
-        HTML_QuickForm_element :: HTML_QuickForm_element($elementName, $elementLabel);
+        HTML_QuickForm_element :: __construct($elementName, $elementLabel);
 
         $this->configuration = $config;
         $this->_type = 'advanced_element_finder';

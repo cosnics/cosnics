@@ -221,11 +221,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             }
 
             $element = $this->getElement($targets_name);
-
-            if (! $element instanceof \HTML_QuickForm_Error)
-            {
-                $element->setDefaultValues($default_elements);
-            }
+            $element->setDefaultValues($default_elements);
         }
 
         $this->setDefaults($defaults);

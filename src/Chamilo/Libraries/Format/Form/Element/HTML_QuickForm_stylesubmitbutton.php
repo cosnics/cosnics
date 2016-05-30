@@ -19,7 +19,7 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
      * @param string $value
      * @param string $glyph
      */
-    public function HTML_QuickForm_stylesubmitbutton($elementName = null, $elementLabel = null, $attributes = null, $value = null,
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null,
         $glyph = 'ok')
     {
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
@@ -28,7 +28,7 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
             $glyph = 'ok';
         }
 
-        HTML_QuickForm_stylebutton :: HTML_QuickForm_stylebutton(
+        HTML_QuickForm_stylebutton :: __construct(
             $elementName,
             $elementLabel,
             $attributes,

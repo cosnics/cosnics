@@ -37,10 +37,10 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
     private $defaults;
 
-    public function HTML_QuickForm_image_selecter($elementName, $elementLabel, $search_url,
+    public function __construct($elementName, $elementLabel, $search_url,
         $locale = array ('Display' => 'Display'), $default = array (), $options = array('rescale_image' => true, 'allow_change'=> false))
     {
-        HTML_QuickForm_group :: HTML_QuickForm_group($elementName, $elementLabel);
+        HTML_QuickForm_group :: __construct($elementName, $elementLabel);
         $this->_type = 'image_selecter';
         $this->_persistantFreeze = true;
         $this->_appendName = false;
