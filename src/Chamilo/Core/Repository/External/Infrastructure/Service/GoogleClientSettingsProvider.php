@@ -59,7 +59,7 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
      */
     public function getDeveloperKey()
     {
-        return $this->externalRepositoryInstance->get_setting('developer_key');
+        return Setting::get('developer_key', $this->externalRepositoryInstance->getId());
     }
 
     /**
@@ -69,7 +69,7 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
      */
     public function getClientId()
     {
-        return $this->externalRepositoryInstance->get_setting('client_id');
+        return Setting::get('client_id', $this->externalRepositoryInstance->getId());
     }
 
     /**
@@ -79,7 +79,7 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
      */
     public function getClientSecret()
     {
-        return $this->externalRepositoryInstance->get_setting('client_secret');
+        return Setting::get('client_secret', $this->externalRepositoryInstance->getId());
     }
 
     /**
