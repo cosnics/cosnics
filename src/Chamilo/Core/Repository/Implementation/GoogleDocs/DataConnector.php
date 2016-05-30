@@ -309,7 +309,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             {
                 $object->set_export_links($exportLinks);
             }
-            else
+            elseif($file_item['downloadUrl'])
             {
                 $object->set_export_links(array($file_item['mimeType'] => $file_item['downloadUrl']));
             }
