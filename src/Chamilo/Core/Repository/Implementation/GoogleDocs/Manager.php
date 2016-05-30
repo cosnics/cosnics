@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
+use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -185,7 +186,10 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
             foreach ($export_types as $export_type)
             {
-                $camelizedExportType = StringUtilities :: getInstance()->createString($export_type)->upperCamelize();
+                $exportTypeExtensions = FileType::get_extensions($export_type);
+                $exportTypeExtension = array_shift($exportTypeExtensions);
+
+                $camelizedExportType = StringUtilities :: getInstance()->createString($exportTypeExtension)->upperCamelize();
 
                 $actions[$export_type] = new ToolbarItem(
                     Translation :: get(
