@@ -65,7 +65,7 @@ class GoogleClientService
 
             if($this->googleClient->isAccessTokenExpired())
             {
-                $refreshToken = $this->googleClient->getRefreshToken();
+                $refreshToken = $this->googleClientSettingsProvider->getRefreshToken();
 
                 if($refreshToken)
                 {
@@ -109,6 +109,7 @@ class GoogleClientService
         {
             $this->googleClient->authenticate($loginCode);
             $this->googleClientSettingsProvider->saveAccessToken($this->googleClient->getAccessToken());
+            $this->googleClientSettingsProvider->saveRefreshToken($this->googleClient->getRefreshToken());
         }
         else
         {
