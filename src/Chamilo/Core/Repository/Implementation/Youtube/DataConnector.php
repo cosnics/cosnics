@@ -1,12 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Youtube;
 
+use Chamilo\Core\Repository\External\Infrastructure\Service\GoogleClientSettingsProvider;
 use Chamilo\Core\Repository\Implementation\Youtube\Form\ExternalObjectForm;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Protocol\GoogleClient\GoogleClientService;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -18,7 +21,20 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
+    /**
+     * @var \Google_Client
+     */
+    protected $client;
+
+    /**
+     * @var \Google_Service_YouTube
+     */
     private $youtube;
+
+    /**
+     * @var GoogleClientService
+     */
+    protected $googleClientService;
 
     private $session_token;
 
@@ -26,43 +42,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         parent :: __construct($external_repository_instance);
 
-        $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'developer_key',
-            $this->get_external_repository_instance_id());
+        $user = new User();
+        $user->setId(Session::get_user_id());
 
-        $this->client = new \Google_Client();
-        $this->client->setDeveloperKey($key);
+        $this->googleClientService = new GoogleClientService(
+            new GoogleClientSettingsProvider(
+                $external_repository_instance, $user, 'https://www.googleapis.com/auth/youtube'
+            )
+        );
 
-        $this->setSessionToken();
-
-        $this->client->setAccessType('offline');
-        $this->client->setApprovalPrompt('force');
         $this->youtube = new \Google_Service_YouTube($this->client);
-    }
-
-    public function setSessionToken()
-    {
-        $sessionToken = $this->getSetting('session_token');
-
-        if ($sessionToken instanceof Setting)
-        {
-            $this->client->setAccessToken($sessionToken->get_value());
-
-            if ($this->client->isAccessTokenExpired())
-            {
-                $refreshToken = $this->getSetting('refresh_token');
-
-                $newAccessToken = $this->client->refreshToken($refreshToken->get_value());
-                $this->client->setAccessToken($newAccessToken);
-
-                $sessionToken->set_value($newAccessToken);
-                $sessionToken->update();
-
-                $newRefreshToken = $this->client->getRefreshToken();
-                $refreshToken->set_value($newRefreshToken);
-                $refreshToken->update();
-            }
-        }
     }
 
     /**
@@ -87,17 +76,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function login()
     {
-        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'client_id',
-            $this->get_external_repository_instance_id());
-        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'client_secret',
-            $this->get_external_repository_instance_id());
-
-        $this->client->setClientId($client_id);
-        $this->client->setClientSecret($client_secret);
-        $this->client->setScopes('https://www.googleapis.com/auth/youtube');
-
         $redirect = new Redirect(
             array(
                 Application :: PARAM_CONTEXT => Manager :: package(),
@@ -106,24 +84,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 \Chamilo\Core\Repository\External\Manager :: PARAM_EMBEDDED => Request :: get(
                     \Chamilo\Core\Repository\External\Manager :: PARAM_EMBEDDED)));
 
-        $this->client->setRedirectUri($redirect->getUrl());
 
-        $this->youtube = new \Google_Service_YouTube($this->client);
+        $this->googleClientService->login($redirect->getUrl(), Request::get('code'));
 
         $code = Request :: get('code');
 
         if (isset($code))
         {
-            $this->client->authenticate($code);
             $token = $this->client->getAccessToken();
-            $this->client->setAccessToken($token);
-
-            $user_setting = new Setting();
-            $user_setting->set_user_id(Session :: get_user_id());
-            $user_setting->set_variable('session_token');
-            $user_setting->set_value($token);
-            $user_setting->set_external_id($this->get_external_repository_instance_id());
-            $user_setting->create();
 
             $user_setting = new Setting();
             $user_setting->set_user_id(Session :: get_user_id());
@@ -131,22 +99,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $user_setting->set_value($this->retrieveCurrentUserId($token));
             $user_setting->set_external_id($this->get_external_repository_instance_id());
             $user_setting->create();
-
-            $user_setting = new Setting();
-            $user_setting->set_user_id(Session :: get_user_id());
-            $user_setting->set_variable('refresh_token');
-            $user_setting->set_value($this->client->getRefreshToken());
-            $user_setting->set_external_id($this->get_external_repository_instance_id());
-            $user_setting->create();
-
-            return true;
         }
-        else
-        {
-            $url = $this->client->createAuthUrl('https://www.googleapis.com/auth/youtube');
-            header('Location: ' . $url);
-            exit();
-        }
+
+        return true;
     }
 
     public function retrieveCurrentUserId($sessionToken)

@@ -99,16 +99,17 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
      */
     public function getAccessToken()
     {
-        $setting = DataManager::retrieveUserSetting(
-            $this->externalRepositoryInstance->getId(), $this->user->getId(), 'session_token'
-        );
+        return $this->getUserSettingValue('session_token');
+    }
 
-        if($setting)
-        {
-            return $setting->get_value();
-        }
-
-        return null;
+    /**
+     * Returns the security refresh token for the google client
+     *
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->getUserSettingValue('refresh_token');
     }
 
     /**
@@ -120,21 +121,19 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
      */
     public function saveAccessToken($accessToken)
     {
-        $setting = DataManager::retrieveUserSetting(
-            $this->externalRepositoryInstance->getId(), $this->user->getId(), 'session_token'
-        );
+        return $this->saveUserSetting('session_token', $accessToken);
+    }
 
-        if(!$setting)
-        {
-            $setting = new Setting();
-        }
-
-        $setting->set_external_id($this->externalRepositoryInstance->getId());
-        $setting->set_variable('session_token');
-        $setting->set_user_id($this->user->getId());
-        $setting->set_value($accessToken);
-
-        return $setting->save();
+    /**
+     * Stores the refresh token
+     *
+     * @param $refreshToken
+     *
+     * @return bool
+     */
+    public function saveRefreshToken($refreshToken)
+    {
+        return $this->saveUserSetting('refresh_token', $refreshToken);
     }
 
     /**
@@ -154,5 +153,54 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
         }
 
         return true;
+    }
+
+    /**
+     * Saves a user setting for the given variable with the given value
+     *
+     *
+     * @param string $variable
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected function saveUserSetting($variable, $value)
+    {
+        $setting = DataManager::retrieveUserSetting(
+            $this->externalRepositoryInstance->getId(), $this->user->getId(), $variable
+        );
+
+        if (!$setting)
+        {
+            $setting = new Setting();
+        }
+
+        $setting->set_external_id($this->externalRepositoryInstance->getId());
+        $setting->set_variable($variable);
+        $setting->set_user_id($this->user->getId());
+        $setting->set_value($value);
+
+        return $setting->save();
+    }
+
+    /**
+     * Returns the value for the user setting for the given variable
+     * 
+     * @param string $variable
+     *
+     * @return string
+     */
+    protected function getUserSettingValue($variable)
+    {
+        $setting = DataManager::retrieveUserSetting(
+            $this->externalRepositoryInstance->getId(), $this->user->getId(), $variable
+        );
+
+        if ($setting)
+        {
+            return $setting->get_value();
+        }
+
+        return null;
     }
 }

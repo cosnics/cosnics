@@ -45,6 +45,13 @@ interface GoogleClientSettingsProviderInterface
     public function getAccessToken();
 
     /**
+     * Returns the security refresh token for the google client
+     *
+     * @return string
+     */
+    public function getRefreshToken();
+
+    /**
      * Stores the access token from the google client into chamilo
      *
      * @param string $accessToken
@@ -52,6 +59,15 @@ interface GoogleClientSettingsProviderInterface
      * @return bool
      */
     public function saveAccessToken($accessToken);
+
+    /**
+     * Stores the refresh token
+     *
+     * @param $refreshToken
+     *
+     * @return bool
+     */
+    public function saveRefreshToken($refreshToken);
 
     /**
      * Removes the access token

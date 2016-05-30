@@ -57,44 +57,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             )
         );
 
-//        $key = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting:: get(
-//            'developer_key',
-//            $this->get_external_repository_instance_id()
-//        );
-
-//        $this->client = new \Google_Client();
-//        $this->client->setDeveloperKey($key);
-//
-//        $conditions = array();
-//        $conditions[] = new EqualityCondition(
-//            new PropertyConditionVariable(Setting:: class_name(), Setting :: PROPERTY_VARIABLE),
-//            new StaticConditionVariable('session_token')
-//        );
-//        $conditions[] = new EqualityCondition(
-//            new PropertyConditionVariable(Setting:: class_name(), Setting :: PROPERTY_USER_ID),
-//            new StaticConditionVariable(Session:: get_user_id())
-//        );
-//        $condition = new AndCondition($conditions);
-//
-//        $setting = DataManager:: retrieve(Setting:: class_name(), new DataClassRetrieveParameters($condition));
-//        if ($setting instanceof Setting && $setting->get_value())
-//        {
-//            $this->client->setAccessToken($setting->get_value());
-//        }
-//
-//        $client_id = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting:: get(
-//            'client_id',
-//            $this->get_external_repository_instance_id()
-//        );
-//        $client_secret = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting:: get(
-//            'client_secret',
-//            $this->get_external_repository_instance_id()
-//        );
-//
-//        $this->client->setClientId($client_id);
-//        $this->client->setClientSecret($client_secret);
-//        $this->client->setScopes('https://www.googleapis.com/auth/drive');
-
         $this->service = new Google_Service_Drive($this->googleClientService->getGoogleClient());
     }
 
@@ -122,32 +84,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $code = Request:: get('code');
         $this->googleClientService->login($redirect->getUrl(), $code);
 
-//        $this->client->setRedirectUri($redirect->getUrl());
-//
-//        $this->service = new \Google_Service_Drive($this->client);
-//
-//
-//
-//        if (isset($code))
-//        {
-//            $this->client->authenticate($code);
-//            $token = $this->client->getAccessToken();
-//            $this->client->setAccessToken($token);
-//
-//            $user_setting = new Setting();
-//            $user_setting->set_user_id(Session:: get_user_id());
-//            $user_setting->set_variable('session_token');
-//            $user_setting->set_value($token);
-//            $user_setting->set_external_id($this->get_external_repository_instance_id());
-//
-//            return $user_setting->create();
-//        }
-//        else
-//        {
-//            $url = $this->client->createAuthUrl('https://www.googleapis.com/auth/drive');
-//            header('Location: ' . $url);
-//            exit();
-//        }
+        return true;
     }
 
     /**
