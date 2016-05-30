@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="weblcms_peer_assessment_group_tracker">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="user_id" type="integer" unsigned="1" notnull="1" />
+		<property name="group_id" type="integer" unsigned="1" notnull="1" />
+	</properties>
+</object>

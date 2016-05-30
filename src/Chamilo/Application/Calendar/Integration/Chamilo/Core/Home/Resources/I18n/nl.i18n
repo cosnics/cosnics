@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\personal_calendar\integration\core\home
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+Month = "Maand"
+Day = "Dag"
+HourStep = "Toon per (x) uur"
+TimeStart = "Start tijd"
+TimeEnd = "Eind tijd"
+TimeHide = "Toon enkel tussen start en eind tijd"
