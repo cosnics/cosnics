@@ -29,10 +29,10 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      * @access public
      * @return void
      */
-    public function HTML_QuickForm_extended_checkbox($elementName = null, $elementLabel = null, $text = '', $attributes = null,
+    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null,
         $value = 1, $return_value = null)
     {
-        HTML_QuickForm_checkbox :: HTML_QuickForm_checkbox($elementName, $elementLabel, $text, $attributes);
+        HTML_QuickForm_checkbox :: __construct($elementName, $elementLabel, $text, $attributes);
 
         if ($value && ! is_null($value))
         {
@@ -142,8 +142,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
                     switch ($event)
                     {
                         case 'createElement' :
-                            $className = get_class($this);
-                            $this->$className($arg[0], $arg[1], $arg[2], $arg[3], $arg[4], $arg[5]);
+                            $this->__construct($arg[0], $arg[1], $arg[2], $arg[3], $arg[4], $arg[5]);
                             break;
                         case 'addElement' :
                             $this->onQuickFormEvent('createElement', $arg, $caller);
