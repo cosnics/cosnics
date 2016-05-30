@@ -39,13 +39,6 @@ class DirectMoverComponent extends Manager
 
         $complexContentObjectItem = $currentNode->get_complex_content_object_item();
 
-        if ($complexContentObjectItem->get_parent() == $parentContentObjectId &&
-            $displayOrder > $complexContentObjectItem->get_display_order()
-        )
-        {
-            $displayOrder --;
-        }
-
         $complexContentObjectItem->set_parent($parentContentObjectId);
         $complexContentObjectItem->set_display_order($displayOrder);
         $success = $complexContentObjectItem->update();
