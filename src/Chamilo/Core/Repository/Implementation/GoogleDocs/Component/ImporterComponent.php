@@ -42,7 +42,8 @@ class ImporterComponent extends Manager
                 $document->set_description($external_object->get_description());
             }
 
-            $extension = FileType::get_extensions($export_format);
+            $extensions = FileType::get_extensions($export_format);
+            $extension = array_shift($extensions);
 
             $document->set_owner_id($this->get_user_id());
             $document->set_filename(
