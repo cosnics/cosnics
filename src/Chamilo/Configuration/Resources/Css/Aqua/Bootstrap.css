@@ -44,6 +44,10 @@ blockquote {
 	margin-bottom: 15px;
 }
 
+.alert .btn-action-toolbar {
+	margin-bottom: 0px;
+}
+
 .btn-action-toolbar form input[type=text] {
 	border: 1px solid #CCC;
 	padding: 5px 10px;
