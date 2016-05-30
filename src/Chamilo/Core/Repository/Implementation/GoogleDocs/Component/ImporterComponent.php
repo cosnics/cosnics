@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Implementation\GoogleDocs\Infrastructure\Service\MimeTypeExtensionParser;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
