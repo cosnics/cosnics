@@ -4,6 +4,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
  *
@@ -63,8 +64,7 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-            array('Chamilo\Libraries\Calendar', 'refresh_external'));
+        $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
 
         return $this->getCacheProvider()->save(
             $identifier,
