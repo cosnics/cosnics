@@ -47,4 +47,22 @@ class MimeTypeExtensionParser
 
         return array_shift($possibleExtensions);
     }
+
+    /**
+     * Returns a valid extension for the given mimetype
+     *
+     * @param string $extension
+     *
+     * @return string
+     */
+    public function getMimeTypeForExtension($extension)
+    {
+        $mimeType = array_search($extension, $this->mimeTypeExtensionMapping);
+        if($mimeType)
+        {
+            return $mimeType;
+        }
+
+        return FileType::get_mimetype($extension);
+    }
 }
