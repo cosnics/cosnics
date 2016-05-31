@@ -51,6 +51,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             )
         );
 
+        $this->client = $this->googleClientService->getGoogleClient();
+
         $this->youtube = new \Google_Service_YouTube($this->client);
     }
 
