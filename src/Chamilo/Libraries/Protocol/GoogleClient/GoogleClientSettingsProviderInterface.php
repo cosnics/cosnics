@@ -76,4 +76,11 @@ interface GoogleClientSettingsProviderInterface
      */
     public function removeAccessToken();
 
+    /**
+     * Removes the refresh token
+     *
+     * @return bool
+     */
+    public function removeRefreshToken();
+
 }

@@ -143,16 +143,17 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
      */
     public function removeAccessToken()
     {
-        $setting = DataManager::retrieveUserSetting(
-            $this->externalRepositoryInstance->getId(), $this->user->getId(), 'session_token'
-        );
+        return $this->removeUserSetting('session_token');
+    }
 
-        if($setting)
-        {
-            return $setting->delete();
-        }
-
-        return true;
+    /**
+     * Removes the refresh token
+     *
+     * @return bool
+     */
+    public function removeRefreshToken()
+    {
+        return $this->removeUserSetting('refresh_token');
     }
 
     /**
@@ -202,5 +203,26 @@ class GoogleClientSettingsProvider implements GoogleClientSettingsProviderInterf
         }
 
         return null;
+    }
+
+    /**
+     * Removes a user setting
+     *
+     * @param string $variable
+     *
+     * @return bool
+     */
+    protected function removeUserSetting($variable)
+    {
+        $setting = DataManager::retrieveUserSetting(
+            $this->externalRepositoryInstance->getId(), $this->user->getId(), $variable
+        );
+
+        if ($setting)
+        {
+            return $setting->delete();
+        }
+
+        return true;
     }
 }

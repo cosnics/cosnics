@@ -61,28 +61,29 @@ class GoogleClientService
 
         if($accessToken)
         {
-            $this->googleClient->setAccessToken($accessToken);
-
-            if($this->googleClient->isAccessTokenExpired())
+            try
             {
-                $refreshToken = $this->googleClientSettingsProvider->getRefreshToken();
+                $this->googleClient->setAccessToken($accessToken);
 
-                if($refreshToken)
+                if($this->googleClient->isAccessTokenExpired())
                 {
-                    try
+                    $refreshToken = $this->googleClientSettingsProvider->getRefreshToken();
+
+                    if($refreshToken)
                     {
                         $this->googleClient->refreshToken($refreshToken);
                         $this->googleClientSettingsProvider->saveAccessToken($this->googleClient->getAccessToken());
+
                     }
-                    catch(\Google_Auth_Exception $exception)
+                    else
                     {
-                        $this->removeAccessToken();
+                        $this->remmoveUserTokens();
                     }
                 }
-                else
-                {
-                    $this->removeAccessToken();
-                }
+            }
+            catch(\Google_Auth_Exception $exception)
+            {
+                $this->remmoveUserTokens();
             }
         }
     }
@@ -90,9 +91,10 @@ class GoogleClientService
     /**
      * Removes the access token
      */
-    protected function removeAccessToken()
+    protected function remmoveUserTokens()
     {
         $this->googleClientSettingsProvider->removeAccessToken();
+        $this->googleClientSettingsProvider->removeRefreshToken();
 
         $redirect = new Redirect();
         $redirect->writeHeader($redirect->getCurrentUrl());
