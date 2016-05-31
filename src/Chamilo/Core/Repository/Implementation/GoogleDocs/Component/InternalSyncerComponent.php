@@ -56,8 +56,8 @@ class InternalSyncerComponent extends Manager
             if ($synchronization_data->update())
             {
                 $parameters = $this->get_parameters();
-                $parameters[Application :: PARAM_ACTION] =
-                    \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS;
+                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager :: context();
+                $parameters[Application :: PARAM_ACTION] = \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS;
                 $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $document->get_id();
                 $this->redirect(
                     Translation:: get(
@@ -67,7 +67,7 @@ class InternalSyncerComponent extends Manager
                     ),
                     false,
                     $parameters,
-                    array(Manager :: PARAM_EXTERNAL_REPOSITORY, Manager :: PARAM_ACTION)
+                    array(Manager :: PARAM_EXTERNAL_REPOSITORY)
                 );
             }
             else

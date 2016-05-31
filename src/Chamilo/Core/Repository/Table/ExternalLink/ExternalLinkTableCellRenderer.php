@@ -74,7 +74,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
 
         $parameters = \Chamilo\Core\Repository\External\Manager :: get_object_viewing_parameters(
             $external_instance_sync);
-        $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTEXT] = $external_instance_sync->get_external()->get_implementation();
+        $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTEXT] = $external_instance_sync->get_external()->get_type();
         $parameters[\Chamilo\Core\Repository\Manager :: PARAM_EXTERNAL_INSTANCE] = $external_instance_sync->get_external_id();
 
         return $this->get_component()->get_url($parameters);
