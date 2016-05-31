@@ -77,13 +77,13 @@ class GoogleClientService
                     }
                     else
                     {
-                        $this->remmoveUserTokens();
+                        $this->removeUserTokens();
                     }
                 }
             }
             catch(\Google_Auth_Exception $exception)
             {
-                $this->remmoveUserTokens();
+                $this->removeUserTokens();
             }
         }
     }
@@ -91,7 +91,7 @@ class GoogleClientService
     /**
      * Removes the access token
      */
-    protected function remmoveUserTokens()
+    protected function removeUserTokens()
     {
         $this->googleClientSettingsProvider->removeAccessToken();
         $this->googleClientSettingsProvider->removeRefreshToken();
