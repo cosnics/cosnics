@@ -64,6 +64,11 @@ class MiniMonthCalendar extends MonthCalendar
             $row = $cellMapping[$cellMappingKey][0];
             $column = $cellMapping[$cellMappingKey][1];
 
+            if(is_null($row) || is_null($column))
+            {
+                continue;
+            }
+
             $tooltip = htmlentities(implode("\n", $items));
 
             if (date('Ymd', $time) != date('Ymd'))
