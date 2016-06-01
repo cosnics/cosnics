@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Youtube\Common\RenditionImplementation
 class HtmlRenditionImplementation extends RenditionImplementation
 {
 
-    public function get_video_element($width = 425, $height = 344)
+    public function get_video_element($width = 600, $height = 480)
     {
         $object = $this->get_content_object();
         // $video_url = $object->get_video_url();
