@@ -31,7 +31,7 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 		margin-top: 0px;
 	}
 	.learning-path-display .learning-path-tree-menu-container {
-		position: fixed;
+		position: relative;
 		top: 0px;
 		bottom: 0px;
 		left: 0px;
