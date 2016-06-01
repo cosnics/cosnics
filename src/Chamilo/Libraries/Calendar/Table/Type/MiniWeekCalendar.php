@@ -43,7 +43,7 @@ class MiniWeekCalendar extends Calendar
     {
         $this->navigationHtml = '';
         $this->hourStep = $hourStep;
-        parent :: __construct($displayTime);
+        parent::__construct($displayTime);
         $this->buildTable();
     }
 
@@ -65,7 +65,7 @@ class MiniWeekCalendar extends Calendar
      */
     public function getStartTime()
     {
-        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -83,7 +83,7 @@ class MiniWeekCalendar extends Calendar
      */
     public function getEndTime()
     {
-        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -107,7 +107,7 @@ class MiniWeekCalendar extends Calendar
             $this->setCellContents(
                 $day + 1,
                 0,
-                Translation :: get(date('l', $weekDay) . 'Long', null, Utilities :: COMMON_LIBRARIES));
+                Translation::get(date('l', $weekDay) . 'Long', null, Utilities::COMMON_LIBRARIES));
         }
         $this->updateColAttributes(0, 'class="week_hours"');
         $this->updateColAttributes(0, 'style="height: 15px; width: 10px;"');
@@ -164,9 +164,15 @@ class MiniWeekCalendar extends Calendar
 
             foreach ($items as $index => $item)
             {
-                $cellContent = $this->getCellContents($row, $column);
-                $cellContent .= $item;
-                $this->setCellContents($row, $column, $cellContent);
+                try
+                {
+                    $cellContent = $this->getCellContents($row, $column);
+                    $cellContent .= $item;
+                    $this->setCellContents($row, $column, $cellContent);
+                }
+                catch (\Exception $exception)
+                {
+                }
             }
         }
     }
@@ -188,20 +194,20 @@ class MiniWeekCalendar extends Calendar
         $navigation->setCellContents(
             0,
             0,
-            '<a href="' . str_replace(Calendar :: TIME_PLACEHOLDER, $prev, $urlFormat) . '"><img src="' .
-                 Theme :: getInstance()->getCommonImagePath('Action/Prev') .
+            '<a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $prev, $urlFormat) . '"><img src="' .
+                 Theme::getInstance()->getCommonImagePath('Action/Prev') .
                  '" style="vertical-align: middle;" alt="&lt;&lt;"/></a> ');
         $navigation->setCellContents(
             0,
             1,
-            htmlentities(Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES)) . ' ' . $weekNumber . ' : ' .
+            htmlentities(Translation::get('Week', null, Utilities::COMMON_LIBRARIES)) . ' ' . $weekNumber . ' : ' .
                  date('l d M Y', $this->getStartTime()) . ' - ' .
                  date('l d M Y', strtotime('+6 Days', $this->getStartTime())));
         $navigation->setCellContents(
             0,
             2,
-            ' <a href="' . str_replace(Calendar :: TIME_PLACEHOLDER, $next, $urlFormat) . '"><img src="' .
-                 Theme :: getInstance()->getCommonImagePath('Action/Next') .
+            ' <a href="' . str_replace(Calendar::TIME_PLACEHOLDER, $next, $urlFormat) . '"><img src="' .
+                 Theme::getInstance()->getCommonImagePath('Action/Next') .
                  '" style="vertical-align: middle;" alt="&gt;&gt;"/></a> ');
 
         $this->navigationHtml = $navigation->toHtml();
@@ -215,7 +221,7 @@ class MiniWeekCalendar extends Calendar
     public function toHtml()
     {
         $this->add_events();
-        $html = parent :: toHtml();
+        $html = parent::toHtml();
         return $this->navigationHtml . $html;
     }
 }

@@ -27,7 +27,7 @@ class AssessmentViewerForm extends FormValidator
 
     public function __construct(AssessmentViewerComponent $assessment_viewer, $method = 'post', $action = null)
     {
-        parent :: __construct(self :: FORM_NAME, $method, $action);
+        parent::__construct(self::FORM_NAME, $method, $action);
 
         $this->assessment_viewer = $assessment_viewer;
 
@@ -55,17 +55,17 @@ class AssessmentViewerForm extends FormValidator
 
     public function add_general()
     {
-        $current_page = self :: PAGE_NUMBER . '-' . $this->get_page_number();
+        $current_page = self::PAGE_NUMBER . '-' . $this->get_page_number();
+        $assessment = $this->assessment_viewer->get_assessment();
+
         $this->addElement('hidden', $current_page, $this->get_page_number());
 
-        if ($this->get_page_number() == 1)
+        if ($this->get_page_number() == 1 && $assessment->has_description())
         {
-            $assessment = $this->assessment_viewer->get_assessment();
-
-            $display = ContentObjectRenditionImplementation :: factory(
-                $this->assessment_viewer->get_assessment(),
-                ContentObjectRendition :: FORMAT_HTML,
-                ContentObjectRendition :: VIEW_DESCRIPTION,
+            $display = ContentObjectRenditionImplementation::factory(
+                $assessment,
+                ContentObjectRendition::FORMAT_HTML,
+                ContentObjectRendition::VIEW_DESCRIPTION,
                 $this->assessment_viewer);
             $this->add_information_message(null, null, $display->render(), true);
         }
@@ -74,15 +74,15 @@ class AssessmentViewerForm extends FormValidator
         $this->addElement('hidden', 'max_time', '', array('id' => 'max_time'));
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Assessment', true) .
                      'AssessmentViewer.js'));
 
-        $start_time = Request :: post('start_time');
+        $start_time = Request::post('start_time');
         $start_time = $start_time ? $start_time : 0;
 
         $defaults['start_time'] = $start_time;
-        $defaults['max_time'] = ($this->assessment_viewer->get_assessment()->get_maximum_time() * 60);
+        $defaults['max_time'] = ($assessment->get_maximum_time() * 60);
         $this->setDefaults($defaults);
 
         $current_time = $defaults['max_time'] - $defaults['start_time'];
@@ -91,8 +91,9 @@ class AssessmentViewerForm extends FormValidator
         {
             $this->addElement(
                 'html',
-                ' <br /><div class="time_left">' . Translation :: get('TimeLeft') . '<br /><div class="time">' .
-                     $current_time . '</div>' . Translation :: get('SecondsShort') . '</div><br /><br />');
+                '<div class="alert alert-warning time_left">' . Translation::get('TimeLeft') .
+                     ': <strong><div class="time">' . $current_time . '</div>' . Translation::get('SecondsShort') .
+                     '</div></strong>');
         }
     }
 
@@ -107,7 +108,7 @@ class AssessmentViewerForm extends FormValidator
             $submit_button = $this->createElement(
                 'style_submit_button',
                 'submit',
-                Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES),
+                Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
                 array('style' => 'display: none;'));
         }
 
@@ -116,10 +117,10 @@ class AssessmentViewerForm extends FormValidator
             $buttons[] = $this->createElement(
                 'style_button',
                 'next',
-                Translation :: get('Check', null, Utilities :: COMMON_LIBRARIES),
+                Translation::get('Check', null, Utilities::COMMON_LIBRARIES),
                 null,
                 null,
-                'chevron-next');
+                'chevron-right');
         }
         else
         {
@@ -128,10 +129,10 @@ class AssessmentViewerForm extends FormValidator
                 $buttons[] = $this->createElement(
                     'style_button',
                     'back',
-                    Translation :: get('Previous', null, Utilities :: COMMON_LIBRARIES),
+                    Translation::get('Previous', null, Utilities::COMMON_LIBRARIES),
                     null,
                     null,
-                    'chevron-previous');
+                    'chevron-left');
             }
 
             if ($this->get_page_number() < $this->get_total_pages())
@@ -139,10 +140,10 @@ class AssessmentViewerForm extends FormValidator
                 $buttons[] = $this->createElement(
                     'style_button',
                     'next',
-                    Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
+                    Translation::get('Next', null, Utilities::COMMON_LIBRARIES),
                     null,
                     null,
-                    'chevron-next');
+                    'chevron-right');
             }
             elseif ($submit_button)
             {
@@ -173,7 +174,7 @@ class AssessmentViewerForm extends FormValidator
 
         foreach ($this->questions as $question)
         {
-            $question_display = QuestionDisplay :: factory($this, $question, $i);
+            $question_display = QuestionDisplay::factory($this, $question, $i);
             $question_display->render();
 
             $i ++;

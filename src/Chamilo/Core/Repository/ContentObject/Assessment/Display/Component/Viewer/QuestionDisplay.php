@@ -81,32 +81,13 @@ abstract class QuestionDisplay
     public function render()
     {
         $formvalidator = $this->formvalidator;
-        $this->add_header();
-
-        if ($this->add_borders())
-        {
-            $header = array();
-            $header[] = $this->get_instruction();
-            $header[] = '<div class="with_borders">';
-
-            $formvalidator->addElement('html', implode(PHP_EOL, $header));
-        }
-
         $formvalidator->addElement(
             'hidden',
             'hint_question[' . $this->get_complex_content_object_question()->get_id() . ']',
             0);
 
+        $this->add_header();
         $this->add_question_form();
-
-        if ($this->add_borders())
-        {
-            $footer = array();
-            $footer[] = '<div class="clear"></div>';
-            $footer[] = '</div>';
-            $formvalidator->addElement('html', implode(PHP_EOL, $footer));
-        }
-
         $this->add_footer();
     }
 
@@ -114,32 +95,17 @@ abstract class QuestionDisplay
 
     public function add_header()
     {
-        $formvalidator = $this->formvalidator;
-        /*
-         * $clo_question = $this->get_clo_question(); $number_of_questions = $formvalidator->get_number_of_questions();
-         * $current_question = $this->question_nr;
-         */
+        $html = array();
 
-        $html[] = '<div class="question">';
-        $html[] = '<div class="title">';
-        $html[] = '<div class="number">';
-        $html[] = '<div class="bevel">';
-        $html[] = $this->question_nr . '.';
+        $html[] = '<div class="panel panel-default">';
+
+        $html[] = '<div class="panel-heading">';
+        $html[] = '<h3 class="panel-title">' . $this->question_nr . '. ' . $this->get_title() . '</h3>';
         $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="text">';
-        $html[] = '<div class="bevel">';
-        $html[] = $this->get_title();
-        $html[] = '</div>';
-        $html[] = '</div>';
-        $html[] = '<div class="clear"></div>';
-        $html[] = '</div>';
-        $html[] = '<div class="answer">';
+
         $html[] = $this->get_description();
-        $html[] = '<div class="clear"></div>';
 
-        $header = implode(PHP_EOL, $html);
-        $formvalidator->addElement('html', $header);
+        $this->formvalidator->addElement('html', implode(PHP_EOL, $html));
     }
 
     public function get_title()
@@ -151,13 +117,14 @@ abstract class QuestionDisplay
     {
         $html = array();
 
-        $description = $this->question->get_description();
         if ($this->question->has_description())
         {
-            $html[] = '<div class="description">';
+            $description = $this->question->get_description();
+            $classes = $this->needsDescriptionBorder() ? 'panel-body panel-body-assessment-description' : 'panel-body';
             $renderer = new ContentObjectResourceRenderer($this, $description);
+
+            $html[] = '<div class="' . $classes . '">';
             $html[] = $renderer->run();
-            $html[] = '<div class="clear">&nbsp;</div>';
             $html[] = '</div>';
         }
 
@@ -167,8 +134,6 @@ abstract class QuestionDisplay
     public function add_footer($formvalidator)
     {
         $formvalidator = $this->formvalidator;
-
-        $html[] = '</div>';
         $html[] = '</div>';
 
         $footer = implode(PHP_EOL, $html);
@@ -180,17 +145,20 @@ abstract class QuestionDisplay
         return false;
     }
 
-    abstract public function get_instruction();
+    public function needsDescriptionBorder()
+    {
+        return false;
+    }
 
     public static function factory($formvalidator, $complex_content_object_question, $question_nr)
     {
-        $question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+        $question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(),
             $complex_content_object_question->get_ref());
         $type = $question->get_type();
 
-        $class = ClassnameUtilities :: getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
-             Assessment :: package() . '\Display\Display';
+        $class = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
+             Assessment::package() . '\Display\Display';
         $question_display = new $class($formvalidator, $complex_content_object_question, $question_nr, $question);
         return $question_display;
     }

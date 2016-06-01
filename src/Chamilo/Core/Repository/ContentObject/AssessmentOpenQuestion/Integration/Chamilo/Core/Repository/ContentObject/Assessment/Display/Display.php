@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * $Id: assessment_open_question.class.php 200 2009-11-13 12:30:04Z kariboe $
@@ -24,24 +25,29 @@ class Display extends QuestionDisplay
         $type = $question->get_question_type();
         $formvalidator = $this->get_formvalidator();
 
+        $formvalidator->addElement('html', '<div class="panel-body">');
+        $formvalidator->addElement('html', $this->get_instruction());
+
         switch ($type)
         {
-            case AssessmentOpenQuestion :: TYPE_DOCUMENT :
+            case AssessmentOpenQuestion::TYPE_DOCUMENT :
                 $this->add_document($clo_question, $formvalidator);
                 break;
-            case AssessmentOpenQuestion :: TYPE_OPEN :
+            case AssessmentOpenQuestion::TYPE_OPEN :
                 $this->add_html_editor($clo_question, $formvalidator);
                 break;
-            case AssessmentOpenQuestion :: TYPE_OPEN_WITH_DOCUMENT :
+            case AssessmentOpenQuestion::TYPE_OPEN_WITH_DOCUMENT :
                 $this->add_html_editor($clo_question, $formvalidator);
                 $this->add_document($clo_question, $formvalidator);
                 break;
         }
 
+        $formvalidator->addElement('html', '</div>');
+
         $formvalidator->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'));
     }
 
     public function add_html_editor($clo_question, $formvalidator)
@@ -68,11 +74,16 @@ class Display extends QuestionDisplay
     public function add_document($clo_question, $formvalidator)
     {
         $type = $this->get_question()->get_question_type();
-        if ($type == AssessmentOpenQuestion :: TYPE_OPEN_WITH_DOCUMENT)
+
+        if ($type == AssessmentOpenQuestion::TYPE_OPEN_WITH_DOCUMENT)
         {
-            $html[] = '<div class="splitter" style="margin: 10px -10px 10px -10px; border-left: none; border-right: none; border-top: 1px solid #B5CAE7;">';
-            $html[] = Translation :: get('SelectDocument');
-            $html[] = '</div>';
+            $html[] = '<br /><p>';
+            $html[] = '<p>';
+            $html[] = '<strong>';
+            $html[] = Translation::get('SelectDocument');
+            $html[] = '<strong>';
+            $html[] = '<p>';
+
             $formvalidator->addElement('html', implode(PHP_EOL, $html));
         }
 
@@ -80,29 +91,38 @@ class Display extends QuestionDisplay
         $name_2 = $clo_question->get_id() . '_2';
 
         $group = array();
-        $group[] = & $formvalidator->createElement(
+        $group[] = $formvalidator->createElement(
             'text',
             ($name_2 . '_title'),
             '',
             array('class' => 'select_file_text', 'disabled' => 'disabled', 'style' => 'width: 200px; height: 20px'));
-        $group[] = & $formvalidator->createElement('hidden', $name_2);
+        $group[] = $formvalidator->createElement('hidden', $name_2);
 
-        $link = Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
-             urlencode(\Chamilo\Core\Repository\Manager :: context()) . '&' . Application :: PARAM_ACTION . '=' .
-             \Chamilo\Core\Repository\Manager :: ACTION_REPOSITORY_VIEWER . '&' .
-             \Chamilo\Core\Repository\Component\RepositoryViewerComponent :: PARAM_ELEMENT_NAME . '=' . $name_2;
-        $group[] = & $formvalidator->createElement(
+        $link = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_REPOSITORY_VIEWER,
+                \Chamilo\Core\Repository\Component\RepositoryViewerComponent::PARAM_ELEMENT_NAME => $name_2)
+
+            );
+
+        $group[] = $formvalidator->createElement(
             'static',
             null,
             null,
-            '<a class="btn btn-default onclick="javascript:openPopup(\'' . $link .
-                 '\');"><span class="glyphicon glyphicon-upload"></span> ' . Translation :: get('BrowseContentObjects') .
+            '<a class="btn btn-default" onclick="javascript:openPopup(\'' . $link->getUrl() .
+                 '\');"><span class="glyphicon glyphicon-upload"></span> ' . Translation::get('BrowseContentObjects') .
                  '</a>');
 
         $formvalidator->addGroup($group, '');
     }
 
     public function add_borders()
+    {
+        return true;
+    }
+
+    public function needsDescriptionBorder()
     {
         return true;
     }
@@ -115,18 +135,20 @@ class Display extends QuestionDisplay
 
         if ($question->has_description())
         {
-            $instruction[] = '<div class="splitter">';
+            $instruction[] = '<p>';
+            $instruction[] = '<strong>';
 
-            if ($type == AssessmentOpenQuestion :: TYPE_DOCUMENT)
+            if ($type == AssessmentOpenQuestion::TYPE_DOCUMENT)
             {
-                $instruction[] = Translation :: get('SelectDocument');
+                $instruction[] = Translation::get('SelectDocument');
             }
             else
             {
-                $instruction[] = Translation :: get('EnterAnswer');
+                $instruction[] = Translation::get('EnterAnswer');
             }
 
-            $instruction[] = '</div>';
+            $instruction[] = '</strong>';
+            $instruction[] = '</p>';
         }
         else
         {
@@ -144,15 +166,16 @@ class Display extends QuestionDisplay
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
 
-            $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
-            $html[] = '<div class="with_borders"><a id="' . $hint_name .
-                 '" class="btn btn-default"><span class="glyphicon glyphicon-gift"></span> ' . Translation :: get(
-                    'GetAHint') . '</a></div>';
+            $html[] = '<div class="panel-body">';
+            $html[] = '<a id="' . $hint_name .
+                 '" class="btn btn-default"><span class="glyphicon glyphicon-gift"></span> ' .
+                 Translation::get('GetAHint') . '</a>';
+            $html[] = '</div>';
 
             $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
         }
 
-        parent :: add_footer($formvalidator);
+        parent::add_footer($formvalidator);
     }
 }
