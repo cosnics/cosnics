@@ -38,7 +38,7 @@ class MonthCalendar extends Calendar
      */
     public function __construct($displayTime, $dayUrlTemplate = null, $classes = array())
     {
-        parent :: __construct($displayTime, $classes);
+        parent::__construct($displayTime, $classes);
 
         $this->cellMapping = array();
         $this->dayUrlTemplate = $dayUrlTemplate;
@@ -56,7 +56,7 @@ class MonthCalendar extends Calendar
     public function getStartTime()
     {
         $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
-        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -87,7 +87,7 @@ class MonthCalendar extends Calendar
 
     protected function getFirstTableDate($firstDay)
     {
-        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -103,31 +103,31 @@ class MonthCalendar extends Calendar
     {
         $header = $this->getHeader();
 
-        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
             $header->addRow(
                 array(
-                    Translation :: get('SundayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('MondayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('TuesdayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('WednesdayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('ThursdayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('FridayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('SaturdayShort', null, Utilities :: COMMON_LIBRARIES)));
+                    Translation::get('SundayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('SaturdayShort', null, Utilities::COMMON_LIBRARIES)));
         }
         else
         {
             $header->addRow(
                 array(
-                    Translation :: get('MondayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('TuesdayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('WednesdayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('ThursdayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('FridayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('SaturdayShort', null, Utilities :: COMMON_LIBRARIES),
-                    Translation :: get('SundayShort', null, Utilities :: COMMON_LIBRARIES)));
+                    Translation::get('MondayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('TuesdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('WednesdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('ThursdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('FridayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('SaturdayShort', null, Utilities::COMMON_LIBRARIES),
+                    Translation::get('SundayShort', null, Utilities::COMMON_LIBRARIES)));
         }
 
         $header->setRowType(0, 'th');
@@ -233,9 +233,15 @@ class MonthCalendar extends Calendar
 
             foreach ($items as $index => $item)
             {
-                $cellContent = $this->getCellContents($row, $column);
-                $cellContent .= $item;
-                $this->setCellContents($row, $column, $cellContent);
+                try
+                {
+                    $cellContent = $this->getCellContents($row, $column);
+                    $cellContent .= $item;
+                    $this->setCellContents($row, $column, $cellContent);
+                }
+                catch (\Exception $exception)
+                {
+                }
             }
         }
     }
@@ -284,6 +290,6 @@ class MonthCalendar extends Calendar
      */
     public function getDayUrl($time)
     {
-        return str_replace(self :: TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
+        return str_replace(self::TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
     }
 }

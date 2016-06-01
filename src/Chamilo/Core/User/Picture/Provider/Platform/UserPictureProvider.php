@@ -29,6 +29,13 @@ class UserPictureProvider implements UserPictureProviderInterface
 
         $response = new StreamedResponse();
         $response->headers->add(array('Content-Type' => $mime, 'Content-Length' => $size));
+        $response->setPublic();
+        $response->setMaxAge(3600 * 24); //24 hours cache
+
+        $lastModifiedDate = new \DateTime();
+        $lastModifiedDate->setTimestamp(filemtime($file));
+
+        $response->setLastModified($lastModifiedDate);
         $response->setCallback(function () use($file)
         {
             readfile($file);
