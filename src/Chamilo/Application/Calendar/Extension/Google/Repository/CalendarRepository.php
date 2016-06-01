@@ -336,9 +336,6 @@ class CalendarRepository
         $timeMax = new \DateTime();
         $timeMax->setTimestamp($toDate);
 
-        $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
-            array('Chamilo\Libraries\Calendar', 'refresh_external'));
-
         return $this->getCalendarClient()->events->listEvents(
             $calendarIdentifier,
             array(

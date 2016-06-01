@@ -89,7 +89,7 @@ class MonthRenderer extends FullTableRenderer
      */
     public function getPreviousDisplayTime()
     {
-        return strtotime('-1 Month', $this->getDisplayTime());
+        return strtotime('first day of previous month', $this->getDisplayTime());
     }
 
     /**
@@ -98,6 +98,6 @@ class MonthRenderer extends FullTableRenderer
      */
     public function getNextDisplayTime()
     {
-        return strtotime('+1 Month', $this->getDisplayTime());
+        return strtotime('first day of next month', $this->getDisplayTime());
     }
 }

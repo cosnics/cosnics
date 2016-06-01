@@ -231,6 +231,11 @@ class MonthCalendar extends Calendar
             $row = $this->cellMapping[$cellMappingKey][0];
             $column = $this->cellMapping[$cellMappingKey][1];
 
+            if(is_null($row) || is_null($column))
+            {
+                continue;
+            }
+
             foreach ($items as $index => $item)
             {
                 try

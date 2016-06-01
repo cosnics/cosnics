@@ -6,6 +6,5 @@ use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Interfaces\GalleryTabl
 
 class ExternalObjectGalleryTable extends DataClassGalleryTable implements GalleryTableOrderDirectionProhibition
 {
-    const DEFAULT_ROW_COUNT = 3;
     const DEFAULT_COLUMN_COUNT = 3;
 }

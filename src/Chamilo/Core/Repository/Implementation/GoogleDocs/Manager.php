@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\Implementation\GoogleDocs\Infrastructure\Service\MimeTypeExtensionParser;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -11,6 +12,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use ValueObjects\String\String;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
@@ -184,17 +186,24 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             unset($actions[Manager :: ACTION_IMPORT_EXTERNAL_REPOSITORY]);
             $export_types = $object->get_export_types();
 
+            $mimeTypeExtensionParser = new MimeTypeExtensionParser();
+
             foreach ($export_types as $export_type)
             {
-                $exportTypeExtensions = FileType::get_extensions($export_type);
-                $exportTypeExtension = array_shift($exportTypeExtensions);
+                $exportTypeExtension = $mimeTypeExtensionParser->getExtensionForMimeType($export_type);
+                if(!$exportTypeExtension)
+                {
+                    continue;
+                }
 
-                $camelizedExportType = StringUtilities :: getInstance()->createString($exportTypeExtension)->upperCamelize();
+                $camelizedExportTypeExtension = StringUtilities::getInstance()->createString($exportTypeExtension)
+                    ->upperCamelize();
 
                 $actions[$export_type] = new ToolbarItem(
-                    Translation :: get(
-                        'Import' . $camelizedExportType),
-                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Import/' . $camelizedExportType),
+                    Translation::getInstance()->getTranslation(
+                        'ImportAs', array('TYPE' => $exportTypeExtension), self::context()
+                    ),
+                    Theme :: getInstance()->getFileExtension($camelizedExportTypeExtension),
                     $this->get_url(
                         array(
                             self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,
