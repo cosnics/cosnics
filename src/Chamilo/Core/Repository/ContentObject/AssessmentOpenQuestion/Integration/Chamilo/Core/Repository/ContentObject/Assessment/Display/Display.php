@@ -81,8 +81,8 @@ class Display extends QuestionDisplay
             $html[] = '<p>';
             $html[] = '<strong>';
             $html[] = Translation::get('SelectDocument');
-            $html[] = '<strong>';
-            $html[] = '<p>';
+            $html[] = '</strong>';
+            $html[] = '</p>';
 
             $formvalidator->addElement('html', implode(PHP_EOL, $html));
         }
