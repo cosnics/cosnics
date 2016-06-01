@@ -11,7 +11,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $object = $this->get_content_object();
         // $video_url = $object->get_video_url();
         
-        return '<embed style="margin-bottom: 1em;" height="' . $height . '" width="' . $width .
-             '" type="application/x-shockwave-flash" src="' . $object->get_video_url() . '"></embed>';
+        return '<iframe frameborder="0" style="margin-bottom: 1em;" height="' . $height . '" width="' . $width .
+             '" src="' . $object->get_video_url() . '"></iframe>';
     }
 }
