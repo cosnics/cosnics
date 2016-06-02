@@ -135,6 +135,8 @@ class GoogleClientService
 
             $redirect = new Redirect();
             $redirect->writeHeader($url);
+
+            exit;
         }
     }
 }
