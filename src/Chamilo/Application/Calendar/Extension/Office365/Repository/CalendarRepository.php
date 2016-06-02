@@ -328,7 +328,7 @@ class CalendarRepository
         }
         else
         {
-            $replyUri = new Redirect($this->getReplyParameters());
+            $replyUri = new Redirect();
 
             $redirect = new Redirect();
             $redirect->writeHeader($this->createAuthUrl($replyUri));

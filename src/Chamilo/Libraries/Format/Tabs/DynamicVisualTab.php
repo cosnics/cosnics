@@ -48,7 +48,7 @@ class DynamicVisualTab extends DynamicTab
      *
      * @var int
      */
-    private $display;
+    protected $display;
 
     /**
      *

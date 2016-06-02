@@ -12,10 +12,11 @@ class DynamicContentTab extends DynamicTab
      * @param string $name
      * @param string $image
      * @param string $content
+     * @param int $display
      */
-    public function __construct($id, $name, $image, $content)
+    public function __construct($id, $name, $image, $content, $display = self::DISPLAY_ICON_AND_TITLE)
     {
-        parent :: __construct($id, $name, $image);
+        parent :: __construct($id, $name, $image, $display);
         $this->content = $content;
     }
 
