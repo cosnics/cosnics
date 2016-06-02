@@ -1,6 +1,7 @@
 <?php
-use core\repository\storage\data_class\ContentObject;
-use libraries\platform\translation\Translation;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Platform\Translation;
+
 /**
  * Split off some of the internal bits from Skin.php.
  * These functions are used for primarily page content: links,
@@ -235,7 +236,7 @@ class MediawikiLinker
         // (i.e., for a nonexistent special page).
         if (in_array('broken', $options) and empty($query['action']) and $target->getNamespace() != NS_SPECIAL)
         {
-            $query[\core\repository\display\action\Manager :: PARAM_ACTION] = \core\repository\content_object\wiki\display\Manager :: ACTION_CREATE_PAGE;
+            $query[\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: ACTION_CREATE_PAGE;
             $query[ContentObject :: PROPERTY_TITLE] = $target->getText();
             
             // $query['redlink'] = '1';
