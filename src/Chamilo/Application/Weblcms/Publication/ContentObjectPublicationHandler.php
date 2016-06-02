@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Publication;
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
@@ -68,8 +69,10 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      * @param Application $parentComponent
      * @param ContentObjectPublicationForm $contentObjectPublicationForm
      */
-    public function __construct($courseId, $toolId, User $user, Application $parentComponent,
-        ContentObjectPublicationForm $contentObjectPublicationForm = null)
+    public function __construct(
+        $courseId, $toolId, User $user, Application $parentComponent,
+        ContentObjectPublicationForm $contentObjectPublicationForm = null
+    )
     {
         $this->courseId = $courseId;
         $this->toolId = $toolId;
@@ -87,7 +90,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     public function publish($selectedContentObjects = array())
     {
-        if (! $this->hasForm())
+        if (!$this->hasForm())
         {
 
             $success = $this->createPublicationsWithoutForm($selectedContentObjects);
@@ -98,29 +101,27 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
             $this->createdPublications = $this->contentObjectPublicationForm->get_publications();
         }
 
-        $message = Translation :: getInstance()->getTranslation(
+        $message = Translation:: getInstance()->getTranslation(
             ($success ? 'ObjectPublished' : 'ObjectNotPublished'),
-            array('OBJECT' => Translation :: get('Object')),
-            Utilities :: COMMON_LIBRARIES);
+            array('OBJECT' => Translation:: get('Object')),
+            Utilities :: COMMON_LIBRARIES
+        );
 
         $parameters = array(
-            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BROWSE);
+            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BROWSE
+        );
 
         if ($this->is_publish_and_build_submit())
         {
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT;
-
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
+            $parameters = $this->getBuilderParameters();
         }
 
         if ($this->is_publish_and_view_submit())
         {
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
-
-            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $this->createdPublications[0]->getId();
+            $parameters = $this->getDisplayParameters();
         }
 
-        $this->parentComponent->redirect($message, ! $success, $parameters);
+        $this->parentComponent->redirect($message, !$success, $parameters);
     }
 
     /**
@@ -136,27 +137,52 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
 
         foreach ($selectedContentObjects as $contentObject)
         {
-            $publication = new ContentObjectPublication();
-
-            $publication->set_content_object_id($contentObject->getId());
-            $publication->set_course_id($this->courseId);
-            $publication->set_tool($this->toolId);
-            $publication->set_publisher_id($this->user->getId());
-            $publication->set_publication_publisher($this->user);
-            $publication->set_category_id(0);
-            $publication->set_from_date(0);
-            $publication->set_to_date(0);
-            $publication->set_publication_date(time());
-            $publication->set_modified_date(time());
-            $publication->set_hidden(0);
-            $publication->set_show_on_homepage(0);
-
-            $success &= $publication->create();
-
-            $this->createdPublications[] = $publication;
+            try
+            {
+                $publication = $this->createPublicationForContentObject($contentObject);
+                $this->createdPublications[] = $publication;
+            }
+            catch(\Exception $ex)
+            {
+                $success = false;
+            }
         }
 
         return $success;
+    }
+
+    /**
+     * Creates a content object publication for a given content object
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return ContentObjectPublication
+     */
+    protected function createPublicationForContentObject($contentObject)
+    {
+        $publication = new ContentObjectPublication();
+
+        $publication->set_content_object_id($contentObject->getId());
+        $publication->set_course_id($this->courseId);
+        $publication->set_tool($this->toolId);
+        $publication->set_publisher_id($this->user->getId());
+        $publication->set_publication_publisher($this->user);
+        $publication->set_category_id(0);
+        $publication->set_from_date(0);
+        $publication->set_to_date(0);
+        $publication->set_publication_date(time());
+        $publication->set_modified_date(time());
+        $publication->set_hidden(0);
+        $publication->set_show_on_homepage(0);
+
+        if (!$publication->create())
+        {
+            throw new \RuntimeException(
+                'Could not create the publication for content object with id ' . $contentObject->getId()
+            );
+        }
+
+        return $publication;
     }
 
     /**
@@ -164,14 +190,14 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     protected function is_publish_and_build_submit()
     {
-        if (! $this->hasForm())
+        if (!$this->hasForm())
         {
             return false;
         }
 
         $values = $this->contentObjectPublicationForm->exportValues();
 
-        return ! empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_BUILD]);
+        return !empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_BUILD]);
     }
 
     /**
@@ -179,13 +205,13 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     protected function is_publish_and_view_submit()
     {
-        if (! $this->hasForm())
+        if (!$this->hasForm())
         {
             return false;
         }
         $values = $this->contentObjectPublicationForm->exportValues();
 
-        return ! empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_VIEW]);
+        return !empty($values[ContentObjectPublicationForm :: PROPERTY_PUBLISH_AND_VIEW]);
     }
 
     /**
@@ -196,5 +222,41 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
     protected function hasForm()
     {
         return $this->contentObjectPublicationForm instanceof ContentObjectPublicationForm;
+    }
+
+    /**
+     * Returns the necessary parameters to redirect to the builder
+     *
+     * @return string[]
+     */
+    protected function getBuilderParameters()
+    {
+        $parameters = array();
+
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT;
+
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] =
+            $this->createdPublications[0]->getId();
+
+        return $parameters;
+    }
+
+    /**
+     * Returns the necessary parameters to redirect to the complex display
+     *
+     * @return mixed
+     */
+    protected function getDisplayParameters()
+    {
+        $parameters = array();
+
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
+
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] =
+            $this->createdPublications[0]->getId();
+
+        return $parameters;
     }
 }
