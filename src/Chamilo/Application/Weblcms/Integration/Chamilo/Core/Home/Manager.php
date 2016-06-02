@@ -14,7 +14,8 @@ class Manager
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\FilteredCourseList',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewAnnouncements',
             'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewAssignments',
-            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewDocuments',
-            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\WeblcmsBookmarkDisplay');
+            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\NewDocuments'
+//            'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type\WeblcmsBookmarkDisplay'
+        );
     }
 }
