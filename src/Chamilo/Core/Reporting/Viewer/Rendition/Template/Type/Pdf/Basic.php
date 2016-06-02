@@ -36,11 +36,11 @@ class Basic extends Pdf
 		$this->pdf_mc_table->SetAutoPageBreak(true, 17);
 
         $this->pdf_mc_table->SetHeader(
-            Theme :: getInstance()->getCommonImagePath('LogoReport'), 
+            Theme :: getInstance()->getCommonImagePath('LogoReport', 'png', false),
             Translation :: get(
                 ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template()),
                 null,
-                ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template())), 
+                ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template())),
             date('d-m-Y'),
             $this->get_template()->getStyle());
 

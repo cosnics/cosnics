@@ -204,6 +204,8 @@ abstract class Manager extends Application
 
     public function get_menu()
     {
+        $translator = Translation::getInstance();
+        
         $html = array();
 
         $html[] = '<div id="repository-tree-container">';
@@ -212,9 +214,10 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_CATEGORY,
-                '',
+                $translator->getTranslation('ViewCategoriesTab', null, Manager::context()),
                 Theme:: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_CATEGORY),
-                $this->get_category_menu()->render_as_tree()
+                $this->get_category_menu()->render_as_tree(),
+                DynamicContentTab::DISPLAY_ICON
             )
         );
 
@@ -235,9 +238,10 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_SEARCH,
-                '',
+                $translator->getTranslation('SearchTab', null, Manager::context()),
                 Theme:: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_SEARCH),
-                $filter_form->render()
+                $filter_form->render(),
+                DynamicContentTab::DISPLAY_ICON
             )
         );
 
@@ -271,9 +275,10 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_OBJECT_TYPE,
-                '',
+                $translator->getTranslation('TypeTab', null, Manager::context()),
                 Theme:: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_OBJECT_TYPE),
-                $object_type->render_as_tree()
+                $object_type->render_as_tree(),
+                DynamicContentTab::DISPLAY_ICON
             )
         );
 
@@ -291,9 +296,10 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_USERVIEW,
-                '',
+                $translator->getTranslation('UserViewTab', null, Manager::context()),
                 Theme:: getInstance()->getImagePath(__NAMESPACE__, 'Menu/' . self :: TAB_USERVIEW),
-                $user_view->render_as_tree()
+                $user_view->render_as_tree(),
+                DynamicContentTab::DISPLAY_ICON
             )
         );
 
