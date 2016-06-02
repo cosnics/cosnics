@@ -593,7 +593,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $html[] = '<div class="target-entities-container" data-course-id="' . $this->get_course_id() . '" data-tool="' .
              $this->get_tool() . '">';
 
-        $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager :: context()) . ':</h5>';
+//        $html[] = '<h5>' . $translator->getTranslation('EntitiesHaveViewRight', null, Manager :: context()) . ':</h5>';
         $html[] = '<div class="panel panel-default target-entities-list">';
         $html[] = '<div class="panel-heading">';
         $html[] = $translator->getTranslation('Users', null, Utilities :: COMMON_LIBRARIES);

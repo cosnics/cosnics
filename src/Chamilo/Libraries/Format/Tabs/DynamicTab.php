@@ -12,17 +12,25 @@ abstract class DynamicTab
 
     private $image;
 
+    protected $display;
+
+    const DISPLAY_ICON = 1;
+    const DISPLAY_TITLE = 2;
+    const DISPLAY_ICON_AND_TITLE = 3;
+
     /**
      *
      * @param integer $id
      * @param string $name
      * @param string $image
+     * @param int $display
      */
-    public function __construct($id, $name, $image)
+    public function __construct($id, $name, $image, $display = self::DISPLAY_ICON_AND_TITLE)
     {
         $this->id = $id;
         $this->name = $name;
         $this->image = $image;
+        $this->display = $display;
     }
 
     /**
@@ -82,16 +90,14 @@ abstract class DynamicTab
     abstract public function get_link();
 
     /**
-     *
-     * @param string $tab_name
      * @return string
      */
     public function header()
     {
         $html = array();
-        $html[] = '<li><a href="' . $this->get_link() . '">';
+        $html[] = '<li><a title="' . $this->name . '" href="' . $this->get_link() . '">';
         $html[] = '<span class="category">';
-        if ($this->image)
+        if ($this->image && $this->isIconVisible())
         {
             if (! $this->image instanceof InlineGlyph)
             {
@@ -104,12 +110,12 @@ abstract class DynamicTab
             }
         }
 
-        if ($this->image && $this->name)
+        if ($this->image && $this->name && $this->isIconVisible() && $this->isTextVisible())
         {
             $html[] = '&nbsp;&nbsp;';
         }
 
-        if ($this->name)
+        if ($this->name && $this->isTextVisible())
         {
             $html[] = '<span class="title">' . $this->name . '</span>';
         }
@@ -146,6 +152,26 @@ abstract class DynamicTab
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns whether or not the icon is visible
+     *
+     * @return bool
+     */
+    protected function isIconVisible()
+    {
+        return $this->display == self::DISPLAY_ICON_AND_TITLE || $this->display == self::DISPLAY_ICON;
+    }
+
+    /**
+     * Returns whether or not the text is visible
+     *
+     * @return bool
+     */
+    protected function isTextVisible()
+    {
+        return $this->display == self::DISPLAY_ICON_AND_TITLE || $this->display == self::DISPLAY_TITLE;
     }
 
     /**
