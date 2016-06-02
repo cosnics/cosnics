@@ -43,14 +43,14 @@ class ForumSubscribeComponent extends Manager
             $message = Translation :: get(
                 "SuccesSubscribe",
                 null,
-                ContentObject :: get_content_object_type_namespace('forum'));
+                ContentObject :: get_content_object_type_namespace('Forum'));
         }
         else
         {
             $message = Translation :: get(
                 "UnSuccesSubscribe",
                 null,
-                ContentObject :: get_content_object_type_namespace('forum'));
+                ContentObject :: get_content_object_type_namespace('Forum'));
         }
         $this->redirect(
             $message,

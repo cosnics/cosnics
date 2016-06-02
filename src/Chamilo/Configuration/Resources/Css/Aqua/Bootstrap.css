@@ -878,3 +878,11 @@ ul.nav-wizard.publication-wizard {
 	background-image: url(../../Images/Aqua/Status/OkMini.png);
 	opacity: 1;
 }
+
+.glyphicon-muted {
+	opacity: 0.5;
+}
+
+.text-muted-invisible {
+	color: #777777 !important;
+}
