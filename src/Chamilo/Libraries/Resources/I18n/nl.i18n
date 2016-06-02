@@ -646,3 +646,5 @@ SlideshowNoContentAvailable = "Er is geen geldige inhoud die getoond kan worden 
 ZeroByteFile = "Het geselecteerde bestand is leeg en wordt daarom niet opgeladen"
 LoginTryAgain = "Probeer opnieuw in te loggen"
 ConfirmChosenAction = "Bent u zeker dat u de geselecteerde actie wilt uitvoeren?"
+LoginSuccessful = "Je bent succesvol ingelogd bij google drive"
+LoginFailed = "Het is niet gelukt om jou in te loggen bij google drive"
