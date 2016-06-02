@@ -91,7 +91,7 @@ class CourseTruncaterForm extends FormValidator
             }
         }
 
-        $this->addFormRule(array('PublicationSelectionMaintenanceWizardPage', 'count_selected_publications'));
+//        $this->addFormRule(array('PublicationSelectionMaintenanceWizardPage', 'count_selected_publications'));
 
         $this->addElement('html', '</div>');
         $publication_selector_form = new PublicationSelectorForm(
