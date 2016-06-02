@@ -1,15 +1,14 @@
 <?php
-use libraries\storage\parameters\DataClassRetrievesParameters;
 
-use libraries\storage\query\condition\EqualityCondition;
-use libraries\storage\query\condition\OrCondition;
-use libraries\storage\query\condition\AndCondition;
-use libraries\platform\session\Request;
-use core\repository\storage\data_class\ContentObject;
-use core\repository\RepositoryDataManager;
-use core\repository\storage\data_class\ComplexContentObjectItem;
-use libraries\storage\query\variable\PropertyConditionVariable;
-use libraries\storage\query\variable\StaticConditionVariable;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+
 class MediawikiLinkHolderArray
 {
 
@@ -278,8 +277,8 @@ class MediawikiLinkHolderArray
                 else
                 {
                     $query_parameters = $this->parent->get_mediawiki_parser_context()->get_parameters();
-                    $query_parameters[\core\repository\display\Manager :: PARAM_ACTION] = \core\repository\content_object\wiki\display\Manager :: ACTION_VIEW_WIKI_PAGE;
-                    $query_parameters[\core\repository\display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
+                    $query_parameters[\Chamilo\Core\Repository\Display\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager :: ACTION_VIEW_WIKI_PAGE;
+                    $query_parameters[\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $wiki_complex_ids[$pdbk];
 
                     $replacePairs[$searchkey] = MediawikiLinker :: makeColouredLinkObj(
                         $title,

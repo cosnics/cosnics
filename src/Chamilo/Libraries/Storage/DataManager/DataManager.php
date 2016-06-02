@@ -448,7 +448,7 @@ class DataManager
      * Retrieve a ResultSet of DataClass object instances from the storage layer
      *
      * @param $class string
-     * @param $parameters \libraries\storage\DataClassRetrievesParameters
+     * @param $parameters DataClassRetrievesParameters
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
     public static function retrieves($class, $parameters = null)
