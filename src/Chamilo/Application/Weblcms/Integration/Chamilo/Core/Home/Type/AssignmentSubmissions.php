@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Core\Repository\Common\Renderer\ContentObjectRenderer;
-use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
@@ -31,24 +30,24 @@ class AssignmentSubmissions extends Block
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_PUBLISHER_ID),
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(),
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_PUBLISHER_ID),
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_TOOL),
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(),
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_TOOL),
             new StaticConditionVariable('Assignment'));
 
         $condition = new AndCondition($conditions);
 
-        $assignment_publications_resultset = WeblcmsDataManager :: retrieves(
-            ContentObjectPublication :: class_name(),
+        $assignment_publications_resultset = WeblcmsDataManager::retrieves(
+            ContentObjectPublication::class_name(),
             new DataClassRetrievesParameters($condition));
 
         if ($assignment_publications_resultset->size() == 0)
         {
-            return Translation :: get('YouDoNotOwnAnyAssignments');
+            return Translation::get('YouDoNotOwnAnyAssignments');
         }
 
         $items = array();
@@ -56,7 +55,7 @@ class AssignmentSubmissions extends Block
         while ($publication = $assignment_publications_resultset->next_result())
         {
             // Retrieve last time the publication was accessed
-            $course_tool = WeblcmsDataManager :: retrieve_course_tool_by_name($publication->get_tool());
+            $course_tool = WeblcmsDataManager::retrieve_course_tool_by_name($publication->get_tool());
             $last_access_time = $this->getLastVisit(
                 $user_id,
                 $publication->get_course_id(),
@@ -69,31 +68,31 @@ class AssignmentSubmissions extends Block
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_PUBLICATION_ID),
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(),
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($publication->get_id()));
             $conditions[] = new InequalityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
-                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_DATE_SUBMITTED),
-                InequalityCondition :: GREATER_THAN,
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(),
+                    \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_DATE_SUBMITTED),
+                InequalityCondition::GREATER_THAN,
                 new StaticConditionVariable($last_access_time));
             $condition = new AndCondition($conditions);
 
-            $submissions_resultset = \Chamilo\Core\Tracking\Storage\DataManager :: retrieves(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: class_name(),
+            $submissions_resultset = \Chamilo\Core\Tracking\Storage\DataManager::retrieves(
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::class_name(),
                 new DataClassRetrievesParameters($condition));
 
             $object = $publication->get_content_object();
             $item[title] = $object->get_title();
             $parameters = array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $publication->get_course_id(),
-                Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
-                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'Assignment',
-                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS,
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id());
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $publication->get_course_id(),
+                Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
+                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Assignment',
+                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_BROWSE_SUBMITTERS,
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => ContentObjectRenderer::TYPE_TABLE,
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id());
 
             $redirect = new Redirect($parameters);
 
@@ -112,7 +111,7 @@ class AssignmentSubmissions extends Block
 
         if (count($html) == 0)
         {
-            return Translation :: get('NoNewSubmissionsSinceLastVisit');
+            return Translation::get('NoNewSubmissionsSinceLastVisit');
         }
 
         return implode('', $html);
@@ -125,7 +124,7 @@ class AssignmentSubmissions extends Block
         foreach ($items as $item)
         {
             $html[] = '<a href="' . $item[link] . '">' . $item[title] . '</a>: ';
-            $html[] = $item[count] . ' ' . Translation :: get('New') . '<br />';
+            $html[] = $item[count] . ' ' . Translation::get('New') . '<br />';
         }
 
         return $html;

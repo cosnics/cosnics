@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Home\Interfaces\AngularConnectorInterface;
 
 /**
  * Services that connects to the several home integration packages and connects their angular functionality
@@ -29,7 +28,7 @@ class AngularConnectorService
     {
         if (! $configuration)
         {
-            $configuration = Configuration :: get_instance();
+            $configuration = Configuration::get_instance();
         }
 
         $this->angularConnectors = array();

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Table\BlockTypeTargetEntity;
 
 use Chamilo\Core\Home\Repository\HomeRepository;
@@ -8,7 +7,6 @@ use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
@@ -18,7 +16,9 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  */
 class BlockTypeTargetEntityTableDataProvider extends RecordTableDataProvider
 {
+
     /**
+     *
      * @var BlockTypeRightsService
      */
     protected $blockTypeRightsService;
@@ -49,13 +49,16 @@ class BlockTypeTargetEntityTableDataProvider extends RecordTableDataProvider
     {
         $blockTypes = $this->blockTypeRightsService->getBlockTypesWithTargetEntities();
 
-        $compareModifier = !empty($order_property) && $order_property[0]->get_direction() != SORT_DESC ? 1 : -1;
+        $compareModifier = ! empty($order_property) && $order_property[0]->get_direction() != SORT_DESC ? 1 : - 1;
 
-        usort($blockTypes, function($item1, $item2) use($compareModifier) {
-           return strcmp($item1['block_type'], $item2['block_type']) * $compareModifier;
-        });
+        usort(
+            $blockTypes,
+            function ($item1, $item2) use($compareModifier)
+            {
+                return strcmp($item1['block_type'], $item2['block_type']) * $compareModifier;
+            });
 
-        if(!is_null($offset) && !is_null($count))
+        if (! is_null($offset) && ! is_null($count))
         {
             $blockTypes = array_splice($blockTypes, $offset, $count);
         }

@@ -1,13 +1,9 @@
 <?php
-
 namespace Chamilo\Core\Repository\External\Infrastructure\Service;
 
-use Chamilo\Core\Repository\External\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderInterface;
 
 /**
@@ -15,8 +11,10 @@ use Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderIn
  *
  * @author Andras Zolnay - edufiles
  */
-class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider implements MicrosoftClientSettingsProviderInterface
+class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider implements
+    MicrosoftClientSettingsProviderInterface
 {
+
     /**
      * Constructor
      *
@@ -26,16 +24,15 @@ class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider
      */
     public function __construct(Instance $externalRepositoryInstance, User $user, $scopes)
     {
-        parent :: __construct($externalRepositoryInstance, $user, $scopes);
+        parent::__construct($externalRepositoryInstance, $user, $scopes);
     }
 
     /**
      * Return the tenant need to constuct Microsoft service URL's.
-     *
-     * Allowed values: common, organizations, consumers, and tenant identifiers.  
+     * Allowed values: common, organizations, consumers, and tenant identifiers.
      * If no tenant given by user, 'common' is returned.
      *
-     * @return string 
+     * @return string
      */
     public function getTenant()
     {
@@ -48,7 +45,7 @@ class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider
 
         return $tenant;
     }
-    
+
     /**
      * Returns the security access token for the microsoft client
      *
@@ -59,9 +56,9 @@ class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider
         $accessTokenString = $this->getUserSettingValue('session_token');
         if (! is_null($accessTokenString))
         {
-            return json_decode($accessTokenString); 
+            return json_decode($accessTokenString);
         }
-        
+
         return null;
     }
 

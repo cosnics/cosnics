@@ -1,26 +1,23 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\SubmissionSubmit\SubmissionSubmitWizardComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonRenderer;
-use Chamilo\Libraries\Format\Structure\Breadcrumb;
-use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
- * Shows a big confirmation message to the user when his submission has been succesfull. This component is separate so
+ * Shows a big confirmation message to the user when his submission has been succesfull.
+ * This component is separate so
  * nothing wrong can happen when a user clicks on the refresh button of the browser
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class SubmissionSubmitConfirmationComponent extends SubmissionSubmitWizardComponent
 {
+
     public function run()
     {
         $html = array();
@@ -32,10 +29,8 @@ class SubmissionSubmitConfirmationComponent extends SubmissionSubmitWizardCompon
                 'SubmissionSubmitConfirmation',
                 array(
                     'ASSIGNMENT_TITLE' => $this->getPublication()->get_content_object()->get_title(),
-                    'USER_EMAIL' => $this->getUser()->get_email()
-                ), Manager::context()
-            )
-        );
+                    'USER_EMAIL' => $this->getUser()->get_email()),
+                Manager::context()));
 
         $parameters = $this->get_parameters();
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_BROWSE_SUBMISSIONS;
@@ -48,8 +43,7 @@ class SubmissionSubmitConfirmationComponent extends SubmissionSubmitWizardCompon
             $redirect->getUrl(),
             Button::DISPLAY_ICON_AND_LABEL,
             false,
-            'btn-primary'
-        );
+            'btn-primary');
 
         $buttonRenderer = new ButtonRenderer($button);
 
@@ -69,26 +63,26 @@ class SubmissionSubmitConfirmationComponent extends SubmissionSubmitWizardCompon
         return array(self::PARAM_PUBLICATION_ID, self::PARAM_SUBMITTER_TYPE, self::PARAM_TARGET_ID);
     }
 
-//    /**
-//     * Add an additional breadcrumb to the trail.
-//     *
-//     * @param $breadcrumbTrail BreadcrumbTrail
-//     */
-//    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbTrail)
-//    {
-//        parent::add_additional_breadcrumbs($breadcrumbTrail);
-//
-//        $breadcrumbTrail->add(
-//            new Breadcrumb(
-//                $this->get_url(
-//                    array(
-//                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION
-//                    )
-//                ),
-//                Translation::getInstance()->getTranslation('SubmissionSubmitComponent', null, Manager::context())
-//            )
-//        );
-//    }
+    // /**
+    // * Add an additional breadcrumb to the trail.
+    // *
+    // * @param $breadcrumbTrail BreadcrumbTrail
+    // */
+    // public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbTrail)
+    // {
+    // parent::add_additional_breadcrumbs($breadcrumbTrail);
+    //
+    // $breadcrumbTrail->add(
+    // new Breadcrumb(
+    // $this->get_url(
+    // array(
+    // \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBMIT_SUBMISSION
+    // )
+    // ),
+    // Translation::getInstance()->getTranslation('SubmissionSubmitComponent', null, Manager::context())
+    // )
+    // );
+    // }
 
     /**
      * Returns the selected step index

@@ -101,7 +101,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
      */
     public function renderContentHeader()
     {
-        return '<ul class="list-group portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
+        return '<div class="list-group portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
     }
 
     /**
@@ -110,7 +110,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
      */
     public function renderContentFooter()
     {
-        return '</ul>';
+        return '</div>';
     }
 
     public function displayContent()
@@ -138,10 +138,10 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
             $title = htmlspecialchars($content_object->get_title());
             $link = '<a href="' . $href . '">' . $title . '</a>';
 
-            $html[] = '<li class="list-group-item">';
+            $html[] = '<div class="list-group-item">';
             $html[] = '<span class="pull-right">' . $icon . '</span>';
             $html[] = $link;
-            $html[] = '</li>';
+            $html[] = '</div>';
         }
 
         return implode(PHP_EOL, $html);

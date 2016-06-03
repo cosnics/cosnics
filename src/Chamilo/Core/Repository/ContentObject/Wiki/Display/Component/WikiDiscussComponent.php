@@ -19,7 +19,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 use Chamilo\Libraries\Utilities\Utilities;
 use MediawikiParser;
 use MediawikiParserContext;
@@ -32,9 +31,8 @@ use MediawikiParserContext;
 /*
  * This is the discuss page. Here a user can add feedback to a wiki_page. Author: Stefan Billiet Author: Nick De Feyter
  */
-require_once Path:: getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
-require_once Path:: getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
-
+require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser.class.php';
+require_once Path::getInstance()->getPluginPath() . 'wiki/mediawiki_parser_context.class.php';
 class WikiDiscussComponent extends Manager implements DelegateComponent, FeedbackSupport
 {
     /*
@@ -60,15 +58,13 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function run()
     {
         $this->set_parameter(
-            self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-            $this->get_selected_complex_content_object_item_id()
-        );
+            self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+            $this->get_selected_complex_content_object_item_id());
 
-        $complex_wiki_page_id = Request:: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
-        $this->complexWikiPage = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-            ComplexContentObjectItem:: class_name(),
-            $complex_wiki_page_id
-        );
+        $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+        $this->complexWikiPage = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ComplexContentObjectItem::class_name(),
+            $complex_wiki_page_id);
         $this->wikiPage = $this->complexWikiPage->get_ref_object();
 
         $html = array();
@@ -76,9 +72,8 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
         $html[] = $this->render_header();
 
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Feedback\Manager:: context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
-        );
+            \Chamilo\Core\Repository\Feedback\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
 
         $html[] = $factory->run();
         $html[] = $this->render_footer();
@@ -90,26 +85,21 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     {
         $html = array();
 
-        $html[] = parent:: render_header($this->complexWikiPage);
+        $html[] = parent::render_header($this->complexWikiPage);
 
         $parser = new MediawikiParser(
             new MediawikiParserContext(
                 $this->get_root_content_object(),
                 $this->wikiPage->get_title(),
                 $this->wikiPage->get_description(),
-                $this->get_parameters()
-            )
-        );
+                $this->get_parameters()));
 
-        $html[] =
-            '<div class="wiki-pane-content-title">' . Translation:: get('Discuss') . ' ' .
-            $this->wikiPage->get_title() .
-            '</div>';
-        $html[] = '<div class="wiki-pane-content-subtitle">' . Translation:: get(
-                'From',
-                null,
-                Utilities :: COMMON_LIBRARIES
-            ) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
+        $html[] = '<div class="wiki-pane-content-title">' . Translation::get('Discuss') . ' ' .
+             $this->wikiPage->get_title() . '</div>';
+        $html[] = '<div class="wiki-pane-content-subtitle">' . Translation::get(
+            'From',
+            null,
+            Utilities::COMMON_LIBRARIES) . ' ' . $this->get_root_content_object()->get_title() . '</div>';
         $html[] = '<div class="wiki-pane-content-discuss">';
         $html[] = $parser->parse($this->wikiPage->get_description());
         $html[] = '<div class="clear"></div>';
@@ -126,7 +116,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
 
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
-        $html[] = parent:: render_footer();
+        $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
     }
@@ -144,8 +134,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     {
         return \Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager::retrieves(
             WikiPageFeedback::class_name(),
-            new DataClassRetrievesParameters($this->getWikiPageFeedbackCondition(), $count, $offset)
-        );
+            new DataClassRetrievesParameters($this->getWikiPageFeedbackCondition(), $count, $offset));
     }
 
     /**
@@ -155,8 +144,8 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function count_feedbacks()
     {
         return \Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager::count(
-            WikiPageFeedback::class_name(), new DataClassCountParameters($this->getWikiPageFeedbackCondition())
-        );
+            WikiPageFeedback::class_name(),
+            new DataClassCountParameters($this->getWikiPageFeedbackCondition()));
     }
 
     /**
@@ -166,8 +155,8 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     public function retrieve_feedback($feedback_id)
     {
         return \Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataManager::retrieve_by_id(
-            WikiPageFeedback::class_name(), $feedback_id
-        );
+            WikiPageFeedback::class_name(),
+            $feedback_id);
     }
 
     /**
@@ -191,8 +180,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
     {
         return new EqualityCondition(
             new PropertyConditionVariable(WikiPageFeedback::class_name(), WikiPageFeedback::PROPERTY_WIKI_PAGE_ID),
-            new StaticConditionVariable($this->wikiPage->getId())
-        );
+            new StaticConditionVariable($this->wikiPage->getId()));
     }
 
     /**

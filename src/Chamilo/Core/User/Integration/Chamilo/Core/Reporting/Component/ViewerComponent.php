@@ -8,7 +8,6 @@ use Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Template\UserTemplate;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -22,34 +21,34 @@ class ViewerComponent extends Manager
      */
     public function run()
     {
-        $this->set_parameter(\Chamilo\Core\User\Manager :: PARAM_USER_USER_ID, $this->get_user_id());
+        $this->set_parameter(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID, $this->get_user_id());
 
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
 
-        $template_id = Request :: get(self :: PARAM_TEMPLATE_ID, 1);
-        $this->set_parameter(self :: PARAM_TEMPLATE_ID, $template_id);
+        $template_id = Request::get(self::PARAM_TEMPLATE_ID, 1);
+        $this->set_parameter(self::PARAM_TEMPLATE_ID, $template_id);
 
         switch ($template_id)
         {
-            case LoginTemplate :: TEMPLATE_ID :
-                $class_name = LoginTemplate :: class_name();
+            case LoginTemplate::TEMPLATE_ID :
+                $class_name = LoginTemplate::class_name();
                 break;
-            case DataTemplate :: TEMPLATE_ID :
-                $class_name = DataTemplate :: class_name();
+            case DataTemplate::TEMPLATE_ID :
+                $class_name = DataTemplate::class_name();
                 break;
-            case UserTemplate :: TEMPLATE_ID :
-                $class_name = UserTemplate :: class_name();
+            case UserTemplate::TEMPLATE_ID :
+                $class_name = UserTemplate::class_name();
                 break;
             default :
-                $class_name = DataTemplate :: class_name();
+                $class_name = DataTemplate::class_name();
                 break;
         }
 
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Reporting\Viewer\Manager :: context(),
+            \Chamilo\Core\Reporting\Viewer\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_template_by_name($class_name);
@@ -62,8 +61,8 @@ class ViewerComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS)),
-                Translation :: get('AdminUserBrowserComponent')));
+                        \Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_BROWSE_USERS)),
+                Translation::get('AdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_reporting');
     }
 }

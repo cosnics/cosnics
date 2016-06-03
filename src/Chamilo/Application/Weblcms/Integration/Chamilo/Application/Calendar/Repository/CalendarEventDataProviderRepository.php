@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Repository;
 
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;

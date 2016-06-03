@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Interfaces;
 
-use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 
 /**
@@ -12,6 +10,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
  */
 interface PersonalCalendarEventDataProviderRepositoryInterface
 {
+
     /**
      * Returns the personal calendar publications for this specific content object type
      *
