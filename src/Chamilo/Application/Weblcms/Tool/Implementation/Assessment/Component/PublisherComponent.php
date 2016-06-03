@@ -2,14 +2,12 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Component;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Form\PublicationForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Publication\ContentObjectPublicationHandler;
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormHandler;
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**

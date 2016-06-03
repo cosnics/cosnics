@@ -1,8 +1,5 @@
 <?php
-
 namespace Chamilo\Core\Repository\Publication\Publisher\Interfaces;
-
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Interface that describes the necessary functions for a publication handler
@@ -11,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  */
 interface PublicationHandlerInterface
 {
+
     /**
      * Publishes the actual selected and configured content objects
      *

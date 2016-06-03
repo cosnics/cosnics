@@ -20,7 +20,7 @@
         "doctrine/cache" : "1.5.*",
         "chamilo/pear-libraries" : "*",
         "glenscott/soundcloud": "dev-psr-4",
-        "google/apiclient": "*"
+        "google/apiclient": "1.*"
     },
     "require-dev" : {
         "phpunit/phpunit" : "4.4.*",

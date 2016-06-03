@@ -2,7 +2,6 @@
 namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
 use Chamilo\Libraries\Cache\ParameterBag;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
@@ -70,9 +69,9 @@ class EventsCacheService extends DoctrineFilesystemCacheService
     {
         $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
 
-        $calendarIdentifier = $identifier->get(self :: PARAM_CALENDAR_IDENTIFIER);
-        $fromDate = $identifier->get(self :: PARAM_FROM_DATE);
-        $toDate = $identifier->get(self :: PARAM_TO_DATE);
+        $calendarIdentifier = $identifier->get(self::PARAM_CALENDAR_IDENTIFIER);
+        $fromDate = $identifier->get(self::PARAM_FROM_DATE);
+        $toDate = $identifier->get(self::PARAM_TO_DATE);
 
         $result = $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
             $calendarIdentifier,
@@ -106,10 +105,10 @@ class EventsCacheService extends DoctrineFilesystemCacheService
 
         $identifier = new ParameterBag(
             array(
-                ParameterBag :: PARAM_IDENTIFIER => $cacheIdentifier,
-                self :: PARAM_CALENDAR_IDENTIFIER => $calendarIdentifier,
-                self :: PARAM_FROM_DATE => $fromDate,
-                self :: PARAM_TO_DATE => $toDate));
+                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier,
+                self::PARAM_CALENDAR_IDENTIFIER => $calendarIdentifier,
+                self::PARAM_FROM_DATE => $fromDate,
+                self::PARAM_TO_DATE => $toDate));
 
         return $this->getForIdentifier($identifier);
     }

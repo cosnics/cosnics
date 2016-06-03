@@ -7,14 +7,13 @@ use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Service\ServiceFactory;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
 
 /**
+ *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
@@ -22,6 +21,7 @@ use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
  */
 abstract class CalendarEventDataProvider extends InternalCalendar
 {
+
     /**
      *
      * @see \Chamilo\Application\Calendar\CalendarInterface::getEvents()
@@ -33,9 +33,8 @@ abstract class CalendarEventDataProvider extends InternalCalendar
      *
      * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(
-        CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate, $toDate
-    )
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate,
+        $toDate)
     {
         $rightsService = ServiceFactory::getInstance()->getRightsService();
 
@@ -43,14 +42,12 @@ abstract class CalendarEventDataProvider extends InternalCalendar
 
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
         $packageContext = $this->getCalendarContext();
-        $packageName = ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($packageContext);
+        $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageContext);
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
             $calendarRendererProvider->getDataUser(),
             $packageContext,
-            $packageName
-        )
-        )
+            $packageName))
         {
             $publications = $this->getPublications($calendarRendererProvider->getDataUser(), $fromDate, $toDate);
 
@@ -59,10 +56,10 @@ abstract class CalendarEventDataProvider extends InternalCalendar
                 $course = new Course();
                 $course->setId($publication->get_course_id());
 
-                if (!$rightsService->canUserViewPublication(
-                    $calendarRendererProvider->getDataUser(), $publication, $course
-                )
-                )
+                if (! $rightsService->canUserViewPublication(
+                    $calendarRendererProvider->getDataUser(),
+                    $publication,
+                    $course))
                 {
                     continue;
                 }
@@ -84,7 +81,7 @@ abstract class CalendarEventDataProvider extends InternalCalendar
         $package = $this->getCalendarContext();
 
         $calendar = new AvailableCalendar();
-        $calendar->setIdentifier(ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($package));
+        $calendar->setIdentifier(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($package));
         $calendar->setType($package);
         $calendar->setName($this->getCalendarName());
 

@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Common\Import\File;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
-use Chamilo\Core\Repository\Common\Import\ImportFormParameters;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -61,7 +60,7 @@ class FileContentObjectImportForm extends ContentObjectImportForm
         {
             $dropZoneParameters['maxFiles'] = 1;
         }
-        
+
         $this->addFileDropzone(self :: IMPORT_FILE_NAME, $dropZoneParameters, false);
 
         $this->addElement(
