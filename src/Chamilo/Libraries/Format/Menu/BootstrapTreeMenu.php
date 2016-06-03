@@ -157,6 +157,8 @@ abstract class BootstrapTreeMenu
      */
     public function render()
     {
+        $currentNodeId = $this->getCurrentNodeId();
+
         $html = array();
 
         $html[] = '<div id="' . $this->getMenuName() . '">';
@@ -179,9 +181,15 @@ abstract class BootstrapTreeMenu
 
                     $('#" . $this->getMenuName() . "').treeview(
                             'revealNode',
-                            [ $('#" . $this->getMenuName() .
-             " li[data-node-id=\"" . $this->getCurrentNodeId() . "\"]'),
+                            [ " . $currentNodeId . ",
                                 { silent: true }
+                            ]
+                    );
+                    
+                    $('#" . $this->getMenuName() . "').treeview(
+                            'expandNode',
+                            [ " . $currentNodeId . ",
+                                { silent: false }
                             ]
                     );
                 });
