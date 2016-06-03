@@ -8,6 +8,7 @@ use Chamilo\Libraries\Calendar\Table\Type\WeekCalendar;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 /**
  *
@@ -63,7 +64,7 @@ class WeekRenderer extends FullTableRenderer
         $this->endHour = $endHour;
         $this->hideOtherHours = $hideOtherHours;
 
-        parent :: __construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
+        parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
     }
 
     /**
@@ -145,8 +146,8 @@ class WeekRenderer extends FullTableRenderer
     public function initializeCalendar()
     {
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $displayParameters[self :: PARAM_TIME] = WeekCalendar :: TIME_PLACEHOLDER;
-        $displayParameters[self :: PARAM_TYPE] = self :: TYPE_DAY;
+        $displayParameters[self::PARAM_TIME] = WeekCalendar::TIME_PLACEHOLDER;
+        $displayParameters[self::PARAM_TYPE] = self::TYPE_DAY;
         $dayUrlTemplate = new Redirect($displayParameters);
 
         return new WeekCalendar(
@@ -212,9 +213,11 @@ class WeekRenderer extends FullTableRenderer
     {
         $weekNumber = date('W', $this->getDisplayTime());
 
-        return Translation :: get('Week', null, Utilities :: COMMON_LIBRARIES) . ' ' . $weekNumber . ' : ' .
-             date('l d M Y', $this->getCalendar()->getStartTime()) . ' - ' .
-             date('l d M Y', strtotime('+6 Days', $this->getCalendar()->getStartTime()));
+        return Translation::get('Week', null, Utilities::COMMON_LIBRARIES) . ' ' . $weekNumber . ' : ' .
+             DatetimeUtilities::format_locale_date('%A %d %B %Y', $this->getCalendar()->getStartTime()) . ' - ' .
+             DatetimeUtilities::format_locale_date(
+                '%A %d %B %Y',
+                strtotime('+6 Days', $this->getCalendar()->getStartTime()));
     }
 
     /**

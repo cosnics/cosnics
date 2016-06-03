@@ -18,3 +18,4 @@ InstructionsText = "Hierbij moet de deelnemer de mogelijke antwoorden in een bep
 RecalculateWeight = "Recalculate weight"
 RandomizeOptions = "Randomize items"
 FeedbackAnswer = "Only show feedback for wrong answers"
+MakeASelection = "Maak je selectie"

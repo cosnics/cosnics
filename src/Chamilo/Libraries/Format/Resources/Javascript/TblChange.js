@@ -27,7 +27,7 @@ function openCalendar(form, field) {
 	}
     
 	var path = getPath('WEB_PATH') + 'index.php?application=Chamilo\\Libraries\\Ajax&go=CalendarPopup';
-	window.open(path, 'calendar', 'location=no,status=no,resizable=no,width=240,height=240');
+	window.open(path, 'calendar', 'location=no,status=no,resizable=no,width=300,height=300');
 	day = datevalues[0];
 	month = datevalues[1];
 	year = datevalues[2];
@@ -107,7 +107,7 @@ function initCalendar(day_of_month_identifier)
     str = "";
 
     //heading table
-    str += '<table class="calendar_table mini_calendar"><tr><th class="monthyear" width="50%">'; 
+    str += '<table class="table calendar_table mini_calendar"><tr><th class="monthyear" width="50%">'; 
     str += '<a href="javascript:month--; initCalendar(' + day_of_month_identifier + ');">&laquo;</a> '; 
     str += month_names[month]; 
     
@@ -125,7 +125,7 @@ function initCalendar(day_of_month_identifier)
     }
     
 	str += '</th></tr></table>';
-	str += '<table class="calendar_table mini_calendar" style="border-top: 0px;"><tr>'; 
+	str += '<table class="table table-striped calendar_table mini_calendar" style="border-top: 0px;"><tr>'; 
 	
 	for (i = 0; i < 7; i++) 
 	{ 

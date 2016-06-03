@@ -145,6 +145,8 @@ class BrowserComponent extends Manager
         if (! isset($this->calendarDataProvider))
         {
             $displayParameters = $this->getDefaultComponent()->get_parameters();
+            $displayParameters[ViewRenderer :: PARAM_TYPE] = $this->getCurrentRendererType();
+            $displayParameters[ViewRenderer :: PARAM_TIME] = $this->getCurrentRendererTime();
 
             $this->calendarDataProvider = new CalendarRendererProvider(
                 $this->getDefaultComponent(),

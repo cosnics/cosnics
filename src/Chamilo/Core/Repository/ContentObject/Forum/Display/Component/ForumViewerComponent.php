@@ -314,11 +314,11 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         {
             foreach ($this->getTopics() as $topic)
             {
-                $title = '<a href="' . $this->get_url(
+                $title = '<h4><a href="' . $this->get_url(
                     array(
                         self :: PARAM_ACTION => self :: ACTION_VIEW_TOPIC,
                         self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id())) . '">' .
-                     $topic->get_ref()->get_title() . '</a>';
+                     $topic->get_ref()->get_title() . '</a></h4>';
 
                 $count = $topic->get_ref()->get_total_posts();
 
@@ -674,7 +674,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $buttonToolBar->addItem(
                         new Button(
                             Translation :: get('UnSticky'),
-                            new FontAwesomeGlyph('star-o'),
+                            new FontAwesomeGlyph('star'),
                             $this->get_url($parameters),
                             Button :: DISPLAY_ICON,
                             false,
@@ -690,7 +690,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         $buttonToolBar->addItem(
                             new Button(
                                 Translation :: get('UnImportant'),
-                                new FontAwesomeGlyph('circle-o'),
+                                new FontAwesomeGlyph('exclamation-circle'),
                                 $this->get_url($parameters),
                                 Button :: DISPLAY_ICON,
                                 false,
@@ -704,7 +704,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation :: get('MakeSticky'),
-                                    new FontAwesomeGlyph('star'),
+                                    new FontAwesomeGlyph('star-o'),
                                     $this->get_url($parameters),
                                     Button :: DISPLAY_ICON,
                                     false,
@@ -714,7 +714,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation :: get('MakeImportant'),
-                                    new FontAwesomeGlyph('exclamation-circle'),
+                                    new FontAwesomeGlyph('circle-o'),
                                     $this->get_url($parameters),
                                     Button :: DISPLAY_ICON,
                                     false,
