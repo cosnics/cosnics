@@ -95,14 +95,14 @@ abstract class DynamicTab
     public function header()
     {
         $html = array();
-        $html[] = '<li><a title="' . $this->name . '" href="' . $this->get_link() . '">';
+        $html[] = '<li><a title="' . strip_tags($this->name) . '" href="' . $this->get_link() . '">';
         $html[] = '<span class="category">';
         if ($this->image && $this->isIconVisible())
         {
             if (! $this->image instanceof InlineGlyph)
             {
                 $html[] = '<img src="' . $this->image . '" border="0" style="vertical-align: middle; " alt="' .
-                     $this->name . '" title="' . $this->name . '"/>';
+                    strip_tags($this->name) . '" title="' . strip_tags($this->name) . '"/>';
             }
             else
             {
