@@ -88,4 +88,14 @@ class ButtonGroup extends AbstractButtonToolBarItem
             $this->prependButton($button);
         }
     }
+
+    /**
+     * Returns whether or not the button group has buttons
+     * 
+     * @return bool
+     */
+    public function hasButtons()
+    {
+        return count($this->buttons) > 0;
+    }
 }
