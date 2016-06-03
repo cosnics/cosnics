@@ -7,6 +7,7 @@ use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -66,12 +67,14 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
                 new CalendarRendererProviderRepository(),
                 $this->getUser(),
                 $this->getUser(),
-                array(),
-                \Chamilo\Application\Calendar\Ajax\Manager :: context());
+                array(
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
+                    \Chamilo\Application\Calendar\Ajax\Manager::context(),
+                    MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY));
 
             $calendarLegend = new Legend($dataProvider);
 
-            $time = Request :: get('time') ? intval(Request :: get('time')) : time();
+            $time = Request::get('time') ? intval(Request::get('time')) : time();
             return new MiniMonthRenderer($dataProvider, $calendarLegend, $time, array(), $this->getLinkTarget());
         }
 

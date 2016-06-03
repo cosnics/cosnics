@@ -107,8 +107,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         if (! isset($this->forumTopic))
         {
             $complexForumTopic = $this->get_complex_content_object_item();
-            $this->forumTopic = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ForumTopic :: class_name(),
+            $this->forumTopic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ForumTopic::class_name(),
                 $complexForumTopic->get_ref());
         }
 
@@ -137,13 +137,13 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     {
         if (! isset($this->forumTopicPosts))
         {
-            $children = DataManager :: retrieve_forum_posts($this->getForumTopic()->getId(), $this->get_condition());
+            $children = DataManager::retrieve_forum_posts($this->getForumTopic()->getId(), $this->get_condition());
 
             $this->forumTopicPosts = array();
 
             while ($child = $children->next_result())
             {
-                $this->forumTopicPosts[] = DataManager :: retrieve_by_id(ForumPost :: class_name(), $child->get_id());
+                $this->forumTopicPosts[] = DataManager::retrieve_by_id(ForumPost::class_name(), $child->get_id());
             }
         }
 
@@ -164,13 +164,13 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     public function setBreadcrumbs()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::get_instance();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                        self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)),
+                        self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
+                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)),
                 $this->get_root_content_object()->get_title()));
 
         $complex_content_objects_path = $this->retrieve_children_from_root_to_cloi(
@@ -187,8 +187,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                         new Breadcrumb(
                             $this->get_url(
                                 array(
-                                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key,
-                                    self :: PARAM_ACTION => self :: ACTION_VIEW_TOPIC)),
+                                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key,
+                                    self::PARAM_ACTION => self::ACTION_VIEW_TOPIC)),
                             $value->get_title()));
                 }
                 else
@@ -197,8 +197,8 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                         new Breadcrumb(
                             $this->get_url(
                                 array(
-                                    self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)),
+                                    self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
+                                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)),
                             $value->get_title()));
                 }
             }
@@ -287,14 +287,14 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     public function renderPostDate($glyphType, $textClass, $date)
     {
-        $dateFormat = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
+        $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
         $fontAwesomeGlyph = new FontAwesomeGlyph($glyphType);
 
         $html = array();
 
         $html[] = '<span class="' . $textClass . '">';
         $html[] = $fontAwesomeGlyph->render();
-        $html[] = DatetimeUtilities :: format_locale_date($dateFormat, $date);
+        $html[] = DatetimeUtilities::format_locale_date($dateFormat, $date);
         $html[] = '</span>';
 
         return implode(PHP_EOL, $html);
@@ -313,16 +313,16 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         {
             $profilePhotoUrl = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user->get_id()));
             $profilePhotoSource = $profilePhotoUrl->getUrl();
             $userName = $user->get_fullname();
         }
         else
         {
-            $profilePhotoSource = Theme :: getInstance()->getImagePath(self :: package(), 'Unknown', 'png');
-            $userName = Translation :: get('UserNotFound');
+            $profilePhotoSource = Theme::getInstance()->getImagePath(self::package(), 'Unknown', 'png');
+            $userName = Translation::get('UserNotFound');
         }
 
         $html[] = '<div class="pull-left user-info" href="#">';
@@ -346,30 +346,30 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         if (! $this->isLocked())
         {
             $parameters = array();
-            $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-            $parameters[self :: PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_QUOTE_FORUM_POST;
+            $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+            $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
+            $parameters[self::PARAM_ACTION] = self::ACTION_QUOTE_FORUM_POST;
 
             $buttonToolBar->addItem(
                 new Button(
-                    Translation :: get('Quote'),
+                    Translation::get('Quote'),
                     new FontAwesomeGlyph('quote-right'),
                     $this->get_url($parameters),
-                    Button :: DISPLAY_ICON,
+                    Button::DISPLAY_ICON,
                     false,
                     'btn-link'));
 
             $parameters = array();
-            $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-            $parameters[self :: PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_FORUM_POST;
+            $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+            $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
+            $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_FORUM_POST;
 
             $buttonToolBar->addItem(
                 new Button(
-                    Translation :: get('Reply'),
+                    Translation::get('Reply'),
                     new FontAwesomeGlyph('comment'),
                     $this->get_url($parameters),
-                    Button :: DISPLAY_ICON,
+                    Button::DISPLAY_ICON,
                     false,
                     'btn-link'));
 
@@ -377,16 +377,16 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                  $this->is_forum_manager($this->get_user()))
             {
                 $parameters = array();
-                $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-                $parameters[self :: PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_EDIT_FORUM_POST;
+                $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
+                $parameters[self::PARAM_ACTION] = self::ACTION_EDIT_FORUM_POST;
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('pencil'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         false,
                         'btn-link'));
             }
@@ -397,16 +397,16 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                      $this->is_forum_manager($this->get_user()))
                 {
                     $parameters = array();
-                    $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-                    $parameters[self :: PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
-                    $parameters[self :: PARAM_ACTION] = self :: ACTION_DELETE_FORUM_POST;
+                    $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                    $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
+                    $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_FORUM_POST;
 
                     $buttonToolBar->addItem(
                         new Button(
-                            Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                            Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
                             new BootstrapGlyph('remove'),
                             $this->get_url($parameters),
-                            Button :: DISPLAY_ICON,
+                            Button::DISPLAY_ICON,
                             true,
                             'btn-link'));
                 }
@@ -425,15 +425,15 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
             $parameters = array();
-            $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_FORUM_POST;
+            $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+            $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_FORUM_POST;
 
             $buttonToolbar->addItem(
                 new Button(
-                    Translation :: get('ReplyOnTopic', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic'),
+                    Translation::get('ReplyOnTopic', null, 'Chamilo\Core\Repository\ContentObject\ForumTopic'),
                     new BootstrapGlyph('plus'),
                     $this->get_url($parameters),
-                    Button :: DISPLAY_ICON_AND_LABEL,
+                    Button::DISPLAY_ICON_AND_LABEL,
                     false,
                     'btn-primary'));
 
@@ -455,14 +455,14 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             {
                 $conditions = array();
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(ForumPost :: class_name(), ForumPost :: PROPERTY_TITLE),
+                    new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_TITLE),
                     '*' . $query . '*',
-                    ForumPost :: get_table_name(),
+                    ForumPost::get_table_name(),
                     false);
                 $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(ForumPost :: class_name(), ForumPost :: PROPERTY_CONTENT),
+                    new PropertyConditionVariable(ForumPost::class_name(), ForumPost::PROPERTY_CONTENT),
                     '*' . $query . '*',
-                    ForumPost :: get_table_name(),
+                    ForumPost::get_table_name(),
                     false);
 
                 return new OrCondition($conditions);
@@ -485,23 +485,18 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     {
         if (! isset($this->pageNumber))
         {
-            $requestedLastPost = Request :: get('last_post');
+            $requestedLastPost = Request::get('last_post');
 
             if ($requestedLastPost)
             {
-                $pageNumber = $this->getTotalNumberOfItems() / self :: DEFAULT_PER_PAGE;
-
-                if ($this->getTotalNumberOfItems() % self :: DEFAULT_PER_PAGE)
-                {
-                    $pageNumber = $pageNumber + 1;
-                }
+                $pageNumber = (int) ceil($this->getTotalNumberOfItems() / self::DEFAULT_PER_PAGE);
             }
             else
             {
                 $pageNumber = 1;
             }
 
-            $requestedPageNumber = Request :: get(ForumTopic :: get_table_name() . '_' . 'page_nr');
+            $requestedPageNumber = Request::get(ForumTopic::get_table_name() . '_' . 'page_nr');
 
             $this->pageNumber = $requestedPageNumber ? $requestedPageNumber : $pageNumber;
         }
@@ -515,7 +510,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
      */
     public function getItemsPerPage()
     {
-        return self :: DEFAULT_PER_PAGE;
+        return self::DEFAULT_PER_PAGE;
     }
 
     /**
@@ -540,7 +535,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $pagerRenderer = new PagerRenderer($this->getPager());
         return $pagerRenderer->renderPaginationWithPageLimit(
             $this->get_parameters(),
-            ForumTopic :: get_table_name() . '_' . 'page_nr');
+            ForumTopic::get_table_name() . '_' . 'page_nr');
     }
 
     /**
@@ -550,6 +545,6 @@ class TopicViewerComponent extends Manager implements DelegateComponent
      */
     public function get_table_data($from = 1)
     {
-        return array_slice($this->posts, $from, self :: DEFAULT_PER_PAGE);
+        return array_slice($this->posts, $from, self::DEFAULT_PER_PAGE);
     }
 }
