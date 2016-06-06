@@ -38,6 +38,8 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
         {
             return self :: VIEW_TYPE_FULL;
         }
+
+        return $viewerType;
     }
 
     /**
