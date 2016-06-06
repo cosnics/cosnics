@@ -14,3 +14,22 @@ ADD COLUMN `subscription_time` INT(10) UNSIGNED NOT NULL DEFAULT 0 AFTER `user_i
 ALTER TABLE `chamilo`.`repository_workspace_content_object_relation` CHANGE COLUMN `content_object_id` `content_object_id` VARCHAR(36) NOT NULL COMMENT '' ;
 
 UPDATE `chamilo`.`repository_workspace_content_object_relation` SET content_object_id = (SELECT object_number FROM `chamilo`.`repository_content_object` WHERE `chamilo`.`repository_content_object`.id = `chamilo`.`repository_workspace_content_object_relation`.content_object_id)
+
+CREATE TABLE `chamilo`.`home_element_target_entity` (
+  `id` INT(10) UNSIGNED NOT NULL,
+  `element_id` INT(10) UNSIGNED NOT NULL,
+  `entity_type` INT(10) UNSIGNED NOT NULL,
+  `entity_id` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `element_id` (`element_id` ASC),
+  INDEX `entity` (`entity_type` ASC, `entity_id` ASC));
+
+CREATE TABLE `chamilo`.`home_block_type_target_entity` (
+  `id` INT(10) UNSIGNED NOT NULL,
+  `block_type` VARCHAR(255) NOT NULL,
+  `entity_type` INT(10) UNSIGNED NOT NULL,
+  `entity_id` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `block_type` (`block_type` ASC),
+  INDEX `entity` (`entity_type` ASC, `entity_id` ASC));
+

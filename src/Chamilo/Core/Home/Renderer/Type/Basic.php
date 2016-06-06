@@ -51,6 +51,13 @@ class Basic extends Renderer
     private $homeService;
 
     /**
+     * Caching variable to check if the home page is in general mode
+     *
+     * @var boolean
+     */
+    protected $generalMode;
+
+    /**
      *
      * @return \Chamilo\Core\Home\Service\HomeService
      */
@@ -73,7 +80,7 @@ class Basic extends Renderer
         $user = $this->get_user();
 
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+        $generalMode = $this->isGeneralMode();
 
         $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)));
         $isGeneralMode = ($generalMode && $user instanceof User && $user->is_platform_admin());
@@ -82,6 +89,12 @@ class Basic extends Renderer
         {
             $html[] = '<script type="text/javascript" src="' .
                  Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
+        }
+
+        if ($this->isGeneralMode())
+        {
+            $html[] = '<script type="text/javascript" src="' .
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' . '"></script>';
         }
 
         $html[] = $this->renderTabs();
@@ -262,7 +275,7 @@ class Basic extends Renderer
     {
         $user = $this->get_user();
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+        $generalMode = $this->isGeneralMode();
         $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
 
         $html = array();
@@ -350,5 +363,20 @@ class Basic extends Renderer
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns whether or not the home viewer is in general mode
+     *
+     * @return bool
+     */
+    protected function isGeneralMode()
+    {
+        if(!isset($this->generalMode))
+        {
+            $this->generalMode = \Chamilo\Libraries\Platform\Session\Session:: retrieve('Chamilo\Core\Home\General');
+        }
+
+        return $this->generalMode;
     }
 }

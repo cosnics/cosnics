@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Home\Interfaces\AngularConnectorInterface;
 
 /**
  * Services that connects to the several home integration packages and connects their angular functionality
