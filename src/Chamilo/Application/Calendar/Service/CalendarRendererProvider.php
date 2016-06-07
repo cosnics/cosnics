@@ -242,10 +242,16 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             if ($registration[Registration :: PROPERTY_STATUS])
             {
                 $context = $registration[Registration :: PROPERTY_CONTEXT];
-                $class_name = $context . '\Manager';
+                $class_name = $context . '\Service\CalendarEventDataProvider';
                 
                 if (class_exists($class_name))
                 {
+                    $reflectionClass = new \ReflectionClass($class_name);
+                    if($reflectionClass->isAbstract())
+                    {
+                        continue;
+                    }
+                    
                     $implementor = new $class_name();
                     
                     if ($this->matchesRequestedSource($requestedSourceType, $implementor->getSourceType()))

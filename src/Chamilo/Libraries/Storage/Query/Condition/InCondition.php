@@ -46,7 +46,7 @@ class InCondition extends Condition
     /**
      *
      * @param $name string
-     * @param $values multitype:string
+     * @param $values array
      * @param $storage_unit string
      * @param $is_alias boolean
      */

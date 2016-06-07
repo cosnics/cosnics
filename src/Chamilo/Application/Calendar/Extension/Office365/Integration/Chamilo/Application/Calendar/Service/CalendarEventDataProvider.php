@@ -1,10 +1,10 @@
 <?php
-namespace Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Application\Calendar;
+namespace Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Application\Calendar\Service;
 
 use Chamilo\Application\Calendar\Architecture\ExternalCalendar;
-use Chamilo\Application\Calendar\Extension\Google\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
-use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
-use Chamilo\Application\Calendar\Extension\Google\Service\CalendarService;
+use Chamilo\Application\Calendar\Extension\Office365\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
+use Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository;
+use Chamilo\Application\Calendar\Extension\Office365\Service\CalendarService;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -16,7 +16,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Manager extends ExternalCalendar
+class CalendarEventDataProvider extends ExternalCalendar
 {
 
     /**
@@ -94,22 +94,19 @@ class Manager extends ExternalCalendar
      *
      * @return \Chamilo\Libraries\Calendar\Event\Event[]
      */
-    private function getCalendarEvents(CalendarService $calendarService, $calendarId, $fromDate, $toDate)
+    private function getCalendarEvents($calendarService, $calendarId, $fromDate, $toDate)
     {
         $eventResultSet = $calendarService->getEventsForCalendarIdentifierAndBetweenDates(
             $calendarId,
             $fromDate,
             $toDate);
 
+        $availableCalendar = $calendarService->getCalendarByIdentifier($calendarId);
         $events = array();
 
-        while ($googleCalenderEvent = $eventResultSet->next_result())
+        while ($office365CalenderEvent = $eventResultSet->next_result())
         {
-            $eventParser = new EventParser(
-                $eventResultSet->getCalendarProperties(),
-                $googleCalenderEvent,
-                $fromDate,
-                $toDate);
+            $eventParser = new EventParser($availableCalendar, $office365CalenderEvent, $fromDate, $toDate);
             $events = array_merge($events, $eventParser->getEvents());
         }
 

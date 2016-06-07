@@ -15,11 +15,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Dieter De Neef
  */
-class Publication extends DataClass
+class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass\Publication
 {
 
     // Properties
-    const PROPERTY_CONTENT_OBJECT_ID = 'content_object_id';
     const PROPERTY_PUBLISHER = 'publisher_id';
     const PROPERTY_PUBLISHED = 'published';
 
@@ -43,7 +42,7 @@ class Publication extends DataClass
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent :: get_default_property_names(
-            array(self :: PROPERTY_CONTENT_OBJECT_ID, self :: PROPERTY_PUBLISHER, self :: PROPERTY_PUBLISHED));
+            array(self :: PROPERTY_PUBLISHER, self :: PROPERTY_PUBLISHED));
     }
 
     /**
@@ -52,16 +51,6 @@ class Publication extends DataClass
     public function get_data_manager()
     {
         return DataManager :: get_instance();
-    }
-
-    /**
-     * Returns the content object id from this Publication object
-     *
-     * @return int The content object ID
-     */
-    public function get_content_object_id()
-    {
-        return $this->get_default_property(self :: PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -82,16 +71,6 @@ class Publication extends DataClass
     public function get_published()
     {
         return $this->get_default_property(self :: PROPERTY_PUBLISHED);
-    }
-
-    /**
-     * Sets the content object id of this Publication.
-     *
-     * @param Int $id the calendar_event ID.
-     */
-    public function set_content_object_id($id)
-    {
-        $this->set_default_property(self :: PROPERTY_CONTENT_OBJECT_ID, $id);
     }
 
     /**
@@ -120,13 +99,7 @@ class Publication extends DataClass
      */
     public function get_publication_object()
     {
-        if (! isset($this->publication_object))
-        {
-            $this->publication_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
-                $this->get_content_object_id());
-        }
-        return $this->publication_object;
+        return parent::getContentObject();
     }
 
     /**
