@@ -7,6 +7,7 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -29,16 +30,16 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return DataClassRetrievesParameters
+     * @return RecordRetrievesParameters
      */
-    public function getPublicationsDataClassRetrievesParameters(User $user)
+    public function getPublicationsRecordRetrievesParameters(User $user)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Publication:: class_name(), Publication :: PROPERTY_PUBLISHER),
             new StaticConditionVariable($user->getId())
         );
 
-        return new DataClassRetrievesParameters($condition);
+        return new RecordRetrievesParameters(null, $condition);
     }
 
     /**
@@ -46,9 +47,9 @@ class CalendarEventDataProviderRepository
      *
      * @param User $user
      *
-     * @return DataClassRetrievesParameters
+     * @return RecordRetrievesParameters
      */
-    public function getSharedPublicatiosnDataClassRetrievesParameters(User $user)
+    public function getSharedPublicationsRecordRetrievesParameters(User $user)
     {
         $user_groups = $user->get_groups(true);
 
@@ -95,6 +96,6 @@ class CalendarEventDataProviderRepository
             Join :: TYPE_LEFT
         );
 
-        return new DataClassRetrievesParameters($condition, null, null, array(), new Joins($joins));
+        return new RecordRetrievesParameters(null, $condition, null, null, array(), new Joins($joins));
     }
 }
