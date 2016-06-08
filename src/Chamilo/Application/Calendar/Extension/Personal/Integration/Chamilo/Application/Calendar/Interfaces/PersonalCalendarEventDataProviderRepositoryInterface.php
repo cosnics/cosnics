@@ -2,7 +2,8 @@
 
 namespace Chamilo\Application\Calendar\Extension\Personal\Integration\Chamilo\Application\Calendar\Interfaces;
 
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 
 /**
  * Interface for a CalendarEventDataProviderRepository which is used by the personal calendar extension
@@ -14,9 +15,11 @@ interface PersonalCalendarEventDataProviderRepositoryInterface
     /**
      * Returns the personal calendar publications for this specific content object type
      *
-     * @param DataClassRetrievesParameters $parameters
+     * @param RecordRetrievesParameters $parameters
      * @param int $fromDate
      * @param int $toDate
+     *
+     * @return Publication[]
      */
-    public function getPublications(DataClassRetrievesParameters $parameters, $fromDate, $toDate);
+    public function getPublications(RecordRetrievesParameters $parameters, $fromDate, $toDate);
 }

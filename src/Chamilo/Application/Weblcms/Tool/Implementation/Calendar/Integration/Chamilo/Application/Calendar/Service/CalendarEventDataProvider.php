@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\C
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Repository\CalendarEventDataProviderRepository;
+use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -38,7 +39,7 @@ class CalendarEventDataProvider extends
      */
     protected function getRepository()
     {
-        return new CalendarEventDataProviderRepository();
+        return new CalendarEventDataProviderRepository(new PublicationRepository());
     }
 
     /**

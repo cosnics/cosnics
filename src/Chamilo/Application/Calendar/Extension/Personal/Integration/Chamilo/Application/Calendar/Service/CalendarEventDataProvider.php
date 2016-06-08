@@ -14,9 +14,11 @@ use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -83,6 +85,8 @@ class CalendarEventDataProvider extends MixedCalendar
      * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
      * @param integer $fromDate
      * @param integer $toDate
+     *
+     * @return array
      */
     public function getUserEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
@@ -90,7 +94,7 @@ class CalendarEventDataProvider extends MixedCalendar
     )
     {
         $repository = new CalendarEventDataProviderRepository();
-        $dataClassRetrievesParameters = $repository->getPublicationsDataClassRetrievesParameters(
+        $dataClassRetrievesParameters = $repository->getPublicationsRecordRetrievesParameters(
             $calendarRendererProvider->getDataUser()
         );
 
@@ -104,6 +108,8 @@ class CalendarEventDataProvider extends MixedCalendar
      * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
      * @param integer $fromDate
      * @param integer $toDate
+     *
+     * @return array
      */
     public function getSharedEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $fromDate,
@@ -111,25 +117,26 @@ class CalendarEventDataProvider extends MixedCalendar
     )
     {
         $repository = new CalendarEventDataProviderRepository();
-        $dataClassRetrievesParameters = $repository->getSharedPublicatiosnDataClassRetrievesParameters(
+        $recordRetrievesParameters = $repository->getSharedPublicationsRecordRetrievesParameters(
             $calendarRendererProvider->getDataUser()
         );
 
         return $this->getEventsByParameters(
-            $calendarRendererProvider, $dataClassRetrievesParameters, $fromDate, $toDate
+            $calendarRendererProvider, $recordRetrievesParameters, $fromDate, $toDate
         );
     }
 
     /**
      * @param \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider
-     * @param $fromDate
-     * @param $toDate
+     * @param RecordRetrievesParameters $recordRetrievesParameters
+     * @param int $fromDate
+     * @param int $toDate
      *
      * @return array
      */
     protected function getEventsByParameters(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider,
-        DataClassRetrievesParameters $dataClassRetrievesParameters, $fromDate, $toDate
+        RecordRetrievesParameters $recordRetrievesParameters, $fromDate, $toDate
     )
     {
         $publications = array();
@@ -138,21 +145,23 @@ class CalendarEventDataProvider extends MixedCalendar
             \Chamilo\Application\Calendar\Extension\Personal\Manager:: package()
         );
 
+        $publicationRepository = new PublicationRepository();
+
         foreach ($registrations as $registration)
         {
             if ($registration[Registration :: PROPERTY_STATUS])
             {
                 $context = $registration[Registration :: PROPERTY_CONTEXT];
-                $class_name = $context . '\Repository\CalendarEventDataProviderRepository';
+                $class_name = $context . '\Repository\PersonalCalendarEventDataProviderRepository';
 
                 if (class_exists($class_name))
                 {
-                    $source = new $class_name();
+                    $source = new $class_name($publicationRepository);
 
                     if($source instanceof PersonalCalendarEventDataProviderRepositoryInterface)
                     {
                         $publications = array_merge(
-                            $publications, $source->getPublications($dataClassRetrievesParameters, $fromDate, $toDate)
+                            $publications, $source->getPublications($recordRetrievesParameters, $fromDate, $toDate)
                         );
                     }
                 }
@@ -168,6 +177,8 @@ class CalendarEventDataProvider extends MixedCalendar
      * @param \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[] $publications
      * @param integer $fromDate
      * @param integer $toDate
+     *
+     * @return array
      */
     private function renderEvents(
         \Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider $calendarRendererProvider, $publications,

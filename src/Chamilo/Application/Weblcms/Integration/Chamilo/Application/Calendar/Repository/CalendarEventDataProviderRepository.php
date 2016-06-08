@@ -3,18 +3,12 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\R
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet;
+use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -26,6 +20,21 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 abstract class CalendarEventDataProviderRepository
 {
     /**
+     * @var PublicationRepository
+     */
+    protected $publicationRepository;
+
+    /**
+     * CalendarEventDataProviderRepository constructor.
+     *
+     * @param PublicationRepository $publicationRepository
+     */
+    public function __construct(PublicationRepository $publicationRepository)
+    {
+        $this->publicationRepository = $publicationRepository;
+    }
+
+    /**
      * Retrieves the valid publications for the user
      *
      * @param Course[]   $courses
@@ -36,46 +45,13 @@ abstract class CalendarEventDataProviderRepository
      */
     function getPublications($fromDate, $toDate, $courses = array())
     {
-        $contentObjectClassName = $this->getContentObjectClassName();
-
-        $propertiesArray = array();
-
-        $propertiesArray[] = new PropertiesConditionVariable(ContentObjectPublication::class_name());
-
-        foreach (ContentObject::get_default_property_names() as $property_name)
-        {
-            if ($property_name != ContentObject::PROPERTY_ID)
-            {
-                $propertiesArray[] = new PropertyConditionVariable(ContentObject::class_name(), $property_name);
-            }
-        }
-
-        foreach ($contentObjectClassName::get_additional_property_names() as $property_name)
-        {
-            if ($property_name != DataClass::PROPERTY_ID)
-            {
-                $propertiesArray[] = new PropertyConditionVariable($contentObjectClassName, $property_name);
-            }
-        }
-
-        $properties = new DataClassProperties($propertiesArray);
-
-        $joins = new Joins(
-            array(
-                $this->getContentObjectPublicationToContentObjectJoin(),
-                $this->getSpecificContentObjectJoin()
-            )
+        $parameters = new RecordRetrievesParameters(
+            null, $this->getPublicationsCondition($fromDate, $toDate, $courses)
         );
 
-        $condition = $this->getPublicationsCondition($fromDate, $toDate, $courses);
-
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins);
-
-        $records = \Chamilo\Application\Weblcms\Storage\DataManager::records(
-            ContentObjectPublication::class_name(), $parameters
+        return $this->publicationRepository->getPublicationsWithContentObjects(
+            $parameters, ContentObjectPublication::class_name(), $this->getContentObjectClassName()
         );
-
-        return $this->hydrateContentObjectPublications($records, true);
     }
 
     /**
@@ -116,106 +92,6 @@ abstract class CalendarEventDataProviderRepository
         $conditions[] = $this->getSpecificContentObjectConditions($fromDate, $toDate);
 
         return new AndCondition($conditions);
-    }
-
-    /**
-     * @return Join
-     */
-    protected function getContentObjectPublicationToContentObjectJoin()
-    {
-        $joinCondition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-            ),
-            new PropertyConditionVariable(
-                ContentObject::class_name(),
-                ContentObject::PROPERTY_ID
-            )
-        );
-
-        return new Join(ContentObject::class_name(), $joinCondition);
-    }
-
-    /**
-     * @return Join
-     */
-    protected function getSpecificContentObjectJoin()
-    {
-        $contentObjectClassName = $this->getContentObjectClassName();
-
-        $joinCondition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObject::class_name(),
-                ContentObject::PROPERTY_ID
-            ),
-            new PropertyConditionVariable(
-                $contentObjectClassName,
-                DataClass::PROPERTY_ID
-            )
-        );
-
-        return new Join($contentObjectClassName, $joinCondition);
-    }
-
-    /**
-     * @param array $publication_record
-     * @param bool|false $hydrate_calendar_event_object
-     *
-     * @return ContentObjectPublication
-     */
-    protected function hydrateContentObjectPublication(
-        $publication_record, $hydrate_calendar_event_object = false
-    )
-    {
-        $contentObjectClassName = $this->getContentObjectClassName();
-
-        $publication = new ContentObjectPublication(
-            array_intersect_key($publication_record, array_flip(ContentObjectPublication::get_default_property_names()))
-        );
-
-        if ($hydrate_calendar_event_object)
-        {
-            if ($publication_record[ContentObject::PROPERTY_TYPE] == $contentObjectClassName)
-            {
-                $default_properties =
-                    array_intersect_key($publication_record, array_flip(ContentObject::get_default_property_names()));
-                $default_properties[ContentObject::PROPERTY_ID] = $publication->get_content_object_id();
-
-                $additional_properties = array_intersect_key(
-                    $publication_record, array_flip($contentObjectClassName::get_additional_property_names())
-                );
-                $additional_properties[DataClass::PROPERTY_ID] = $publication->get_content_object_id();
-                $content_object = new $contentObjectClassName($default_properties, $additional_properties);
-            }
-            else
-            {
-                throw new \DomainException("unknown type:" . $publication_record[ContentObject::PROPERTY_TYPE]);
-            }
-
-            $publication->setContentObject($content_object);
-        }
-
-        return $publication;
-    }
-
-    /**
-     * @param RecordResultSet $records
-     * @param bool $hydrate_calendar_event_object
-     *
-     * @return ContentObjectPublication[]
-     */
-    protected function hydrateContentObjectPublications($records, $hydrate_calendar_event_object = false)
-    {
-        $publication_objects_array = array();
-
-        while ($record = $records->next_result())
-        {
-            $publication_objects_array[] =
-                $this->hydrateContentObjectPublication($record, $hydrate_calendar_event_object);
-        }
-
-        return $publication_objects_array;
     }
 
     /**

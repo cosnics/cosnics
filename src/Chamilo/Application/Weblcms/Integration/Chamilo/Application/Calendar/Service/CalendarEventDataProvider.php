@@ -17,6 +17,8 @@ use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Sven Vanpoucke - Hogeschool Gent
+ *
+ * TODO: fix course access rights and fix publication access rights
  */
 abstract class CalendarEventDataProvider extends InternalCalendar
 {
