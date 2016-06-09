@@ -14,6 +14,18 @@ class HomeRepository
 {
 
     /**
+     * Returns a home element by an identifier
+     *
+     * @param int $elementIdentifier
+     *
+     * @return Element
+     */
+    public function findElementByIdentifier($elementIdentifier)
+    {
+        return DataManager::retrieve_by_id(Element::class_name(), $elementIdentifier);
+    }
+
+    /**
      *
      * @param integer $userIdentifier
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
