@@ -16,7 +16,7 @@ ALTER TABLE `chamilo`.`repository_workspace_content_object_relation` CHANGE COLU
 UPDATE `chamilo`.`repository_workspace_content_object_relation` SET content_object_id = (SELECT object_number FROM `chamilo`.`repository_content_object` WHERE `chamilo`.`repository_content_object`.id = `chamilo`.`repository_workspace_content_object_relation`.content_object_id)
 
 CREATE TABLE `chamilo`.`home_element_target_entity` (
-  `id` INT(10) UNSIGNED NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `element_id` INT(10) UNSIGNED NOT NULL,
   `entity_type` INT(10) UNSIGNED NOT NULL,
   `entity_id` INT(10) UNSIGNED NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE `chamilo`.`home_element_target_entity` (
   INDEX `entity` (`entity_type` ASC, `entity_id` ASC));
 
 CREATE TABLE `chamilo`.`home_block_type_target_entity` (
-  `id` INT(10) UNSIGNED NOT NULL,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `block_type` VARCHAR(255) NOT NULL,
   `entity_type` INT(10) UNSIGNED NOT NULL,
   `entity_id` INT(10) UNSIGNED NOT NULL,

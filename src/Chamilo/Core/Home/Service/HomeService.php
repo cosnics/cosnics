@@ -57,6 +57,18 @@ class HomeService
     }
 
     /**
+     * Returns a home element by an identifier
+     *
+     * @param int $elementIdentifier
+     *
+     * @return Element
+     */
+    public function getElementByIdentifier($elementIdentifier)
+    {
+        return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
+    }
+
+    /**
      *
      * @param integer $userIdentifier
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet

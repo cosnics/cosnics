@@ -1,6 +1,5 @@
 $(function()
 {
-    var ajaxContext = 'Chamilo\\Core\\Home\\Ajax';
     var ajaxUri = getPath('WEB_PATH') + 'index.php';
     var translationContext = 'Chamilo\\Core\\Home';
 
@@ -11,14 +10,16 @@ $(function()
 
     function bindGeneralModeActions()
     {
-        $(document).on('click', ".portal-action-block-configure-target-entities", configureTargetEntities);
+        $(document).on('click', ".portal-action-block-configure-target-entities", showTargetEntitiesConfigurationForm);
         $(document).on('click', ".portal-block-target-entities-form .btn[name=submit]", saveTargetEntities);
-        $(document).on('click', ".portal-block-target-entities-form .btn[name=cancel]", cancelTargetEntities);
+        $(document).on('click', ".portal-block-target-entities-form .btn[name=cancel]", hideTargetEntitiesConfigurationForm);
     }
 
-    function configureTargetEntities(e, ui)
+    function showTargetEntitiesConfigurationForm(event)
     {
-        e.preventDefault();
+        if(event) {
+            event.preventDefault();
+        }
 
         var block = $(this).parent().parent().parent();
         blockId = block.data('element-id');
@@ -45,11 +46,14 @@ $(function()
 
     }
 
-    function cancelTargetEntities(e, ui)
+    function hideTargetEntitiesConfigurationForm(event)
     {
-        e.preventDefault();
+        if(event) {
+            event.preventDefault();
+        }
 
         var form = $(this).parent().parent().parent().parent();
+
         var portalBlockForm = form.parent().parent();
         var panel = portalBlockForm.parent();
         var contentIsHidden = $('.portal-action-block-hide', panel).hasClass('hidden');
@@ -69,61 +73,41 @@ $(function()
 
         $('.portal-action', panel).show();
         $('.panel-title-target-entities', panel).remove();
+
     }
 
-    function saveTargetEntities(e, ui)
+    function saveTargetEntities(event)
     {
-        e.preventDefault();
+        if(event) {
+            event.preventDefault();
+        }
 
-        // var form = $(this).parent().parent().parent().parent();
-        // var block = form.parent().parent().parent();
-        // var blockId = block.data('element-id');
-        //
-        // var submittedData = {};
-        //
-        // $(':input', form).each(function(index)
-        // {
-        //     var inputElement = $(this);
-        //
-        //     if (inputElement.attr('type') != 'radio' && inputElement.attr('type') != 'checkbox')
-        //     {
-        //         submittedData[inputElement.attr('name')] = inputElement.val();
-        //     }
-        //     else if (inputElement.attr('type') != 'radio' && inputElement.prop('checked') == true)
-        //     {
-        //         submittedData[inputElement.attr('name')] = inputElement.val();
-        //     }
-        //     else if (inputElement.attr('type') == 'checkbox')
-        //     {
-        //         if (inputElement.prop('checked') == true)
-        //         {
-        //             submittedData[inputElement.attr('name')] = inputElement.val();
-        //         }
-        //         else
-        //         {
-        //             submittedData[inputElement.attr('name')] = 0;
-        //         }
-        //     }
-        // });
-        //
-        // var parameters = {
-        //     'application' : ajaxContext,
-        //     'go' : 'BlockConfig',
-        //     'block' : blockId,
-        //     'data' : submittedData
-        // };
-        //
-        // var response = $.ajax({
-        //     type : "POST",
-        //     url : ajaxUri,
-        //     data : parameters,
-        //     async : false
-        // }).success(function(json)
-        // {
-        //     if (json.result_code == 200)
-        //     {
-        //         block.before(json.properties.block).remove();
-        //     }
-        // });
+        var form = $(this).parent().parent().parent().parent();
+        var formId = form.attr('id');
+
+        var block = form.parent().parent().parent();
+        var blockId = block.data('element-id');
+
+        var selectedEntitiesField = $('input[name="active_hidden_' + formId + '_rights"]', form);
+
+        var parameters = {
+            'application' : 'Chamilo\\Core\\Home\\Rights\\Ajax',
+            'go' : 'SetElementTargetEntities',
+            'elementId' : blockId,
+            'targetEntities' : selectedEntitiesField.val()
+        };
+
+        var response = $.ajax({
+            type : "POST",
+            url : ajaxUri,
+            data : parameters,
+            async : false
+        }).success(function(json)
+        {
+            if (json.result_code == 200)
+            {
+                block.before(json.properties.block).remove();
+            }
+        });
     }
 });
