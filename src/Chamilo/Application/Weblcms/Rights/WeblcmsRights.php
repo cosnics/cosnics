@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Rights;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
@@ -8,7 +9,9 @@ use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager as CourseGroupDataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Rights\RightsLocation;
 use Chamilo\Core\Rights\RightsUtil;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -285,6 +288,31 @@ class WeblcmsRights extends RightsUtil
             $entity_id,
             $entity_type,
             $location_id
+        );
+    }
+
+    /**
+     * Returns the publication identifiers on which a right has been granted for a given user in a given course
+     *
+     * @param int $right
+     * @param RightsLocation $parent_location
+     * @param Course $course
+     * @param User $user
+     *
+     * @return mixed
+     */
+    public function get_publication_identifiers_with_right_granted(
+        $right, RightsLocation $parent_location, Course $course, User $user
+    )
+    {
+        $entities = array();
+        $entities[] = CourseGroupEntity::get_instance($course->getId());
+        $entities[] = CourseUserEntity::get_instance();
+        $entities[] = CoursePlatformGroupEntity::get_instance($course->getId());
+
+        return $this->get_identifiers_with_right_granted(
+            $right, \Chamilo\Application\Weblcms\Manager::context(), $parent_location,
+            WeblcmsRights::TYPE_PUBLICATION, $user->getId(), $entities
         );
     }
 }

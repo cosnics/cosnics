@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity;
 use Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
@@ -322,13 +323,14 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $contentObject = $first_publication->get_content_object();
 
             $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
-            $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+            $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
             $canEditContentObject = $repositoryRightsService->canEditContentObject($this->user, $contentObject);
-            $canEditPublicationContentObject = $weblcmsRightsService->canEditPublicationContentObject(
+            $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
                 $this->user,
-                $this->course,
-                $first_publication->get_default_properties());
+                $first_publication,
+                $this->course
+            );
 
             if ($first_publication)
             {

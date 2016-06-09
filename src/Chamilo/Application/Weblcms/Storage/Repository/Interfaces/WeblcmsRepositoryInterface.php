@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Storage\Repository;
+namespace Chamilo\Application\Weblcms\Storage\Repository\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;

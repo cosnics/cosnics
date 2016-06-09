@@ -12,7 +12,7 @@ use Chamilo\Libraries\Format\Theme;
  */
 class ResourceManagementExtension extends \Twig_Extension
 {
-    const HOGENT_LIBRARIES_CONTEXT = 'Hogent\Libraries';
+    const DEFAULT_CONTEXT = 'Chamilo\Libraries';
 
     /**
      * Helper variable for the getUniquePath function
@@ -111,7 +111,7 @@ class ResourceManagementExtension extends \Twig_Extension
      */
     public function getCssPath($css, $context)
     {
-        $context = $context ?  : self :: HOGENT_LIBRARIES_CONTEXT;
+        $context = $context ?  : self :: DEFAULT_CONTEXT;
 
         return Theme :: getInstance()->getCssPath($context) . $css;
     }
@@ -172,7 +172,7 @@ class ResourceManagementExtension extends \Twig_Extension
      */
     public function getJavascriptPath($javascript, $context)
     {
-        $context = $context ?  : self :: HOGENT_LIBRARIES_CONTEXT;
+        $context = $context ?  : self :: DEFAULT_CONTEXT;
 
         return Path :: getInstance()->namespaceToFullPath($context, true) . 'Resources/Javascript/' . $javascript;
     }
