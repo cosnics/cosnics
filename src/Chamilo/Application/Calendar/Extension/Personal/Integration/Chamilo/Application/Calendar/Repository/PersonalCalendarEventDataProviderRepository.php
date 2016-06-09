@@ -42,6 +42,8 @@ abstract class PersonalCalendarEventDataProviderRepository implements PersonalCa
      */
     public function getPublications(RecordRetrievesParameters $parameters, $fromDate, $toDate)
     {
+        $parameters = clone $parameters;
+
         $condition = $this->getContentObjectCondition($fromDate, $toDate);
 
         if($condition)
