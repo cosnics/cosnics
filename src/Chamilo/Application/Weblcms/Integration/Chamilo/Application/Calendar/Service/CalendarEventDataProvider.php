@@ -5,8 +5,10 @@ use Chamilo\Application\Calendar\Architecture\InternalCalendar;
 use Chamilo\Application\Calendar\Repository\AvailabilityRepository;
 use Chamilo\Application\Calendar\Service\AvailabilityService;
 use Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Libraries\Calendar\Event\EventParser;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -17,8 +19,6 @@ use Chamilo\Libraries\Calendar\Renderer\Service\CalendarRendererProvider;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Sven Vanpoucke - Hogeschool Gent
- *
- * TODO: fix course access rights and fix publication access rights
  */
 abstract class CalendarEventDataProvider extends InternalCalendar
 {
@@ -37,6 +37,8 @@ abstract class CalendarEventDataProvider extends InternalCalendar
         CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate, $toDate
     )
     {
+        $rightsService = ServiceFactory::getInstance()->getRightsService();
+
         $events = array();
 
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
@@ -54,14 +56,11 @@ abstract class CalendarEventDataProvider extends InternalCalendar
 
             foreach ($publications as $publication)
             {
-                /**
-                 * Make sure that the category visibility is checked!
-                 */
-                if (!WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
-                    WeblcmsRights :: VIEW_RIGHT,
-                    $publication->get_id(),
-                    WeblcmsRights :: TYPE_PUBLICATION,
-                    $publication->get_course_id()
+                $course = new Course();
+                $course->setId($publication->get_course_id());
+
+                if (!$rightsService->canUserViewPublication(
+                    $calendarRendererProvider->getDataUser(), $publication, $course
                 )
                 )
                 {
