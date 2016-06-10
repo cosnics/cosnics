@@ -2,9 +2,13 @@
 
 namespace Chamilo\Core\Home\Rights\Form;
 
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
+use Chamilo\Core\Rights\Entity\RightsEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
+use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
@@ -25,19 +29,48 @@ class TargetEntitiesForm extends FormValidator
     protected $formName;
 
     /**
+     * @var ElementRightsService
+     */
+    protected $elementRightsService;
+
+    /**
+     * The current element
+     *
+     * @var Element
+     */
+    protected $element;
+
+    /**
+     * The entities
+     *
+     * @var RightsEntity[]
+     */
+    protected $entities;
+
+    /**
      * Constructor
      *
      * TargetEntitiesForm constructor.
      *
-     * @param Block $block
+     * @param Element $element
      * @param string $action
+     * @param ElementRightsService $elementRightsService
      */
-    public function __construct(Block $block, $action)
+    public function __construct(Element $element, $action, ElementRightsService $elementRightsService)
     {
-        $this->formName = sprintf('home_block_%s_target_entities_form', $block->getId());
+        $this->formName = sprintf('home_block_%s_target_entities_form', $element->getId());
         parent::__construct($this->formName);
 
+        $this->element = $element;
+        $this->elementRightsService = $elementRightsService;
+
+        $this->entities = array(
+            UserEntity::ENTITY_TYPE => UserEntity::get_instance(),
+            PlatformGroupEntity::ENTITY_TYPE => PlatformGroupEntity::get_instance()
+        );
+
         $this->buildForm();
+        $this->setDefaults();
     }
 
     /**
@@ -46,8 +79,12 @@ class TargetEntitiesForm extends FormValidator
     protected function buildForm()
     {
         $types = new AdvancedElementFinderElementTypes();
-        $types->add_element_type(UserEntity::get_element_finder_type());
-        $types->add_element_type(PlatformGroupEntity::get_element_finder_type());
+
+        foreach ($this->entities as $entity)
+        {
+            $types->add_element_type($entity->get_element_finder_type());
+        }
+
         $this->addElement(
             'advanced_element_finder',
             $this->formName . '_rights',
@@ -80,6 +117,34 @@ class TargetEntitiesForm extends FormValidator
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+
+    /**
+     * Sets the default values
+     *
+     * @param array $defaults
+     *
+     * @throws \Exception
+     */
+    public function setDefaults($defaults = array())
+    {
+        $selectedEntities = $this->elementRightsService->getTargetEntitiesForElement($this->element);
+
+        $default_elements = new AdvancedElementFinderElements();
+
+        foreach ($selectedEntities as $selectedEntity)
+        {
+            $entity = $this->entities[$selectedEntity->get_entity_type()];
+
+            $default_elements->add_element(
+                $entity->get_element_finder_element($selectedEntity->get_entity_id())
+            );
+        }
+
+        $element = $this->getElement($this->formName . '_rights');
+        $element->setDefaultValues($default_elements);
+
+        parent::setDefaults($defaults);
     }
 
 }

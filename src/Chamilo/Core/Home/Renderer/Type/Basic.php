@@ -7,6 +7,8 @@ use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Renderer\Type\Basic\TabHeaderRenderer;
 use Chamilo\Core\Home\Renderer\Type\Basic\TabRenderer;
 use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
+use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
@@ -65,7 +67,7 @@ class Basic extends Renderer
     {
         if (! isset($this->homeService))
         {
-            $this->homeService = new HomeService(new HomeRepository());
+            $this->homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
         }
 
         return $this->homeService;
