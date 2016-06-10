@@ -5,6 +5,8 @@ use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Rights\Form\TargetEntitiesForm;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
+use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -297,12 +299,14 @@ class BlockRenderer
             $html[] = '</div>';
         }
 
-        if($this->isInGeneralMode())
+        if ($this->isInGeneralMode())
         {
             $html[] = '<div class="portal-block-target-entities-form hidden">';
             $html[] = '<div class="panel-body">';
 
-            $form = new TargetEntitiesForm($this->getBlock(), $this->getUrl());
+            $form = new TargetEntitiesForm(
+                $this->getBlock(), $this->getUrl(), new ElementRightsService(new RightsRepository())
+            );
 
             $html[] = $form->toHtml();
 
@@ -387,7 +391,8 @@ class BlockRenderer
                 $glyph = new FontAwesomeGlyph('user');
                 $configure_text = Translation:: get('SelectTargetUsersGroups');
 
-                $html[] = '<a href="#" class="portal-action portal-action-block-configure-target-entities" title="' . $configure_text .
+                $html[] = '<a href="#" class="portal-action portal-action-block-configure-target-entities" title="' .
+                    $configure_text .
                     '">' . $glyph->render() . '</a>';
             }
 

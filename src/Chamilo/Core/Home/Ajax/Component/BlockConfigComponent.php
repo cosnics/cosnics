@@ -4,6 +4,8 @@ namespace Chamilo\Core\Home\Ajax\Component;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
+use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
@@ -52,7 +54,7 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
             // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
             // $renderer = $rendererFactory->getRenderer();
 
-            $homeService = new HomeService(new HomeRepository());
+            $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
             $blockRendererFactory = new BlockRendererFactory($this, $homeService, $block);
             $blockRenderer = $blockRendererFactory->getRenderer();
 

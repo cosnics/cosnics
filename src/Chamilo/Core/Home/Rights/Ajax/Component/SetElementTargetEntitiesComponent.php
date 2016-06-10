@@ -49,10 +49,9 @@ class SetElementTargetEntitiesComponent extends Manager
         $elementId = intval($this->getPostDataValue(self::PARAM_ELEMENT_ID));
         $targetEntities = $this->getTargetEntitiesFromRequest();
 
-        $homeService = new HomeService(new HomeRepository());
-        $element = $homeService->getElementByIdentifier($elementId);
-
         $elementRightsService = new ElementRightsService(new RightsRepository());
+        $homeService = new HomeService(new HomeRepository(), $elementRightsService);
+        $element = $homeService->getElementByIdentifier($elementId);
 
         try
         {
