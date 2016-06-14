@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Home\Rights\Service;
 
+use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -19,13 +20,19 @@ class BlockTypeRightsService
     protected $rightsRepository;
 
     /**
+     * @var HomeRepository
+     */
+    protected $homeRepository;
+
+    /**
      * BlockTypeRightsService constructor.
      *
      * @param RightsRepository $rightsRepository
      */
-    public function __construct(RightsRepository $rightsRepository)
+    public function __construct(RightsRepository $rightsRepository, HomeRepository $homeRepository)
     {
         $this->rightsRepository = $rightsRepository;
+        $this->homeRepository = $homeRepository;
     }
 
     /**
@@ -71,7 +78,7 @@ class BlockTypeRightsService
      *
      * @return BlockTypeTargetEntity[]
      */
-    public function getTargetEntitiesForElement($blockType)
+    public function getTargetEntitiesForBlockType($blockType)
     {
         return $this->rightsRepository->findTargetEntitiesForBlockType($blockType);
     }
@@ -86,6 +93,11 @@ class BlockTypeRightsService
      */
     public function canUserViewBlockType(User $user, $blockType)
     {
+        if($user->is_platform_admin())
+        {
+            return true;
+        }
+        
         $targetedBlockTypes = $this->rightsRepository->findTargetedBlockTypes();
 
         if(!in_array($blockType, $targetedBlockTypes))
@@ -96,5 +108,55 @@ class BlockTypeRightsService
         $blockTypesForUser = $this->rightsRepository->findBlockTypesTargetedForUser($user);
 
         return in_array($blockType, $blockTypesForUser);
+    }
+
+    /**
+     * Returns a list of block types with target entities
+     */
+    public function getBlockTypesWithTargetEntities()
+    {
+        $targetEntitiesPerBlockType = $this->getTargetEntitiesPerBlockType();
+
+        $blockTypesWithTargetEntities = array();
+        
+        $blockTypes = $this->homeRepository->findBlockTypes();
+        foreach($blockTypes as $blockType)
+        {
+            $blockTypeWithTargetEntity = array();
+            $blockTypeWithTargetEntity['block_type'] = $blockType;
+
+            if(array_key_exists($blockType, $targetEntitiesPerBlockType))
+            {
+                $targetEntities = $targetEntitiesPerBlockType[$blockType];
+                foreach($targetEntities as $targetEntity)
+                {
+                    $blockTypeWithTargetEntity['target_entities'][$targetEntity->get_entity_type()][] =
+                        $targetEntity->get_entity_id();
+                }
+            }
+
+            $blockTypesWithTargetEntities[] = $blockTypeWithTargetEntity;
+        }
+
+        return $blockTypesWithTargetEntities;
+    }
+
+    /**
+     * Helper function to get the target entities grouped per block type
+     *
+     * @return BlockTypeTargetEntity[][]
+     */
+    protected function getTargetEntitiesPerBlockType()
+    {
+        $targetEntitiesPerBlockType = array();
+
+        $blockTypeTargetEntities = $this->rightsRepository->findBlockTypeTargetEntities();
+
+        foreach($blockTypeTargetEntities as $blockTypeTargetEntity)
+        {
+            $targetEntitiesPerBlockType[$blockTypeTargetEntity->get_block_type()][] = $blockTypeTargetEntity;
+        }
+
+        return $targetEntitiesPerBlockType;
     }
 }

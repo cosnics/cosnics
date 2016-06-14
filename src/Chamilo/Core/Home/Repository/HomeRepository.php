@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Home\Repository;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Home\Storage\DataClass\Element;
-use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -65,5 +67,24 @@ class HomeRepository
         $parameters = new DataClassCountParameters($this->getElementsByUserIdentifierCondition($userIdentifier));
 
         return DataManager :: count(Element :: class_name(), $parameters);
+    }
+
+    public function findBlockTypes()
+    {
+        $homeIntegrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Home');
+        $blockTypes = array();
+
+        foreach ($homeIntegrations as $homeIntegration)
+        {
+            $className = $homeIntegration[Registration :: PROPERTY_CONTEXT] . '\Manager';
+
+            if (class_exists($className))
+            {
+                $homeIntegrationManager = new $className();
+                $blockTypes = array_merge($blockTypes, $homeIntegrationManager->getBlockTypes());
+            }
+        }
+
+        return $blockTypes;
     }
 }

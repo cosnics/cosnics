@@ -4,7 +4,7 @@ namespace Chamilo\Core\Home\Renderer\Type\Basic;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Manager;
-use Chamilo\Core\Home\Rights\Form\TargetEntitiesForm;
+use Chamilo\Core\Home\Rights\Form\ElementTargetEntitiesForm;
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\HomeService;
@@ -304,7 +304,7 @@ class BlockRenderer
             $html[] = '<div class="portal-block-target-entities-form hidden">';
             $html[] = '<div class="panel-body">';
 
-            $form = new TargetEntitiesForm(
+            $form = new ElementTargetEntitiesForm(
                 $this->getBlock(), $this->getUrl(), new ElementRightsService(new RightsRepository())
             );
 
