@@ -267,10 +267,16 @@ class AvailabilityService
         foreach ($registrations as $registration)
         {
             $context = $registration[Registration :: PROPERTY_CONTEXT];
-            $class_name = $context . '\Manager';
-            
+            $class_name = $context . '\Service\CalendarEventDataProvider';
+
             if (class_exists($class_name))
             {
+                $reflectionClass = new \ReflectionClass($class_name);
+                if($reflectionClass->isAbstract())
+                {
+                    continue;
+                }
+
                 $package = ClassnameUtilities :: getInstance()->getNamespaceParent($context, 4);
                 $implementor = new $class_name();
                 $availableCalendars[$package] = $implementor->getCalendars();

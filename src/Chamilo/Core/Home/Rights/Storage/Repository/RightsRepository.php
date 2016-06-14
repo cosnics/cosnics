@@ -13,6 +13,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -43,6 +44,20 @@ class RightsRepository
     }
 
     /**
+     * Clears the target entities for a given block type
+     *
+     * @param string $blockType
+     *
+     * @return bool
+     */
+    public function clearTargetEntitiesForBlockType($blockType)
+    {
+        return DataManager::deletes(
+            BlockTypeTargetEntity::class_name(), $this->getBlockTypeTargetEntityConditionByBlockType($blockType)
+        );
+    }
+
+    /**
      * Finds the target entities for a given element
      *
      * @param Element $element
@@ -53,9 +68,23 @@ class RightsRepository
     {
         return DataManager::retrieves(
             ElementTargetEntity::class_name(), new DataClassRetrievesParameters(
-                $this->getElementTargetEntityConditionByElement(
-                    $element
-                )
+                $this->getElementTargetEntityConditionByElement($element)
+            )
+        )->as_array();
+    }
+
+    /**
+     * Finds the target entities for a given block type
+     *
+     * @param string $blockType
+     *
+     * @return BlockTypeTargetEntity[]
+     */
+    public function findTargetEntitiesForBlockType($blockType)
+    {
+        return DataManager::retrieves(
+            BlockTypeTargetEntity::class_name(), new DataClassRetrievesParameters(
+                $this->getBlockTypeTargetEntityConditionByBlockType($blockType)
             )
         )->as_array();
     }
@@ -68,6 +97,16 @@ class RightsRepository
     public function findElementTargetEntities()
     {
         return DataManager::retrieves(ElementTargetEntity::class_name())->as_array();
+    }
+
+    /**
+     * Finds the block type target entities
+     *
+     * @return BlockTypeTargetEntity[]
+     */
+    public function findBlockTypeTargetEntities()
+    {
+        return DataManager::retrieves(BlockTypeTargetEntity::class_name())->as_array();
     }
 
     /**
@@ -212,6 +251,23 @@ class RightsRepository
         return new EqualityCondition(
             new PropertyConditionVariable(ElementTargetEntity::class_name(), ElementTargetEntity::PROPERTY_ELEMENT_ID),
             new StaticConditionVariable($element->getId())
+        );
+    }
+
+    /**
+     * Returns a condition for the BlockTypeTargetEntity data class by a given block type
+     *
+     * @param string $blockType
+     *
+     * @return EqualityCondition
+     */
+    protected function getBlockTypeTargetEntityConditionByBlockType($blockType)
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(
+                BlockTypeTargetEntity::class_name(), BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE
+            ),
+            new StaticConditionVariable($blockType)
         );
     }
 }
