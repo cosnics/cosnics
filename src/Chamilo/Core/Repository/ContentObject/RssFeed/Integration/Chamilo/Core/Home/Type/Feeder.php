@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\RssFeed\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -10,7 +11,7 @@ use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 
 class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
-    StaticBlockTitleInterface
+    StaticBlockTitleInterface, ContentObjectPublicationBlockInterface
 {
 
     /**

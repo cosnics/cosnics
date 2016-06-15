@@ -104,6 +104,8 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
             
             if($isIntegration)
             {
+                $lastIntegrationIndex = $contextStringUtilities->indexOfLast('\Integration\\');
+                var_dump($lastIntegrationIndex);
                 $contextParts = $contextStringUtilities->split('\\\Integration\\\\', 2);
                 $integrationContext = $contextParts[1]->__toString();
                 $rootContext = $contextParts[0]->__toString();

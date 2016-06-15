@@ -72,7 +72,14 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
     {
         $toolbar = new Toolbar();
 
-        $link_id = $this->render_id_cell($object);
+        if($object instanceof Attributes)
+        {
+            $link_id = $object->get_application() . '|' . $this->render_id_cell($object);
+        }
+        else
+        {
+            $link_id = $this->render_id_cell($object);
+        }
 
         $type = $this->get_table()->get_type();
 
@@ -93,7 +100,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
                     Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                    $this->get_delete_link_url($this->type, $this->get_component()->get_object()->get_id(), $link_id),
+                    $this->get_delete_link_url($type, $this->get_component()->get_object()->get_id(), $link_id),
                     ToolbarItem :: DISPLAY_ICON,
                     true));
         }

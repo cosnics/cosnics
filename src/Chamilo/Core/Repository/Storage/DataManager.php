@@ -669,30 +669,30 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             return true;
         }
 
-        // Home block content object display
-        $formats = array();
-        $formats[] = 's:10:"use_object";i:' . (int) $object->get_id() . ';';
-        $formats[] = 's:10:"use_object";s:' . strlen((string) $object->get_id()) . ':"' . $object->get_id() . '";';
-
-        $conditions = array();
-
-        foreach ($formats as $format)
-        {
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_CONFIGURATION),
-                '*' . $format . '*');
-        }
-
-        $condition = new OrCondition($conditions);
-
-        $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager :: count(
-            Block :: class_name(),
-            new DataClassCountParameters($condition));
-
-        if ($usedInBlocks > 0)
-        {
-            return false;
-        }
+//        // Home block content object display
+//        $formats = array();
+//        $formats[] = 's:10:"use_object";i:' . (int) $object->get_id() . ';';
+//        $formats[] = 's:10:"use_object";s:' . strlen((string) $object->get_id()) . ':"' . $object->get_id() . '";';
+//
+//        $conditions = array();
+//
+//        foreach ($formats as $format)
+//        {
+//            $conditions[] = new PatternMatchCondition(
+//                new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_CONFIGURATION),
+//                '*' . $format . '*');
+//        }
+//
+//        $condition = new OrCondition($conditions);
+//
+//        $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager :: count(
+//            Block :: class_name(),
+//            new DataClassCountParameters($condition));
+//
+//        if ($usedInBlocks > 0)
+//        {
+//            return false;
+//        }
 
         if ($only_version)
         {
