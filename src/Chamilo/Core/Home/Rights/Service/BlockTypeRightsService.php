@@ -2,10 +2,15 @@
 
 namespace Chamilo\Core\Home\Rights\Service;
 
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
+use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRendition;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * Service to manage the rights for the given block types
@@ -84,7 +89,7 @@ class BlockTypeRightsService
     }
 
     /**
-     * Checks whether or not a user can view the given element
+     * Checks whether or not a user can view the given block type
      *
      * @param User $user
      * @param string $blockType
@@ -108,6 +113,46 @@ class BlockTypeRightsService
         $blockTypesForUser = $this->rightsRepository->findBlockTypesTargetedForUser($user);
 
         return in_array($blockType, $blockTypesForUser);
+    }
+
+    /**
+     * Checks whether or not a user can view the given block renderer, checking the target entities and checking
+     * if the block is not deletable and already added to the homepage
+     * 
+     * @param User $user
+     * @param BlockRenderer $blockRenderer
+     *
+     * @return bool
+     */
+    public function canUserViewBlockRenderer(User $user, BlockRenderer $blockRenderer)
+    {
+        if(!$this->canUserViewBlockType($user, get_class($blockRenderer)))
+        {
+            return false;
+        }
+
+        if($blockRenderer->isDeletable())
+        {
+            return true;
+        }
+
+        $classNameUtilities = ClassnameUtilities::getInstance();
+        $blockClass = get_class($blockRenderer);
+        $blockClassName = $classNameUtilities->getClassnameFromNamespace($blockClass);
+        $blockClassContext = $classNameUtilities->getNamespaceParent($blockClass, 6);
+
+        $userBlocks = $this->homeRepository->findBlocksByUserIdentifier($user->getId());
+        while($userBlock = $userBlocks->next_result())
+        {
+
+            /** @var Block $userBlock */
+            if($userBlock->getBlockType() == $blockClassName && $userBlock->getContext() == $blockClassContext)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

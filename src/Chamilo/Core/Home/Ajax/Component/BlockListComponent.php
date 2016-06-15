@@ -3,7 +3,10 @@ namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Core\Home\Service\HomeService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataManager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
@@ -21,7 +24,10 @@ class BlockListComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $blockTypeRightsService = new BlockTypeRightsService(new RightsRepository(), new HomeRepository());
+        $rightsRepository = new RightsRepository();
+        $homeRepository = new HomeRepository();
+        $homeService = new HomeService($homeRepository, new ElementRightsService($rightsRepository));
+        $blockTypeRightsService = new BlockTypeRightsService($rightsRepository, new HomeRepository());
 
         $platformBlocks = DataManager :: getPlatformBlocks();
 
@@ -32,7 +38,10 @@ class BlockListComponent extends \Chamilo\Core\Home\Ajax\Manager
             $components = $contextBlocksInfo['components'];
             foreach($components as $component)
             {
-                if($blockTypeRightsService->canUserViewBlockType($this->getUser(), $component['id']))
+                $class = $component['id'];
+                $blockRenderer = new $class($this, $homeService, new Block());
+
+                if($blockTypeRightsService->canUserViewBlockRenderer($this->getUser(), $blockRenderer))
                 {
                     $validComponents[] = $component;
                 }

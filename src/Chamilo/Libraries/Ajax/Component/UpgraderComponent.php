@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Ajax\Component;
 
+use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
+use Chamilo\Core\Home\Service\ContentObjectPublicationService;
+use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Repository\Common\Template\Template;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestion;
 use Chamilo\Core\Repository\ContentObject\AssessmentMatchingQuestion\Storage\DataClass\AssessmentMatchingQuestionOption;
@@ -19,10 +23,14 @@ use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\Hots
 use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\HotspotQuestionAnswer;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestion;
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\OrderingQuestionOption;
+use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
@@ -36,29 +44,32 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-         $this->fixTemplates();
-         $this->fixAssessmentMatchNumericQuestions();
-         $this->fixAssessmentMatchTextQuestions();
-        $this->fixAssessmentMatchingQuestions();
-         $this->fixAssessmentMatrixQuestions();
-         $this->fixAssessmentMultipleChoiceQuestions();
-         $this->fixAssessmentSelectQuestions();
-         $this->fixHotspotQuestions();
-         $this->fixOrderingQuestions();
-         $this->fixAssignmentAllowedTypes();
+//        $this->fixTemplates();
+//        $this->fixAssessmentMatchNumericQuestions();
+//        $this->fixAssessmentMatchTextQuestions();
+//        $this->fixAssessmentMatchingQuestions();
+//        $this->fixAssessmentMatrixQuestions();
+//        $this->fixAssessmentMultipleChoiceQuestions();
+//        $this->fixAssessmentSelectQuestions();
+//        $this->fixHotspotQuestions();
+//        $this->fixOrderingQuestions();
+//        $this->fixAssignmentAllowedTypes();
+
+        $this->fixHomeBlockPublications();
     }
 
     private function fixTemplates()
     {
-        $existingTemplates = DataManager :: retrieves(
-            TemplateRegistration :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingTemplates = DataManager:: retrieves(
+            TemplateRegistration:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingTemplate = $existingTemplates->next_result())
         {
             try
             {
-                $template = Template :: get($existingTemplate->get_content_object_type(), $existingTemplate->get_name());
+                $template = Template:: get($existingTemplate->get_content_object_type(), $existingTemplate->get_name());
                 $existingTemplate->set_template($template);
                 $existingTemplate->update();
             }
@@ -71,9 +82,10 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     private function fixAssessmentMatchNumericQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            AssessmentMatchNumericQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            AssessmentMatchNumericQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -88,20 +100,22 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                     $oldOption->value,
                     $oldOption->tolerance,
                     $oldOption->score,
-                    $oldOption->feedback);
+                    $oldOption->feedback
+                );
             }
 
             $existingQuestion->set_options($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixAssessmentMatchTextQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            AssessmentMatchTextQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            AssessmentMatchTextQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -115,20 +129,22 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                 $newOptions[$key] = new AssessmentMatchTextQuestionOption(
                     $oldOption->value,
                     $oldOption->score,
-                    $oldOption->feedback);
+                    $oldOption->feedback
+                );
             }
 
             $existingQuestion->set_options($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixAssessmentMatchingQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            AssessmentMatchingQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            AssessmentMatchingQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -143,20 +159,22 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                     $oldOption->value,
                     $oldOption->match,
                     $oldOption->score,
-                    $oldOption->feedback);
+                    $oldOption->feedback
+                );
             }
 
             $existingQuestion->set_options($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixAssessmentMatrixQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            AssessmentMatrixQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            AssessmentMatrixQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -171,20 +189,22 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                     $oldOption->value,
                     $oldOption->score,
                     $oldOption->feedback,
-                    $oldOption->matches);
+                    $oldOption->matches
+                );
             }
 
             $existingQuestion->set_options($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixAssessmentMultipleChoiceQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            AssessmentMultipleChoiceQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            AssessmentMultipleChoiceQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -199,20 +219,22 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                     $oldOption->value,
                     $oldOption->correct,
                     $oldOption->score,
-                    $oldOption->feedback);
+                    $oldOption->feedback
+                );
             }
 
             $existingQuestion->set_options($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixAssessmentSelectQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            AssessmentSelectQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            AssessmentSelectQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -227,20 +249,22 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                     $oldOption->value,
                     $oldOption->correct,
                     $oldOption->score,
-                    $oldOption->feedback);
+                    $oldOption->feedback
+                );
             }
 
             $existingQuestion->set_options($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixHotspotQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            HotspotQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            HotspotQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -255,20 +279,22 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                     $oldOption->answer,
                     $oldOption->comment,
                     $oldOption->weight,
-                    $oldOption->hotspot_coordinates);
+                    $oldOption->hotspot_coordinates
+                );
             }
 
             $existingQuestion->set_answers($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixOrderingQuestions()
     {
-        $existingQuestions = DataManager :: retrieves(
-            OrderingQuestion :: class_name(),
-            new DataClassRetrievesParameters());
+        $existingQuestions = DataManager:: retrieves(
+            OrderingQuestion:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         while ($existingQuestion = $existingQuestions->next_result())
         {
@@ -283,18 +309,19 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
                     $oldOption->value,
                     $oldOption->order,
                     $oldOption->score,
-                    $oldOption->feedback);
+                    $oldOption->feedback
+                );
             }
 
             $existingQuestion->set_options($newOptions);
 
-            DataManager :: update($existingQuestion);
+            DataManager:: update($existingQuestion);
         }
     }
 
     private function fixAssignmentAllowedTypes()
     {
-        $existingAssignments = DataManager :: retrieves(Assignment :: class_name(), new DataClassRetrievesParameters());
+        $existingAssignments = DataManager:: retrieves(Assignment:: class_name(), new DataClassRetrievesParameters());
 
         while ($existingAssignment = $existingAssignments->next_result())
         {
@@ -305,14 +332,14 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
             foreach ($oldAllowedTypes as $oldAllowedType)
             {
-                $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($oldAllowedType);
+                $packageName = ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($oldAllowedType);
                 $newAllowedTypes[] = 'Chamilo\Core\Repository\ContentObject\\' . $packageName . '\Storage\DataClass\\' .
-                     $packageName;
+                    $packageName;
             }
 
             $existingAssignment->set_allowed_types(implode(',', $newAllowedTypes));
 
-            DataManager :: update($existingAssignment);
+            DataManager:: update($existingAssignment);
         }
     }
 
@@ -322,7 +349,9 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
      * step.
      *
      * @since 1.1.0
+     *
      * @param object $object __PHP_Incomplete_Class
+     *
      * @return object
      */
     function fix_object($object)
@@ -341,5 +370,42 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
         // 4. Unserialize the modified object again.
         return unserialize($dump);
+    }
+
+    protected function fixHomeBlockPublications()
+    {
+        $contentObjectPublicationService = new ContentObjectPublicationService(
+            new ContentObjectPublicationRepository(
+                new PublicationRepository()
+            )
+        );
+        $formats = array();
+        $formats[] = 's:10:"use_object"';
+
+        $conditions = array();
+
+        foreach ($formats as $format)
+        {
+            $conditions[] = new PatternMatchCondition(
+                new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_CONFIGURATION),
+                '*' . $format . '*'
+            );
+        }
+
+        $condition = new OrCondition($conditions);
+
+        $blocks = \Chamilo\Core\Home\Storage\DataManager::retrieves(
+            Block::class_name(),
+            new DataClassRetrievesParameters($condition)
+        );
+
+        while ($block = $blocks->next_result())
+        {
+            $useObjectId = $block->getSetting('use_object');
+            $contentObjectPublicationService->setOnlyContentObjectForElement($block, $useObjectId);
+            
+            $block->removeSetting('use_object');
+            $block->update();
+        }
     }
 }
