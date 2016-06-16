@@ -155,7 +155,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieve the (first) user whose status is "anonymous"
      *
-     * @return user\User boolean
+     * @return \Chamilo\Core\User\Storage\DataClass\User boolean
      */
     public static function retrieve_anonymous_user()
     {
@@ -191,7 +191,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Returns the User currently registered in the session
      *
-     * @return user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function get_current_user()
     {
@@ -204,7 +204,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve a User based on the official code property
      *
      * @param $official_code string
-     * @return user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_official_code($official_code)
     {
@@ -218,7 +218,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve a User based on the username property
      *
      * @param $username string
-     * @return user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_username($username)
     {
@@ -232,7 +232,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve a User based on the external user id property
      *
      * @param $external_uid string
-     * @return user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_external_uid($external_uid)
     {
@@ -246,7 +246,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve a User based on the security token
      *
      * @param $security_token string
-     * @return user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_security_token($security_token)
     {
@@ -350,7 +350,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve a User based on the username property
      *
      * @param $username string
-     * @return user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      * @deprecated Use DataManager :: retrieve_user_by_username() now
      */
     public static function retrieve_user_info($username)
@@ -362,7 +362,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Attempt to retrieve a user based on his full name (first name + last name)
      *
      * @param $fullname string
-     * @return user\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public static function retrieve_user_by_fullname($fullname)
     {

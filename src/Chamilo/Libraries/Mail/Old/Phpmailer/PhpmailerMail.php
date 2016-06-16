@@ -18,23 +18,23 @@ class PhpmailerMail extends Mail
 
     public function send()
     {
-        global $phpmailer_config;
+        global $phpMailerConfiguration;
         require_once (__DIR__ . '/phpmailer.conf.php');
         $mail = new PHPMailer();
         $mail->isHtml(true);
         $mail->CharSet = 'utf-8';
-        $mail->Mailer = $phpmailer_config['SMTP_MAILER'];
-        $mail->Host = $phpmailer_config['SMTP_HOST'];
-        $mail->Port = $phpmailer_config['SMTP_PORT'];
-        if ($phpmailer_config['SMTP_AUTH'])
+        $mail->Mailer = $phpMailerConfiguration['SMTP_MAILER'];
+        $mail->Host = $phpMailerConfiguration['SMTP_HOST'];
+        $mail->Port = $phpMailerConfiguration['SMTP_PORT'];
+        if ($phpMailerConfiguration['SMTP_AUTH'])
         {
             $mail->SMTPAuth = 1;
-            $mail->Username = $phpmailer_config['SMTP_USER'];
-            $mail->Password = $phpmailer_config['SMTP_PASS'];
+            $mail->Username = $phpMailerConfiguration['SMTP_USER'];
+            $mail->Password = $phpMailerConfiguration['SMTP_PASS'];
         }
 
         $mail->Priority = 3; // 5=low, 1=high
-        $mail->AddCustomHeader('Errors-To: ' . $phpmailer_config['SMTP_FROM_EMAIL']);
+        $mail->AddCustomHeader('Errors-To: ' . $phpMailerConfiguration['SMTP_FROM_EMAIL']);
 
         $mail->SMTPKeepAlive = true;
 
@@ -54,9 +54,9 @@ class PhpmailerMail extends Mail
         }
         else
         {
-            $mail->From = $phpmailer_config['SMTP_FROM_EMAIL'];
-            $mail->Sender = $phpmailer_config['SMTP_FROM_EMAIL'];
-            $mail->FromName = $phpmailer_config['SMTP_FROM_NAME'];
+            $mail->From = $phpMailerConfiguration['SMTP_FROM_EMAIL'];
+            $mail->Sender = $phpMailerConfiguration['SMTP_FROM_EMAIL'];
+            $mail->FromName = $phpMailerConfiguration['SMTP_FROM_NAME'];
         }
 
         foreach ($this->get_embedded_images() as $index => $mail_embedded_object)
