@@ -35,9 +35,9 @@ class JavascriptCacheService extends AsseticCacheService
 
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.browser.min.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.ui.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.ui.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tabula.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.dynamic.visual_tabs.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tablednd.js');
@@ -51,7 +51,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jsuggest.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jeditable.mini.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.query.js');
-        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.simplemodal.js');
+//        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.simplemodal.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tree_menu.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.timepicker.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'AngularJS/angular.min.js');
