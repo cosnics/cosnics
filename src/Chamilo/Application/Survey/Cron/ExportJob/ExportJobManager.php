@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Survey\Cron\ExportJob;
 
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Storage\DataClass\Matching;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matrix\Storage\DataClass\Matrix;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Storage\DataClass\MultipleChoice;
@@ -9,7 +10,8 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Open\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Storage\DataClass\Rating;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataClass\Select;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -224,12 +226,10 @@ class ExportJobManager
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($user_id);
         $to_email = $user->get_email();
 
-        $from = array();
         $name = PlatformSetting :: get('administrator_firstname', 'admin') . ' ' .
              PlatformSetting :: get('administrator_surname', 'admin');
-        $from[Mail :: NAME] = $name;
         $email = PlatformSetting :: get('administrator_email', 'admin');
-        $from[Mail :: EMAIL] = $email;
+
         if ($export_template)
         {
             $header = Translation :: get('ExportHeader') . ' ' . $export_template->get_name();
@@ -239,22 +239,21 @@ class ExportJobManager
             $header = Translation :: get('AnswerSynchronizationHeader');
         }
 
-        $mail = Mail :: factory($header, $message, $to_email, $from);
+        $mail = new Mail($header, $message, $to_email, true, array(), array(), $name, $email, $name, $email);
 
-        $reply = array();
-        $reply[Mail :: NAME] = $name;
-        $reply[Mail :: EMAIL] = $email;
-        $mail->set_reply($reply);
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
 
-        // Check whether it was sent successfully
-        if ($mail->send() === FALSE)
+        try
         {
-            echo 'Mail not send to: ' . $name . ' ' . $email . "\n";
+            $mailer->sendMail($mail);
+            
+            echo 'Mail send to: ' . $name . ' ' . $email . "\n";
             echo '     Message: ' . $message . "\n";
         }
-        else
+        catch(\Exception $ex)
         {
-            echo 'Mail send to: ' . $name . ' ' . $email . "\n";
+            echo 'Mail not send to: ' . $name . ' ' . $email . "\n";
             echo '     Message: ' . $message . "\n";
         }
     }

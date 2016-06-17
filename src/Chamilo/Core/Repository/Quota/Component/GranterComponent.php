@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Manager;
 use Chamilo\Core\Repository\Quota\Storage\DataClass\Request;
 use Chamilo\Core\Repository\Quota\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -153,15 +155,17 @@ class GranterComponent extends Manager
                 'ADDED_QUOTA' => Filesystem :: format_file_size($request->get_quota()),
                 'QUOTA' => Filesystem :: format_file_size($calculator->getMaximumUserDiskQuota())));
 
-        $mail = Mail :: factory(
-            $title,
-            $body,
-            array(Mail :: NAME => $recipient->get_fullname(), Mail :: EMAIL => $recipient->get_email()),
-            array(
-                Mail :: NAME => PlatformSetting :: get('administrator_firstname') . '_' .
-                     PlatformSetting :: get('administrator_surname'),
-                    Mail :: EMAIL => PlatformSetting :: get('administrator_email')));
+        $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mail->send();
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (\Exception $ex)
+        {
+        }
     }
 }
