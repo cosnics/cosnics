@@ -1,13 +1,15 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Hashing\Hashing;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
@@ -328,13 +330,20 @@ class RegisterForm extends FormValidator
             $body = str_replace('[' . $option . ']', $value, $body);
         }
 
-        $mail = Mail :: factory(
-            $subject,
-            $body,
-            $user->get_email(),
-            array(
-                Mail :: NAME => $options['admin_firstname'] . ' ' . $options['admin_surname'],
-                Mail :: EMAIL => $options['admin_email']));
-        $mail->send();
+        $mail = new Mail(
+            $subject, $body, $user->get_email(), true, array(), array(),
+            $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
+        );
+
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (\Exception $ex)
+        {
+        }
     }
 }

@@ -3,8 +3,10 @@ namespace Chamilo\Application\Survey\Cron\MailJob;
 
 use Chamilo\Application\Survey\Cron\Storage\DataClass\MailJob;
 use Chamilo\Application\Survey\Cron\Storage\DataManager;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -13,6 +15,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
+
 class MailJobManager
 {
     const TYPE_ALL_MAILS_SEND = 1;
@@ -24,7 +27,7 @@ class MailJobManager
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_UUID, '0');
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_STATUS, MailJob :: STATUS_NEW);
         $condition = new AndCondition($conditions);
-        $mail_jobs = DataManager :: retrieve_mail_jobs($condition);
+        $mail_jobs = DataManager:: retrieve_mail_jobs($condition);
 
         $UUID = uniqid($_SERVER['SERVER_ADDR'], true);
 
@@ -40,7 +43,7 @@ class MailJobManager
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_UUID, $UUID);
         $conditions[] = new EqualityCondition(MailJob :: PROPERTY_STATUS, MailJob :: STATUS_NEW);
         $condition = new AndCondition($conditions);
-        $mail_jobs = DataManager :: retrieve_mail_jobs($condition);
+        $mail_jobs = DataManager:: retrieve_mail_jobs($condition);
 
         $user_ids = array();
         $user_publication_ids = array();
@@ -52,48 +55,52 @@ class MailJobManager
         while ($mail_job = $mail_jobs->next_result())
         {
             $job_count ++;
-            $mail_tracker = DataManager :: retrieve_by_id(
-                \Chamilo\Application\Survey\Mail\Storage\DataClass\Mail :: class_name(),
-                $mail_job->get_publication_mail_tracker_id());
+            $mail_tracker = DataManager:: retrieve_by_id(
+                \Chamilo\Application\Survey\Mail\Storage\DataClass\Mail:: class_name(),
+                $mail_job->get_publication_mail_tracker_id()
+            );
 
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($mail_tracker->get_user_id());
+            $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_user($mail_tracker->get_user_id());
             $to_email = $user->get_email();
 
-            $publication_mail = DataManager :: retrieve_survey_publication_mail(
-                $mail_tracker->get_survey_publication_mail_id());
+            $publication_mail = DataManager:: retrieve_survey_publication_mail(
+                $mail_tracker->get_survey_publication_mail_id()
+            );
             $user_ids[] = $publication_mail->get_sender_user_id();
 
-            $from = array();
-            $from[Mail :: NAME] = $publication_mail->get_from_address_name();
-            $from[Mail :: EMAIL] = $publication_mail->get_from_address();
+            $mail = new Mail(
+                $publication_mail->get_mail_header(), $publication_mail->get_mail_content(), $to_email, true, array(),
+                array(), $publication_mail->get_from_address_name(), $publication_mail->get_from_address(),
+                $publication_mail->get_reply_address_name(),
+                $publication_mail->get_reply_address()
+            );
 
-            $mail = Mail :: factory(
-                $publication_mail->get_mail_header(),
-                $publication_mail->get_mail_content(),
-                $to_email,
-                $from);
-            $reply = array();
-            $reply[Mail :: NAME] = $publication_mail->get_reply_address_name();
-            $reply[Mail :: EMAIL] = $publication_mail->get_reply_address();
-            $mail->set_reply($reply);
+            $mailerFactory = new MailerFactory(Configuration::get_instance());
+            $mailer = $mailerFactory->getActiveMailer();
 
             $user_publication_ids[$publication_mail->get_sender_user_id()][] = $publication_mail->get_publication_id();
-            // Check whether it was sent successfully
-            if ($mail->send() === FALSE)
+
+            try
             {
-                $mail_failure_count ++;
-                $publication_failures[$publication_mail->get_publication_id()] = $publication_mail->get_sender_user_id();
-                $mail_tracker->set_status(
-                    \Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail :: STATUS_MAIL_NOT_SEND);
-                echo '    Mail not send to: ' . $user->get_fullname() . ' ' . $to_email . "\n";
-            }
-            else
-            {
+                $mailer->sendMail($mail);
+
                 $mail_count ++;
                 $mail_tracker->set_status(
-                    \Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail :: STATUS_MAIL_SEND);
+                    \Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail :: STATUS_MAIL_SEND
+                );
                 echo '    Mail send to: ' . $user->get_fullname() . ' ' . $to_email . "\n";
             }
+            catch (\Exception $ex)
+            {
+                $mail_failure_count ++;
+                $publication_failures[$publication_mail->get_publication_id()] =
+                    $publication_mail->get_sender_user_id();
+                $mail_tracker->set_status(
+                    \Chamilo\Application\Survey\Mail\Storage\DataClass\UserMail :: STATUS_MAIL_NOT_SEND
+                );
+                echo '    Mail not send to: ' . $user->get_fullname() . ' ' . $to_email . "\n";
+            }
+
             $mail_tracker->update();
             $mail_job->set_status(MailJob :: STATUS_DONE);
             $mail_job->update();
@@ -118,15 +125,17 @@ class MailJobManager
                 {
                     if (in_array($user_id, $publication_failures[$publication_id]))
                     {
-                        MailJobManager :: send_mail(
+                        MailJobManager:: send_mail(
                             $user_id,
-                            MailJobManager :: get_mail_message(self :: TYPE_NOT_ALL_MAILS_SEND, $publication_id));
+                            MailJobManager:: get_mail_message(self :: TYPE_NOT_ALL_MAILS_SEND, $publication_id)
+                        );
                     }
                     else
                     {
-                        MailJobManager :: send_mail(
+                        MailJobManager:: send_mail(
                             $user_id,
-                            MailJobManager :: get_mail_message(self :: TYPE_ALL_MAILS_SEND, $publication_id));
+                            MailJobManager:: get_mail_message(self :: TYPE_ALL_MAILS_SEND, $publication_id)
+                        );
                     }
                 }
             }
@@ -135,31 +144,29 @@ class MailJobManager
 
     static function send_mail($user_id, $message)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($user_id);
+        $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_user($user_id);
         $to_email = $user->get_email();
 
-        $from = array();
-        $name = PlatformSetting :: get('administrator_firstname', 'admin') . ' ' .
-             PlatformSetting :: get('administrator_surname', 'admin');
-        $from[Mail :: NAME] = $name;
-        $email = PlatformSetting :: get('administrator_email', 'admin');
-        $from[Mail :: EMAIL] = $email;
+        $name = PlatformSetting:: get('administrator_firstname', 'admin') . ' ' .
+            PlatformSetting:: get('administrator_surname', 'admin');
+        $email = PlatformSetting:: get('administrator_email', 'admin');
 
-        $mail = Mail :: factory(Translation :: get('MailHeader'), $message, $to_email, $from);
+        $mail = new Mail(
+            Translation:: get('MailHeader'), $message, $to_email, true, array(), array(), $name, $email, $name, $email
+        );
 
-        $reply = array();
-        $reply[Mail :: NAME] = $name;
-        $reply[Mail :: EMAIL] = $email;
-        $mail->set_reply($reply);
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
 
-        // Check whether it was sent successfully
-        if ($mail->send() === FALSE)
+        try
+        {
+            $mailer->sendMail($mail);
+
+            echo '    			Notification Mail send to: ' . $user->get_fullname() . ' ' . $to_email . "\n";
+        }
+        catch (\Exception $ex)
         {
             echo '    			Notification Mail not send to: ' . $user->get_fullname() . ' ' . $to_email . "\n";
-        }
-        else
-        {
-            echo '    			Notification Mail send to: ' . $user->get_fullname() . ' ' . $to_email . "\n";
         }
     }
 
@@ -167,12 +174,13 @@ class MailJobManager
     {
         $message = array();
 
-        $publication = DataManager :: retrieve_survey_publication($publication_id);
+        $publication = DataManager:: retrieve_survey_publication($publication_id);
 
-        $click_message = Translation :: get('ClickToGoToMailManager');
+        $click_message = Translation:: get('ClickToGoToMailManager');
         $parameters = array();
-        $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
-        $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_MAIL_INVITEES;
+        $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager:: package();
+        $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] =
+            \Chamilo\Application\Survey\Manager :: ACTION_MAIL_INVITEES;
         $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $publication_id;
 
         $redirect = new Redirect($parameters);
@@ -182,29 +190,30 @@ class MailJobManager
         {
 
             case self :: TYPE_ALL_MAILS_SEND :
-                $message[] = Translation :: get("AllMailsSend");
+                $message[] = Translation:: get("AllMailsSend");
                 break;
             case self :: TYPE_NOT_ALL_MAILS_SEND :
-                $message[] = Translation :: get("NotAllMailsSend");
+                $message[] = Translation:: get("NotAllMailsSend");
                 break;
         }
 
         $message[] = '<br/><br/>';
-        $message[] = Translation :: get('Title') . ': ';
+        $message[] = Translation:: get('Title') . ': ';
         $message[] = '<br/>';
         $message[] = $publication->get_title();
         $message[] = '<br/><br/>';
-        $message[] = Translation :: get('Description') . ': ';
+        $message[] = Translation:: get('Description') . ': ';
         $message[] = '<br/>';
         $message[] = $publication->getContentObject()->get_description();
         $message[] = '<br/><br/>';
         $message[] = '<a href=' . $url . '>' . $click_message . '</a>';
 
-        $message[] = '<br/><br/>' . Translation :: get('OrCopyAndPasteThisText') . ':';
+        $message[] = '<br/><br/>' . Translation:: get('OrCopyAndPasteThisText') . ':';
         $message[] = '<br/><a href=' . $url . '>' . $url . '</a>';
         $message[] = '</p>';
 
         return implode(PHP_EOL, $message);
     }
 }
+
 ?>

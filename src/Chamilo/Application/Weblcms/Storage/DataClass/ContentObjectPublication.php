@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Application\Weblcms\Storage\DataClass;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
@@ -16,8 +18,8 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Mail\Mail;
-use Chamilo\Libraries\Mail\MailEmbeddedObject;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
+use Chamilo\Libraries\Mail\ValueObject\MailFile;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -628,19 +630,12 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
         $site_name = PlatformSetting:: get('site_name');
 
-        $mail = Mail:: factory(
-            '[' . $site_name . '] ' . Translation:: get(
-                $after_publication ? 'OldPublicationMailSubject' : 'NewPublicationMailSubject',
-                array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
-            ),
-            '',
-            '',
-            array(Mail :: NAME => $user->get_fullname(), Mail :: EMAIL => $user->get_email())
-        );
-
         $doc = new DOMDocument();
         $doc->loadHTML($body);
         $elements = $doc->getElementsByTagname('resource');
+
+        $mailFiles = array();
+        $index = 0;
 
         // replace image document resource tags with a html img tag with base64
         // data
@@ -657,18 +652,18 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
                 );
                 if ($object->is_image())
                 {
-                    $mail_embedded_object = new MailEmbeddedObject(
+                    $mailFiles[] = new MailFile(
                         $object->get_filename(),
-                        $object->get_mime_type(),
-                        $object->get_full_path()
+                        $object->get_full_path(),
+                        $object->get_mime_type()
                     );
-
-                    $index = $mail->add_embedded_image($mail_embedded_object);
 
                     $elem = $doc->createElement('img');
                     $elem->setAttribute('src', 'cid:' . $index);
                     $elem->setAttribute('alt', $object->get_filename());
                     $element->parentNode->replaceChild($elem, $element);
+
+                    $index++;
                 }
                 else
                 {
@@ -688,28 +683,34 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $body .= '<br ><br >' . Translation:: get('AttachmentWarning', array('LINK' => $link));
         }
 
-        $mail->set_message($body);
 
+        $log = '';
         $log .= "mail for publication " . $this->get_id() . " in course ";
         $log .= $course->get_title();
         $log .= " to: \n";
 
-        // send mail
-        foreach ($unique_email as $mail_to)
+        $subject = Translation:: get(
+            $after_publication ? 'OldPublicationMailSubject' : 'NewPublicationMailSubject',
+            array('COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title())
+        );
+
+        $mail = new Mail(
+            $subject, $body, $unique_email, true, array(), array(), $user->get_fullname(), $user->get_email(), null,
+            null, $mailFiles
+        );
+
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
         {
+            $mailer->sendMail($mail);
 
-            $mail->set_to($mail_to);
-            $success = $mail->send();
-
-            $log .= $mail_to;
-            if ($success)
-            {
-                $log .= " (successfull)\n";
-            }
-            else
-            {
-                $log .= " (unsuccessfull)\n";
-            }
+            $log .= " (successfull)\n";
+        }
+        catch (\Exception $ex)
+        {
+            $log .= " (unsuccessfull)\n";
         }
 
         if (PlatformSetting:: get('log_mails', __NAMESPACE__))
