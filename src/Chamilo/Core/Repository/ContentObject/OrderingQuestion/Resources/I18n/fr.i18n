@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\ordering_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Question d'ordre"
+Weight = "Poids"
+PutAnswersCorrectOrder = "Mettez les réponses dans le bon ordre"
+Items = "Objets"
+AddItem = "Ajouter un élément"
+Item = "Objet"
+Order = "Ranger"
+Rank = "Classer"
+Title = "Titre"
+Description = "Description"
+Hint = "Suggestion"
