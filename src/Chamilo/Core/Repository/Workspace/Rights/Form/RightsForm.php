@@ -30,6 +30,9 @@ class RightsForm extends FormValidator
     const PROPERTY_VIEW = 'right_view';
     const PROPERTY_MANAGE = 'right_manage';
 
+    const MODE_CREATE = 'create';
+    const MODE_UPDATE = 'update';
+
     /**
      *
      * @var \Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation
@@ -37,14 +40,24 @@ class RightsForm extends FormValidator
     private $entityRelation;
 
     /**
+     * The form mode
+     *
+     * @var string
+     */
+    protected $mode;
+
+    /**
      *
      * @param string $formUrl
+     * @param WorkspaceEntityRelation $entityRelation
+     * @param string $mode
      */
-    public function __construct($formUrl, WorkspaceEntityRelation $entityRelation = null)
+    public function __construct($formUrl, WorkspaceEntityRelation $entityRelation = null, $mode = self::MODE_CREATE)
     {
-        parent :: __construct('rights', 'post', $formUrl);
+        parent:: __construct('rights', 'post', $formUrl);
 
         $this->entityRelation = $entityRelation;
+        $this->mode = $mode;
 
         $this->build_form();
         $this->setDefaults();
@@ -56,17 +69,19 @@ class RightsForm extends FormValidator
         {
             if ($this->entityRelation->get_entity_type() == UserEntity :: ENTITY_TYPE)
             {
-                $entityType = UserEntity :: get_instance()->get_entity_translated_name();
-                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-                    User :: class_name(),
-                    $this->entityRelation->get_entity_id())->get_fullname();
+                $entityType = UserEntity:: get_instance()->get_entity_translated_name();
+                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager:: retrieve_by_id(
+                    User:: class_name(),
+                    $this->entityRelation->get_entity_id()
+                )->get_fullname();
             }
             else
             {
-                $entityType = PlatformGroupEntity :: get_instance()->get_entity_translated_name();
-                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-                    Group :: class_name(),
-                    $this->entityRelation->get_entity_id())->get_name();
+                $entityType = PlatformGroupEntity:: get_instance()->get_entity_translated_name();
+                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager:: retrieve_by_id(
+                    Group:: class_name(),
+                    $this->entityRelation->get_entity_id()
+                )->get_name();
             }
 
             $this->addElement('static', null, $entityType, $entityName);
@@ -74,77 +89,87 @@ class RightsForm extends FormValidator
         else
         {
             $types = new AdvancedElementFinderElementTypes();
-            $types->add_element_type(UserEntity :: get_element_finder_type());
-            $types->add_element_type(PlatformGroupEntity :: get_element_finder_type());
+            $types->add_element_type(UserEntity:: get_element_finder_type());
+            $types->add_element_type(PlatformGroupEntity:: get_element_finder_type());
             $this->addElement(
                 'advanced_element_finder',
                 self :: PROPERTY_ACCESS,
-                Translation :: get('UsersGroups'),
-                $types);
+                Translation:: get('UsersGroups'),
+                $types
+            );
         }
 
         $this->addElement(
             'radio',
             self :: PROPERTY_VIEW,
-            Translation :: get('ContentRight'),
-            Translation :: get('ViewRight'),
-            RightsService :: RIGHT_VIEW);
+            Translation:: get('ContentRight'),
+            Translation:: get('ViewRight'),
+            RightsService :: RIGHT_VIEW
+        );
 
         $this->addElement(
             'radio',
             self :: PROPERTY_VIEW,
             null,
-            Translation :: get('AddRight'),
-            RightsService :: RIGHT_VIEW | RightsService :: RIGHT_ADD);
+            Translation:: get('AddRight'),
+            RightsService :: RIGHT_VIEW | RightsService :: RIGHT_ADD
+        );
 
         $this->addElement(
             'radio',
             self :: PROPERTY_VIEW,
             null,
-            Translation :: get('EditRight'),
-            RightsService :: RIGHT_VIEW | RightsService :: RIGHT_ADD | RightsService :: RIGHT_EDIT);
+            Translation:: get('EditRight'),
+            RightsService :: RIGHT_VIEW | RightsService :: RIGHT_ADD | RightsService :: RIGHT_EDIT
+        );
 
         $this->addElement(
             'radio',
             self :: PROPERTY_VIEW,
             null,
-            Translation :: get('DeleteRight'),
+            Translation:: get('DeleteRight'),
             RightsService :: RIGHT_VIEW | RightsService :: RIGHT_ADD | RightsService :: RIGHT_EDIT |
-                 RightsService :: RIGHT_DELETE);
+            RightsService :: RIGHT_DELETE
+        );
 
         $this->addElement(
             'checkbox',
             self :: PROPERTY_USE,
-            Translation :: get('UseRight'),
+            Translation:: get('UseRight'),
             null,
             null,
-            RightsService :: RIGHT_USE);
+            RightsService :: RIGHT_USE
+        );
 
         $this->addElement(
             'checkbox',
             self :: PROPERTY_COPY,
-            Translation :: get('CopyRight'),
+            Translation:: get('CopyRight'),
             null,
             null,
-            RightsService :: RIGHT_COPY);
+            RightsService :: RIGHT_COPY
+        );
 
         $this->addElement(
             'checkbox',
             self :: PROPERTY_MANAGE,
-            Translation :: get('ManageRight'),
+            Translation:: get('ManageRight'),
             null,
             null,
             RightsService :: RIGHT_VIEW | RightsService :: RIGHT_ADD | RightsService :: RIGHT_EDIT |
-                 RightsService :: RIGHT_DELETE | RightsService :: RIGHT_USE | RightsService :: RIGHT_COPY |
-                 RightsService :: RIGHT_MANAGE);
+            RightsService :: RIGHT_DELETE | RightsService :: RIGHT_USE | RightsService :: RIGHT_COPY |
+            RightsService :: RIGHT_MANAGE
+        );
 
-        $this->add_warning_message(null, null, Translation :: get('ManageRightWarning'), true);
+        $this->add_warning_message(null, null, Translation:: get('ManageRightWarning'), true);
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Workspace\Rights', true) .
-                     'RightsForm.js'));
+            ResourceManager:: get_instance()->get_resource_html(
+                Path:: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Workspace\Rights', true) .
+                'RightsForm.js'
+            )
+        );
 
         $this->addSaveResetButtons();
     }
@@ -153,23 +178,29 @@ class RightsForm extends FormValidator
     {
         $buttons = array();
 
-        $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('SaveAndAddNew', null, Manager::context()),
-            array('class' => 'positive'));
+        if ($this->mode == self::MODE_CREATE)
+        {
+            $buttons[] = $this->createElement(
+                'style_submit_button',
+                'submit',
+                Translation:: get('SaveAndAddNew', null, Manager::context()),
+                array('class' => 'positive')
+            );
+        }
 
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'positive'));
+            Translation:: get('Save', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'positive')
+        );
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'normal empty'));
+            Translation:: get('Reset', null, Utilities :: COMMON_LIBRARIES),
+            array('class' => 'normal empty')
+        );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -180,8 +211,8 @@ class RightsForm extends FormValidator
         {
             $givenRights = $this->entityRelation->get_rights();
 
-            $defaults[self :: PROPERTY_VIEW] = $givenRights & ~ RightsService :: RIGHT_USE &
-                 ~ RightsService :: RIGHT_COPY & ~ RightsService :: RIGHT_MANAGE;
+            $defaults[self :: PROPERTY_VIEW] = $givenRights & ~RightsService :: RIGHT_USE &
+                ~RightsService :: RIGHT_COPY & ~RightsService :: RIGHT_MANAGE;
 
             $defaults[self :: PROPERTY_USE] = $givenRights & RightsService :: RIGHT_USE;
             $defaults[self :: PROPERTY_COPY] = $givenRights & RightsService :: RIGHT_COPY;
@@ -192,6 +223,6 @@ class RightsForm extends FormValidator
             $defaults[self :: PROPERTY_VIEW] = RightsService :: RIGHT_VIEW;
         }
 
-        parent :: setDefaults($defaults);
+        parent:: setDefaults($defaults);
     }
 }

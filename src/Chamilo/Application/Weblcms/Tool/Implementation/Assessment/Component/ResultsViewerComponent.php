@@ -70,7 +70,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($assessment);
         if ($this->buttonToolbarRenderer)
         {
             $html[] = $this->buttonToolbarRenderer->render();
@@ -104,14 +104,20 @@ class ResultsViewerComponent extends Manager implements TableSupport
     /**
      * Returns the action bar
      *
+     * @param Assessment | Hotpotatoes $assessment
+     *
      * @return ButtonToolBarRenderer
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function getButtonToolbarRenderer()
+    public function getButtonToolbarRenderer($assessment)
     {
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             if (!isset($this->buttonToolbarRenderer))
             {
+                $aid = Request:: get(self :: PARAM_ASSESSMENT);
+                
                 $buttonToolbar = new ButtonToolBar($this->get_url());
                 $commonActions = new ButtonGroup();
 
@@ -120,21 +126,6 @@ class ResultsViewerComponent extends Manager implements TableSupport
                         Translation:: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
                         Theme:: getInstance()->getCommonImagePath('Action/Browser'),
                         $this->get_url(),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
-                    )
-                );
-
-                $aid = Request:: get(self :: PARAM_ASSESSMENT);
-                $commonActions->addButton(
-                    new Button(
-                        Translation:: get('DownloadDocuments'),
-                        Theme:: getInstance()->getCommonImagePath('Action/Download'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SAVE_DOCUMENTS,
-                                self :: PARAM_ASSESSMENT => $aid
-                            )
-                        ),
                         ToolbarItem :: DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -154,19 +145,37 @@ class ResultsViewerComponent extends Manager implements TableSupport
                     )
                 );
 
-                $commonActions->addButton(
-                    new Button(
-                        Translation:: get('RawExportResults'),
-                        Theme:: getInstance()->getCommonImagePath('Action/Export'),
-                        $this->get_url(
-                            array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_RAW_EXPORT_RESULTS,
-                                self :: PARAM_ASSESSMENT => Request:: get(self :: PARAM_ASSESSMENT)
-                            )
-                        ),
-                        ToolbarItem :: DISPLAY_ICON_AND_LABEL
-                    )
-                );
+
+                if($assessment instanceof Assessment)
+                {
+                    $commonActions->addButton(
+                        new Button(
+                            Translation:: get('DownloadDocuments'),
+                            Theme:: getInstance()->getCommonImagePath('Action/Download'),
+                            $this->get_url(
+                                array(
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_SAVE_DOCUMENTS,
+                                    self :: PARAM_ASSESSMENT => $aid
+                                )
+                            ),
+                            ToolbarItem :: DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+
+                    $commonActions->addButton(
+                        new Button(
+                            Translation:: get('RawExportResults'),
+                            Theme:: getInstance()->getCommonImagePath('Action/Export'),
+                            $this->get_url(
+                                array(
+                                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_RAW_EXPORT_RESULTS,
+                                    self :: PARAM_ASSESSMENT => Request:: get(self :: PARAM_ASSESSMENT)
+                                )
+                            ),
+                            ToolbarItem :: DISPLAY_ICON_AND_LABEL
+                        )
+                    );
+                }
 
                 $buttonToolbar->addButtonGroup($commonActions);
 

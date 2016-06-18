@@ -230,4 +230,15 @@ class Element extends CompositeDataClass implements DisplayOrderDataClassListene
 
         $this->setConfiguration($configuration);
     }
+
+    /**
+     * @param string $variable
+     */
+    public function removeSetting($variable)
+    {
+        $configuration = $this->getConfiguration();
+        unset($configuration[$variable]);
+
+        $this->setConfiguration($configuration);
+    }
 }

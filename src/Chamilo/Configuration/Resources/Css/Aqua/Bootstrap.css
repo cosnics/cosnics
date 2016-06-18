@@ -736,6 +736,8 @@ ul.nav-wizard.publication-wizard {
 	.treeview .list-group .list-group-item .icon.node-icon, .treeview .list-group .list-group-item a
 	{
 	display: table-cell;
+	word-wrap: break-word;
+	word-break: break-word;
 }
 
 .treeview .list-group .list-group-item .indent {
@@ -877,4 +879,12 @@ ul.nav-wizard.publication-wizard {
 .treeview .list-group .list-group-item .icon.node-icon.type_completed {
 	background-image: url(../../Images/Aqua/Status/OkMini.png);
 	opacity: 1;
+}
+
+.glyphicon-muted {
+	opacity: 0.5;
+}
+
+.text-muted-invisible {
+	color: #777777 !important;
 }

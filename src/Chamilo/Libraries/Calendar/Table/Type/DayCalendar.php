@@ -62,7 +62,7 @@ class DayCalendar extends Calendar
         $this->endHour = $endHour;
         $this->hideOtherHours = $hideOtherHours;
 
-        parent :: __construct($displayTime, $classes);
+        parent::__construct($displayTime, $classes);
         $this->buildTable();
     }
 
@@ -186,7 +186,7 @@ class DayCalendar extends Calendar
         $header->setHeaderContents(
             0,
             1,
-            Translation :: get(date('l', $this->getDisplayTime()) . 'Short', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+            Translation::get(date('l', $this->getDisplayTime()) . 'Short', null, Utilities::COMMON_LIBRARIES) . ' ' .
                  date('d/m', $this->getDisplayTime()));
 
         $startHour = 0;
@@ -299,9 +299,15 @@ class DayCalendar extends Calendar
 
             foreach ($items as $index => $item)
             {
-                $cellContent = $this->getCellContents($row, 1);
-                $cellContent .= $item;
-                $this->setCellContents($row, 1, $cellContent);
+                try
+                {
+                    $cellContent = $this->getCellContents($row, 1);
+                    $cellContent .= $item;
+                    $this->setCellContents($row, 1, $cellContent);
+                }
+                catch (\Exception $exception)
+                {
+                }
             }
         }
     }

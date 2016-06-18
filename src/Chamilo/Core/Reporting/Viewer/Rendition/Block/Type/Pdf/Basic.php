@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf;
 
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Pdf;
+use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -275,8 +276,14 @@ class Basic extends Pdf
 			$text = preg_replace('/[ \n\r\t]+/', ' ', $text);
 		}
 
-        // Extract image filename
-        $text = preg_replace('/<img\s+src="(.+)".*\/>/isU', '${1}', $text);
+        $path = Path::getInstance();
+        $webPath = $path->getBasePath(true);
+        $sysPath = $path->getBasePath(false);
+
+        $text = preg_replace_callback('/<img\s+src="(.+)".*\/>/isU', function($matches) use($webPath, $sysPath) {
+//            return str_replace($webPath, $sysPath, $matches[1]);
+            return null;
+        }, $text);
 
         return $text;
 	}	

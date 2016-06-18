@@ -61,15 +61,15 @@ class FormValidator extends HTML_QuickForm
     {
         $attributes['onreset'] = 'resetElements()';
 
-        parent :: __construct($form_name, $method, $action, $target, $attributes, $trackSubmit);
+        parent::__construct($form_name, $method, $action, $target, $attributes, $trackSubmit);
 
         $this->registerAdditionalElements();
         $this->registerAdditionalRules();
 
         $this->addElement(
             'html',
-            '<script type="text/javascript" src="' . Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                 'Reset.js"></script>');
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Reset.js'));
 
         $this->setDefaultTemplates();
 
@@ -681,7 +681,8 @@ EOT;
             'html',
             "<script type=\"text/javascript\">
 					/* <![CDATA[ */
-					var expiration_" . $elementName . " = document.getElementById('receiver_" . $elementName . "');
+					var expiration_" . $elementName .
+                 " = document.getElementById('receiver_" . $elementName . "');
 					if (expiration_" . $elementName . ".checked)
 					{
 						receivers_hide('receivers_window_" . $elementName . "');

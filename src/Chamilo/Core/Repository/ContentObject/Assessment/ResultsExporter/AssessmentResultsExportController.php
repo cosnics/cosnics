@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter;
 
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
+use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -103,7 +104,7 @@ class AssessmentResultsExportController
     /**
      * Initializes this class
      *
-     * @param Assessment $assessments
+     * @param Assessment[] | Hotpotatoes[] $assessments
      * @param AssessmentResult $assessment_results
      * @param string[] $additional_column_headers
      */
@@ -241,9 +242,9 @@ class AssessmentResultsExportController
     /**
      * Exports a single assessment
      *
-     * @param Assessment $assessment
+     * @param Assessment | Hotpotatoes $assessment
      */
-    protected function export_assessment(Assessment $assessment)
+    protected function export_assessment($assessment)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -265,9 +266,9 @@ class AssessmentResultsExportController
      * Exports the question of an assessment
      *
      * @param ComplexContentObjectItem $complex_question
-     * @param Assessment $assessment
+     * @param Assessment | Hotpotatoes $assessment
      */
-    protected function export_question(ComplexContentObjectItem $complex_question, Assessment $assessment)
+    protected function export_question(ComplexContentObjectItem $complex_question, $assessment)
     {
         $question_results = $this->question_results_by_question[$complex_question->get_id()];
         foreach ($question_results as $question_result)
@@ -281,10 +282,10 @@ class AssessmentResultsExportController
      *
      * @param QuestionResult $question_result
      * @param ComplexContentObjectItem $complex_question
-     * @param Assessment $assessment
+     * @param Assessment | Hotpotatoes $assessment
      */
     protected function export_question_result(QuestionResult $question_result,
-        ComplexContentObjectItem $complex_question, Assessment $assessment)
+        ComplexContentObjectItem $complex_question, $assessment)
     {
         $assessment_result = $question_result->get_assessment_result();
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(

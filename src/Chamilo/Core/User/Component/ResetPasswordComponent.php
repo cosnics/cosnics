@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -14,7 +15,8 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\Hashing;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -177,10 +179,23 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 'ADMINLASTNAME' => PlatformSetting :: get('administrator_surname'))) . '</p>';
         $mail_body[] = '</div>';
         $mail_body = implode(PHP_EOL, $mail_body);
-        $from[Mail :: EMAIL] = (PlatformSetting :: get('no_reply_email') != '') ? PlatformSetting :: get(
-            'no_reply_email') : PlatformSetting :: get('administrator_email');
-        $mail = Mail :: factory($mail_subject, $mail_body, $user->get_email(), $from);
-        return $mail->send();
+
+
+        $mail = new Mail($mail_subject, $mail_body, $user->get_email());
+
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+
+            return true;
+        }
+        catch (\Exception $ex)
+        {
+            return false;
+        }
     }
 
     /**
@@ -212,10 +227,22 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                 'ADMINLASTNAME' => PlatformSetting :: get('administrator_surname'))) . '</p>';
         $mail_body[] = '</div>';
         $mail_body = implode(PHP_EOL, $mail_body);
-        $from[Mail :: EMAIL] = (PlatformSetting :: get('no_reply_email') != '') ? PlatformSetting :: get(
-            'no_reply_email') : PlatformSetting :: get('administrator_email');
-        $mail = Mail :: factory($mail_subject, $mail_body, $user->get_email(), $from);
-        return $mail->send();
+
+        $mail = new Mail($mail_subject, $mail_body, $user->get_email());
+
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+
+            return true;
+        }
+        catch (\Exception $ex)
+        {
+            return false;
+        }
     }
 
     /**

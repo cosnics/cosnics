@@ -64,4 +64,22 @@ class DataClassProperties implements Hashable
 
         return $hashParts;
     }
+
+    /**
+     * Merges the given dataclass properties into this one
+     *
+     * @param DataClassProperties $dataClassPropertiesToMerge
+     */
+    public function merge(DataClassProperties $dataClassPropertiesToMerge = null)
+    {
+        if(!$dataClassPropertiesToMerge instanceof DataClassProperties)
+        {
+            return;
+        }
+
+        foreach ($dataClassPropertiesToMerge->get() as $property)
+        {
+            $this->add($property);
+        }
+    }
 }

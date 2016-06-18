@@ -38,11 +38,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             intval($current_user_id));
 
         $user_home_allowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $general_mode = \Chamilo\Libraries\Platform\Session\Session :: retrieve(__NAMESPACE__ . '\general');
+        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
 
         if ($current_user instanceof User)
         {
-            if ($general_mode && $current_user->is_platform_admin())
+            if ($generalMode && $current_user->is_platform_admin())
             {
                 return 0;
             }

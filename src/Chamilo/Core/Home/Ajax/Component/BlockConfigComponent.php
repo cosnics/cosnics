@@ -2,11 +2,18 @@
 namespace Chamilo\Core\Home\Ajax\Component;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
+use Chamilo\Core\Home\Repository\ContentObjectPublicationRepository;
 use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
+use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
+use Chamilo\Core\Home\Service\ContentObjectPublicationService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
+use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Core\Home\Storage\DataManager;
+use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -33,18 +40,19 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager :: determine_user_id();
+        $userId = DataManager:: determine_user_id();
 
         if ($userId === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult:: not_allowed();
         }
 
         $block = intval($this->getPostDataValue(self :: PARAM_BLOCK));
         $data = $this->getPostDataValue(self :: PARAM_DATA);
 
-        $block = DataManager :: retrieve_by_id(Block :: class_name(), $block);
+        $block = DataManager:: retrieve_by_id(Block:: class_name(), $block);
 
+        /** @var Element $block */
         if ($block->getUserId() == $userId)
         {
             $postedValues = $this->getPostDataValue(self :: PARAM_DATA);
@@ -52,15 +60,35 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
             // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
             // $renderer = $rendererFactory->getRenderer();
 
-            $homeService = new HomeService(new HomeRepository());
+            $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
             $blockRendererFactory = new BlockRendererFactory($this, $homeService, $block);
             $blockRenderer = $blockRendererFactory->getRenderer();
 
-            if ($blockRenderer instanceof ConfigurableInterface)
+            $contentObjectPublicationService =
+                new ContentObjectPublicationService(
+                    new ContentObjectPublicationRepository(new PublicationRepository())
+                );
+
+            if ($blockRenderer instanceof ConfigurableInterface ||
+                $blockRenderer instanceof ContentObjectPublicationBlockInterface
+            )
             {
-                foreach ($blockRenderer->getConfigurationVariables() as $configurationVariable)
+                if ($blockRenderer instanceof ConfigurableInterface)
                 {
-                    $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
+                    foreach ($blockRenderer->getConfigurationVariables() as $configurationVariable)
+                    {
+                        $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
+                    }
+                }
+
+                if ($blockRenderer instanceof ContentObjectPublicationBlockInterface)
+                {
+                    foreach ($blockRenderer->getContentObjectConfigurationVariables() as $configurationVariable)
+                    {
+                        $contentObjectPublicationService->setOnlyContentObjectForElement(
+                            $block, $postedValues[$configurationVariable]
+                        );
+                    }
                 }
 
                 if (isset($postedValues[Block :: PROPERTY_TITLE]))
@@ -68,9 +96,9 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                     $block->setTitle($postedValues[Block :: PROPERTY_TITLE]);
                 }
 
-                if (! $block->update())
+                if (!$block->update())
                 {
-                    JsonAjaxResult :: general_error();
+                    JsonAjaxResult:: general_error();
                 }
                 else
                 {
@@ -82,12 +110,12 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
             }
             else
             {
-                JsonAjaxResult :: bad_request();
+                JsonAjaxResult:: bad_request();
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult:: not_allowed();
         }
     }
 }

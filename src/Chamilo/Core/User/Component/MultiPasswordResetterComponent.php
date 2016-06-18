@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
@@ -10,7 +11,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\Hashing;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
@@ -64,10 +66,19 @@ class MultiPasswordResetterComponent extends Manager
                     $mail_body[] = Translation :: get('UserName') . ' :' . $user->get_username();
                     $mail_body[] = Translation :: get('Password') . ' :' . $password;
                     $mail_body = implode(PHP_EOL, $mail_body);
-                    $from[Mail :: EMAIL] = (PlatformSetting :: get('no_reply_email') != '') ? PlatformSetting :: get(
-                        'no_reply_email') : PlatformSetting :: get('administrator_email');
-                    $mail = Mail :: factory($mail_subject, $mail_body, $user->get_email(), $from);
-                    $mail->send();
+
+                    $mail = new Mail($mail_subject, $mail_body, $user->get_email());
+
+                    $mailerFactory = new MailerFactory(Configuration::get_instance());
+                    $mailer = $mailerFactory->getActiveMailer();
+
+                    try
+                    {
+                        $mailer->sendMail($mail);
+                    }
+                    catch (\Exception $ex)
+                    {
+                    }
 
                     Event :: trigger(
                         'Update',

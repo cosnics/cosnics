@@ -135,7 +135,7 @@ class WorkspaceService
      * @return \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet
      */
     public function getWorkspacesForUser(
-        User $user, $right = RightsService :: RIGHT_VIEW, $limit, $offset, $orderProperty = null
+        User $user, $right = RightsService :: RIGHT_VIEW, $limit = null, $offset = null, $orderProperty = null
     )
     {
         return $this->getWorkspaceRepository()->findWorkspacesForUser(

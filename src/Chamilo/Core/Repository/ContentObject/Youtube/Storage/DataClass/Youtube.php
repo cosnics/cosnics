@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Youtube extends ContentObject implements Versionable, Includeable
 {
-    const YOUTUBE_PLAYER_URI = 'http://www.youtube.com/v/%s';
+    const YOUTUBE_PLAYER_URI = 'https://www.youtube.com/embed/%s';
 
     public static function get_type_name()
     {

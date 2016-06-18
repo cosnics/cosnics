@@ -96,10 +96,10 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
     public function __construct($action, DataClass $base_object)
     {
-        $this->form_name = ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_class($this), true);
+        $this->form_name = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this), true);
         $this->base_object = $base_object;
 
-        parent :: __construct($this->form_name, self :: FORM_METHOD_POST, $action);
+        parent::__construct($this->form_name, self::FORM_METHOD_POST, $action);
 
         $this->create_tabs();
 
@@ -108,12 +108,12 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES));
+            Translation::get('Save', array(), Utilities::COMMON_LIBRARIES));
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES));
+            Translation::get('Reset', array(), Utilities::COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
@@ -138,7 +138,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $this->setDefaults(
             $this->multi_dimensional_array_to_single_dimensional_array(
-                CourseSettingsController :: get_instance()->convert_course_settings_to_values_array($this->base_object)));
+                CourseSettingsController::get_instance()->convert_course_settings_to_values_array($this->base_object)));
     }
 
     /**
@@ -162,7 +162,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             return;
         }
 
-        $selected_entities = CourseManagementRights :: get_instance()->retrieve_rights_location_rights_for_location(
+        $selected_entities = CourseManagementRights::get_instance()->retrieve_rights_location_rights_for_location(
             $location,
             $available_rights);
 
@@ -174,11 +174,11 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         foreach ($available_rights as $right_id)
         {
-            $option_name = CourseManagementRights :: PARAM_RIGHT_OPTION . '[' . $right_id . ']';
+            $option_name = CourseManagementRights::PARAM_RIGHT_OPTION . '[' . $right_id . ']';
 
             if (count($selected_entities_per_right[$right_id]) == 0)
             {
-                $defaults[$option_name] = CourseManagementRights :: RIGHT_OPTION_NOBODY;
+                $defaults[$option_name] = CourseManagementRights::RIGHT_OPTION_NOBODY;
                 continue;
             }
 
@@ -188,21 +188,21 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
                 if ($selected_entity->get_entity_type() == 0 && $selected_entity->get_entity_id() == 0)
                 {
-                    $defaults[$option_name] = CourseManagementRights :: RIGHT_OPTION_ALL;
+                    $defaults[$option_name] = CourseManagementRights::RIGHT_OPTION_ALL;
                     continue;
                 }
 
                 if ($selected_entity->get_entity_type() == 1 && $selected_entity->get_entity_id() ==
-                     Session :: get_user_id())
+                     Session::get_user_id())
                 {
-                    $defaults[$option_name] = CourseManagementRights :: RIGHT_OTPION_ME;
+                    $defaults[$option_name] = CourseManagementRights::RIGHT_OTPION_ME;
                     continue;
                 }
             }
 
-            $targets_name = CourseManagementRights :: PARAM_RIGHT_TARGETS . '[' . $right_id . ']';
+            $targets_name = CourseManagementRights::PARAM_RIGHT_TARGETS . '[' . $right_id . ']';
 
-            $defaults[$option_name] = CourseManagementRights :: RIGHT_OPTION_SELECT;
+            $defaults[$option_name] = CourseManagementRights::RIGHT_OPTION_SELECT;
 
             $default_elements = new AdvancedElementFinderElements();
 
@@ -213,7 +213,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
                 {
                     $elementFinderElement = $entity->get_element_finder_element($selected_entity->get_entity_id());
 
-                    if($elementFinderElement instanceof AdvancedElementFinderElement)
+                    if ($elementFinderElement instanceof AdvancedElementFinderElement)
                     {
                         $default_elements->add_element($elementFinderElement);
                     }
@@ -244,29 +244,29 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $tabs_renderer->add_tab(
             new DynamicFormTab(
-                self :: TAB_GENERAL,
-                (string) StringUtilities :: getInstance()->createString(self :: TAB_GENERAL)->upperCamelize(),
+                self::TAB_GENERAL,
+                (string) StringUtilities::getInstance()->createString(self::TAB_GENERAL)->upperCamelize(),
                 null,
                 'build_general_tab_form_elements'));
 
         $tabs_renderer->add_tab(
             new DynamicFormTab(
-                self :: TAB_SETTINGS,
-                (string) StringUtilities :: getInstance()->createString(self :: TAB_SETTINGS)->upperCamelize(),
+                self::TAB_SETTINGS,
+                (string) StringUtilities::getInstance()->createString(self::TAB_SETTINGS)->upperCamelize(),
                 null,
                 'build_settings_tab_form_elements'));
 
         $tabs_renderer->add_tab(
             new DynamicFormTab(
-                self :: TAB_TOOLS,
-                (string) StringUtilities :: getInstance()->createString(self :: TAB_TOOLS)->upperCamelize(),
+                self::TAB_TOOLS,
+                (string) StringUtilities::getInstance()->createString(self::TAB_TOOLS)->upperCamelize(),
                 null,
                 'build_tools_tab_form_elements'));
 
         $tabs_renderer->add_tab(
             new DynamicFormTab(
-                self :: TAB_RIGHTS,
-                (string) StringUtilities :: getInstance()->createString(self :: TAB_RIGHTS)->upperCamelize(),
+                self::TAB_RIGHTS,
+                (string) StringUtilities::getInstance()->createString(self::TAB_RIGHTS)->upperCamelize(),
                 null,
                 'build_rights_tab_form_elements'));
 
@@ -285,11 +285,11 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     public function build_settings_tab_form_elements()
     {
         $this->add_settings_from_xml(
-            Path :: getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms') .
+            Path::getInstance()->namespaceToFullPath('Chamilo\Application\Weblcms') .
                  join(DIRECTORY_SEPARATOR, array('Resources', 'Settings', 'course_settings.xml')),
-                Manager :: context(),
+                Manager::context(),
                 new \Chamilo\Application\Weblcms\CourseSettingsConnector(),
-                CourseSettingsController :: SETTING_PARAM_COURSE_SETTINGS);
+                CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS);
     }
 
     /**
@@ -301,8 +301,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $dynamic_content_menu->add_menu_item(
             new FormDynamicContentMenuItem(
-                self :: TAB_GENERAL,
-                (string) StringUtilities :: getInstance()->createString(self :: TAB_GENERAL)->upperCamelize(),
+                self::TAB_GENERAL,
+                (string) StringUtilities::getInstance()->createString(self::TAB_GENERAL)->upperCamelize(),
                 null,
                 'build_tools_tab_general_content_form_elements',
                 true));
@@ -310,40 +310,41 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $settings_conditions = array();
 
         $settings_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseSetting :: class_name(), CourseSetting :: PROPERTY_GLOBAL_SETTING),
+            new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_GLOBAL_SETTING),
             new StaticConditionVariable(0));
 
         $settings_conditions[] = new InCondition(
-            new PropertyConditionVariable(CourseSetting :: class_name(), CourseSetting :: PROPERTY_NAME),
-            CourseSetting :: get_static_tool_settings());
+            new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_NAME),
+            CourseSetting::get_static_tool_settings());
 
         $settings_condition = new NotCondition(new AndCondition($settings_conditions));
 
         $tools_condition = new SubselectCondition(
-            new PropertyConditionVariable(CourseTool :: class_name(), CourseTool :: PROPERTY_ID),
-            new PropertyConditionVariable(CourseSetting :: class_name(), CourseSetting :: PROPERTY_TOOL_ID),
-            CourseSetting :: get_table_name(),
+            new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_ID),
+            new PropertyConditionVariable(CourseSetting::class_name(), CourseSetting::PROPERTY_TOOL_ID),
+            CourseSetting::get_table_name(),
             $settings_condition);
 
-        $tools = DataManager :: retrieves(
-            CourseTool :: class_name(),
-            new DataClassRetrievesParameters($tools_condition));
+        $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters($tools_condition));
 
         $toolsArray = $tools->as_array();
-        usort($toolsArray, function($toolA, $toolB) {
-            $toolANamespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($toolA->get_name());
-            $toolBNamespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($toolB->get_name());
+        usort(
+            $toolsArray,
+            function ($toolA, $toolB)
+            {
+                $toolANamespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($toolA->get_name());
+                $toolBNamespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($toolB->get_name());
 
-            $toolATranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolANamespace);
-            $toolBTranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolBNamespace);
+                $toolATranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolANamespace);
+                $toolBTranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolBNamespace);
 
-            return strcmp($toolATranslation, $toolBTranslation);
-        });
+                return strcmp($toolATranslation, $toolBTranslation);
+            });
 
-        foreach($toolsArray as $tool)
+        foreach ($toolsArray as $tool)
         {
-            $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool->get_name());
-            $tool_title = Translation :: get('TypeName', null, $tool_namespace);
+            $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool->get_name());
+            $tool_title = Translation::get('TypeName', null, $tool_namespace);
 
             $dynamic_content_menu->add_menu_item(
                 new FormDynamicContentMenuItem(
@@ -380,14 +381,14 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         {
             $this->addElement(
                 'html',
-                '<div class="normal-message">' . Translation :: get('NoRightsAvailable') . '</div>');
+                '<div class="normal-message">' . Translation::get('NoRightsAvailable') . '</div>');
         }
 
         $this->addElement('html', '</div>');
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'));
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'));
     }
 
     /**
@@ -410,19 +411,19 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="column_icon"></th>';
-        $table_header[] = '<th>' . Translation :: get('Tool') . '</th>';
-        $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('IsToolAvailable') . '</th>';
+        $table_header[] = '<th>' . Translation::get('Tool') . '</th>';
+        $table_header[] = '<th class="tools_column_toggle">' . Translation::get('IsToolAvailable') . '</th>';
 
         if ($locked_settings_supported)
         {
-            $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('ToolAvailableLocked') . '</th>';
+            $table_header[] = '<th class="tools_column_toggle">' . Translation::get('ToolAvailableLocked') . '</th>';
         }
 
-        $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('IsToolVisible') . '</th>';
+        $table_header[] = '<th class="tools_column_toggle">' . Translation::get('IsToolVisible') . '</th>';
 
         if ($locked_settings_supported)
         {
-            $table_header[] = '<th class="tools_column_toggle">' . Translation :: get('ToolVisibleLocked') . '</th>';
+            $table_header[] = '<th class="tools_column_toggle">' . Translation::get('ToolVisibleLocked') . '</th>';
         }
 
         $table_header[] = '</tr>';
@@ -433,22 +434,23 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $tools_condition = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(CourseTool :: class_name(), CourseTool :: PROPERTY_SECTION_TYPE),
-                new StaticConditionVariable(CourseSection :: TYPE_CUSTOM)));
+                new PropertyConditionVariable(CourseTool::class_name(), CourseTool::PROPERTY_SECTION_TYPE),
+                new StaticConditionVariable(CourseSection::TYPE_CUSTOM)));
 
-        $tools = DataManager :: retrieves(
-            CourseTool :: class_name(),
-            new DataClassRetrievesParameters($tools_condition));
+        $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters($tools_condition));
 
         $toolsArray = $tools->as_array();
-        usort($toolsArray, function($toolA, $toolB) {
-            $toolATranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolA->getContext());
-            $toolBTranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolB->getContext());
+        usort(
+            $toolsArray,
+            function ($toolA, $toolB)
+            {
+                $toolATranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolA->getContext());
+                $toolBTranslation = Translation::getInstance()->getTranslation('TypeName', null, $toolB->getContext());
 
-            return strcmp($toolATranslation, $toolBTranslation);
-        });
+                return strcmp($toolATranslation, $toolBTranslation);
+            });
 
-        foreach($toolsArray as $tool)
+        foreach ($toolsArray as $tool)
         {
             $tool_name = $tool->get_name();
 
@@ -459,8 +461,8 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             }
 
             $tool_namespace = $tool->getContext();
-            $tool_title = Translation :: get('TypeName', null, $tool_namespace);
-            $tool_image_src = Theme :: getInstance()->getImagePath($tool_namespace, 'Logo/' . Theme :: ICON_MINI);
+            $tool_title = Translation::get('TypeName', null, $tool_namespace);
+            $tool_image_src = Theme::getInstance()->getImagePath($tool_namespace, 'Logo/' . Theme::ICON_MINI);
             $tool_image = $tool_name . "_image";
 
             $table_body = array();
@@ -472,22 +474,22 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
             $this->addElement('html', implode(PHP_EOL, $table_body));
 
-            $tool_element_name = CourseSettingsController :: SETTING_PARAM_TOOL_SETTINGS . '[' . $tool_name . ']';
-            $active_element_name = $tool_element_name . '[' . CourseSetting :: COURSE_SETTING_TOOL_ACTIVE . ']';
-            $visible_element_name = $tool_element_name . '[' . CourseSetting :: COURSE_SETTING_TOOL_VISIBLE . ']';
-            $locked_prefix = CourseSettingsController :: SETTING_PARAM_LOCKED_PREFIX;
+            $tool_element_name = CourseSettingsController::SETTING_PARAM_TOOL_SETTINGS . '[' . $tool_name . ']';
+            $active_element_name = $tool_element_name . '[' . CourseSetting::COURSE_SETTING_TOOL_ACTIVE . ']';
+            $visible_element_name = $tool_element_name . '[' . CourseSetting::COURSE_SETTING_TOOL_VISIBLE . ']';
+            $locked_prefix = CourseSettingsController::SETTING_PARAM_LOCKED_PREFIX;
 
             $this->addElement('html', '<td class="tools_column_toggle">');
             $active_element = $this->addElement(
                 'toggle',
                 $active_element_name,
-                Translation :: get('Active'),
+                Translation::get('Active'),
                 '',
                 null,
                 '1',
                 '0');
 
-            if (! $this->can_change_course_setting(CourseSetting :: COURSE_SETTING_TOOL_ACTIVE, $tool->get_id()))
+            if (! $this->can_change_course_setting(CourseSetting::COURSE_SETTING_TOOL_ACTIVE, $tool->get_id()))
             {
                 $active_element->freeze();
             }
@@ -497,14 +499,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             if ($locked_settings_supported)
             {
                 $this->addElement('html', '<td class="tools_column_toggle">');
-                $this->addElement(
-                    'checkbox',
-                    $locked_prefix . $active_element_name,
-                    '',
-                    '',
-                    array(),
-                    '1',
-                    '0');
+                $this->addElement('checkbox', $locked_prefix . $active_element_name, '', '', array(), '1', '0');
                 $this->addElement('html', '</div></td>');
             }
 
@@ -512,13 +507,13 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $visible_element = $this->addElement(
                 'toggle',
                 $visible_element_name,
-                Translation :: get('Visible'),
+                Translation::get('Visible'),
                 '',
                 null,
                 '1',
                 '0');
 
-            if (! $this->can_change_course_setting(CourseSetting :: COURSE_SETTING_TOOL_VISIBLE, $tool->get_id()))
+            if (! $this->can_change_course_setting(CourseSetting::COURSE_SETTING_TOOL_VISIBLE, $tool->get_id()))
             {
                 $visible_element->freeze();
             }
@@ -528,14 +523,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             if ($locked_settings_supported)
             {
                 $this->addElement('html', '<td class="tools_column_toggle">');
-                $this->addElement(
-                    'checkbox',
-                    $locked_prefix . $visible_element_name,
-                    '',
-                    '',
-                    array(),
-                    '1',
-                    '0');
+                $this->addElement('checkbox', $locked_prefix . $visible_element_name, '', '', array(), '1', '0');
                 $this->addElement('html', '</div></td>');
             }
 
@@ -565,15 +553,15 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $tool = $menu_item_id[0];
         $tool_id = $menu_item_id[1];
 
-        $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool);
-        $tool_path = Path :: getInstance()->namespaceToFullPath($tool_namespace);
+        $tool_namespace = \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool);
+        $tool_path = Path::getInstance()->namespaceToFullPath($tool_namespace);
         $settings_xml_path = $tool_path . 'Resources/Settings/course_settings.xml';
 
         $this->add_settings_from_xml(
             $settings_xml_path,
             $tool_namespace,
             null,
-            CourseSettingsController :: SETTING_PARAM_TOOL_SETTINGS . '[' . $tool . ']',
+            CourseSettingsController::SETTING_PARAM_TOOL_SETTINGS . '[' . $tool . ']',
             $tool_id);
     }
 
@@ -591,9 +579,9 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
     private function build_right_form($right_name, $right_id)
     {
-        $name = CourseManagementRights :: PARAM_RIGHT_OPTION . '[' . $right_id . ']';
-        $targets_name = CourseManagementRights :: PARAM_RIGHT_TARGETS . '[' . $right_id . ']';
-        $locked_name = CourseManagementRights :: PARAM_RIGHT_LOCKED . '[' . $right_id . ']';
+        $name = CourseManagementRights::PARAM_RIGHT_OPTION . '[' . $right_id . ']';
+        $targets_name = CourseManagementRights::PARAM_RIGHT_TARGETS . '[' . $right_id . ']';
+        $locked_name = CourseManagementRights::PARAM_RIGHT_LOCKED . '[' . $right_id . ']';
 
         $this->addElement('category', $right_name);
         $this->addElement('html', '<div class="right">');
@@ -604,39 +592,39 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             'radio',
             null,
             null,
-            Translation :: get('Nobody'),
-            CourseManagementRights :: RIGHT_OPTION_NOBODY,
+            Translation::get('Nobody'),
+            CourseManagementRights::RIGHT_OPTION_NOBODY,
             array('class' => 'rights_selector'));
         $group[] = & $this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('Everyone'),
-            CourseManagementRights :: RIGHT_OPTION_ALL,
+            Translation::get('Everyone'),
+            CourseManagementRights::RIGHT_OPTION_ALL,
             array('class' => 'rights_selector'));
         $group[] = & $this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('OnlyForMe'),
-            CourseManagementRights :: RIGHT_OTPION_ME,
+            Translation::get('OnlyForMe'),
+            CourseManagementRights::RIGHT_OTPION_ME,
             array('class' => 'rights_selector'));
         $group[] = & $this->createElement(
             'radio',
             null,
             null,
-            Translation :: get('SelectSpecificEntities'),
-            CourseManagementRights :: RIGHT_OPTION_SELECT,
+            Translation::get('SelectSpecificEntities'),
+            CourseManagementRights::RIGHT_OPTION_SELECT,
             array('class' => 'rights_selector specific_rights_selector'));
 
-        $this->addGroup($group, $name, Translation :: get('Target'), '');
+        $this->addGroup($group, $name, Translation::get('Target'), '');
 
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
 
         $entities = array();
-        $entities[UserEntity :: ENTITY_TYPE] = new UserEntity();
-        $entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
+        $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
 
         foreach ($entities as $entity)
         {
@@ -651,16 +639,13 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $this->addElement('html', '</div></div>');
 
         $defaults = array();
-        $defaults[$name] = CourseManagementRights :: RIGHT_OPTION_NOBODY;
+        $defaults[$name] = CourseManagementRights::RIGHT_OPTION_NOBODY;
 
         if ($this instanceof FormLockedSettingsSupport)
         {
-            $this->addElement(
-                'checkbox',
-                $locked_name,
-                Translation :: get('Locked'));
+            $this->addElement('checkbox', $locked_name, Translation::get('Locked'));
 
-            if (CourseManagementRights :: get_instance()->is_right_locked_for_base_object($this->base_object, $right_id))
+            if (CourseManagementRights::get_instance()->is_right_locked_for_base_object($this->base_object, $right_id))
             {
                 $defaults[$locked_name] = 1;
             }
@@ -687,7 +672,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
     public function can_change_course_setting($name, $tool_id = 0)
     {
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController::get_instance();
 
         $course_setting = $course_settings_controller->get_course_setting_object_from_name_and_tool($name, $tool_id);
 

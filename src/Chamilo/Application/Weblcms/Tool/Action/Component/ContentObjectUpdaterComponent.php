@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
+use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
@@ -31,15 +32,16 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
             $pid);
 
         $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
-        $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+        $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
         $canEditContentObject = $repositoryRightsService->canEditContentObject(
             $this->get_user(),
             $publication->get_content_object());
-        $canEditPublicationContentObject = $weblcmsRightsService->canEditPublicationContentObject(
+        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
             $this->get_user(),
-            $this->get_course(),
-            $publication->get_default_properties());
+            $publication,
+            $this->get_course()
+        );
 
         $is_admin_introduction = $this->get_course()->is_course_admin($this->get_user()) &&
              $publication->get_content_object()->get_type() == Introduction :: class_name();

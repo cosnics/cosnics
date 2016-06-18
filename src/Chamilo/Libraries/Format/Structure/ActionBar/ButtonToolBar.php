@@ -162,4 +162,14 @@ class ButtonToolBar
     {
         $this->classes[] = $class;
     }
+
+    /**
+     * Returns whether or not the current button toolbar has items
+     *
+     * @return bool
+     */
+    public function hasItems()
+    {
+        return count($this->items) > 0;
+    }
 }

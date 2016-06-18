@@ -87,10 +87,14 @@ abstract class Manager extends Application
     {
         $html = array();
 
+        $html[] = '<div class="row">';
+        $html[] = '<div class="col-xs-12">';
         $html[] = '<div class="alert alert-warning">';
         $html[] = $this->getButtonToolBarRenderer()->render();
         $html[] = $this->getPreviewModeWarning();
         $html[] = '<div class="clearfix"></div>';
+        $html[] = '</div>';
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

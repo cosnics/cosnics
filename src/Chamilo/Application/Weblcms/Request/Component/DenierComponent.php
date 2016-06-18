@@ -5,8 +5,10 @@ use Chamilo\Application\Weblcms\Request\Form\RequestForm;
 use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -207,16 +209,17 @@ class DenierComponent extends Manager
                 'DENIER' => $this->get_user()->get_fullname(),
                 'MOTIVATION' => $request->get_decision_motivation()));
 
-        $mail = Mail :: factory(
-            $title,
-            $body,
-            array($recipient->get_email()),
-            array(
-                Mail :: NAME => PlatformSetting :: get('administrator_firstname') . '_' .
-                     PlatformSetting :: get('administrator_surname'),
-                    Mail :: EMAIL => PlatformSetting :: get('administrator_email')));
+        $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mail->send();
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (\Exception $ex)
+        {
+        }
     }
 }
-?>

@@ -56,15 +56,15 @@ class FilterData
     /**
      * Constructs a new Filter
      */
-    private function __construct(WorkspaceInterface $workspaceImplementation)
+    public function __construct(WorkspaceInterface $workspaceImplementation)
     {
         $this->workspaceImplementation = $workspaceImplementation;
         $this->initialize();
     }
 
-    private function getStorageKey()
+    protected function getStorageKey()
     {
-        return self :: STORAGE . '_' . $this->workspaceImplementation->getHash();
+        return static :: STORAGE . '_' . $this->workspaceImplementation->getHash();
     }
 
     /**

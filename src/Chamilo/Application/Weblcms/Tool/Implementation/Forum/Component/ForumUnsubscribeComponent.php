@@ -45,7 +45,7 @@ class ForumUnsubscribeComponent extends Manager
         $message = Translation :: get(
             $success ? "SuccesUnSubscribe" : "UnSuccesUnSubscribe",
             null,
-            ContentObject :: get_content_object_type_namespace('forum'));
+            ContentObject :: get_content_object_type_namespace('Forum'));
 
         $this->redirect(
             $message,

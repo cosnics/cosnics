@@ -115,7 +115,7 @@ class UnlinkerComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation :: get('RepositoryManagerBrowserComponent')));
+                Translation :: get('BrowserComponent')));
         $breadcrumbtrail->add_help('repository_unlinker');
     }
 }

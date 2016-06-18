@@ -103,7 +103,7 @@ class XmlFormParser
     {
         if (! file_exists($file_path))
         {
-            throw new \Exception(Translation :: get('PathToXmlFileDoesNotExist'));
+            throw new \Exception(Translation::get('PathToXmlFileDoesNotExist'));
         }
 
         if (! $context)
@@ -195,19 +195,19 @@ class XmlFormParser
 
         switch ($element_type)
         {
-            case self :: ELEMENT_TYPE_SELECT :
+            case self::ELEMENT_TYPE_SELECT :
                 $this->create_select_element($element_node, $element_name, $element_title);
                 break;
-            case self :: ELEMENT_TYPE_RADIO :
+            case self::ELEMENT_TYPE_RADIO :
                 $this->create_radio_element($element_node, $element_name, $element_title);
                 break;
-            case self :: ELEMENT_TYPE_CHECKBOX :
+            case self::ELEMENT_TYPE_CHECKBOX :
                 $this->create_checkbox_element($element_node, $element_name, $element_title);
                 break;
-            case self :: ELEMENT_TYPE_TOGGLE :
+            case self::ELEMENT_TYPE_TOGGLE :
                 $this->create_toggle_element($element_node, $element_name, $element_title);
                 break;
-            case self :: ELEMENT_TYPE_TEXT :
+            case self::ELEMENT_TYPE_TEXT :
                 $this->create_text_element($element_node, $element_name, $element_title);
                 break;
             default :
@@ -237,7 +237,7 @@ class XmlFormParser
 
         $attributes = array('size' => $element_size);
 
-        $this->create_and_add_element(self :: ELEMENT_TYPE_TEXT, $element_name, $element_title, $attributes);
+        $this->create_and_add_element(self::ELEMENT_TYPE_TEXT, $element_name, $element_title, $attributes);
     }
 
     /**
@@ -250,7 +250,7 @@ class XmlFormParser
     protected function create_select_element($element_node, $element_name, $element_title)
     {
         $element_options = $this->parse_element_options($element_node);
-        $this->create_and_add_element(self :: ELEMENT_TYPE_SELECT, $element_name, $element_title, $element_options);
+        $this->create_and_add_element(self::ELEMENT_TYPE_SELECT, $element_name, $element_title, $element_options);
     }
 
     /**
@@ -269,7 +269,7 @@ class XmlFormParser
         foreach ($element_options as $option_value => $option_name)
         {
             $group_elements[] = $this->form_builder->createElement(
-                self :: ELEMENT_TYPE_RADIO,
+                self::ELEMENT_TYPE_RADIO,
                 $element_name,
                 null,
                 $option_name,
@@ -277,7 +277,7 @@ class XmlFormParser
         }
 
         $this->create_and_add_element(
-            self :: ELEMENT_TYPE_GROUP,
+            self::ELEMENT_TYPE_GROUP,
             $element_name,
             $element_title,
             $group_elements,
@@ -294,7 +294,7 @@ class XmlFormParser
      */
     protected function create_checkbox_element($element_node, $element_name, $element_title)
     {
-        $this->create_and_add_element(self :: ELEMENT_TYPE_CHECKBOX, $element_name, $element_title, '', null, '1', '0');
+        $this->create_and_add_element(self::ELEMENT_TYPE_CHECKBOX, $element_name, $element_title, '', null, '1', '0');
     }
 
     /**
@@ -306,7 +306,7 @@ class XmlFormParser
      */
     protected function create_toggle_element($element_node, $element_name, $element_title)
     {
-        $this->create_and_add_element(self :: ELEMENT_TYPE_TOGGLE, $element_name, $element_title, '', null, '1', '0');
+        $this->create_and_add_element(self::ELEMENT_TYPE_TOGGLE, $element_name, $element_title, '', null, '1', '0');
     }
 
     /**
@@ -360,7 +360,7 @@ class XmlFormParser
         $required_attribute = $element_node->getAttribute('required');
         if ($required_attribute)
         {
-            $this->create_and_add_validation_rule($element_name, Translation :: get('ThisFieldIsRequired'), 'required');
+            $this->create_and_add_validation_rule($element_name, Translation::get('ThisFieldIsRequired'), 'required');
         }
 
         $validation_node_list = $this->get_dom_xpath()->query('validations/validation', $element_node);
@@ -429,8 +429,8 @@ class XmlFormParser
      */
     protected function translate($translation_variable, $parameters)
     {
-        $translation_variable = (string) StringUtilities :: getInstance()->createString($translation_variable)->upperCamelize();
-        return Translation :: get($translation_variable, $parameters, $this->get_context());
+        $translation_variable = (string) StringUtilities::getInstance()->createString($translation_variable)->upperCamelize();
+        return Translation::get($translation_variable, $parameters, $this->get_context());
     }
 
     /**

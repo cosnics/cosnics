@@ -1,10 +1,6 @@
 /*********************************************
  * GENERAL STYLES FOR DISPLAYING ASSESSMENTS *
  *********************************************/
-.take_assessment th.checkbox_answer {
-	width: 48px;
-}
-
 div.assessment {
 	margin-bottom: 15px;
 }
@@ -217,22 +213,6 @@ img.save_hotspot {
 	cursor: pointer;
 }
 
-div.time_left, div.time_left_alert {
-	float: right;
-	padding: 6px 10px 6px 10px;
-	border: 1px solid #ffd89b;
-	background-color: #fff8aa;
-	color: #996900;
-	text-align: center;
-	margin-top: -10px;
-}
-
-div.time_left_alert {
-	background-color: #FFD1D1;
-	border: 1px solid #ff9b9d;
-	color: #b40404;
-}
-
 div.time {
 	display: inline;
 }
@@ -255,4 +235,13 @@ button.hint, a.hint_button {
 img.hint, img.hint_disabled {
 	vertical-align: text-bottom;
 	cursor: pointer;
+}
+
+#assessment_viewer_form .form-row {
+	margin-left: -15px;
+	margin-right: -15px;
+}
+
+.panel .panel-body.panel-body-assessment-description {
+	border-bottom: 1px dashed #dddddd;
 }
