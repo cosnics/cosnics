@@ -37,10 +37,10 @@ class Display extends QuestionDisplay
         $renderer = $this->get_renderer();
 
         $table_header = array();
-        $table_header[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
+        $table_header[] = '<table class="table take_assessment">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
-        $table_header[] = '<th></th>';
+        $table_header[] = '<th class="cell-stat-x2"></th>';
         $table_header[] = '<th>' . $this->get_instruction() . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -57,13 +57,13 @@ class Display extends QuestionDisplay
                 $this->get_formvalidator()->get_assessment_viewer(),
                 $answer->get_value());
 
-            if ($type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO)
+            if ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
             {
                 $answer_name = $question_id . '_0';
                 $group[] = $formvalidator->createElement('radio', $answer_name, null, null, $i);
                 $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
             }
-            elseif ($type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX)
+            elseif ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX)
             {
                 $answer_name = $question_id . '_' . ($i + 1);
                 $group[] = $formvalidator->createElement('checkbox', $answer_name);
@@ -74,7 +74,7 @@ class Display extends QuestionDisplay
             {
                 $answers = $this->get_answers();
                 // dump($this->get_answers());
-                if ($type == AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO)
+                if ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
                 {
                     $defaults[$answer_name] = $answers[0];
                 }
@@ -103,8 +103,8 @@ class Display extends QuestionDisplay
 
         $formvalidator->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(Assessment::package(), true) . 'GiveHint.js'));
 
         $formvalidator->setDefaults($defaults);
     }
@@ -119,13 +119,13 @@ class Display extends QuestionDisplay
         $question = $this->get_question();
         $type = $question->get_answer_type();
 
-        if ($type == 'radio' && $question->has_description())
+        if ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO && $question->has_description())
         {
-            $title = Translation :: get('SelectCorrectAnswer');
+            $title = Translation::get('SelectCorrectAnswer');
         }
-        elseif ($type == 'checkbox' && $question->has_description())
+        elseif ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX && $question->has_description())
         {
-            $title = Translation :: get('SelectCorrectAnswers');
+            $title = Translation::get('SelectCorrectAnswers');
         }
         else
         {
@@ -143,15 +143,15 @@ class Display extends QuestionDisplay
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
 
-            $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
+            $html[] = '<div class="splitter">' . Translation::get('Hint') . '</div>';
             $html[] = '<div class="with_borders"><a id="' . $hint_name .
-                 '" class="btn btn-default"><span class="glyphicon glyphicon-gift"></span> ' . Translation :: get(
+                 '" class="btn btn-default"><span class="glyphicon glyphicon-gift"></span> ' . Translation::get(
                     'GetAHint') . '</a></div>';
 
             $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
         }
 
-        parent :: add_footer($formvalidator);
+        parent::add_footer($formvalidator);
     }
 }

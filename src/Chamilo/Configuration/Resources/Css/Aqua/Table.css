@@ -322,43 +322,6 @@ td p {
 	padding: 0px;
 }
 
-.take_assessment th {
-	padding: 3px 10px 3px 10px;
-}
-
-.take_assessment th p {
-	margin: 0px;
-	padding: 0px;
-}
-
-.take_assessment {
-	border-top: 0px solid white;
-}
-
-.take_assessment th {
-	border-left: 0px solid #EEF5FA;
-	border-top: 0px solid #EEF5FA;
-	padding: 3px 10px 3px 10px;
-	background-color: #EEF5FA;
-	background-image: none;
-}
-
-.take_assessment td {
-	padding: 6px 10px 6px 10px;
-}
-
-.take_assessment tr.row_even td, .take_assessment tr.row_odd td {
-	color: black;
-}
-
-.take_assessment tr.row_even:hover {
-	background-color: #ffffff;
-}
-
-.take_assessment tr.row_odd, .take_assessment tr.row_odd:hover {
-	background-color: #ffffff;
-}
-
 table.no_border {
 	width: 100%;
 }

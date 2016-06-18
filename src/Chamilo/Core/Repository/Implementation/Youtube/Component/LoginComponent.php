@@ -44,7 +44,7 @@ class LoginComponent extends Manager
             $parameters = $this->get_parameters();
             $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
             $this->redirect(
-                Translation:: get('LoginSuccessful', null, Utilities :: COMMON_LIBRARIES),
+                '',
                 false,
                 $parameters
             );

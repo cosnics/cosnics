@@ -14,7 +14,7 @@ class ExternalObject extends StreamingMediaExternalObject
     const STATUS_PROCESSED = 'processed';
     const STATUS_UPLOADED = 'uploaded';
     const STATUS_REJECTED = 'rejected';
-    const YOUTUBE_PLAYER_URI = 'http://www.youtube.com/v/%s';
+    const YOUTUBE_PLAYER_URI = 'https://www.youtube.com/embed/%s';
 
     public function get_category()
     {

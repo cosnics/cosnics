@@ -7,6 +7,8 @@ use Chamilo\Core\Home\Renderer\Renderer;
 use Chamilo\Core\Home\Renderer\Type\Basic\TabHeaderRenderer;
 use Chamilo\Core\Home\Renderer\Type\Basic\TabRenderer;
 use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
+use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Service\AngularConnectorService;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Tab;
@@ -51,6 +53,13 @@ class Basic extends Renderer
     private $homeService;
 
     /**
+     * Caching variable to check if the home page is in general mode
+     *
+     * @var boolean
+     */
+    protected $generalMode;
+
+    /**
      *
      * @return \Chamilo\Core\Home\Service\HomeService
      */
@@ -58,7 +67,7 @@ class Basic extends Renderer
     {
         if (! isset($this->homeService))
         {
-            $this->homeService = new HomeService(new HomeRepository());
+            $this->homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
         }
 
         return $this->homeService;
@@ -73,7 +82,7 @@ class Basic extends Renderer
         $user = $this->get_user();
 
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+        $generalMode = $this->isGeneralMode();
 
         $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)));
         $isGeneralMode = ($generalMode && $user instanceof User && $user->is_platform_admin());
@@ -82,6 +91,12 @@ class Basic extends Renderer
         {
             $html[] = '<script type="text/javascript" src="' .
                  Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
+        }
+
+        if ($this->isGeneralMode())
+        {
+            $html[] = '<script type="text/javascript" src="' .
+                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' . '"></script>';
         }
 
         $html[] = $this->renderTabs();
@@ -262,7 +277,7 @@ class Basic extends Renderer
     {
         $user = $this->get_user();
         $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
-        $generalMode = \Chamilo\Libraries\Platform\Session\Session :: retrieve('Chamilo\Core\Home\General');
+        $generalMode = $this->isGeneralMode();
         $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
 
         $html = array();
@@ -350,5 +365,20 @@ class Basic extends Renderer
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns whether or not the home viewer is in general mode
+     *
+     * @return bool
+     */
+    protected function isGeneralMode()
+    {
+        if(!isset($this->generalMode))
+        {
+            $this->generalMode = \Chamilo\Libraries\Platform\Session\Session:: retrieve('Chamilo\Core\Home\General');
+        }
+
+        return $this->generalMode;
     }
 }

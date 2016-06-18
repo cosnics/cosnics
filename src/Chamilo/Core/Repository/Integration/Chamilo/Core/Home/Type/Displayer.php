@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Architecture\ContentObjectPublicationBlockInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Service\HomeService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 
 class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
-    StaticBlockTitleInterface
+    StaticBlockTitleInterface, ContentObjectPublicationBlockInterface
 {
 
     /**

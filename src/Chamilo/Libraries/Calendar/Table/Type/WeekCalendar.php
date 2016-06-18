@@ -56,7 +56,7 @@ class WeekCalendar extends Calendar
         $this->endHour = $endHour;
         $this->hideOtherHours = $hideOtherHours;
 
-        parent :: __construct($displayTime, $classes);
+        parent::__construct($displayTime, $classes);
         $this->buildTable();
     }
 
@@ -142,7 +142,7 @@ class WeekCalendar extends Calendar
      */
     public function getStartTime()
     {
-        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -160,7 +160,7 @@ class WeekCalendar extends Calendar
      */
     public function getEndTime()
     {
-        $setting = PlatformSetting :: get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
 
         if ($setting == 'sunday')
         {
@@ -246,7 +246,7 @@ class WeekCalendar extends Calendar
      */
     protected function getHeaderContent($weekDayTime)
     {
-        $dayLabel = Translation :: get(date('l', $weekDayTime) . 'Short', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+        $dayLabel = Translation::get(date('l', $weekDayTime) . 'Short', null, Utilities::COMMON_LIBRARIES) . ' ' .
              date('d/m', $weekDayTime);
 
         $dayUrlTemplate = $this->getDayUrlTemplate();
@@ -332,9 +332,15 @@ class WeekCalendar extends Calendar
 
             foreach ($items as $index => $item)
             {
-                $cellContent = $this->getCellContents($row, $column);
-                $cellContent .= $item;
-                $this->setCellContents($row, $column, $cellContent);
+                try
+                {
+                    $cellContent = $this->getCellContents($row, $column);
+                    $cellContent .= $item;
+                    $this->setCellContents($row, $column, $cellContent);
+                }
+                catch (\Exception $exception)
+                {
+                }
             }
         }
     }
@@ -370,6 +376,6 @@ class WeekCalendar extends Calendar
      */
     public function getDayUrl($time)
     {
-        return str_replace(self :: TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
+        return str_replace(self::TIME_PLACEHOLDER, $time, $this->getDayUrlTemplate());
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Form\RequestForm;
 use Chamilo\Core\Repository\Quota\Manager;
@@ -13,7 +14,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -217,17 +219,19 @@ class DenierComponent extends Manager
                 'PLATFORM' => PlatformSetting :: get('site_name'), 
                 'QUOTA' => Filesystem :: format_file_size($request->get_quota()), 
                 'MOTIVATION' => $request->get_decision_motivation()));
-        
-        $mail = Mail :: factory(
-            $title, 
-            $body, 
-            array(Mail :: NAME => $recipient->get_fullname(), Mail :: EMAIL => $recipient->get_email()), 
-            array(
-                Mail :: NAME => PlatformSetting :: get('administrator_firstname') . '_' .
-                     PlatformSetting :: get('administrator_surname'), 
-                    Mail :: EMAIL => PlatformSetting :: get('administrator_email')));
-        
-        $mail->send();
+
+        $mail = new Mail($title, $body, $recipient->get_email());
+
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (\Exception $ex)
+        {
+        }
     }
 
     public function getButtonToolbarRenderer()

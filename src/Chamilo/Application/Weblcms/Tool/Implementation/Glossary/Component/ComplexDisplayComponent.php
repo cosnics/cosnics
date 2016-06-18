@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
@@ -67,12 +68,13 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
             $this->get_user(),
             $this->publication->get_content_object());
 
-        $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService::getInstance();
+        $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
-        $hasPublicationContentRight = $weblcmsRightsService->canEditPublicationContentObject(
+        $hasPublicationContentRight = $weblcmsRightsService->canUserEditPublication(
             $this->get_user(),
-            $this->get_application()->get_course(),
-            $this->publication->get_default_properties());
+            $this->publication,
+            $this->get_application()->get_course()
+        );
 
         $hasPublictionRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
 

@@ -5,3 +5,4 @@
 
 TypeName = "Startpagina"
 ToolVisibilityChanged = "Zichtbaarheid van tool gewijzigd"
+BrowserComponent = "Startpagina"

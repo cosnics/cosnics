@@ -20,7 +20,7 @@ class MiniMonthCalendar extends MonthCalendar
      */
     public function __construct($displayTime)
     {
-        parent :: __construct($displayTime, null, array('table-calendar-mini'));
+        parent::__construct($displayTime, null, array('table-calendar-mini'));
     }
 
     /**
@@ -37,7 +37,7 @@ class MiniMonthCalendar extends MonthCalendar
         {
             for ($col = 0; $col < 7; $col ++)
             {
-                $url = str_replace(self :: TIME_PLACEHOLDER, $day, $urlFormat);
+                $url = str_replace(self::TIME_PLACEHOLDER, $day, $urlFormat);
                 $content = $this->getCellContents($row, $col);
                 $content = '<a href="' . $url . '">' . $content . '</a>';
                 $this->setCellContents($row, $col, $content);
@@ -73,11 +73,17 @@ class MiniMonthCalendar extends MonthCalendar
 
             if (date('Ymd', $time) != date('Ymd'))
             {
-                $this->setCellContents(
-                    $row,
-                    $column,
-                    '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
-                         $this->getCellContents($row, $column) . '</span>');
+                try
+                {
+                    $this->setCellContents(
+                        $row,
+                        $column,
+                        '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
+                             $this->getCellContents($row, $column) . '</span>');
+                }
+                catch (\Exception $exception)
+                {
+                }
             }
         }
     }
@@ -101,7 +107,7 @@ class MiniMonthCalendar extends MonthCalendar
      */
     protected function determineCellContent($tableDate)
     {
-        $cellContent = parent :: determineCellContent($tableDate);
+        $cellContent = parent::determineCellContent($tableDate);
 
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))

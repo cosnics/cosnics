@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -49,6 +50,8 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                             '',
                             str_ireplace('[[', '', str_ireplace('=', '', $wiki_page->get_description())));
                         return StringUtilities :: getInstance()->truncate($description, 50);
+                    case ContentObject::PROPERTY_MODIFICATION_DATE:
+                        return DatetimeUtilities::format_locale_date(null, $wiki_page->get_modification_date());
                 }
             }
 
@@ -68,7 +71,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-                            Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $publication->get_id())),
+                            Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_id)),
                     ToolbarItem :: DISPLAY_ICON,
                     true));
         }
@@ -82,7 +85,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                     $this->get_component()->get_url(
                         array(
                             Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                            Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $publication->get_id())),
+                            Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->complex_id)),
                     ToolbarItem :: DISPLAY_ICON));
 
             if (($publication->get_additional_property('is_homepage') == 0))
