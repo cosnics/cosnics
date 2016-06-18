@@ -11,14 +11,16 @@ class LoginComponent extends Manager
 
     public function run()
     {
-        if (! Setting :: get('session_token', $this->get_external_repository()->get_id()))
-
+        $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieveUserSetting(
+            $this->get_external_repository()->getId(), $this->getUser()->getId(), 'session_token');
+        
+        if (!$setting instanceof Setting)
         {
             if ($this->get_external_repository_manager_connector()->login())
             {
                 $parameters = $this->get_parameters();
                 $parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-
+                
                 $this->redirect(
                     Translation :: get('LoginSuccessful', null, Utilities :: COMMON_LIBRARIES),
                     false,
