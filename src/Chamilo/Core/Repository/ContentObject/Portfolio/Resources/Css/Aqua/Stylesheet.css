@@ -92,9 +92,13 @@ ul.tree-menu li div a.portfolio, ul.tree-menu li div a.type_portfolio,
 	padding-top: 5px;
 }
 
-.panel.panel-default.panel-portfolio .portfolio-photo {
+.portfolio-photo-container {
+	margin-bottom: 20px;
+}
+
+.portfolio-photo-container .portfolio-photo {
 	width: 100%;
-	max-width: 100%;
+	max-width: 100px;
 	padding: 0px;
 }
 

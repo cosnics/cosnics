@@ -80,11 +80,13 @@ abstract class ItemComponent extends Manager implements DelegateComponent
                 \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->get_root_content_object()->get_owner()->get_id()));
 
         // User photo
-        $html[] = '<div class="panel panel-default panel-portfolio">';
-        $html[] = '<div class="panel-body">';
-        $html[] = '<img src="' . $profilePhotoUrl->getUrl() . '" class="portfolio-photo" />';
+//        $html[] = '<div class="panel panel-default panel-portfolio">';
+//        $html[] = '<div class="panel-body">';
+        $html[] = '<div class="portfolio-photo-container">';
+        $html[] = '<img src="' . $profilePhotoUrl->getUrl() . '" class="portfolio-photo img-thumbnail" />';
         $html[] = '</div>';
-        $html[] = '</div>';
+//        $html[] = '</div>';
+//        $html[] = '</div>';
 
         // Tree menu
         $portfolioMenu = new Menu(

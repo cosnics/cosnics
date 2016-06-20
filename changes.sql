@@ -15,7 +15,7 @@ ALTER TABLE `chamilo`.`repository_workspace_content_object_relation` CHANGE COLU
 
 UPDATE `chamilo`.`repository_workspace_content_object_relation` SET content_object_id = (SELECT object_number FROM `chamilo`.`repository_content_object` WHERE `chamilo`.`repository_content_object`.id = `chamilo`.`repository_workspace_content_object_relation`.content_object_id)
 
-CREATE TABLE `chamilo`.`home_element_target_entity` (
+CREATE TABLE `home_element_target_entity` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `element_id` INT(10) UNSIGNED NOT NULL,
   `entity_type` INT(10) UNSIGNED NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE `chamilo`.`home_element_target_entity` (
   INDEX `element_id` (`element_id` ASC),
   INDEX `entity` (`entity_type` ASC, `entity_id` ASC));
 
-CREATE TABLE `chamilo`.`home_block_type_target_entity` (
+CREATE TABLE `home_block_type_target_entity` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `block_type` VARCHAR(255) NOT NULL,
   `entity_type` INT(10) UNSIGNED NOT NULL,
@@ -49,4 +49,4 @@ INSERT INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name
 INSERT INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Libraries\\Mail\\Mailer\\Platform','Chamilo\\Libraries\\Mail\\Mailer',NULL,'Mailer',1,'5.0.0');
 INSERT INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer','Chamilo\\Libraries\\Mail\\Mailer',NULL,'Mailer',1,'5.0.0');
 
-INSERT INTO `chamilo`.`configuration_setting` (`context`, `variable`, `value`, `user_setting`) VALUES ('Chamilo\\Core\\Admin', 'mailer', 'Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer\\Mailer', '0');
+INSERT INTO `configuration_setting` (`context`, `variable`, `value`, `user_setting`) VALUES ('Chamilo\\Core\\Admin', 'mailer', 'Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer\\Mailer', '0');

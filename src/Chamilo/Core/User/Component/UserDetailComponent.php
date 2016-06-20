@@ -290,7 +290,7 @@ class UserDetailComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
-                Translation :: get('UserManagerAdminUserBrowserComponent')));
+                Translation :: get('AdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_detail');
     }
 }

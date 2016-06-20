@@ -82,7 +82,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_MY_PHOTOS),
             array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
         $my_photos['class'] = 'user';
-        $menu_items[] = $my_photos;
+//        $menu_items[] = $my_photos;
 
         $general = array();
         $general['title'] = Translation :: get('Public');
@@ -90,7 +90,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             array(self :: PARAM_FEED_TYPE => self :: FEED_TYPE_GENERAL),
             array(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY));
         $general['class'] = 'home';
-        $menu_items[] = $general;
+//        $menu_items[] = $general;
 
         // $most_recent = array();
         // $most_recent['title'] = Translation :: get('MostRecent');
@@ -118,9 +118,10 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array(
-            self :: ACTION_BROWSE_EXTERNAL_REPOSITORY,
-            self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY,
-            self :: ACTION_EXPORT_EXTERNAL_REPOSITORY);
+            self :: ACTION_BROWSE_EXTERNAL_REPOSITORY
+        );
+//            self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY,
+//            self :: ACTION_EXPORT_EXTERNAL_REPOSITORY);
 
         $is_platform = $this->get_user()->is_platform_admin() && (count(
             Setting :: get_all($this->get_external_repository()->get_id())) > 0);
