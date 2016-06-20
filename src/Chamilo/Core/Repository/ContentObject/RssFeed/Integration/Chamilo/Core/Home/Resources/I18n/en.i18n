@@ -5,3 +5,5 @@
 
 TypeName = "Home"
 Feeder = "RSS Feed"
+SelectRssFeed = "Select an RSS feed from your repository"
+UseObject = "Select RSS feed"

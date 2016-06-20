@@ -316,6 +316,8 @@ class BlockRenderer
 
         $html[] = $this->renderContentHeader();
 
+        $html[] = '<div style="overflow:auto;">';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -436,6 +438,7 @@ class BlockRenderer
         $html = array();
 
         $html[] = $this->renderContentFooter();
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

@@ -40,8 +40,8 @@ class Vimeo extends ContentObject implements Versionable, Includeable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE),
-            new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager :: get_namespace('vimeo')));
+            new PropertyConditionVariable(Instance :: class_name(), Instance::PROPERTY_IMPLEMENTATION),
+            new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager :: get_namespace('Vimeo')));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED),
             new StaticConditionVariable(1));

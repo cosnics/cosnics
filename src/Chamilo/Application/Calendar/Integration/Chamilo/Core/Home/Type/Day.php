@@ -44,7 +44,7 @@ class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implement
 
     public function displayContent()
     {
-        return $this->getCalendarRenderer()->renderFullCalendar();
+        return '<div style="max-height: 500px; overflow: auto;">' . $this->getCalendarRenderer()->renderFullCalendar() . '</div>';
     }
 
     public function renderContentHeader()

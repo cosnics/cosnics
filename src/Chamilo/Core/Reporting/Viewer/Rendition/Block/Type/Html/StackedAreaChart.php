@@ -113,7 +113,7 @@ class StackedAreaChart extends Chart
             $chart_canvas->setFontProperties(
                 array(
                     'FontName' => Path :: getInstance()->getVendorPath() .
-                         'szymach/c-pchart/src/Resources/fonts/Verdana.ttf', 
+                         'szymach/c-pchart/src/Resources/fonts/verdana.ttf', 
                         'FontSize' => 8, 
                         'R' => 0, 
                         'G' => 0, 
