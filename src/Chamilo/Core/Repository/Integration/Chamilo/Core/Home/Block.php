@@ -40,13 +40,15 @@ class Block extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param int $source
+     * @param string $defaultTitle
      */
     public function __construct(
         Application $application, HomeService $homeService,
-        \Chamilo\Core\Home\Storage\DataClass\Block $block, $defaultTitle = ''
+        \Chamilo\Core\Home\Storage\DataClass\Block $block, $source = self::SOURCE_DEFAULT, $defaultTitle = ''
     )
     {
-        parent:: __construct($application, $homeService, $block);
+        parent:: __construct($application, $homeService, $block, $source);
         $this->defaultTitle = $defaultTitle ? $defaultTitle : Translation:: get('Object');
 
         $this->contentObjectPublicationService =

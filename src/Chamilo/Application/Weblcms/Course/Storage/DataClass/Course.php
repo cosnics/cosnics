@@ -629,7 +629,13 @@ class Course extends DataClass
         {
             $course_section = new CourseSection();
             $course_section->set_course_id($this->get_id());
-            $course_section->set_name($section['name']);
+
+            $course_section->set_name(
+                Translation::getInstance()->getTranslation(
+                    $section['name'], null, \Chamilo\Application\Weblcms\Course\Manager::context()
+                )
+            );
+
             $course_section->set_type($section['type']);
             $course_section->set_visible(true);
             if (! $course_section->create())
