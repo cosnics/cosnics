@@ -61,3 +61,6 @@ CREATE TABLE `repository_wiki_page_feedback` (
   PRIMARY KEY (`id`),
   KEY `rwpf_wiki_page_id` (`wiki_page_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+/* HoGent */
+/* Perspectief */
