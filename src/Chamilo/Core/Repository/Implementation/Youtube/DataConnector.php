@@ -389,7 +389,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // Category Education
         $snippet->setCategoryId(27);
 
-        $snippet->setCategoryId('Education');
         $status = new \Google_Service_YouTube_VideoStatus();
         $status->privacyStatus = "unlisted";
         $status->embeddable = true;
