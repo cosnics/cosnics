@@ -71,7 +71,7 @@ class ViewerComponent extends TabComponent
 
         $translator = new PrerequisitesTranslator($this->get_current_node());
 
-        if (! $translator->can_execute())
+        if (!$this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) && ! $translator->can_execute())
         {
             $html = array();
 
