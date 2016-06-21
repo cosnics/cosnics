@@ -37,14 +37,16 @@ class DeleterComponent extends Manager
 
             foreach ($ids as $id)
             {
+                /** @var CourseSection $course_section */
                 $course_section = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
                     CourseSection :: class_name(),
                     $id);
 
-                if (! $course_section->delete())
+                if($course_section->get_type() != CourseSection::TYPE_CUSTOM || !$course_section->delete())
                 {
                     $failures ++;
                 }
+
             }
 
             if ($failures)

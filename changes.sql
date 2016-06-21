@@ -50,3 +50,14 @@ INSERT INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name
 INSERT INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer','Chamilo\\Libraries\\Mail\\Mailer',NULL,'Mailer',1,'5.0.0');
 
 INSERT INTO `configuration_setting` (`context`, `variable`, `value`, `user_setting`) VALUES ('Chamilo\\Core\\Admin', 'mailer', 'Chamilo\\Libraries\\Mail\\Mailer\\PhpMailer\\Mailer', '0');
+
+CREATE TABLE `repository_wiki_page_feedback` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `wiki_page_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `creation_date` int(10) unsigned NOT NULL,
+  `modification_date` int(10) unsigned NOT NULL,
+  `comment` longtext COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `rwpf_wiki_page_id` (`wiki_page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
