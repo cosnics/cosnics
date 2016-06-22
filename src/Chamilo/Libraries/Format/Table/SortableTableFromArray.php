@@ -87,6 +87,8 @@ class SortableTableFromArray extends SortableTable
         $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true,
         $allowPageNavigation = true)
     {
+        $this->tableName = $tableName;
+        
         parent :: __construct(
             $tableName,
             array($this, 'countData'),
@@ -102,7 +104,6 @@ class SortableTableFromArray extends SortableTable
         $this->additionalParameters = $additionalParameters;
         $this->defaultOrderColumn = $defaultOrderColumn;
         $this->defaultPerPage = $defaultPerPage;
-        $this->tableName = $tableName;
         $this->allowPageSelection = $allowPageSelection;
         $this->defaultOrderDirection = $defaultOrderDirection;
         $this->allowPageSelection = $allowPageSelection;
