@@ -109,7 +109,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = parent :: render_header();
 
         $html[] = '<div class="learning-path-display">';
-        $html[] = '<iframe class="learning-path-display-full-screen" src="#"></iframe>';
+        $html[] = '<iframe class="learning-path-display-full-screen" src="about:blank"></iframe>';
 
         $html[] = $this->get_navigation_bar();
 
