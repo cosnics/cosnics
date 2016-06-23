@@ -336,6 +336,11 @@ class SubmissionSubmitComponent extends SubmissionsManager implements \Chamilo\C
      */
     public function create_tracker($submitter_id, $repo_object, $submitter_type = null)
     {
+        if(is_array($repo_object))
+        {
+            $repo_object = $repo_object[0];
+        }
+        
         $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
             ContentObject :: class_name(),
             $repo_object);

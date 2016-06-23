@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -63,7 +64,7 @@ class Menu extends \Chamilo\Core\Repository\Display\Menu
 
         $progressItem = array();
         $progressItem['text'] = Translation :: get('Progress');
-        $progress_item['href'] = $application->get_url(
+        $progressItem['href'] = $application->get_url(
             array(Manager :: PARAM_ACTION => Manager :: ACTION_REPORTING, Manager :: PARAM_STEP => null));
         $progressItem['icon'] = 'type_statistics';
 
