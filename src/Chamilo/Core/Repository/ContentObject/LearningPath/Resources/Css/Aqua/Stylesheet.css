@@ -87,6 +87,7 @@ ul.tree-menu li div a.learning_path, ul.tree-menu li div a.type_learning_path,
 .learning-path-display .navbar-learning-path .navbar-learning-path-actions a
 	{
 	height: 32px;
+	margin: 0 10px;
 }
 
 .learning-path-display .navbar-learning-path .navbar-learning-path-actions .glyphicon
