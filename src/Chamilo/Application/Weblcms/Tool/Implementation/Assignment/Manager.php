@@ -31,6 +31,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const ACTION_DELETE_SUBMISSION = 'SubmissionDeleter';
     const ACTION_DOWNLOAD_SUBMISSIONS = 'SubmissionsDownloader';
     const ACTION_SUBMIT_SUBMISSION = 'SubmissionSubmit';
+    const ACTION_SUBMIT_SUBMISSON_CONFIRMATION = 'SubmissionSubmitConfirmation';
     const ACTION_VIEW_SUBMISSION = 'SubmissionViewer';
     // Feedback actions
     const ACTION_DELETE_FEEDBACK = 'FeedbackDeleter';
