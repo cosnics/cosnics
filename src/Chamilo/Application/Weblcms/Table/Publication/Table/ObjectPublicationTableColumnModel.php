@@ -37,7 +37,7 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
      */
     public function initialize_columns($addActionsColumn = true)
     {
-        $this->add_column(new StaticTableColumn(self :: COLUMN_STATUS, '', 'publication_table_status_column'));
+        $this->add_column(new StaticTableColumn(self :: COLUMN_STATUS, '', null, 'publication_table_status_column'));
 
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject:: class_name(), ContentObject :: PROPERTY_TITLE)
@@ -77,7 +77,7 @@ class ObjectPublicationTableColumnModel extends RecordTableColumnModel implement
         $this->add_column(
             new DataClassPropertyTableColumn(
                 ContentObjectPublication:: class_name(),
-                ContentObjectPublication :: PROPERTY_DISPLAY_ORDER_INDEX, null, true, 'publication_table_order_column'
+                ContentObjectPublication :: PROPERTY_DISPLAY_ORDER_INDEX, null, true, null, 'publication_table_order_column'
             )
         );
 
