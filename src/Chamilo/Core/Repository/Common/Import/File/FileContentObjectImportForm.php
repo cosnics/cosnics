@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Import\File;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImport;
+use Chamilo\Core\Repository\Common\Import\ImportFormParameters;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
@@ -47,18 +48,21 @@ class FileContentObjectImportForm extends ContentObjectImportForm
             )
         );
 
-        $this->addFileDropzone(
-            self :: IMPORT_FILE_NAME,
-            array(
-                'name' => self :: IMPORT_FILE_NAME,
-                'maxFilesize' => $calculator->getMaximumUploadSize(),
-                'uploadUrl' => $uploadUrl->getUrl(),
-                'successCallbackFunction' => 'chamilo.core.repository.import.processUploadedFile',
-                'sendingCallbackFunction' => 'chamilo.core.repository.import.prepareRequest',
-                'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'
-            ),
-            false
+        $dropZoneParameters = array(
+            'name' => self :: IMPORT_FILE_NAME,
+            'maxFilesize' => $calculator->getMaximumUploadSize(),
+            'uploadUrl' => $uploadUrl->getUrl(),
+            'successCallbackFunction' => 'chamilo.core.repository.import.processUploadedFile',
+            'sendingCallbackFunction' => 'chamilo.core.repository.import.prepareRequest',
+            'removedfileCallbackFunction' => 'chamilo.core.repository.import.deleteUploadedFile'
         );
+
+        if(!$this->importFormParameters->canUploadMultipleFiles())
+        {
+            $dropZoneParameters['maxFiles'] = 1;
+        }
+        
+        $this->addFileDropzone(self :: IMPORT_FILE_NAME, $dropZoneParameters, false);
 
         $this->addElement(
             'html',

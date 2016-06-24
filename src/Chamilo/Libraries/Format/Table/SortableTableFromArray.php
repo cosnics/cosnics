@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Platform\Security;
 
 /**
@@ -83,13 +84,16 @@ class SortableTableFromArray extends SortableTable
      * @param boolean $enableSorting
      * @param boolean $allowPageNavigation
      */
-    public function __construct($tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
-        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true, $enableSorting = true,
-        $allowPageNavigation = true)
+    public function __construct(
+        $tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1,
+        $defaultPerPage = 20, $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true,
+        $enableSorting = true,
+        $allowPageNavigation = true
+    )
     {
         $this->tableName = $tableName;
-        
-        parent :: __construct(
+
+        parent:: __construct(
             $tableName,
             array($this, 'countData'),
             array($this, 'getData'),
@@ -97,7 +101,8 @@ class SortableTableFromArray extends SortableTable
             $defaultPerPage,
             $defaultOrderDirection,
             $allowPageSelection,
-            $allowPageNavigation);
+            $allowPageNavigation
+        );
 
         $this->tableData = $tableData;
         $this->tableColumns = $tableColumns;
@@ -110,7 +115,7 @@ class SortableTableFromArray extends SortableTable
         $this->enableSorting = $enableSorting;
         $this->allowPageNavigation = $allowPageNavigation;
 
-        if (! $allowPageSelection)
+        if (!$allowPageSelection)
         {
             $this->defaultPerPage = count($tableData);
         }
@@ -124,7 +129,7 @@ class SortableTableFromArray extends SortableTable
     {
         $this->initializeTable();
 
-        return parent :: toHtml();
+        return parent:: toHtml();
     }
 
     /**
@@ -137,20 +142,27 @@ class SortableTableFromArray extends SortableTable
 
         foreach ($this->getTableColumns() as $key => $tableColumn)
         {
-            $headerAttributes = array();
+            $headerAttributes = $contentAttributes = array();
 
             $cssClasses = $tableColumn->getCssClasses();
 
-            if (! empty($cssClasses))
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
             {
-                $headerAttributes['class'] = $cssClasses;
+                $headerAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER];
+            }
+
+            if (!empty($cssClasses[TableColumn::CSS_CLASSES_COLUMN_HEADER]))
+            {
+                $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
             }
 
             $this->setColumnHeader(
                 $key,
-                Security :: remove_XSS($tableColumn->get_title()),
+                Security::remove_XSS($tableColumn->get_title()),
                 $tableColumn->is_sortable(),
-                $headerAttributes);
+                $headerAttributes,
+                $contentAttributes
+            );
         }
     }
 
@@ -169,7 +181,7 @@ class SortableTableFromArray extends SortableTable
 
         if ($this->getEnableSorting())
         {
-            $content = TableSort :: sort_table($content, $orderColumn, $orderDirection);
+            $content = TableSort:: sort_table($content, $orderColumn, $orderDirection);
         }
 
         if ($this->getAllowPageSelection())
