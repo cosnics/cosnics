@@ -14,7 +14,7 @@ class WizardHeaderRenderer
      *
      * @var WizardHeader
      */
-    private $wizardHeader;
+    protected $wizardHeader;
 
     /**
      * WizardHeaderRenderer constructor.
@@ -35,7 +35,7 @@ class WizardHeaderRenderer
 
         $html[] = '<ul class="nav nav-wizard publication-wizard">';
 
-        foreach($this->wizardHeader->getStepTitles() as $index => $stepTitle)
+        foreach($this->getStepTitles() as $index => $stepTitle)
         {
             $class = $this->wizardHeader->isStepSelected($index) ? 'active' : '';
             $html[] = '<li class="' . $class . '"><a href="#">' . $stepTitle .
@@ -45,6 +45,16 @@ class WizardHeaderRenderer
         $html[] = '</ul>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns the step titles
+     *
+     * @return \string[]
+     */
+    protected function getStepTitles()
+    {
+        return $this->wizardHeader->getStepTitles();
     }
 
 }

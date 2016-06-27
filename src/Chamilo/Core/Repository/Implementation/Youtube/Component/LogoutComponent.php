@@ -25,7 +25,7 @@ class LogoutComponent extends Manager
             new StaticConditionVariable('session_token'));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
-            new StaticConditionVariable(1));
+            new StaticConditionVariable($this->getUser()->getId()));
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassRetrievesParameters($condition, 1);
@@ -33,43 +33,24 @@ class LogoutComponent extends Manager
 
         if ($settings->size() > 0)
         {
-            $setting = $settings->next_result();
-
-            $conditions = array();
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_SETTING_ID),
-                new StaticConditionVariable($setting->get_id()));
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
-                new StaticConditionVariable($this->get_user_id()));
-            $condition = new AndCondition($conditions);
-
-            $parameters = new DataClassRetrievesParameters($condition, 1);
-            $user_settings = \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
-                Setting :: class_name(),
-                $parameters);
-
-            if ($user_settings->size() > 0)
+            $user_setting = $settings->next_result();
+            if ($user_setting->delete())
             {
-                $user_setting = $user_settings->next_result();
-                if ($user_setting->delete())
-                {
-                    $parameters = $this->get_parameters();
-                    $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                    $this->redirect(
-                        Translation :: get('LogoutSuccessful', null, Utilities :: COMMON_LIBRARIES),
-                        false,
-                        $parameters);
-                }
-                else
-                {
-                    $parameters = $this->get_parameters();
-                    $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-                    $this->redirect(
-                        Translation :: get('LogoutFailed', null, Utilities :: COMMON_LIBRARIES),
-                        true,
-                        $parameters);
-                }
+                $parameters = $this->get_parameters();
+                $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
+                $this->redirect(
+                    Translation :: get('LogoutSuccessful', null, Utilities :: COMMON_LIBRARIES),
+                    false,
+                    $parameters);
+            }
+            else
+            {
+                $parameters = $this->get_parameters();
+                $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
+                $this->redirect(
+                    Translation :: get('LogoutFailed', null, Utilities :: COMMON_LIBRARIES),
+                    true,
+                    $parameters);
             }
         }
     }

@@ -33,23 +33,29 @@ class DataClassPropertyTableColumn extends TableColumn
      * @param string $property - The property or the property alias
      * @param string $title - [OPTIONAL] default translated title from property
      * @param bool $sortable - Whether or not the column is sortable
-     * @param string $cssClasses
+     * @param string $headerCssClasses
+     * @param string $contentCssClasses
+     *
+     * @internal param string $cssClasses
      */
-    public function __construct($class_name, $property, $title = null, $sortable = true, $cssClasses = null)
+    public function __construct(
+        $class_name, $property, $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null
+    )
     {
         $this->class_name = $class_name;
 
-        $context = $class_name :: context();
+        $context = $class_name:: context();
 
-        if (! $title)
+        if (!$title)
         {
-            $title = Translation :: get(
-                (string) StringUtilities :: getInstance()->createString($property)->upperCamelize(),
+            $title = Translation:: get(
+                (string) StringUtilities:: getInstance()->createString($property)->upperCamelize(),
                 null,
-                $context);
+                $context
+            );
         }
 
-        parent :: __construct($property, $title, $sortable, $cssClasses);
+        parent:: __construct($property, $title, $sortable, $headerCssClasses, $contentCssClasses);
     }
 
     /**

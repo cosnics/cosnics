@@ -38,7 +38,7 @@ class AssignmentSubmissions extends Block
             new PropertyConditionVariable(
                 \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
                 \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_TOOL),
-            new StaticConditionVariable(Assignment :: get_table_name()));
+            new StaticConditionVariable('Assignment'));
 
         $condition = new AndCondition($conditions);
 
@@ -90,7 +90,7 @@ class AssignmentSubmissions extends Block
                 Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
                 \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $publication->get_course_id(),
                 Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
-                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => Assignment :: get_table_name(),
+                \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => 'Assignment',
                 \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
                 \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id());

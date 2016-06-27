@@ -69,7 +69,6 @@
 					<option name="Week" value="Week" />
 					<option name="Day" value="Day" />
 					<option name="List" value="List" />
-					<option name="Year" value="Year" />
 				</options>
 			</setting>
 			<setting name="first_day_of_week" field="radio" default="monday" user_setting="1">

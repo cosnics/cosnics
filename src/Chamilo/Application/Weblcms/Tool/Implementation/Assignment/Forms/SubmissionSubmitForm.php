@@ -31,7 +31,7 @@ class SubmissionSubmitForm extends FormValidator
 
         $assignment = $publication->get_content_object();
 
-        $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
+//        $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
         // Submit as
         if ($assignment->get_allow_group_submissions())
         {
@@ -39,15 +39,15 @@ class SubmissionSubmitForm extends FormValidator
                 'select',
                 \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID,
                 Translation :: get('SubmitAs'),
-                $choices);
+                $choices, array('class' => 'form-control'));
         }
-        $this->addElement('category');
+//        $this->addElement('category');
 
         $buttons = array();
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES),
+            Translation :: get('SelectGroup'),
             null,
             null,
             'arrow-right');

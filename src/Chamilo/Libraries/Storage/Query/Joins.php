@@ -77,4 +77,22 @@ class Joins implements \Countable
     {
         return count($this->joins);
     }
+
+    /**
+     * Merges the given dataclass properties into this one
+     *
+     * @param Joins $joinsToMerge
+     */
+    public function merge(Joins $joinsToMerge = null)
+    {
+        if(!$joinsToMerge instanceof Joins)
+        {
+            return;
+        }
+        
+        foreach ($joinsToMerge->get() as $join)
+        {
+            $this->add($join);
+        }
+    }
 }

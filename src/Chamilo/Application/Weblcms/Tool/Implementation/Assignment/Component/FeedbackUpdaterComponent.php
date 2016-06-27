@@ -120,7 +120,7 @@ class FeedbackUpdaterComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_BROWSE)),
-                Translation :: get('AssignmentToolBrowserComponent')));
+                Translation :: get('BrowserComponent')));
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(

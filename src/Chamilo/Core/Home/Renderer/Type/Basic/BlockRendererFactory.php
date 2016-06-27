@@ -14,6 +14,8 @@ use Chamilo\Libraries\Architecture\Application\Application;
  */
 class BlockRendererFactory
 {
+    const SOURCE_DEFAULT = 1;
+    const SOURCE_AJAX = 2;
 
     /**
      *
@@ -34,16 +36,27 @@ class BlockRendererFactory
     private $block;
 
     /**
+     * The source from which this block renderer is called
+     *
+     * @var int
+     */
+    protected $source;
+
+    /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param int $source
      */
-    public function __construct(Application $application, HomeService $homeService, Block $block)
+    public function __construct(
+        Application $application, HomeService $homeService, Block $block, $source = self::SOURCE_DEFAULT
+    )
     {
         $this->application = $application;
         $this->homeService = $homeService;
         $this->block = $block;
+        $this->source = $source;
     }
 
     /**
@@ -101,6 +114,14 @@ class BlockRendererFactory
     }
 
     /**
+     * @return int
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
      *
      * @return \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
      */
@@ -109,6 +130,6 @@ class BlockRendererFactory
         $block = $this->getBlock();
         $class = $block->getContext() . '\Integration\Chamilo\Core\Home\Type\\' . $block->getBlockType();
 
-        return new $class($this->getApplication(), $this->getHomeService(), $block);
+        return new $class($this->getApplication(), $this->getHomeService(), $block, $this->source);
     }
 }

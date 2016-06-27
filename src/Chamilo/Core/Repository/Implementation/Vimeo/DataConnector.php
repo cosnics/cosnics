@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Vimeo;
 
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
@@ -110,7 +111,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 else
                 {
                     // get all videos
-                    $search_parameters['query'] = 'test';
+                    $search_parameters['query'] = 'physics';
                 }
                 $videos = $this->vimeo->request('/videos', $search_parameters);
 
@@ -377,9 +378,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function determine_rights($video_entry)
     {
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = true;
-        $rights[ExternalObject :: RIGHT_EDIT] = true;
-        $rights[ExternalObject :: RIGHT_DELETE] = true;
+
+        if(ContentObject::is_available(\Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo::class_name()))
+        {
+            $rights[ExternalObject :: RIGHT_USE] = true;
+        }
+
+        $rights[ExternalObject :: RIGHT_EDIT] = false;
+        $rights[ExternalObject :: RIGHT_DELETE] = false;
         $rights[ExternalObject :: RIGHT_DOWNLOAD] = false;
         return $rights;
     }

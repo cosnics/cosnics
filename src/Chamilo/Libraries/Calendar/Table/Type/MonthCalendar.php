@@ -165,6 +165,8 @@ class MonthCalendar extends Calendar
             }
             while ($cell % 7 != 0);
         }
+        
+        $this->setHeader();
     }
 
     /**

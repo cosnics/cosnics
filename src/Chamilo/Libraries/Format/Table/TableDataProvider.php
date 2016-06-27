@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+
 /**
  * This class represents a data provider for a table
  * Refactoring from ObjectTable to split between a table based on a record and based on an object
@@ -19,26 +23,19 @@ abstract class TableDataProvider extends TableComponent
     /**
      * Returns the data as a resultset
      * 
-     * @abstract
-     *
-     *
-     * @param \libraries\storage\Condition $condition
-     * @param $condition
+     * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param ObjectTableOrder[] $order_property
+     * @param OrderBy[] $order_property
      *
-     * @return \libraries\storage\ResultSet
+     * @return ResultSet
      */
     abstract public function retrieve_data($condition, $offset, $count, $order_property = null);
 
     /**
      * Counts the data
-     * 
-     * @abstract
      *
-     *
-     * @param \libraries\storage\Condition $condition
+     * @param Condition $condition
      *
      * @return int
      */

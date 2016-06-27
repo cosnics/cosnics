@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -242,13 +243,14 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         }
 
         $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService :: getInstance();
-        $weblcmsRightsService = \Chamilo\Application\Weblcms\Service\RightsService :: getInstance();
+        $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
         $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
-        $canEditPublicationContentObject = $weblcmsRightsService->canEditPublicationContentObject(
+        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
             $this->get_user(),
-            $this->tool_browser->get_application()->get_course(),
-            $publication);
+            new ContentObjectPublication($publication),
+            $this->tool_browser->get_application()->get_course()
+        );
 
         if ($canEditContentObject || $canEditPublicationContentObject)
         {

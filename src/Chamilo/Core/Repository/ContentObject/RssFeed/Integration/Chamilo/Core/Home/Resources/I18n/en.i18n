@@ -5,3 +5,6 @@
 
 TypeName = "Home"
 Feeder = "RSS Feed"
+SelectRssFeed = "Select an RSS feed from your repository"
+UseObject = "Select RSS feed"
+PleaseRefreshPageToSeeChanges = "Please refresh the page to see the changes for this block"

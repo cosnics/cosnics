@@ -8,8 +8,10 @@ use Chamilo\Application\Weblcms\Request\Manager;
 use Chamilo\Application\Weblcms\Request\Storage\DataClass\Request;
 use Chamilo\Application\Weblcms\Request\Storage\DataManager;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -177,16 +179,17 @@ class GranterComponent extends Manager
                 'PLATFORM' => PlatformSetting :: get('site_name'),
                 'NAME' => $request->get_name()));
 
-        $mail = Mail :: factory(
-            $title,
-            $body,
-            array($recipient->get_email()),
-            array(
-                Mail :: NAME => PlatformSetting :: get('administrator_firstname') . '_' .
-                     PlatformSetting :: get('administrator_surname'),
-                    Mail :: EMAIL => PlatformSetting :: get('administrator_email')));
+        $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mail->send();
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (\Exception $ex)
+        {
+        }
     }
 }
-?>

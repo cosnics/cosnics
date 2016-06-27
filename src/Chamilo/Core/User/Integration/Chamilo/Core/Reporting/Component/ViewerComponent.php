@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
-class ViewerComponent extends Manager implements DelegateComponent
+class ViewerComponent extends Manager
 {
 
     /**
@@ -63,7 +63,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 $this->get_url(
                     array(
                         \Chamilo\Core\User\Manager :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_BROWSE_USERS)),
-                Translation :: get('UserManagerAdminUserBrowserComponent')));
+                Translation :: get('AdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_reporting');
     }
 }

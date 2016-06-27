@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Core\User\Email\Form;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -72,8 +74,18 @@ class EmailForm extends FormValidator
         $message = $values['message'];
         $targets = $this->get_target_email_addresses();
 
-        $mail = Mail :: factory($title, $message, $targets, array($this->user->get_email()));
-        $mail->send();
+        $mail = new Mail($title, $message, $targets, false, array($this->user->get_email()));
+
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (\Exception $ex)
+        {
+        }
 
         return true;
     }

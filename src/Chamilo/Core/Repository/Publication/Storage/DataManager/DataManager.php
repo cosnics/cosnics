@@ -155,7 +155,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function delete_content_object_publication($application, $publication_id)
     {
-        $manager_class = $application . '\Publication\Manager';
+        $manager_class = $application . '\Integration\Chamilo\Core\Repository\Publication\Manager';
         return $manager_class :: delete_content_object_publication($publication_id);
     }
 

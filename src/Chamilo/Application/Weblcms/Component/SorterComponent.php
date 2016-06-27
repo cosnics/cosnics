@@ -403,11 +403,9 @@ class SorterComponent extends Manager
 
     public function display_page_header()
     {
-        $trail = BreadcrumbTrail :: get_instance();
-        
         $html = array();
         
-        $html[] = $this->render_header($trail, false, true);
+        $html[] = $this->render_header();
         $html[] = '<div class="clear"></div><br />';
         
         return implode(PHP_EOL, $html);

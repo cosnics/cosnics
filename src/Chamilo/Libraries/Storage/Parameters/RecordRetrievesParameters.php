@@ -46,8 +46,6 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
     {
         parent :: __construct($condition, $count, $offset, $order_by, $joins);
 
-        $this->count = $count;
-        $this->offset = $offset;
         $this->properties = $properties;
         $this->group_by = $group_by;
     }

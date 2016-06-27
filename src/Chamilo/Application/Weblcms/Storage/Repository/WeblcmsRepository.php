@@ -4,8 +4,10 @@ namespace Chamilo\Application\Weblcms\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\WeblcmsRepositoryInterface;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -29,7 +31,9 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
      */
     public function retrieveUserByUsername($username)
     {
-        return \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($username);
+        $userRepository = new UserRepository();
+        
+        return $userRepository->findUserByUsername($username);
     }
 
     /**

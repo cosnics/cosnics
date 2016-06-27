@@ -15,18 +15,26 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
+use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Core\Rights\RightsUtil;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Bootstrap;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -142,15 +150,16 @@ abstract class Manager extends Application
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent:: __construct($applicationConfiguration);
 
-        if ($this->get_course_id() && ! $this->get_parent()->is_tool_accessible())
+        if ($this->get_course_id() && !$this->get_parent()->is_tool_accessible())
         {
             throw new NotAllowedException();
         }
         $this->set_parameter(
             \Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY,
-            Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY));
+            Request:: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY)
+        );
         $this->set_parameter(self :: PARAM_BROWSER_TYPE, $this->get_browser_type());
     }
 
@@ -164,14 +173,15 @@ abstract class Manager extends Application
     {
         $class = $namespace . '\Manager';
 
-        if (! class_exists($class))
+        if (!class_exists($class))
         {
-            throw new Exception(Translation :: get('ToolTypeDoesNotExist', array('type' => $namespace)));
+            throw new Exception(Translation:: get('ToolTypeDoesNotExist', array('type' => $namespace)));
         }
 
         $factory = new ApplicationFactory(
             $namespace,
-            new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application));
+            new ApplicationConfiguration($application->getRequest(), $application->get_user(), $application)
+        );
 
         return $factory->run();
     }
@@ -183,7 +193,7 @@ abstract class Manager extends Application
      */
     public function get_browser_type()
     {
-        $browser_type = Request :: get(self :: PARAM_BROWSER_TYPE);
+        $browser_type = Request:: get(self :: PARAM_BROWSER_TYPE);
 
         if ($browser_type && in_array($browser_type, $this->get_available_browser_types()))
         {
@@ -240,7 +250,7 @@ abstract class Manager extends Application
         $html[] = parent::renderPageTitle();
         $html[] = '</div>';
 
-        if (Page :: getInstance()->isFullPage())
+        if (Page:: getInstance()->isFullPage())
         {
             $visible_tools = $this->get_visible_tools();
 
@@ -263,25 +273,28 @@ abstract class Manager extends Application
     {
         $tools = array();
 
-        $course_tools = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            CourseTool :: class_name(),
-            new DataClassRetrievesParameters());
+        $course_tools = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieves(
+            CourseTool:: class_name(),
+            new DataClassRetrievesParameters()
+        );
 
         $edit_right = $this->is_allowed(WeblcmsRights :: EDIT_RIGHT);
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController:: get_instance();
 
         while ($tool = $course_tools->next_result())
         {
             $tool_active = $course_settings_controller->get_course_setting(
                 $this->get_course(),
                 CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
-                $tool->get_id());
+                $tool->get_id()
+            );
 
             $tool_visible = $course_settings_controller->get_course_setting(
                 $this->get_course(),
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
-                $tool->get_id());
+                $tool->get_id()
+            );
 
             if ($tool_active && ($edit_right || $tool_visible))
             {
@@ -309,11 +322,12 @@ abstract class Manager extends Application
      */
     public function renderShortcuts($tools)
     {
-        $courseSettingsController = CourseSettingsController :: get_instance();
+        $courseSettingsController = CourseSettingsController:: get_instance();
 
         $toolShortcut = $courseSettingsController->get_course_setting(
             $this->get_course(),
-            CourseSettingsConnector :: TOOL_SHORTCUT_MENU);
+            CourseSettingsConnector :: TOOL_SHORTCUT_MENU
+        );
 
         $html = array();
 
@@ -335,63 +349,70 @@ abstract class Manager extends Application
      */
     public function renderHomeActions()
     {
-        $courseSettingsController = CourseSettingsController :: get_instance();
+        $courseSettingsController = CourseSettingsController:: get_instance();
         $introductionTextAllowed = $courseSettingsController->get_course_setting(
             $this->get_course(),
-            CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
+            CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT
+        );
 
-        $toolbar = new Toolbar();
+        $buttonToolbar = new ButtonToolBar();
 
-        $is_subscribed = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: is_subscribed(
+        $is_subscribed = \Chamilo\Application\Weblcms\Course\Storage\DataManager:: is_subscribed(
             $this->get_course(),
-            $this->get_user());
+            $this->get_user()
+        );
 
-        if (! $is_subscribed)
+        if (!$is_subscribed)
         {
             $params = array();
             $params[Application :: PARAM_ACTION] = Manager :: ACTION_CREATE_BOOKMARK;
 
             $bookmark_url = $this->get_parent()->get_url($params);
 
-            $onclick = '" onclick="javascript:openPopup(\'' . $bookmark_url . '\'); return false;';
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('MakeBookmark'),
-                    null,
-                    $bookmark_url,
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL,
-                    false,
-                    $onclick,
-                    '_blank'));
+//            $onclick = '" onclick="javascript:openPopup(\'' . $bookmark_url . '\'); return false;';
+
+            $buttonToolbar->addItem(
+                new Button(
+                    Translation:: get('MakeBookmark'), null, $bookmark_url, Button::DISPLAY_ICON_AND_LABEL, false, null,
+                    '_blank'
+                )
+            );
         }
 
         if ($introductionTextAllowed)
         {
             $introduction_text = $this->get_introduction_text();
 
-            if (! $introduction_text)
+            if (!$introduction_text)
             {
                 if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
                 {
-                    $toolbar->add_item(
-                        new ToolbarItem(
-                            Translation :: get('PublishIntroductionText'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Introduce'),
-                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_PUBLISH_INTRODUCTION))));
+                    $parameters = $this->get_parameters();
+                    $parameters[self :: PARAM_ACTION] = self :: ACTION_PUBLISH_INTRODUCTION;
+
+                    $actionSelector = new ActionSelector(
+                        $this,
+                        $this->getUser()->getId(),
+                        array(Introduction::class_name()),
+                        $parameters
+                    );
+
+                    $buttonToolbar->addItem(
+                        $actionSelector->getActionButton(
+                            Translation:: get('PublishIntroductionText', null, Utilities :: COMMON_LIBRARIES),
+                            new FontAwesomeGlyph('book')
+                        )
+                    );
                 }
             }
         }
 
         $html = array();
 
-        if ($toolbar->has_items())
+        if($buttonToolbar->hasItems())
         {
-            $html[] = '<div class="clearfix"></div>';
-            $html[] = '<div class="panel panel-default">';
-            $html[] = '<div class="panel-heading">';
-            $html[] = $toolbar->as_html();
-            $html[] = '</div>';
-            $html[] = '</div>';
+            $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+            $html[] = $buttonToolbarRenderer->render();
         }
 
         return implode(PHP_EOL, $html);
@@ -434,15 +455,15 @@ abstract class Manager extends Application
      */
     public function is_allowed($right, $publication = null, $category_id = null)
     {
-        $studentview = Session :: retrieve('studentview');
+        $studentview = Session:: retrieve('studentview');
         if ($studentview == 1)
         {
             return false;
         }
         // add check for student view/login as
-        $id = Session :: get_user_id();
-        $va_id = Session :: get(self :: PARAM_VIEW_AS_ID);
-        $course_id = Session :: get(self :: PARAM_VIEW_AS_COURSE_ID);
+        $id = Session:: get_user_id();
+        $va_id = Session:: get(self :: PARAM_VIEW_AS_ID);
+        $course_id = Session:: get(self :: PARAM_VIEW_AS_COURSE_ID);
         // fake the id with the set "login as id" only if we're in the right
         // course
         if (isset($va_id) && isset($course_id))
@@ -488,11 +509,12 @@ abstract class Manager extends Application
 
             if ($category_id != 0)
             {
-                $category = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                    ContentObjectPublicationCategory :: class_name(),
-                    $category_id);
+                $category = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
+                    ContentObjectPublicationCategory:: class_name(),
+                    $category_id
+                );
 
-                if (! $category->is_recursive_visible())
+                if (!$category->is_recursive_visible())
                 {
                     return false;
                 }
@@ -505,49 +527,54 @@ abstract class Manager extends Application
 
             if ($hidden && $right == WeblcmsRights :: VIEW_RIGHT)
             {
-                return WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+                return WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
                     WeblcmsRights :: EDIT_RIGHT,
                     $publication_id,
                     WeblcmsRights :: TYPE_PUBLICATION,
                     $this->get_course_id(),
-                    $id);
+                    $id
+                );
             }
 
-            return WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+            return WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
                 $right,
                 $publication_id,
                 WeblcmsRights :: TYPE_PUBLICATION,
                 $this->get_course_id(),
-                $id);
+                $id
+            );
         }
         else
         {
             if (is_null($category_id))
             {
-                $category_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY);
+                $category_id = Request:: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY);
             }
 
             if ($category_id && $category_id !== 0)
             {
-                $category = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                    ContentObjectPublicationCategory :: class_name(),
-                    $category_id);
+                $category = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
+                    ContentObjectPublicationCategory:: class_name(),
+                    $category_id
+                );
 
-                if (! isset($category))
+                if (!isset($category))
                 {
                     throw new ObjectNotExistException(
-                        Translation :: get('ContentObjectPublicationCategory'),
-                        $category_id);
+                        Translation:: get('ContentObjectPublicationCategory'),
+                        $category_id
+                    );
                 }
 
                 if ($category->is_recursive_visible())
                 {
-                    return WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+                    return WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
                         $right,
                         $category_id,
                         WeblcmsRights :: TYPE_COURSE_CATEGORY,
                         $this->get_course_id(),
-                        $id);
+                        $id
+                    );
                 }
                 else
                 {
@@ -557,40 +584,43 @@ abstract class Manager extends Application
 
             if ($this->get_tool_id() == 'home')
             {
-                return WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+                return WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
                     $right,
                     0,
                     RightsUtil :: TYPE_ROOT,
                     $this->get_course_id(),
-                    $id);
+                    $id
+                );
             }
 
             $tool_registration = $this->get_tool_registration();
-            $course_settings_controller = CourseSettingsController :: get_instance();
+            $course_settings_controller = CourseSettingsController:: get_instance();
 
             $module_visible = $course_settings_controller->get_course_setting(
                 $this->get_course(),
                 CourseSetting :: COURSE_SETTING_TOOL_VISIBLE,
-                $tool_registration->get_id());
+                $tool_registration->get_id()
+            );
 
-            if (! $module_visible)
+            if (!$module_visible)
             {
                 return false;
             }
 
-            return WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+            return WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
                 $right,
                 $tool_registration->get_id(),
                 WeblcmsRights :: TYPE_COURSE_MODULE,
                 $this->get_course_id(),
-                $id);
+                $id
+            );
         }
     }
 
     public function get_user_id()
     {
-        $va_id = Session :: get(self :: PARAM_VIEW_AS_ID);
-        $course_id = Session :: get(self :: PARAM_VIEW_AS_COURSE_ID);
+        $va_id = Session:: get(self :: PARAM_VIEW_AS_ID);
+        $course_id = Session:: get(self :: PARAM_VIEW_AS_COURSE_ID);
         // fake the id with the set "login as id" only if we're in the right
         // course
         if (isset($va_id) && isset($course_id))
@@ -601,18 +631,19 @@ abstract class Manager extends Application
             }
         }
 
-        return parent :: get_user_id();
+        return parent:: get_user_id();
     }
 
     /**
      * Converts a tool name to the corresponding class name.
      *
      * @param $tool string The tool name.
+     *
      * @return string The class name.
      */
     public static function type_to_class($tool)
     {
-        $toolName = (string) StringUtilities :: getInstance()->createString($tool)->upperCamelize();
+        $toolName = (string) StringUtilities:: getInstance()->createString($tool)->upperCamelize();
 
         return __NAMESPACE__ . '\Implementation\\' . $toolName . '\\' . $toolName . 'Tool';
     }
@@ -621,11 +652,13 @@ abstract class Manager extends Application
      * Converts a tool class name to the corresponding tool name.
      *
      * @param $class string The class name.
+     *
      * @return string The tool name.
      */
     public static function class_to_type($class)
     {
-        return (string) StringUtilities :: getInstance()->createString(str_replace('Tool', '', $class))->underscored()->__toString();
+        return (string) StringUtilities:: getInstance()->createString(str_replace('Tool', '', $class))->underscored()
+            ->__toString();
     }
 
     /**
@@ -652,47 +685,57 @@ abstract class Manager extends Application
 
         if ($introduction_text)
         {
+            $toolbar = new ButtonToolBar();
+            $buttonGroup = new ButtonGroup();
+
             if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
             {
-                $toolbar = new Toolbar();
-
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation:: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('pencil'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_UPDATE_CONTENT_OBJECT,
-                                self :: PARAM_PUBLICATION_ID => $introduction_text->get_id())),
-                        ToolbarItem :: DISPLAY_ICON));
+                                self :: PARAM_PUBLICATION_ID => $introduction_text->get_id()
+                            )
+                        ),
+                        Button::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT))
             {
-                if (! $toolbar)
-                {
-                    $toolbar = new Toolbar();
-                }
-
-                $toolbar->add_item(
-                    new ToolbarItem(
-                        Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                        Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation:: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        new BootstrapGlyph('remove'),
                         $this->get_url(
                             array(
                                 self :: PARAM_ACTION => self :: ACTION_DELETE,
-                                self :: PARAM_PUBLICATION_ID => $introduction_text->get_id())),
-                        ToolbarItem :: DISPLAY_ICON,
-                        true));
+                                self :: PARAM_PUBLICATION_ID => $introduction_text->get_id()
+                            )
+                        ),
+                        Button::DISPLAY_ICON_AND_LABEL,
+                        true
+                    )
+                );
+            }
+            
+            if($buttonGroup->hasButtons())
+            {
+                $toolbar->addButtonGroup($buttonGroup);
             }
 
             $content_object = $introduction_text->get_content_object();
 
-            $rendition_implementation = ContentObjectRenditionImplementation :: factory(
+            $rendition_implementation = ContentObjectRenditionImplementation:: factory(
                 $content_object,
                 ContentObjectRendition :: FORMAT_HTML,
                 ContentObjectRendition :: VIEW_DESCRIPTION,
-                $this);
+                $this
+            );
 
             $html[] = '<div class="panel panel-default">';
             $html[] = '<div class="panel-heading">';
@@ -701,9 +744,10 @@ abstract class Manager extends Application
             $html[] = '<div class="panel-body">';
             $html[] = $rendition_implementation->render();
 
-            if ($toolbar)
+            if ($toolbar->hasItems())
             {
-                $html[] = $toolbar->as_html() . '<div class="clear"></div>';
+                $renderer = new ButtonToolBarRenderer($toolbar);
+                $html[] = '<div class="pull-right">' . $renderer->render() . '</div><div class="clearfix"></div>';
             }
 
             $html[] = '</div>';
@@ -728,20 +772,25 @@ abstract class Manager extends Application
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
-                    ContentObjectPublication :: PROPERTY_COURSE_ID),
-                new StaticConditionVariable($course_id));
+                    ContentObjectPublication:: class_name(),
+                    ContentObjectPublication :: PROPERTY_COURSE_ID
+                ),
+                new StaticConditionVariable($course_id)
+            );
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
-                    ContentObjectPublication :: PROPERTY_TOOL),
-                new StaticConditionVariable($tool_id));
+                    ContentObjectPublication:: class_name(),
+                    ContentObjectPublication :: PROPERTY_TOOL
+                ),
+                new StaticConditionVariable($tool_id)
+            );
 
             $condition = new AndCondition($conditions);
 
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_introduction_publication(
-                $condition);
+            $publication = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_introduction_publication(
+                $condition
+            );
             if ($publication)
             {
                 $this->introduction_cache[$course_id][$tool_id] = $publication;
@@ -762,18 +811,22 @@ abstract class Manager extends Application
 
     public function get_access_details_toolbar_item($parent)
     {
-        if (Request :: get(self :: PARAM_PUBLICATION_ID))
+        if (Request:: get(self :: PARAM_PUBLICATION_ID))
         {
             $url = $this->get_parent()->get_url(
                 array(
                     self :: PARAM_ACTION => self :: ACTION_VIEW_REPORTING_TEMPLATE,
-                    self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID),
-                    self :: PARAM_TEMPLATE_NAME => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate :: class_name()));
+                    self :: PARAM_PUBLICATION_ID => Request:: get(self :: PARAM_PUBLICATION_ID),
+                    self :: PARAM_TEMPLATE_NAME => \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\PublicationDetailTemplate:: class_name(
+                    )
+                )
+            );
 
             return new Button(
-                Translation :: get('AccessDetails'),
-                Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
-                $url);
+                Translation:: get('AccessDetails'),
+                Theme:: getInstance()->getCommonImagePath('Action/Reporting'),
+                $url
+            );
         }
         else
         {
@@ -786,7 +839,9 @@ abstract class Manager extends Application
         return $this->get_url(
             array(
                 self :: PARAM_ACTION => self :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT,
-                self :: PARAM_PUBLICATION_ID => $pid));
+                self :: PARAM_PUBLICATION_ID => $pid
+            )
+        );
     }
 
     public function get_complex_display_url($pid)
@@ -794,22 +849,26 @@ abstract class Manager extends Application
         return $this->get_url(
             array(
                 self :: PARAM_ACTION => self :: ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
-                self :: PARAM_PUBLICATION_ID => $pid));
+                self :: PARAM_PUBLICATION_ID => $pid
+            )
+        );
     }
 
     public static function get_pcattree_parents($pcattree)
     {
-        $parent = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(),
-            $pcattree);
+        $parent = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
+            ContentObjectPublication:: class_name(),
+            $pcattree
+        );
 
         $parents[] = $parent;
 
         while ($parent && $parent->get_parent() != 0)
         {
-            $parent = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                ContentObjectPublication :: class_name(),
-                $parent->get_parent());
+            $parent = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
+                ContentObjectPublication:: class_name(),
+                $parent->get_parent()
+            );
 
             $parents[] = $parent;
         }
@@ -831,9 +890,9 @@ abstract class Manager extends Application
     public function get_entities()
     {
         $entities = array();
-        $entities[CourseGroupEntity :: ENTITY_TYPE] = CourseGroupEntity :: get_instance($this->get_course_id());
-        $entities[CourseUserEntity :: ENTITY_TYPE] = CourseUserEntity :: get_instance();
-        $entities[CoursePlatformGroupEntity :: ENTITY_TYPE] = CoursePlatformGroupEntity :: get_instance();
+        $entities[CourseGroupEntity :: ENTITY_TYPE] = CourseGroupEntity:: get_instance($this->get_course_id());
+        $entities[CourseUserEntity :: ENTITY_TYPE] = CourseUserEntity:: get_instance();
+        $entities[CoursePlatformGroupEntity :: ENTITY_TYPE] = CoursePlatformGroupEntity:: get_instance();
 
         return $entities;
     }
@@ -863,18 +922,18 @@ abstract class Manager extends Application
     {
         $course_id = $this->get_course_id();
 
-        if (! isset($category_id))
+        if (!isset($category_id))
         {
-            $category_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY);
+            $category_id = Request:: get(\Chamilo\Application\Weblcms\Manager :: PARAM_CATEGORY);
         }
 
-        $publications = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
+        $publications = Request:: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
 
-        $rights_util = WeblcmsRights :: get_instance();
+        $rights_util = WeblcmsRights:: get_instance();
 
         if ($publications)
         {
-            if (! is_array($publications))
+            if (!is_array($publications))
             {
                 $publications = array($publications);
             }
@@ -884,7 +943,8 @@ abstract class Manager extends Application
                 $locations[] = $rights_util->get_weblcms_location_by_identifier_from_courses_subtree(
                     WeblcmsRights :: TYPE_PUBLICATION,
                     $publication,
-                    $course_id);
+                    $course_id
+                );
             }
         }
         else
@@ -894,7 +954,8 @@ abstract class Manager extends Application
                 $locations[] = $rights_util->get_weblcms_location_by_identifier_from_courses_subtree(
                     WeblcmsRights :: TYPE_COURSE_CATEGORY,
                     $category_id,
-                    $course_id);
+                    $course_id
+                );
             }
             else
             {
@@ -906,7 +967,8 @@ abstract class Manager extends Application
                     $locations[] = $rights_util->get_weblcms_location_by_identifier_from_courses_subtree(
                         WeblcmsRights :: TYPE_COURSE_MODULE,
                         $course_tool->get_id(),
-                        $course_id);
+                        $course_id
+                    );
                 }
                 else
                 {
@@ -923,23 +985,26 @@ abstract class Manager extends Application
         return $this->get_url(
             array(
                 self :: PARAM_ACTION => self :: ACTION_VIEW_ATTACHMENT,
-                self :: PARAM_OBJECT_ID => $attachment->get_id()));
+                self :: PARAM_OBJECT_ID => $attachment->get_id()
+            )
+        );
     }
 
     public static function get_packages_from_filesystem()
     {
         $types = array();
 
-        $directories = Filesystem :: get_directory_content(
-            Path :: getInstance()->namespaceToFullPath(__NAMESPACE__ . '\Implementation'),
+        $directories = Filesystem:: get_directory_content(
+            Path:: getInstance()->namespaceToFullPath(__NAMESPACE__ . '\Implementation'),
             Filesystem :: LIST_DIRECTORIES,
-            false);
+            false
+        );
 
         foreach ($directories as $directory)
         {
             $namespace = __NAMESPACE__ . '\Implementation\\' . $directory;
 
-            if (\Chamilo\Configuration\Package\Storage\DataClass\Package :: exists($namespace))
+            if (\Chamilo\Configuration\Package\Storage\DataClass\Package:: exists($namespace))
             {
                 $types[] = $namespace;
             }
@@ -951,8 +1016,9 @@ abstract class Manager extends Application
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            \Chamilo\Application\Weblcms\Tool\Action\Manager:: context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
 
         return $factory->run();
     }
@@ -967,7 +1033,9 @@ abstract class Manager extends Application
         $breadcrumbTrail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE), array(self::PARAM_PUBLICATION_ID)),
-                Translation :: getInstance()->getTranslation('BrowserComponent', array(), $this->context())));
+                Translation:: getInstance()->getTranslation('BrowserComponent', array(), $this->context())
+            )
+        );
     }
 
     /**

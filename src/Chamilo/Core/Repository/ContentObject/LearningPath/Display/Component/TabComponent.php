@@ -109,7 +109,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = parent :: render_header();
 
         $html[] = '<div class="learning-path-display">';
-        $html[] = '<iframe class="learning-path-display-full-screen" src="#"></iframe>';
+        $html[] = '<iframe class="learning-path-display-full-screen" src="about:blank"></iframe>';
 
         $html[] = $this->get_navigation_bar();
 
@@ -227,6 +227,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
             $html[] = '<div class="navbar-learning-path">';
 
             $html[] = '<div class="navbar-learning-path-actions">';
+            $html[] = '<span class="learning-path-action-menu">';
 
             $previous_node = $current_node->get_previous();
 
@@ -240,7 +241,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
                 $label = Translation :: get('Previous');
 
-                $html[] = '<a class="pull-left" href="' . $previous_url .
+                $html[] = '<a id="learning-path-navigate-left" href="' . $previous_url .
                      '"><span class="glyphicon glyphicon-arrow-left" alt="' . $label . '" title="' . $label .
                      '"></span></a>';
             }
@@ -248,9 +249,19 @@ abstract class TabComponent extends Manager implements DelegateComponent
             {
                 $label = Translation :: get('PreviousNa');
 
-                $html[] = '<span class="pull-left glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' .
+                $html[] = '<span class="glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' .
                      $label . '"></span>';
             }
+
+            $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
+
+            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-show' .
+                 ($isMenuHidden != 'true' ? ' hidden' : '') . '"></span>';
+            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-hide' .
+                 ($isMenuHidden == 'true' ? ' hidden' : '') . '"></span>';
+            $html[] = '&nbsp;';
+            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-fullscreen"></span>';
+            $html[] = '</span>';
 
             $next_node = $current_node->get_next();
 
@@ -263,29 +274,17 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
                 $label = Translation :: get('Next');
 
-                $html[] = '<a class="pull-right" href="' . $next_url .
-                     '"><span class="glyphicon glyphicon-arrow-right" alt="' . $label . '" title="' . $label .
-                     '"></span></a>';
+                $html[] = '<a id="learning-path-navigate-right" href="' . $next_url .
+                    '"><span class="glyphicon glyphicon-arrow-right" alt="' . $label . '" title="' . $label .
+                    '"></span></a>';
             }
             else
             {
                 $label = Translation :: get('NextNa');
 
-                $html[] = '<span class="pull-right glyphicon glyphicon-arrow-right disabled" alt="' . $label .
-                     '" title="' . $label . '"></span>';
+                $html[] = '<span class="glyphicon glyphicon-arrow-right disabled" alt="' . $label .
+                    '" title="' . $label . '"></span>';
             }
-
-            $html[] = '<span class="learning-path-action-menu">';
-
-            $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
-
-            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-show' .
-                 ($isMenuHidden != 'true' ? ' hidden' : '') . '"></span>';
-            $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-hide' .
-                 ($isMenuHidden == 'true' ? ' hidden' : '') . '"></span>';
-            $html[] = '&nbsp;';
-            $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-fullscreen"></span>';
-            $html[] = '</span>';
 
             $html[] = '</div>';
 

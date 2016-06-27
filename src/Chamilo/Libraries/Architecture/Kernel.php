@@ -39,7 +39,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 class Kernel
 {
     const PARAM_CODE = 'code';
-    const PARAM_SESSION_STATE = 'session_state';
     const PARAM_STATE = 'state';
 
     /**
@@ -452,21 +451,25 @@ class Kernel
     }
 
     /**
+     * Redirects response of Microsoft OAuth 2.0 Authorization workflow to the component which have called MicrosoftClientService::login(...).
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
+     *
+     * @see MicrosoftClientService::login(...)
      */
     public function handleOAuth2()
     {
         $state = $this->getRequest()->query->get(self :: PARAM_STATE);
         $code = $this->getRequest()->query->get(self :: PARAM_CODE);
-        $sessionState = $this->getRequest()->query->get(self :: PARAM_SESSION_STATE);
-
-        if ($state && $code && $sessionState)
+        // Previously, parameter 'session_state' has also been required. However protocol description 
+        // (https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-protocols-oauth-code/) does not mention this
+        // parameter anymore.
+       
+        if ($state && $code)
         {
             $stateParameters = (array) unserialize(base64_decode($state));
             $stateParameters[self :: PARAM_CODE] = $code;
-            $stateParameters[self :: PARAM_SESSION_STATE] = $sessionState;
-
+        
             $redirect = new Redirect($stateParameters);
             $redirect->toUrl();
         }

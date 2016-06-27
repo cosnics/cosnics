@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 
-use Chamilo\Libraries\Mail\Mail;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -47,39 +49,44 @@ class PostEmailNotificator extends EmailNotificator
      */
     public function send_emails()
     {
+        $targetUsers = array();
         foreach ($this->users as $user)
         {
-            $site_name = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
+            $targetUsers[] = $user->get_email();
+        }
 
-            $subject = '[' . $site_name . '] ' . $this->action_title . ' ' . $this->topic->get_title();
+        $site_name = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
 
-            $message = $this->action_body . ' ' . $this->topic->get_title() . '<br/>' . '-' . '<br/>';
-            $message = $message . $this->post->get_content();
+        $subject = '[' . $site_name . '] ' . $this->action_title . ' ' . $this->topic->get_title();
 
-            $message = preg_replace(
-                '/\[quote=("|&quot;)(.*)("|&quot;)\]/',
-                "<div class=\"quotetitle\">$2 " . Translation :: get('Wrote') . ":</div><div class=\"quotecontent\">",
-                $message);
+        $message = $this->action_body . ' ' . $this->topic->get_title() . '<br/>' . '-' . '<br/>';
+        $message = $message . $this->post->get_content();
 
-            $message = str_replace('[/quote]', '</div>', $message);
-            $message = $message . '<br/>' . Translation :: get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
-                 $this->action_user->get_lastname();
+        $message = preg_replace(
+            '/\[quote=("|&quot;)(.*)("|&quot;)\]/',
+            "<div class=\"quotetitle\">$2 " . Translation :: get('Wrote') . ":</div><div class=\"quotecontent\">",
+            $message);
 
-            if ($this->first_post_text)
-            {
-                $message = $message . '<br/>' . $this->first_post_text;
-            }
+        $message = str_replace('[/quote]', '</div>', $message);
+        $message = $message . '<br/>' . Translation :: get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
+            $this->action_user->get_lastname();
 
-            $admin_email = PlatformSetting :: get('administrator_email', 'Chamilo\Core\Admin');
-            $admin_name = PlatformSetting :: get('admin_surname', 'Chamilo\Core\Admin') . ' ' .
-                 PlatformSetting :: get('admin_firstname', 'Chamilo\Core\Admin');
+        if ($this->first_post_text)
+        {
+            $message = $message . '<br/>' . $this->first_post_text;
+        }
 
-            $mail = Mail :: factory(
-                $subject,
-                $message,
-                $user->get_email(),
-                array(Mail :: NAME => $admin_name, Mail :: EMAIL => $admin_email));
-            $mail->send();
+        $mail = new Mail($subject, $message, $targetUsers);
+
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailer = $mailerFactory->getActiveMailer();
+
+        try
+        {
+            $mailer->sendMail($mail);
+        }
+        catch (\Exception $ex)
+        {
         }
     }
 }
