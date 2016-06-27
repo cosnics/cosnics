@@ -44,7 +44,7 @@ class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\B
             $content_object,
             ContentObjectRendition :: FORMAT_HTML,
             ContentObjectRendition :: VIEW_DESCRIPTION,
-            $this->getRenderer()
+            $this
         );
 
         return $display->render();

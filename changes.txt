@@ -235,3 +235,7 @@
 * [Assignment] Added a wizard for better usability in the add submission component, added a better confirmation message and added the option to send an email after a submission has been received
 * [Repo Viewer] Fixed the importer to take the maximum number of selectable files into account
 * [Common] Changed the way the css classes for columns are rendered, splitsing the css between header and content css
+
+[02/06/2016]
+
+* [Repository] Fixed fatal error in displayer block
