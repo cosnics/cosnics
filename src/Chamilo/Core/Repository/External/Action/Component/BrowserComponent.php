@@ -19,7 +19,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class BrowserComponent extends Manager implements DelegateComponent
 {
-
     /**
      *
      * @var ButtonToolBarRenderer
@@ -178,5 +177,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
+     */
+    public function get_additional_parameters()
+    {
+        return array(\Chamilo\Core\Repository\External\Manager :: PARAM_FOLDER);
     }
 }

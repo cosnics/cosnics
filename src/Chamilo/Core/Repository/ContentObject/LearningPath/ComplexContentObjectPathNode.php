@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\AbstractItemAttempt;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 
 /**
  *
@@ -82,6 +83,18 @@ class ComplexContentObjectPathNode extends \Chamilo\Core\Repository\Common\Path\
         if (! isset($this->is_completed))
         {
             $this->is_completed = false;
+
+            if($this->get_content_object() instanceof LearningPath)
+            {
+                $descendants = $this->get_descendants();
+                foreach($descendants as $descendant)
+                {
+                    if(!$descendant->is_completed())
+                    {
+                        return false;
+                    }
+                }
+            }
             
             foreach ($this->get_data() as $attempt)
             {

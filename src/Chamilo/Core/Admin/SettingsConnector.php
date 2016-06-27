@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Admin;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -26,6 +28,12 @@ class SettingsConnector
         $options = Theme :: getInstance()->getAvailableThemes();
 
         return $options;
+    }
+    
+    public static function getMailers()
+    {
+        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        return $mailerFactory->getAvailableMailers();
     }
 
     public static function get_time_zones()

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Home\Service;
 
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Repository\HomeRepository;
+use Chamilo\Core\Home\Rights\Service\ElementRightsService;
 use Chamilo\Core\Home\Storage\DataClass\Block;
 use Chamilo\Core\Home\Storage\DataClass\Column;
 use Chamilo\Core\Home\Storage\DataClass\Element;
@@ -30,12 +31,19 @@ class HomeService
     private $homeRepository;
 
     /**
+     * @var ElementRightsService
+     */
+    protected $elementRightsService;
+
+    /**
      *
      * @param \Chamilo\Core\Home\Repository\HomeRepository $homeRepository
+     * @param ElementRightsService $elementRightsService
      */
-    public function __construct(HomeRepository $homeRepository)
+    public function __construct(HomeRepository $homeRepository, ElementRightsService $elementRightsService)
     {
         $this->homeRepository = $homeRepository;
+        $this->elementRightsService = $elementRightsService;
     }
 
     /**
@@ -54,6 +62,18 @@ class HomeService
     public function setHomeRepository($homeRepository)
     {
         $this->homeRepository = $homeRepository;
+    }
+
+    /**
+     * Returns a home element by an identifier
+     *
+     * @param int $elementIdentifier
+     *
+     * @return Element
+     */
+    public function getElementByIdentifier($elementIdentifier)
+    {
+        return $this->getHomeRepository()->findElementByIdentifier($elementIdentifier);
     }
 
     /**
@@ -77,10 +97,11 @@ class HomeService
     }
 
     /**
+     * @param User $user
      *
-     * @param integer $userIdentifier
+     * @return bool
      */
-    public function createDefaultHomeByUserIdentifier($userIdentifier)
+    public function createDefaultHomeByUserIdentifier(User $user)
     {
         $defaultElementResultSet = $this->getElementsByUserIdentifier(0);
         $defaultElements = array();
@@ -89,7 +110,10 @@ class HomeService
 
         while ($defaultElement = $defaultElementResultSet->next_result())
         {
-            $defaultElements[$defaultElement->get_type()][$defaultElement->getParentId()][] = $defaultElement;
+            if($this->elementRightsService->canUserViewElement($user, $defaultElement))
+            {
+                $defaultElements[$defaultElement->get_type()][$defaultElement->getParentId()][] = $defaultElement;
+            }
         }
 
         // Process tabs
@@ -97,21 +121,21 @@ class HomeService
             Tab :: class_name(),
             $defaultElements,
             $elementIdentifierMap,
-            $userIdentifier);
+            $user->getId());
 
         // Process columns
         $this->createDefaultElementsByUserIdentifier(
             Column :: class_name(),
             $defaultElements,
             $elementIdentifierMap,
-            $userIdentifier);
+            $user->getId());
 
         // Process blocks
         $this->createDefaultElementsByUserIdentifier(
             Block :: class_name(),
             $defaultElements,
             $elementIdentifierMap,
-            $userIdentifier);
+            $user->getId());
 
         return true;
     }
@@ -180,7 +204,7 @@ class HomeService
             {
                 if ($this->countElementsByUserIdentifier($homeUserIdentifier) == 0)
                 {
-                    $this->createDefaultHomeByUserIdentifier($homeUserIdentifier);
+                    $this->createDefaultHomeByUserIdentifier($user);
                 }
             }
 

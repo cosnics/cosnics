@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Portfolio\Favourite\Table\Favourite;
 
+use Chamilo\Application\Portfolio\Favourite\Infrastructure\Repository\FavouriteRepository;
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Toolbar;
@@ -49,6 +50,26 @@ class FavouriteTableCellRenderer extends RecordTableCellRenderer implements Tabl
                 ),
                 ToolbarItem :: DISPLAY_ICON,
                 true
+            )
+        );
+
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation::getInstance()->getTranslation(
+                    'ShowPortfolio',
+                    array('USER' => $result[User::PROPERTY_FIRSTNAME] . ' ' . $result[User::PROPERTY_LASTNAME]),
+                    \Chamilo\Application\Portfolio\Manager::context()
+                ),
+                Theme:: getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_component()->get_url(
+                    array(
+                        \Chamilo\Application\Portfolio\Manager::PARAM_ACTION =>
+                            \Chamilo\Application\Portfolio\Manager::ACTION_HOME,
+                        \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID =>
+                            $result[FavouriteRepository::PROPERTY_USER_ID]
+                    )
+                ),
+                ToolbarItem :: DISPLAY_ICON
             )
         );
 

@@ -736,6 +736,8 @@ ul.nav-wizard.publication-wizard {
 	.treeview .list-group .list-group-item .icon.node-icon, .treeview .list-group .list-group-item a
 	{
 	display: table-cell;
+	word-wrap: break-word;
+	word-break: break-word;
 }
 
 .treeview .list-group .list-group-item .indent {

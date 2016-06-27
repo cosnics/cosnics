@@ -21,7 +21,7 @@ abstract class Menu extends BootstrapTreeMenu
      */
     public function getCurrentNodeId()
     {
-        return $this->getApplication()->get_current_step();
+        return $this->getApplication()->get_current_step() - 1;
     }
 
     public function getNodes()

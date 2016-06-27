@@ -8,7 +8,7 @@ use Chamilo\Application\Weblcms\Domain\ValueObject\ImportedCourseGroupRelation;
 use Chamilo\Application\Weblcms\Domain\ValueObject\ImportedCourseUserRelation;
 use Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format\ImportFormatFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Application\Weblcms\Storage\Repository\WeblcmsRepositoryInterface;
+use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\WeblcmsRepositoryInterface;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

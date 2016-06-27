@@ -554,7 +554,7 @@ class DataManager
      * @param $class string
      * @param $property string
      * @param $condition \libraries\storage\Condition
-     * @return multitype:string
+     * @return array
      */
     public static function distinct($class, $parameters)
     {

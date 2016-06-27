@@ -72,4 +72,14 @@ class WizardHeader
     {
         return $stepIndex == $this->selectedStepIndex;
     }
+
+    /**
+     * Adds a step title
+     *
+     * @param string $stepTitle
+     */
+    public function addStepTitle($stepTitle)
+    {
+        $this->stepTitles[] = $stepTitle;
+    }
 }

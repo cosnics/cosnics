@@ -27,13 +27,13 @@ abstract class BrowseSubscriptionCoursesComponent extends BrowseComponent
         return true;
     }
 
-    /**
-     * Creates and returns the action bar
-     * 
-     * @return ButtonToolBarRenderer
-     */
-    protected function getButtonToolbarRenderer()
-    {
-        return $this->getButtonToolbarRenderer();
-    }
+//    /**
+//     * Creates and returns the action bar
+//     *
+//     * @return ButtonToolBarRenderer
+//     */
+//    protected function getButtonToolbarRenderer()
+//    {
+//        return $this->getButtonToolbarRenderer();
+//    }
 }

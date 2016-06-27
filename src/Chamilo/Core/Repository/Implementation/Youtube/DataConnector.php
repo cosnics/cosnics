@@ -185,41 +185,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return $list_categories;
     }
 
-    public function upload_video($values, $_video_file)
-    {
-        $snippet = new \Google_Service_YouTube_VideoSnippet();
-        $snippet->setTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
-        $snippet->setDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
-        $snippet->setTags($values[ExternalObjectForm :: VIDEO_TAGS]);
-        $snippet->setCategoryId($values[ExternalObjectForm :: VIDEO_CATEGORY]);
-
-        $status = new \Google_Service_YouTube_VideoStatus();
-        $status->privacyStatus = "private";
-
-        $video = new \Google_Service_YouTube_Video();
-        $video->setSnippet($snippet);
-        $video->setStatus($status);
-
-        $chunkSizeBytes = 1 * 1024 * 1024;
-        $this->client->setDefer(true);
-
-        $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
-        $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
-        $media->setFileSize(filesize($_video_file['tmp_name']));
-        $status = false;
-        $handle = fopen($_video_file['tmp_name'], "rb");
-        while (! $status && ! feof($handle))
-        {
-            $chunk = fread($handle, $chunkSizeBytes);
-            $status = $media->nextChunk($chunk);
-        }
-
-        fclose($handle);
-        $this->client->setDefer(false);
-
-        return $media;
-    }
-
     public function get_video_feeds()
     {
         if ($this->client->getAccessToken())
@@ -421,9 +386,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $snippet->setDescription(strip_tags($object->get_description()));
         $snippet->setTags(array("tag1", "tag2"));
 
-        $snippet->setCategoryId('Education');
+        // Category Education
+        $snippet->setCategoryId(27);
+
         $status = new \Google_Service_YouTube_VideoStatus();
-        $status->privacyStatus = "public";
+        $status->privacyStatus = "unlisted";
+        $status->embeddable = true;
 
         $video = new \Google_Service_YouTube_Video();
         $video->setSnippet($snippet);
@@ -444,20 +412,44 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         fclose($handle);
 
         $this->client->setDefer(false);
-        // $upload_url = 'http://uploads.gdata.youtube.com/feeds/api/users/default/uploads';
-        // try
-        // {
-        // $new_entry = $this->youtube->insertEntry($video_entry, $upload_url, 'Zend_Gdata_YouTube_VideoEntry');
-        // }
-        // catch (Zend_Gdata_App_HttpException $httpException)
-        // {
-        // echo ($httpException->getRawResponseBody());
-        // }
-        // catch (Zend_Gdata_App_Exception $e)
-        // {
-        // echo $e->getMessage();
-        // }
+
         return true;
+    }
+
+    public function upload_video($values, $_video_file)
+    {
+        $snippet = new \Google_Service_YouTube_VideoSnippet();
+        $snippet->setTitle($values[ExternalObjectForm :: VIDEO_TITLE]);
+        $snippet->setDescription($values[ExternalObjectForm :: VIDEO_DESCRIPTION]);
+        $snippet->setTags($values[ExternalObjectForm :: VIDEO_TAGS]);
+        $snippet->setCategoryId($values[ExternalObjectForm :: VIDEO_CATEGORY]);
+
+        $status = new \Google_Service_YouTube_VideoStatus();
+        $status->privacyStatus = "unlisted";
+        $status->embeddable = true;
+
+        $video = new \Google_Service_YouTube_Video();
+        $video->setSnippet($snippet);
+        $video->setStatus($status);
+
+        $chunkSizeBytes = 1 * 1024 * 1024;
+        $this->client->setDefer(true);
+
+        $insertRequest = $this->youtube->videos->insert('snippet, status, contentDetails', $video);
+        $media = new \Google_Http_MediaFileUpload($this->client, $insertRequest, 'video/*', null, true, $chunkSizeBytes);
+        $media->setFileSize(filesize($_video_file['tmp_name']));
+        $status = false;
+        $handle = fopen($_video_file['tmp_name'], "rb");
+        while (! $status && ! feof($handle))
+        {
+            $chunk = fread($handle, $chunkSizeBytes);
+            $status = $media->nextChunk($chunk);
+        }
+
+        fclose($handle);
+        $this->client->setDefer(false);
+
+        return $media;
     }
 
     public function determine_rights($video_entry)

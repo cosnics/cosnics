@@ -32,6 +32,8 @@ abstract class Manager extends Application
     const PARAM_PUBLISH_SELECTED = 'viewer_selected';
     const PARAM_IMPORT_TYPE = 'import_type';
     const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
+    const PARAM_WORKSPACE_ID = 'workspace_id';
+    const PARAM_IN_WORKSPACES = 'in_workspaces';
 
     // Actions
     const ACTION_CREATOR = 'Creator';
