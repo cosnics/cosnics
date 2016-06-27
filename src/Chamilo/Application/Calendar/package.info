@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Personal Calendar</name>
+		<code>PersonalCalendar</code>
+		<context>Chamilo\Application\Calendar</context>
+		<type>Chamilo\Application</type>
+		<category>social</category>
+		<authors />
+		<version>5.0.0</version>
+		<description>&lt;p&gt;A calendar is a system of organizing days for social,
+			religious, commercial, or administrative
+			purposes.
+			This is done by giving
+			names to periods of time, typically days, weeks, months, and years. The name
+			given to
+			each day
+			is known as a date. Periods in a calendar (such as years and
+			months) are usually, though not necessarily,
+			synchronized with the cycle of
+			the sun or the moon. Many civilizations and societies have devised a
+			calendar, usually
+			derived from other calendars on which they model their
+			systems, suited to their particular needs.&lt;/p&gt;
+		</description>
+		<pre-depends>
+			<dependency type="registration">
+				<id>Chamilo\Configuration</id>
+				<version operator="4">5.0.0</version>
+			</dependency>
+		</pre-depends>
+		<extra>
+			<default-install>1</default-install>
+		</extra>
+	</package>
+</packages>
