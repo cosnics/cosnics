@@ -73,3 +73,7 @@ CREATE TABLE `repository_wiki_page_feedback` (
 
 /* HoGent */
 /* Perspectief */
+
+ALTER TABLE `menu_application_item`
+  ADD COLUMN `component` VARCHAR(255) NULL DEFAULT NULL AFTER `application`,
+  ADD COLUMN `extra_parameters` VARCHAR(255) NULL DEFAULT NULL AFTER `component`;
