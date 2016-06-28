@@ -239,3 +239,12 @@
 [02/06/2016]
 
 * [Repository] Fixed fatal error in displayer block
+* [Calendar] Fixed the home block links
+* [Weblcms] Fixed calendar links to days
+* [Learning Path] Make sure learning paths remain full screen and headerless in all relevant contexts
+* [Learning Path] Re-added node-specific actions (assessment)
+* [Common] Various translation fixes
+* [Forum] Topic and subforum title synchronization
+* [Forum] Fixed the direct link to the last post in a topic
+* [Calendar] Fixed the untranslated week calendar header
+* [Calendar] Popup datepicker calendar layout fixed

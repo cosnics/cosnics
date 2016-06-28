@@ -15,13 +15,38 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class ApplicationItem extends Bar
 {
-
+    /**
+     * Returns whether or not this item is selected
+     *
+     * @return bool
+     */
     public function isItemSelected()
     {
-        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
-        return ($currentContext == $this->getItem()->get_application());
+        $request = $this->getMenuRenderer()->getRequest();
+        $currentContext = $request->get(Application::PARAM_CONTEXT);
+        $currentAction = $request->get(Application::PARAM_ACTION);
+
+        /** @var \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item */
+        $item = $this->getItem();
+
+        if($currentContext != $item->get_application())
+        {
+            return false;
+        }
+
+        if($item->getComponent() && $currentAction != $item->getComponent())
+        {
+            return false;
+        }
+
+        return true;
     }
 
+    /**
+     * Returns the content
+     *
+     * @return string
+     */
     public function getContent()
     {
         $application = $this->getItem()->get_application();
@@ -31,16 +56,7 @@ class ApplicationItem extends Bar
             return;
         }
 
-        $url = $this->getUrl($application);
-
-        // if ($this->isSelected())
-        // {
-        // $class = 'class="chamilo-menu-item-current" ';
-        // }
-        // else
-        // {
-        // $class = '';
-        // }
+        $url = $this->getApplicationItemURL();
 
         $html = array();
 
@@ -78,17 +94,32 @@ class ApplicationItem extends Bar
     }
 
     /**
-     * @param $application
+     * Builds the url for the current application item
      *
      * @return string
      */
-    protected function getUrl($application)
+    protected function getApplicationItemURL()
     {
-        if ($application == 'root')
+        /** @var \Chamilo\Core\Menu\Storage\DataClass\ApplicationItem $item */
+        $item = $this->getItem();
+
+        if ($item->get_application() == 'root')
         {
             return 'index.php';
         }
 
-        return 'index.php?application=' . $this->getItem()->get_application();
+        $url = 'index.php?application=' . $item->get_application();
+
+        if($item->getComponent())
+        {
+            $url .= '&go=' . $item->getComponent();
+        }
+
+        if($item->getExtraParameters())
+        {
+            $url .= '&' . $item->getExtraParameters();
+        }
+
+        return $url;
     }
 }
