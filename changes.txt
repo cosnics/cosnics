@@ -248,3 +248,5 @@
 * [Forum] Fixed the direct link to the last post in a topic
 * [Calendar] Fixed the untranslated week calendar header
 * [Calendar] Popup datepicker calendar layout fixed
+* [Common] PHP Mailer Bugfix
+* [Home] Removed contexts of home blocks when no blocks are found for the current user
