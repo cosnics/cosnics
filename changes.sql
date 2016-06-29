@@ -1,11 +1,11 @@
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\File\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\File\\Integration',NULL,'assignment_integration',1,'5.0.0');
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Page\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Page\\Integration',NULL,'assignment_integration',1,'5.0.0');
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Webpage\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Webpage\\Integration',NULL,'assignment_integration',1,'5.0.0');
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Link\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Link\\Integration',NULL,'assignment_integration',1,'5.0.0');
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Youtube\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Youtube\\Integration',NULL,'assignment_integration',1,'5.0.0');
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Vimeo\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Vimeo\\Integration',NULL,'assignment_integration',1,'5.0.0');
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Slideshare\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Slideshare\\Integration',NULL,'assignment_integration',1,'5.0.0');
-INSERT IGNORE INTO chamilo_migration.`configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Soundcloud\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Soundcloud\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\File\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\File\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Page\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Page\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Webpage\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Webpage\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Link\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Link\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Youtube\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Youtube\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Vimeo\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Vimeo\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Slideshare\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Slideshare\\Integration',NULL,'assignment_integration',1,'5.0.0');
+INSERT IGNORE INTO `configuration_registration` (`id`,`context`,`type`,`category`,`name`,`status`,`version`) VALUES (NULL,'Chamilo\\Core\\Repository\\ContentObject\\Soundcloud\\Integration\\Chamilo\\Core\\Repository\\ContentObject\\Assignment','Chamilo\\Core\\Repository\\ContentObject\\Soundcloud\\Integration',NULL,'assignment_integration',1,'5.0.0');
 
 CREATE TABLE `chamilo`.`portfolio_user_favourite` (
   `id` INT NOT NULL AUTO_INCREMENT,
@@ -71,9 +71,9 @@ CREATE TABLE `repository_wiki_page_feedback` (
   KEY `rwpf_wiki_page_id` (`wiki_page_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-/* HoGent */
-/* Perspectief */
-
 ALTER TABLE `menu_application_item`
   ADD COLUMN `component` VARCHAR(255) NULL DEFAULT NULL AFTER `application`,
   ADD COLUMN `extra_parameters` VARCHAR(255) NULL DEFAULT NULL AFTER `component`;
+
+/* HoGent */
+/* Perspectief */
