@@ -82,12 +82,12 @@ abstract class Tracker extends DataClass
      * @param $application string
      * @return Tracker The tracker object
      */
-    public static function factory($type, $context)
-    {
-        $class = $context . '\Storage\DataClass\\' .
-             StringUtilities :: getInstance()->createString($type)->upperCamelize();
-        return new $class();
-    }
+//    public static function factory($type, $context)
+//    {
+//        $class = $context . '\Storage\DataClass\\' .
+//             StringUtilities :: getInstance()->createString($type)->upperCamelize();
+//        return new $class();
+//    }
 
     /**
      *
