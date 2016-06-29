@@ -44,16 +44,16 @@ class UpgraderComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-//        $this->fixTemplates();
-//        $this->fixAssessmentMatchNumericQuestions();
-//        $this->fixAssessmentMatchTextQuestions();
-//        $this->fixAssessmentMatchingQuestions();
-//        $this->fixAssessmentMatrixQuestions();
-//        $this->fixAssessmentMultipleChoiceQuestions();
-//        $this->fixAssessmentSelectQuestions();
-//        $this->fixHotspotQuestions();
-//        $this->fixOrderingQuestions();
-//        $this->fixAssignmentAllowedTypes();
+        $this->fixTemplates();
+        $this->fixAssessmentMatchNumericQuestions();
+        $this->fixAssessmentMatchTextQuestions();
+        $this->fixAssessmentMatchingQuestions();
+        $this->fixAssessmentMatrixQuestions();
+        $this->fixAssessmentMultipleChoiceQuestions();
+        $this->fixAssessmentSelectQuestions();
+        $this->fixHotspotQuestions();
+        $this->fixOrderingQuestions();
+        $this->fixAssignmentAllowedTypes();
 
         $this->fixHomeBlockPublications();
     }
