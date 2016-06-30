@@ -1,0 +1,66 @@
+@import url('../Aqua/Stylesheet.css');
+
+/*****************************************************
+ *  ADMIN STYLES                                     *
+ *****************************************************/
+div.admin_header span.category {
+	float: left;
+	background-color: #f6f6f6;
+	font-weight: bold;
+	color: #9e021b;
+	padding: 5px 15px 0px 15px;
+	border: 1px solid #ebebeb;
+	border-bottom: 0px solid #efefef;
+	margin: 0px 0px -1px 15px;
+	-moz-border-radius-topright: 10px;
+	border-radius-topright: 10px;
+	-webkit-border-top-right-radius: 10px;
+	/*
+	background-image: url('../images/admin/background_tab.png');
+	background-repeat: repeat-x;
+	*/
+}
+
+div.admin_header span.category span.title {
+	color: #B1071C;
+	font-size: 14px;
+}
+
+div.admin_header div.admin_search {
+	float: right;
+	margin: -10px 15px 0px 0px;
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #9e021b;
+}
+
+div.vertical_action {
+	clear: both;
+	width: 100%;
+	overflow: hidden;
+	padding: 10px 0px 10px 0px;
+	border-top: 1px solid #EBEBEB;
+}
+
+div.vertical_action div.icon {
+	float: left;
+	width: 64px;
+	height: 64px;
+}
+
+div.vertical_action div.icon img {
+	margin: 16px;
+}
+
+div.vertical_action div.description {
+	margin-left: 64px;
+}
+
+div.vertical_action div.description .binary_checkbox {
+	margin-top: 10px;
+}
+
+div.vertical_action h4 {
+	margin: 0px;
+	padding: 0px;
+}
