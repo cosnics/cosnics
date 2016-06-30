@@ -205,7 +205,15 @@ class ViewerComponent extends TabComponent
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
-            $parameters[self::PARAM_STEP] = $this->get_current_step();
+
+            if ($this->get_current_content_object() instanceof LearningPath)
+            {
+                $parameters[self::PARAM_STEP] = $this->get_current_step();
+            }
+            else
+            {
+                $parameters[self::PARAM_STEP] = $this->get_current_node()->get_parent_id();
+            }
 
             $actionSelector = new ActionSelector(
                 $this,
