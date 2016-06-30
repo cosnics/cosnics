@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 
 abstract class Manager extends Application
 {
@@ -61,7 +62,7 @@ abstract class Manager extends Application
             $primaryActions->addButton(
                 new Button(
                     Translation::get('BuilderComponent'),
-                    new BootstrapGlyph('th-list'),
+                    new FontAwesomeGlyph('cubes'),
                     $url,
                     Button::DISPLAY_ICON_AND_LABEL,
                     false,

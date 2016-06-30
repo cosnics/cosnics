@@ -69,7 +69,6 @@ class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer impleme
                 $this->getUser(),
                 array(
                     Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
-                    \Chamilo\Application\Calendar\Ajax\Manager::context(),
                     MiniMonthRenderer::PARAM_TYPE => MiniMonthRenderer::TYPE_DAY));
 
             $calendarLegend = new Legend($dataProvider);
