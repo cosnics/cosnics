@@ -250,3 +250,8 @@
 * [Calendar] Popup datepicker calendar layout fixed
 * [Common] PHP Mailer Bugfix
 * [Home] Removed contexts of home blocks when no blocks are found for the current user
+* [Repository] Bugfix search form in browser
+* [Learning path] Make sure the step parameter is set to the parent step if the current item can't have any children
+* [Assessment] constant typo fixed
+* [Mail] Don't add the phpmailer config to the codebase
+* [User] Make sure the profile picture in the form is not a cached version
