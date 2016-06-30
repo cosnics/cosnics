@@ -35,14 +35,14 @@ class FilterDataButtonSearchForm extends ButtonSearchForm
      */
     public function getQuery()
     {
-        $query = $this->filterData->get_filter_property(FilterData::FILTER_TEXT);
+        $query = parent::getQuery();
 
         if($query)
         {
             return $query;
         }
 
-        return parent::getQuery();
+        return $this->filterData->get_filter_property(FilterData::FILTER_TEXT);
     }
 
     /**

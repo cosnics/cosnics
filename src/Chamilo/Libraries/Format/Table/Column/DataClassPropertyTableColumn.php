@@ -35,8 +35,6 @@ class DataClassPropertyTableColumn extends TableColumn
      * @param bool $sortable - Whether or not the column is sortable
      * @param string $headerCssClasses
      * @param string $contentCssClasses
-     *
-     * @internal param string $cssClasses
      */
     public function __construct(
         $class_name, $property, $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null
