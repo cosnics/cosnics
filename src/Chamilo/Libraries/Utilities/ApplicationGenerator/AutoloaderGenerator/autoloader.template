@@ -1,0 +1,45 @@
+<?php
+
+namespace {NAMESPACE};
+
+use common\libraries\Utilities;
+use common\libraries\Webapplication;
+
+/**
+ * @author Sven Vanpoucke
+ * @author {AUTHOR}
+ * {APPLICATION_NAME}
+ */
+class Autoloader
+{
+
+    static function load($classname)
+    {
+        $list = array(
+            '{L_APPLICATION_NAME}_data_manager' => '{L_APPLICATION_NAME}_data_manager.class.php',
+            '{L_APPLICATION_NAME}_data_manager_interface' => '{L_APPLICATION_NAME}_data_manager_interface.class.php',
+            <!-- BEGIN OBJECTS -->
+            '{OBJECTS.L_OBJECT_CLASS}' => '{OBJECTS.L_OBJECT_CLASS}.class.php',
+            '{OBJECTS.L_OBJECT_CLASS}_form' => 'forms/{OBJECTS.L_OBJECT_CLASS}_form.class.php',
+            <!-- BEGIN TABLE -->
+            '{OBJECTS.L_OBJECT_CLASS}_browser_table' => '{L_APPLICATION_NAME}_manager/component/{OBJECTS.L_OBJECT_CLASS}_browser/{OBJECTS.L_OBJECT_CLASS}_browser_table.class.php',
+            <!-- END TABLE -->
+            <!-- END OBJECTS -->
+            '{L_APPLICATION_NAME}_manager' => '{L_APPLICATION_NAME}_manager/{L_APPLICATION_NAME}_manager.class.php'
+        );
+
+        $lower_case = Utilities :: camelcase_to_underscores($classname);
+
+        if (key_exists($lower_case, $list))
+        {
+            $url = $list[$lower_case];
+            require_once WebApplication :: get_application_class_lib_path('{L_APPLICATION_NAME}') . $url;
+            return true;
+        }
+
+        return false;
+    }
+
+}
+
+?>

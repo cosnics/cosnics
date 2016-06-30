@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\glossary
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Woordenlijsten"
+TypeNameSingle = "Woordenlijst"
+BrowserComponent = "Doorblader woordenlijsten"
+ViewerComponent = "Geef de woordenlijst weer"
+EvaluateComponent = "Evalueer"
+IntroductionPublisherComponent = "Publiceer introductie"
+MoverComponent = "Verplaats woordenlijst"
+PublisherComponent = "Publiceer woordenlijst"
+UpdaterComponent = "Bewerk woordenlijst"
+CreateItem = "Maak item aan"

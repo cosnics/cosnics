@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\search
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Search"
+TypeCategory = "Course Tools"
+ResultsFoundFor = "{COUNT} results found for: <mark>{QUERY}</mark>"
+ResultFoundFor = "{COUNT} result found for: <mark>{QUERY}</mark>"
+SearcherComponent = "Search"
+SearchResult = "{COUNT} result"
+SearchResults = "{COUNT} results"
+SearchFor = "Search for"
