@@ -48,6 +48,11 @@ class BlockListComponent extends \Chamilo\Core\Home\Ajax\Manager
             }
 
             $contextBlocksInfo['components'] = $validComponents;
+
+            if(empty($contextBlocksInfo['components']))
+            {
+                unset($platformBlocks[$context]);
+            }
         }
 
         $result = new JsonAjaxResult(200);
