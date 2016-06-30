@@ -95,12 +95,17 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function getButtonToolbarRenderer($content_object)
     {
-        $buttonToolbar = parent::getButtonToolbarRenderer($content_object);
+        $buttonToolbarRenderer = parent::getButtonToolbarRenderer($content_object);
 
-        if (! isset($this->buttonToolbarRenderer))
+        if (! $buttonToolbarRenderer instanceof ButtonToolBarRenderer)
         {
             $buttonToolbar = new ButtonToolBar();
         }
+        else
+        {
+            $buttonToolbar = $buttonToolbarRenderer->getButtonToolBar();
+        }
+
         $commonActions = new ButtonGroup();
 
         $preview_url = \Chamilo\Core\Repository\Manager::get_preview_content_object_url($content_object);
