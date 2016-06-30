@@ -13,6 +13,7 @@ syntax: glob
 deactivator.php
 behat.yml
 
+src/Chamilo/Libraries/Mail/Mailer/PhpMailer/Resources/Config/phpmailer.conf.php
 syntax: regexp
 (^|/)\.
 ^composer\.(?!json)
