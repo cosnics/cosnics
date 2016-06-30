@@ -255,3 +255,4 @@
 * [Assessment] constant typo fixed
 * [Mail] Don't add the phpmailer config to the codebase
 * [User] Make sure the profile picture in the form is not a cached version
+* [Platform Groups] Fixed translations and readded the subscribe button
