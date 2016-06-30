@@ -39,6 +39,11 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -535,7 +540,7 @@ EOT;
                 ContentObject::PROPERTY_PARENT_ID,
                 Translation::get('CategoryTypeName'),
                 $this->get_categories(),
-                array('class' => 'form-control'));
+                array('class' => 'form-control', 'id' => "parent_id"));
 
             $category_group[] = $this->createElement(
                 'image',
@@ -923,19 +928,46 @@ EOT;
      */
     public function create_new_category($category_name, $parent_id)
     {
-        $new_category = new RepositoryCategory();
-        $new_category->set_name($category_name);
-        $new_category->set_parent($parent_id);
-        $new_category->set_type_id($this->workspace->getId());
-        $new_category->set_type($this->workspace->getWorkspaceType());
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
+            new StaticConditionVariable($parent_id));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->workspace->getId()));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE),
+            new StaticConditionVariable($this->workspace->getWorkspaceType()));
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_NAME),
+            new StaticConditionVariable($category_name));
+        $condition = new AndCondition($conditions);
 
-        if (! $new_category->create())
+        $existingNewCategory = DataManager::retrieve(
+            RepositoryCategory::class_name(),
+            new DataClassRetrieveParameters($condition));
+
+        if ($existingNewCategory instanceof RepositoryCategory)
         {
-            return null;
+            return $existingNewCategory;
         }
         else
         {
-            return $new_category;
+
+            $new_category = new RepositoryCategory();
+            $new_category->set_name($category_name);
+            $new_category->set_parent($parent_id);
+            $new_category->set_type_id($this->workspace->getId());
+            $new_category->set_type($this->workspace->getWorkspaceType());
+
+            if (! $new_category->create())
+            {
+                return null;
+            }
+            else
+            {
+                return $new_category;
+            }
         }
     }
 
