@@ -79,7 +79,7 @@ abstract class ViewRenderer extends Renderer
     public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
         $viewActions = array(), $linkTarget = '')
     {
-        parent :: __construct($dataProvider);
+        parent::__construct($dataProvider);
 
         $this->legend = $legend;
         $this->displayTime = $displayTime;
@@ -177,7 +177,27 @@ abstract class ViewRenderer extends Renderer
      */
     public function getEvents($startTime, $endTime)
     {
-        return $this->getDataProvider()->getAllEventsInPeriod($startTime, $endTime);
+        $events = $this->getDataProvider()->getAllEventsInPeriod($startTime, $endTime);
+
+        usort(
+            $events,
+            function ($eventLeft, $eventRight)
+            {
+                if ($eventLeft->getStartDate() < $eventRight->getStartDate())
+                {
+                    return - 1;
+                }
+                elseif ($eventLeft->getStartDate() > $eventRight->getStartDate())
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            });
+
+        return $events;
     }
 
     /**
@@ -209,14 +229,14 @@ abstract class ViewRenderer extends Renderer
         foreach ($types as $type)
         {
             $items[] = new ToolbarItem(
-                Translation :: get($type . 'View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Type/' . $type),
-                str_replace(self :: MARKER_TYPE, $type, $typeUrl));
+                Translation::get($type . 'View', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Type/' . $type),
+                str_replace(self::MARKER_TYPE, $type, $typeUrl));
         }
 
         $items[] = new ToolbarItem(
-            Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Today'),
+            Translation::get('Today', null, Utilities::COMMON_LIBRARIES),
+            Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Today'),
             $todayUrl);
 
         return $items;
@@ -236,26 +256,24 @@ abstract class ViewRenderer extends Renderer
         {
             $tabs[] = new DynamicVisualTab(
                 $type,
-                Translation :: get($type . 'View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getImagePath(
-                    'Chamilo\Libraries\Calendar\Renderer',
-                    'Renderer/Tab/Type/' . $type),
-                str_replace(self :: MARKER_TYPE, $type, $typeUrl),
+                Translation::get($type . 'View', null, Utilities::COMMON_LIBRARIES),
+                Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Type/' . $type),
+                str_replace(self::MARKER_TYPE, $type, $typeUrl),
                 false,
                 false,
-                DynamicVisualTab :: POSITION_LEFT,
-                DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+                DynamicVisualTab::POSITION_LEFT,
+                DynamicVisualTab::DISPLAY_BOTH_SELECTED);
         }
 
         $tabs[] = new DynamicVisualTab(
             'today',
-            Translation :: get('Today', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Today'),
+            Translation::get('Today', null, Utilities::COMMON_LIBRARIES),
+            Theme::getInstance()->getImagePath('Chamilo\Libraries\Calendar\Renderer', 'Renderer/Tab/Today'),
             $todayUrl,
             false,
             false,
-            DynamicVisualTab :: POSITION_LEFT,
-            DynamicVisualTab :: DISPLAY_BOTH_SELECTED);
+            DynamicVisualTab::POSITION_LEFT,
+            DynamicVisualTab::DISPLAY_BOTH_SELECTED);
 
         return $tabs;
     }
@@ -267,28 +285,28 @@ abstract class ViewRenderer extends Renderer
     public function renderTypeButton()
     {
         $rendererTypes = array(
-            ViewRenderer :: TYPE_MONTH,
-            ViewRenderer :: TYPE_WEEK,
-            ViewRenderer :: TYPE_DAY,
-            ViewRenderer :: TYPE_LIST);
+            ViewRenderer::TYPE_MONTH,
+            ViewRenderer::TYPE_WEEK,
+            ViewRenderer::TYPE_DAY,
+            ViewRenderer::TYPE_LIST);
 
         $displayParameters = $this->getDataProvider()->getDisplayParameters();
-        $currentRendererType = $displayParameters[self :: PARAM_TYPE];
+        $currentRendererType = $displayParameters[self::PARAM_TYPE];
 
-        $button = new DropdownButton(Translation :: get($currentRendererType . 'View'), new BootstrapGlyph('calendar'));
+        $button = new DropdownButton(Translation::get($currentRendererType . 'View'), new BootstrapGlyph('calendar'));
         $button->setDropdownClasses('dropdown-menu-right');
 
         foreach ($rendererTypes as $rendererType)
         {
-            $displayParameters[self :: PARAM_TYPE] = $rendererType;
+            $displayParameters[self::PARAM_TYPE] = $rendererType;
             $typeUrl = new Redirect($displayParameters);
 
             $button->addSubButton(
                 new SubButton(
-                    Translation :: get($rendererType . 'View'),
+                    Translation::get($rendererType . 'View'),
                     null,
                     $typeUrl->getUrl(),
-                    SubButton :: DISPLAY_LABEL,
+                    SubButton::DISPLAY_LABEL,
                     false,
                     $currentRendererType == $rendererType ? 'selected' : 'not-selected'));
         }
@@ -303,7 +321,7 @@ abstract class ViewRenderer extends Renderer
     public function determineNavigationUrl()
     {
         $parameters = $this->getDataProvider()->getDisplayParameters();
-        $parameters[self :: PARAM_TIME] = Calendar :: TIME_PLACEHOLDER;
+        $parameters[self::PARAM_TIME] = Calendar::TIME_PLACEHOLDER;
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
