@@ -67,8 +67,20 @@ class DeleterComponent extends Manager
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionFeedback :: remove(
                         $subm_condition);
 
+                    $subm_condition = new EqualityCondition(
+                        new PropertyConditionVariable(
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: class_name(),
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: PROPERTY_SUBMISSION_ID),
+                        new StaticConditionVariable($submission->get_id()));
+
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionScore :: remove(
                         $subm_condition);
+
+                    $subm_condition = new EqualityCondition(
+                        new PropertyConditionVariable(
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote :: class_name(),
+                            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote :: PROPERTY_SUBMISSION_ID),
+                        new StaticConditionVariable($submission->get_id()));
 
                     \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\SubmissionNote :: remove(
                         $subm_condition);
