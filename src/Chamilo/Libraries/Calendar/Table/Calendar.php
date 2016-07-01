@@ -43,7 +43,7 @@ abstract class Calendar extends HTML_Table
 
         array_unshift($classes, 'table-calendar');
 
-        parent :: __construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
+        parent::__construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
     }
 
     /**
@@ -73,7 +73,6 @@ abstract class Calendar extends HTML_Table
     public function addEvent($time, $content)
     {
         $this->eventsToShow[$time][] = $content;
-        sort($this->eventsToShow[$time]);
     }
 
     /**
