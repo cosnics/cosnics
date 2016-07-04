@@ -20,11 +20,7 @@ class CheckCategoryNameComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(
-            self :: PARAM_NAME,
-            self :: PARAM_PARENT_ID,
-            self :: PARAM_WORKSPACE_TYPE,
-            self :: PARAM_WORKSPACE_ID);
+        return array(self::PARAM_NAME, self::PARAM_PARENT_ID, self::PARAM_WORKSPACE_TYPE, self::PARAM_WORKSPACE_ID);
     }
 
     /*
@@ -32,10 +28,10 @@ class CheckCategoryNameComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function run()
     {
-        $category_name = $this->getPostDataValue(self :: PARAM_NAME);
-        $parent_id = $this->getPostDataValue(self :: PARAM_PARENT_ID);
+        $category_name = $this->getPostDataValue(self::PARAM_NAME);
+        $parent_id = $this->getPostDataValue(self::PARAM_PARENT_ID);
 
-        if ($this->getPostDataValue(self :: PARAM_WORKSPACE_TYPE) == PersonalWorkspace :: WORKSPACE_TYPE)
+        if ($this->getPostDataValue(self::PARAM_WORKSPACE_TYPE) == PersonalWorkspace::WORKSPACE_TYPE)
         {
             $workspace = new PersonalWorkspace($this->get_user());
         }
@@ -43,16 +39,16 @@ class CheckCategoryNameComponent extends \Chamilo\Core\Repository\Ajax\Manager
         {
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
             $workspace = $workspaceService->getWorkspaceByIdentifier(
-                $this->getPostDataValue(self :: PARAM_WORKSPACE_ID));
+                $this->getPostDataValue(self::PARAM_WORKSPACE_ID));
         }
 
-        if (! DataManager :: check_category_name($workspace, $parent_id, $category_name))
+        if (! DataManager::check_category_name($workspace, $parent_id, $category_name))
         {
-            JsonAjaxResult :: success();
+            JsonAjaxResult::success();
         }
         else
         {
-            JsonAjaxResult :: error(409, Translation :: get('CategoryAlreadyExists'));
+            JsonAjaxResult::error(409, Translation::get('CategoryAlreadyExists'));
         }
     }
 }

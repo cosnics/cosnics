@@ -13,6 +13,6 @@
     
     "require": {
         "php": ">=5.4.0",
-        "phpoffice/phpexcel" : "=1.8.0"
+        "phpoffice/phpexcel" : "1.8.*"
     }
 }
