@@ -88,15 +88,15 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
 
         $html[] = '</div>';
 
-        if (! $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
+        if (! $this->getBlock()->getSetting(self::CONFIGURATION_SHOW_NEW_ICONS, true))
         {
             $courseTypeLink = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: package(),
-                    \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer :: PARAM_SELECTED_COURSE_TYPE => $this->getCourseTypeId()));
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::package(),
+                    \Chamilo\Application\Weblcms\Renderer\CourseList\Type\CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE => $this->getCourseTypeId()));
 
             $html[] = '<div class="panel-footer">';
-            $html[] = Translation :: get('CheckWhatsNew', array('URL' => $courseTypeLink->getUrl()));
+            $html[] = Translation::get('CheckWhatsNew', array('URL' => $courseTypeLink->getUrl()));
             $html[] = '</div>';
         }
 
@@ -114,7 +114,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
 
         $renderer = $this->getCourseListRenderer();
 
-        if ($this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_NEW_ICONS, true))
+        if ($this->getBlock()->getSetting(self::CONFIGURATION_SHOW_NEW_ICONS, true))
         {
             $renderer->show_new_publication_icons();
         }
@@ -136,7 +136,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
 
         if ($course_type_id > 0)
         {
-            $course_type = CourseTypeDataManager :: retrieve_by_id(CourseType :: class_name(), $course_type_id);
+            $course_type = CourseTypeDataManager::retrieve_by_id(CourseType::class_name(), $course_type_id);
 
             if ($course_type)
             {
@@ -144,12 +144,12 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
             }
             else
             {
-                return Translation :: get('NoSuchCourseType');
+                return Translation::get('NoSuchCourseType');
             }
         }
         else
         {
-            $course_type_title = Translation :: get('NoCourseType');
+            $course_type_title = Translation::get('NoCourseType');
         }
 
         $user_course_category_id = $this->getUserCourseCategoryId();
@@ -157,8 +157,8 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
         if ($user_course_category_id > 0)
         {
 
-            $course_user_category = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory :: class_name(),
+            $course_user_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                \Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory::class_name(),
                 $user_course_category_id);
 
             if ($course_user_category)
@@ -201,7 +201,13 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
      */
     private function loadSettings()
     {
-        $courseTypeIds = json_decode($this->getBlock()->getSetting(self :: CONFIGURATION_COURSE_TYPE));
+        $courseTypeIds = json_decode($this->getBlock()->getSetting(self::CONFIGURATION_COURSE_TYPE));
+
+        if (is_array($courseTypeIds))
+        {
+            $courseTypeIds = array($courseTypeIds);
+        }
+
         $this->courseTypeId = $courseTypeIds[0];
 
         // TODO: Fix this?
@@ -214,6 +220,6 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
      */
     public function getConfigurationVariables()
     {
-        return array(self :: CONFIGURATION_SHOW_NEW_ICONS, self :: CONFIGURATION_COURSE_TYPE);
+        return array(self::CONFIGURATION_SHOW_NEW_ICONS, self::CONFIGURATION_COURSE_TYPE);
     }
 }
