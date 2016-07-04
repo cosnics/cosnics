@@ -203,7 +203,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
     {
         $courseTypeIds = json_decode($this->getBlock()->getSetting(self::CONFIGURATION_COURSE_TYPE));
 
-        if (is_array($courseTypeIds))
+        if (!is_array($courseTypeIds))
         {
             $courseTypeIds = array($courseTypeIds);
         }
