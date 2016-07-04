@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\note
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Note"
+TypeCategory = "Content Objects"
+Title = "Title"
+Description = "Note"
+DeleteSelected = "Delete selected"
+NoteToolBrowserComponent = "Browse notes"
+NoteToolIntroductionPublisherComponent = "Publish introduction"
+NoteToolPublisherComponent = "Publish"
+NoteToolUpdaterComponent = "Edit note"
+NoteToolViewerComponent = "View note"
