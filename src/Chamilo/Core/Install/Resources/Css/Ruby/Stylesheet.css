@@ -1,12 +1,1 @@
 @import url('../Aqua/Stylesheet.css');
-
-#progresstrail li a {
-	display: block;
-	padding: 0 15px 0 15px;
-	background-image:
-		url(../../../../../Configuration/Resources/Images/Ruby/Background/Breadcrumb.png);
-	background-repeat: no-repeat;
-	background-position: right center;
-	color: #a8a8a8;
-	cursor: default;
-}
