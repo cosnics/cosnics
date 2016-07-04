@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="comic_book">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" />
+		<property name="original_title" type="text" length="255" />
+		<property name="issue" unsigned="1" type="integer" length="4" />
+		<property name="series" type="text" length="255" />
+		<property name="original_series" type="text" length="255" />
+		<property name="subseries" type="text" length="255" />
+		<property name="artist" type="text" length="255" />
+		<property name="writer" type="text" length="255" />
+		<property name="colorist" type="text" length="255" />
+		<property name="inker" type="text" length="255" />
+		<property name="editor" type="text" length="255" />
+		<property name="collection" type="text" length="255" />
+		<property name="collection_issue" unsigned="1" type="integer" length="4" />
+		<property name="type" type="text" length="50" />
+		<property name="binding" unsigned="1" type="integer" length="1" />
+		<property name="pages" unsigned="1" type="integer" length="4" />
+		<property name="year" type="integer" length="4" />
+		<property name="genre" type="text" length="50" />
+		<property name="limited" unsigned="1" type="integer" length="1" />
+		<property name="signed" unsigned="1" type="integer" length="1" />
+		<property name="language" type="text" length="255" />
+		<property name="colour" unsigned="1" type="integer" length="1" />
+		<property name="weight" unsigned="1" type="integer" length="3" />
+		<property name="price" type="decimal" length="10" scale="2" />
+		<property name="currency" type="text" length="50" />
+		<property name="synopsis" type="text" />
+		<property name="review" type="text" />
+		<property name="covers" type="text" />
+		<property name="extracts" type="text" />
+		<property name="tags" type="text" notnull="1" />
+	</properties>
+	<index name="id" type="primary">
+		<indexproperty name="id" />
+	</index>
+</object>
