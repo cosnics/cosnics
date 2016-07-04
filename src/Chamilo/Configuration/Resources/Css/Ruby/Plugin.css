@@ -1,12 +1,12 @@
-@import url('../../../Aqua/Plugin/Dropzone/dropzone.min.css');
+@import url('../Aqua/Plugin/Dropzone/dropzone.min.css');
 
 @import url('Plugin/Jquery/jquery-ui.min.css');
 
-@import url('../../../Aqua/Plugin/TextareaResizer/Stylesheet.css');
+@import url('../Aqua/Plugin/TextareaResizer/Stylesheet.css');
 
-@import url('../../../Aqua/Plugin/Jplayer/Stylesheet.css');
+@import url('../Aqua/Plugin/Jplayer/Stylesheet.css');
 
-@import url('../../../Aqua/Bootstrap/css/bootstrap-toggle.min.css');
+@import url('../Aqua/Bootstrap/css/bootstrap-toggle.min.css');
 
 .ui-widget-content {
 	border: 0px;
