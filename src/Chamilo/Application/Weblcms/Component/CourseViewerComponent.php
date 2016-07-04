@@ -55,7 +55,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         /** Make sure the tool parameter is backwards compatible by upper camelizing the tool */
         $tool = Request :: get(self :: PARAM_TOOL);
-        $tool = StringUtilities::getInstance()->createString($tool)->upperCamelize();
+        $tool = StringUtilities::getInstance()->createString($tool)->upperCamelize()->__toString();
 
         $this->set_parameter(self :: PARAM_COURSE, $this->get_course()->get_id());
         $this->set_parameter(self :: PARAM_TOOL, $tool);
