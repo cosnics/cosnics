@@ -728,9 +728,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
-                ComplexContentObjectItem::PROPERTY_REF),
+            new PropertyConditionVariable(ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF),
             new StaticConditionVariable($object->get_id()));
 
         $conditions[] = new EqualityCondition(
@@ -1056,9 +1054,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(),
-                ComplexContentObjectItem::PROPERTY_REF),
+            new PropertyConditionVariable(ComplexContentObjectItem::class_name(), ComplexContentObjectItem::PROPERTY_REF),
             new StaticConditionVariable($ref_id));
 
         $conditions[] = new EqualityCondition(
@@ -1132,9 +1128,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             RepositoryCategory::class_name(),
             new DataClassRetrievesParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(
-                        RepositoryCategory::class_name(),
-                        RepositoryCategory::PROPERTY_PARENT),
+                    new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
                     new StaticConditionVariable($category->get_id()))));
 
         while ($categories && $category = $categories->next_result())
@@ -1215,7 +1209,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($workspace->getWorkspaceType()));
         $condition = new AndCondition($conditions);
 
-        return self::count(RepositoryCategory::class_name(), $condition) > 0;
+        return self::count(RepositoryCategory::class_name(), new DataClassCountParameters($condition)) > 0;
     }
 
     public static function delete_workspace_category_recursive($category, $fix_display_order = true)
@@ -1250,9 +1244,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             RepositoryCategory::class_name(),
             new DataClassRetrievesParameters(
                 new EqualityCondition(
-                    new PropertyConditionVariable(
-                        RepositoryCategory::class_name(),
-                        RepositoryCategory::PROPERTY_PARENT),
+                    new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_PARENT),
                     new StaticConditionVariable($category->get_id()))));
         while ($category = $categories->next_result())
         {
