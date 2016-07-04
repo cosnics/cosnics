@@ -8,16 +8,6 @@
 
 @import url('../../../Aqua/Bootstrap/css/bootstrap-toggle.min.css');
 
-/* .ui-tabs .ui-tabs-panel { */
-/* 	border: 1px solid #ebebeb; */
-/* 	background-color: transparent; */
-/* 	padding: 0px; */
-/* } */
-
-.ui-widget {
-	font-family: Ubuntu, verdana, sans-serif;
-}
-
 .ui-widget-content {
 	border: 0px;
 	background-image: none;

@@ -1,89 +1,24 @@
 @import url('../Aqua/Bootstrap.css');
 
-/**************
- * ACTION BAR *
- **************/
-.dropdown-menu>li>a {
-	padding: 3px 32px;
-}
-
-.dropdown-menu>li>a.selected, .dropdown-menu>li>a:hover.selected {
-	background-image: url("../../Images/Aqua/Background/Checkmark.png");
-	background-position: 12px center;
-	background-repeat: no-repeat;
-}
-
-.btn-action-toolbar .btn-group-vertical {
-	width: 100%;
-	margin-bottom: 15px;
-}
-
-.btn-action-toolbar .btn-group-vertical .btn {
-	text-align: left;
-}
-
-form .row {
-	margin: 0 0 5px;
-}
-
-form.table_form .row {
-	margin-bottom: 0;
-}
-
-form.table_form .row .btn-action-toolbar {
-	margin-bottom: 5px;
-}
-
-a, .ui-widget-content a:not(.btn) {
+.ui-widget-content a:not (.btn ), a {
 	color: #b1071c;
-	text-decoration: none;
-	font-weight: bold;
 }
 
-ul.nav-wizard li.active {
-	color: #f5f5f5;
-	background: #B63033;
+a {
+	color: #b1071c;
 }
 
-ul.nav-wizard li.active:after {
-	border-left: 16px solid #B63033;
-}
-
-ul.nav-wizard li.active a, ul.nav-wizard li.active a:active, ul.nav-wizard li.active a:visited,
-	ul.nav-wizard li.active a:focus {
-	color: #f5f5f5;
-	background: #B63033;
-}
-
-/***********************
- * Alert			   *
- ***********************/
-
-.alert-message
-{
-	z-index: 9999;
-	position: relative;
-	margin: 10px auto 10px -287px;
-	width: 500px;
-	left: 50%;
-	right: 50%;
-	padding: 10px 36px 10px 36px;
-	text-align: justify;
-	background-repeat: no-repeat;
-	background-position: 10px 50%;
+ol.breadcrumb>li>a {
+	color: #808080;
 }
 
 .btn-default span.glyphicon, .btn-default span.fa {
-	color: #777777;
+	color: #8e4040;
 }
 
-.ui-widget-content a:not (.btn ), a {
-	color: #777777;
-	text-decoration: none;
-	font-weight: bold;
-}
-
-.file-upload .panel .glyphicon {
-	font-size: 48px;
-	color: #777777;
+.btn-primary span.glyphicon, .btn-primary span.fa, .btn-success span.glyphicon,
+	.btn-success span.fa, .btn-info span.glyphicon, .btn-info span.fa,
+	.btn-warning span.glyphicon, .btn-warning span.fa, .btn-danger span.glyphicon,
+	.btn-danger span.fa {
+	color: white;
 }
