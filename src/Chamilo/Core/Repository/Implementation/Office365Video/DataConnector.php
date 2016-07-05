@@ -129,7 +129,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_external_repository_object($id)
     {
-        if ($this->microsoftClientService->isUserLoggedIn())
+        if ($this->isUserLoggedIn())
         {
             try
             {
@@ -149,6 +149,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             return null;
         }
+    }
+
+    /**
+     *  Returns whether current user has an access token.
+     */ 
+    public function isUserLoggedIn()
+    {
+        return $this->microsoftClientService->isUserLoggedIn();
     }
 
     /**
