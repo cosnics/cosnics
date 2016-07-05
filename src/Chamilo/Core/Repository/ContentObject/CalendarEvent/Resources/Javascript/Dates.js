@@ -20,6 +20,7 @@
             startDateTextBox,
             endDateTextBox,
             {
+                firstDay: 1,
                 minInterval: (1000*60*60), // 1hr
                 dateFormat: 'dd-mm-yy', 
                 timeFormat: 'HH:mm',

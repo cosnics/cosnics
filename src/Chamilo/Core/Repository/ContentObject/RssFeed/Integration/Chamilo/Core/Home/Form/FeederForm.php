@@ -26,7 +26,7 @@ class FeederForm extends ConfigurationForm
         $this->contentObjectPublicationService =
             new ContentObjectPublicationService(new ContentObjectPublicationRepository(new PublicationRepository()));
 
-        parent :: __construct($block, $hasStaticTitle);
+        parent:: __construct($block, $hasStaticTitle);
     }
 
     /**
@@ -40,8 +40,10 @@ class FeederForm extends ConfigurationForm
         $this->addElement(
             'select',
             Feeder :: CONFIGURATION_OBJECT_ID,
-            Translation :: get('UseObject'),
-            $connector->get_rss_feed_objects());
+            Translation:: get('UseObject'),
+            $connector->get_rss_feed_objects(),
+            array('class' => 'form-control')
+        );
     }
 
     public function setDefaults()
@@ -52,11 +54,11 @@ class FeederForm extends ConfigurationForm
             $this->getBlock()
         );
 
-        if($contentObjectPublication)
+        if ($contentObjectPublication)
         {
             $defaults[Feeder :: CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
         }
 
-        parent :: setDefaults($defaults);
+        parent:: setDefaults($defaults);
     }
 }

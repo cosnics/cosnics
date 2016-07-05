@@ -143,7 +143,7 @@ class CourseGroupUserRelation extends DataClass
             $this->set_subscription_time(time());
         }
 
-        parent::create();
+        return parent::create();
     }
 
     /**

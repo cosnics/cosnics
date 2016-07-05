@@ -48,7 +48,17 @@ class CpoDefaultContentObjectExport extends CpoContentObjectExport
             $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
                 $this->get_export_implementation()->get_context()->get_parameters()->getWorkspace(),
                 $this->get_export_implementation()->get_content_object());
-            $this->addGeneralPropertyValue($document, $general, 'parent_id', $contentObjectRelation->getCategoryId());
+
+            if($contentObjectRelation)
+            {
+                $this->addGeneralPropertyValue(
+                    $document, $general, 'parent_id', $contentObjectRelation->getCategoryId()
+                );
+            }
+            else
+            {
+                $this->addGeneralProperty($document, $general, 'parent_id');
+            }
         }
 
         if (! $this->get_export_implementation()->get_context()->get_parameters()->has_categories() || $content_object->get_owner_id() !=

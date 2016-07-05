@@ -21,6 +21,7 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: course_viewer.class.php 218 2009-11-13 14:21:26Z kariboe $
@@ -52,7 +53,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        /** Make sure the tool parameter is backwards compatible by upper camelizing the tool */
         $tool = Request :: get(self :: PARAM_TOOL);
+        $tool = StringUtilities::getInstance()->createString($tool)->upperCamelize()->__toString();
 
         $this->set_parameter(self :: PARAM_COURSE, $this->get_course()->get_id());
         $this->set_parameter(self :: PARAM_TOOL, $tool);

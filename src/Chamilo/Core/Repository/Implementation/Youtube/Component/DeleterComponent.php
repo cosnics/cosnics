@@ -11,7 +11,7 @@ class DeleterComponent extends Manager
 
     public function run()
     {
-        if (! $this->get_external_repository()->get_user_setting('session_token'))
+        if (! $this->get_external_repository()->get_user_setting($this->getUser()->getId(), 'session_token'))
         {
             throw new NotAllowedException();
         }

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
@@ -254,16 +255,46 @@ class AccountForm extends FormValidator
 
         $this->addElement('hidden', User :: PROPERTY_ID);
 
-        $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES));
-        $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+        if($this->canUserChangeAnything())
+        {
+            $buttons[] = $this->createElement(
+                'style_submit_button',
+                'submit',
+                Translation:: get('Save', null, Utilities :: COMMON_LIBRARIES)
+            );
+            $buttons[] = $this->createElement(
+                'style_reset_button',
+                'reset',
+                Translation:: get('Reset', null, Utilities :: COMMON_LIBRARIES)
+            );
 
-        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+            $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+        }
+    }
+
+    /**
+     * Determines whether or not a user can change anything
+     *
+     * @return bool
+     */
+    protected function canUserChangeAnything()
+    {
+        $configuration = Configuration::get_instance();
+
+        $settings = array(
+            'allow_change_firstname', 'allow_change_lastname', 'allow_change_official_code',
+            'allow_change_email', 'allow_change_username', 'allow_change_user_picture'
+        );
+
+        foreach($settings as $setting)
+        {
+            if ($configuration->get_setting(array(Manager::context(), $setting)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

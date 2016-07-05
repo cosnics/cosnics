@@ -301,10 +301,16 @@ EOT;
      */
     public function add_textfield($name, $label, $required = true, $attributes = array())
     {
-        if (! array_key_exists('size', $attributes))
+//        if (! array_key_exists('size', $attributes))
+//        {
+//            $attributes['size'] = 50;
+//        }
+
+        if (! array_key_exists('class', $attributes))
         {
-            $attributes['size'] = 50;
+            $attributes['class'] = 'form-control';
         }
+
         $element = $this->addElement('text', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
         if ($required)
@@ -320,10 +326,16 @@ EOT;
 
     public function create_textfield($name, $label, $attributes = array())
     {
-        if (! array_key_exists('size', $attributes))
+//        if (! array_key_exists('size', $attributes))
+//        {
+//            $attributes['size'] = 50;
+//        }
+
+        if (! array_key_exists('class', $attributes))
         {
-            $attributes['size'] = 50;
+            $attributes['class'] = 'form-control';
         }
+
         $element = $this->createElement('text', $name, $label, $attributes);
 
         return $element;

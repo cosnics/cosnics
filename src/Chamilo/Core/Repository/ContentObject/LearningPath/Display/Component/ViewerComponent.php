@@ -9,6 +9,8 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\PrerequisitesTran
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -42,41 +44,42 @@ class ViewerComponent extends TabComponent
 
     public function build()
     {
-        $show_progress = Request :: get(self :: PARAM_SHOW_PROGRESS);
+        $show_progress = Request::get(self::PARAM_SHOW_PROGRESS);
         $learning_path = $this->get_parent()->get_root_content_object();
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::get_instance();
 
         if (! $learning_path)
         {
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = $this->display_error_message(Translation :: get('NoObjectSelected'));
+            $html[] = $this->display_error_message(Translation::get('NoObjectSelected'));
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
         }
 
         // Process some tracking
-        $this->learning_path_trackers[self :: TRACKER_LEARNING_PATH] = $this->get_parent()->retrieve_learning_path_tracker();
+        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH] = $this->get_parent()->retrieve_learning_path_tracker();
 
         // // Get the currently displayed content object
         $this->set_complex_content_object_item($this->get_current_complex_content_object_item());
 
         // Update the main tracker
-        $this->learning_path_trackers[self :: TRACKER_LEARNING_PATH]->set_progress(
+        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->set_progress(
             $this->get_complex_content_object_path()->get_progress());
-        $this->learning_path_trackers[self :: TRACKER_LEARNING_PATH]->update();
+        $this->learning_path_trackers[self::TRACKER_LEARNING_PATH]->update();
 
         $translator = new PrerequisitesTranslator($this->get_current_node());
 
-        if (! $translator->can_execute())
+        if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
+             ! $translator->can_execute())
         {
             $html = array();
 
             $html[] = $this->render_header();
-            $html[] = '<div class="error-message">' . Translation :: get('NotYetAllowedToView') . '</div>';
+            $html[] = '<div class="error-message">' . Translation::get('NotYetAllowedToView') . '</div>';
             $html[] = $this->render_footer();
 
             return implode(PHP_EOL, $html);
@@ -87,7 +90,7 @@ class ViewerComponent extends TabComponent
         if (! $learning_path_item_attempt instanceof AbstractItemAttempt)
         {
             $learning_path_item_attempt = $this->get_parent()->create_learning_path_item_tracker(
-                $this->learning_path_trackers[self :: TRACKER_LEARNING_PATH],
+                $this->learning_path_trackers[self::TRACKER_LEARNING_PATH],
                 $this->get_complex_content_object_item());
             $this->get_current_node()->set_current_attempt($learning_path_item_attempt);
         }
@@ -97,7 +100,7 @@ class ViewerComponent extends TabComponent
             $learning_path_item_attempt->update();
         }
 
-        $embedder = Embedder :: factory($this, $this->get_current_node());
+        $embedder = Embedder::factory($this, $this->get_current_node());
 
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
 
@@ -117,7 +120,7 @@ class ViewerComponent extends TabComponent
      */
     protected function getButtonToolbar()
     {
-        $translator = Translation :: getInstance();
+        $translator = Translation::getInstance();
 
         if (! isset($this->buttonToolbar))
         {
@@ -129,13 +132,15 @@ class ViewerComponent extends TabComponent
             $current_content_object = $this->get_current_node()->get_content_object();
 
             $this->addCreatorButtons($primaryActions, $translator);
+            $this->addNodeSpecificButtons($primaryActions, $secondaryActions, $this->get_current_node());
+
             $this->addUpdateButton($current_content_object, $primaryActions, $translator);
             $this->addDeleteButton($primaryActions, $translator);
             // $this->addMoverButtons($secondaryActions, $translator);
             $this->addMoveButton($secondaryActions, $translator);
             $this->addManageButton($secondaryActions, $translator);
 
-            if ($this->get_action() != self :: ACTION_REPORTING)
+            if ($this->get_action() != self::ACTION_REPORTING)
             {
                 $this->addReportingButtons($secondaryActions, $translator);
             }
@@ -150,6 +155,31 @@ class ViewerComponent extends TabComponent
     }
 
     /**
+     *
+     * @param ButtonGroup $buttonGroup
+     */
+    public function addNodeSpecificButtons(ButtonGroup $primaryActions, ButtonGroup $secondaryActions)
+    {
+        $object_namespace = $this->get_current_node()->get_content_object()->package();
+        $integration_class_name = $object_namespace . '\Integration\\' . self::package() . '\Manager';
+
+        if (class_exists($integration_class_name))
+        {
+            try
+            {
+                $factory = new ApplicationFactory(
+                    $integration_class_name::context(),
+                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                $component = $factory->getComponent();
+                $component->get_node_tabs($primaryActions, $secondaryActions, $this->get_current_node());
+            }
+            catch (\Exception $exception)
+            {
+            }
+        }
+    }
+
+    /**
      * Builds the attachment url TODO: Currently moved the complex content object item to the selected complex content
      * object item because the wrong parameter was used in the viewer
      *
@@ -161,9 +191,7 @@ class ViewerComponent extends TabComponent
     {
         $selected_complex_content_object_item_id = $this->get_current_complex_content_object_item()->get_id();
 
-        return parent :: get_content_object_display_attachment_url(
-            $attachment,
-            $selected_complex_content_object_item_id);
+        return parent::get_content_object_display_attachment_url($attachment, $selected_complex_content_object_item_id);
     }
 
     /**
@@ -176,8 +204,16 @@ class ViewerComponent extends TabComponent
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
         {
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
-            $parameters[self :: PARAM_STEP] = $this->get_current_step();
+            $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
+
+            if ($this->get_current_content_object() instanceof LearningPath)
+            {
+                $parameters[self::PARAM_STEP] = $this->get_current_step();
+            }
+            else
+            {
+                $parameters[self::PARAM_STEP] = $this->get_current_node()->get_parent_id();
+            }
 
             $actionSelector = new ActionSelector(
                 $this,
@@ -188,7 +224,7 @@ class ViewerComponent extends TabComponent
                 'btn-primary');
 
             $actionButton = $actionSelector->getActionButton(
-                $translator->getTranslation('CreatorComponent', null, Manager :: context()),
+                $translator->getTranslation('CreatorComponent', null, Manager::context()),
                 new BootstrapGlyph('plus'));
 
             $buttonGroup->addButton($actionButton);
@@ -204,14 +240,14 @@ class ViewerComponent extends TabComponent
     protected function addUpdateButton($current_content_object, $buttonGroup, $translator)
     {
         if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
-             RightsService :: getInstance()->canEditContentObject($this->get_user(), $current_content_object))
+             RightsService::getInstance()->canEditContentObject($this->get_user(), $current_content_object))
         {
-            $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager :: context());
+            $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
             $editImage = new FontAwesomeGlyph('pencil');
             $editURL = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
-                    self :: PARAM_STEP => $this->get_current_step()));
+                    self::PARAM_ACTION => self::ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
+                    self::PARAM_STEP => $this->get_current_step()));
 
             if (! $this->get_current_node()->get_content_object() instanceof LearningPath)
             {
@@ -219,12 +255,12 @@ class ViewerComponent extends TabComponent
 
                 $editButton->addSubButton(
                     new SubButton(
-                        $translator->getTranslation('BuildPrerequisites', null, Manager :: context()),
+                        $translator->getTranslation('BuildPrerequisites', null, Manager::context()),
                         new FontAwesomeGlyph('wrench'),
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_BUILD_PREREQUISITES,
-                                self :: PARAM_STEP => $this->get_current_step()))));
+                                self::PARAM_ACTION => self::ACTION_BUILD_PREREQUISITES,
+                                self::PARAM_STEP => $this->get_current_step()))));
             }
             else
             {
@@ -249,12 +285,12 @@ class ViewerComponent extends TabComponent
             {
                 $buttonGroup->addButton(
                     new Button(
-                        $translator->getTranslation('ManagerComponent', null, Manager :: context()),
+                        $translator->getTranslation('ManagerComponent', null, Manager::context()),
                         new FontAwesomeGlyph('bars'),
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_MANAGE,
-                                self :: PARAM_STEP => $this->get_current_step()))));
+                                self::PARAM_ACTION => self::ACTION_MANAGE,
+                                self::PARAM_STEP => $this->get_current_step()))));
             }
         }
     }
@@ -271,12 +307,12 @@ class ViewerComponent extends TabComponent
         {
             $buttonGroup->addButton(
                 new Button(
-                    $translator->getTranslation('DeleterComponent', null, Manager :: context()),
+                    $translator->getTranslation('DeleterComponent', null, Manager::context()),
                     new BootstrapGlyph('remove'),
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
-                            self :: PARAM_STEP => $this->get_current_step()))));
+                            self::PARAM_ACTION => self::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,
+                            self::PARAM_STEP => $this->get_current_step()))));
         }
     }
 
@@ -431,10 +467,10 @@ class ViewerComponent extends TabComponent
         // }
 
         $moveButton = new Button(
-            $translator->getTranslation('Move', null, Manager :: context()),
+            $translator->getTranslation('Move', null, Manager::context()),
             new BootstrapGlyph('random'),
             '#',
-            Button :: DISPLAY_ICON_AND_LABEL,
+            Button::DISPLAY_ICON_AND_LABEL,
             false,
             'mover-open');
 
@@ -449,26 +485,22 @@ class ViewerComponent extends TabComponent
     protected function addReportingButtons($buttonGroup, $translator)
     {
         $extraButton = new DropdownButton(
-            $translator->getTranslation('Extra', null, Manager :: context()),
+            $translator->getTranslation('Extra', null, Manager::context()),
             new BootstrapGlyph('cog'));
 
         $extraButton->addSubButton(
             new SubButton(
-                $translator->getTranslation('ActivityComponent', null, Manager :: context()),
+                $translator->getTranslation('ActivityComponent', null, Manager::context()),
                 new FontAwesomeGlyph('mouse-pointer'),
                 $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_ACTIVITY,
-                        self :: PARAM_STEP => $this->get_current_step()))));
+                    array(self::PARAM_ACTION => self::ACTION_ACTIVITY, self::PARAM_STEP => $this->get_current_step()))));
 
         $extraButton->addSubButton(
             new SubButton(
-                $translator->getTranslation('ReportingComponent', null, Manager :: context()),
+                $translator->getTranslation('ReportingComponent', null, Manager::context()),
                 new FontAwesomeGlyph('bar-chart'),
                 $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_REPORTING,
-                        self :: PARAM_STEP => $this->get_current_step()))));
+                    array(self::PARAM_ACTION => self::ACTION_REPORTING, self::PARAM_STEP => $this->get_current_step()))));
 
         $buttonGroup->addButton($extraButton);
     }
@@ -480,10 +512,10 @@ class ViewerComponent extends TabComponent
      */
     protected function renderMovePanel()
     {
-        $translator = Translation :: getInstance();
+        $translator = Translation::getInstance();
 
         $form = new DirectMoverForm(
-            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_MOVE_DIRECTLY)),
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_MOVE_DIRECTLY)),
             $this->get_complex_content_object_path(),
             $this->get_current_node());
 
@@ -497,7 +529,7 @@ class ViewerComponent extends TabComponent
         $html[] = '<span class="inline-glyph glyphicon glyphicon-remove"></span>';
         $html[] = '</a>';
         $html[] = '</div>';
-        $html[] = $translator->getTranslation('Move', null, Manager :: context());
+        $html[] = $translator->getTranslation('Move', null, Manager::context());
         $html[] = '</h3>';
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</div>';

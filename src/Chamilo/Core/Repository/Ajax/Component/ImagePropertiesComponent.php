@@ -19,30 +19,49 @@ class ImagePropertiesComponent extends \Chamilo\Core\Repository\Ajax\Manager
 
     public function run()
     {
-        $object = Request :: post('content_object');
-        $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object);
+        $contentObject = $this->getContentObject();
 
-        $full_path = $object->get_full_path();
-        $dimensions = getimagesize($full_path);
+        if ($contentObject instanceof File && $contentObject->is_image())
+        {
+            $full_path = $contentObject->get_full_path();
 
-        $properties = array();
-        $properties[ContentObject :: PROPERTY_ID] = $object->get_id();
-        $properties[ContentObject :: PROPERTY_TITLE] = $object->get_title();
-        $properties['fullPath'] = $full_path;
-        $properties['webPath'] = \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
-            $object->get_id(),
-            $object->calculate_security_code());
+            $properties = array();
 
-        $properties[File :: PROPERTY_FILENAME] = $object->get_filename();
-        $properties[File :: PROPERTY_PATH] = $object->get_path();
-        $properties[File :: PROPERTY_FILESIZE] = $object->get_filesize();
+            $properties[ContentObject::PROPERTY_ID] = $contentObject->get_id();
+            $properties[ContentObject::PROPERTY_TITLE] = $contentObject->get_title();
 
-        $properties['width'] = $dimensions[0];
-        $properties['height'] = $dimensions[1];
-        $properties['type'] = $object->get_extension();
+            $properties[File::PROPERTY_FILENAME] = $contentObject->get_filename();
+            $properties[File::PROPERTY_PATH] = $contentObject->get_path();
+            $properties[File::PROPERTY_FILESIZE] = $contentObject->get_filesize();
 
-        $jsonAjaxResult = new JsonAjaxResult();
-        $jsonAjaxResult->set_properties($properties);
-        $jsonAjaxResult->display();
+            $properties['fullPath'] = $full_path;
+            $properties['webPath'] = \Chamilo\Core\Repository\Manager::get_document_downloader_url(
+                $contentObject->get_id(),
+                $contentObject->calculate_security_code());
+            $properties['type'] = $contentObject->get_extension();
+
+            $dimensions = getimagesize($full_path);
+
+            $properties['width'] = $dimensions[0];
+            $properties['height'] = $dimensions[1];
+
+            $jsonAjaxResult = new JsonAjaxResult();
+            $jsonAjaxResult->set_properties($properties);
+            $jsonAjaxResult->display();
+        }
+        else
+        {
+            JsonAjaxResult::general_error();
+        }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File
+     */
+    public function getContentObject()
+    {
+        $contentObjectId = Request::post('content_object');
+        return DataManager::retrieve_by_id(ContentObject::class_name(), $contentObjectId);
     }
 }

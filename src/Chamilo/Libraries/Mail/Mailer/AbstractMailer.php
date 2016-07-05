@@ -138,18 +138,18 @@ abstract class AbstractMailer implements MailerInterface
      */
     protected function logMail(Mail $mail, $state = MailLog::STATE_SUCCESSFUL, $message = null)
     {
-        $log = new MailLog();
-        $log->set_sender($this->determineFromEmail($mail));
-        $log->set_recipient($mail->getTo()[0]);
-        $log->set_date(time());
-        $log->set_subject($mail->getSubject());
-        $log->set_host(gethostname());
-        $log->set_state($state);
-        $log->set_message($message);
-
-        if(!$log->create())
-        {
-            throw new \RuntimeException('Could not create a mail log');
-        }
+//        $log = new MailLog();
+//        $log->set_sender($this->determineFromEmail($mail));
+//        $log->set_recipient(json_encode($mail->getTo()));
+//        $log->set_date(time());
+//        $log->set_subject($mail->getSubject());
+//        $log->set_host(gethostname());
+//        $log->set_state($state);
+//        $log->set_message($message);
+//
+//        if(!$log->create())
+//        {
+//            throw new \RuntimeException('Could not create a mail log');
+//        }
     }
 }

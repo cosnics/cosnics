@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Viewer\Component;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportImplementation;
+use Chamilo\Core\Repository\Common\Import\ImportFormParameters;
 use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -46,12 +47,18 @@ class ImporterComponent extends Manager implements DelegateComponent
 
         if ($type)
         {
-            $importForm = ContentObjectImportForm :: factory(
+            $importFormParameters = new ImportFormParameters(
                 $type,
                 $this->getWorkspace(),
                 $this,
+                $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)),
                 'post',
-                $this->get_url(array(self :: PARAM_IMPORT_TYPE => $type)));
+                true,
+                $this->get_maximum_select()
+            );
+
+            $importForm = ContentObjectImportForm::factory($importFormParameters);
+
             $this->addPublishButtonToImportForm($importForm);
 
             if ($importForm->validate())

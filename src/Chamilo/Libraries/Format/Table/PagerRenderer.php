@@ -69,7 +69,7 @@ class PagerRenderer
         $variables['END'] = $this->getPager()->getCurrentRangeEnd();
         $variables['TOTAL'] = $this->getPager()->getNumberOfItems();
 
-        return Translation:: get('ShowingStartToEndOfTotalEntries', $variables, Utilities :: COMMON_LIBRARIES);
+        return Translation::get('ShowingStartToEndOfTotalEntries', $variables, Utilities::COMMON_LIBRARIES);
     }
 
     /**
@@ -81,10 +81,8 @@ class PagerRenderer
      *
      * @return string
      */
-    protected function renderDirectionPaginationItem(
-        $queryParameters, $pageNumberParameterName, $isDisabled, $symbol,
-        $translation, $targetPage = null
-    )
+    protected function renderDirectionPaginationItem($queryParameters, $pageNumberParameterName, $isDisabled, $symbol,
+        $translation, $targetPage = null)
     {
         $html = array();
 
@@ -98,7 +96,7 @@ class PagerRenderer
         else
         {
             $html[] = '<a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $targetPage) .
-                '" aria-label="' . $translation . '">' . $symbolHtml . '</a>';
+                 '" aria-label="' . $translation . '">' . $symbolHtml . '</a>';
         }
 
         $html[] = '</li>';
@@ -114,10 +112,8 @@ class PagerRenderer
      *
      * @return string
      */
-    protected function renderPaginationBetweenStartAndEnd(
-        $queryParameters, $pageNumberParameterName, $start, $end,
-        $includeRange = true
-    )
+    protected function renderPaginationBetweenStartAndEnd($queryParameters, $pageNumberParameterName, $start, $end,
+        $includeRange = true)
     {
         $html = array();
 
@@ -134,24 +130,22 @@ class PagerRenderer
                 $pageNumberParameterName,
                 $isDisabled,
                 '&laquo;',
-                Translation:: get('First'),
-                1
-            );
+                Translation::get('First'),
+                1);
 
             $html[] = $this->renderDirectionPaginationItem(
                 $queryParameters,
                 $pageNumberParameterName,
                 $isDisabled,
                 '&lsaquo;',
-                Translation:: get('Previous'),
-                $this->getPager()->getCurrentPageNumber() - 1
-            );
+                Translation::get('Previous'),
+                $this->getPager()->getCurrentPageNumber() - 1);
 
             for ($i = $start; $i <= $end; $i ++)
             {
                 $html[] = '<li' . ($this->getPager()->getCurrentPageNumber() == $i ? ' class="active"' : '') .
-                    '><a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '">' . $i .
-                    '</a></li>';
+                     '><a href="' . $this->getUrl($queryParameters, $pageNumberParameterName, $i) . '">' . $i .
+                     '</a></li>';
             }
 
             $isDisabled = ($this->getPager()->getCurrentPageNumber() == $this->getPager()->getNumberOfPages());
@@ -161,18 +155,16 @@ class PagerRenderer
                 $pageNumberParameterName,
                 $isDisabled,
                 '&rsaquo;',
-                Translation:: get('Next'),
-                $this->getPager()->getCurrentPageNumber() + 1
-            );
+                Translation::get('Next'),
+                $this->getPager()->getCurrentPageNumber() + 1);
 
             $html[] = $this->renderDirectionPaginationItem(
                 $queryParameters,
                 $pageNumberParameterName,
                 $isDisabled,
                 '&raquo;',
-                Translation:: get('Last'),
-                $this->getPager()->getNumberOfPages()
-            );
+                Translation::get('Last'),
+                $this->getPager()->getNumberOfPages());
         }
 
         if ($includeRange)
@@ -198,17 +190,14 @@ class PagerRenderer
      *
      * @return string
      */
-    public function renderPagination(
-        $queryParameters = array(), $pageNumberParameterName = 'page_nr', $includeRange = true
-    )
+    public function renderPagination($queryParameters = array(), $pageNumberParameterName = 'page_nr', $includeRange = true)
     {
         return $this->renderPaginationBetweenStartAndEnd(
             $queryParameters,
             $pageNumberParameterName,
             1,
             $this->getPager()->getNumberOfPages(),
-            $includeRange
-        );
+            $includeRange);
     }
 
     /**
@@ -220,10 +209,8 @@ class PagerRenderer
      *
      * @return string
      */
-    public function renderPaginationWithPageLimit(
-        $queryParameters = array(), $pageNumberParameterName = 'page_nr', $pageLimit = 7,
-        $includeRange = true
-    )
+    public function renderPaginationWithPageLimit($queryParameters = array(), $pageNumberParameterName = 'page_nr', $pageLimit = 7,
+        $includeRange = true)
     {
         $currentPageNumber = $this->getPager()->getCurrentPageNumber();
 
@@ -284,8 +271,7 @@ class PagerRenderer
             $pageNumberParameterName,
             $startPage,
             $endPage,
-            $includeRange
-        );
+            $includeRange);
     }
 
     /**
@@ -295,88 +281,74 @@ class PagerRenderer
      *
      * @return string
      */
-    public function renderItemsPerPageSelector(
-        $queryParameters, $itemsPerPageParameterName,
-        $translationVariables = array()
-    )
+    public function renderItemsPerPageSelector($queryParameters, $itemsPerPageParameterName,
+        $translationVariables = array())
 
     {
         $buttonToolBar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
         $buttonToolBar->addButtonGroup($buttonGroup);
 
-        if (empty($translationVariables))
-        {
-            $translationVariables[Application :: PARAM_CONTEXT] = Utilities :: COMMON_LIBRARIES;
-            $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
-            $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_ROW] = 'ShowNumberOfItemsPerPage';
-            $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE_ALL] = 'ShowAllItems';
-        }
+        $defaultTranslationVariables[Application::PARAM_CONTEXT] = Utilities::COMMON_LIBRARIES;
+        $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfItemsPerPage';
+        $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW] = 'ShowNumberOfItemsPerPage';
+        $defaultTranslationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL] = 'ShowAllItems';
+
+        $translationVariables = array_merge($defaultTranslationVariables, $translationVariables);
 
         $currentNumberOfRowsPerPage = $this->getPager()->getNumberOfRows();
         $numberOfItems = $this->getPager()->getNumberOfItems();
 
-        if ($this->getPager()->getNumberOfItemsPerPage() == Pager :: DISPLAY_ALL)
+        if ($this->getPager()->getNumberOfItemsPerPage() >= $this->getPager()->getNumberOfItems())
         {
-            $dropDownButtonLabel = Translation:: get(
-                $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE_ALL],
+            $dropDownButtonLabel = Translation::get(
+                $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL],
                 null,
-                $translationVariables[Application :: PARAM_CONTEXT]
-            );
+                $translationVariables[Application::PARAM_CONTEXT]);
         }
         else
         {
-            $dropDownButtonLabel = Translation:: get(
-                $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE],
+            $dropDownButtonLabel = Translation::get(
+                $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE],
                 array('NUMBER' => $this->getPager()->getNumberOfItemsPerPage()),
-                $translationVariables[Application :: PARAM_CONTEXT]
-            );
+                $translationVariables[Application::PARAM_CONTEXT]);
         }
 
-        $dropDownButton = new DropdownButton($dropDownButtonLabel, null, Button :: DISPLAY_LABEL, 'btn-sm');
+        $dropDownButton = new DropdownButton($dropDownButtonLabel, null, Button::DISPLAY_LABEL, 'btn-sm');
 
         $dropDownButton->setDropdownClasses('dropdown-menu-right');
         $buttonGroup->addButton($dropDownButton);
 
-        for (
-            $nr = Pager :: DISPLAY_PER_INCREMENT; $nr <= $numberOfItems && $nr <= 100;
-            $nr += Pager :: DISPLAY_PER_INCREMENT
-        )
+        for ($nr = Pager::DISPLAY_PER_INCREMENT; $nr <= $numberOfItems && $nr <= 100; $nr += Pager::DISPLAY_PER_INCREMENT)
         {
             $nrOfRows = ($nr / $this->getPager()->getNumberOfColumns());
 
             $dropDownButton->addSubButton(
                 new SubButton(
-                    Translation:: get(
-                        $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_ROW],
+                    Translation::get(
+                        $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW],
                         array('NUMBER' => $nr),
-                        $translationVariables[Application :: PARAM_CONTEXT]
-                    ),
+                        $translationVariables[Application::PARAM_CONTEXT]),
                     null,
                     $this->getUrl($queryParameters, $itemsPerPageParameterName, $nrOfRows),
-                    SubButton :: DISPLAY_LABEL,
+                    SubButton::DISPLAY_LABEL,
                     false,
-                    ($nrOfRows == $currentNumberOfRowsPerPage ? 'selected' : 'not-selected')
-                )
-            );
+                    ($nrOfRows == $currentNumberOfRowsPerPage ? 'selected' : 'not-selected')));
         }
 
-        if ($numberOfItems < Pager :: DISPLAY_PER_PAGE_LIMIT)
+        if ($numberOfItems < Pager::DISPLAY_PER_PAGE_LIMIT)
         {
             $dropDownButton->addSubButton(
                 new SubButton(
-                    Translation:: get(
-                        $translationVariables[self :: PAGE_SELECTOR_TRANSLATION_TITLE_ALL],
+                    Translation::get(
+                        $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL],
                         null,
-                        $translationVariables[Application :: PARAM_CONTEXT]
-                    ),
+                        $translationVariables[Application::PARAM_CONTEXT]),
                     null,
-                    $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager :: DISPLAY_ALL),
-                    SubButton :: DISPLAY_LABEL,
+                    $this->getUrl($queryParameters, $itemsPerPageParameterName, $this->getPager()->getNumberOfItems()),
+                    SubButton::DISPLAY_LABEL,
                     false,
-                    ($nr == Pager :: DISPLAY_ALL ? ' selected' : 'not-selected')
-                )
-            );
+                    ($this->getPager()->getNumberOfItemsPerPage() == $this->getPager()->getNumberOfItems() ? ' selected' : 'not-selected')));
         }
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);

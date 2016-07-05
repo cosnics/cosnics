@@ -121,7 +121,7 @@ class Event extends DataClass
      * @param string $application The name of the application
      * @return Event The event
      */
-    public static function factory($name, $context)
+    public static function eventFactory($name, $context)
     {
         $eventClass = $context . '\Event\\' . $name;
 
@@ -162,7 +162,7 @@ class Event extends DataClass
     public static function trigger($name, $context, $parameters)
     {
         $context .= '\Integration\Chamilo\Core\Tracking';
-        return self :: factory($name, $context)->run($parameters);
+        return self :: eventFactory($name, $context)->run($parameters);
     }
 
     public function run($parameters)

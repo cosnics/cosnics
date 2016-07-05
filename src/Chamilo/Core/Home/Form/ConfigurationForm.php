@@ -69,7 +69,7 @@ abstract class ConfigurationForm extends FormValidator
     {
         if (! $this->hasStaticTitle)
         {
-            $this->add_textfield(Block :: PROPERTY_TITLE, Translation :: get('Title'));
+            $this->addElement('text', Block :: PROPERTY_TITLE, Translation :: get('Title'), array('class' => 'form-control'));
         }
 
         $this->addSettings();

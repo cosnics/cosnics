@@ -2,8 +2,6 @@
 namespace Chamilo\Application\Weblcms\Tool\Interfaces;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**
  * Defines the necessary functionality for a publisher component that has a custom publication form

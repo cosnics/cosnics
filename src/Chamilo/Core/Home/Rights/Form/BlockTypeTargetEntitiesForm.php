@@ -1,10 +1,8 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Form;
 
 use Chamilo\Core\Home\Rights\Manager;
 use Chamilo\Core\Home\Rights\Service\BlockTypeRightsService;
-use Chamilo\Core\Home\Rights\Storage\DataClass\HomeTargetEntity;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -15,7 +13,9 @@ use Chamilo\Libraries\Platform\Translation;
 class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
 {
     const PROPERTY_BLOCK_TYPE = 'block_type';
+
     /**
+     *
      * @var BlockTypeRightsService
      */
     protected $blockTypeRightsService;
@@ -29,7 +29,6 @@ class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
 
     /**
      * Constructor
-     *
      * TargetEntitiesForm constructor.
      *
      * @param string $action
@@ -50,9 +49,10 @@ class BlockTypeTargetEntitiesForm extends TargetEntitiesForm
     protected function buildForm()
     {
         $this->addElement(
-            'static', self::PROPERTY_BLOCK_TYPE,
-            Translation::getInstance()->getTranslation('BlockType', null, Manager::context()), $this->blockType
-        );
+            'static',
+            self::PROPERTY_BLOCK_TYPE,
+            Translation::getInstance()->getTranslation('BlockType', null, Manager::context()),
+            $this->blockType);
 
         parent::buildForm();
     }

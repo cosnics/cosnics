@@ -389,3 +389,4 @@ InvalidUserPictureProvider = "An invalid user picture provider has been selected
 UserPictureProvider = "User picture provider"
 DefaultUserPictureProvider = "Default user picture provider"
 PictureUri = "Picture"
+ViewerComponent = "View user reporting"

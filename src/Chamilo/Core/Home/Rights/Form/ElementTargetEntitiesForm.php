@@ -1,9 +1,7 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Form;
 
 use Chamilo\Core\Home\Rights\Service\ElementRightsService;
-use Chamilo\Core\Home\Rights\Storage\DataClass\HomeTargetEntity;
 use Chamilo\Core\Home\Storage\DataClass\Element;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -15,7 +13,9 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ElementTargetEntitiesForm extends TargetEntitiesForm
 {
+
     /**
+     *
      * @var ElementRightsService
      */
     protected $elementRightsService;
@@ -29,7 +29,6 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
 
     /**
      * Constructor
-     *
      * TargetEntitiesForm constructor.
      *
      * @param Element $element
@@ -60,8 +59,7 @@ class ElementTargetEntitiesForm extends TargetEntitiesForm
             Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES),
             array('class' => 'btn-danger'),
             null,
-            'remove'
-        );
+            'remove');
 
         $buttonGroup->setElements($buttons);
     }

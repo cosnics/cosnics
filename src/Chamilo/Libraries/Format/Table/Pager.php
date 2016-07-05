@@ -257,7 +257,14 @@ class Pager
     {
         if (! isset($this->numberOfPages))
         {
-            $this->numberOfPages = ceil($this->getNumberOfItems() / $this->getNumberOfItemsPerPage());
+            if ($this->getNumberOfItemsPerPage() == Pager::DISPLAY_ALL)
+            {
+                $this->numberOfPages = 1;
+            }
+            else
+            {
+                $this->numberOfPages = ceil($this->getNumberOfItems() / $this->getNumberOfItemsPerPage());
+            }
         }
 
         return $this->numberOfPages;

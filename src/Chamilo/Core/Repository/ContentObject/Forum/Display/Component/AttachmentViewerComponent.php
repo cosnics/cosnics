@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Attachment Viewer used for the Forum Posts.
@@ -28,19 +27,19 @@ class AttachmentViewerComponent extends Manager
         /*
          * Retrieve data and check if it is a valid attachment
          */
-        $post_id = Request :: get(self :: PARAM_SELECTED_FORUM_POST);
-        $attachment_id = Request :: get(self :: PARAM_ATTACHMENT_ID);
-        $topic_id = Request :: get(self :: PARAM_FORUM_TOPIC_ID);
+        $post_id = Request::get(self::PARAM_SELECTED_FORUM_POST);
+        $attachment_id = Request::get(self::PARAM_ATTACHMENT_ID);
+        $topic_id = Request::get(self::PARAM_FORUM_TOPIC_ID);
 
         if (is_null($attachment_id))
         {
-            throw new ParameterNotDefinedException(self :: PARAM_ATTACHMENT_ID);
+            throw new ParameterNotDefinedException(self::PARAM_ATTACHMENT_ID);
         }
 
         /*
          * Test if a attachment is attached to a post.
          */
-        $found_post = DataManager :: retrieve_attached_object($post_id, $attachment_id);
+        $found_post = DataManager::retrieve_attached_object($post_id, $attachment_id);
 
         if ($found_post == null)
         {
@@ -50,7 +49,7 @@ class AttachmentViewerComponent extends Manager
         /*
          * Test if a post is part of a topic
          */
-        $post_in_topic = DataManager :: retrieve_forum_post_of_topic($topic_id, $post_id);
+        $post_in_topic = DataManager::retrieve_forum_post_of_topic($topic_id, $post_id);
 
         if ($post_in_topic == null)
         {
@@ -60,26 +59,24 @@ class AttachmentViewerComponent extends Manager
         /*
          * Render the attachment
          */
-        $attachment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+        $attachment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(),
             $attachment_id);
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::get_instance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ATTACHMENT_ID => $attachment_id)),
-                Translation :: get('ViewAttachment')));
+                $this->get_url(array(self::PARAM_ATTACHMENT_ID => $attachment_id)),
+                Translation::get('ViewAttachment')));
 
-        Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+        Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
         $html = array();
 
         $html[] = $this->render_header();
-        $html[] = '<a href="javascript:history.go(-1)">' .
-             Translation :: get('Back', null, Utilities :: COMMON_LIBRARIES) . '</a><br /><br />';
-        $html[] = ContentObjectRenditionImplementation :: launch(
+        $html[] = ContentObjectRenditionImplementation::launch(
             $attachment,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_FULL,
+            ContentObjectRendition::FORMAT_HTML,
+            ContentObjectRendition::VIEW_FULL,
             $this);
         $html[] = $this->render_footer();
 

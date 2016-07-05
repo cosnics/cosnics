@@ -4,8 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Menu;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -27,9 +25,9 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_BUILD_PREREQUISITES,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item));
+                self::PARAM_ACTION => self::ACTION_BUILD_PREREQUISITES,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item));
     }
 
     public function get_mastery_score_url($selected_complex_content_object_item)
@@ -38,9 +36,9 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_SET_MASTERY_SCORE,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item));
+                self::PARAM_ACTION => self::ACTION_SET_MASTERY_SCORE,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item));
     }
 
     public function get_configuration_url($selected_complex_content_object_item)
@@ -49,20 +47,20 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_CONFIGURE_FEEDBACK,
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
-                self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item));
+                self::PARAM_ACTION => self::ACTION_CONFIGURE_FEEDBACK,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_item_id,
+                self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item));
     }
 
     public function run()
     {
         $learning_path = $this->get_parent()->get_root_content_object();
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail::get_instance();
 
         if (! $learning_path)
         {
-            return $this->display_error_page(Translation :: get('NoObjectSelected'));
+            return $this->display_error_page(Translation::get('NoObjectSelected'));
         }
 
         $this->learning_path_menu = new Menu(
@@ -79,9 +77,9 @@ abstract class TabComponent extends Manager implements DelegateComponent
             true) as $node_parent)
         {
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_STEP] = $node_parent->get_id();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-            BreadcrumbTrail :: get_instance()->add(
+            $parameters[self::PARAM_STEP] = $node_parent->get_id();
+            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+            BreadcrumbTrail::get_instance()->add(
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title()));
         }
 
@@ -96,20 +94,20 @@ abstract class TabComponent extends Manager implements DelegateComponent
      */
     public function render_header()
     {
-        $isFullScreen = $this->getRequest()->query->get(self :: PARAM_FULL_SCREEN, false);
-        $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
+        $isFullScreen = $this->getRequest()->query->get(self::PARAM_FULL_SCREEN, false);
+        $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
 
         if ($isFullScreen)
         {
-            Page :: getInstance()->setViewMode(Page :: VIEW_MODE_HEADERLESS);
+            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         }
 
         $html = array();
 
-        $html[] = parent :: render_header();
+        $html[] = parent::render_header();
 
         $html[] = '<div class="learning-path-display">';
-        $html[] = '<iframe class="learning-path-display-full-screen" src="#"></iframe>';
+        $html[] = '<iframe class="learning-path-display-full-screen" src="about:blank"></iframe>';
 
         $html[] = $this->get_navigation_bar();
 
@@ -131,7 +129,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = '<div class="' . implode(' ', $classes) . '">';
 
         $html[] = '<h3>';
-        $html[] = Translation :: get('LearningPathNavigationMenu');
+        $html[] = Translation::get('LearningPathNavigationMenu');
         $html[] = '</h3>';
 
         $html[] = '<div class="learning-path-tree-menu">';
@@ -166,13 +164,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Manager :: package(), true) . 'LearningPathMenu.js');
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+        $html[] = ResourceManager::get_instance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'LearningPathMenu.js');
+        $html[] = ResourceManager::get_instance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/Jquery/jquery.fullscreen.min.js');
 
-        $html[] = parent :: render_footer();
+        $html[] = parent::render_footer();
 
         return implode(PHP_EOL, $html);
     }
@@ -180,33 +178,6 @@ abstract class TabComponent extends Manager implements DelegateComponent
     public function get_learning_path_menu()
     {
         return $this->learning_path_menu;
-    }
-
-    public function get_node_specific_tabs(ComplexContentObjectPathNode $node)
-    {
-        $object_namespace = $node->get_content_object()->package();
-        $integration_class_name = $object_namespace . '\Integration\\' . self :: package() . '\Manager';
-
-        if (class_exists($integration_class_name))
-        {
-            try
-            {
-                $factory = new ApplicationFactory(
-                    $integration_class_name :: context(),
-                    new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-                $component = $factory->getComponent();
-
-                return $component->get_node_tabs($node);
-            }
-            catch (\Exception $exception)
-            {
-                return array();
-            }
-        }
-        else
-        {
-            return array();
-        }
     }
 
     /**
@@ -221,12 +192,13 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $current_node = $this->get_current_node();
         $html = array();
 
-        if ($this->get_action() != self :: ACTION_REPORTING || $this->is_current_step_set())
+        if ($this->get_action() != self::ACTION_REPORTING || $this->is_current_step_set())
         {
 
             $html[] = '<div class="navbar-learning-path">';
 
             $html[] = '<div class="navbar-learning-path-actions">';
+            $html[] = '<span class="learning-path-action-menu">';
 
             $previous_node = $current_node->get_previous();
 
@@ -235,49 +207,24 @@ abstract class TabComponent extends Manager implements DelegateComponent
 
                 $previous_url = $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                        self :: PARAM_STEP => $previous_node->get_id()));
+                        self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                        self::PARAM_STEP => $previous_node->get_id()));
 
-                $label = Translation :: get('Previous');
+                $label = Translation::get('Previous');
 
-                $html[] = '<a class="pull-left" href="' . $previous_url .
+                $html[] = '<a id="learning-path-navigate-left" href="' . $previous_url .
                      '"><span class="glyphicon glyphicon-arrow-left" alt="' . $label . '" title="' . $label .
                      '"></span></a>';
             }
             else
             {
-                $label = Translation :: get('PreviousNa');
+                $label = Translation::get('PreviousNa');
 
-                $html[] = '<span class="pull-left glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' .
-                     $label . '"></span>';
+                $html[] = '<span class="glyphicon glyphicon-arrow-left disabled" alt="' . $label . '" title="' . $label .
+                     '"></span>';
             }
 
-            $next_node = $current_node->get_next();
-
-            if ($next_node instanceof ComplexContentObjectPathNode)
-            {
-                $next_url = $this->get_url(
-                    array(
-                        self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                        self :: PARAM_STEP => $next_node->get_id()));
-
-                $label = Translation :: get('Next');
-
-                $html[] = '<a class="pull-right" href="' . $next_url .
-                     '"><span class="glyphicon glyphicon-arrow-right" alt="' . $label . '" title="' . $label .
-                     '"></span></a>';
-            }
-            else
-            {
-                $label = Translation :: get('NextNa');
-
-                $html[] = '<span class="pull-right glyphicon glyphicon-arrow-right disabled" alt="' . $label .
-                     '" title="' . $label . '"></span>';
-            }
-
-            $html[] = '<span class="learning-path-action-menu">';
-
-            $isMenuHidden = Session :: retrieve('learningPathMenuIsHidden');
+            $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
 
             $html[] = '<span class="glyphicon glyphicon-list-alt learning-path-action-menu-show' .
                  ($isMenuHidden != 'true' ? ' hidden' : '') . '"></span>';
@@ -286,6 +233,29 @@ abstract class TabComponent extends Manager implements DelegateComponent
             $html[] = '&nbsp;';
             $html[] = '<span class="glyphicon glyphicon-fullscreen learning-path-action-fullscreen"></span>';
             $html[] = '</span>';
+
+            $next_node = $current_node->get_next();
+
+            if ($next_node instanceof ComplexContentObjectPathNode)
+            {
+                $next_url = $this->get_url(
+                    array(
+                        self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                        self::PARAM_STEP => $next_node->get_id()));
+
+                $label = Translation::get('Next');
+
+                $html[] = '<a id="learning-path-navigate-right" href="' . $next_url .
+                     '"><span class="glyphicon glyphicon-arrow-right" alt="' . $label . '" title="' . $label .
+                     '"></span></a>';
+            }
+            else
+            {
+                $label = Translation::get('NextNa');
+
+                $html[] = '<span class="glyphicon glyphicon-arrow-right disabled" alt="' . $label . '" title="' . $label .
+                     '"></span>';
+            }
 
             $html[] = '</div>';
 

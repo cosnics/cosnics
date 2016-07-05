@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Viewer\Component;
 
 use Chamilo\Core\Repository\Selector\TypeSelector;
 use Chamilo\Core\Repository\Selector\TypeSelectorFactory;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\Filter\FilterData;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Viewer\Menu\RepositoryCategoryMenu;
@@ -26,15 +25,8 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
-use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 class BrowserComponent extends Manager implements TableSupport
@@ -44,23 +36,26 @@ class BrowserComponent extends Manager implements TableSupport
     const PROPERTY_CATEGORY = 'category';
 
     /**
+     *
      * @var ButtonToolBarRenderer
      */
     protected $buttonToolbarRenderer;
 
     /**
+     *
      * @var WorkspaceService
      */
     protected $workspaceService;
 
     /**
+     *
      * @var WorkspaceInterface
      */
     protected $workspace;
 
     public function get_additional_parameters()
     {
-        return array(self :: PROPERTY_CATEGORY, self::PARAM_WORKSPACE_ID, self::PARAM_IN_WORKSPACES);
+        return array(self::PROPERTY_CATEGORY, self::PARAM_WORKSPACE_ID, self::PARAM_IN_WORKSPACES);
     }
 
     /*
@@ -84,9 +79,9 @@ class BrowserComponent extends Manager implements TableSupport
             $html[] = $buttonToolbarRender->render();
         }
 
-        if ($this->get_maximum_select() > self :: SELECT_SINGLE)
+        if ($this->get_maximum_select() > self::SELECT_SINGLE)
         {
-            $message = sprintf(Translation:: get('SelectMaximumNumberOfContentObjects'), $this->get_maximum_select());
+            $message = sprintf(Translation::get('SelectMaximumNumberOfContentObjects'), $this->get_maximum_select());
 
             $html[] = '<div class="row">';
             $html[] = '<div class="col-xs-12">';
@@ -135,7 +130,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $all_types = $type_selector->get_unique_content_object_template_ids();
 
-        $type_selection = TypeSelector:: get_selection();
+        $type_selection = TypeSelector::get_selection();
 
         if ($type_selection)
         {
@@ -148,9 +143,7 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         $filterData->set_filter_property(FilterData::FILTER_TYPE, $types);
-        $filterData->set_filter_property(
-            FilterData::FILTER_CATEGORY, $this->getCategoryId()
-        );
+        $filterData->set_filter_property(FilterData::FILTER_CATEGORY, $this->getCategoryId());
     }
 
     /**
@@ -183,11 +176,12 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
+     *
      * @return ButtonToolBarRenderer
      */
     public function getButtonToolbarRenderer()
     {
-        if (!isset($this->buttonToolbarRenderer))
+        if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
@@ -198,9 +192,9 @@ class BrowserComponent extends Manager implements TableSupport
 
                 $button = new DropdownButton(
                     $translator->getTranslation(
-                        'CurrentWorkspace', array('WORKSPACE' => $this->getWorkspace()->getTitle()), $translationContext
-                    )
-                );
+                        'CurrentWorkspace',
+                        array('WORKSPACE' => $this->getWorkspace()->getTitle()),
+                        $translationContext));
 
                 $workspaces = $this->getWorkspacesForUser();
 
@@ -215,9 +209,7 @@ class BrowserComponent extends Manager implements TableSupport
                             $this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())),
                             SubButton::DISPLAY_LABEL,
                             false,
-                            $class
-                        )
-                    );
+                            $class));
                 }
 
                 $buttonToolbar->addItem($button);
@@ -237,34 +229,32 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_menu($allow_shared = true)
     {
-        $url =
-            $this->get_url($this->get_parameters(), array(self::PARAM_QUERY)) . '&' . self :: PROPERTY_CATEGORY . '=%s';
+        $url = $this->get_url($this->get_parameters(), array(self::PARAM_QUERY)) . '&' . self::PROPERTY_CATEGORY . '=%s';
 
         $extra = array();
 
-//        if ($this->get_query())
-//        {
-//            $search_url = '#';
-//            $search = array();
-//            $search['title'] = Translation:: get('SearchResults', null, Utilities :: COMMON_LIBRARIES);
-//            $search['url'] = $search_url;
-//            $search['class'] = 'search_results';
-//            $extra[] = $search;
-//        }
-//        else
-//        {
-//            $search_url = null;
-//        }
+        // if ($this->get_query())
+        // {
+        // $search_url = '#';
+        // $search = array();
+        // $search['title'] = Translation:: get('SearchResults', null, Utilities :: COMMON_LIBRARIES);
+        // $search['url'] = $search_url;
+        // $search['class'] = 'search_results';
+        // $extra[] = $search;
+        // }
+        // else
+        // {
+        // $search_url = null;
+        // }
 
         $menu = new RepositoryCategoryMenu(
             $this,
             $this->get_user_id(),
             $this->getWorkspace(),
-            Request:: get(self :: PROPERTY_CATEGORY) ? Request:: get(self :: PROPERTY_CATEGORY) : 0,
+            Request::get(self::PROPERTY_CATEGORY) ? Request::get(self::PROPERTY_CATEGORY) : 0,
             $url,
             $extra,
-            $this->get_types()
-        );
+            $this->get_types());
 
         return $menu;
     }
@@ -277,7 +267,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_category_url($category_id)
     {
-        return $this->get_url(array(self :: PROPERTY_CATEGORY => $category_id), array(self::PARAM_QUERY));
+        return $this->get_url(array(self::PROPERTY_CATEGORY => $category_id), array(self::PARAM_QUERY));
     }
 
     /**
@@ -288,85 +278,68 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_default_browser_actions($content_object)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        if (RightsService:: getInstance()->canUseContentObject($this->get_user(), $content_object))
+        if (RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Publish', null, Utilities :: COMMON_LIBRARIES),
-                    Theme:: getInstance()->getCommonImagePath('Action/Publish'),
+                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Publish'),
                     $this->get_url(
-                        array_merge($this->get_parameters(), array(self :: PARAM_ID => $content_object->get_id())),
-                        false
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
+                        array_merge($this->get_parameters(), array(self::PARAM_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem::DISPLAY_ICON));
         }
 
-        if (RightsService:: getInstance()->canViewContentObject($this->get_user(), $content_object))
+        if (RightsService::getInstance()->canViewContentObject($this->get_user(), $content_object))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Preview'),
-                    Theme:: getInstance()->getCommonImagePath('Action/Browser'),
+                    Translation::get('Preview'),
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(
                         array_merge(
                             $this->get_parameters(),
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_VIEWER,
-                                self :: PARAM_VIEW_ID => $content_object->get_id()
-                            )
-                        ),
-                        false
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
+                                self::PARAM_ACTION => self::ACTION_VIEWER,
+                                self::PARAM_VIEW_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem::DISPLAY_ICON));
         }
 
-        if (RightsService:: getInstance()->canEditContentObject($this->get_user(), $content_object) &&
-            RightsService:: getInstance()->canUseContentObject($this->get_user(), $content_object)
-        )
+        if (RightsService::getInstance()->canEditContentObject($this->get_user(), $content_object) &&
+             RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('EditAndPublish'),
-                    Theme:: getInstance()->getCommonImagePath('Action/Editpublish'),
+                    Translation::get('EditAndPublish'),
+                    Theme::getInstance()->getCommonImagePath('Action/Editpublish'),
                     $this->get_url(
                         array_merge(
                             $this->get_parameters(),
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_CREATOR,
-                                self :: PARAM_EDIT_ID => $content_object->get_id()
-                            )
-                        ),
-                        false
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
+                                self::PARAM_ACTION => self::ACTION_CREATOR,
+                                self::PARAM_EDIT_ID => $content_object->get_id())),
+                        false),
+                    ToolbarItem::DISPLAY_ICON));
         }
 
         if ($content_object instanceof ComplexContentObjectSupport &&
-            RightsService:: getInstance()->canViewContentObject($this->get_user(), $content_object)
-        )
+             RightsService::getInstance()->canViewContentObject($this->get_user(), $content_object))
         {
 
-            $preview_url = \Chamilo\Core\Repository\Manager:: get_preview_content_object_url($content_object);
+            $preview_url = \Chamilo\Core\Repository\Manager::get_preview_content_object_url($content_object);
             $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Preview', null, Utilities :: COMMON_LIBRARIES),
-                    Theme:: getInstance()->getCommonImagePath('Action/Preview'),
+                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Preview'),
                     $preview_url,
-                    ToolbarItem :: DISPLAY_ICON,
+                    ToolbarItem::DISPLAY_ICON,
                     false,
                     $onclick,
-                    '_blank'
-                )
-            );
+                    '_blank'));
         }
 
         return $toolbar;
@@ -385,32 +358,31 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
+     *
      * @return WorkspaceInterface
      */
     public function getWorkspace()
     {
-        if (!isset($this->workspace))
+        if (! isset($this->workspace))
         {
             if ($this->isInWorkspaces())
             {
 
                 $identifier = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
-                $workspace = $this->workspaceService->getWorkspaceByIdentifier(
-                    $identifier
-                );
+                $workspace = $this->workspaceService->getWorkspaceByIdentifier($identifier);
 
-                if (!$workspace)
+                if (! $workspace)
                 {
                     $workspaces = $this->getWorkspacesForUser();
                     $workspace = $workspaces->next_result();
 
-                    if (!$workspace)
+                    if (! $workspace)
                     {
                         throw new \RuntimeException(
                             Translation::getInstance()->getTranslation(
-                                'NoValidWorkspacesForUser', null, Manager::context()
-                            )
-                        );
+                                'NoValidWorkspacesForUser',
+                                null,
+                                Manager::context()));
                     }
                 }
 
@@ -426,22 +398,23 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
+     *
      * @return Workspace[]
      */
     protected function getWorkspacesForUser()
     {
         $workspaces = $this->workspaceService->getWorkspacesForUser(
-            $this->getUser(), RightsService::RIGHT_USE, null, null, array(
-                new OrderBy(
-                    new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_NAME)
-                )
-            )
-        );
+            $this->getUser(),
+            RightsService::RIGHT_USE,
+            null,
+            null,
+            array(new OrderBy(new PropertyConditionVariable(Workspace::class_name(), Workspace::PROPERTY_NAME))));
 
         return $workspaces;
     }
 
     /**
+     *
      * @return bool
      */
     protected function isInWorkspaces()

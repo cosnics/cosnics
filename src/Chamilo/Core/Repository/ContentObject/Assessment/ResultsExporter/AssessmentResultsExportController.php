@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\ResultsExporter;
 
-use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
-use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -227,7 +225,7 @@ class AssessmentResultsExportController
             {
                 $this->add_data_to_current_row(
                     $constant,
-                    Translation :: get((string) StringUtilities :: getInstance()->createString($value)->upperCamelize()));
+                    Translation::get((string) StringUtilities::getInstance()->createString($value)->upperCamelize()));
             }
         }
 
@@ -248,12 +246,12 @@ class AssessmentResultsExportController
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_PARENT),
+                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($assessment->get_id()));
 
-        $complex_questions_resultset = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(),
+        $complex_questions_resultset = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(),
             new DataClassRetrievesParameters($condition));
 
         while ($complex_question = $complex_questions_resultset->next_result())
@@ -288,8 +286,8 @@ class AssessmentResultsExportController
         ComplexContentObjectItem $complex_question, $assessment)
     {
         $assessment_result = $question_result->get_assessment_result();
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
             $assessment_result->get_user_id());
 
         if ($user)
@@ -300,35 +298,35 @@ class AssessmentResultsExportController
         }
         else
         {
-            $first_name = $last_name = Translation :: get('UserUnknown');
+            $first_name = $last_name = Translation::get('UserUnknown');
             $official_code = '-';
         }
 
         $question = $complex_question->get_ref_object();
 
-        $start_time = DatetimeUtilities :: format_locale_date(null, $assessment_result->get_start_time());
-        $end_time = DateTimeUtilities :: format_locale_date(null, $assessment_result->get_end_time());
-        $total_time = DateTimeUtilities :: convert_seconds_to_hours($assessment_result->get_total_time());
+        $start_time = DatetimeUtilities::format_locale_date(null, $assessment_result->get_start_time());
+        $end_time = DateTimeUtilities::format_locale_date(null, $assessment_result->get_end_time());
+        $total_time = DateTimeUtilities::convert_seconds_to_hours($assessment_result->get_total_time());
 
-        $this->add_data_to_current_row(self :: COLUMN_OFFICIAL_CODE, $official_code);
-        $this->add_data_to_current_row(self :: COLUMN_FIRSTNAME, $first_name);
-        $this->add_data_to_current_row(self :: COLUMN_LASTNAME, $last_name);
-        $this->add_data_to_current_row(self :: COLUMN_ASSESSMENT_TITLE, $assessment->get_title());
-        $this->add_data_to_current_row(self :: COLUMN_ASSESSMENT_DESCRIPTION, $assessment->get_description());
-        $this->add_data_to_current_row(self :: COLUMN_ATTEMTP_ID, $assessment_result->get_result_id());
-        $this->add_data_to_current_row(self :: COLUMN_ATTEMPT_START_TIME, $start_time);
-        $this->add_data_to_current_row(self :: COLUMN_ATTEMPT_END_TIME, $end_time);
-        $this->add_data_to_current_row(self :: COLUMN_ATTEMPT_TOTAL_TIME, $total_time);
-        $this->add_data_to_current_row(self :: COLUMN_ATTEMPT_TOTAL_SCORE, $assessment_result->get_total_score());
-        $this->add_data_to_current_row(self :: COLUMN_QUESTION_NUMBER, $complex_question->get_display_order());
-        $this->add_data_to_current_row(self :: COLUMN_QUESTION_ID, $question->get_id());
-        $this->add_data_to_current_row(self :: COLUMN_QUESTION_TITLE, $question->get_title());
-        $this->add_data_to_current_row(self :: COLUMN_QUESTION_DESCRIPTION, $question->get_description());
+        $this->add_data_to_current_row(self::COLUMN_OFFICIAL_CODE, $official_code);
+        $this->add_data_to_current_row(self::COLUMN_FIRSTNAME, $first_name);
+        $this->add_data_to_current_row(self::COLUMN_LASTNAME, $last_name);
+        $this->add_data_to_current_row(self::COLUMN_ASSESSMENT_TITLE, $assessment->get_title());
+        $this->add_data_to_current_row(self::COLUMN_ASSESSMENT_DESCRIPTION, $assessment->get_description());
+        $this->add_data_to_current_row(self::COLUMN_ATTEMTP_ID, $assessment_result->get_result_id());
+        $this->add_data_to_current_row(self::COLUMN_ATTEMPT_START_TIME, $start_time);
+        $this->add_data_to_current_row(self::COLUMN_ATTEMPT_END_TIME, $end_time);
+        $this->add_data_to_current_row(self::COLUMN_ATTEMPT_TOTAL_TIME, $total_time);
+        $this->add_data_to_current_row(self::COLUMN_ATTEMPT_TOTAL_SCORE, $assessment_result->get_total_score());
+        $this->add_data_to_current_row(self::COLUMN_QUESTION_NUMBER, $complex_question->get_display_order());
+        $this->add_data_to_current_row(self::COLUMN_QUESTION_ID, $question->get_id());
+        $this->add_data_to_current_row(self::COLUMN_QUESTION_TITLE, $question->get_title());
+        $this->add_data_to_current_row(self::COLUMN_QUESTION_DESCRIPTION, $question->get_description());
 
-        QuestionResultExportImplementation :: launch($complex_question, $this, $question_result);
+        QuestionResultExportImplementation::launch($complex_question, $this, $question_result);
 
-        $this->add_data_to_current_row(self :: COLUMN_ATTEMPT_SCORE, $question_result->get_score());
-        $this->add_data_to_current_row(self :: COLUMN_QUESTION_WEIGHT, $complex_question->get_weight());
+        $this->add_data_to_current_row(self::COLUMN_ATTEMPT_SCORE, $question_result->get_score());
+        $this->add_data_to_current_row(self::COLUMN_QUESTION_WEIGHT, $complex_question->get_weight());
 
         $this->add_additional_information_columns($question_result);
 
@@ -376,8 +374,8 @@ class AssessmentResultsExportController
      */
     protected function export_to_csv()
     {
-        $path = Path :: getInstance()->getTemporaryPath();
-        $path = $path . DIRECTORY_SEPARATOR . Filesystem :: create_unique_name(
+        $path = Path::getInstance()->getTemporaryPath();
+        $path = $path . DIRECTORY_SEPARATOR . Filesystem::create_unique_name(
             $path,
             'raw_assessment_export' . date('_Y-m-d_H-i-s') . '.csv');
 

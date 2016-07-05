@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Storage\Repository;
 
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
@@ -18,7 +17,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -29,6 +27,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class RightsRepository
 {
+
     /**
      * Clears the target entities for a given element
      *
@@ -39,8 +38,8 @@ class RightsRepository
     public function clearTargetEntitiesForElement(Element $element)
     {
         return DataManager::deletes(
-            ElementTargetEntity::class_name(), $this->getElementTargetEntityConditionByElement($element)
-        );
+            ElementTargetEntity::class_name(),
+            $this->getElementTargetEntityConditionByElement($element));
     }
 
     /**
@@ -53,8 +52,8 @@ class RightsRepository
     public function clearTargetEntitiesForBlockType($blockType)
     {
         return DataManager::deletes(
-            BlockTypeTargetEntity::class_name(), $this->getBlockTypeTargetEntityConditionByBlockType($blockType)
-        );
+            BlockTypeTargetEntity::class_name(),
+            $this->getBlockTypeTargetEntityConditionByBlockType($blockType));
     }
 
     /**
@@ -67,10 +66,8 @@ class RightsRepository
     public function findTargetEntitiesForElement(Element $element)
     {
         return DataManager::retrieves(
-            ElementTargetEntity::class_name(), new DataClassRetrievesParameters(
-                $this->getElementTargetEntityConditionByElement($element)
-            )
-        )->as_array();
+            ElementTargetEntity::class_name(),
+            new DataClassRetrievesParameters($this->getElementTargetEntityConditionByElement($element)))->as_array();
     }
 
     /**
@@ -83,10 +80,8 @@ class RightsRepository
     public function findTargetEntitiesForBlockType($blockType)
     {
         return DataManager::retrieves(
-            BlockTypeTargetEntity::class_name(), new DataClassRetrievesParameters(
-                $this->getBlockTypeTargetEntityConditionByBlockType($blockType)
-            )
-        )->as_array();
+            BlockTypeTargetEntity::class_name(),
+            new DataClassRetrievesParameters($this->getBlockTypeTargetEntityConditionByBlockType($blockType)))->as_array();
     }
 
     /**
@@ -118,20 +113,16 @@ class RightsRepository
     {
         $targetedEntityIds = DataManager::distinct(
             ElementTargetEntity::class_name(),
-            new DataClassDistinctParameters(null, ElementTargetEntity::PROPERTY_ELEMENT_ID)
-        );
+            new DataClassDistinctParameters(null, ElementTargetEntity::PROPERTY_ELEMENT_ID));
 
         $condition = new NotCondition(
             new InCondition(
                 new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID),
-                $targetedEntityIds
-            )
-        );
+                $targetedEntityIds));
 
         return DataManager::distinct(
             Element::class_name(),
-            new DataClassDistinctParameters($condition, Element::PROPERTY_ID)
-        );
+            new DataClassDistinctParameters($condition, Element::PROPERTY_ID));
     }
 
     /**
@@ -147,9 +138,7 @@ class RightsRepository
             ElementTargetEntity::class_name(),
             new DataClassDistinctParameters(
                 $this->getTargetEntitiesConditionForUser(ElementTargetEntity::class_name(), $user),
-                ElementTargetEntity::PROPERTY_ELEMENT_ID
-            )
-        );
+                ElementTargetEntity::PROPERTY_ELEMENT_ID));
     }
 
     /**
@@ -161,8 +150,7 @@ class RightsRepository
     {
         return DataManager::distinct(
             BlockTypeTargetEntity::class_name(),
-            new DataClassDistinctParameters(null, BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE)
-        );
+            new DataClassDistinctParameters(null, BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE));
     }
 
     /**
@@ -178,9 +166,7 @@ class RightsRepository
             BlockTypeTargetEntity::class_name(),
             new DataClassDistinctParameters(
                 $this->getTargetEntitiesConditionForUser(BlockTypeTargetEntity::class_name(), $user),
-                BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE
-            )
-        );
+                BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE));
     }
 
     /**
@@ -195,41 +181,29 @@ class RightsRepository
     {
         $condition = null;
 
-        if (!$user->is_platform_admin())
+        if (! $user->is_platform_admin())
         {
             $conditions = array();
 
             $userConditions = array();
 
             $userConditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    $targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE
-                ),
-                new StaticConditionVariable(UserEntity::ENTITY_TYPE)
-            );
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(UserEntity::ENTITY_TYPE));
 
             $userConditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    $targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID
-                ),
-                new StaticConditionVariable($user->getId())
-            );
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID),
+                new StaticConditionVariable($user->getId()));
 
             $conditions[] = new AndCondition($userConditions);
 
             $groupConditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    $targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE
-                ),
-                new StaticConditionVariable(PlatformGroupEntity::ENTITY_TYPE)
-            );
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable(PlatformGroupEntity::ENTITY_TYPE));
 
             $groupConditions[] = new InCondition(
-                new PropertyConditionVariable(
-                    $targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID
-                ),
-                $user->get_groups(true)
-            );
+                new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_ID),
+                $user->get_groups(true));
 
             $conditions[] = new AndCondition($groupConditions);
 
@@ -250,8 +224,7 @@ class RightsRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(ElementTargetEntity::class_name(), ElementTargetEntity::PROPERTY_ELEMENT_ID),
-            new StaticConditionVariable($element->getId())
-        );
+            new StaticConditionVariable($element->getId()));
     }
 
     /**
@@ -265,9 +238,8 @@ class RightsRepository
     {
         return new EqualityCondition(
             new PropertyConditionVariable(
-                BlockTypeTargetEntity::class_name(), BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE
-            ),
-            new StaticConditionVariable($blockType)
-        );
+                BlockTypeTargetEntity::class_name(),
+                BlockTypeTargetEntity::PROPERTY_BLOCK_TYPE),
+            new StaticConditionVariable($blockType));
     }
 }
