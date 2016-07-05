@@ -138,10 +138,14 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $channelId = Request :: get(self :: PARAM_CHANNEL_ID);
         if (empty($channelId))
         {
-            $channels = $this->get_external_repository_manager_connector()->getChannels();
-            if (! empty($channels))
+            $dataConnector = $this->get_external_repository_manager_connector();
+            if ($dataConnector->isUserLoggedIn())
             {
-                $channelId = array_keys($channels)[0];
+                $channels = $dataConnector->getChannels();
+                if (! empty($channels))
+                {
+                    $channelId = array_keys($channels)[0];
+                }
             }
         }
         
