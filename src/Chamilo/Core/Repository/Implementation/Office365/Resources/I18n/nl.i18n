@@ -1,6 +1,7 @@
 TypeName = "Office 365"
 ClientId = "Client ID"
 ClientSecret = "Client Secret"
+Tenant = "Tenant"
 RootMenuTitle = "Bestanden"
 TypeFolder = "Map"
 TypeFile = "Bestand"

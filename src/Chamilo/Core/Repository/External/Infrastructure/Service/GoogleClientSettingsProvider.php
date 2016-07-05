@@ -16,6 +16,13 @@ use Chamilo\Libraries\Protocol\GoogleClient\GoogleClientSettingsProviderInterfac
 class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider implements GoogleClientSettingsProviderInterface
 {
     /**
+     * Scopes that enable access to particular resources
+     *
+     * @var strings
+     */
+    protected $scopes;
+
+    /**
      * Constructor
      *
      * @param Instance $externalRepositoryInstance
@@ -24,7 +31,9 @@ class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider im
      */
     public function __construct(Instance $externalRepositoryInstance, User $user, $scopes)
     {
-        parent :: __construct($externalRepositoryInstance, $user, $scopes);
+        parent :: __construct($externalRepositoryInstance, $user);
+        
+        $this->scopes = $scopes;        
     }
 
     /**
@@ -35,6 +44,16 @@ class GoogleClientSettingsProvider extends ExternalRepositorySettingsProvider im
     public function getDeveloperKey()
     {
         return Setting::get('developer_key', $this->externalRepositoryInstance->getId());
+    }
+
+    /**
+     * Scopes enable access to particular resources
+     *
+     * @return string
+     */
+    public function getScopes()
+    {
+        return $this->scopes;
     }
 
     /**

@@ -15,18 +15,17 @@ use Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderIn
  *
  * @author Andras Zolnay - edufiles
  */
-class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider implements MicrosoftClientSettingsProviderInterface
+abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider implements MicrosoftClientSettingsProviderInterface
 {
     /**
      * Constructor
      *
      * @param Instance $externalRepositoryInstance
      * @param User $user
-     * @param array $scopes
      */
-    public function __construct(Instance $externalRepositoryInstance, User $user, $scopes)
+    public function __construct(Instance $externalRepositoryInstance, User $user)
     {
-        parent :: __construct($externalRepositoryInstance, $user, $scopes);
+        parent :: __construct($externalRepositoryInstance, $user);
     }
 
     /**
@@ -35,7 +34,9 @@ class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider
      * Allowed values: common, organizations, consumers, and tenant identifiers.  
      * If no tenant given by user, 'common' is returned.
      *
-     * @return string 
+     * @return string
+     *
+     * @see MicrosoftClientSettingsProviderInterface::getTenant()
      */
     public function getTenant()
     {

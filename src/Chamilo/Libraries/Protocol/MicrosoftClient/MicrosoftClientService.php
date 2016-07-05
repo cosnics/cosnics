@@ -8,27 +8,38 @@ use Chamilo\Libraries\Utilities\String\Text;
 /**
  * Initializes and handles the login procedure for Microsoft REST API's
  *
- * Code is based on https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-protocols-oauth-code/
+ * Code is based on
+ * - OAUTH2: https://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
+ * - OAUTH2 V2.0: https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-protocols-oauth-code/
  *
- * Redirect URI: when registering a redirect URI on https://apps.dev.microsoft.com/ just use the base URL of the Chamilo site, i.e my.chamilo.com/index.php.
+ * Redirect URI: when registering a redirect URI on 
+ * - OAUTH: https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually#bk_RegisterWebApp
+ * - OAUTH2 v2.0: https://apps.dev.microsoft.com/ 
+ * use the base URL of the Chamilo site, i.e my.chamilo.com/index.php.
  *
  * @author Andras Zolnay - edufiles
  */
 class MicrosoftClientService
 {
     /**
-     * The Azure Active Directory client with base URL https://login.microsoftonline.com/<tenant>/oauth2/v2.0/
+     * The Azure Active Directory client with base URL 
+     * - OAUTH2: https://login.microsoftonline.com/<tenant>/oauth2/
+     * - OAUTH2 v2.0: https://login.microsoftonline.com/<tenant>/oauth2/v2.0/
      *
      * @var \GuzzleHttp\Client
      */
     private $azureActiveDirectoryClient;
 
     /**
-     * The Microsoft Graph client with base URL https://graph.microsoft.com/v1.0/me/ where 'me' resolves to the logged in user.
+     * The Microsoft REST API client with base URL given by Settings provider.
+     *
+     * Examples:
+     * - Microsoft graph: https://graph.microsoft.com/v1.0/me/ where 'me' resolves to the logged in user.
+     * - Microsoft share point Video service: https://<company>.sharepoint.com/portals/hub/_api/VideoService
      *
      * @var \GuzzleHttp\Client
      */
-    private $graphClient;
+    private $microsoftServiceClient;
 
     /**
      * The settings provider for the microsoft client
@@ -48,19 +59,19 @@ class MicrosoftClientService
     }
 
     /**
-     * Using the microsoft authentification site, requests an access token granting access to services.
+     * Using the Microsoft authentication site, requests an access token granting access to services.
      *
      * Work flow:
      * -# This function is first called with $authenticationCode being null. In this case, the user is redirected to the Microsoft login
      *    page. Note that parameter $replyParameters should contain the URL parameters of the component calling this function. Function
      *    createAuthorizationUrl(...) stores the value of $replyParameters in redirect parameter 'state'.
      * -# User logs in and the Microsoft login page redirects to base URL of our site. The redirect contains two parameters:
-     *    - code: authentification code  
+     *    - code: authentication code  
      *    - state: value of array $replyParameters sent to the Microsoft login page in previous step.
      *    The function Kernel::handleOAuth2(), resolves the array stored in parameter 'state'. This array contains the URL parameters of the
      *    component which called this function in previous step.  Based on the URL parameters, Kernel::handleOAuth2() can redirect to the
      *    component calling this function in the first step. 
-     *    Why do we acctually need parameter 'state' and Kernel::handleOAuth2(). The Microsoft OAuth2 does not allow reply URI's which
+     *    Why do we actually need parameter 'state' and Kernel::handleOAuth2(). The Microsoft OAuth2 does not allow reply URI's which
      *    contain query string. Thus we cannot ask the Microsoft login page to directly go back the component calling this function and we
      *    have to store the parameters of the calling component in the 'state' variable.
      * -# When called second time, the $authenticationCode should be the value of parameter 'code' sent by the Microsoft login page.
@@ -87,6 +98,16 @@ class MicrosoftClientService
     }
 
     /**
+     *  Returns whether user has an access token. 
+     */
+    public function isUserLoggedIn()
+    {
+        $accessToken = $this->microsoftClientSettingsProvider->getAccessToken();
+
+        return (! empty($accessToken));
+    }
+    
+    /**
      *  Removes the access token stored by the setting provider.
      */
     public function logout()
@@ -98,23 +119,24 @@ class MicrosoftClientService
      * Creates a Guzzle HTTP Request..
      *
      * @param string $method, 'POST', 'GET', etc.
-     * @param string $endpoint Endpoint of Microsoft Graph REST API, e.g. drive/root/children for listing content of root directory.
+     * @param string $endpoint Endpoint of Microsoft REST API, e.g. drive/root/children for listing content of root directory via Microsoft
+     *               graph. $endpoint is concatenated with base URL provided by the setting provider.
      * @return \GuzzleHttp\Message\Request.
      */
-    public function createGraphRequest($method, $endpoint)
+    public function createRequest($method, $endpoint)
     {
-        return $this->getGraphClient()->createRequest($method, $endpoint);
+        return $this->getMicrosoftServiceClient()->createRequest($method, $endpoint);
     }
     
     /**
-     * Refreshes access token and sends given request to Microsoft Graph.
+     * Refreshes access token and sends given request.
      *
      * @param \GuzzleHttp\Message\Request $request
      * @return 
      * - If $shouldDecodeContent is true: \stdClass or false if fails.
      * - Else body of response.
      */
-    public function sendGraphRequest(\GuzzleHttp\Message\Request $request, $shouldDecodeContent = true)
+    public function sendRequest(\GuzzleHttp\Message\Request $request, $shouldDecodeContent = true)
     {
         if ($this->hasAccessTokenExpired())
         {
@@ -126,7 +148,7 @@ class MicrosoftClientService
         }
 
         $request->addHeader('Authorization', 'Bearer ' . $this->getAccessToken()->access_token);
-        $response = $this->getGraphClient()->send($request);
+        $response = $this->getMicrosoftServiceClient()->send($request);
         
         if ($shouldDecodeContent)
         {
@@ -153,25 +175,32 @@ class MicrosoftClientService
     {
         if (! isset($this->azureActiveDirectoryClient))
         {
-            $this->azureActiveDirectoryClient = 
-                new \GuzzleHttp\Client(
-                    array('base_url' => 'https://login.microsoftonline.com/' . $this->microsoftClientSettingsProvider->getTenant() . '/oauth2/v2.0/'));
+            $baseUrl = 'https://login.microsoftonline.com/' . $this->microsoftClientSettingsProvider->getTenant() . '/oauth2';
+
+            if (! empty($this->microsoftClientSettingsProvider->getOauth2Version()))
+            {   // OUATH2 v2.0
+                $baseUrl .= '/' . $this->microsoftClientSettingsProvider->getOauth2Version();
+            }
+
+            $baseUrl .= '/';
+        
+            $this->azureActiveDirectoryClient = new \GuzzleHttp\Client(array('base_url' => $baseUrl));
         }
         
         return $this->azureActiveDirectoryClient;
     }
 
     /**
-     *  Creates on demand and returns a Guzzle HTTP client with base URL https://graph.microsoft.com/v1.0/me/.
+     *  Creates on demand and returns a Guzzle HTTP client with base URL provided by the setting provider.
      */
-    private function getGraphClient()
+    private function getMicrosoftServiceClient()
     {
-        if (! isset($this->graphClient))
+        if (! isset($this->microsoftServiceClient))
         {
-            $this->graphClient = new \GuzzleHttp\Client(array('base_url' => 'https://graph.microsoft.com/v1.0/me/'));
+            $this->microsoftServiceClient = new \GuzzleHttp\Client(array('base_url' => $this->microsoftClientSettingsProvider->getServiceBaseUrl()));
         }
         
-        return $this->graphClient;
+        return $this->microsoftServiceClient;
     }
 
     /**
@@ -181,22 +210,30 @@ class MicrosoftClientService
      */
     private function createAuthorizationUrl($replyParameters)
     {
-        $params = array(
+        $parameters = array(
             'client_id' => $this->microsoftClientSettingsProvider->getClientId(),
             'response_type' => 'code',
             'redirect_uri' => $this->getRedirectUri(),
-            'scope' => $this->getScopes(),
-            'response_mode' => 'query',
             'state' => base64_encode(serialize($replyParameters)),
-            'prompt' => 'login');
+            'prompt' => 'login',
         /*
             'login_hint' => 'user name or email',
             'domain_hint' => 'consumers or organizations'
         */
-           
-        return $this->getAzureActiveDirectoryClient()->getBaseUrl() . 'authorize' . "?" . http_build_query($params, '', '&');
-    }
+             );
 
+        if (empty($this->microsoftClientSettingsProvider->getOauth2Version()))
+        {   // OUATH2
+            $parameters['resource'] = $this->getScopeOrResource();
+        }
+        else
+        {   // OUATH2 v2.0
+            $parameters['scope'] = $this->getScopeOrResource();
+            $parameters['response_mode'] = 'query';
+        }
+           
+        return $this->getAzureActiveDirectoryClient()->getBaseUrl() . 'authorize' . "?" . http_build_query($parameters, '', '&');
+    }
 
     /**
      *  Returns the URI of Chamilo to which Microsoft login page returns after successful login.
@@ -211,22 +248,31 @@ class MicrosoftClientService
     }
 
     /**
-     * Extends the scopes provided by MicrosoftClientSettingsProvider by scope 'offline_access' which enables refreshing of access tokens.
+     * - OAUTH2: Returns resource provided by MicrosoftClientSettingsProvider.
+     * - OAUTH2 v2.0: Extends the scopes provided by MicrosoftClientSettingsProvider by scope 'offline_access' which enables refreshing of access tokens.
      */
-    private function getScopes()
+    private function getScopeOrResource()
     {
-        $scopes = $this->microsoftClientSettingsProvider->getScopes();
-        if (! is_array($scopes))
-        {
-            $scopes = array($scope);
-        }
+        $scopeOrResource = $this->microsoftClientSettingsProvider->getScopeOrResource();
 
-        if (! in_array('offline_access', $scopes))
-        {
-            $scopes[] = 'offline_access';
+        if (empty($this->microsoftClientSettingsProvider->getOauth2Version()))
+        {   // OAUTH2
+            return $scopeOrResource;
         }
+        else
+        {   // OAUTH2 v2.0
+            if (! is_array($scopeOrResource))
+            {
+                $scopeOrResource = array($scopeOrResource);
+            }
 
-        return implode(' ', $scopes);
+            if (! in_array('offline_access', $scopeOrResource))
+            {
+                $scopeOrResource[] = 'offline_access';
+            }
+        
+            return implode(' ', $scopeOrResource);
+        }
     }
 
     /**
@@ -243,7 +289,16 @@ class MicrosoftClientService
 
         $postBody->setField('client_id', $this->microsoftClientSettingsProvider->getClientId());
         $postBody->setField('grant_type', 'authorization_code');
-        $postBody->setField('scope', $this->getScopes());
+  
+        if (empty($this->microsoftClientSettingsProvider->getOauth2Version()))
+        {   // OAUTH2
+            $postBody->setField('resource', $this->getScopeOrResource());
+        }
+        else
+        {   // OAUTH2 v2.0
+            $postBody->setField('scope', $this->getScopeOrResource());
+        }
+
         $postBody->setField('code', $authorizationCode);
         $postBody->setField('redirect_uri', $this->getRedirectUri());
         $postBody->setField('client_secret', $this->microsoftClientSettingsProvider->getClientSecret());
@@ -273,11 +328,19 @@ class MicrosoftClientService
 
         $postBody->setField('client_id', $this->microsoftClientSettingsProvider->getClientId());
         $postBody->setField('grant_type', 'refresh_token');
-        $postBody->setField('scope', $this->getScopes());
         $postBody->setField('refresh_token', $this->getAccessToken()->refresh_token);
-        $postBody->setField('redirect_uri', $this->getRedirectUri());
         $postBody->setField('client_secret', $this->microsoftClientSettingsProvider->getClientSecret());
-        
+
+        if (empty($this->microsoftClientSettingsProvider->getOauth2Version()))
+        {   // OUATH2
+            $postBody->setField('resource', $this->getScopeOrResource());
+        }
+        else
+        {   // OUATH2 v2.0
+            $postBody->setField('scope', $this->getScopeOrResource());
+            $postBody->setField('redirect_uri', $this->getRedirectUri());
+        }
+     
         $response = $this->getAzureActiveDirectoryClient()->send($request);
         $accessToken = json_decode($response->getBody()->getContents());
         
@@ -301,8 +364,11 @@ class MicrosoftClientService
      */
     private function saveAccessToken($accessToken)
     {
-        $accessToken->expires_on = strtotime('+' . $accessToken->expires_in . 'seconds');
-        
+        if (is_null($accessToken->expires_on))
+        {   // OAUTH2 v2.0 does not send the expires_on attribute.
+            $accessToken->expires_on = strtotime('+' . $accessToken->expires_in . 'seconds');
+        }
+
         return $this->microsoftClientSettingsProvider->saveAccessToken($accessToken);
     }
 

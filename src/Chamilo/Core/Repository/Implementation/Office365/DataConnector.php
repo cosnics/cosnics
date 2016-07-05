@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Office365;
 
-use Chamilo\Core\Repository\External\Infrastructure\Service\MicrosoftClientSettingsProvider;
+use Chamilo\Core\Repository\External\Infrastructure\Service\MicrosoftGraphClientSettingsProvider;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Properties\FileProperties;
@@ -50,19 +50,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $user = new User();
         $user->setId(Session::get_user_id());
 
-        $this->microsoftClientService = new MicrosoftClientService(
-            new MicrosoftClientSettingsProvider($externalRepositoryInstance, $user, array('https://graph.microsoft.com/Files.Read')));
-    }
-
-    function expandHomeDirectory($path)
-    {
-        $homeDirectory = getenv('HOME');
-        if (empty($homeDirectory))
-        {
-            $homeDirectory = getenv("HOMEDRIVE") . getenv("HOMEPATH");
-        }
-
-        return str_replace('~', realpath($homeDirectory), $path);
+        $this->microsoftClientService = new MicrosoftClientService(new MicrosoftGraphClientSettingsProvider($externalRepositoryInstance, $user));
     }
 
     public function login()
@@ -89,10 +77,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function retrieve_external_repository_object($id)
     {
-        $request = $this->microsoftClientService->createGraphRequest('GET', 'drive/items/' . $id);
-        $result = $this->microsoftClientService->sendGraphRequest($request);
+        $request = $this->microsoftClientService->createRequest('GET', 'drive/items/' . $id);
+        $result = $this->microsoftClientService->sendRequest($request);
 
-        return $this->parse_external_repository_object($result);
+        return $this->parseExternalRepositoryObject($result);
     }
 
     /*
@@ -144,7 +132,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $end = min(count($driveItems), $offset + $count);
         for ($i = $offset; $i < $end; ++$i)
         {
-            $objects[] = $this->parse_external_repository_object($driveItems[$i]);
+            $objects[] = $this->parseExternalRepositoryObject($driveItems[$i]);
         }
 
         return new ArrayResultSet($objects);
@@ -156,28 +144,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         return new ArrayResultSet($folderPath[$parent_id]);
     }
 
-    /**
-     *
-     * @param $folderId string
-     *
-     * @return array
-     */
-    public function download_external_repository_object($url)
-    {
-        // $session_token = $this->google_docs->getHttpClient()->getAuthSubToken();
-        // $opts = array(
-        // 'http' => array(
-        // 'method' => 'GET',
-        // 'header' => "GData-Version: 3.0\r\n" . "Authorization: AuthSub token=\"$session_token\"\r\n"));
-
-        // return file_get_contents($url, false, stream_context_create($opts));
-        return file_get_contents($url);
-    }
-
     public function import_external_repository_object($id)
     {        
-        $request = $this->microsoftClientService->createGraphRequest('GET', 'drive/items/' . $id . '/content');
-        return $this->microsoftClientService->sendGraphRequest($request, false);
+        $request = $this->microsoftClientService->createRequest('GET', 'drive/items/' . $id . '/content');
+        return $this->microsoftClientService->sendRequest($request, false);
     }
 
     public function getFolderPath()
@@ -230,8 +200,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
         else
         {
-            $request = $this->microsoftClientService->createGraphRequest('GET', 'drive/items/' . $id);
-            $result = $this->microsoftClientService->sendGraphRequest($request);
+            $request = $this->microsoftClientService->createRequest('GET', 'drive/items/' . $id);
+            $result = $this->microsoftClientService->sendRequest($request);
             
             $folder->setId($result->id);
             $folder->setTitle($result->name);
@@ -247,7 +217,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      *   @param \stdClass $response
      *   @return ExternalObject
      */
-    private function parse_external_repository_object($response)
+    private function parseExternalRepositoryObject($response)
     {
         $object = new ExternalObject();
         $object->set_id($response->id);
@@ -327,8 +297,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $link = $this->getDriveItemsRequest($searchString);
             while (true)
             {
-                $request = $this->microsoftClientService->createGraphRequest('GET', $link);
-                $result = get_object_vars($this->microsoftClientService->sendGraphRequest($request));
+                $request = $this->microsoftClientService->createRequest('GET', $link);
+                $result = get_object_vars($this->microsoftClientService->sendRequest($request));
         
                 $this->driveItems = array_merge($this->driveItems, $result['value']);   
                 
@@ -399,7 +369,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $request .= '?' . implode('&', $queryParameters); 
         }
 
-        //print_r(var_dump($request));
         return $request;    
     }
 

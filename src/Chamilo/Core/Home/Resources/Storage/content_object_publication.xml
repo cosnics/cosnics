@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="element_target_entity">
+<object name="content_object_publication">
     <properties>
         <property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
         <property name="element_id" type="integer" unsigned="1" notnull="1" default="0" />
