@@ -1,10 +1,7 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Form;
 
-use Chamilo\Core\Home\Rights\Storage\DataClass\HomeTargetEntity;
 use Chamilo\Core\Rights\Entity\PlatformGroupEntity;
-use Chamilo\Core\Rights\Entity\RightsEntity;
 use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementTypes;
@@ -22,6 +19,7 @@ abstract class TargetEntitiesForm extends FormValidator
     const PROPERTY_RIGHTS = 'rights';
 
     /**
+     *
      * @var string
      */
     protected $formName;
@@ -35,7 +33,6 @@ abstract class TargetEntitiesForm extends FormValidator
 
     /**
      * Constructor
-     *
      * TargetEntitiesForm constructor.
      *
      * @param string $formName ;
@@ -49,8 +46,7 @@ abstract class TargetEntitiesForm extends FormValidator
 
         $this->entities = array(
             UserEntity::ENTITY_TYPE => UserEntity::get_instance(),
-            PlatformGroupEntity::ENTITY_TYPE => PlatformGroupEntity::get_instance()
-        );
+            PlatformGroupEntity::ENTITY_TYPE => PlatformGroupEntity::get_instance());
 
         $this->buildForm();
         $this->setDefaults();
@@ -72,8 +68,7 @@ abstract class TargetEntitiesForm extends FormValidator
             'advanced_element_finder',
             $this->formName . '_rights',
             Translation::get('SelectTargetUsersGroups'),
-            $types
-        );
+            $types);
 
         $this->addElement('html', '<div style="margin-top: 20px;"></div>');
 
@@ -83,14 +78,12 @@ abstract class TargetEntitiesForm extends FormValidator
             Translation::get('Save', null, Utilities::COMMON_LIBRARIES),
             null,
             null,
-            'save'
-        );
+            'save');
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -112,9 +105,7 @@ abstract class TargetEntitiesForm extends FormValidator
         {
             $entity = $this->entities[$selectedEntity->get_entity_type()];
 
-            $default_elements->add_element(
-                $entity->get_element_finder_element($selectedEntity->get_entity_id())
-            );
+            $default_elements->add_element($entity->get_element_finder_element($selectedEntity->get_entity_id()));
         }
 
         $element = $this->getElement($this->formName . '_rights');
@@ -141,5 +132,4 @@ abstract class TargetEntitiesForm extends FormValidator
      * @return HomeTargetEntity[]
      */
     abstract protected function getSelectedEntities();
-
 }

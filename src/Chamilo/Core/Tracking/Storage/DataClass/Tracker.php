@@ -7,7 +7,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 abstract class Tracker extends DataClass
 {
@@ -73,7 +72,7 @@ abstract class Tracker extends DataClass
      */
     public function remove(Condition $condition = null)
     {
-        return DataManager :: deletes($this->class_name(), $condition);
+        return DataManager :: deletes(static :: class_name(), $condition);
     }
 
     /**
@@ -82,12 +81,12 @@ abstract class Tracker extends DataClass
      * @param $application string
      * @return Tracker The tracker object
      */
-    public static function factory($type, $context)
-    {
-        $class = $context . '\Storage\DataClass\\' .
-             StringUtilities :: getInstance()->createString($type)->upperCamelize();
-        return new $class();
-    }
+//    public static function factory($type, $context)
+//    {
+//        $class = $context . '\Storage\DataClass\\' .
+//             StringUtilities :: getInstance()->createString($type)->upperCamelize();
+//        return new $class();
+//    }
 
     /**
      *

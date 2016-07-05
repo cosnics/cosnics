@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -31,8 +30,8 @@ class MultiPasswordResetterComponent extends Manager
      */
     public function run()
     {
-        $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
-        $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
+        $ids = $this->getRequest()->get(self::PARAM_USER_USER_ID);
+        $this->set_parameter(self::PARAM_USER_USER_ID, $ids);
 
         if (! $this->get_user()->is_platform_admin())
         {
@@ -50,21 +49,20 @@ class MultiPasswordResetterComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
                     (int) $id);
 
-                $password = Text :: generate_password();
-                $user->set_password(Hashing :: hash($password));
+                $password = Text::generate_password();
+                $user->set_password(Hashing::hash($password));
 
                 if ($user->update())
                 {
-                    $mail_subject = Translation :: get('LoginRequest');
+                    $mail_subject = Translation::get('LoginRequest');
                     $mail_body[] = $user->get_fullname() . ',';
-                    $mail_body[] = Translation :: get('YourAccountParam') . ' ' .
-                         Path :: getInstance()->getBasePath(true);
-                    $mail_body[] = Translation :: get('UserName') . ' :' . $user->get_username();
-                    $mail_body[] = Translation :: get('Password') . ' :' . $password;
+                    $mail_body[] = Translation::get('YourAccountParam') . ' ' . Path::getInstance()->getBasePath(true);
+                    $mail_body[] = Translation::get('UserName') . ' :' . $user->get_username();
+                    $mail_body[] = Translation::get('Password') . ' :' . $password;
                     $mail_body = implode(PHP_EOL, $mail_body);
 
                     $mail = new Mail($mail_subject, $mail_body, $user->get_email());
@@ -80,12 +78,12 @@ class MultiPasswordResetterComponent extends Manager
                     {
                     }
 
-                    Event :: trigger(
+                    Event::trigger(
                         'Update',
-                        Manager :: context(),
+                        Manager::context(),
                         array(
-                            ChangesTracker :: PROPERTY_REFERENCE_ID => $user->get_id(),
-                            ChangesTracker :: PROPERTY_USER_ID => $this->get_user()->get_id()));
+                            ChangesTracker::PROPERTY_REFERENCE_ID => $user->get_id(),
+                            ChangesTracker::PROPERTY_USER_ID => $this->get_user()->get_id()));
                 }
                 else
                 {
@@ -101,19 +99,16 @@ class MultiPasswordResetterComponent extends Manager
                 'UserPasswordResetted',
                 'UserPasswordsResetted');
 
-            $this->redirect(
-                $message,
-                ($failures > 0),
-                array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_USERS));
+            $this->redirect($message, ($failures > 0), array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
+                    Translation::get(
                         'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('User')),
-                        Utilities :: COMMON_LIBRARIES)));
+                        array('OBJECT' => Translation::get('User')),
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 
@@ -121,8 +116,8 @@ class MultiPasswordResetterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
-                Translation :: get('UserManagerAdminUserBrowserComponent')));
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
+                Translation::get('AdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_password_resetter');
     }
 }

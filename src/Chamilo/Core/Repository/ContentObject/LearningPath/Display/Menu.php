@@ -33,7 +33,7 @@ class Menu extends \Chamilo\Core\Repository\Display\Menu
             }
             else
             {
-                return parent :: getItemIcon($node);
+                return parent::getItemIcon($node);
             }
         }
         else
@@ -49,7 +49,7 @@ class Menu extends \Chamilo\Core\Repository\Display\Menu
      */
     protected function isSelectedItem(ComplexContentObjectPathNode $node)
     {
-        return $this->getApplication()->get_action() != Manager :: ACTION_REPORTING && parent :: isSelectedItem($node);
+        return $this->getApplication()->get_action() != Manager::ACTION_REPORTING && parent::isSelectedItem($node);
     }
 
     /**
@@ -62,12 +62,12 @@ class Menu extends \Chamilo\Core\Repository\Display\Menu
         $extraMenuItems = array();
 
         $progressItem = array();
-        $progressItem['text'] = Translation :: get('Progress');
-        $progress_item['href'] = $application->get_url(
-            array(Manager :: PARAM_ACTION => Manager :: ACTION_REPORTING, Manager :: PARAM_STEP => null));
+        $progressItem['text'] = Translation::get('Progress');
+        $progressItem['href'] = $application->get_url(
+            array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING, Manager::PARAM_STEP => null));
         $progressItem['icon'] = 'type_statistics';
 
-        if ($application->get_action() == Manager :: ACTION_REPORTING && ! $application->is_current_step_set())
+        if ($application->get_action() == Manager::ACTION_REPORTING && ! $application->is_current_step_set())
         {
             $progressItem['state'] = array('selected' => true);
         }

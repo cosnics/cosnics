@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\Implementation\Office365;
 
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalObjectDisplay
 {
@@ -11,8 +10,8 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     {
         $object = $this->get_object();
 
-        $properties = parent :: get_display_properties();
-        $properties[Translation :: get('LastModifiedBy')] = $object->get_modifier_id();
+        $properties = parent::get_display_properties();
+        $properties[Translation::get('LastModifiedBy')] = $object->get_modifier_id();
 
         return $properties;
     }

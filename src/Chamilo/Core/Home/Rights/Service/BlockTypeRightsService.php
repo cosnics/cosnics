@@ -1,30 +1,30 @@
 <?php
-
 namespace Chamilo\Core\Home\Rights\Service;
 
 use Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer;
-use Chamilo\Core\Home\Renderer\Type\Basic\BlockRendererFactory;
 use Chamilo\Core\Home\Repository\HomeRepository;
 use Chamilo\Core\Home\Rights\Storage\DataClass\BlockTypeTargetEntity;
 use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Core\Home\Storage\DataClass\Block;
-use Chamilo\Core\Reporting\Viewer\Rendition\Block\BlockRendition;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 
 /**
  * Service to manage the rights for the given block types
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class BlockTypeRightsService
 {
+
     /**
+     *
      * @var RightsRepository
      */
     protected $rightsRepository;
 
     /**
+     *
      * @var HomeRepository
      */
     protected $homeRepository;
@@ -48,7 +48,7 @@ class BlockTypeRightsService
      */
     public function setTargetEntitiesForBlockType($blockType, $targetEntities = array())
     {
-        if (!$this->rightsRepository->clearTargetEntitiesForBlockType($blockType))
+        if (! $this->rightsRepository->clearTargetEntitiesForBlockType($blockType))
         {
             throw new \RuntimeException('Failed to delete the target entities for block type ' . $blockType);
         }
@@ -62,15 +62,15 @@ class BlockTypeRightsService
                 $elementTargetEntity->set_entity_type($targetEntityType);
                 $elementTargetEntity->set_entity_id($targetEntityIdentifier);
 
-                if (!$elementTargetEntity->create())
+                if (! $elementTargetEntity->create())
                 {
                     throw new \RuntimeException(
                         sprintf(
                             'Could not create a new $blockType target entity for $blockType %s, ' .
-                            'entity type %s and entity id %s',
-                            $blockType, $targetEntityType, $targetEntityIdentifier
-                        )
-                    );
+                                 'entity type %s and entity id %s',
+                                $blockType,
+                                $targetEntityType,
+                                $targetEntityIdentifier));
                 }
             }
         }
@@ -98,14 +98,14 @@ class BlockTypeRightsService
      */
     public function canUserViewBlockType(User $user, $blockType)
     {
-        if($user->is_platform_admin())
+        if ($user->is_platform_admin())
         {
             return true;
         }
-        
+
         $targetedBlockTypes = $this->rightsRepository->findTargetedBlockTypes();
 
-        if(!in_array($blockType, $targetedBlockTypes))
+        if (! in_array($blockType, $targetedBlockTypes))
         {
             return true;
         }
@@ -118,7 +118,7 @@ class BlockTypeRightsService
     /**
      * Checks whether or not a user can view the given block renderer, checking the target entities and checking
      * if the block is not deletable and already added to the homepage
-     * 
+     *
      * @param User $user
      * @param BlockRenderer $blockRenderer
      *
@@ -126,12 +126,12 @@ class BlockTypeRightsService
      */
     public function canUserViewBlockRenderer(User $user, BlockRenderer $blockRenderer)
     {
-        if(!$this->canUserViewBlockType($user, get_class($blockRenderer)))
+        if (! $this->canUserViewBlockType($user, get_class($blockRenderer)))
         {
             return false;
         }
 
-        if($blockRenderer->isDeletable())
+        if ($blockRenderer->isDeletable())
         {
             return true;
         }
@@ -142,11 +142,11 @@ class BlockTypeRightsService
         $blockClassContext = $classNameUtilities->getNamespaceParent($blockClass, 6);
 
         $userBlocks = $this->homeRepository->findBlocksByUserIdentifier($user->getId());
-        while($userBlock = $userBlocks->next_result())
+        while ($userBlock = $userBlocks->next_result())
         {
 
             /** @var Block $userBlock */
-            if($userBlock->getBlockType() == $blockClassName && $userBlock->getContext() == $blockClassContext)
+            if ($userBlock->getBlockType() == $blockClassName && $userBlock->getContext() == $blockClassContext)
             {
                 return false;
             }
@@ -163,20 +163,19 @@ class BlockTypeRightsService
         $targetEntitiesPerBlockType = $this->getTargetEntitiesPerBlockType();
 
         $blockTypesWithTargetEntities = array();
-        
+
         $blockTypes = $this->homeRepository->findBlockTypes();
-        foreach($blockTypes as $blockType)
+        foreach ($blockTypes as $blockType)
         {
             $blockTypeWithTargetEntity = array();
             $blockTypeWithTargetEntity['block_type'] = $blockType;
 
-            if(array_key_exists($blockType, $targetEntitiesPerBlockType))
+            if (array_key_exists($blockType, $targetEntitiesPerBlockType))
             {
                 $targetEntities = $targetEntitiesPerBlockType[$blockType];
-                foreach($targetEntities as $targetEntity)
+                foreach ($targetEntities as $targetEntity)
                 {
-                    $blockTypeWithTargetEntity['target_entities'][$targetEntity->get_entity_type()][] =
-                        $targetEntity->get_entity_id();
+                    $blockTypeWithTargetEntity['target_entities'][$targetEntity->get_entity_type()][] = $targetEntity->get_entity_id();
                 }
             }
 
@@ -197,7 +196,7 @@ class BlockTypeRightsService
 
         $blockTypeTargetEntities = $this->rightsRepository->findBlockTypeTargetEntities();
 
-        foreach($blockTypeTargetEntities as $blockTypeTargetEntity)
+        foreach ($blockTypeTargetEntities as $blockTypeTargetEntity)
         {
             $targetEntitiesPerBlockType[$blockTypeTargetEntity->get_block_type()][] = $blockTypeTargetEntity;
         }

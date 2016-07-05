@@ -10,7 +10,6 @@ use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormHa
 use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
 use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublisherSupport;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;

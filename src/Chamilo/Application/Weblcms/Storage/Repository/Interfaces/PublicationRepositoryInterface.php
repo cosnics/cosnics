@@ -1,23 +1,19 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Storage\Repository\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Interface to determine the necessary functions for the publication repository
  *
  * @package application\weblcms
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface PublicationRepositoryInterface
 {
+
     /**
      * Finds publications for a given course and tool
      *
@@ -113,5 +109,4 @@ interface PublicationRepositoryInterface
      * @return ContentObjectPublicationCategory
      */
     public function findPublicationCategoryById($categoryId);
-
 }

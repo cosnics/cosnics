@@ -218,25 +218,25 @@ class Mailer extends AbstractMailer
             global $phpMailerConfiguration;
             require_once(__DIR__ . '/Resources/Config/phpmailer.conf.php');
 
-            $mail = new \PHPMailer();
+            $phpMailer = new \PHPMailer();
 
-            $mail->isHTML(true);
-            $mail->CharSet = 'utf-8';
-            $mail->Mailer = $phpMailerConfiguration['SMTP_MAILER'];
-            $mail->Host = $phpMailerConfiguration['SMTP_HOST'];
-            $mail->Port = $phpMailerConfiguration['SMTP_PORT'];
+            $phpMailer->isHTML(true);
+            $phpMailer->CharSet = 'utf-8';
+            $phpMailer->Mailer = $phpMailerConfiguration['SMTP_MAILER'];
+            $phpMailer->Host = $phpMailerConfiguration['SMTP_HOST'];
+            $phpMailer->Port = $phpMailerConfiguration['SMTP_PORT'];
 
             if ($phpMailerConfiguration['SMTP_AUTH'])
             {
-                $mail->SMTPAuth = 1;
-                $mail->Username = $phpMailerConfiguration['SMTP_USER'];
-                $mail->Password = $phpMailerConfiguration['SMTP_PASS'];
+                $phpMailer->SMTPAuth = 1;
+                $phpMailer->Username = $phpMailerConfiguration['SMTP_USER'];
+                $phpMailer->Password = $phpMailerConfiguration['SMTP_PASS'];
             }
 
-            $mail->Priority = 3;
-            $mail->addCustomHeader('Errors-To: ' . $phpMailerConfiguration['SMTP_FROM_EMAIL']);
+            $phpMailer->Priority = 3;
+            $phpMailer->addCustomHeader('Errors-To: ' . $phpMailerConfiguration['SMTP_FROM_EMAIL']);
 
-            $mail->SMTPKeepAlive = true;
+            $phpMailer->SMTPKeepAlive = true;
         }
 
         $this->phpMailer = $phpMailer;

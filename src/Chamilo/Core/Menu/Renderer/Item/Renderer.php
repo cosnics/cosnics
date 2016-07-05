@@ -71,7 +71,7 @@ abstract class Renderer
      * @param Renderer $parentRenderer
      * @return string
      */
-    public static function toHtml($menuRenderer, $item, $parentRenderer)
+    public static function toHtml($menuRenderer, $item, $parentRenderer = null)
     {
         return self :: factory($menuRenderer, $item, $parentRenderer)->render();
     }

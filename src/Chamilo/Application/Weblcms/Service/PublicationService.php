@@ -1,13 +1,10 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\PublicationRepositoryInterface;
-use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
-use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -19,11 +16,11 @@ use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
  * Service to manage publications
  *
  * @package application\weblcms
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class PublicationService implements PublicationServiceInterface
 {
+
     /**
      * The course service
      *
@@ -83,9 +80,11 @@ class PublicationService implements PublicationServiceInterface
         return $this;
     }
 
-    /****************************************************************************************************************
-     * Publication Functionality                                                                                    *
-     ****************************************************************************************************************/
+    /**
+     * **************************************************************************************************************
+     * Publication Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * Returns a publication by a given id
@@ -113,18 +112,18 @@ class PublicationService implements PublicationServiceInterface
     public function getPublicationForUser(User $user, $publicationId)
     {
         $contentObjectPublication = $this->publicationRepository->findPublicationById($publicationId);
-        if(!$contentObjectPublication)
+        if (! $contentObjectPublication)
         {
             throw new ObjectNotExistException('ContentObjectPublication', $publicationId);
         }
 
         $course = $this->courseService->getCourseById($contentObjectPublication->get_course_id());
-        if(!$course)
+        if (! $course)
         {
             throw new ObjectNotExistException('Course', $contentObjectPublication->get_course_id());
         }
 
-        if(!$this->rightsService->canUserViewPublication($user, $contentObjectPublication, $course))
+        if (! $this->rightsService->canUserViewPublication($user, $contentObjectPublication, $course))
         {
             throw new NotAllowedException();
         }
@@ -154,9 +153,8 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublication[]
      */
-    public function getPublicationsByCourseAndToolAndCategory(
-        Course $course, $tool, ContentObjectPublicationCategory $category = null
-    )
+    public function getPublicationsByCourseAndToolAndCategory(Course $course, $tool,
+        ContentObjectPublicationCategory $category = null)
     {
         $categoryId = is_null($category) ? 0 : $category->get_id();
         return $this->publicationRepository->findPublicationsByCategoryId($course, $tool, $categoryId);
@@ -247,29 +245,28 @@ class PublicationService implements PublicationServiceInterface
      */
     public function getPublicationsForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, $tool)
     {
-        if($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
+        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
         {
             return $this->getPublicationsByCourseAndTool($course, $tool);
         }
 
-        if(!$this->rightsService->canUserViewTool($user, $tool, $course))
+        if (! $this->rightsService->canUserViewTool($user, $tool, $course))
         {
             return array();
         }
 
-        $contentObjectPublicationIds = $this->rightsService->getPublicationIdsWithViewRightInTool(
-            $user, $tool, $course
-        );
+        $contentObjectPublicationIds = $this->rightsService->getPublicationIdsWithViewRightInTool($user, $tool, $course);
 
         $contentObjectPublicationCategories = $this->getPublicationCategoriesForUser($user, $course, $tool);
 
-        foreach($contentObjectPublicationCategories as $contentObjectPublicationCategory)
+        foreach ($contentObjectPublicationCategories as $contentObjectPublicationCategory)
         {
             $contentObjectPublicationIds = array_merge(
-                $contentObjectPublicationIds, $this->rightsService->getPublicationIdsWithViewRightInCategory(
-                    $user, $contentObjectPublicationCategory, $course
-                )
-            );
+                $contentObjectPublicationIds,
+                $this->rightsService->getPublicationIdsWithViewRightInCategory(
+                    $user,
+                    $contentObjectPublicationCategory,
+                    $course));
         }
 
         return $this->publicationRepository->findVisiblePublicationsByIds($contentObjectPublicationIds);
@@ -286,18 +283,17 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublication[]
      */
-    public function getPublicationsForUserInCategory(
-        \Chamilo\Core\User\Storage\DataClass\User $user, Course $course, $tool, ContentObjectPublicationCategory $category = null
-    )
+    public function getPublicationsForUserInCategory(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course,
+        $tool, ContentObjectPublicationCategory $category = null)
     {
-        if($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
+        if ($this->courseService->isUserTeacherInCourse($user, $course) || $user->is_platform_admin())
         {
             return $this->getPublicationsByCourseAndToolAndCategory($course, $tool, $category);
         }
 
-        if(!$category)
+        if (! $category)
         {
-            if(!$this->rightsService->canUserViewTool($user, $tool, $course))
+            if (! $this->rightsService->canUserViewTool($user, $tool, $course))
             {
                 return array();
             }
@@ -306,7 +302,7 @@ class PublicationService implements PublicationServiceInterface
         }
         else
         {
-            if(!$this->rightsService->canUserViewPublicationCategory($user, $category, $course))
+            if (! $this->rightsService->canUserViewPublicationCategory($user, $category, $course))
             {
                 return array();
             }
@@ -315,12 +311,13 @@ class PublicationService implements PublicationServiceInterface
         }
 
         return $this->publicationRepository->findVisiblePublicationsByIds($publicationIds);
-
     }
 
-    /****************************************************************************************************************
-     * PublicationCategory Functionality                                                                            *
-     ****************************************************************************************************************/
+    /**
+     * **************************************************************************************************************
+     * PublicationCategory Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * Returns the categories for a given course and tool
@@ -341,20 +338,19 @@ class PublicationService implements PublicationServiceInterface
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param Course $course
      * @param $tool
-     *
      * @return ContentObjectPublicationCategory[]
      */
-    public function getPublicationCategoriesForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course, $tool)
+    public function getPublicationCategoriesForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course,
+        $tool)
     {
-        $contentObjectPublicationCategories = $this->getPublicationCategoriesForCourseAndTool(
-            $course, $tool
-        );
+        $contentObjectPublicationCategories = $this->getPublicationCategoriesForCourseAndTool($course, $tool);
 
         return $this->filterAccessibleCategoriesForUser($user, $course, $contentObjectPublicationCategories);
     }
 
     /**
-     * Returns the child publication categories for a user in a given category. If no category is given the root
+     * Returns the child publication categories for a user in a given category.
+     * If no category is given the root
      * categories are returned
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
@@ -364,19 +360,17 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublicationCategory[]
      */
-    public function getPublicationCategoriesForUserInCategory(
-        \Chamilo\Core\User\Storage\DataClass\User $user, Course $course, $tool, ContentObjectPublicationCategory $category = null
-    )
+    public function getPublicationCategoriesForUserInCategory(\Chamilo\Core\User\Storage\DataClass\User $user,
+        Course $course, $tool, ContentObjectPublicationCategory $category = null)
     {
         $categoryId = is_null($category) ? 0 : $category->get_id();
 
-        $contentObjectPublicationCategories =
-            $this->publicationRepository->findPublicationCategoriesByParentCategoryId(
-                $course, $tool, $categoryId
-            );
+        $contentObjectPublicationCategories = $this->publicationRepository->findPublicationCategoriesByParentCategoryId(
+            $course,
+            $tool,
+            $categoryId);
 
         return $this->filterAccessibleCategoriesForUser($user, $course, $contentObjectPublicationCategories);
-
     }
 
     /**
@@ -388,17 +382,17 @@ class PublicationService implements PublicationServiceInterface
      *
      * @return ContentObjectPublicationCategory[]
      */
-    protected function filterAccessibleCategoriesForUser(
-        \Chamilo\Core\User\Storage\DataClass\User $user, Course $course, array $contentObjectPublicationCategories
-    )
+    protected function filterAccessibleCategoriesForUser(\Chamilo\Core\User\Storage\DataClass\User $user, Course $course,
+        array $contentObjectPublicationCategories)
     {
         $categoriesForUser = array();
 
-        foreach($contentObjectPublicationCategories as $contentObjectPublicationCategory)
+        foreach ($contentObjectPublicationCategories as $contentObjectPublicationCategory)
         {
-            if (!$this->rightsService->canUserViewPublicationCategory(
-                $user, $contentObjectPublicationCategory, $course
-            ))
+            if (! $this->rightsService->canUserViewPublicationCategory(
+                $user,
+                $contentObjectPublicationCategory,
+                $course))
             {
                 continue;
             }
@@ -436,19 +430,19 @@ class PublicationService implements PublicationServiceInterface
     {
         $publicationCategory = $this->publicationRepository->findPublicationCategoryById($categoryId);
 
-        if(!$publicationCategory)
+        if (! $publicationCategory)
         {
             throw new ObjectNotExistException('category', $categoryId);
         }
 
         $course = $this->courseService->getCourseById($publicationCategory->get_course());
 
-        if(!$course)
+        if (! $course)
         {
             throw new ObjectNotExistException('course', $publicationCategory->get_course());
         }
 
-        if(!$this->rightsService->canUserViewPublicationCategory($user, $publicationCategory, $course))
+        if (! $this->rightsService->canUserViewPublicationCategory($user, $publicationCategory, $course))
         {
             throw new NotAllowedException();
         }

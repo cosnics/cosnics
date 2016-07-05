@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Implementation\GoogleDocs;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Infrastructure\Service\MimeTypeExtensionParser;
 use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
-use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -12,7 +11,6 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use ValueObjects\String\String;
 
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
@@ -21,7 +19,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     const PARAM_FOLDER = 'folder';
     const ACTION_LOGIN = 'Login';
     const ACTION_LOGOUT = 'Logout';
-    const DEFAULT_ACTION = self :: ACTION_LOGIN;
+    const DEFAULT_ACTION = self::ACTION_LOGIN;
 
     private $categoryTreeMenu;
 
@@ -54,8 +52,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_object_viewing_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
 
         return $this->get_url($parameters);
     }
@@ -77,8 +75,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
             // Basic list of all documents
             $all_items = array();
-            $all_items['title'] = Translation :: get('AllItems');
-            $all_items['url'] = $this->get_url(array(self :: PARAM_FOLDER => null));
+            $all_items['title'] = Translation::get('AllItems');
+            $all_items['url'] = $this->get_url(array(self::PARAM_FOLDER => null));
             $all_items['class'] = 'home';
             $menu_items[] = $all_items;
 
@@ -86,26 +84,26 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             $owned = array();
 
             $shared = array();
-            $shared['title'] = Translation :: get('SharedWithMe');
-            $shared['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_SHARED));
+            $shared['title'] = Translation::get('SharedWithMe');
+            $shared['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_SHARED));
             $shared['class'] = 'external_repository';
             $menu_items[] = $shared;
 
             $recent = array();
-            $recent['title'] = Translation :: get('Recent');
-            $recent['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_RECENT));
+            $recent['title'] = Translation::get('Recent');
+            $recent['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_RECENT));
             $recent['class'] = 'recent';
             $menu_items[] = $recent;
 
             $followed = array();
-            $followed['title'] = Translation :: get('Followed');
-            $followed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_FOLLOWED));
+            $followed['title'] = Translation::get('Followed');
+            $followed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_FOLLOWED));
             $followed['class'] = 'followed';
             $menu_items[] = $followed;
 
             $trashed = array();
-            $trashed['title'] = Translation :: get('Trash');
-            $trashed['url'] = $this->get_url(array(self :: PARAM_FOLDER => DataConnector :: DOCUMENTS_TRASH));
+            $trashed['title'] = Translation::get('Trash');
+            $trashed['url'] = $this->get_url(array(self::PARAM_FOLDER => DataConnector::DOCUMENTS_TRASH));
             $trashed['class'] = 'trash';
             $menu_items[] = $trashed;
 
@@ -113,7 +111,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         }
         else
         {
-            return $this->display_warning_page(Translation :: get('YouMustBeLoggedIn'));
+            return $this->display_warning_page(Translation::get('YouMustBeLoggedIn'));
         }
     }
 
@@ -134,19 +132,19 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_actions()
     {
-        $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY);
+        $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
-            $actions[] = self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY;
+            $actions[] = self::ACTION_UPLOAD_EXTERNAL_REPOSITORY;
         }
 
         if (! $this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
-            $actions[] = self :: ACTION_LOGIN;
+            $actions[] = self::ACTION_LOGIN;
         }
         else
         {
-            $actions[] = self :: ACTION_LOGOUT;
+            $actions[] = self::ACTION_LOGOUT;
         }
         return $actions;
     }
@@ -158,17 +156,17 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         $document_conditions = array();
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILENAME),
+            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME),
             '*.doc',
-            File :: get_type_name());
+            File::get_type_name());
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILENAME),
+            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME),
             '*.xls',
-            File :: get_type_name());
+            File::get_type_name());
         $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILENAME),
+            new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME),
             '*.ppt',
-            File :: get_type_name());
+            File::get_type_name());
 
         return new OrCondition($document_conditions);
     }
@@ -180,10 +178,10 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_object_actions(\Chamilo\Core\Repository\External\ExternalObject $object)
     {
-        $actions = parent :: get_external_repository_object_actions($object);
-        if (in_array(Manager :: ACTION_IMPORT_EXTERNAL_REPOSITORY, array_keys($actions)))
+        $actions = parent::get_external_repository_object_actions($object);
+        if (in_array(Manager::ACTION_IMPORT_EXTERNAL_REPOSITORY, array_keys($actions)))
         {
-            unset($actions[Manager :: ACTION_IMPORT_EXTERNAL_REPOSITORY]);
+            unset($actions[Manager::ACTION_IMPORT_EXTERNAL_REPOSITORY]);
             $export_types = $object->get_export_types();
 
             $mimeTypeExtensionParser = new MimeTypeExtensionParser();
@@ -191,25 +189,25 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
             foreach ($export_types as $export_type)
             {
                 $exportTypeExtension = $mimeTypeExtensionParser->getExtensionForMimeType($export_type);
-                if(!$exportTypeExtension)
+                if (! $exportTypeExtension)
                 {
                     continue;
                 }
 
-                $camelizedExportTypeExtension = StringUtilities::getInstance()->createString($exportTypeExtension)
-                    ->upperCamelize();
+                $camelizedExportTypeExtension = StringUtilities::getInstance()->createString($exportTypeExtension)->upperCamelize();
 
                 $actions[$export_type] = new ToolbarItem(
                     Translation::getInstance()->getTranslation(
-                        'ImportAs', array('TYPE' => $exportTypeExtension), self::context()
-                    ),
-                    Theme :: getInstance()->getFileExtension($camelizedExportTypeExtension),
+                        'ImportAs',
+                        array('TYPE' => $exportTypeExtension),
+                        self::context()),
+                    Theme::getInstance()->getFileExtension($camelizedExportTypeExtension),
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,
-                            self :: PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(),
-                            self :: PARAM_EXPORT_FORMAT => $export_type)),
-                    ToolbarItem :: DISPLAY_ICON);
+                            self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY,
+                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(),
+                            self::PARAM_EXPORT_FORMAT => $export_type)),
+                    ToolbarItem::DISPLAY_ICON);
             }
         }
 
@@ -222,6 +220,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_repository_type()
     {
-        return self :: REPOSITORY_TYPE;
+        return self::REPOSITORY_TYPE;
     }
 }

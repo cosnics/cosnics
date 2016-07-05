@@ -12,10 +12,11 @@ namespace Chamilo\Libraries\Format\Table\Column;
 class ActionsTableColumn extends StaticTableColumn
 {
     /**
-     * @param string $cssClasses
+     * @param string $headerCssClasses
+     * @param string $contentCssClasses
      */
-    public function __construct($cssClasses = null)
+    public function __construct($headerCssClasses = null, $contentCssClasses = null)
     {
-        return parent :: __construct('action_column', '', $cssClasses);
+        return parent :: __construct('action_column', '', $headerCssClasses, $contentCssClasses);
     }
 }

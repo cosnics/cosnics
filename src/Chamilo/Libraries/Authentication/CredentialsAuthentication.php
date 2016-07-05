@@ -32,10 +32,14 @@ abstract class CredentialsAuthentication extends Authentication
      *
      * @param string $userName
      */
-    public function __construct($userName)
+    public function __construct($userName = null)
     {
         $this->userName = $userName;
-        $this->user = \Chamilo\Core\User\Storage\DataManager :: retrieveUserByUsername($userName);
+
+        if($userName)
+        {
+            $this->user = \Chamilo\Core\User\Storage\DataManager:: retrieveUserByUsername($userName);
+        }
     }
 
     /**

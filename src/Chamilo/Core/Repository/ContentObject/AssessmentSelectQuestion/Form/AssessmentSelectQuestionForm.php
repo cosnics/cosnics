@@ -165,7 +165,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             $score = $values[AssessmentSelectQuestionOption::PROPERTY_SCORE][$option_id];
             $feedback = $values[AssessmentSelectQuestionOption::PROPERTY_FEEDBACK][$option_id];
 
-            if ($answerType == AssessmentSelectQuestionOption::ANSWER_TYPE_RADIO)
+            if ($answerType == AssessmentSelectQuestion::ANSWER_TYPE_RADIO)
             {
                 $correct = $values[AssessmentSelectQuestionOption::PROPERTY_CORRECT] == $option_id;
             }

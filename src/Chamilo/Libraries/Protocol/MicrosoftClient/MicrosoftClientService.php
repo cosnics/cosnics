@@ -1,17 +1,13 @@
 <?php
-
 namespace Chamilo\Libraries\Protocol\MicrosoftClient;
 
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Utilities\String\Text;
 
 /**
  * Initializes and handles the login procedure for Microsoft REST API's
- *
  * Code is based on
  * - OAUTH2: https://msdn.microsoft.com/en-us/library/azure/dn645542.aspx
  * - OAUTH2 V2.0: https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-protocols-oauth-code/
- *
  * Redirect URI: when registering a redirect URI on 
  * - OAUTH: https://msdn.microsoft.com/office/office365/howto/add-common-consent-manually#bk_RegisterWebApp
  * - OAUTH2 v2.0: https://apps.dev.microsoft.com/ 
@@ -21,6 +17,7 @@ use Chamilo\Libraries\Utilities\String\Text;
  */
 class MicrosoftClientService
 {
+
     /**
      * The Azure Active Directory client with base URL 
      * - OAUTH2: https://login.microsoftonline.com/<tenant>/oauth2/
@@ -162,7 +159,6 @@ class MicrosoftClientService
 
     /**
      * Creates on demand and returns a Guzzle HTTP client with base URL https://login.microsoftonline.com/<tenant>/oauth2/v2.0/.
-     *  
      * Typical endpoints: 
      * - authorize: endpoint for requesting authentication code 
      * - token: endpoint for requesting or refreshing access tokens.
@@ -352,11 +348,9 @@ class MicrosoftClientService
 
         return $accessToken;
     }
-
-    
+   
     /**
      *  Adds 'expires_on' attribute to $accessToken and saves the modified token.
-     *
      *  expires_on: derived from attibute expires_in and current time and used by function hasAccessTokenExpired().
      *  
      *  @param \stdClass $accessToken
@@ -374,6 +368,7 @@ class MicrosoftClientService
 
     /**
      * Returns the access token stored by the settings provider.
+     *
      * @throws \RuntimeException Thrown if no access token has been stored yet.     
      */
     private function getAccessToken()
@@ -390,6 +385,7 @@ class MicrosoftClientService
 
     /**
      *  Returns whether the access token has expired.
+     *
      *  @return boolean
      */
     private function hasAccessTokenExpired()

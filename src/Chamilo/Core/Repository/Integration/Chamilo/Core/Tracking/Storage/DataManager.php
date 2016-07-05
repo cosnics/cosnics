@@ -115,10 +115,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $order_property = $order_property[0];
 
+
+		
         usort(
             $content_object_activities,
-            function ($activity_a, $activity_b) use($order_property) {
-                switch ($order_property->get_property())
+            function ($activity_a, $activity_b) use($order_property) {				
+                switch ($order_property->get_property()->get_property())
                 {
                     case Activity :: PROPERTY_TYPE :
                         if ($order_property->get_direction() == SORT_ASC)

@@ -36,9 +36,9 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         $this->collapsed = $collapsed;
 
         $entryTemplates = array();
-        $entryTemplates[self :: HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
-        $entryTemplates[self :: HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
-        $entryTemplates[self :: HTML_MENU_ENTRY_ACTIVEPATH] = '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_INACTIVE] = '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVE] = '<!--A--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
+        $entryTemplates[self::HTML_MENU_ENTRY_ACTIVEPATH] = '<!--P--><div><a href="{url}" onclick="{onclick}" id="{id}" class="{class}" style="{style}" title="{safe_title}">{title}</a></div>';
         $this->setEntryTemplate($entryTemplates);
         $this->setItemTemplate('<li>', '</li>' . "\n");
     }
@@ -57,7 +57,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
                 '<div id="' . $this->tree_name . '"><ul class="tree-menu">' . "\n",
                 '</ul></div>' . "\n");
         }
-        parent :: finishLevel($level);
+        parent::finishLevel($level);
         if ($root)
         {
             $this->setLevelTemplate('<ul>' . "\n", '</ul>' . "\n");
@@ -85,7 +85,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
             $node['safe_title'] = strip_tags($node['title']);
         }
 
-        parent :: renderEntry($node, $level, $type);
+        parent::renderEntry($node, $level, $type);
     }
 
     /**
@@ -95,9 +95,10 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
      */
     public function toHtml()
     {
-        $parent_html = parent :: toHtml();
-        $class = array('A' => 'current', 'P' => 'current_path');
-        $parent_html = preg_replace('/(?<=<li)><!--([AP])-->/e', '\' class="\'.$class[\1].\'">\'', $parent_html);
+        $parent_html = parent::toHtml();
+
+        $parent_html = str_replace('<li><!--A-->', '<li class="current">', $parent_html);
+        $parent_html = str_replace('<li><!--P-->', '<li class="current_path">', $parent_html);
         $parent_html = preg_replace('/\s*\b(onclick|id)="\s*"\s*/', ' ', $parent_html);
 
         $html[] = $parent_html;

@@ -37,7 +37,7 @@ class ItemForm extends FormValidator
 
     public function __construct($form_type, $item, $action)
     {
-        parent :: __construct('item', 'post', $action);
+        parent:: __construct('item', 'post', $action);
 
         $this->item = $item;
         $this->form_type = $form_type;
@@ -55,29 +55,32 @@ class ItemForm extends FormValidator
 
     public function build_basic_form()
     {
-        $this->addElement('category', Translation :: get('General'));
-        $this->addElement('select', Item :: PROPERTY_PARENT, Translation :: get('Parent'), $this->get_parents());
-        $this->addRule(Item :: PROPERTY_PARENT, Translation :: get('ThisFieldIsRequired'), 'required');
+        $this->addElement('category', Translation:: get('General'));
+        $this->addElement('select', Item :: PROPERTY_PARENT, Translation:: get('Parent'), $this->get_parents(), array('class' => 'form-control'));
+        $this->addRule(Item :: PROPERTY_PARENT, Translation:: get('ThisFieldIsRequired'), 'required');
 
-        $this->addElement('checkbox', Item :: PROPERTY_HIDDEN, Translation :: get('Hidden'));
+        $this->addElement('checkbox', Item :: PROPERTY_HIDDEN, Translation:: get('Hidden'));
         $this->addElement('category');
 
-        $this->addElement('category', Translation :: get('Titles'));
-        $active_languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
-        $platform_language = PlatformSetting :: get('platform_language');
+        $this->addElement('category', Translation:: get('Titles'));
+        $active_languages = \Chamilo\Configuration\Configuration:: get_instance()->getLanguages();
+        $platform_language = PlatformSetting:: get('platform_language');
         foreach ($active_languages as $isocode => $language)
         {
             $this->addElement(
                 'text',
                 ItemTitle :: PROPERTY_TITLE . '[' . $isocode . ']',
                 $language,
-                array("size" => "50"));
+                array("class" => "form-control")
+            );
+
             if ($isocode == $platform_language)
             {
                 $this->addRule(
                     ItemTitle :: PROPERTY_TITLE . '[' . $isocode . ']',
-                    Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
-                    'required');
+                    Translation:: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+                    'required'
+                );
             }
         }
         $this->addElement('category');
@@ -92,23 +95,26 @@ class ItemForm extends FormValidator
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+                    Translation:: get('Create', null, Utilities :: COMMON_LIBRARIES)
+                );
                 break;
             case self :: TYPE_EDIT :
                 $buttons[] = $this->createElement(
                     'style_submit_button',
                     'submit_button',
-                    Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
+                    Translation:: get('Update', null, Utilities :: COMMON_LIBRARIES),
                     null,
                     null,
-                    'arrow-right');
+                    'arrow-right'
+                );
                 break;
         }
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+            Translation:: get('Reset', null, Utilities :: COMMON_LIBRARIES)
+        );
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -127,26 +133,30 @@ class ItemForm extends FormValidator
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT),
-            new StaticConditionVariable(0));
+            new PropertyConditionVariable(Item:: class_name(), Item :: PROPERTY_PARENT),
+            new StaticConditionVariable(0)
+        );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_TYPE),
-            new StaticConditionVariable(CategoryItem :: class_name()));
+            new PropertyConditionVariable(Item:: class_name(), Item :: PROPERTY_TYPE),
+            new StaticConditionVariable(CategoryItem:: class_name())
+        );
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrievesParameters(
             $condition,
             null,
             null,
-            new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_SORT)));
-        $items = DataManager :: retrieves(Item :: class_name(), $parameters);
+            new OrderBy(new PropertyConditionVariable(Item:: class_name(), Item :: PROPERTY_SORT))
+        );
+        $items = DataManager:: retrieves(Item:: class_name(), $parameters);
 
         $item_options = array();
-        $item_options[0] = Translation :: get('Root', null, Utilities :: COMMON_LIBRARIES);
+        $item_options[0] = Translation:: get('Root', null, Utilities :: COMMON_LIBRARIES);
 
         while ($item = $items->next_result())
         {
             $item_options[$item->get_id()] = '-- ' . $item->get_titles()->get_current_translation();
         }
+
         return $item_options;
     }
 
@@ -157,11 +167,11 @@ class ItemForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array())
     {
         $item = $this->item;
-        $active_languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
-        $platform_language = PlatformSetting :: get('platform_language');
+        $active_languages = \Chamilo\Configuration\Configuration:: get_instance()->getLanguages();
+        $platform_language = PlatformSetting:: get('platform_language');
         foreach ($active_languages as $isocode => $language)
         {
             $defaults[ItemTitle :: PROPERTY_TITLE][$isocode] = $item->get_titles()->get_translation($isocode, false);
@@ -171,7 +181,7 @@ class ItemForm extends FormValidator
         $defaults[Item :: PROPERTY_HIDDEN] = $item->get_hidden();
         $defaults[Item :: PROPERTY_TYPE] = $item->get_type();
 
-        parent :: setDefaults($defaults);
+        parent:: setDefaults($defaults);
     }
 
     public function get_item()
@@ -187,7 +197,7 @@ class ItemForm extends FormValidator
         $formName = $itemClass . 'Form';
         $formClass = __NAMESPACE__ . '\\Item\\' . $formName;
 
-        if(class_exists($formClass))
+        if (class_exists($formClass))
         {
             return new $formClass($form_type, $item, $action);
         }

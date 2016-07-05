@@ -17,6 +17,9 @@ abstract class TableColumn
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
+    const CSS_CLASSES_COLUMN_HEADER = 'header';
+    const CSS_CLASSES_COLUMN_CONTENT = 'content';
+
     /**
      * **************************************************************************************************************
      * Properties *
@@ -45,7 +48,7 @@ abstract class TableColumn
     /**
      * The CSS Classes
      *
-     * @var string
+     * @var string[]
      */
     protected $cssClasses;
 
@@ -61,9 +64,10 @@ abstract class TableColumn
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
      * @param bool $sortable - [OPTIONAL] default null
-     * @param string $cssClasses
+     * @param string $headerCssClasses
+     * @param string $contentCssClasses
      */
-    public function __construct($name, $title = null, $sortable = true, $cssClasses = null)
+    public function __construct($name, $title = null, $sortable = true, $headerCssClasses = null, $contentCssClasses = null)
     {
         $this->set_name($name);
 
@@ -86,7 +90,13 @@ abstract class TableColumn
 
         $this->set_title($title);
         $this->set_sortable($sortable);
-        $this->setCssClasses($cssClasses);
+
+        $this->setCssClasses(
+            array(
+                self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
+                self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses
+            )
+        );
     }
 
     /**
@@ -156,7 +166,7 @@ abstract class TableColumn
     }
 
     /**
-     * @return string
+     * @return string[]
      */
     public function getCssClasses()
     {
@@ -164,7 +174,7 @@ abstract class TableColumn
     }
 
     /**
-     * @param string $cssClasses
+     * @param string[] $cssClasses
      */
     public function setCssClasses($cssClasses)
     {

@@ -1,10 +1,12 @@
 /* Bootstrap */
-@import url('Bootstrap/css/bootstrap.css');
+@import url('../Aqua/Bootstrap/css/bootstrap.css');
 
 @import url('../Aqua/BootstrapCheckbox/awesome-bootstrap-checkbox.css');
 
 /* Font Awesome */
-@import url('FontAwesome/css/font-awesome.css');
+@import url('../Aqua/FontAwesome/css/font-awesome.css');
+
+@import url('../Aqua/ConnectIdents/ConnectIdents.css');
 
 /* Plugin CSS */
 @import url('Plugin.css');
@@ -21,6 +23,3 @@
 @import url('Tree.css');
 
 @import url('Bootstrap.css');
-
-/* Typography */
-@import url('Typography.css');

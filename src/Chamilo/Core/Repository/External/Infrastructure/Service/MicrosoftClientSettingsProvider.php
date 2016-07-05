@@ -1,13 +1,9 @@
 <?php
-
 namespace Chamilo\Core\Repository\External\Infrastructure\Service;
 
-use Chamilo\Core\Repository\External\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderInterface;
 
 /**
@@ -15,8 +11,10 @@ use Chamilo\Libraries\Protocol\MicrosoftClient\MicrosoftClientSettingsProviderIn
  *
  * @author Andras Zolnay - edufiles
  */
-abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider implements MicrosoftClientSettingsProviderInterface
+abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySettingsProvider implements 
+    MicrosoftClientSettingsProviderInterface
 {
+
     /**
      * Constructor
      *
@@ -30,7 +28,6 @@ abstract class MicrosoftClientSettingsProvider extends ExternalRepositorySetting
 
     /**
      * Return the tenant need to constuct Microsoft service URL's.
-     *
      * Allowed values: common, organizations, consumers, and tenant identifiers.  
      * If no tenant given by user, 'common' is returned.
      *

@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Service;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar\Repository\CalendarEventDataProviderRepository;
 use Chamilo\Core\Repository\Publication\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -13,8 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CalendarEventDataProvider extends
-    \Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider
+class CalendarEventDataProvider extends \Chamilo\Application\Weblcms\Integration\Chamilo\Application\Calendar\Service\CalendarEventDataProvider
 {
 
     /**
@@ -28,13 +25,13 @@ class CalendarEventDataProvider extends
      */
     function getPublications(User $user, $fromDate, $toDate)
     {
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user($user)
-            ->as_array();
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user($user)->as_array();
 
         return $this->getRepository()->getPublications($fromDate, $toDate, $courses);
     }
 
     /**
+     *
      * @return CalendarEventDataProviderRepository
      */
     protected function getRepository()
@@ -60,8 +57,8 @@ class CalendarEventDataProvider extends
     function getCalendarName()
     {
         return Translation::getInstance()->getTranslation(
-            'CoursesCalendarCalendar', null,
-            'Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar'
-        );
+            'CoursesCalendarCalendar',
+            null,
+            'Chamilo\Application\Weblcms\Tool\Implementation\Calendar\Integration\Chamilo\Application\Calendar');
     }
 }

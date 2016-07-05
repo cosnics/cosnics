@@ -33,6 +33,9 @@ class BlockRenderer
     const BLOCK_PROPERTY_NAME = 'name';
     const BLOCK_PROPERTY_IMAGE = 'image';
 
+    const SOURCE_DEFAULT = 1;
+    const SOURCE_AJAX = 2;
+
     /**
      *
      * @var \Chamilo\Core\Home\Renderer\Renderer
@@ -54,6 +57,13 @@ class BlockRenderer
     private $homeService;
 
     /**
+     * The source from which this block renderer is called
+     *
+     * @var int
+     */
+    protected $source;
+
+    /**
      * Caching variable for general mode
      *
      * @var bool
@@ -65,12 +75,16 @@ class BlockRenderer
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param \Chamilo\Core\Home\Service\HomeService $homeService
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
+     * @param int $source
      */
-    public function __construct(Application $application, HomeService $homeService, Block $block)
+    public function __construct(
+        Application $application, HomeService $homeService, Block $block, $source = self::SOURCE_DEFAULT
+    )
     {
         $this->renderer = $application;
         $this->homeService = $homeService;
         $this->block = $block;
+        $this->source = $source;
     }
 
     /**
@@ -170,6 +184,14 @@ class BlockRenderer
     public function getBlock()
     {
         return $this->block;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 
     /**
@@ -316,6 +338,8 @@ class BlockRenderer
 
         $html[] = $this->renderContentHeader();
 
+        $html[] = '<div style="overflow:auto;">';
+
         return implode(PHP_EOL, $html);
     }
 
@@ -436,6 +460,7 @@ class BlockRenderer
         $html = array();
 
         $html[] = $this->renderContentFooter();
+        $html[] = '</div>';
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);

@@ -8,6 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class LogoutComponent extends Manager
 {
+
     /**
      *  Delete session token created by MicrosoftClientSettingsProvider.
      */

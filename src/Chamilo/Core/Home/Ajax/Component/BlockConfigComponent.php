@@ -61,7 +61,10 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
             // $renderer = $rendererFactory->getRenderer();
 
             $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
-            $blockRendererFactory = new BlockRendererFactory($this, $homeService, $block);
+
+            $blockRendererFactory =
+                new BlockRendererFactory($this, $homeService, $block, BlockRendererFactory::SOURCE_AJAX);
+
             $blockRenderer = $blockRendererFactory->getRenderer();
 
             $contentObjectPublicationService =

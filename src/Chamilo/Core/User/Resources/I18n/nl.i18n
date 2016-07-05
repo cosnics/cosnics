@@ -389,3 +389,4 @@ InvalidUserPictureProvider = "Er is een ongeldige gebruikersafbeelding provider 
 DefaultUserPictureProvider = "Standaard gebruikersafbeelding provider"
 UserPictureProvider = "Gebruikersafbeelding provider"
 PictureUri = "Afbeelding"
+ViewerComponent = "Bekijk rapportering gebruiker"
