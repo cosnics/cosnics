@@ -2,10 +2,12 @@
 namespace Chamilo\Core\Repository\Implementation\Office365\Component;
 
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
+use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
 use Chamilo\Core\Repository\Implementation\Office365\Manager;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -15,17 +17,16 @@ class ImporterComponent extends Manager
     {
         if ($externalObject->is_importable())
         {
-            $file = ContentObject :: factory(File :: class_name());
-            $this->sychronize_file_with_external_object($file, $externalObject);
-  
-            if ($file->create())
+            $contentObject = $this->createContentObject($externalObject);
+            $this->synchronizeContentObjectWithExternalObject($contentObject, $externalObject);
+            if ($contentObject->create())
             {
-                SynchronizationData :: quicksave($file, $externalObject, $this->get_external_repository()->get_id());
+                SynchronizationData :: quicksave($contentObject, $externalObject, $this->get_external_repository()->get_id());
 
                 $parameters = $this->get_parameters();
                 $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager :: context();
                 $parameters[Application :: PARAM_ACTION] = \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS;
-                $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $file->get_id();
+                $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $contentObject->get_id();
                 $this->redirect(Translation :: get('ObjectImported', null, Utilities :: COMMON_LIBRARIES), false, $parameters);
             }
             else
@@ -44,7 +45,16 @@ class ImporterComponent extends Manager
             $this->redirect(null, false, $parameters);
         }
     }
+ 
+    public function createContentObject($externalObject)
+    {
+        if (empty(Request :: get(self :: PARAM_IMPORT_AS_LINK)))
+        {
+            return ContentObject :: factory(File :: class_name());
+        }
+        else
+        {
+            return ContentObject :: factory(Link :: class_name());
+        }
+    }
 }
-
-
-

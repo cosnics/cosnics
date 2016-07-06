@@ -11,7 +11,8 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         $object = $this->get_object();
 
         $properties = parent::get_display_properties();
-        $properties[Translation::get('LastModifiedBy')] = $object->get_modifier_id();
+        $properties[Translation::get('LastModifiedBy')] = $object->getModifierId();
+        $properties[Translation::get('Url')] = $object->getUrl();
 
         return $properties;
     }
