@@ -197,10 +197,9 @@ class LocationForm extends FormValidator
                 $this->content_objects[0],
                 $this->getApplication()->get_user());
 
-            $total_locations += $locations->size();
-
-            if ($locations->size() > 0)
+            if (! is_null($locations) && $locations->size() > 0)
             {
+                $total_locations += $locations->size();
                 $this->add_locations($locations);
             }
         }

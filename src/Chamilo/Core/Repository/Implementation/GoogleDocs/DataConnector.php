@@ -53,17 +53,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $this->service = new Google_Service_Drive($this->googleClientService->getGoogleClient());
     }
 
-    function expandHomeDirectory($path)
-    {
-        $homeDirectory = getenv('HOME');
-        if (empty($homeDirectory))
-        {
-            $homeDirectory = getenv("HOMEDRIVE") . getenv("HOMEPATH");
-        }
-
-        return str_replace('~', realpath($homeDirectory), $path);
-    }
-
     public function login()
     {
         $redirect = new Redirect(

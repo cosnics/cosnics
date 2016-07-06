@@ -40,7 +40,8 @@ class Kernel
 {
     const PARAM_CODE = 'code';
     const PARAM_STATE = 'state';
-
+    const PARAM_SESSION_STATE = 'session_state';
+  
     /**
      *
      * @var \Chamilo\Libraries\Architecture\Kernel
@@ -459,17 +460,19 @@ class Kernel
      */
     public function handleOAuth2()
     {
-        $state = $this->getRequest()->query->get(self :: PARAM_STATE);
         $code = $this->getRequest()->query->get(self :: PARAM_CODE);
-        // Previously, parameter 'session_state' has also been required. However protocol description 
-        // (https://azure.microsoft.com/en-us/documentation/articles/active-directory-v2-protocols-oauth-code/) does not mention this
-        // parameter anymore.
+        $state = $this->getRequest()->query->get(self :: PARAM_STATE);
+        $session_state = $this->getRequest()->query->get(self :: PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
        
-        if ($state && $code)
+        if ($code && $state)
         {
             $stateParameters = (array) unserialize(base64_decode($state));
             $stateParameters[self :: PARAM_CODE] = $code;
-        
+            if ($session_state)
+            {
+                $stateParameters[self :: PARAM_SESSION_STATE] = $session_state;
+            }
+
             $redirect = new Redirect($stateParameters);
             $redirect->toUrl();
         }

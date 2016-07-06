@@ -10,6 +10,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const OBJECT_TYPE = 'office365';
 
     const PROPERTY_MODIFIER_ID = 'modifier_id';
+    const PROPERTY_URL = 'url';
 
     const TYPE_FILE = 'file';
     const TYPE_IMAGE = 'image';
@@ -17,7 +18,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent:: get_default_property_names(array(self :: PROPERTY_MODIFIER_ID));
+        return parent:: get_default_property_names(array(self :: PROPERTY_MODIFIER_ID, self :: PROPERTY_URL));
     }
 
     public static function get_object_type()
@@ -25,14 +26,24 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return self :: OBJECT_TYPE;
     }
 
-    public function get_modifier_id()
+    public function getModifierId()
     {
         return $this->get_default_property(self :: PROPERTY_MODIFIER_ID);
     }
 
-    public function set_modifier_id($modifier_id)
+    public function setModifierId($modifierId)
     {
-        return $this->set_default_property(self :: PROPERTY_MODIFIER_ID, $modifier_id);
+        return $this->set_default_property(self :: PROPERTY_MODIFIER_ID, $modifierId);
+    }
+
+    public function getUrl()
+    {
+        return $this->get_default_property(self :: PROPERTY_URL);
+    }
+
+    public function setUrl($url)
+    {
+        return $this->set_default_property(self :: PROPERTY_URL, $url);
     }
 
     public function get_icon_image()
