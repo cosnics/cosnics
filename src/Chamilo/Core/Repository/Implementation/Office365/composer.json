@@ -1,17 +1,13 @@
 {
-    "name": "chamilo/ext-repo-google-docs",
-        "version": "6.0.0", "description": "Chamilo Google Docs External Repository",
+    "name": "chamilo/ext-repo-office365",
+        "version": "6.0.0", "description": "Chamilo Office365 External Repository",
     "keywords": [],
     "homepage": "http://www.chamilo.org",
     "license": "GPLv3",
     "authors": [
         {
-            "name": "Sven Vanpoucke",
-            "email": "sven.vanpoucke@hogent.be"
-        },
-        {
-            "name": "Hans De Bisschop",
-            "email": "hans.de.bisschop@ehb.be"
+            "name": "Andras Zolnay",
+            "email": "a.zolnay@edufiles.nl"
         }
     ],
     
@@ -21,7 +17,7 @@
         "google/apiclient" : "1.1.*"
     },
     "extra": {
-        "install-path": "common/extensions/external_repository_manager/implementation/google_docs"
+        "install-path": "common/extensions/external_repository_manager/implementation/office365"
     }
 
 }

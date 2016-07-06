@@ -12,20 +12,20 @@ class InternalSyncerComponent extends Manager
     public function synchronize_internal_repository_object(ExternalObject $externalObject)
     {
         $synchronization_data = $externalObject->get_synchronization_data();
-        $file = $synchronization_data->get_content_object();
+        $contentObject = $synchronization_data->get_content_object();
 
-        $this->sychronize_file_with_external_object($file, $externalObject);
+        $this->synchronizeContentObjectWithExternalObject($contentObject, $externalObject);
     
-        if ($file->update())
+        if ($contentObject->update())
         {
-            $synchronization_data->set_content_object_timestamp($file->get_modification_date());
+            $synchronization_data->set_content_object_timestamp($contentObject->get_modification_date());
             $synchronization_data->set_external_object_timestamp($externalObject->get_modified());
             if ($synchronization_data->update())
             {
                 $parameters = $this->get_parameters();
                 $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager :: context();
                 $parameters[Application :: PARAM_ACTION] = \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS;
-                $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $file->get_id();
+                $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $contentObject->get_id();
                 $this->redirect(
                     Translation:: get('ObjectUpdated', array('OBJECT' => Translation:: get('ContentObject')),Utilities :: COMMON_LIBRARIES),
                     false, $parameters, array(Manager :: PARAM_EXTERNAL_REPOSITORY));

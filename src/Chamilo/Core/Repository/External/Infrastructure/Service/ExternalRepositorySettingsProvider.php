@@ -29,24 +29,15 @@ class ExternalRepositorySettingsProvider
     protected $user;
 
     /**
-     * Scopes are strings that enable access to particular resources
-     *
-     * @var array of strings or string
-     */
-    protected $scopes;
-
-    /**
      * Constructor
      *
      * @param Instance $externalRepositoryInstance
      * @param User $user
-     * @param array of strings or string $scopes
      */
-    public function __construct(Instance $externalRepositoryInstance, User $user, $scopes)
+    public function __construct(Instance $externalRepositoryInstance, User $user)
     {
         $this->externalRepositoryInstance = $externalRepositoryInstance;
         $this->user = $user;
-        $this->scopes = $scopes;        
     }
 
     /**
@@ -67,18 +58,6 @@ class ExternalRepositorySettingsProvider
     public function getClientSecret()
     {
         return Setting::get('client_secret', $this->externalRepositoryInstance->getId());
-    }
-
-    /**
-     * Returns the scopes.
-     *
-     * Scopes are strings that enable access to particular resources
-     *
-     * @return array of strings or string
-     */
-    public function getScopes()
-    {
-        return $this->scopes;
     }
 
     /**

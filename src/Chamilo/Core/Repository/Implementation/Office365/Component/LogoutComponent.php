@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Office365\Component;
 
-use Chamilo\Core\Repository\External\Infrastructure\Service\MicrosoftClientSettingsProvider;
+use Chamilo\Core\Repository\External\Infrastructure\Service\MicrosoftGraphClientSettingsProvider;
 use Chamilo\Core\Repository\Implementation\Office365\Manager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -14,8 +14,7 @@ class LogoutComponent extends Manager
      */
     public function run()
     {
-        $settingsProvider =
-            new MicrosoftClientSettingsProvider($this->get_external_repository(), $this->get_user(), array('https://graph.microsoft.com/Files.Read'));
+        $settingsProvider = new MicrosoftGraphClientSettingsProvider($this->get_external_repository(), $this->get_user());
 
         if ($settingsProvider->removeUserSetting('session_token'))
         {
