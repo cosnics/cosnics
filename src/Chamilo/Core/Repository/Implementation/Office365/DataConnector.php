@@ -16,12 +16,11 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  * @notes The Graph API has some shortcomings when querying files on Microsoft OneDrive.
  * - Cannot retrieve folders only or files only, we always receive both sorts of object.
  * - API does not support offset and count.
- * - API cannot perform full test search inside a folder.
+ * - API cannot perform full text search inside a folder.
  * The implementation resembles the OneDrive browser on office.com:
- * - Folders appear in the table on right hand side.
+ * - Folders appear in the table on the right pane.
  * - Menu only shows the path to the current directory.
  * - Searching for items in folder is restricted to searching for items starting with given string.
- * 
  *
  * @author Andras Zolnay - edufiles
  */
@@ -224,7 +223,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $object->set_created(strtotime($response->createdDateTime));
         $object->set_modified(strtotime($response->lastModifiedDateTime));
-
+   
         if (is_null($response->remoteItem))
         {
             $object->set_title($response->name);
@@ -232,7 +231,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_rights($this->parseRights($response));
             $object->set_owner_id($response->createdBy->user->id);
             $object->set_owner_name($response->createdBy->user->displayName);
-            $object->set_modifier_id($response->lastModifiedBy->user->displayName);
+            $object->setModifierId($response->lastModifiedBy->user->displayName);
+            $object->setUrl($response->webUrl);
         }
         else
         {
