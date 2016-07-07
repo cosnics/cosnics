@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\External\Renderer\Renderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -127,7 +126,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
         return new OrCondition($video_conditions);
     }
-    
+
     /**
      *  \brief Returns value of PARAM_CHANNEL_ID.
      *
@@ -148,7 +147,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                 }
             }
         }
-        
+
         return $channelId;
     }
 }
