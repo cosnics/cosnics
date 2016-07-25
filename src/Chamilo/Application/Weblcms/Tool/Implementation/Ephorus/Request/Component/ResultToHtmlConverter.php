@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -48,7 +49,7 @@ class ResultToHtmlConverter
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getResourcesPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
-                true) . 'Css/Report.css');
+                true) . 'Css/' . Theme::getInstance()->getTheme() . '/Report.css');
 
         $html[] = ResourceManager :: get_instance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath(
