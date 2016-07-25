@@ -15,6 +15,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseSettingsServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Service class to manage weblcms courses.
@@ -266,36 +267,19 @@ class CourseService implements CourseServiceInterface
      */
     public function getTeachersFromCourse(Course $course)
     {
-        $userIds = array();
+        return $this->getUsersFromCourseByStatus($course, CourseEntityRelation::STATUS_TEACHER);
+    }
 
-        /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $directlySubscribedUsers */
-        $directlySubscribedUsers = $course->get_course_admin_users();
-        while($directlySubscribedUser = $directlySubscribedUsers->next_result())
-        {
-            $userIds[] = $directlySubscribedUser[User::PROPERTY_ID];
-        }
-
-        /** @var \Chamilo\Libraries\Storage\ResultSet\ResultSet $groups */
-        $groups = $course->get_course_admin_groups();
-
-        while ($group = $groups->next_result())
-        {
-            if(!$group instanceof Group)
-            {
-                $group = new Group($group);
-            }
-            
-            $userIds = array_merge($userIds, $group->get_users(true, true));
-        }
-
-        if(count($userIds) == 0)
-        {
-            return array();
-        }
-
-        return $this->userRepository->findUsers(
-            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
-        );
+    /**
+     * Returns an array of users who are subscribed (directly or through groups) as a student in a given course
+     *
+     * @param Course $course
+     *
+     * @return User[]
+     */
+    public function getStudentsFromCourse(Course $course)
+    {
+        return $this->getUsersFromCourseByStatus($course, CourseEntityRelation::STATUS_STUDENT);
     }
 
     /****************************************************************************************************************
@@ -377,5 +361,43 @@ class CourseService implements CourseServiceInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param Course $course
+     * @param int $status
+     *
+     * @return User
+     */
+    protected function getUsersFromCourseByStatus(Course $course, $status = CourseEntityRelation::STATUS_STUDENT)
+    {
+        $userIds = array();
+
+        $directlySubscribedUsers = $this->courseRepository->findUsersByStatus($course->getId(), $status);
+        while($directlySubscribedUser = $directlySubscribedUsers->next_result())
+        {
+            $userIds[] = $directlySubscribedUser[User::PROPERTY_ID];
+        }
+
+        $groups = $this->courseRepository->findDirectSubscribedGroupsByStatus($course->getId(), $status);
+
+        while ($group = $groups->next_result())
+        {
+            if(!$group instanceof Group)
+            {
+                $group = new Group($group);
+            }
+
+            $userIds = array_merge($userIds, $group->get_users(true, true));
+        }
+
+        if(count($userIds) == 0)
+        {
+            return array();
+        }
+
+        return $this->userRepository->findUsers(
+            new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds)
+        );
     }
 }
