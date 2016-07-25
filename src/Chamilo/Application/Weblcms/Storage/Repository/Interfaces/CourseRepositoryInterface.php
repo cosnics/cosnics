@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Interface to describe the necessary functions needed from the CourseEntityRepository
@@ -124,4 +125,25 @@ interface CourseRepositoryInterface
      * @return Course[]
      */
     public function findCoursesWithTitularAndCourseSettings(Condition $condition = null);
+
+
+    /**
+     * Returns all users subscribed to course by status
+     *
+     * @param $courseId
+     * @param $status
+     *
+     * @return ResultSet
+     */
+    public function findUsersByStatus($courseId, $status);
+
+    /**
+     * Returns all groups directly subscribed to course by status
+     *
+     * @param $courseId
+     * @param $status
+     *
+     * @return ResultSet
+     */
+    public function findDirectSubscribedGroupsByStatus($courseId, $status);
 }

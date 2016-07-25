@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
@@ -413,6 +414,9 @@ abstract class Manager extends Application
         return $this->get_parent()->get_user_info($user_id);
     }
 
+    /**
+     * @return Course
+     */
     public function get_course()
     {
         return $this->get_parent()->get_course();

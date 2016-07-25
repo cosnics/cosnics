@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\CourseRepositoryInterface;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -23,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * The repository class for the Course Entity
@@ -117,7 +119,7 @@ class CourseRepository implements CourseRepositoryInterface
     public function findCoursesWhereUserIsTeacher(User $user)
     {
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::
-            retrieve_courses_from_user_where_user_is_teacher($user)->as_array();
+        retrieve_courses_from_user_where_user_is_teacher($user)->as_array();
     }
 
     /**
@@ -130,7 +132,7 @@ class CourseRepository implements CourseRepositoryInterface
     public function findCoursesWhereUserIsStudent(User $user)
     {
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::
-            retrieve_courses_from_user_where_user_is_student($user)->as_array();
+        retrieve_courses_from_user_where_user_is_student($user)->as_array();
     }
 
     /**
@@ -333,5 +335,31 @@ class CourseRepository implements CourseRepositoryInterface
         }
 
         return $courses;
+    }
+
+    /**
+     * Returns all users subscribed to course by status
+     *
+     * @param $courseId
+     * @param $status
+     *
+     * @return ResultSet
+     */
+    public function findUsersByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
+    {
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_users_directly_subscribed_to_course_by_status($courseId, $status);
+    }
+
+    /**
+     * Returns all groups directly subscribed to course by status
+     *
+     * @param $courseId
+     * @param $status
+     *
+     * @return ResultSet
+     */
+    public function findDirectSubscribedGroupsByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
+    {
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_groups_directly_subscribed_to_course_as_status($courseId, $status);
     }
 }
