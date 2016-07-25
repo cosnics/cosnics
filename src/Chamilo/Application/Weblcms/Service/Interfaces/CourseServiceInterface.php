@@ -129,6 +129,15 @@ interface CourseServiceInterface
      */
     public function getTeachersFromCourse(Course $course);
 
+    /**
+     * Returns an array of users who are subscribed (directly or through groups) as a student in a given course
+     *
+     * @param Course $course
+     *
+     * @return User[]
+     */
+    public function getStudentsFromCourse(Course $course);
+
     /****************************************************************************************************************
      * Tool Functionality                                                                                           *
      ****************************************************************************************************************/
