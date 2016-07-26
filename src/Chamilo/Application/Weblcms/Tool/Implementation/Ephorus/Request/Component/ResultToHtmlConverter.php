@@ -55,7 +55,7 @@ class ResultToHtmlConverter
             Path :: getInstance()->getJavascriptPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
                 true) . 'Report.js');
-        $html[] = '<div id="printable">';
+        $html[] = '<div class="ephorus-report-result" id="printable">';
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Result :: class_name(), Result :: PROPERTY_REQUEST_ID),
