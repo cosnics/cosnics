@@ -198,11 +198,11 @@ class AccountForm extends FormValidator
         {
             $this->addElement('category', Translation :: get('ChangePassword'));
 
-            $password_requirements = Authentication :: factory($this->user->get_auth_source())->getPasswordRequirements();
-            if (! is_null($password_requirements))
-            {
-                $this->add_warning_message('password_requirements', null, $password_requirements);
-            }
+//            $password_requirements = Authentication :: factory($this->user->get_auth_source())->getPasswordRequirements();
+//            if (! is_null($password_requirements))
+//            {
+//                $this->add_warning_message('password_requirements', null, $password_requirements);
+//            }
 
             $this->addElement('static', null, null, '<em>' . Translation :: get('EnterCurrentPassword') . '</em>');
             $this->addElement(
@@ -334,7 +334,7 @@ class AccountForm extends FormValidator
              strlen($values[User :: PROPERTY_PASSWORD]) &&
              Authentication :: factory($this->user->get_auth_source()) instanceof ChangeablePassword)
         {
-            $result = Authentication :: factory($this->user->get_auth_source())->change_password(
+            $result = Authentication :: factory($this->user->get_auth_source())->changePassword(
                 $user,
                 $values[User :: PROPERTY_PASSWORD],
                 $values[self :: NEW_PASSWORD]);
