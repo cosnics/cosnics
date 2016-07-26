@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Interfaces;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+
 /**
  * An authentication class implements the <code>ChangeablePassword</code>
  * interface to indicate that it supports changing of passwords
@@ -15,12 +17,13 @@ interface ChangeablePassword
 
     /**
      *
+     * @param User $user
      * @param string $oldPassword
      * @param string $newPassword
      *
-     * @return boolean
+     * @return bool
      */
-    public function changePassword($oldPassword, $newPassword);
+    public function changePassword(User $user, $oldPassword, $newPassword);
 
     /**
      * Get the password requirements for the authentication method

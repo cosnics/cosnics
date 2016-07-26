@@ -62,7 +62,7 @@ class InvitationRegistrationForm extends FormValidator
             'required');
         $this->addRule(User :: PROPERTY_USERNAME, Translation :: get('UsernameNotAvailable'), 'username_available');
 
-        $this->add_warning_message('password_requirements', null, Translation :: get('GeneralPasswordRequirements'));
+//        $this->add_warning_message('password_requirements', null, Translation :: get('GeneralPasswordRequirements'));
 
         $this->addElement(
             'password',
