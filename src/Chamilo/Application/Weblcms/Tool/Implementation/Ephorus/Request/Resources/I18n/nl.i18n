@@ -9,7 +9,6 @@ ResultDetails = "{PERCENTAGE} {TITLE} geschreven door {AUTHOR} ({STUDENTCODE}), 
 Summary = "Samenvatting"
 EphorusRequestManagerResultViewerComponent = "Rapport"
 LocalHitNotFoundOnServer = "Dit document is geplagiëerd van een lokale bron: {LOCAL_GUID} ({SOURCE})"
-LocalHitNotFoundOnServer = "{PERCENTAGE} {TITLE} geschreven door {AUTHOR} ({STUDENTCODE}), gecreëerd op {CREATEDATE} en voor het laatst gemodifiëerd op {MODIFIEDDATE}."
 UrlReport = "Rapport: {URL}"
 LocalReport = "Rapport: {LOCAL_GUID} ({SOURCE})"
 PrintReport = "Druk rapport af"
