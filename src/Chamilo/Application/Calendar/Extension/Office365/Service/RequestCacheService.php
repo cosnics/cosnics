@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Office365\Service;
 
 use Chamilo\Application\Calendar\Extension\Office365\Repository\CalendarRepository;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 
 /**
  *
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RequestCacheService extends DoctrineFilesystemCacheService
+class RequestCacheService extends DoctrineFilesystemCacheService implements UserBasedCacheInterface
 {
     const PARAM_REQUEST = 'request';
     const PARAM_LIFETIME = 'lifetime';

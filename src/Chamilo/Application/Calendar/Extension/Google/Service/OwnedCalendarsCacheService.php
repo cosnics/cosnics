@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Extension\Google\Service;
 
 use Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
 /**
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Platform\Configuration\LocalSetting;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService
+class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implements UserBasedCacheInterface
 {
 
     /**
