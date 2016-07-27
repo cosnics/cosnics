@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\ExternalCalendar\Service;
 
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrineFilesystemCacheService;
+use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\Cache\ParameterBag;
 use Sabre\VObject;
 
@@ -12,7 +13,7 @@ use Sabre\VObject;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ExternalCalendarCacheService extends DoctrineFilesystemCacheService
+class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implements UserBasedCacheInterface
 {
     const PARAM_PATH = 'path';
     const PARAM_LIFETIME = 'lifetime';

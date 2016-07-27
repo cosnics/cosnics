@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
+use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 use Chamilo\Libraries\Cache\ParameterBag;
 
 /**
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Cache\ParameterBag;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService
+class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implements UserBasedCacheInterface
 {
     const PARAM_USER_IDENTIFIER = 'user_identifier';
     const PARAM_TYPE = 'type';
