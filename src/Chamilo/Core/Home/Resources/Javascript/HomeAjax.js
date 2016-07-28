@@ -166,6 +166,8 @@ $(function()
                         column.prepend(json.properties.block);
                         $('.portal-column[data-element-id="' + columnId + '"] .portal-column-empty')
                                 .removeClass('show').addClass('hidden');
+
+                        getAvailableBlocks();
                     }
                 });
     }
