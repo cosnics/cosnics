@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Protocol\Webservice\Rest\Client\Client;
 
+use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient;
 use Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestResult;
@@ -9,6 +10,11 @@ class Curl extends RestClient
 {
 
     private $curl;
+
+    /**
+     * @var string
+     */
+    protected $cookie_file;
 
     public function __construct($base_url)
     {
@@ -61,7 +67,13 @@ class Curl extends RestClient
         }
 
         // cookies
-        $this->cookie_file = Path :: getInstance()->getTemporaryPath() . 'curl_cookies.txt';
+        $temporaryPath = Path :: getInstance()->getTemporaryPath();
+        if(!is_dir($temporaryPath))
+        {
+            Filesystem::create_dir($temporaryPath);
+        }
+
+        $this->cookie_file = $temporaryPath . 'curl_cookies.txt';
 
         if (! file_exists($this->cookie_file))
         {
