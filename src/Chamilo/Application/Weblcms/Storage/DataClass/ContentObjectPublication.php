@@ -671,7 +671,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
         $subject = Translation::get(
             $after_publication ? 'OldPublicationMailSubject' : 'NewPublicationMailSubject',
-            array('COURSE' => $this->course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()));
+            array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()));
 
         $mail = new Mail(
             $subject,
