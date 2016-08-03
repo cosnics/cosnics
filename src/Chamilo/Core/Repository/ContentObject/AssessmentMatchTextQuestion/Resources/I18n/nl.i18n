@@ -1,0 +1,25 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_text_question
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Kort antwoord vraag"
+PossibleAnswer = "Mogelijk antwoord"
+Options = "Opties"
+UseWildcards = "Gebruik wildcards"
+IgnoreCase = "Niet hoofdletter-gevoelig"
+AddItem = "Voeg item toe"
+Feedback = "Feedback"
+Score = "Score"
+Answer = "Antwoord"
+Comment = "Commentaar"
+Weight = "Gewicht"
+Title = "Vraag"
+Description = "Extra instructies"
+Hint = "Hint"
+InstructionsText = "Bij dit type vragen kun je toestaan dat deelnemers met jokertekens of wildcards (*, ?, ���)  werken.<br />In de vraag 'Koning __________ II volgde koning Boudewijn op.' kun je, als je 'Gebruik wildcards' aanvinkt, Alb* opgeven: op dat moment worden oplossingen als Albert, Alber of Albertus goed gerekend.<br />Je kunt ook eisen dat het gebruik van de hoofdletters wordt gerespecteerd (hoofdlettergevoeligheid). Om die optie uit te zetten: vink 'Niet hoofdlettergevoelig' aan.<ol><li>Geef een titel aan de vraag.</li><li>Bepaal de Categorie waarin je de vraag (het object) gaat opslaan.</li><li>Geef bij Vraag  de opdracht in, b.v. Geef het ontbrekende woord. Koning __________ II volgde koning Boudewijn op.</li><li>Geef mogelijke antwoorden op, voeg desnoods items toe of verwijder er.</li><li>Geef mogelijke feedback in.</li><li>Bepaal de score per mogelijk antwoord.</li><li>Geef indien gewenst een hint in.</li><li>Klik op Maak.</li></ol>"
+RecalculateWeight = "Herbereken gewicht"
+FeedbackAnswer = "Enkel feedback bij fout antwoord"
+AddHint = "Stel hint in"
+ConfirmOptionDelete = "Ben je zeker dat je dit antwoord wil verwijderen?"
+AddMatchTextOption = "Voeg  optie toe"
