@@ -814,7 +814,7 @@ abstract class Application
         return $active_applications;
     }
 
-    public static function context_fallback($context)
+    public static function context_fallback($context, array $fallbackContexts)
     {
         // Check if the context exists
         $context_path = Path :: getInstance()->namespaceToFullPath($context);
@@ -835,16 +835,12 @@ abstract class Application
 
             $convertedContext = implode('\\', $convertedContextParts);
 
-            $possible_contexts = array();
-            $possible_contexts[] = 'Chamilo\Application\\' . $convertedContext;
-            $possible_contexts[] = 'Chamilo\Core\\' . $convertedContext;
-            $possible_contexts[] = 'Chamilo\\' . $convertedContext;
-
-            foreach ($possible_contexts as $possible_context)
+            foreach ($fallbackContexts as $fallbackContext)
             {
-                if (is_dir(Path :: getInstance()->namespaceToFullPath($possible_context)))
+                $possibleContext = $fallbackContext . $convertedContext;
+                if (is_dir(Path :: getInstance()->namespaceToFullPath($possibleContext)))
                 {
-                    $context = $possible_context;
+                    $context = $possibleContext;
                 }
             }
 

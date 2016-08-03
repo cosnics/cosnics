@@ -373,9 +373,24 @@ class Kernel
     protected function configureContext()
     {
         $this->context = $this->determineContext();
-        $this->context = Application:: context_fallback($this->context);
+        $this->context = Application::context_fallback($this->context, $this->getFallbackContexts());
 
         return $this;
+    }
+
+    /**
+     * Returns a list of the available fallback contexts
+     *
+     * @return array
+     */
+    protected function getFallbackContexts()
+    {
+        $fallbackContexts = array();
+        $fallbackContexts[] = 'Chamilo\Application\\';
+        $fallbackContexts[] = 'Chamilo\Core\\';
+        $fallbackContexts[] = 'Chamilo\\';
+
+        return $fallbackContexts;
     }
 
     /**
