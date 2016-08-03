@@ -52,7 +52,7 @@ class BlockSortComponent extends \Chamilo\Core\Home\Ajax\Manager
                 if ($block)
                 {
                     $block->setParentId($column->get_id());
-                    $block->setSort($sortOrder);
+                    $block->setSort($sortOrder + 1);
 
                     if (! $block->update())
                     {

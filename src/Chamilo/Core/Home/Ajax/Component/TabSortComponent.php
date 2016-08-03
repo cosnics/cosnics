@@ -41,7 +41,7 @@ class TabSortComponent extends \Chamilo\Core\Home\Ajax\Manager
         foreach ($tabs[self :: PARAM_ORDER] as $sortOrder => $tabId)
         {
             $tab = DataManager :: retrieve_by_id(Tab :: class_name(), intval($tabId));
-            $tab->setSort($sortOrder);
+            $tab->setSort($sortOrder + 1);
 
             if (! $tab->update())
             {
