@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\User\Storage\Repository\Interfaces;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Interface for the user repository
@@ -41,4 +43,15 @@ interface UserRepositoryInterface
      * @return User;
      */
     public function findUserByEmail($email);
+
+    /**
+     * @return User[]
+     */
+    public function findActiveStudents();
+
+    /**
+     * @return User[]
+     */
+    public function findActiveTeachers();
+
 }

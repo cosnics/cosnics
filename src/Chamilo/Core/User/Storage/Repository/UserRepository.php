@@ -5,6 +5,7 @@ namespace Chamilo\Core\User\Storage\Repository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -77,5 +78,51 @@ class UserRepository implements UserRepositoryInterface
     public function findUserByUsername($username)
     {
         return \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($username);
+    }
+
+    /**
+     * @return User[]
+     */
+    public function findActiveStudents()
+    {
+        return $this->findActiveUsersByStatus(User::STATUS_STUDENT);
+    }
+
+    /**
+     * @return User[]
+     */
+    public function findActiveTeachers()
+    {
+        return $this->findActiveUsersByStatus(User::STATUS_TEACHER);
+    }
+
+    /**
+     * @param $status
+     * @return User[]
+     */
+    protected function findActiveUsersByStatus($status)
+    {
+        $conditions = array();
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS),
+            ComparisonCondition::EQUAL,
+            new StaticConditionVariable($status)
+        );
+        $conditions[] = new ComparisonCondition(
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE),
+            ComparisonCondition::EQUAL,
+            new StaticConditionVariable(1)
+        );
+
+        $parameters = new DataClassRetrievesParameters(
+            new AndCondition($conditions)
+        );
+
+        /**
+         * @var User[] $users
+         */
+        $users = DataManager::retrieves(User::class_name(), $parameters)->as_array();
+
+        return $users;
     }
 }
