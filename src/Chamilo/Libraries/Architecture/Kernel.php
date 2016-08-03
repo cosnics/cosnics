@@ -330,7 +330,7 @@ class Kernel
      */
     protected function setup()
     {
-        if (\Chamilo\Configuration\Configuration:: get('Chamilo\Configuration', 'debug', 'show_errors'))
+        if (!\Chamilo\Configuration\Configuration:: get('Chamilo\Configuration', 'debug', 'show_errors'))
         {
             set_exception_handler('\Chamilo\Libraries\Utilities\Utilities::handle_exception');
             set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
