@@ -73,7 +73,7 @@ class BlockAddComponent extends \Chamilo\Core\Home\Ajax\Manager
 
         if ($block->create())
         {
-            $block->setSort(0);
+            $block->setSort(1);
 
             if ($block->update())
             {
