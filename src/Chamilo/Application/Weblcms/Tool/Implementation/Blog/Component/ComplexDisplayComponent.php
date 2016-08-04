@@ -69,9 +69,8 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {
-        return RightsService :: getInstance()->canEditContentObject(
-            $this->get_user(),
-            $this->publication->get_content_object());
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+        $this->publication->get_allow_collaboration();
     }
 
     public function is_allowed_to_view_content_object()
