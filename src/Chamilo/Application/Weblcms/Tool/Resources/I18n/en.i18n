@@ -1,0 +1,31 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\course
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+SectionTools = "Tools"
+SectionAdministration = "Administration"
+SectionLinks = "Links"
+SectionDisabled = "Disabled"
+CourseManagerQuickCreateComponent = "Create course"
+Typename = "Course"
+SelectCourseType = "Select course type"
+CourseType = "Course type"
+SelectAValidCourseType = "Select a valid course type"
+ThisFieldIsRequired = "This field is required"
+Title = "Title"
+VisualCode = "Visual code"
+TypeName = "Course"
+SectionCourseAdministration = "Administration"
+CourseManagerBrowseUnsubscribedCoursesComponent = "Subscribe to courses"
+CourseManagerBrowseSubscribedCoursesComponent = "Unsubscribe from courses"
+CourseManagerBrowseComponent = "Courses overview"
+Course = "Course"
+NoCourseType = "No course type"
+TitularId = "Titular"
+CourseTypeId = "Course type"
+TitularUnknown = "Unknown"
+ViewCourseHome = "View course"
+Status = "Subscription status"
+RightsEditorComponent = "Manage rights"
+NoViewRights = "You do not have the correct rights to view this course module / category"

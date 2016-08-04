@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_open_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Open question"
+TypeCategory = "Content Objects"
+OpenQuestion = "Open question"
+OpenQuestionWithDocument = "Open question with document"
+DocumentQuestion = "Document"
+Properties = "Properties"
+OpenQuestionQuestionType = "Type"
+Weight = "Weight"
+Title = "Question"
+Description = "Extra instructions"
+Feedback = "Feedback"
+Hint = "Hint"
+InstructionsText = ""
+AddHint = "Configure hint"
+SelectDocument = "Select your file"
+BrowseContentObjects = "Browse your repository or add a new file"

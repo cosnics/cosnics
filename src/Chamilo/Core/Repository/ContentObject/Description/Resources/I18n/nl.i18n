@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\description
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Beschrijving"
+Title = "Titel"
+Properties = "Eigenschappen"
+Description = "Beschrijving"
+DescriptionToolBrowserComponent = "Blader"
+DescriptionToolEvaluateComponent = "Evalueer"
+DescriptionToolIntroductionPublisherComponent = "Publiceer introductie"
+DescriptionToolMoverComponent = "Verplaats"
+DescriptionToolPublisherComponent = "Publiceer"
+DescriptionToolUpdaterComponent = "Updaten"
+DescriptionToolViewerComponent = "Bekijken"
