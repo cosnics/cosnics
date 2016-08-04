@@ -79,11 +79,12 @@ class ExternalCalendarForm extends ContentObjectForm
 
         $this->addElement('file', ExternalCalendar :: PROPERTY_PATH . '[' . ExternalCalendar :: PATH_TYPE_LOCAL . ']');
         $this->addRule(
-            'file',
-            Translation :: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
-            'disk_quota');
+            ExternalCalendar :: PROPERTY_PATH . '[' . ExternalCalendar :: PATH_TYPE_LOCAL . ']',
+            Translation:: get('DiskQuotaExceeded', null, Utilities :: COMMON_LIBRARIES),
+            'disk_quota'
+        );
 
-        $this->addFormRule(array($this, 'check_document_form'));
+//        $this->addFormRule(array($this, 'check_document_form'));
 
         $this->addElement('html', '</div>');
         $this->addElement('category');
