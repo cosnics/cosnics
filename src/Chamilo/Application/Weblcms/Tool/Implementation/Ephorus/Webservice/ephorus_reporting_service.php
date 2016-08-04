@@ -15,8 +15,6 @@ function report()
 {
     global $HTTP_RAW_POST_DATA;
     
-    file_put_contents(__DIR__ . '/test' . uniqid() . '.log', $HTTP_RAW_POST_DATA);
-    
     $dom_document = new DOMDocument();
     $dom_document->loadXML($HTTP_RAW_POST_DATA);
     $dom_xpath = new DOMXPath($dom_document);
