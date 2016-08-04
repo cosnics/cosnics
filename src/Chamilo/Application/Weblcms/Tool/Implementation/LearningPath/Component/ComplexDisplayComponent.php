@@ -41,6 +41,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
 {
 
+    /**
+     * @var ContentObjectPublication
+     */
     private $publication;
 
     /*
