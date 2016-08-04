@@ -540,9 +540,10 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Peer
         return parent :: is_allowed(WeblcmsRights :: VIEW_RIGHT, $this->get_publication());
     }
 
-    function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object()
     {
-        return parent :: is_allowed(WeblcmsRights :: EDIT_RIGHT, $this->get_publication());
+        return parent::is_allowed(WeblcmsRights::EDIT_RIGHT, $this->get_publication())
+        && $this->get_publication()->get_allow_collaboration();
     }
 
     function is_allowed_to_add_child()

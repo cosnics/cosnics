@@ -26,6 +26,10 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
  */
 class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateComponent
 {
+    /**
+     * @var ContentObjectPublication
+     */
+    protected $publication;
 
     private $root_content_object;
 
@@ -36,7 +40,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID, $this->publication_id);
 
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
+        $this->publication = $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),
             $this->publication_id);
 
@@ -130,7 +134,8 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {
-        return $this->is_allowed(WeblcmsRights :: EDIT_RIGHT, $this->publication);
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+        $this->publication->get_allow_collaboration();
     }
 
     public function is_allowed_to_view_content_object()

@@ -35,9 +35,10 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
 
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
-            $publication_id);
+            $publication_id
+        );
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
                 Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
@@ -45,14 +46,18 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
                 array(),
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                )
+            );
         }
 
         $context = $this->publication->get_content_object()->package() . '\Display';
 
         $factory = new ApplicationFactory(
             $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
+
         return $factory->run();
     }
 
@@ -66,7 +71,8 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
     {
         $hasWorkspaceRight = RightsService::getInstance()->canEditContentObject(
             $this->get_user(),
-            $this->publication->get_content_object());
+            $this->publication->get_content_object()
+        );
 
         $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
@@ -76,7 +82,8 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
             $this->get_application()->get_course()
         );
 
-        $hasPublictionRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+        $hasPublictionRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+            $this->publication->get_allow_collaboration();
 
         return $hasWorkspaceRight || $hasPublicationContentRight || $hasPublictionRight;
     }
