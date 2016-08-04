@@ -32,7 +32,7 @@ class ViewerComponent extends Manager
 
         $params["data_public_url"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Public' ,true);
         $params["data_public_path"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Public');
-        $params["data_private_path"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Private');
+        $params["data_private_path"] = Path :: getInstance()->getLogPath() . 'phpfreechat';
         $params["server_script_url"] = $_SERVER['REQUEST_URI'];
         $params["serverid"] = $course->get_id();
         $params["title"] = $course->get_title();
