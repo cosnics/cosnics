@@ -841,6 +841,7 @@ abstract class Application
                 if (is_dir(Path :: getInstance()->namespaceToFullPath($possibleContext)))
                 {
                     $context = $possibleContext;
+                    break;
                 }
             }
 
