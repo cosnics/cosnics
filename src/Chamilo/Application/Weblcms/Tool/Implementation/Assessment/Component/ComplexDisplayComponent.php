@@ -36,8 +36,10 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ComplexDisplayComponent extends Manager implements AssessmentDisplaySupport, DelegateComponent
 {
-
-    private $pub;
+    /**
+     * @var ContentObjectPublication
+     */
+    private $publication;
 
     private $assessment;
 
@@ -66,11 +68,11 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
             $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
 
-            $this->pub = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
                 ContentObjectPublication::class_name(),
                 $this->publication_id);
 
-            if (! $this->pub || ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->pub))
+            if (! $this->publication || ! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
             {
                 $this->redirect(
                     Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
@@ -81,7 +83,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
             }
 
-            $this->assessment = $this->pub->get_content_object();
+            $this->assessment = $this->publication->get_content_object();
             $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $this->publication_id);
         }
 
@@ -364,7 +366,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLICATION_ID),
-                new StaticConditionVariable($this->pub->get_id())));
+                new StaticConditionVariable($this->publication->get_id())));
         $assessment_publication = DataManager::retrieve(Publication::class_name(), $parameters);
 
         return $assessment_publication->get_configuration();
@@ -383,7 +385,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     // METHODS FOR COMPLEX DISPLAY RIGHTS
     public function is_allowed_to_edit_content_object()
     {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) && $this->publication->get_allow_collaboration();
     }
 
     public function is_allowed_to_view_content_object()
