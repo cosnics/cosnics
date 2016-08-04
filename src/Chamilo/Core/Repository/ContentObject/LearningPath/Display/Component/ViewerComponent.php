@@ -239,7 +239,8 @@ class ViewerComponent extends TabComponent
      */
     protected function addUpdateButton($current_content_object, $buttonGroup, $translator)
     {
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
+        if (
+            $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) ||
              RightsService::getInstance()->canEditContentObject($this->get_user(), $current_content_object))
         {
             $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
