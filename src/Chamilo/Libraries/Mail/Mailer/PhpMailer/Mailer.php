@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Mail\Mailer\PhpMailer;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\MailLog;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 
@@ -216,7 +217,7 @@ class Mailer extends AbstractMailer
         if (!isset($phpMailer) || !$phpMailer instanceof \PHPMailer)
         {
             global $phpMailerConfiguration;
-            require_once(__DIR__ . '/Resources/Config/phpmailer.conf.php');
+            require_once(\Chamilo\Libraries\File\Path :: getInstance()->getStoragePath() . 'configuration/phpmailer.conf.php');
 
             $phpMailer = new \PHPMailer();
 
