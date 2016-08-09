@@ -589,7 +589,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $link = $this->get_course_viewer_link();
         $course = CourseDataManager::retrieve_course($this->get_course_id());
 
-        $body = Translation::get($after_publication ? 'OldPublicationMailDescription' : 'NewPublicationMailDescription') .
+        $body = Translation::get('NewPublicationMailDescription') .
              ' ' . $course->get_title() . ' : <a href="' . $link . '" target="_blank">' .
              utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         $body .= $content_object->get_description();
@@ -669,8 +669,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $log .= $course->get_title();
         $log .= " to: \n";
 
-        $subject = Translation::get(
-            $after_publication ? 'OldPublicationMailSubject' : 'NewPublicationMailSubject',
+        $subject = Translation::get('NewPublicationMailSubject',
             array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()));
 
         $mail = new Mail(
