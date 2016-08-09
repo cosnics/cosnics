@@ -153,7 +153,7 @@ class SubmissionSubmitComponent extends SubmissionSubmitWizardComponent
         if (\Chamilo\Core\Repository\Viewer\Manager:: is_ready_to_be_published())
         {
             $submitter = $this->create_tracker($this->get_target_id(), $this->get_repo_objects());
-            $this->sendMail();
+//            $this->sendMail();
 
             $this->redirect(
                 '',
