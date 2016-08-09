@@ -188,7 +188,7 @@ function rm_r($dir)
  * @param string $dest Destination path
  * @return bool Returns TRUE on success, FALSE on failure
  */
-function copy_r($source, $dest, $modedir = 0755, $modefile = 0664)
+function copy_r($source, $dest, $modedir = 06770, $modefile = 06770)
 {
     // Simple copy for a file
     if (is_file($source))
