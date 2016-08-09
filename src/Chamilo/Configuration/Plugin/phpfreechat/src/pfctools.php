@@ -150,7 +150,7 @@ function cleanPath($path)
     return implode('/', $result);
 }
 
-function mkdir_r($path, $modedir = 0755)
+function mkdir_r($path, $modedir = 06770)
 {
     // This function creates the specified directory using mkdir(). Note
     // that the recursive feature on mkdir() is broken with PHP 5.0.4 for
