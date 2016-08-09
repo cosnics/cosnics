@@ -454,9 +454,11 @@ class CourseGroup extends NestedTreeNode
     /**
      * Get the dependencies for this object
      *
-     * @return boolean
+     * @param array $dependencies
+     *
+     * @return bool
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = array())
     {
         return array(
             CourseGroupUserRelation :: class_name() => new EqualityCondition(
