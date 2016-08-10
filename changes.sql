@@ -80,3 +80,5 @@ ALTER TABLE `menu_application_item`
 
 /* HoGent */
 /* Perspectief */
+
+INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES(NULL, 'Chamilo\\Core\\Admin', 'google_analytics_tracking_id', '', 0);

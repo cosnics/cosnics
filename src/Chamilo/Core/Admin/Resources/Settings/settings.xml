@@ -72,6 +72,7 @@
 			<setting name="mailer" field="select" default="Chamilo\Libraries\Mail\Mailer\PhpMailer\Mailer" user_setting="0">
 				<options type="dynamic" source="getMailers" />
 			</setting>
+			<setting name="google_analytics_tracking_id" field="text" default="" />
 		</category>
 		<category name="internationalization">
 			<setting name="hide_dcda_markup" field="toggle" default="1">
