@@ -236,7 +236,7 @@
 * [Repo Viewer] Fixed the importer to take the maximum number of selectable files into account
 * [Common] Changed the way the css classes for columns are rendered, splitsing the css between header and content css
 
-[02/06/2016]
+[02/07/2016]
 
 * [Repository] Fixed fatal error in displayer block
 * [Calendar] Fixed the home block links
@@ -256,3 +256,7 @@
 * [Mail] Don't add the phpmailer config to the codebase
 * [User] Make sure the profile picture in the form is not a cached version
 * [Platform Groups] Fixed translations and readded the subscribe button
+
+[12/08/2016]
+
+* [Weblcms] Fixed course request denier
