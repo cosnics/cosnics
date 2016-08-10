@@ -255,7 +255,7 @@ class Header
             $html[] = '})(window,document,\'script\',\'https://www.google-analytics.com/analytics.js\',\'ga\');';
             $html[] = '';
             $html[] = 'ga(\'create\', \'' . $googleAnalyticsTrackingId . '\', \'auto\');';
-            $html[] = 'ga(\'send\', \'pageview\', location.pathname);';
+            $html[] = 'ga(\'send\', \'pageview\', location.pathname + location.search);';
             $html[] = '';
             $html[] = '</script>';
 
