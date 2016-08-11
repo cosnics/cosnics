@@ -242,6 +242,12 @@
 	.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a img.chamilo-menu-item-icon {
 		padding: 0 0 0 40px;
 	}
+
+	.navbar-chamilo .navbar-collapse {
+		border: none;
+		box-shadow: none;
+		-webkit-box-shadow: none;
+	}
 }
 
 /*********************************************************************************************************************/
