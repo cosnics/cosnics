@@ -261,3 +261,4 @@
 
 * [Weblcms] Fixed course request denier
 * [Core] Added Google Analytics Tracking
+* [Menu] Changing the way menu's are rendered for mobile view
