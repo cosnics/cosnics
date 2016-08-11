@@ -84,7 +84,9 @@ class WorkspaceCategoryItem extends CategoryItem
                 $integrationNamespace,
                 'WorkspaceCategory' . ($selected ? 'Selected' : ''));
 
-            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+            $html[] = '<img class="chamilo-menu-item-icon' .
+                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
+                " src="' . $imagePath . '" title="' . $title . '" alt="' .
                  $title . '" />';
         }
 
@@ -94,6 +96,7 @@ class WorkspaceCategoryItem extends CategoryItem
                  ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
         $html[] = implode(PHP_EOL, $sub_html);

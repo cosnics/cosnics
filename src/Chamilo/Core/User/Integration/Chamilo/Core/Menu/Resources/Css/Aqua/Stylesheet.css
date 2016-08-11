@@ -137,3 +137,10 @@ div.chamilo-menu-item-account div.chamilo-menu-item-account-logout img,
 	vertical-align: middle;
 	margin-right: 5px;
 }
+
+/* Set minimum width for full view to 1400px */
+@media ( max-width : 900px) {
+	.navbar-chamilo ul.navbar-nav li a img.chamilo-menu-item-icon-account {
+		padding-right: 5px !important;
+	}
+}
