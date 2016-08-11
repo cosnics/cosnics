@@ -43,7 +43,9 @@ abstract class MenuItem extends Bar
             $itemType = ClassnameUtilities :: getInstance()->getClassnameFromNamespace($this->getItem()->get_type());
             $imagePath = Theme :: getInstance()->getImagePath($itemNamespace, $itemType . ($selected ? 'Selected' : ''));
 
-            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+            $html[] = '<img class="chamilo-menu-item-icon' .
+                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
+                " src="' . $imagePath . '" title="' . $title . '" alt="' .
                  $title . '" />';
         }
 
@@ -53,6 +55,7 @@ abstract class MenuItem extends Bar
                  ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);

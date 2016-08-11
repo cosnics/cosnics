@@ -50,7 +50,9 @@ class WorkspaceConfigureItem extends Bar
                 'Chamilo\Core\Repository\Integration\Chamilo\Core\Menu',
                 'ConfigureWorkspaces' . ($selected ? 'Selected' : ''));
 
-            $html[] = '<img class="chamilo-menu-item-icon" src="' . $imagePath . '" title="' . $title . '" alt="' .
+            $html[] = '<img class="chamilo-menu-item-icon' .
+                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
+                " src="' . $imagePath . '" title="' . $title . '" alt="' .
                  $title . '" />';
         }
 
@@ -61,6 +63,7 @@ class WorkspaceConfigureItem extends Bar
                  '</em></div>';
         }
 
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
         return implode(PHP_EOL, $html);

@@ -102,7 +102,9 @@ class WidgetItem extends Bar
                     Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
                     \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $this->getMenuRenderer()->get_user()->get_id()));
 
-            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account" src="' .
+            $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account' .
+                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '
+                " src="' .
                  $profilePhotoUrl->getUrl() . '" title="' . $title . '" alt="' . $title . '" />';
 
             // $html[] = '<img class="chamilo-menu-item-icon chamilo-menu-item-icon-account"
@@ -117,6 +119,7 @@ class WidgetItem extends Bar
                  ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
 
+        $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
 
         $user = $this->getMenuRenderer()->get_user();

@@ -215,6 +215,20 @@
 	.navbar-chamilo ul.navbar-nav li.active {
 		border: none;
 	}
+
+	.navbar-chamilo ul.navbar-nav li a .chamilo-menu-item-image-with-label {
+		display: inline-block;
+	}
+
+	.navbar-chamilo ul.navbar-nav li a {
+		height: auto;
+		text-align: left;
+	}
+
+	.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label {
+		padding: 15px 15px 15px 0;
+		display: inline-block;
+	}
 }
 
 /*********************************************************************************************************************/
