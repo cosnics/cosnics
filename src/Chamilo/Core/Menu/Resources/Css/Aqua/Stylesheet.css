@@ -226,6 +226,10 @@
 		text-align: left;
 	}
 
+	.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label {
+		padding: 15px;
+	}
+
 	.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label.chamilo-menu-item-label-with-image {
 		padding: 15px 15px 15px 0;
 		display: inline-block;
