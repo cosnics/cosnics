@@ -4,7 +4,8 @@ namespace Chamilo\Libraries\Calendar\Renderer;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\NotificationMessage;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -234,11 +235,12 @@ class Legend
 
                 if ($visibleSources == 0)
                 {
-                    $messages = Session :: retrieve(Application :: PARAM_MESSAGES);
-                    $messages[Application :: PARAM_MESSAGE_TYPE][] = NotificationMessage :: TYPE_WARNING;
-                    $messages[Application :: PARAM_MESSAGE][] = Translation :: get('AllEventSourcesHidden');
-
-                    Session :: register(Application :: PARAM_MESSAGES, $messages);
+                    $notificationMessageManager = new NotificationMessageManager();
+                    $notificationMessageManager->addMessage(
+                        new NotificationMessage(
+                            Translation :: get('AllEventSourcesHidden'), NotificationMessage::TYPE_WARNING
+                        )
+                    );
                 }
             }
         }
