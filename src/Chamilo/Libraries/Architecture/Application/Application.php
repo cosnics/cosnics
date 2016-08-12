@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\NotificationMessage;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -163,13 +164,15 @@ abstract class Application
         if ($message != null)
         {
 
-            $message_type = (! $error_message) ? NotificationMessage :: TYPE_INFO : NotificationMessage :: TYPE_DANGER;
+            $message_type = (! $error_message) ?
+                \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage :: TYPE_INFO :
+                \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage :: TYPE_DANGER;
 
-            $messages = Session :: retrieve(self :: PARAM_MESSAGES);
-            $messages[self :: PARAM_MESSAGE_TYPE][] = $message_type;
-            $messages[self :: PARAM_MESSAGE][] = $message;
+            $notificationMessageManager = new NotificationMessageManager();
 
-            Session :: register(self :: PARAM_MESSAGES, $messages);
+            $notificationMessageManager->addMessage(
+                new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage($message, $message_type)
+            );
         }
 
         $this->simple_redirect($parameters, $filter, $encode_entities, $anchor);
@@ -270,6 +273,9 @@ abstract class Application
         {
             $html[] = $this->display_messages($messages[self :: PARAM_MESSAGE], $messages[self :: PARAM_MESSAGE_TYPE]);
         }
+
+        $notificationMessageManager = new NotificationMessageManager();
+        $html[] = $notificationMessageManager->renderMessages();
 
         // DEPRECATED
         // Display messages
@@ -855,14 +861,18 @@ abstract class Application
                 $query = $_GET;
                 $query[self :: PARAM_CONTEXT] = $context;
 
-                $messages = Session :: retrieve(self :: PARAM_MESSAGES);
-                $messages[self :: PARAM_MESSAGE_TYPE][] = NotificationMessage :: TYPE_WARNING;
-                $messages[self :: PARAM_MESSAGE][] = Translation :: get(
-                    'OldApplicationParameter',
-                    array('OLD' => $original_context, 'NEW' => $context));
-
-                Session :: register(self :: PARAM_MESSAGES, $messages);
-
+                $notificationMessageManager = new NotificationMessageManager();
+                $notificationMessageManager->addMessage(
+                    new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage(
+                        Translation :: get(
+                            'OldApplicationParameter', array('OLD' => $original_context, 'NEW' => $context)
+                        ),
+                        \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_WARNING,
+                        'old_application_parameter'
+                    ),
+                    1
+                );
+                
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
 

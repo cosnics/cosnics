@@ -225,6 +225,8 @@ class Redirect
 
         $response = new RedirectResponse($url);
         $response->send();
+
+        exit;
     }
 
     /**
