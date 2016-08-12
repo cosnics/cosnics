@@ -71,4 +71,48 @@ class NotificationMessage
     {
         return $this->category;
     }
+
+    /**
+     * @param string $message
+     * @param string $category
+     *
+     * @return string
+     */
+    public static function confirm($message, $category = null)
+    {
+        return self::__construct($message, self :: TYPE_SUCCESS, $category);
+    }
+
+    /**
+     * @param string $message
+     * @param string $category
+     *
+     * @return string
+     */
+    public static function normal($message, $category = null)
+    {
+        return self::__construct($message, self :: TYPE_INFO, $category);
+    }
+
+    /**
+     * @param string $message
+     * @param string $category
+     *
+     * @return string
+     */
+    public static function warning($message, $category = null)
+    {
+        return self::__construct($message, self :: TYPE_WARNING, $category);
+    }
+
+    /**
+     * @param string $message
+     * @param string $category
+     *
+     * @return string
+     */
+    public static function error($message, $category = null)
+    {
+        return self::__construct($message, self :: TYPE_DANGER, $category);
+    }
 }

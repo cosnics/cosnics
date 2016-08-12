@@ -9,8 +9,9 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
-use Chamilo\Libraries\Format\NotificationMessage;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
+use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
@@ -353,72 +354,72 @@ abstract class Application
      * Displays a normal message.
      *
      * @param string $message
+     *
+     * @return string
      */
     public function display_message($message)
     {
-        $html = array();
-        $html[] = '<div class="notifications">';
-        $html[] = NotificationMessage :: normal($message)->to_html();
-        $html[] = '</div>';
+        $notificationMessageRenderer = new NotificationMessageRenderer();
+        $notificationMessage = NotificationMessage::normal($message);
 
-        return implode(PHP_EOL, $html);
+        return $notificationMessageRenderer->render($notificationMessage);
     }
 
     /**
+     * @param array $messages
+     * @param array $types
      *
-     * @param multitype:string $messages
-     * @param multitype:int $types
+     * @return string
      */
     public function display_messages($messages, $types)
     {
-        $html = array();
+        $notificationMessageRenderer = new NotificationMessageRenderer();
+        $notificationMessages = array();
 
-        $html[] = '<div class="notifications">';
         foreach ($types as $key => $type)
         {
-            $html[] = NotificationMessage :: create($messages[$key], $type)->to_html();
+            $notificationMessages[] = new NotificationMessage($messages[$key], $type);
         }
-        $html[] = '</div>';
 
-        return implode(PHP_EOL, $html);
+        return $notificationMessageRenderer->render($notificationMessages);
     }
 
     /**
      * Displays an error message.
      *
      * @param string $message
+     *
+     * @return string
      */
     public function display_error_message($message)
     {
-        $html = array();
-
-        $html[] = '<div class="notifications">';
-        $html[] = NotificationMessage :: error($message)->to_html();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        $notificationMessageRenderer = new NotificationMessageRenderer();
+        $notificationMessage = NotificationMessage::error($message);
+        
+        return $notificationMessageRenderer->render($notificationMessage);
     }
 
     /**
      * Displays a warning message.
      *
      * @param string $message
+     *
+     * @return string
      */
     public function display_warning_message($message)
     {
-        $html = array();
+        $notificationMessageRenderer = new NotificationMessageRenderer();
+        $notificationMessage = NotificationMessage::warning($message);
 
-        $html[] = '<div class="notifications">';
-        $html[] = NotificationMessage :: warning($message)->to_html();
-        $html[] = '</div>';
-
-        return implode(PHP_EOL, $html);
+        return $notificationMessageRenderer->render($notificationMessage);
     }
 
     /**
      * Displays an error page.
      *
      * @param string $message
+     *
+     * @return string
      */
     public function display_error_page($message)
     {

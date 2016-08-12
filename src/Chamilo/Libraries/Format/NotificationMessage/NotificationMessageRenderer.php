@@ -16,7 +16,7 @@ class NotificationMessageRenderer
     /**
      * Renders one or more notification messages
      *
-     * @param NotificationMessage[] $notificationMessages
+     * @param NotificationMessage | NotificationMessage[] $notificationMessages
      *
      * @return string
      */
