@@ -240,9 +240,14 @@ class Header
      */
     protected function addGoogleAnalyticsTracking()
     {
-        $googleAnalyticsTrackingId = \Chamilo\Configuration\Configuration :: get(
-            'Chamilo\Core\Admin', 'google_analytics_tracking_id'
-        );
+        if(!\Chamilo\Configuration\Configuration::get_instance()->is_available())
+        {
+            return;
+        }
+
+        $googleAnalyticsTrackingId = \Chamilo\Configuration\Configuration::get_instance()->get_setting(
+            array('Chamilo\Core\Admin', 'google_analytics_tracking_id')
+            );
 
         if(!empty($googleAnalyticsTrackingId))
         {

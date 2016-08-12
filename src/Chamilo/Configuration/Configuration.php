@@ -468,7 +468,7 @@ class Configuration
         $this->set(array('Chamilo\Core\Admin', 'hide_dcda_markup'), true);
         $this->set(array('Chamilo\Core\Admin', 'version'), '5.0');
         $this->set(array('Chamilo\Core\Admin', 'maintenance_mode'), false);
-        
+
         $this->set(array('Chamilo\Core\Admin', 'administrator_email'), '');
         $this->set(array('Chamilo\Core\Admin', 'administrator_website'), '');
         $this->set(array('Chamilo\Core\Admin', 'administrator_surname'), '');
