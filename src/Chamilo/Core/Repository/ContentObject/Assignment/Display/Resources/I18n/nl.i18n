@@ -1,0 +1,4 @@
+TypeName = "Weergave opdracht"
+EntriesForEntityType = "{NAME} met inzendingen"
+FeedbackForEntityType = "{NAME} met feedback"
+LateEntriesForEntityType = "{NAME} met laattijdige inzendingen"
