@@ -25,7 +25,8 @@ class ComplexContentObjectEmbedder extends Embedder
         $html[] = '     $(".link_iframe")[0].height = $(".link_iframe")[0].contentWindow.document.body.offsetHeight + 20;';
         $html[] = '}';
         $html[] = '$(".link_iframe").on("load", function() {';
-        $html[] = '     setTimeout(resizeIframe, 200);';
+        $html[] = '     resizeIframe();';
+        $html[] = '     setTimeout(resizeIframe, 750);';
         $html[] = '});';
 
         $html[] = '</script>';
