@@ -51,6 +51,13 @@ class BuildUtilities
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
         Filesystem :: recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
         $event->getIO()->write('Processed file extension resources');
+
+        // Copy the error pages
+        $sourceResourceImagePath = Path :: getInstance()->getResourcesPath('Chamilo\Configuration') . 'ErrorPages' .
+            DIRECTORY_SEPARATOR;
+        $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
+        Filesystem :: recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
+        $event->getIO()->write('Processed error pages');
     }
 
     public static function processComposer(Event $event)
