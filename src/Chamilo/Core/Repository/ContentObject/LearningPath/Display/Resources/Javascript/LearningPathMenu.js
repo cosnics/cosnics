@@ -95,23 +95,6 @@ $(function()
         }
     }
 
-    function keyboardPressed(e, ui) {
-        if(e.keyCode == 37) {
-            var learningPathNavigateLeft = $('#learning-path-navigate-left');
-
-            if(learningPathNavigateLeft.length > 0) {
-                learningPathNavigateLeft[0].click();
-            }
-        }
-
-        if(e.keyCode == 39) {
-            var learningPathNavigateRight = $('#learning-path-navigate-right');
-            if(learningPathNavigateRight.length > 0) {
-                learningPathNavigateRight[0].click();
-            }
-        }
-    }
-
     $(document).ready(
         function()
         {
@@ -122,7 +105,5 @@ $(function()
                 ".learning-path-display .learning-path-action-menu .learning-path-action-menu-hide", hideMenu);
             $(document).on('click',
                 ".learning-path-display .learning-path-action-menu .learning-path-action-menu-show", showMenu);
-
-            $(document).on('keydown', keyboardPressed);
         });
 });
