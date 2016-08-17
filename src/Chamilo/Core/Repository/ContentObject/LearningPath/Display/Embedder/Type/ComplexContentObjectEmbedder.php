@@ -19,6 +19,12 @@ class ComplexContentObjectEmbedder extends Embedder
         
         $html[] = '<iframe frameborder="0" class="link_iframe" src="' . $link . '" width="100%" height="700px">';
         $html[] = '<p>Your browser does not support iframes.</p></iframe>';
+
+        $html[] = '<script type="text/javascript">';
+        $html[] = '$(".link_iframe").on("load", function() {';
+        $html[] = '$(".link_iframe")[0].height = $(".link_iframe")[0].contentWindow.document.body.offsetHeight + 20;';
+        $html[] = '});';
+        $html[] = '</script>';
         
         return implode(PHP_EOL, $html);
     }
