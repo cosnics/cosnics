@@ -20,8 +20,6 @@ $(function()
                 learningPathNavigateRight[0].click();
             }
         }
-
-        return false;
     }
 
     $(document).on('keydown', keyboardPressed);
