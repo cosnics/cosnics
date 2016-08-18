@@ -99,7 +99,7 @@
 
         if (!fakeElementImageUrl)
         {
-            imageUrl = CKEDITOR.getUrl('images/spacer.gif');
+            imageUrl = CKEDITOR.tools.transparentImageData;
         }
         else
         {
@@ -161,7 +161,7 @@
 
         if (!fakeElementImageUrl)
         {
-            imageUrl = CKEDITOR.getUrl('images/spacer.gif');
+            imageUrl = CKEDITOR.tools.transparentImageData;
         }
         else
         {
