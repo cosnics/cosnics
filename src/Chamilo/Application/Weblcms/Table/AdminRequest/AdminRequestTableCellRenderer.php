@@ -90,10 +90,10 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 new ToolbarItem(
                     Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Confirm'),
-                    $this->browser->get_course_request_allowing_url(
+                    $this->get_component()->get_course_request_allowing_url(
                         $request,
-                        $this->browser->get_request_type(),
-                        $this->browser->get_request_view()),
+                        $this->get_component()->get_request_type(),
+                        $this->get_component()->get_request_view()),
                     ToolbarItem :: DISPLAY_ICON));
         }
         if ($check_item == CommonRequest :: NO_DECISION)
@@ -102,10 +102,10 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 new ToolbarItem(
                     Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
                     Theme :: getInstance()->getCommonImagePath('Action/Refuse'),
-                    $this->browser->get_course_request_refuse_url(
+                    $this->get_component()->get_course_request_refuse_url(
                         $request,
-                        $this->browser->get_request_type(),
-                        $this->browser->get_request_view()),
+                        $this->get_component()->get_request_type(),
+                        $this->get_component()->get_request_view()),
                     ToolbarItem :: DISPLAY_ICON));
         }
 
@@ -113,10 +113,10 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
             new ToolbarItem(
                 Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/Ddelete'),
-                $this->browser->get_course_request_deleting_url(
+                $this->get_component()->get_course_request_deleting_url(
                     $request,
-                    $this->browser->get_request_type(),
-                    $this->browser->get_request_view()),
+                    $this->get_component()->get_request_type(),
+                    $this->get_component()->get_request_view()),
                 ToolbarItem :: DISPLAY_ICON,
                 true));
 
@@ -124,10 +124,10 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
             new ToolbarItem(
                 Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
                 Theme :: getInstance()->getCommonImagePath('Action/View'),
-                $this->browser->get_course_request_viewing_url(
+                $this->get_component()->get_course_request_viewing_url(
                     $request,
-                    $this->browser->get_request_type(),
-                    $this->browser->get_request_view()),
+                    $this->get_component()->get_request_type(),
+                    $this->get_component()->get_request_view()),
                 ToolbarItem :: DISPLAY_ICON));
 
         return $toolbar->as_html();
