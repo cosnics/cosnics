@@ -334,6 +334,7 @@ class Kernel
         {
             set_exception_handler('\Chamilo\Libraries\Utilities\Utilities::handle_exception');
             set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
+//            register_shutdown_function('\Chamilo\Libraries\Utilities\Utilities::checkShutdown');
         }
 
         $timezone = \Chamilo\Configuration\Configuration:: get('Chamilo\Core\Admin', 'platform_timezone');
