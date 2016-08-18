@@ -1478,12 +1478,14 @@ class ContentObject extends CompositeDataClass
 
     public static function get_content_object_type_namespace($type)
     {
-        // sometimes, the $type is already prefixed, in which case no prefix should be added.
-        $prefix = 'Chamilo\Core\Repository\ContentObject\\';
-        if (strpos($type, $prefix) === 0)
+        if (strpos($type, '\\') !== false)
+        {
             return $type;
+        }
         else
-            return $prefix . $type;
+        {
+            return 'Chamilo\Core\Repository\ContentObject\\' . $type;
+        }
     }
 
     public static function type_exists($type)
