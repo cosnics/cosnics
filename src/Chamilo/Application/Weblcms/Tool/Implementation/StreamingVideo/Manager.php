@@ -22,7 +22,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Youtube :: class_name(), Vimeo :: class_name(), Matterhorn :: class_name(), Office365Video :: class_name());
+        $allowedTypes = array(
+            Youtube :: class_name(), Vimeo :: class_name(), Matterhorn :: class_name(), Office365Video :: class_name()
+        );
+
+        $hogentTypes = array('\Hogent\Core\Repository\ContentObject\Mediamosa\Storage\DataClass\Mediamosa');
+
+        foreach($hogentTypes as $hogentType)
+        {
+            if(class_exists($hogentType))
+            {
+                $allowedTypes[] = $hogentType;
+            }
+        }
+
+        return $allowedTypes;
     }
 
     public function get_available_browser_types()
