@@ -36,10 +36,10 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
     // Inherited
     public function render_cell($column, $request)
     {
-        if ($column === AdminRequestTableColumnModel :: get_modification_column())
-        {
-            return $this->get_modification_links($request);
-        }
+//        if ($column === AdminRequestTableColumnModel :: get_modification_column())
+//        {
+//            return $this->get_modification_links($request);
+//        }
 
         // Add special features here
         switch ($column->get_name())
@@ -61,9 +61,6 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
                 return DataManager :: retrieve_by_id(Course :: class_name(), $request->get_course_id())->get_title();
             case CommonRequest :: PROPERTY_SUBJECT :
                 return $request->get_subject();
-
-            case CommonRequest :: PROPERTY_MOTIVATION :
-                return $request->get_motivation();
 
             case CommonRequest :: PROPERTY_CREATION_DATE :
                 return DatetimeUtilities :: format_locale_date(null, $request->get_creation_date());
