@@ -26,6 +26,8 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
+        $this->checkInstallationAllowed();
+        
         $phpVersion = phpversion();
 
         $html = array();

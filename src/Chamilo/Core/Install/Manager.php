@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Install;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -204,5 +205,27 @@ abstract class Manager extends Application implements NoContextComponent
             self :: ACTION_SETTINGS,
             self :: ACTION_OVERVIEW,
             self :: ACTION_INSTALL_PLATFORM);
+    }
+
+    /**
+     * Checks if the installation is allowed
+     */
+    protected function checkInstallationAllowed()
+    {
+        $configuration = Configuration::get_instance();
+
+        if(!$configuration->is_available())
+        {
+            return;
+        }
+
+        $installationBlocked = (bool) $configuration->get_setting(array('Chamilo\Core\Admin', 'installation_blocked'));
+
+        if($installationBlocked)
+        {
+            throw new \Exception(
+                Translation::getInstance()->getTranslation('InstallationBlockedByAdministrator', null, self::context())
+            );
+        }
     }
 }
