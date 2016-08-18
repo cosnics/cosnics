@@ -37,6 +37,8 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
      */
     public function run()
     {
+        $this->checkInstallationAllowed();
+        
         $this->current_step = "";
         $this->counter = 0;
         $this->optional_application_counter = 0;

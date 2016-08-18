@@ -35,6 +35,8 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
+        $this->checkInstallationAllowed();
+        
         $table = new SimpleTable($this->get_data(), new DiagnoserCellRenderer(), null, 'diagnoser');
 
         $html = array();

@@ -29,6 +29,8 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
+        $this->checkInstallationAllowed();
+        
         $form = new SettingsForm($this, $this->get_url());
 
         if ($form->validate())

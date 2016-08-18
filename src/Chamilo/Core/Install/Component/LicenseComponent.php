@@ -25,6 +25,8 @@ class LicenseComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
+        $this->checkInstallationAllowed();
+        
         $html = array();
 
         $html[] = $this->render_header();
