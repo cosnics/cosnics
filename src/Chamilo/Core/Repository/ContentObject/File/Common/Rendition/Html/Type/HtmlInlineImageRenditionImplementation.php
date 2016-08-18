@@ -78,11 +78,11 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
             $label = $object->get_filename() . ' (' . Filesystem :: format_file_size($object->get_filesize()) . ')';
 
             $html[] =
-                '<a href="' . $url . '"><img title="' . Translation:: get('DownloadFile', array('LABEL' => $label)) .
+                '<img title="' . Translation:: get('DownloadFile', array('LABEL' => $label)) .
                 '" src="' . $url . '&display=1"
                         alt="' . $parameters[self :: PARAM_ALT] . '"
                         title="' . $parameters[self :: PARAM_ALT] . '"
-                        style="' . $styles_string . '"></a><br /><br />';
+                        style="' . $styles_string . '"><br /><br />';
         }
 
         return implode(PHP_EOL, $html);
