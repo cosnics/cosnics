@@ -862,17 +862,17 @@ abstract class Application
                 $query = $_GET;
                 $query[self :: PARAM_CONTEXT] = $context;
 
-                $notificationMessageManager = new NotificationMessageManager();
-                $notificationMessageManager->addMessage(
-                    new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage(
-                        Translation :: get(
-                            'OldApplicationParameter', array('OLD' => $original_context, 'NEW' => $context)
-                        ),
-                        \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_WARNING,
-                        'old_application_parameter'
-                    ),
-                    1
-                );
+//                $notificationMessageManager = new NotificationMessageManager();
+//                $notificationMessageManager->addMessage(
+//                    new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage(
+//                        Translation :: get(
+//                            'OldApplicationParameter', array('OLD' => $original_context, 'NEW' => $context)
+//                        ),
+//                        \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_WARNING,
+//                        'old_application_parameter'
+//                    ),
+//                    1
+//                );
                 
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
