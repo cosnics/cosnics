@@ -454,7 +454,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                         'static',
                         null,
                         null,
-                        '<img src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
+                        '<img class="remove_match" src="' . Theme::getInstance()->getCommonImagePath('Action/DeleteNa') . '" />');
                 }
 
                 $this->addGroup($group, 'match_' . $match_number, null, '', false);
