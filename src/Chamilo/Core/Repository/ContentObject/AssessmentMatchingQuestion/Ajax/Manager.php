@@ -12,4 +12,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
  */
 abstract class Manager extends AjaxManager
 {
+    const DEFAULT_ACTION = 'AssessmentMatchingQuestion';
 }
