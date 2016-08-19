@@ -80,7 +80,7 @@ class NotificationMessage
      */
     public static function confirm($message, $category = null)
     {
-        return self::__construct($message, self :: TYPE_SUCCESS, $category);
+        return new self($message, self :: TYPE_SUCCESS, $category);
     }
 
     /**
@@ -91,7 +91,7 @@ class NotificationMessage
      */
     public static function normal($message, $category = null)
     {
-        return self::__construct($message, self :: TYPE_INFO, $category);
+        return new self($message, self :: TYPE_INFO, $category);
     }
 
     /**
@@ -102,7 +102,7 @@ class NotificationMessage
      */
     public static function warning($message, $category = null)
     {
-        return self::__construct($message, self :: TYPE_WARNING, $category);
+        return new self($message, self :: TYPE_WARNING, $category);
     }
 
     /**
@@ -113,6 +113,6 @@ class NotificationMessage
      */
     public static function error($message, $category = null)
     {
-        return self::__construct($message, self :: TYPE_DANGER, $category);
+        return new self($message, self :: TYPE_DANGER, $category);
     }
 }
