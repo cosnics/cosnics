@@ -5,15 +5,18 @@ $(function() {
 			'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
 			'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' ];
 
+	var ajaxContext = 'Chamilo\\Core\\Repository\\ContentObject\\AssessmentMatchingQuestion\\Ajax';
+	var ajaxUri = getPath('WEB_PATH') + 'index.php';
+
 	function getDeleteIconMatches() {
 		return $('.table-data.matches > tbody > tr:first td:last .remove_match')
-				.attr('src').replace('_na.png', '.png');
+				.attr('src').replace('Na.png', '.png');
 	}
 
 	function getDeleteIconOptions() {
 		return $(
 				'.table-data.options > tbody > tr:first td:last .remove_option')
-				.attr('src').replace('_na.png', '.png');
+				.attr('src').replace('Na.png', '.png');
 	}
 
 	function getSelectOptions() {
@@ -26,7 +29,7 @@ $(function() {
 		var deleteImage, deleteField, rows, counter = 0;
 
 		deleteImage = '<img class="remove_match" src="'
-				+ getDeleteIconMatches().replace('.png', '_na.png') + '"/>';
+				+ getDeleteIconMatches().replace('.png', 'Na.png') + '"/>';
 		deleteField = '<input id="remove_match_$option_number" class="remove_match" type="image" src="'
 				+ getDeleteIconMatches()
 				+ '" name="remove_match[$option_number]" />';
@@ -60,7 +63,7 @@ $(function() {
 		var deleteImage, deleteField, rows, counter = 1;
 
 		deleteImage = '<img class="remove_option" src="'
-				+ getDeleteIconOptions().replace('.png', '_na.png') + '"/>';
+				+ getDeleteIconOptions().replace('.png', 'Na.png') + '"/>';
 		deleteField = '<input id="remove_option_$option_number" class="remove_option" type="image" src="'
 				+ getDeleteIconOptions()
 				+ '" name="remove_option[$option_number]" />';
@@ -97,8 +100,9 @@ $(function() {
 		destroyHtmlEditor('feedback[' + id + ']');
 		$('tr#option_' + id, tableBody).remove();
 		doAjaxPost(
-				"./repository/content_object/assessment_matching_question/php/ajax/assessment_matching_question.php",
+				ajaxUri,
 				{
+					application: ajaxContext,
 					action : 'skip_option',
 					value : id
 				});
@@ -167,8 +171,9 @@ $(function() {
 		$('tr#match_' + id, tableBody).remove();
 
 		doAjaxPost(
-				"./repository/content_object/assessment_matching_question/php/ajax/assessment_matching_question.php",
+				ajaxUri,
 				{
+					application: ajaxContext,
 					action : 'skip_match',
 					value : id
 				});
