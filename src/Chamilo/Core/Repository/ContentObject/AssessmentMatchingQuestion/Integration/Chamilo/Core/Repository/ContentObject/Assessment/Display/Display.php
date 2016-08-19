@@ -132,7 +132,7 @@ class Display extends QuestionDisplay
             }
             else
             {
-                $formvalidator->addElement('html', '<td></td>');
+                $formvalidator->addElement('html', '<td colspan="3"></td>');
             }
 
             if ($question->get_display() == AssessmentMatchingQuestion::DISPLAY_LIST)
@@ -153,7 +153,10 @@ class Display extends QuestionDisplay
                 }
                 else
                 {
-                    $formvalidator->addElement('html', '<td colspan="2" rowspan="' . ($maximum - $i) . '"></td>');
+                    if($i <= count($matches))
+                    {
+                        $formvalidator->addElement('html', '<td colspan="2" rowspan="' . ($maximum - $i) . '"></td>');
+                    }
                 }
             }
 
