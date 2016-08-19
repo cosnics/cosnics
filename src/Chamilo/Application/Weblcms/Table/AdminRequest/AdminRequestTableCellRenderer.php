@@ -82,53 +82,53 @@ class AdminRequestTableCellRenderer extends DataClassTableCellRenderer implement
     {
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
-        $check_item = $request->get_decision();
-
-        if ($check_item != CommonRequest :: ALLOWED_DECISION)
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Confirm'),
-                    $this->get_component()->get_course_request_allowing_url(
-                        $request,
-                        $this->get_component()->get_request_type(),
-                        $this->get_component()->get_request_view()),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
-        if ($check_item == CommonRequest :: NO_DECISION)
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Refuse'),
-                    $this->get_component()->get_course_request_refuse_url(
-                        $request,
-                        $this->get_component()->get_request_type(),
-                        $this->get_component()->get_request_view()),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
-
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Ddelete'),
-                $this->get_component()->get_course_request_deleting_url(
-                    $request,
-                    $this->get_component()->get_request_type(),
-                    $this->get_component()->get_request_view()),
-                ToolbarItem :: DISPLAY_ICON,
-                true));
-
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/View'),
-                $this->get_component()->get_course_request_viewing_url(
-                    $request,
-                    $this->get_component()->get_request_type(),
-                    $this->get_component()->get_request_view()),
-                ToolbarItem :: DISPLAY_ICON));
+//        $check_item = $request->get_decision();
+//
+//        if ($check_item != CommonRequest :: ALLOWED_DECISION)
+//        {
+//            $toolbar->add_item(
+//                new ToolbarItem(
+//                    Translation :: get('Accept', null, Utilities :: COMMON_LIBRARIES),
+//                    Theme :: getInstance()->getCommonImagePath('Action/Confirm'),
+//                    $this->get_component()->get_course_request_allowing_url(
+//                        $request,
+//                        $this->get_component()->get_request_type(),
+//                        $this->get_component()->get_request_view()),
+//                    ToolbarItem :: DISPLAY_ICON));
+//        }
+//        if ($check_item == CommonRequest :: NO_DECISION)
+//        {
+//            $toolbar->add_item(
+//                new ToolbarItem(
+//                    Translation :: get('Reject', null, Utilities :: COMMON_LIBRARIES),
+//                    Theme :: getInstance()->getCommonImagePath('Action/Refuse'),
+//                    $this->get_component()->get_course_request_refuse_url(
+//                        $request,
+//                        $this->get_component()->get_request_type(),
+//                        $this->get_component()->get_request_view()),
+//                    ToolbarItem :: DISPLAY_ICON));
+//        }
+//
+//        $toolbar->add_item(
+//            new ToolbarItem(
+//                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+//                Theme :: getInstance()->getCommonImagePath('Action/Ddelete'),
+//                $this->get_component()->get_course_request_deleting_url(
+//                    $request,
+//                    $this->get_component()->get_request_type(),
+//                    $this->get_component()->get_request_view()),
+//                ToolbarItem :: DISPLAY_ICON,
+//                true));
+//
+//        $toolbar->add_item(
+//            new ToolbarItem(
+//                Translation :: get('View', null, Utilities :: COMMON_LIBRARIES),
+//                Theme :: getInstance()->getCommonImagePath('Action/View'),
+//                $this->get_component()->get_course_request_viewing_url(
+//                    $request,
+//                    $this->get_component()->get_request_type(),
+//                    $this->get_component()->get_request_view()),
+//                ToolbarItem :: DISPLAY_ICON));
 
         return $toolbar->as_html();
     }
