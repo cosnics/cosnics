@@ -187,6 +187,17 @@
 			<setting name="cas_host" field="text" default="" />
 			<setting name="cas_port" field="text" default="" />
 			<setting name="cas_uri" field="text" default="" />
+			<setting name="cas_version" field="radio" default="SAML_VERSION_1_1">
+				<options type="static">
+					<option name="SAML VERSION 1.1" value="SAML_VERSION_1_1" />
+					<option name="CAS VERSION 2.0" value="CAS_VERSION_2_0" />
+				</options>
+			</setting>
+			<setting name="cas_check_certificate" field="toggle" default="1">
+				<options type="static">
+					<option name="cas_check_certificate" value="1" />
+				</options>
+			</setting>
 			<setting name="cas_certificate" field="text" default="" />
 			<setting name="cas_enable_log" field="toggle">
 				<options type="static">
@@ -194,11 +205,18 @@
 				</options>
 			</setting>
 			<setting name="cas_log" field="text" default="" />
+			<setting name="cas_user_login" field="radio" default="login">
+				<options type="static">
+					<option name="Login" value="login" />
+					<option name="E-mail" value="email" />
+				</options>
+			</setting>
 			<setting name="cas_allow_change_password" field="toggle">
 				<options type="static">
 					<option name="cas_allow_change_password" value="1" />
 				</options>
 			</setting>
+			<setting name="cas_validation_string" field="text" default="EXT" />
 		</category>
 		<category name="logfiles">
 			<setting name="php_error_location" field="text" default="" />
