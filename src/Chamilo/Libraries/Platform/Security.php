@@ -36,9 +36,10 @@ class Security
             }
 
             // from: http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php
+            // from: https://gist.github.com/mbijon/1098477
 
             // Remove any attribute starting with "on" or xmlns
-            $variable = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $variable);
+            $variable = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+[>\b]?#iu', '$1>', $variable);
 
             // Remove javascript: and vbscript: protocols
             $variable = preg_replace(
