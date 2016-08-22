@@ -1,0 +1,28 @@
+@import url('../Aqua/Stylesheet.css');
+
+ul.tree-menu li div a.fill_in_blanks_question, ul.tree-menu li div a.type_fill_in_blanks_question,
+	ul.tree-menu li div a.type_fill_in_blanks_question_default {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
+
+span.fill_in_the_blanks_gap {
+	border: 1px solid #CECECE;
+	background-color: #F4F4F4;
+	padding: 2px 10px 2px 10px;
+	font-weight: bold;
+	font-size: 11px;
+	font-family: Ubuntu, "Trebuchet MS", Verdana, Arial, Helvetica,
+		sans-serif;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: #9e021b;
+	font-size: 10px;
+}
+
+button.blanks_hint, a.blanks_hint_button {
+	background-image: url(../../Images/Ruby/Buttons/ButtonHint.png);
+}
+
+button.character_hint, a.character_hint_button {
+	background-image: url(../../Images/Ruby/Buttons/ButtonCharacterHint.png);
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="complex_wiki_page">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" />
+		<property name="is_homepage" type="boolean" notnull="1" default="0" />
+		<property name="is_locked" type="boolean" notnull="1" default="0" />
+	</properties>
+	<index name="id" type="primary">
+		<indexproperty name="id" />
+	</index>
+</object>

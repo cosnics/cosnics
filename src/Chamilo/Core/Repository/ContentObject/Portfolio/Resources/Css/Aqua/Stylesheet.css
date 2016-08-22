@@ -1,0 +1,107 @@
+ul.tree-menu li div a.portfolio, ul.tree-menu li div a.type_portfolio,
+	.treeview .list-group .list-group-item .icon.node-icon.type_portfolio, .treeview .list-group .list-group-item .icon.node-icon.type_portfolio_default,
+	ul.tree-menu li div a.type_portfolio_default {
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}
+
+.feedback-container {
+	width: 100%;
+	margin: 0 auto;
+	border-bottom: 1px solid white;
+}
+
+.feedback-form {
+	margin-top: 10px;
+}
+
+.feedback-container-even {
+	background-color: #f6f6f6;
+}
+
+.feedback-container-odd {
+	background-color: #ecf4f8;
+}
+
+.feedback-container .feedback {
+	width: 100%;
+	position: relative;
+}
+
+.feedback-container .body {
+	width: 100%;
+	float: left;
+	overflow: hidden;
+}
+
+.feedback-container .content {
+	padding: 10px 55px 10px 52px;
+}
+
+.feedback-container .user {
+	font-weight: bold;
+	color: #4171B5;
+}
+
+.feedback-container .date {
+	font-size: 11px;
+	color: gray;
+	padding-top: 2px;
+}
+
+.feedback-container .content p {
+	margin-top: 0px;
+}
+
+.feedback-container .photo {
+	float: left;
+	width: 32px;
+	padding: 10px 0px 10px 10px;
+	margin-left: -100%;
+	position: relative;
+}
+
+.feedback-container .actions {
+	float: left;
+	width: 35px;
+	padding: 10px 10px 10px 0px;
+	margin-left: -45px;
+	position: relative;
+}
+
+.feedback-history {
+	display: none;
+	clear: both;
+}
+
+.feedback-history-toggle-visible, .feedback-history-toggle-invisible {
+	cursor: pointer;
+	font-weight: bold;
+	color: #4171B5;
+	font-size: 11px;
+}
+
+.feedback-history-toggle-invisible {
+	display: none;
+}
+
+.portfolio-statistics {
+	text-align: right;
+	font-style: italic;
+	font-size: 11px;
+	color: gray;
+	padding-top: 5px;
+}
+
+.portfolio-photo-container {
+	margin-bottom: 20px;
+}
+
+.portfolio-photo-container .portfolio-photo {
+	width: 100%;
+	max-width: 100px;
+	padding: 0px;
+}
+
+.portfolio-tree-menu {
+	overflow: auto;
+}
