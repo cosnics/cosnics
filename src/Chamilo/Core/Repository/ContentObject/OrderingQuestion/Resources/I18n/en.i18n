@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\ordering_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Ordering question"
+TypeCategory = "Content Objects"
+Weight = "Weight"
+PutAnswersCorrectOrder = "Put answers in the correct order"
+Items = "Items"
+AddItem = "Add an item"
+Item = "Item"
+Order = "Order"
+Rank = "Ranking"
+Title = "Title"
+Description = "Description"
+Hint = "Hint"
+RecalculateWeight = "Recalculate weight"
+RandomizeOptions = "Randomize items"
+FeedbackAnswer = "Only show feedback for wrong answers"
+MakeASelection = "Make your selection"
