@@ -720,11 +720,14 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
     private function get_course_viewer_link()
     {
+        $params = array();
+
+        $params[Manager::PARAM_CONTEXT] = Manager:: package();
         $params[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $params[Manager::PARAM_COURSE] = $this->get_course_id();
         $params[Manager::PARAM_TOOL] = $this->get_tool();
         $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
-        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->get_id();
+        $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $this->getId();
 
         $redirect = new Redirect($params);
 

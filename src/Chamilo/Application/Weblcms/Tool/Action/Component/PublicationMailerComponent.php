@@ -26,6 +26,9 @@ class PublicationMailerComponent extends Manager implements DelegateComponent
 
             $failure = false;
 
+            /**
+             * @var ContentObjectPublication $publication
+             */
             $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
                 ContentObjectPublication :: class_name(),
                 $publication_id);
