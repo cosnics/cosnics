@@ -1,0 +1,29 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\Office365Video
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Office 365 Video"
+Type = "Type"
+Title = "Titel"
+Description = "Beschrijving"
+Created = "Aangemaakt"
+Properties = "Eigenschappen"
+ClientId = "Client ID"
+ClientSecret = "Client Secret"
+RootSite = "SharePoint Site Collection URL"
+Tenant = "Tenant"
+PendingProcessing = "Nog niet begonnen"
+Processing = "Bezig met verwerken"
+ReadyForPlay = "Beschikbaar"
+ErrorOnUploading = "Uploaden mislukte"
+ErrorOnProcessing = "Bewerken mislukte"
+Timeout = "Tijdslimiet bereikt"
+UnsupportedFormat = "Formaat wordt niet ondersteund"
+CorruptedFile = "Corrupt bestand"
+ContentObject = "Content Object"
+Unknown = "Onbekend"
+YouMustBeLoggedIn = "Klik op aanmelden om Office 365 Video te gebruiken"
+ThisFieldIsRequired = "Vereist veld"
+Office365VideoExternalRepositoryManagerBrowserComponent = "Doorblader Office 365 Video"
+Office365VideoExternalRepositoryManagerSelecterComponent = "Selecteer Office 365 Video"
