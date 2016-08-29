@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = 
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Reporting"
+LoginDayBlock = "Logins per day"
+LoginBlock = "Logins"
+LoginHourBlock = "Logins per hour"
+LoginMonthBlock = "Logins per month"
+BrowserBlock = "Browsers"
+CountryBlock = "Countries"
+RefererBlock = "Referers"
+ProviderBlock = "Providers"
+OperatingSystemBlock = "Operating systems"
+LoginTemplate = "Login statistics"
+DataTemplate = "Visitor statistics"
+PlatformStatisticsBlock = "Platform statistics"

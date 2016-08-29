@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeCategory = "Rights"
+CreatorComponent = "Grant rights to new users / groups"
+BrowserComponent = "Manage rights for users / groups"
+ContentRight = "Content rights"
+UseRight = "Allow usage"
+CopyRight = "Allow copies"
+ManageRight = "Co-manager"
+ViewRight = "View"
+AddRight = "View + Add"
+EditRight = "View + Add + Edit"
+DeleteRight = "View + Add + Edit + Delete"
+ManageRightWarning = "When making users and/or groups co-managers, they will have the SAME rights as the creator of the workspace. They will be able to manage access rights, all content and even be able to delete the workspace. Please use with caution!"
+UsersGroups = "Users / Groups"
+SaveAndAddNew = "Save and grant rights to new users / groups"
+RightsSet = "New users / groups added to the workspace"
+RightsUpdated = "Rights for users / groups updated"
+Entity = "User / Group"
