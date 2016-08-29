@@ -283,7 +283,8 @@ class AccountForm extends FormValidator
 
         $settings = array(
             'allow_change_firstname', 'allow_change_lastname', 'allow_change_official_code',
-            'allow_change_email', 'allow_change_username', 'allow_change_user_picture'
+            'allow_change_email', 'allow_change_username', 'allow_change_user_picture',
+            'allow_change_password'
         );
 
         foreach($settings as $setting)
