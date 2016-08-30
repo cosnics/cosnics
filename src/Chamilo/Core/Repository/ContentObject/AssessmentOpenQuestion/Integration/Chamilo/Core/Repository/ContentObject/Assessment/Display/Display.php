@@ -56,6 +56,7 @@ class Display extends QuestionDisplay
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = 150;
         $html_editor_options['toolbar'] = 'Assessment';
+        $html_editor_options['collapse_toolbar'] = true;
 
         $element_template = array();
         $element_template[] = '<div><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element}';

@@ -92,27 +92,12 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         $toolbar = new Toolbar();
 
-        $contentObject = $cloi->get_ref_object();
-
-        if ($contentObject &&
-             RightsService :: getInstance()->canEditContentObject($this->get_component()->get_user(), $contentObject))
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                    $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
-                    ToolbarItem :: DISPLAY_ICON));
-        }
-        else
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation :: get('EditNA', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/EditNa'),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON));
-        }
+        $toolbar->add_item(
+            new ToolbarItem(
+                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                $this->get_component()->get_complex_content_object_item_edit_url($cloi->get_id()),
+                ToolbarItem :: DISPLAY_ICON));
 
         $toolbar->add_item(
             new ToolbarItem(
