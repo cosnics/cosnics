@@ -98,19 +98,11 @@ class ContentObjectResourceRenderer
 
             $rendition_xpath = new DOMXPath($rendition);
 
-            $javascript_nodes = $rendition_xpath->query('//script');
-            $body_nodes = $rendition_xpath->query('body/*');
             $fragment = $rendition->createDocumentFragment();
 
-            foreach($javascript_nodes as $javascript_node)
-            {
-                $fragment->appendChild($javascript_node);
-            }
-
-            foreach ($body_nodes as $child)
-            {
-                $fragment->appendChild($child);
-            }
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//script'));
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('//link'));
+            $this->addNodesToDocumentFragment($fragment, $rendition_xpath->query('body/*'));
 
             $fragment = $this->dom_document->importNode($fragment, true);
 
@@ -119,5 +111,19 @@ class ContentObjectResourceRenderer
         }
 
         return $this->dom_document->saveHTML();
+    }
+
+    /**
+     * Add given nodes to the given document fragment
+     *
+     * @param \DOMDocumentFragment $documentFragment
+     * @param \DOMNodeList $nodes
+     */
+    protected function addNodesToDocumentFragment(\DOMDocumentFragment $documentFragment, \DOMNodeList $nodes)
+    {
+        foreach($nodes as $node)
+        {
+            $documentFragment->appendChild($node);
+        }
     }
 }
