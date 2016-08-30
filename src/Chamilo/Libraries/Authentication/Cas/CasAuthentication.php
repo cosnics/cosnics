@@ -42,14 +42,16 @@ class CasAuthentication extends ExternalAuthentication
             $this->initializeClient();
         }
 
-        $userAttributes = phpCAS :: getAttributes();
+        $userAttributes = phpCAS::getAttributes();
 
-        if(PlatformSetting :: get('cas_user_login') == 'email')
+        if (PlatformSetting::get('cas_user_login') == 'email')
         {
-            if (is_numeric($userAttributes['person_number']) || strpos($userAttributes['person_number'], PlatformSetting :: get('cas_validation_string')) !== false)
+            if (is_numeric($userAttributes['person_number']) ||
+                 strpos($userAttributes['person_number'], PlatformSetting::get('cas_validation_string')) !== false)
 
             {
-                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user_by_official_code($userAttributes['person_number']);
+                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_official_code(
+                    $userAttributes['person_number']);
 
                 if (! $user instanceof User)
                 {
@@ -61,19 +63,19 @@ class CasAuthentication extends ExternalAuthentication
             else
             {
                 throw new AuthenticationException(
-                    Translation :: get(
+                    Translation::get(
                         'CasAuthenticationError',
                         array(
-                            'PLATFORM' => Configuration :: get_instance()->get_setting(
+                            'PLATFORM' => Configuration::get_instance()->get_setting(
                                 'Chamilo\Core\Admin',
                                 'platform_name'))));
             }
         }
         else
         {
-            if (strpos($userAttributes['email'], PlatformSetting :: get('cas_validation_string')) !== false)
+            if (strpos($userAttributes['email'], PlatformSetting::get('cas_validation_string')) !== false)
             {
-                $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user_by_username($userAttributes['login']);
+                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($userAttributes['login']);
 
                 if (! $user instanceof User)
                 {
@@ -85,15 +87,14 @@ class CasAuthentication extends ExternalAuthentication
             else
             {
                 throw new AuthenticationException(
-                    Translation :: get(
+                    Translation::get(
                         'CasAuthenticationError',
                         array(
-                            'PLATFORM' => Configuration :: get_instance()->get_setting(
+                            'PLATFORM' => Configuration::get_instance()->get_setting(
                                 'Chamilo\Core\Admin',
                                 'platform_name'))));
             }
         }
-
     }
 
     /**
@@ -108,10 +109,10 @@ class CasAuthentication extends ExternalAuthentication
             $this->initializeClient();
         }
 
-        $userAttributes = phpCAS :: getAttributes();
+        $userAttributes = phpCAS::getAttributes();
 
         $user = new User();
-        if(PlatformSetting :: get('cas_user_login') === 'login')
+        if (PlatformSetting::get('cas_user_login') === 'login')
         {
             $user->set_username($userAttributes['login']);
         }
@@ -120,9 +121,8 @@ class CasAuthentication extends ExternalAuthentication
             $user->set_username($userAttributes['email']);
         }
 
-
         $user->set_password('PLACEHOLDER');
-        $user->set_status(User :: STATUS_STUDENT);
+        $user->set_status(User::STATUS_STUDENT);
         $user->set_auth_source('Cas');
         $user->set_platformadmin(0);
         $user->set_email($userAttributes['email']);
@@ -148,7 +148,7 @@ class CasAuthentication extends ExternalAuthentication
     {
         if (! $this->isConfigured())
         {
-            throw new AuthenticationException(Translation :: get('CheckCASConfiguration'));
+            throw new AuthenticationException(Translation::get('CheckCASConfiguration'));
         }
         else
         {
@@ -160,7 +160,7 @@ class CasAuthentication extends ExternalAuthentication
             }
 
             // Do the logout
-            phpCAS :: logout();
+            phpCAS::logout();
         }
     }
 
@@ -173,12 +173,12 @@ class CasAuthentication extends ExternalAuthentication
         if (! isset($this->settings))
         {
             $this->settings = array();
-            $this->settings['host'] = PlatformSetting :: get('cas_host');
-            $this->settings['port'] = PlatformSetting :: get('cas_port');
-            $this->settings['uri'] = PlatformSetting :: get('cas_uri');
-            $this->settings['certificate'] = PlatformSetting :: get('cas_certificate');
-            $this->settings['log'] = PlatformSetting :: get('cas_log');
-            $this->settings['enable_log'] = PlatformSetting :: get('cas_enable_log');
+            $this->settings['host'] = PlatformSetting::get('cas_host');
+            $this->settings['port'] = PlatformSetting::get('cas_port');
+            $this->settings['uri'] = PlatformSetting::get('cas_uri');
+            $this->settings['certificate'] = PlatformSetting::get('cas_certificate');
+            $this->settings['log'] = PlatformSetting::get('cas_log');
+            $this->settings['enable_log'] = PlatformSetting::get('cas_enable_log');
         }
 
         return $this->settings;
@@ -214,7 +214,7 @@ class CasAuthentication extends ExternalAuthentication
     {
         if (! $this->isConfigured())
         {
-            throw new \Exception(Translation :: get('CheckCASConfiguration'));
+            throw new \Exception(Translation::get('CheckCASConfiguration'));
         }
         else
         {
@@ -225,14 +225,14 @@ class CasAuthentication extends ExternalAuthentication
                 // initialize phpCAS
                 if ($settings['enable_log'])
                 {
-                    phpCAS :: setDebug($settings['log']);
+                    phpCAS::setDebug($settings['log']);
                 }
 
                 $uri = ($settings['uri'] ? $settings['uri'] : '');
 
-                if(PlatformSetting :: get('cas_version') == 'SAML_VERSION_1_1')
+                if (PlatformSetting::get('cas_version') == 'SAML_VERSION_1_1')
                 {
-                    phpCAS :: client(
+                    phpCAS::client(
                         SAML_VERSION_1_1,
                         $settings['host'],
                         (int) $settings['port'],
@@ -241,7 +241,7 @@ class CasAuthentication extends ExternalAuthentication
                 }
                 else
                 {
-                    phpCAS :: client(
+                    phpCAS::client(
                         CAS_VERSION_2_0,
                         $settings['host'],
                         (int) $settings['port'],
@@ -252,17 +252,17 @@ class CasAuthentication extends ExternalAuthentication
                 $this->hasBeenInitialized = true;
 
                 // SSL validation for the CAS server
-                if(PlatformSetting :: get('cas_check_certificate') == '1')
+                if (PlatformSetting::get('cas_check_certificate') == '1')
                 {
-                    phpCAS :: setCasServerCACert($settings['certificate']);
+                    phpCAS::setCasServerCACert($settings['certificate']);
                 }
                 else
                 {
-                    phpCAS :: setNoCasServerValidation();
+                    phpCAS::setNoCasServerValidation();
                 }
 
                 // force CAS authentication
-                phpCAS :: forceAuthentication();
+                phpCAS::forceAuthentication();
             }
             catch (\Exception $exception)
             {
