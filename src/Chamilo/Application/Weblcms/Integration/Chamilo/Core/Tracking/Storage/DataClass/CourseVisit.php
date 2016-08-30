@@ -66,7 +66,10 @@ class CourseVisit extends Tracker
         $this->set_user_id($parameters[self :: PROPERTY_USER_ID]);
         $this->set_course_id($parameters[self :: PROPERTY_COURSE_ID]);
         $this->set_tool_id($parameters[self :: PROPERTY_TOOL_ID]);
-        $this->set_category_id($parameters[self :: PROPERTY_CATEGORY_ID]);
+
+        $categoryId = $parameters[self :: PROPERTY_CATEGORY_ID] > 0 ? $parameters[self :: PROPERTY_CATEGORY_ID] : null;
+
+        $this->set_category_id($categoryId);
 
         $publication_id = $parameters[self :: PROPERTY_PUBLICATION_ID];
         $publication_id = is_array($publication_id) ? $publication_id[0] : $publication_id;

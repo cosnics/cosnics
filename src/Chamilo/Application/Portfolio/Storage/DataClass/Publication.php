@@ -59,7 +59,7 @@ class Publication extends DataClass
 
     /**
      *
-     * @return \repository\ContentObject
+     * @return ContentObject
      */
     public function get_content_object()
     {
