@@ -24,14 +24,19 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     {
         $html = array();
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
-                 'Plugin/MediaElementJS/build/mediaelement-and-player.min.js');
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
-                 'Plugin/MediaElementJS/build/mediaelementplayer.css');
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(File :: package(), true) . 'MediaElementJS.js');
+        $html[] = ResourceManager:: get_instance()->get_resource_html(
+            Path:: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+            'Plugin/MediaElementJS/build/mediaelement-and-player.min.js'
+        );
+
+        $html[] = ResourceManager:: get_instance()->get_resource_html(
+            Path:: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+            'Plugin/MediaElementJS/build/mediaelementplayer.css'
+        );
+
+        $html[] = ResourceManager:: get_instance()->get_resource_html(
+            Path:: getInstance()->getJavascriptPath(File:: package(), true) . 'MediaElementJS.js'
+        );
 
         $html[] = $this->getMediaElement();
 
@@ -43,6 +48,7 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     /**
      *
      * @param string[] $parameters
+     *
      * @return string
      */
     public function getMediaElement($parameters)
@@ -69,6 +75,7 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     /**
      *
      * @param string[] $parameters
+     *
      * @return string
      */
     abstract public function getSources($parameters);
@@ -81,8 +88,9 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
     {
         $object = $this->get_content_object();
 
-        return \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
+        return \Chamilo\Core\Repository\Manager:: get_document_downloader_url(
             $object->get_id(),
-            $object->calculate_security_code()) . '&display=1';
+            $object->calculate_security_code()
+        ) . '&display=1';
     }
 }
