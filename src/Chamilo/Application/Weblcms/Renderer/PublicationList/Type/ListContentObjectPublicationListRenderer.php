@@ -821,7 +821,13 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $pager = $this->getPager();
         $pagerRenderer = $this->getPagerRenderer();
 
-        return $pagerRenderer->renderPaginationWithPageLimit();
+        $queryParameters = $this->get_tool_browser()->get_parameters();
+        $queryParameters[self::PARAM_PAGE_NUMBER] = $this->getCurrentPageNumber();
+
+        return $pagerRenderer->renderPaginationWithPageLimit(
+            $queryParameters,
+            self :: PARAM_PAGE_NUMBER
+        );
     }
 
     public function get_page_publications()

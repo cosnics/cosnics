@@ -24,7 +24,12 @@ class EditorComponent extends Manager
      */
     public function run()
     {
-        $id = $this->get_parameter(self :: PARAM_GROUP_ID);
+        if (! $this->get_user()->is_platform_admin())
+        {
+            throw new NotAllowedException();
+        }
+        $id = Request :: get(self :: PARAM_GROUP_ID);
+        $this->set_parameter(self :: PARAM_GROUP_ID, $id);
 
         if ($id)
         {
