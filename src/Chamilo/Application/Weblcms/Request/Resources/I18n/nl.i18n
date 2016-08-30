@@ -1,0 +1,88 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\request
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Aanvraagbeheer"
+BrowserComponent = "Doorblader aanvragen"
+ConfigureManagementRights = "Configureer toegangsrechten"
+CreationDate = "Aangevraagd op"
+CreatorComponent = "Vraag een cursus aan"
+Decision = "Beslissing"
+DecisionGranted = "Aanvraag goedgekeurd"
+DecisionMotivation = "Motivatie"
+DecisionPending = "Aanvraag hangende"
+DecisionDenied = "Aanvraag geweigerd"
+DecisionsDenied = "Aanvragen geweigerd"
+DecisionNotDenied = "Aanvraag kon niet geweigerd worden"
+SomeDecisionsNotDenied = "Sommige aanvragen konden niet geweigerd worden"
+DecisionsNotDenied = "Aanvragen konden niet geweigerd worden"
+DeniedRequests = "Geweigerde aanvragen"
+DenierComponent = "Weiger een aanvraag"
+Deny = "Weiger"
+Grant = "Keur goed"
+GrantedRequests = "Goedgekeurde aanvragen"
+GranterComponent = "Keur een aanvraag goed"
+Motivation = "Motivatie"
+PendingRequests = "Hangende aanvragen"
+Request = "Vraag aan"
+RequestCourse = "Vraag een cursus aan"
+User = "Gebruiker"
+YourRequests = "Jouw aanvragen"
+GrantSelected = "Keur aanvragen goed"
+DenySelected = "Weiger aanvragen"
+DeleteSelected = "Verwijder aanvragen"
+RequestGrantedMailTitle = "Je {PLATFORM} cursusaanvraag ({NAME}) werd goedgekeurd"
+RequestDeniedMailTitle = "Je {PLATFORM} cursusaanvraag ({NAME}) werd geweigerd"
+RequestGrantedMailBody = "Beste {USER},<br />
+<br />
+Je cursus {NAME} werd aangemaakt. Je kan hem vanaf nu raadplegen via de cursushomepage op {PLATFORM}.<br />
+<br />
+Met vriendelijke groeten,<br />
+Je {PLATFORM} team"
+RequestDeniedMailBody = "Beste {USER},<br />
+<br />
+De aanvraag die je recent verstuurde voor een nieuwe cursus ({NAME}) werd omwille van volgende reden geweigerd:<br />
+{MOTIVATION}<br />
+<br />
+Neem contact op met {DENIER} voor meer informatie.<br />
+<br />
+Met vriendelijke groeten,<br />
+Je {PLATFORM} team"
+RequestDeniedMailBodySimple = "Beste {USER},<br />
+<br />
+De aanvraag die je recent verstuurde voor een cursus ({NAME}) werd geweigerd. Neem contact op met {DENIER} voor meer informatie.<br />
+<br />
+Met vriendelijke groeten,<br />
+Je {PLATFORM} team"
+RequestCreatedMailTitle = "[{PLATFORM}] Nieuwe cursusaanvraag"
+RequestCreatedMailBody = "Beste {USER},<br />
+<br />
+Er werd een nieuwe cursusaanvraag ingediend. Gelieve deze wanneer mogelijk te evalueren op de daartoe bestemde beheerspagina. (Cursussen >> Lijst aanvragen >> Hangende aanvragen)<br />
+<br />
+Met vriendelijke groeten,<br />
+Je {PLATFORM} team"
+RightsComponent = "Configureer toegangsrechten"
+NoRequestsPending = "Er zijn op dit moment geen hangende aanvragen"
+NoRequestsFormDirectly = "Je hebt geen voorgaande of hangende aanvragen, dus hebben we je automatisch doorgestuurd naar het aanvraagformulier."
+Name = "Naam"
+Subject = "Onderwerp"
+CourseType = "Cursustype"
+AllowUpgrade = "Sta upgrade toe"
+AllowRequest = "Sta request toe"
+Step = "Stap"
+MaximumUser = "Maximaal gebruiker"
+DiskQuota = "Disk quota"
+QuotaPolicy = "Quota policy"
+QuotaFallback = "Quota fallback"
+CategoryId = "Cursuscategorie"
+General = "Algemeen"
+QuotaPolicyUser = "QuotaPolicyUser"
+QuotaPolicyGroupHighest = "QuotaPolicyGroupHighest"
+QuotaPolicyGroupLowest = "QuotaPolicyGroupLowest"
+QuotaPolicyHighest = "QuotaPolicyHighest"
+QuotaPolicyLowest = "QuotaPolicyLowest"
+QuotaFallbackUserGroupHighest = "QuotaFallbackUserGroupHighest"
+QuotaFallbackUserGroupLowest = "QuotaFallbackUserGroupLowest"
+QuotaFallbackUser = "QuotaFallbackUser"
+CategoryId = "Cursuscategorie"
