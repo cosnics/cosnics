@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Component;
 
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathItemAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathQuestionAttempt;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
@@ -148,13 +149,19 @@ class AssessmentRawResultsExporterComponent extends Manager
 
         while ($learning_path_item_attempt = $learning_path_item_attempts->next_result())
         {
+            /**
+             * @var LearningPathItemAttempt $learning_path_item_attempt
+             */
+            /**
+             * @var LearningPathAttempt $learning_path_attempt
+             */
             $learning_path_attempt = WeblcmsTrackingDataManager :: retrieve_by_id(
-                LearningPathItemAttempt :: class_name(),
+                LearningPathAttempt :: class_name(),
                 $learning_path_item_attempt->get_learning_path_attempt_id());
 
             $assessment_result = new AssessmentResult(
                 $learning_path_item_attempt->get_id(),
-                $this->complex_learning_path_item_assessment_mapper[$learning_path_item_attempt->get_lp_item_id()],
+                $this->complex_learning_path_item_assessment_mapper[$learning_path_item_attempt->get_learning_path_item_id()],
                 null,
                 array(),
                 $learning_path_item_attempt->get_start_time(),

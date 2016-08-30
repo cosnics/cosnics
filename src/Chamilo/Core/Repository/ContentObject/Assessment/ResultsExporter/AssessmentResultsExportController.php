@@ -375,7 +375,13 @@ class AssessmentResultsExportController
     protected function export_to_csv()
     {
         $path = Path::getInstance()->getTemporaryPath();
-        $path = $path . DIRECTORY_SEPARATOR . Filesystem::create_unique_name(
+
+        if(!file_exists($path))
+        {
+            Filesystem::create_dir($path);
+        }
+
+        $path = $path . Filesystem::create_unique_name(
             $path,
             'raw_assessment_export' . date('_Y-m-d_H-i-s') . '.csv');
 
