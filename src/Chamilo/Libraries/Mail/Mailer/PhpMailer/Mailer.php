@@ -185,14 +185,32 @@ class Mailer extends AbstractMailer
      * Sends the mail individually
      *
      * @param Mail $mail
+     *
+     * @throws \Exception
      */
     protected function sendIndividually(Mail $mail)
     {
+        $recipientsFailed = array();
+
         foreach($mail->getTo() as $recipient)
         {
             $this->phpMailer->addAddress($recipient, $recipient);
-            $this->send($mail);
+
+            try
+            {
+                $this->send($mail);
+            }
+            catch(\Exception $ex)
+            {
+                $recipientsFailed[] = $recipient;
+            }
+
             $this->phpMailer->clearAllRecipients();
+        }
+
+        if(count($recipientsFailed) >  0)
+        {
+            throw new \Exception('Some mails could not be send (' . implode(', ', $recipientsFailed) . ')');
         }
     }
 
