@@ -5,7 +5,6 @@ use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manag
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -30,9 +29,7 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) && RightsService :: getInstance()->canEditContentObject(
-            $this->get_user(),
-            $this->get_current_content_object()))
+        if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();

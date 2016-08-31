@@ -18,7 +18,7 @@ class DirectMoverComponent extends Manager
     function run()
     {
         $currentNode = $this->get_current_node();
-        if (!$this->get_application()->is_allowed_to_edit_content_object($currentNode))
+        if (!$this->canEditComplexContentObjectPathNode($currentNode))
         {
             throw new NotAllowedException();
         }

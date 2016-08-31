@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Display;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -239,5 +240,22 @@ abstract class Manager extends Application
                 self :: PARAM_ACTION => self :: ACTION_VIEW_ATTACHMENT,
                 self :: PARAM_ATTACHMENT_ID => $attachment->get_id(),
                 self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item_id));
+    }
+
+    /**
+     * Checks if a complex content object path node can be editted
+     *
+     * @param ComplexContentObjectPathNode $complexContentObjectPathNode
+     *
+     * @return bool
+     */
+    protected function canEditComplexContentObjectPathNode(ComplexContentObjectPathNode $complexContentObjectPathNode)
+    {
+        if($this->get_application()->is_allowed_to_edit_content_object($this->get_current_node()))
+        {
+            return true;
+        }
+
+        return $complexContentObjectPathNode->get_content_object()->get_owner_id() == $this->getUser()->getId();
     }
 }

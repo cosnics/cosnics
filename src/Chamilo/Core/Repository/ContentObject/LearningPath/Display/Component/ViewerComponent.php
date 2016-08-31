@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\PrerequisitesTranslator;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Path;
@@ -75,7 +74,7 @@ class ViewerComponent extends TabComponent
 
         $translator = new PrerequisitesTranslator($this->get_current_node());
 
-        if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) &&
+        if (! $this->canEditComplexContentObjectPathNode($this->get_current_node()) &&
              ! $translator->can_execute())
         {
             $html = array();
@@ -207,7 +206,7 @@ class ViewerComponent extends TabComponent
      */
     protected function addCreatorButtons($buttonGroup, $translator)
     {
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+        if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_COMPLEX_CONTENT_OBJECT_ITEM;
@@ -245,9 +244,7 @@ class ViewerComponent extends TabComponent
      */
     protected function addUpdateButton($current_content_object, $buttonGroup, $translator)
     {
-        if (
-            $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()) ||
-             RightsService::getInstance()->canEditContentObject($this->get_user(), $current_content_object))
+        if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             $editTitle = $translator->getTranslation('UpdaterComponent', null, Manager::context());
             $editImage = new FontAwesomeGlyph('pencil');
@@ -285,7 +282,7 @@ class ViewerComponent extends TabComponent
      */
     protected function addManageButton($buttonGroup, $translator)
     {
-        if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+        if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             if ($this->get_current_content_object() instanceof LearningPath &&
                  count($this->get_current_node()->get_children()) > 1)
@@ -310,7 +307,7 @@ class ViewerComponent extends TabComponent
     protected function addDeleteButton($buttonGroup, $translator)
     {
         if (! $this->get_current_node()->is_root() &&
-             $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()))
+             $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent()))
         {
             $buttonGroup->addButton(
                 new Button(
@@ -335,7 +332,7 @@ class ViewerComponent extends TabComponent
     // new BootstrapGlyph('random'));
     //
     // if (! $this->get_current_node()->is_root() &&
-    // $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()))
+    // $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent()))
     // {
     // $moveButton->addSubButton(
     // new SubButton(
@@ -348,7 +345,7 @@ class ViewerComponent extends TabComponent
     // }
     //
     // if (! $this->get_current_node()->is_root() &&
-    // $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()) &&
+    // $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent()) &&
     // $this->get_current_node()->has_siblings())
     // {
     // if (! $this->get_current_node()->is_last_child())
@@ -394,7 +391,7 @@ class ViewerComponent extends TabComponent
     protected function addMoveButton(ButtonGroup $buttonGroup, Translation $translator)
     {
         if ($this->get_current_node()->is_root() ||
-             ! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent()))
+             ! $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent()))
         {
             return;
         }

@@ -26,7 +26,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
      */
     public function run()
     {
-        if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+        if (! $this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             throw new NotAllowedException();
         }

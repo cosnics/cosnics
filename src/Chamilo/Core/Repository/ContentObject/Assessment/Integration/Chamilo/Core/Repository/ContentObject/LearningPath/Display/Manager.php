@@ -29,7 +29,7 @@ abstract class Manager extends Application
         $tabs = array();
         $current_content_object = $node->get_content_object();
 
-        if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object($node) &&
+        if ($this->get_parent()->canEditComplexContentObjectPathNode($node) &&
              RightsService::getInstance()->canEditContentObject($this->get_user(), $current_content_object))
         {
             $secondaryActions->addButton(
