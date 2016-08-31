@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -89,4 +90,5 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->get_parent()->get_root_content_object()->get_complex_content_object_path()->get_node(
             $this->get_current_step());
     }
+
 }

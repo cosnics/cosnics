@@ -249,9 +249,11 @@ abstract class Manager extends Application
      *
      * @return bool
      */
-    protected function canEditComplexContentObjectPathNode(ComplexContentObjectPathNode $complexContentObjectPathNode)
+    protected function canEditComplexContentObjectPathNode(
+        ComplexContentObjectPathNode $complexContentObjectPathNode = null
+    )
     {
-        if($this->get_application()->is_allowed_to_edit_content_object($this->get_current_node()))
+        if($this->get_application()->is_allowed_to_edit_content_object($complexContentObjectPathNode))
         {
             return true;
         }
