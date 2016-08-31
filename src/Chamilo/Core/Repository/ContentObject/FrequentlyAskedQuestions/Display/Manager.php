@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
