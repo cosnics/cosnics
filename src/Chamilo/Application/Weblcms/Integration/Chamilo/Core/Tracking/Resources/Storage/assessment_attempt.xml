@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="assessment_attempt">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="user_id" type="integer" unsigned="1" notnull="1" />
+		<property name="course_id" type="integer" unsigned="1" notnull="1" />
+		<property name="assessment_id" type="integer" unsigned="1" notnull="1" />
+		<property name="total_score" type="integer" />
+		<property name="status" type="integer" unsigned="1" notnull="1" default="1" />
+		<property name="start_time" type="integer" unsigned="1" notnull="1" />
+		<property name="end_time" type="integer" unsigned="1" notnull="1" />
+		<property name="total_time" type="integer" unsigned="1" notnull="1" />
+	</properties>
+	<index name="assessment_id">
+		<indexproperty name="assessment_id" />
+	</index>
+	<index name="user_id">
+		<indexproperty name="user_id" />
+	</index>
+	<index name="course_id">
+		<indexproperty name="course_id" />
+	</index>
+</object>
