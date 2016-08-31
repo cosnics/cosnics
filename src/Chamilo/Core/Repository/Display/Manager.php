@@ -249,7 +249,7 @@ abstract class Manager extends Application
      *
      * @return bool
      */
-    protected function canEditComplexContentObjectPathNode(
+    public function canEditComplexContentObjectPathNode(
         ComplexContentObjectPathNode $complexContentObjectPathNode = null
     )
     {
