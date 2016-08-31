@@ -91,7 +91,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     ToolbarItem :: DISPLAY_ICON));
         }
 
-        if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object($node->get_parent()))
+        if ($this->get_component()->canEditComplexContentObjectPathNode($node->get_parent()))
         {
             $variable = $node->get_content_object() instanceof Portfolio ? 'MoveFolder' : 'MoverComponent';
 
@@ -108,7 +108,7 @@ class ItemTableCellRenderer extends DataClassTableCellRenderer implements TableC
                     ToolbarItem :: DISPLAY_ICON));
         }
 
-        if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object($node->get_parent()))
+        if ($this->get_component()->canEditComplexContentObjectPathNode($node->get_parent()))
         {
             $variable = $node->get_content_object() instanceof Portfolio ? 'DeleteFolder' : 'DeleterComponent';
 

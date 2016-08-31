@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
-use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -318,7 +317,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $contentItems = new ButtonGroup();
             $this->buttonToolBar->addItem($contentItems);
 
-            if ($this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+            if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
             {
                 if ($this->get_current_node()->get_content_object() instanceof Portfolio)
                 {
@@ -340,15 +339,12 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                 }
             }
 
-            $canEditNodeOrContentObject = $this->get_parent()->is_allowed_to_edit_content_object(
-                    $this->get_current_node()
-                ) && RightsService:: getInstance()->canEditContentObject(
-                    $this->get_user(),
-                    $this->get_current_content_object()
-                );
+            $canEditNodeOrContentObject = $this->canEditComplexContentObjectPathNode(
+                $this->get_current_node()
+            );
 
             $canMoveNode = !$this->get_current_node()->is_root() &&
-                $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent());
+                $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent());
 
             if ($canEditNodeOrContentObject || $canMoveNode)
             {
@@ -556,7 +552,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             }
 
             if (!$this->get_current_node()->is_root() &&
-                $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()->get_parent())
+                $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent())
             )
             {
                 $variable =
@@ -715,7 +711,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             );
         }
 
-        $isManagingAllowed = $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node());
+        $isManagingAllowed = $this->canEditComplexContentObjectPathNode($this->get_current_node());
 
         if ($isManagingAllowed)
         {

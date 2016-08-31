@@ -30,7 +30,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function build()
     {
-        if (! $this->get_parent()->is_allowed_to_edit_content_object($this->get_current_node()))
+        if (! $this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             throw new NotAllowedException();
         }

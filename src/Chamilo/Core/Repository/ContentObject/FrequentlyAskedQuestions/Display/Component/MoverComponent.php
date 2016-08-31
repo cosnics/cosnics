@@ -42,7 +42,7 @@ class MoverComponent extends Manager
         {
             $selected_node = $path->get_node($selected_step);
 
-            if ($this->get_parent()->is_allowed_to_edit_content_object($selected_node->get_parent()))
+            if ($this->canEditComplexContentObjectPathNode($selected_node->get_parent()))
             {
                 $available_nodes[] = $selected_node;
             }
