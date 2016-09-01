@@ -72,12 +72,12 @@ class Csv implements ImportFormatInterface
     }
 
     /**
-     * Returns the import type
+     * Returns the possible import mime types
      *
      * @return string
      */
-    public function getImportType()
+    public function getImportMimeTypes()
     {
-        return 'text/csv';
+        return array('text/csv', 'text/comma-separated-values');
     }
 }

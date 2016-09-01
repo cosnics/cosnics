@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 
+use Chamilo\Application\Weblcms\Domain\ValueObject\ImportedCourseEntityRelation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -20,9 +21,9 @@ interface ImportFormatInterface
     public function parseFile(UploadedFile $file);
 
     /**
-     * Returns the import type
+     * Returns the possible import mime types
      *
      * @return string
      */
-    public function getImportType();
+    public function getImportMimeTypes();
 }

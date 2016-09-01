@@ -40,9 +40,11 @@ class ImportFormatFactory
     {
         $importFormat = $this->getImportFormatByMimeType($file->getClientMimeType());
 
-        if (! $importFormat)
+        if (!$importFormat)
         {
-            throw new \Exception(sprintf('Importing with the given format %s is not supported', $file->getMimeType()));
+            throw new \Exception(
+                sprintf('Importing with the given format %s is not supported', $file->getClientMimeType())
+            );
         }
 
         return $importFormat;
@@ -59,7 +61,7 @@ class ImportFormatFactory
     {
         foreach ($this->importFormats as $importFormat)
         {
-            if ($importFormat->getImportType() == $mimeType)
+            if (in_array($mimeType, $importFormat->getImportMimeTypes()))
             {
                 return $importFormat;
             }
