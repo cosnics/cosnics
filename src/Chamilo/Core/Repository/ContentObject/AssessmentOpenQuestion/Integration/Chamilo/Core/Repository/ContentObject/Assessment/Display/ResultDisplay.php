@@ -43,7 +43,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 break;
         }
 
-        $html[] = '<div class="splitter" style="margin: -10px; border-left: none; border-right: none; border-top: 1px solid #B5CAE7;">';
+        $html[] = '<div class="splitter" style="margin: -10px -10px 10px -10px; border-left: none; border-right: none; border-top: 1px solid #B5CAE7;">';
         $html[] = Translation :: get('Feedback');
         $html[] = '</div>';
 
@@ -67,7 +67,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
     public function display_open($answer)
     {
         $html = array();
-        $html[] = '<div class="splitter" style="margin: -10px; border-left: none; border-right: none;">';
+        $html[] = '<div class="splitter" style="margin: -10px -10px 0 -10px; border-left: none; border-right: none;">';
         $html[] = Translation :: get('Answer');
         $html[] = '</div>';
 
@@ -92,11 +92,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html = array();
         if ($with_open)
         {
-            $html[] = '<div class="splitter" style="margin: -10px; border-left: none; border-right: none; border-top: 1px solid #B5CAE7;">';
+            $html[] = '<div class="splitter" style="margin: -10px -10px 0 -10px; border-left: none; border-right: none; border-top: 1px solid #B5CAE7;">';
         }
         else
         {
-            $html[] = '<div class="splitter" style="margin: -10px; border-left: none; border-right: none;">';
+            $html[] = '<div class="splitter" style="margin: -10px -10px 0 -10px; border-left: none; border-right: none;">';
         }
 
         $html[] = Translation :: get('Document');
