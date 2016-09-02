@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\repo_viewer
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+BrowserTitle = "Parcourir"
+ComponentFailedToLoad = "Le composant a échoué à charger"
+CreatorTitle = "Créer"
+EditAndPublish = "Éditer et publier"
+Preview = "Extrait"
+PublishSelected = "Publier"
+RepoViewerBrowserComponent = "Parcourir le dépôt"
+RepoViewerCreatorComponent = "Créer un objet"
+SelectMaximumNumberOfContentObjects = "Sélectionnez nombre maximum d'objets de contenu"
+SharedContentObjects = "Les objets partagés"
+SharedSearchResults = "Résultats de la recherche"
+TypeName = "Repository Viewer"
