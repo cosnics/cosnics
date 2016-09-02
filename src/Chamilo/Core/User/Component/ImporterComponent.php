@@ -125,7 +125,7 @@ class ImporterComponent extends Manager
         $html[] = '        &lt;activation_date&gt;YYYY-MM-DD HH:MM:SS/0&lt;/activation_date&gt;';
         $html[] = '        &lt;expiration_date&gt;YYYY-MM-DD HH:MM:SS/0&lt;/expiration_date&gt;';
         $html[] = '';
-        $html[] = '        &lt;auth_source&gt;platform/ldap&lt;/auth_source&gt;';
+        $html[] = '        &lt;auth_source&gt;Platform/Ldap/Cas&lt;/auth_source&gt;';
         $html[] = '';
         $html[] = '    &lt;/Contact&gt;';
         $html[] = '&lt;/Contacts&gt;';
