@@ -81,7 +81,7 @@ class UserImportForm extends FormValidator
             Translation:: get('ConfirmNo', null, Utilities :: COMMON_LIBRARIES),
             0
         );
-        $this->addGroup($group, 'mail', Translation:: get('SendMailToNewUser'), '&nbsp;');
+        $this->addGroup($group, 'mail', Translation:: get('SendMailToNewUser'), '');
 
         $buttons[] = $this->createElement(
             'style_submit_button',

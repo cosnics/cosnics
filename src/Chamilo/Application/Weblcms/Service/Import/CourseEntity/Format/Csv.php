@@ -78,6 +78,6 @@ class Csv implements ImportFormatInterface
      */
     public function getImportMimeTypes()
     {
-        return array('text/csv', 'text/comma-separated-values');
+        return array('application/vnd.ms-excel', 'text/csv', 'text/comma-separated-values');
     }
 }
