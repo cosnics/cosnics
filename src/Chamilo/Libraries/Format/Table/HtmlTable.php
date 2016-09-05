@@ -289,11 +289,11 @@ abstract class HtmlTable extends \HTML_Table
         if (is_null($this->pager))
         {
             $numberOfItemsPerPage = $this->getNumberOfItemsPerPage();
-            $concreteNumberOfItemsPerPage = $numberOfItemsPerPage == Pager::DISPLAY_ALL ?
+            $actualNumberOfItemsPerPage = $numberOfItemsPerPage == Pager::DISPLAY_ALL ?
                 $this->countSourceData() : $numberOfItemsPerPage;
 
             $this->pager = new Pager(
-                $concreteNumberOfItemsPerPage,
+                $actualNumberOfItemsPerPage,
                 $this->getColumnCount(),
                 $this->countSourceData(),
                 $this->getPageNumber()
