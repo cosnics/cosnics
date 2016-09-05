@@ -73,6 +73,11 @@ class AssessmentMatrixQuestionOption
         return unserialize($this->matches);
     }
 
+    public function get_serialized_matches()
+    {
+        return $this->matches;
+    }
+
     public function set_feedback($value)
     {
         $this->feedback = $value;
