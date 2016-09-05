@@ -44,7 +44,7 @@ class RepositoryImplementationItem extends Bar
                 \Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY => $this->getItem()->get_instance_id()));
 
         $html[] = '<a ' . $class . 'href="' . $redirect->getUrl() . '">';
-        $title = $this->getItem()->get_name();
+        $title = htmlentities($this->getItem()->get_name());
 
         if ($this->getItem()->show_icon())
         {

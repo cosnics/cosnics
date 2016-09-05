@@ -22,7 +22,7 @@ class DefaultExternalTableCellRenderer extends DataClassTableCellRenderer implem
                 $title_short = StringUtilities :: getInstance()->truncate($object->get_title(), 50, false);
                 return '<a href="' .
                      htmlentities($this->get_component()->get_external_repository_object_viewing_url($object)) .
-                     '" title="' . $object->get_title() . '">' . $title_short . '</a>';
+                     '" title="' . htmlentities($object->get_title()) . '">' . $title_short . '</a>';
             case ExternalObject :: PROPERTY_DESCRIPTION :
                 return StringUtilities :: getInstance()->truncate($object->get_description(), 50);
             case ExternalObject :: PROPERTY_CREATED :

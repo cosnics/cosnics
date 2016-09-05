@@ -273,7 +273,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
         $html[] = '<li class="list-group-item">';
         $html[] = '<img src="' . $option->get_image_path(Theme::ICON_MEDIUM) . '" />';
         $html[] = '&nbsp;&nbsp;';
-        $html[] = '<a href="' . $url . '" title="' . $option->get_label() . '">';
+        $html[] = '<a href="' . $url . '" title="' . htmlentities($option->get_label()) . '">';
         $html[] = $option->get_label();
         $html[] = '</a>';
         $html[] = '</li>';

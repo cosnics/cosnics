@@ -101,7 +101,7 @@ abstract class InlineGlyph
      */
     public function render()
     {
-        $title = $this->getTitle() ? ' title="' . $this->getTitle() . '"' : '';
+        $title = $this->getTitle() ? ' title="' . htmlentities($this->getTitle()) . '"' : '';
         return '<span class="' . implode(' ', $this->getClassNames()) . '"' . $title . '></span>';
     }
 

@@ -177,7 +177,7 @@ class ToolbarItem
         $button = '';
         if (($this->display & self :: DISPLAY_ICON) == self :: DISPLAY_ICON && isset($this->image))
         {
-            $button .= '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' . $label . '"' .
+            $button .= '<img src="' . htmlentities($this->image) . '" alt="' . $label . '" title="' . htmlentities($label) . '"' .
                  ($display_label ? ' class="labeled"' : '') . '/>';
         }
 
@@ -227,7 +227,7 @@ class ToolbarItem
 
             $extraAttributesString = implode(' ', $extraAttributesString);
 
-            $button = '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' . $label . '"' .
+            $button = '<a' . $class . $target . ' href="' . htmlentities($this->href) . '" title="' . htmlentities($label) . '"' .
                  ($this->needs_confirmation() ? ' onclick="return confirm(\'' .
                  addslashes(htmlentities($this->get_confirmation())) . '\');"' : '') . ' ' . $extraAttributesString . '>' .
                  $button . '</a>';

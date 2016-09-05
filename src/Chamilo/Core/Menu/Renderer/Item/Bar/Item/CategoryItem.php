@@ -104,7 +104,7 @@ class CategoryItem extends Bar
 
             $html[] = '<img class="chamilo-menu-item-icon' .
                 ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') .
-                '" src="' . $imagePath . '" title="' . $title . '" alt="' .
+                '" src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' .
                  $title . '" />';
         }
 

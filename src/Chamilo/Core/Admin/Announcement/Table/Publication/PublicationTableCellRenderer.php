@@ -45,7 +45,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
                             array(
                                 Manager :: PARAM_ACTION => Manager :: ACTION_VIEW,
                                 Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication[Publication :: PROPERTY_ID]))) .
-                     '" title="' . $content_object->get_title() . '">' . $title_short . '</a>';
+                     '" title="' . htmlentities($content_object->get_title()) . '">' . $title_short . '</a>';
                 break;
             case Publication :: PROPERTY_PUBLICATION_DATE :
                 $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);

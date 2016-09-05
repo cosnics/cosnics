@@ -137,7 +137,7 @@ class PeerAssessmentGraph
         }
 
         return '<div style="float: left;"><img src="data:image/png;base64,' . base64_encode(file_get_contents($path)) .
-             '" border="0" alt="' . $this->title . '" title="' . $this->title . '" /></div>';
+             '" border="0" alt="' . $this->title . '" title="' . htmlentities($this->title) . '" /></div>';
     }
 
     /**

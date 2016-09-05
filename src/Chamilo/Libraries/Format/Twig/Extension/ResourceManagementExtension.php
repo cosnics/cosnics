@@ -83,7 +83,7 @@ class ResourceManagementExtension extends \Twig_Extension
 
         if (! empty($label))
         {
-            $html[] = 'alt="' . $label . '" title="' . $label . '"';
+            $html[] = 'alt="' . $label . '" title="' . htmlentities($label) . '"';
         }
 
         if (! empty($class))

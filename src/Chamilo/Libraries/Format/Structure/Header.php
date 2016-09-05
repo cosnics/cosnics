@@ -300,7 +300,7 @@ class Header
     public function addLink($url, $rel = null, $title = null, $type = null)
     {
         $type = $type ? ' type="' . $type . '"' : '';
-        $title = $title ? ' title="' . $title . '"' : '';
+        $title = $title ? ' title="' . htmlentities($title) . '"' : '';
         $rel = $rel ? ' rel="' . $rel . '"' : '';
         $href = ' href="' . $url . '"';
         $header = '<link' . $href . $rel . $title . $type . '/>';

@@ -140,7 +140,7 @@ class DynamicAction
 
         $html[] = '<div class="pull-left icon">';
         $html[] = '<a href="' . $this->get_url() . '" ' . $onclick . '><img src="' . $this->get_image() . '" alt="' .
-             $this->get_title() . '" title="' . $this->get_title() . '"/></a>';
+             $this->get_title() . '" title="' . htmlentities($this->get_title()) . '"/></a>';
         $html[] = '</div>';
 
         $html[] = '<div class="pull-left">';

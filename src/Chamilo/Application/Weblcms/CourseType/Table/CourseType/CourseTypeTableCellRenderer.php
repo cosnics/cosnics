@@ -50,7 +50,7 @@ class CourseTypeTableCellRenderer extends DataClassTableCellRenderer implements 
                     $name_short = mb_substr($name_short, 0, 50) . '&hellip;';
                 }
                 return '<a href="' . $this->get_component()->get_view_course_type_url($course_type->get_id()) .
-                     '" title="' . $name . '">' . $name_short . '</a>';
+                     '" title="' . htmlentities($name) . '">' . $name_short . '</a>';
 
             case CourseType :: PROPERTY_DESCRIPTION :
                 $description = strip_tags(parent :: render_cell($column, $course_type));

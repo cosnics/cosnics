@@ -39,7 +39,7 @@ abstract class EventTableRenderer extends EventRenderer
 
         $fullTitle = $this->renderFullTitle();
 
-        $html[] = '<a href="' . $this->getEvent()->getUrl() . '" title="' . strip_tags($fullTitle) . '">';
+        $html[] = '<a href="' . $this->getEvent()->getUrl() . '" title="' . htmlentities(strip_tags($fullTitle)) . '">';
         $html[] = $fullTitle;
         $html[] = '</a>';
 

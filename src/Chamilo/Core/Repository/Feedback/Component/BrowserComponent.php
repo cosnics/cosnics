@@ -231,7 +231,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $bootstrapGlyph = new BootstrapGlyph('remove');
         $title = Translation:: get('Delete', null, Utilities :: COMMON_LIBRARIES);
-        $delete_link = '<a title="' . $title . '" href="' . $delete_url . '" onclick="return confirm(\'' .
+        $delete_link = '<a title="' . htmlentities($title) . '" href="' . $delete_url . '" onclick="return confirm(\'' .
             addslashes(Translation:: get('Confirm', null, Utilities :: COMMON_LIBRARIES)) . '\');">' .
             $bootstrapGlyph->render() . '</a>';
 
@@ -255,7 +255,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $bootstrapGlyph = new BootstrapGlyph('pencil');
         $title = Translation:: get('Edit', null, Utilities :: COMMON_LIBRARIES);
-        $update_link = '<a title="' . $title . '" href="' . $update_url . '">' . $bootstrapGlyph->render() . '</a>';
+        $update_link = '<a title="' . htmlentities($title) . '" href="' . $update_url . '">' . $bootstrapGlyph->render() . '</a>';
 
         return $update_link;
     }

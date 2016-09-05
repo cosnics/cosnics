@@ -1331,7 +1331,7 @@ class ContentObject extends CompositeDataClass
     {
         return '<img src="' . static::icon_path($context, $size, $is_current) . '" alt="' . static::type_string(
             $context,
-            $type_string) . '" title="' . static::type_string($context, $type_string) . '"/>';
+            $type_string) . '" title="' . htmlentities(static::type_string($context, $type_string)) . '"/>';
     }
 
     public function get_icon_path($size = Theme :: ICON_SMALL)

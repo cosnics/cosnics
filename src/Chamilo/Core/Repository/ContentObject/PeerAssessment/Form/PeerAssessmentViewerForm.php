@@ -112,7 +112,7 @@ class PeerAssessmentViewerForm extends FormValidator
         // loop over the indicators to build the header cells
         foreach ($this->indicators as $i)
         {
-            $table_header[] = '<th title="' . trim(strip_tags($i->get_description())) . '" style="word-wrap: break-all">' .
+            $table_header[] = '<th title="' . trim(htmlentities(strip_tags($i->get_description()))) . '" style="word-wrap: break-all">' .
                  $i->get_title() . '</th>';
         }
         $table_header[] = '</tr>';

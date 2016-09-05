@@ -81,7 +81,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
                 '<img title="' . Translation:: get('DownloadFile', array('LABEL' => $label)) .
                 '" src="' . $url . '&display=1"
                         alt="' . $parameters[self :: PARAM_ALT] . '"
-                        title="' . $parameters[self :: PARAM_ALT] . '"
+                        title="' . htmlentities($parameters[self :: PARAM_ALT]) . '"
                         style="' . $styles_string . '">';
         }
 

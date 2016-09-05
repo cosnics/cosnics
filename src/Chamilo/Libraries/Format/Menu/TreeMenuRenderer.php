@@ -82,7 +82,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
 
         if (! $node['safe_title'])
         {
-            $node['safe_title'] = strip_tags($node['title']);
+            $node['safe_title'] = htmlentities(strip_tags($node['title']));
         }
 
         parent::renderEntry($node, $level, $type);

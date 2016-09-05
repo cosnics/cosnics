@@ -218,7 +218,7 @@ class BreadcrumbTrail
 
                 if ($breadcrumb->getImage())
                 {
-                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' . $breadcrumb->get_name() .
+                    $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' . htmlentities($breadcrumb->get_name()) .
                          '">';
                 }
                 elseif ($breadcrumb->getGlyph())

@@ -34,7 +34,7 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
         {
             $video = array();
             
-            $video[] = '<video class="projekktor" title="' . $object->get_title() .
+            $video[] = '<video class="projekktor" title="' . htmlentities($object->get_title()) .
                  '" width="640" height="390" controls>';
             $video[] = '</video>';
             
