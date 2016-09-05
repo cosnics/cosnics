@@ -154,10 +154,13 @@ abstract class HtmlTable extends \HTML_Table
      * @param boolean $allowPageSelection
      * @param boolean $allowPageNavigation
      */
-    public function __construct($tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
-        $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true, $allowPageNavigation = true)
+    public function __construct(
+        $tableName = 'table', $sourceCountFunction = null, $sourceDataFunction = null, $defaultOrderColumn = 1,
+        $defaultNumberOfItemsPerPage = 20, $defaultOrderDirection = SORT_ASC, $allowPageSelection = true,
+        $allowPageNavigation = true
+    )
     {
-        parent :: __construct(array('class' => $this->getTableClasses(), 'id' => $tableName), 0, true);
+        parent:: __construct(array('class' => $this->getTableClasses(), 'id' => $tableName), 0, true);
 
         $this->tableName = $tableName;
         $this->additionalParameters = array();
@@ -199,6 +202,7 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @param string $parameter
+     *
      * @return string
      */
     protected function getParameterName($parameter)
@@ -213,7 +217,7 @@ abstract class HtmlTable extends \HTML_Table
     protected function determinePageNumber()
     {
         $variableName = $this->getParameterName(self :: PARAM_PAGE_NUMBER);
-        $requestedPageNumber = Request :: get($variableName);
+        $requestedPageNumber = Request:: get($variableName);
 
         return $requestedPageNumber ? $requestedPageNumber : 1;
     }
@@ -221,25 +225,27 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @param integer $defaultOrderColumn
+     *
      * @return integer
      */
     protected function determineOrderColumn($defaultOrderColumn)
     {
         $variableName = $this->getParameterName(self :: PARAM_ORDER_COLUMN);
-        $requestedOrderColumn = Request :: get($variableName);
+        $requestedOrderColumn = Request:: get($variableName);
 
-        return ! is_null($requestedOrderColumn) ? $requestedOrderColumn : $defaultOrderColumn;
+        return !is_null($requestedOrderColumn) ? $requestedOrderColumn : $defaultOrderColumn;
     }
 
     /**
      *
      * @param integer $defaultOrderDirection
+     *
      * @return integer
      */
     protected function determineOrderDirection($defaultOrderDirection)
     {
         $variableName = $this->getParameterName(self :: PARAM_ORDER_DIRECTION);
-        $requestedOrderDirection = Request :: get($variableName);
+        $requestedOrderDirection = Request:: get($variableName);
 
         return $requestedOrderDirection ? $requestedOrderDirection : $defaultOrderDirection;
     }
@@ -247,21 +253,30 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @param integer $defaultNumberOfItemsPerPage
+     *
      * @return integer
      */
     protected function determineNumberOfItemsPerPage($defaultNumberOfItemsPerPage)
     {
         $variableName = $this->getParameterName(self :: PARAM_NUMBER_OF_ITEMS_PER_PAGE);
-        $requestedNumberOfItemsPerPage = Request :: get($variableName);
+        $requestedNumberOfItemsPerPage = Request:: get($variableName);
 
-        if ($requestedNumberOfItemsPerPage == Pager :: DISPLAY_ALL)
-        {
-            return $this->countSourceData();
-        }
-        else
-        {
-            return $requestedNumberOfItemsPerPage ? $requestedNumberOfItemsPerPage : $defaultNumberOfItemsPerPage;
-        }
+        return $requestedNumberOfItemsPerPage ? $requestedNumberOfItemsPerPage : $defaultNumberOfItemsPerPage;
+    }
+
+    /**
+     * Returns the filter parameters for this table
+     *
+     * @return array
+     */
+    public function getTableFilterParameters()
+    {
+        return array(
+            $this->getParameterName(self::PARAM_PAGE_NUMBER) => $this->getPageNumber(),
+            $this->getParameterName(self::PARAM_ORDER_COLUMN) => $this->getOrderColumn(),
+            $this->getParameterName(self::PARAM_ORDER_DIRECTION) => $this->getOrderDirection(),
+            $this->getParameterName(self::PARAM_NUMBER_OF_ITEMS_PER_PAGE) => $this->getNumberOfItemsPerPage()
+        );
     }
 
     /**
@@ -273,11 +288,16 @@ abstract class HtmlTable extends \HTML_Table
     {
         if (is_null($this->pager))
         {
+            $numberOfItemsPerPage = $this->getNumberOfItemsPerPage();
+            $concreteNumberOfItemsPerPage = $numberOfItemsPerPage == Pager::DISPLAY_ALL ?
+                $this->countSourceData() : $numberOfItemsPerPage;
+
             $this->pager = new Pager(
-                $this->getNumberOfItemsPerPage(),
+                $concreteNumberOfItemsPerPage,
                 $this->getColumnCount(),
                 $this->countSourceData(),
-                $this->getPageNumber());
+                $this->getPageNumber()
+            );
         }
 
         return $this->pager;
@@ -314,12 +334,12 @@ abstract class HtmlTable extends \HTML_Table
         $cols = $this->getHeader()->getColCount();
 
         $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
-        $this->setCellContents(0, 0, Translation :: get('NoSearchResults', null, Utilities :: COMMON_LIBRARIES));
+        $this->setCellContents(0, 0, Translation:: get('NoSearchResults', null, Utilities :: COMMON_LIBRARIES));
 
         $html = array();
 
         $html[] = '<div class="table-responsive">';
-        $html[] = parent :: toHTML();
+        $html[] = parent:: toHTML();
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -332,7 +352,7 @@ abstract class HtmlTable extends \HTML_Table
     public function renderTableHeader()
     {
         $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-             $this->getTableFormActions()->has_form_actions();
+            $this->getTableFormActions()->has_form_actions();
 
         $html = array();
 
@@ -342,7 +362,7 @@ abstract class HtmlTable extends \HTML_Table
             $firstFormAction = array_shift($tableFormActions);
 
             $html[] = '<form class="' . $this->getFormClasses() . '" method="post" action="' .
-                 $firstFormAction->get_action() . '" name="form_' . $this->tableName . '">';
+                $firstFormAction->get_action() . '" name="form_' . $this->tableName . '">';
         }
 
         $html[] = '<div class="row">';
@@ -399,7 +419,8 @@ abstract class HtmlTable extends \HTML_Table
                 $firstAction->get_action(),
                 Button :: DISPLAY_LABEL,
                 $firstAction->getConfirmation(),
-                'btn-sm btn-table-action');
+                'btn-sm btn-table-action'
+            );
             $button->setDropdownClasses('btn-table-action');
 
             foreach ($formActions as $formAction)
@@ -410,7 +431,9 @@ abstract class HtmlTable extends \HTML_Table
                         null,
                         $formAction->get_action(),
                         Button :: DISPLAY_LABEL,
-                        $formAction->getConfirmation()));
+                        $formAction->getConfirmation()
+                    )
+                );
             }
 
             $buttonToolBar->addItem($button);
@@ -424,7 +447,9 @@ abstract class HtmlTable extends \HTML_Table
                     $firstAction->get_action(),
                     Button :: DISPLAY_LABEL,
                     $firstAction->getConfirmation(),
-                    'btn-sm btn-table-action'));
+                    'btn-sm btn-table-action'
+                )
+            );
         }
 
         return $buttonToolBar;
@@ -442,7 +467,7 @@ abstract class HtmlTable extends \HTML_Table
 
         $html[] = $buttonToolBarRenderer->render();
         $html[] = '<input type="hidden" name="' . $this->tableName . '_namespace" value="' .
-             $this->getTableFormActions()->get_namespace() . '"/>';
+            $this->getTableFormActions()->get_namespace() . '"/>';
         $html[] = '<input type="hidden" name="table_name" value="' . $this->tableName . '"/>';
 
         return implode(PHP_EOL, $html);
@@ -455,7 +480,7 @@ abstract class HtmlTable extends \HTML_Table
     public function renderTableFooter()
     {
         $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
-             $this->getTableFormActions()->has_form_actions();
+            $this->getTableFormActions()->has_form_actions();
         $allowNavigation = $this->allowPageSelection || $this->allowPageNavigation;
 
         $html = array();
@@ -525,7 +550,7 @@ abstract class HtmlTable extends \HTML_Table
 
         $html = array();
 
-        if (! $empty_table)
+        if (!$empty_table)
         {
             $html[] = $this->renderTableHeader();
         }
@@ -540,7 +565,7 @@ abstract class HtmlTable extends \HTML_Table
         $html[] = '</div>';
         $html[] = '</div>';
 
-        if (! $empty_table)
+        if (!$empty_table)
         {
             $html[] = $this->renderTableFooter();
         }
@@ -564,13 +589,15 @@ abstract class HtmlTable extends \HTML_Table
             null,
             $this->getNumberOfItemsPerPage(),
             $this->getOrderColumn(),
-            $this->getOrderDirection());
+            $this->getOrderDirection()
+        );
 
         if ($this->allowPageNavigation)
         {
             return $this->getPagerRenderer()->renderPaginationWithPageLimit(
                 $queryParameters,
-                $this->getParameterName(self :: PARAM_PAGE_NUMBER));
+                $this->getParameterName(self :: PARAM_PAGE_NUMBER)
+            );
         }
 
         return '';
@@ -582,28 +609,31 @@ abstract class HtmlTable extends \HTML_Table
      * @param integer $numberOfItemsPerPage
      * @param integer $orderColumn
      * @param integer $orderDirection
+     *
      * @return string[]
      */
-    public function getQueryParameters($pageNumber = null, $numberOfItemsPerPage = null, $orderColumn = null, $orderDirection = null)
+    public function getQueryParameters(
+        $pageNumber = null, $numberOfItemsPerPage = null, $orderColumn = null, $orderDirection = null
+    )
     {
         $queryParameters = array();
 
-        if (! is_null($pageNumber))
+        if (!is_null($pageNumber))
         {
             $queryParameters[$this->getParameterName(self :: PARAM_PAGE_NUMBER)] = $pageNumber;
         }
 
-        if (! is_null($numberOfItemsPerPage))
+        if (!is_null($numberOfItemsPerPage))
         {
             $queryParameters[$this->getParameterName(self :: PARAM_NUMBER_OF_ITEMS_PER_PAGE)] = $numberOfItemsPerPage;
         }
 
-        if (! is_null($orderColumn))
+        if (!is_null($orderColumn))
         {
             $queryParameters[$this->getParameterName(self :: PARAM_ORDER_COLUMN)] = $orderColumn;
         }
 
-        if (! is_null($orderDirection))
+        if (!is_null($orderDirection))
         {
             $queryParameters[$this->getParameterName(self :: PARAM_ORDER_DIRECTION)] = $orderDirection;
         }
@@ -617,7 +647,7 @@ abstract class HtmlTable extends \HTML_Table
      */
     public function getPagerRenderer()
     {
-        if (! isset($this->pagerRenderer))
+        if (!isset($this->pagerRenderer))
         {
             $this->pagerRenderer = new PagerRenderer($this->getPager());
         }
@@ -657,7 +687,7 @@ abstract class HtmlTable extends \HTML_Table
             $this->setColAttributes($column, $attributes);
         }
 
-        return \HTML_Table :: toHTML();
+        return \HTML_Table:: toHTML();
     }
 
     /**
@@ -689,11 +719,13 @@ abstract class HtmlTable extends \HTML_Table
                 $this->getPageNumber(),
                 null,
                 $this->getOrderColumn(),
-                $this->getOrderDirection());
+                $this->getOrderDirection()
+            );
 
             return $this->getPagerRenderer()->renderItemsPerPageSelector(
                 $queryParameters,
-                $this->getParameterName(self :: PARAM_NUMBER_OF_ITEMS_PER_PAGE));
+                $this->getParameterName(self :: PARAM_NUMBER_OF_ITEMS_PER_PAGE)
+            );
         }
 
         return '';
@@ -706,9 +738,12 @@ abstract class HtmlTable extends \HTML_Table
      * @param boolean $sortable
      * @param string[] $headerAttributes
      * @param string[] $cellAttributes
+     *
      * @return string
      */
-    public function setColumnHeader($orderColumn, $label, $isSortable = true, $headerAttributes = null, $cellAttributes = null)
+    public function setColumnHeader(
+        $orderColumn, $label, $isSortable = true, $headerAttributes = null, $cellAttributes = null
+    )
     {
         $header = $this->getHeader();
 
@@ -717,13 +752,15 @@ abstract class HtmlTable extends \HTML_Table
             $header->setColAttributes($i, $headerAttributes[$i]);
         }
 
-        $isOrderColumnAndAscending = ($this->getOrderColumn() == $orderColumn && $this->getOrderDirection() == SORT_ASC);
+        $isOrderColumnAndAscending =
+            ($this->getOrderColumn() == $orderColumn && $this->getOrderDirection() == SORT_ASC);
 
         $queryParameters = $this->getQueryParameters(
             $this->getPageNumber(),
             $this->getNumberOfItemsPerPage(),
             $orderColumn,
-            ($isOrderColumnAndAscending ? SORT_DESC : SORT_ASC));
+            ($isOrderColumnAndAscending ? SORT_DESC : SORT_ASC)
+        );
 
         if ($isSortable)
         {
@@ -743,12 +780,12 @@ abstract class HtmlTable extends \HTML_Table
 
         $header->setHeaderContents(0, $orderColumn, $link);
 
-        if (! is_null($cellAttributes))
+        if (!is_null($cellAttributes))
         {
             $this->contentCellAttributes[$orderColumn] = $cellAttributes;
         }
 
-        if (! is_null($headerAttributes))
+        if (!is_null($headerAttributes))
         {
             $this->headerAttributes[$orderColumn] = $headerAttributes;
         }
@@ -776,7 +813,7 @@ abstract class HtmlTable extends \HTML_Table
 
     /**
      *
-     * @param string[]
+     * @param string []
      */
     public function setAdditionalParameters($parameters)
     {
@@ -812,11 +849,12 @@ abstract class HtmlTable extends \HTML_Table
      * SortableTable. Make sure your function has the same parameters as defined here.
      *
      * @param integer
+     *
      * @return string[]
      */
     public function getSourceData($offset = null)
     {
-        if (! is_null($this->getSourceDataFunction()))
+        if (!is_null($this->getSourceDataFunction()))
         {
             if (is_null($this->sourceData))
             {
@@ -825,7 +863,8 @@ abstract class HtmlTable extends \HTML_Table
                     $offset,
                     $this->getPager()->getNumberOfItemsPerPage(),
                     $this->getOrderColumn(),
-                    $this->getOrderDirection());
+                    $this->getOrderDirection()
+                );
             }
 
             return $this->sourceData;
@@ -918,6 +957,7 @@ abstract class HtmlTable extends \HTML_Table
     /**
      *
      * @param integer $value
+     *
      * @return string
      */
     public function getCheckboxHtml($value)
@@ -926,9 +966,9 @@ abstract class HtmlTable extends \HTML_Table
 
         $html[] = '<div class="checkbox checkbox-primary">';
         $html[] = '<input class="styled styled-primary" type="checkbox" name="' .
-             $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $value . '"';
+            $this->getTableFormActions()->getIdentifierName() . '[]" value="' . $value . '"';
 
-        if (Request :: get($this->getParameterName(self :: PARAM_SELECT_ALL)))
+        if (Request:: get($this->getParameterName(self :: PARAM_SELECT_ALL)))
         {
             $html[] = ' checked="checked"';
         }
@@ -947,6 +987,7 @@ abstract class HtmlTable extends \HTML_Table
      * checkbox
      *
      * @param string[] $row
+     *
      * @return string[]
      */
     abstract public function filterData($row);

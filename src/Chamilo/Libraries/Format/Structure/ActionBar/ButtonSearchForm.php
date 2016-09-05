@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Table\HtmlTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -33,6 +34,11 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     private $renderer;
 
     /**
+     * @var string
+     */
+    protected $actionURL;
+
+    /**
      * Creates a new search form
      *
      * @param string $url The location to which the search request should be posted.
@@ -40,6 +46,9 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     public function __construct($url)
     {
         parent :: __construct(self :: FORM_NAME, 'post', $url);
+
+        $this->actionURL = $url;
+
         $this->setAttribute('class', 'form-inline');
         $this->renderer = clone $this->defaultRenderer();
 
@@ -50,8 +59,6 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         }
 
         $this->buildForm();
-
-        $this->accept($this->renderer);
     }
 
     /**
@@ -106,6 +113,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function render()
     {
+        $this->accept($this->renderer);
         return $this->renderer->toHTML();
     }
 
@@ -136,9 +144,14 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      *
      * @param array $tableParameters
      */
-    public function registerTableParametersInForm(array $tableParameters = array())
+    public function registerTableParametersInSearchForm(array $tableParameters = array())
     {
-        // TODO: Implement registerTableParametersInForm() method.
+        foreach($tableParameters as $tableParameter => $value)
+        {
+            $this->actionURL .= '&' . $tableParameter . '=' . $value;
+        }
+
+        $this->updateAttributes(array('action' => $this->actionURL));
     }
 
     /**
@@ -146,7 +159,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      *
      * @param Table $table
      */
-    public function registerFormParametersInTable(Table $table)
+    public function registerSearchFormParametersInTable(Table $table)
     {
         $table->addParameter(self::PARAM_SIMPLE_SEARCH_QUERY, $this->getQuery());
     }

@@ -30,13 +30,12 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
      */
     protected function renderTabContent()
     {
-        $html = array();
-
-        $html[] = $this->buttonToolbarRenderer->render();
-
         $table = new UnsubscribedGroupTable($this);
-        $html[] = $table->as_html();
+        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
 
+        $html = array();
+        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $table->as_html();
         return implode(PHP_EOL, $html);
     }
 

@@ -276,8 +276,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     public function get_additional_parameters()
     {
         return array(
-            self :: PARAM_TAB, \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP,
-            ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY
+            self :: PARAM_TAB, \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP
         );
     }
 
