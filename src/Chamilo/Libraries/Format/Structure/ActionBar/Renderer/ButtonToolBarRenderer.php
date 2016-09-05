@@ -82,7 +82,7 @@ class ButtonToolBarRenderer
 
             if ($searchForm->validate() && $searchForm->clearFormSubmitted())
             {
-                $redirectResponse = new RedirectResponse($this->getButtonToolBar()->getSearchUrl());
+                $redirectResponse = new RedirectResponse($searchForm->getActionURL());
                 $redirectResponse->send();
             }
 
