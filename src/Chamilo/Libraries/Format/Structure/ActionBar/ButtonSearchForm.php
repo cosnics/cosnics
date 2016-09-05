@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
+use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -13,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ButtonSearchForm extends FormValidator
+class ButtonSearchForm extends FormValidator implements TableSupportedSearchFormInterface
 {
     /**
      * #@+ Search parameter
@@ -127,5 +129,25 @@ class ButtonSearchForm extends FormValidator
     public function clearFormSubmitted()
     {
         return ! is_null(Request :: post('clear'));
+    }
+
+    /**
+     * Registers the table parameters in the form
+     *
+     * @param array $tableParameters
+     */
+    public function registerTableParametersInForm(array $tableParameters = array())
+    {
+        // TODO: Implement registerTableParametersInForm() method.
+    }
+
+    /**
+     * Registers the form parameters in the table
+     *
+     * @param Table $table
+     */
+    public function registerFormParametersInTable(Table $table)
+    {
+        $table->addParameter(self::PARAM_SIMPLE_SEARCH_QUERY, $this->getQuery());
     }
 }

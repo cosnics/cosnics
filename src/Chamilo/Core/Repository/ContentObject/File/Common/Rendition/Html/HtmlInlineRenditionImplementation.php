@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\File\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\ContentObject\File\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -92,10 +93,15 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
      */
     public function getDownloadUrl()
     {
+        /** @var File $object */
         $object = $this->get_content_object();
+
+        $fullPath = $object->get_full_path();
+        $timestamp = filemtime($fullPath);
 
         return \Chamilo\Core\Repository\Manager :: get_document_downloader_url(
             $object->get_id(),
-            $object->calculate_security_code());
+            $object->calculate_security_code()
+        ) . '&time=' . $timestamp;
     }
 }
