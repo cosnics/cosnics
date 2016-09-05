@@ -146,6 +146,8 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         }
 
         $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
