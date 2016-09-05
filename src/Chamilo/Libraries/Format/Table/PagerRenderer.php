@@ -345,7 +345,7 @@ class PagerRenderer
                         null,
                         $translationVariables[Application::PARAM_CONTEXT]),
                     null,
-                    $this->getUrl($queryParameters, $itemsPerPageParameterName, $this->getPager()->getNumberOfItems()),
+                    $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager::DISPLAY_ALL),
                     SubButton::DISPLAY_LABEL,
                     false,
                     ($this->getPager()->getNumberOfItemsPerPage() == $this->getPager()->getNumberOfItems() ? ' selected' : 'not-selected')));
