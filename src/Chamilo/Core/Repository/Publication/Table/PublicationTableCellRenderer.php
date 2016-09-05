@@ -31,7 +31,7 @@ class PublicationTableCellRenderer extends DataClassTableCellRenderer implements
                 return Translation :: get('TypeName', null, $publication_attributes->get_application());
             case Attributes :: PROPERTY_TITLE :
                 $url = $publication_attributes->get_url();
-                return '<a href="' . $url . '"><span title="' . $publication_attributes->get_title() . '">' .
+                return '<a href="' . $url . '"><span title="' . htmlentities($publication_attributes->get_title()) . '">' .
                      StringUtilities :: getInstance()->truncate($publication_attributes->get_title(), 50) . '</span></a>';
             case Attributes :: PROPERTY_DATE :
                 return date('Y-m-d, H:i', $publication_attributes->get_date());

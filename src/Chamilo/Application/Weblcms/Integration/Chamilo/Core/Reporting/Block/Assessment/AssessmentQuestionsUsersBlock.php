@@ -90,7 +90,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         {
             $question_header = $vertical_headers ? substr($complex_question->get_ref_object()->get_title(), 0, 14) : $complex_question->get_ref_object()->get_title();
             $question_headers[$complex_question->get_id()] = '<div id="' . $complex_question->get_id() . '" title="' .
-                 $complex_question->get_ref_object()->get_title() . '">' . $question_header . '</div>';
+                htmlentities($complex_question->get_ref_object()->get_title()) . '">' . $question_header . '</div>';
             $question_weights[$complex_question->get_id()] = $complex_question->get_weight();
         }
 

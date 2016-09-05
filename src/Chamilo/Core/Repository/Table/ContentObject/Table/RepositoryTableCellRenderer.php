@@ -30,7 +30,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                 $title_short = StringUtilities :: getInstance()->truncate($title, 50, true);
                 return '<a href="' .
                      Utilities :: htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
-                     '" title="' . $title . '">' . $title_short . '</a>';
+                     '" title="' . htmlentities($title) . '">' . $title_short . '</a>';
             case ContentObject :: PROPERTY_DESCRIPTION :
                 return Utilities :: htmlentities(
                     StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));

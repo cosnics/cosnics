@@ -50,7 +50,7 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
                     ThumbnailComponent :: PARAM_WIDTH => $width,
                     ThumbnailComponent :: PARAM_HEIGHT => $height));
 
-            return '<img src="' . $thumbnailUrl->getUrl() . '" title="' . $object->get_title() .
+            return '<img src="' . $thumbnailUrl->getUrl() . '" title="' . htmlentities($object->get_title()) .
                  '" class="thumbnail-image" />';
         }
         else

@@ -253,7 +253,7 @@ class DynamicVisualTab extends DynamicTab
         if ($this->get_image() && $this->get_display() != self :: DISPLAY_TEXT)
         {
             $html[] = '<img src="' . $this->get_image() . '" border="0" style="vertical-align: middle;" alt="' .
-                 $this->get_name() . '" title="' . $this->get_name() . '"/>';
+                 $this->get_name() . '" title="' . htmlentities($this->get_name()) . '"/>';
         }
 
         if ($this->get_name() && (($this->get_display() == self :: DISPLAY_BOTH_SELECTED && $this->get_selected() == true) ||

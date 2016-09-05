@@ -44,7 +44,7 @@ class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements 
                 }
                 return '<a href="' .
                      htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) . '" title="' .
-                     $title . '">' . $title_short . '</a>';
+                htmlentities($title) . '">' . $title_short . '</a>';
             case Translation :: get(RecycleBinTableColumnModel :: ORIGINAL_LOCATION) :
                 $pid = $content_object->get_parent_id();
                 if (! isset($this->parent_title_cache[$pid]))

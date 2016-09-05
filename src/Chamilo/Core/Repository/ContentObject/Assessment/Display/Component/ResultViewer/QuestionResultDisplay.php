@@ -151,7 +151,7 @@ class QuestionResultDisplay
 
             $html[] = '<img style="float: none; vertical-align: baseline;" src="' . Theme :: getInstance()->getImagePath(
                 'Chamilo\Core\Repository\ContentObject\Assessment\Display',
-                'Buttons/ButtonHint') . '" alt="' . $label . '" title="' . $label . '" />&nbsp;&nbsp;';
+                'Buttons/ButtonHint') . '" alt="' . $label . '" title="' . htmlentities($label) . '" />&nbsp;&nbsp;';
         }
 
         if (! $this->can_change)

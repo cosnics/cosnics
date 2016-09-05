@@ -81,7 +81,7 @@ class WidgetItem extends Bar
     {
         $html = array();
 
-        $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+        $title = htmlentities($this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()));
         $selected = $this->isSelected();
 
         $html[] = '<li class="dropdown chamilo-account-menu-item">';

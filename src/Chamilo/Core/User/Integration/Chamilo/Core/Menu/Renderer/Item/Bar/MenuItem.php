@@ -33,7 +33,7 @@ abstract class MenuItem extends Bar
 
         $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' . $this->get_url() . '">';
 
-        $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
+        $title = htmlentities($this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()));
 
         if ($this->getItem()->show_icon())
         {

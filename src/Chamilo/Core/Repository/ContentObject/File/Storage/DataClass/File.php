@@ -192,7 +192,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
     {
         return '<img src="' . $this->get_icon_path($size) . '" alt="' . $this->get_extension() . '" title="' .
-             $this->get_extension() . '"/>';
+            htmlentities($this->get_extension()) . '"/>';
     }
 
     public function get_icon_path($size = Theme :: ICON_SMALL)

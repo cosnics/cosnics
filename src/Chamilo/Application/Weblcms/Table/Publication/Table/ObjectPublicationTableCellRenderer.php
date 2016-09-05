@@ -71,7 +71,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
                         $title .= ' (' . Translation :: get('New') . ')';
                     }
                 }
-                return '<img title="' . $title . '" src="' .
+                return '<img title="' . htmlentities($title) . '" src="' .
                      $content_object->get_icon_path(Theme :: ICON_MINI . $icon_suffix) . '" />';
 
                 break;

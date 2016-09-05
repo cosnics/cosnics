@@ -339,7 +339,7 @@ class Translation
 
         if ($this->showTranslationVariable)
         {
-            return '<span title="' . $context . ' - ' . $variable . '">' . $value . '</span>';
+            return '<span title="' . htmlentities($context . ' - ' . $variable) . '">' . $value . '</span>';
         }
 
         return $value;

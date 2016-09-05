@@ -102,7 +102,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function renderTitle()
     {
-        return 'title="' . $this->getTitle() . '"';
+        return 'title="' . htmlentities($this->getTitle()) . '"';
     }
 
     public function getTitle()
