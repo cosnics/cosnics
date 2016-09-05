@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribedGroup\UnsubscribedGroupTable;
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -33,7 +34,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
 
         $html[] = $this->buttonToolbarRenderer->render();
 
-        $table = new UnsubscribedGroupTable($this, $this->get_parameters(), $this->get_table_condition(''));
+        $table = new UnsubscribedGroupTable($this);
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);
