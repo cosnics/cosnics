@@ -80,18 +80,18 @@ abstract class Table
     private $form_actions;
 
     /**
-     * The parameters for this table
-     *
-     * @var array
-     */
-    protected $parameters;
-
-    /**
      * The search form that supports this table
      *
      * @var TableSupportedSearchFormInterface
      */
     protected $searchForm;
+
+    /**
+     * The sortable table implementation
+     *
+     * @var SortableTable
+     */
+    protected $table;
 
     /**
      * **************************************************************************************************************
@@ -130,6 +130,8 @@ abstract class Table
         }
 
         $this->component = $component;
+
+        $this->constructTable();
     }
 
     /**
@@ -145,7 +147,8 @@ abstract class Table
      */
     public function as_html()
     {
-        return $this->initialize_table()->as_html();
+        $this->initialize_table();
+        return $this->table->toHtml();
     }
 
     /**
@@ -155,13 +158,11 @@ abstract class Table
      */
 
     /**
-     * Initializes the table
-     *
-     * @return HTML_Table
+     * Constructs the sortable table
      */
-    protected function initialize_table()
+    protected function constructTable()
     {
-        $table = new SortableTable(
+        $this->table = new SortableTable(
             $this->get_name(),
             array($this, 'countData'),
             array($this, 'getData'),
@@ -171,12 +172,18 @@ abstract class Table
             !$this->prohibits_page_selection()
         );
 
+        $this->table->setAdditionalParameters($this->get_parameters());
+    }
+
+    /**
+     * Initializes the table
+     */
+    protected function initialize_table()
+    {
         if ($this->has_form_actions())
         {
-            $table->setTableFormActions($this->get_form_actions());
+            $this->table->setTableFormActions($this->get_form_actions());
         }
-
-        $table->setAdditionalParameters($this->get_parameters());
 
         // refactored the column model out of the loop.
         $column_model = &$this->get_column_model();
@@ -200,7 +207,7 @@ abstract class Table
                 $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
             }
 
-            $table->setColumnHeader(
+            $this->table->setColumnHeader(
                 ($this->has_form_actions() ? $i + 1 : $i),
                 Security:: remove_XSS($column->get_title()),
                 $column->is_sortable(),
@@ -212,12 +219,10 @@ abstract class Table
         // store the actual direction of the sortable table in the table column
         // model, to be used for a correct mover action implementation.
         // The prefix 'default_' is not relevant.
-        $direction = intval($table->getOrderDirection());
+        $direction = intval($this->table->getOrderDirection());
         $column_model->set_default_order_direction($direction);
 
-        $column_model->set_default_order_column($table->getOrderColumn());
-
-        return $table;
+        $column_model->set_default_order_column($this->table->getOrderColumn());
     }
 
     /**
@@ -484,6 +489,17 @@ abstract class Table
     public function setSearchForm(TableSupportedSearchFormInterface $searchForm)
     {
         $this->searchForm = $searchForm;
+        $searchForm->registerSearchFormParametersInTable($this);
+
+        $filterParameters = $this->table->getTableFilterParameters();
+
+        /**
+         * We don't want paging to be registered because the number of pages can be different
+         * depending on the search parameter
+         */
+        unset($filterParameters[HtmlTable::PARAM_PAGE_NUMBER]);
+
+        $searchForm->registerTableParametersInSearchForm($filterParameters);
     }
 
     /**
@@ -494,8 +510,10 @@ abstract class Table
      */
     public function addParameter($parameter, $value)
     {
-        $parameters = $this->get_parameters();
+        $parameters = $this->table->getAdditionalParameters();
         $parameters[$parameter] = $value;
+
+        $this->table->setAdditionalParameters($parameters);
     }
 
     /**
@@ -582,12 +600,7 @@ abstract class Table
      */
     protected function get_parameters()
     {
-        if(!isset($this->parameters))
-        {
-            $this->parameters = $this->get_component()->get_parameters();
-        }
-
-        return $this->parameters;
+        return $this->get_component()->get_parameters();
     }
 
     /**

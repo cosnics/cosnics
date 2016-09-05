@@ -15,12 +15,12 @@ interface TableSupportedSearchFormInterface
      *
      * @param array $tableParameters
      */
-    public function registerTableParametersInForm(array $tableParameters = array());
+    public function registerTableParametersInSearchForm(array $tableParameters = array());
 
     /**
      * Registers the form parameters in the table
      *
      * @param Table $table
      */
-    public function registerFormParametersInTable(Table $table);
+    public function registerSearchFormParametersInTable(Table $table);
 }
