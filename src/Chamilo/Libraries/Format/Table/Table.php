@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableAjaxSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 use Chamilo\Libraries\Format\Table\Interfaces\TablePageSelectionProhibition;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -77,6 +78,20 @@ abstract class Table
      * @var TableFormActions
      */
     private $form_actions;
+
+    /**
+     * The parameters for this table
+     *
+     * @var array
+     */
+    protected $parameters;
+
+    /**
+     * The search form that supports this table
+     *
+     * @var TableSupportedSearchFormInterface
+     */
+    protected $searchForm;
 
     /**
      * **************************************************************************************************************
@@ -461,6 +476,29 @@ abstract class Table
     }
 
     /**
+     * Connects a table supported search form to this table to share the parameters of the search form and the
+     * table
+     *
+     * @param TableSupportedSearchFormInterface $searchForm
+     */
+    public function setSearchForm(TableSupportedSearchFormInterface $searchForm)
+    {
+        $this->searchForm = $searchForm;
+    }
+
+    /**
+     * Registers a new parameter and value in the array of parameters
+     *
+     * @param string $parameter
+     * @param string $value
+     */
+    public function addParameter($parameter, $value)
+    {
+        $parameters = $this->get_parameters();
+        $parameters[$parameter] = $value;
+    }
+
+    /**
      * **************************************************************************************************************
      * Helper Functionality *
      * **************************************************************************************************************
@@ -540,11 +578,16 @@ abstract class Table
     /**
      * Returns the parameters for this table
      *
-     * @return mixed
+     * @return array
      */
     protected function get_parameters()
     {
-        return $this->get_component()->get_parameters();
+        if(!isset($this->parameters))
+        {
+            $this->parameters = $this->get_component()->get_parameters();
+        }
+
+        return $this->parameters;
     }
 
     /**
