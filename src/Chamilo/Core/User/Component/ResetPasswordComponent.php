@@ -44,7 +44,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     public function run()
     {
         $user_id = \Chamilo\Libraries\Platform\Session\Session :: get_user_id();
-        $allow_password_retrieval = PlatformSetting :: get('allow_password_retrieval', self :: context());
+        $allow_password_retrieval = PlatformSetting :: get('allow_password_retrieval', Manager::context());
 
         if ($allow_password_retrieval == false)
         {
