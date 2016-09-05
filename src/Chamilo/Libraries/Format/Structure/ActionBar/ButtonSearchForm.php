@@ -163,4 +163,14 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     {
         $table->addParameter(self::PARAM_SIMPLE_SEARCH_QUERY, $this->getQuery());
     }
+
+    /**
+     * Returns the action URL
+     * 
+     * @return string
+     */
+    public function getActionURL()
+    {
+        return $this->actionURL;
+    }
 }
