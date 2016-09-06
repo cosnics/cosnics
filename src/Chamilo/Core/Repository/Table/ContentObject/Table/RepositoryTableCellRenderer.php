@@ -32,8 +32,7 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
                      Utilities :: htmlentities($this->get_component()->get_content_object_viewing_url($content_object)) .
                      '" title="' . htmlentities($title) . '">' . $title_short . '</a>';
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(
-                    StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
+                return StringUtilities :: getInstance()->truncate(html_entity_decode($content_object->get_description()), 50);
             case ContentObject::PROPERTY_OWNER_ID:
                 $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $content_object->get_owner_id());
                 if(!$user)
