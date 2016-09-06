@@ -74,7 +74,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
             'text',
             self :: PARAM_SIMPLE_SEARCH_QUERY,
             Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'form-group form-control btn action-bar-search'));
+            array('class' => 'form-group form-control action-bar-search'));
 
         $this->renderer->setElementTemplate('{element} ', self :: PARAM_SIMPLE_SEARCH_QUERY);
 
