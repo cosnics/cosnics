@@ -11,6 +11,8 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
  */
 class ContentObjectTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
 {
+    const DEFAULT_ORDER_COLUMN_INDEX = 3;
+    const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
 
     public function initialize_columns()
     {
