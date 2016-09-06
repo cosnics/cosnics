@@ -141,7 +141,11 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                     );
                     if ($failures == 0)
                     {
-                        $html[] = Display:: normal_message($message);
+                        $html[] = Display:: normal_message(
+                            Translation::getInstance()->getTranslation(
+                                $message, null, Manager::context()
+                            )
+                        );
                     }
                     else
                     {
@@ -226,7 +230,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
         $url_params[self :: PARAM_RESET_KEY] = $this->get_user_key($user);
         $url_params[User :: PROPERTY_ID] = $user->get_id();
         $reset_link = $this->get_url($url_params);
-        
+
         $mail_subject = Translation:: get('LoginRequest');
         $mail_body[] = '<div style="font-family:arial, sans-serif">';
         $mail_body[] = '<p>' . Translation:: get('MailResetPasswordDear', array('USER' => $user->get_fullname())) .
