@@ -22,7 +22,7 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
         return $contentObjectService->getContentObjectsForWorkspace(
             $this->get_component()->getWorkspace(),
             ConditionFilterRenderer::factory(
-                new FilterData($this->get_component()->getWorkspace()),
+                $this->get_component()->getFilterData(),
                 $this->get_component()->getWorkspace()
             ),
             $count,
@@ -41,7 +41,7 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
         return $contentObjectService->countContentObjectsForWorkspace(
             $this->get_component()->getWorkspace(),
             ConditionFilterRenderer::factory(
-                new FilterData($this->get_component()->getWorkspace()),
+                $this->get_component()->getFilterData(),
                 $this->get_component()->getWorkspace()
             )
         );

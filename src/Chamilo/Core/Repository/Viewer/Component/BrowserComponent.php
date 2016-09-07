@@ -53,6 +53,11 @@ class BrowserComponent extends Manager implements TableSupport
      */
     protected $workspace;
 
+    /**
+     * @var FilterData
+     */
+    protected $filterData;
+
     public function get_additional_parameters()
     {
         return array(self::PROPERTY_CATEGORY, self::PARAM_WORKSPACE_ID, self::PARAM_IN_WORKSPACES);
@@ -143,7 +148,18 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         $filterData->set_filter_property(FilterData::FILTER_TYPE, $types);
-        $filterData->set_filter_property(FilterData::FILTER_CATEGORY, $this->getCategoryId());
+        
+        $this->filterData = $filterData;
+    }
+
+    /**
+     * Returns the previously setup filterdata
+     * 
+     * @return FilterData
+     */
+    public function getFilterData()
+    {
+        return $this->filterData;
     }
 
     /**
@@ -153,7 +169,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     protected function getCategoryId()
     {
-        $categoryId = $this->getRequest()->query->get(self::PROPERTY_CATEGORY);
+        $categoryId = $this->filterData->get_category();
         return $categoryId ? $categoryId : 0;
     }
 
@@ -251,7 +267,7 @@ class BrowserComponent extends Manager implements TableSupport
             $this,
             $this->get_user_id(),
             $this->getWorkspace(),
-            Request::get(self::PROPERTY_CATEGORY) ? Request::get(self::PROPERTY_CATEGORY) : 0,
+            $this->getCategoryId(),
             $url,
             $extra,
             $this->get_types());

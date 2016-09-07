@@ -51,13 +51,17 @@ class PublisherComponent extends Manager
                 \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION,
                 \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER);
 
+            $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
+
             $factory = new ApplicationFactory(
                 \Chamilo\Core\Repository\Viewer\Manager :: context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+                $applicationConfiguration);
 
             $component = $factory->getComponent();
             $component->set_excluded_objects($this->getExcludedObjects());
             $component->set_actions(array(\Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER));
+
             return $component->run();
         }
         else
