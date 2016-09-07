@@ -18,7 +18,9 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -784,7 +786,25 @@ EOT;
         $content_object = $this->content_object;
         $defaults[ContentObject::PROPERTY_ID] = $content_object->get_id();
         $defaults[ContentObject::PROPERTY_MODIFICATION_DATE] = $content_object->get_modification_date();
-        $defaults[ContentObject::PROPERTY_PARENT_ID] = $content_object->get_parent_id();
+
+        if(!$this->workspace instanceof PersonalWorkspace)
+        {
+            $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+            $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+                $this->workspace, $content_object
+            );
+
+            if($contentObjectRelation)
+            {
+                $defaults[ContentObject::PROPERTY_PARENT_ID] = $contentObjectRelation->getCategoryId();
+            }
+        }
+
+        if(!array_key_exists(ContentObject::PROPERTY_PARENT_ID, $defaults))
+        {
+            $defaults[ContentObject::PROPERTY_PARENT_ID] = $content_object->get_parent_id();
+        }
+
         $defaults[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] = $content_object->get_template_registration_id();
 
         if ($this->form_type == self::TYPE_REPLY)
