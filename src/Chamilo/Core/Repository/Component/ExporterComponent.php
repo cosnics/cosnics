@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Export\ContentObjectExport;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportController;
 use Chamilo\Core\Repository\Common\Export\ContentObjectExportImplementation;
 use Chamilo\Core\Repository\Common\Export\ExportParameters;
+use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
@@ -47,7 +48,7 @@ class ExporterComponent extends Manager
         $content_object_ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
         $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $content_object_ids);
 
-        $category_ids = Request :: get(self :: PARAM_CATEGORY_ID);
+        $category_ids = Request :: get(FilterData::FILTER_CATEGORY);
 
         if (! is_array($content_object_ids) && ! is_null($content_object_ids))
         {
@@ -103,7 +104,7 @@ class ExporterComponent extends Manager
                         {
                             $table_row[] = '<a href="' .
                                  $this->get_content_objects_exporting_url(
-                                    self :: PARAM_CATEGORY_ID,
+                                    FilterData::FILTER_CATEGORY,
                                     $category_ids,
                                     $export_type) . '">' . Theme :: getInstance()->getCommonImage('Action/Export') .
                                  '</a>';

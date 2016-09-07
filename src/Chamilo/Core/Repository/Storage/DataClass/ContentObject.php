@@ -6,6 +6,10 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -1893,19 +1897,72 @@ class ContentObject extends CompositeDataClass
         return DataManager::retrieve_content_objects(ContentObject::class_name(), $parameters)->as_array();
     }
 
+    /**
+     * Retrieves a virtual path for this content object
+     * 
+     * @deprecated 
+     * @use getVirtualPathInWorkspace
+     * 
+     * @return string
+     */
     public function get_virtual_path()
     {
-        $category_id = $this->get_parent_id();
+        return $this->getVirtualPathByCategoryId($this->get_parent_id());
+
+    }
+
+    /**
+     * Retrieves the virtual path of this content object in a given workspace
+     *
+     * @param WorkspaceInterface $workspace
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function getVirtualPathInWorkspace(WorkspaceInterface $workspace)
+    {
+        if($workspace instanceof PersonalWorkspace)
+        {
+            return $this->getVirtualPathByCategoryId($this->get_parent_id());
+        }
+
+        $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
+        $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
+            $workspace, $this
+        );
+
+        if(!$contentObjectRelation)
+        {
+            throw new \Exception('ContentObject not found in given workspace');
+        }
+
+        return $this->getVirtualPathByCategoryId($contentObjectRelation->getCategoryId(), $workspace->getTitle());
+    }
+
+    /**
+     * Helper function to retrieve a virtual path by a given category id
+     *
+     * @param $categoryId
+     *
+     * @return string
+     */
+    protected function getVirtualPathByCategoryId($categoryId, $rootPath = null)
+    {
+        if(!$rootPath)
+        {
+            $rootPath = $this->get_owner_fullname();
+        }
+
         $virtual_path = array();
 
-        while ($category_id != 0)
+        while ($categoryId != 0)
         {
-            $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
-            $category_id = $category->get_parent();
+            $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $categoryId);
+            $categoryId = $category->get_parent();
             array_unshift($virtual_path, Filesystem::create_safe_name($category->get_name()));
         }
 
-        array_unshift($virtual_path, Filesystem::create_safe_name($this->get_owner_fullname()));
+        array_unshift($virtual_path, Filesystem::create_safe_name($rootPath));
 
         return implode(DIRECTORY_SEPARATOR, $virtual_path) . DIRECTORY_SEPARATOR;
     }
