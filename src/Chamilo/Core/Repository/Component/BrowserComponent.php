@@ -82,6 +82,12 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
         }
 
+        $filterData = FilterData::get_instance($this->getWorkspace());
+        if(is_null($filterData->get_category()))
+        {
+            $filterData->set_filter_property(FilterData::FILTER_CATEGORY, 0);
+        }
+
         $output = $this->get_content_objects_html();
 
         $html = array();
