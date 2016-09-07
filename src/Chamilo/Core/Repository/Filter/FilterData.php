@@ -45,7 +45,7 @@ class FilterData
      *
      * @var string[]
      */
-    private $storage;
+    protected $storage;
 
     /**
      *
@@ -283,18 +283,39 @@ class FilterData
 
         foreach ($this->get_filter_properties() as $filter_property)
         {
-            $post_value = Request :: post($filter_property);
-            $get_value = Request :: get($filter_property);
-
-            if (isset($post_value))
+            $valueFromRequest = $this->getFromRequest($filter_property);
+            if(!is_null($valueFromRequest))
             {
-                $this->set_filter_property($filter_property, $post_value);
-            }
-            elseif (isset($get_value))
-            {
-                $this->set_filter_property($filter_property, $get_value);
+                $this->set_filter_property($filter_property, $valueFromRequest);
             }
         }
+    }
+
+    /**
+     * Returns the value of a filter property from a request
+     *
+     * @param string $filterProperty
+     *
+     * @return string
+     */
+    protected function getFromRequest($filterProperty)
+    {
+        $postValue = Request::post($filterProperty);
+
+        if(isset($postValue))
+        {
+            return $postValue;
+        }
+
+
+        $getValue = Request::get($filterProperty);
+
+        if(isset($getValue))
+        {
+            return $getValue;
+        }
+
+        return null;
     }
 
     /**
