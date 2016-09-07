@@ -401,7 +401,7 @@ class Utilities
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
         	<head>
         		<title>Uncaught exception</title>
-        		<link rel="stylesheet" href="Configuration/Resources/Css/Aqua/Stylesheet.css" type="text/css"/>
+        		<link rel="stylesheet" href="Chamilo/Configuration/Resources/Css/Aqua/Stylesheet.css" type="text/css"/>
         	</head>
         	<body dir="ltr">
         		<div id="outerframe">
@@ -438,7 +438,7 @@ class Utilities
         		</div>
         	</body>
         </html>';
-        return $html;
+        echo $html;
     }
 
     /**

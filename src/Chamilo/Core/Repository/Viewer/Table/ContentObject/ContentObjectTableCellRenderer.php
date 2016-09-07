@@ -24,7 +24,7 @@ class ContentObjectTableCellRenderer extends DataClassTableCellRenderer implemen
             case ContentObject :: PROPERTY_TITLE :
                 return StringUtilities :: getInstance()->truncate($content_object->get_title(), 50);
             case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(StringUtilities :: getInstance()->truncate($content_object->get_description(), 50));
+                return StringUtilities :: getInstance()->truncate($content_object->get_description(), 50);
             case ContentObject::PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities::format_locale_date(null, $content_object->get_modification_date());
         }
