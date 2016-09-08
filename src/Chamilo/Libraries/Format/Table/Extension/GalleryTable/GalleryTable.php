@@ -36,15 +36,13 @@ abstract class GalleryTable extends Table
      */
 
     /**
-     * Initializes the table
-     *
-     * @return HTML_Table
+     * Constructs the sortable table
      */
-    protected function initialize_table()
+    protected function constructTable()
     {
         $count = $this->get_default_row_count();
 
-        $table = new GalleryHTMLTable(
+        $this->table = new GalleryHTMLTable(
             $this->get_name(),
             array($this, 'countData'),
             array($this, 'getData'),
@@ -57,12 +55,20 @@ abstract class GalleryTable extends Table
 
         if ($this->has_form_actions())
         {
-            $table->setTableFormActions($this->get_form_actions());
+            $this->table->setTableFormActions($this->get_form_actions());
         }
 
-        $table->setAdditionalParameters($this->get_parameters());
+        $this->table->setAdditionalParameters($this->get_parameters());
+    }
 
-        return $table;
+    /**
+     * Initializes the table
+     *
+     * @return HTML_Table
+     */
+    protected function initialize_table()
+    {
+
     }
 
     /**
