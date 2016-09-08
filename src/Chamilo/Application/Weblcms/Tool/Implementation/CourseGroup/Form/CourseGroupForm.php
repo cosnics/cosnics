@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\CourseGroupMenu;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
@@ -20,6 +21,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -319,147 +321,14 @@ class CourseGroupForm extends FormValidator
     }
 
     /**
-     * Creates a document category for the course_group
-     *
-     * @param $element string value
-     * @param $course_group CourseGroup
-     *
-     * @return ContentObjectPublicationCategory
-     */
-    public function create_course_group_document_category($element_value, &$course_group)
-    {
-        switch ($element_value)
-        {
-            case 1 :
-
-                $tool = 'Document';
-                $group_document_id = 0;
-
-                $course_group_document_category = $this->create_category($course_group, $tool, $group_document_id);
-                if (is_object($course_group_document_category))
-                {
-                    $course_group_document_category_id = $course_group_document_category->get_id();
-                }
-                else
-                {
-                    $course_group_document_category_id = $course_group_document_category;
-                    $course_group_document_category = DataManager:: retrieve_by_id(
-                        ContentObjectPublicationCategory:: class_name(),
-                        $course_group_document_category_id
-                    );
-                }
-                if ($course_group_document_category_id)
-                {
-                    $course_group->set_document_category_id($course_group_document_category_id);
-
-                    // settings rights to publication_category
-                    $rights = $this->rights;
-                    /*
-                     * $rights[] = WeblcmsRights :: VIEW_RIGHT; $rights[] = WeblcmsRights :: ADD_RIGHT;
-                     */
-
-                    if ($course_group_document_category)
-                    {
-                        $this->set_rights_content_object_publication_category(
-                            $course_group_document_category,
-                            $course_group,
-                            $rights
-                        );
-                    }
-                }
-                else
-                    // error message that document category was not created
-                {
-                    $course_group->add_error(Translation:: get('DocumentCategoryIsNotCreated'));
-                }
-
-                break;
-            case 0 :
-                $course_group->set_document_category_id($element_value);
-                break;
-            case null :
-                break;
-        }
-
-        return $course_group_document_category;
-    }
-
-    /**
-     * Creates a forum category for the course_group
-     *
-     * @param $element string value (checkbox value in the form indicating the creation of the Forum)
-     * @param $course_group CourseGroup
-     *
-     * @return ContentObjectPublicationCategory
-     */
-    public function create_course_group_forum_category($element_value, &$course_group)
-    {
-        switch ($element_value)
-        {
-            case 1 :
-
-                $tool = 'Forum';
-                $group_forum_id = 0;
-
-                $course_group_forum_category = $this->create_category($course_group, $tool, $group_forum_id);
-                if (is_object($course_group_forum_category))
-                {
-                    $course_group_forum_category_id = $course_group_forum_category->get_id();
-                }
-                else
-                {
-                    $course_group_forum_category_id = $course_group_forum_category;
-                    $course_group_forum_category = DataManager:: retrieve_by_id(
-                        ContentObjectPublicationCategory:: class_name(),
-                        $course_group_forum_category_id
-                    );
-                }
-                if ($course_group_forum_category_id)
-                {
-                    $course_group->set_forum_category_id($course_group_forum_category_id);
-                    // rights
-                    $rights = array();
-                    $rights[] = WeblcmsRights :: VIEW_RIGHT;
-                    $rights[] = WeblcmsRights :: ADD_RIGHT;
-
-                    if ($course_group_forum_category)
-                    {
-                        $this->set_rights_content_object_publication_category(
-                            $course_group_forum_category,
-                            $course_group,
-                            $rights
-                        );
-                    }
-                }
-
-                break;
-            case 0 :
-                $course_group->set_forum_category_id($element_value);
-                break;
-            case null :
-                break;
-        }
-
-        return $course_group_forum_category;
-    }
-
-    public function create_course_group_forum_in_category($forum_category, $course_group)
-    {
-        $tool = 'Forum';
-        $content_object_publication = $this->publish_forum($tool, $forum_category->get_id(), $course_group);
-        $rights = array();
-        $rights[] = WeblcmsRights :: VIEW_RIGHT;
-        $rights[] = WeblcmsRights :: ADD_RIGHT;
-        $this->set_rights_content_object_publication($content_object_publication, $course_group, $rights);
-    }
-
-    /**
      * Updates the course group
      *
      * @return boolean $result True when successful
      */
     public function update_course_group()
     {
+        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance());
+
         $values = $this->exportValues();
         $course_group = $this->course_group;
         $course_id = $this->course_group->get_course_code();
@@ -617,18 +486,17 @@ class CourseGroupForm extends FormValidator
                         // note that it might not exist anymore or may have been renamed manually.
                     }
                 }
-                if (isset($values, $values[CourseGroup :: PROPERTY_DOCUMENT_CATEGORY_ID . $counter]))
+                $createDocumentCategory = boolval($values[CourseGroup :: PROPERTY_DOCUMENT_CATEGORY_ID . $counter]);
+                $createForum = boolval($values[CourseGroup :: PROPERTY_FORUM_CATEGORY_ID . $counter]);
+
+                if ($createDocumentCategory)
                 {
                     if ($course_group->get_document_category_id() == 0) // it
                         // doesn't
                         // exist
                         // yet
                     {
-                        $this->create_course_group_document_category(
-                            $values[CourseGroup :: PROPERTY_DOCUMENT_CATEGORY_ID . $counter],
-                            $course_group,
-                            false
-                        ); // After rework with parent group, this should always be false
+                        $courseGroupService->createDocumentCategoryForCourseGroup($course_group);
                     }
                 }
                 else
@@ -651,19 +519,19 @@ class CourseGroupForm extends FormValidator
                         $course_group->set_document_category_id(0);
                     }
                 }
-                if (isset($values, $values[CourseGroup :: PROPERTY_FORUM_CATEGORY_ID . $counter]))
+
+                if ($createForum)
                 {
                     if ($course_group->get_forum_category_id() == 0) // it
                         // doesn't
                         // exist yet
                     {
-                        $course_group_forum_category = $this->create_course_group_forum_category(
-                            $values[CourseGroup :: PROPERTY_FORUM_CATEGORY_ID . $counter],
-                            $course_group,
-                            false
-                        ); // After rework with parent group, this should always be false
+                        $user = new User();
+                        $user->setId(Session::get_user_id());
 
-                        $this->create_course_group_forum_in_category($course_group_forum_category, $course_group);
+                        $courseGroupService->createForumCategoryAndPublicationForCourseGroup(
+                            $course_group, $user
+                        );
                     }
                 }
                 else
@@ -1211,6 +1079,8 @@ class CourseGroupForm extends FormValidator
      */
     public function create_course_group()
     {
+        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance());
+
         $this->rights = array();
         $this->rights[] = WeblcmsRights :: VIEW_RIGHT;
         $this->rights[] = WeblcmsRights :: ADD_RIGHT;
@@ -1311,22 +1181,23 @@ class CourseGroupForm extends FormValidator
                 {
                     if ($course_group->create())
                     {
-                        if (isset($values, $values[CourseGroup :: PROPERTY_DOCUMENT_CATEGORY_ID]))
+                        $createDocumentCategory = boolval($values[CourseGroup :: PROPERTY_DOCUMENT_CATEGORY_ID]);
+                        if ($createDocumentCategory)
                         {
-                            $this->create_course_group_document_category(
-                                $values[CourseGroup :: PROPERTY_DOCUMENT_CATEGORY_ID],
-                                $course_group
-                            );
+                            $courseGroupService->createDocumentCategoryForCourseGroup($course_group);
                         }
-                        if (isset($values, $values[CourseGroup :: PROPERTY_FORUM_CATEGORY_ID]))
-                        {
-                            $course_group_forum_category = $this->create_course_group_forum_category(
-                                $values[CourseGroup :: PROPERTY_FORUM_CATEGORY_ID],
-                                $course_group
-                            );
 
-                            $this->create_course_group_forum_in_category($course_group_forum_category, $course_group);
+                        $createForum = boolval($values[CourseGroup :: PROPERTY_FORUM_CATEGORY_ID]);
+                        if ($createForum)
+                        {
+                            $user = new User();
+                            $user->setId(Session::get_user_id());
+
+                            $courseGroupService->createForumCategoryAndPublicationForCourseGroup(
+                                $course_group, $user
+                            );
                         }
+
                         $course_group->update();
                     }
                     else
@@ -1649,171 +1520,6 @@ class CourseGroupForm extends FormValidator
         }
 
         return $all_groups_filled;
-    }
-
-    /*
-     * Publish a forum for a course group and returns a new content_object_publication
-     */
-    public function publish_forum($tool, $category_id, $course_group)
-    {
-        $forum = new Forum();
-        $forum->set_title($course_group->get_name());
-        $forum->set_locked(0);
-        $forum->set_description($course_group->get_name() . " forum");
-        $user_id = $_SESSION['_uid'];
-        $forum->set_owner_id($user_id);
-        $forum->create();
-
-        $content_object_publication = new ContentObjectPublication();
-        $content_object_publication->set_category_id($category_id);
-        $content_object_publication->set_tool($tool);
-        $content_object_publication->set_course_id($course_group->get_course_code());
-        $content_object_publication->set_publisher_id($forum->get_owner_id());
-
-        $content_object_publication->set_content_object($forum);
-        $content_object_publication->set_content_object_id($forum->get_id());
-        $content_object_publication->set_publication_date(time());
-        $content_object_publication->set_modified_date(time());
-        $content_object_publication->create();
-
-        return $content_object_publication;
-    }
-
-    /*
-     * Sets the the given rights to publication object
-     */
-    public function set_rights_content_object_publication($content_object_publication, $course_group, $rights)
-    {
-        $context = \Chamilo\Application\Weblcms\Manager:: context();
-
-        $weblcms_rights = WeblcmsRights:: get_instance();
-        $entity_id = $course_group->get_id();
-        $entity_type = CourseGroupEntity :: ENTITY_TYPE;
-        $course_id = $course_group->get_course_code();
-        $category_id = $content_object_publication->get_id();
-
-        $location = $weblcms_rights->get_weblcms_location_by_identifier_from_courses_subtree(
-            WeblcmsRights :: TYPE_PUBLICATION,
-            $category_id,
-            $course_id
-        );
-
-        $location->disinherit();
-        $location_id = $location->get_id();
-        $location->update();
-
-        foreach ($rights as $right)
-        {
-            $weblcms_rights->set_location_entity_right($context, $right, $entity_id, $entity_type, $location_id);
-        }
-
-        // publish fot the owner. Without it the forum is invisibale for the
-        // publisher
-        $entity_id = $content_object_publication->get_publisher_id();
-        $entity_type = UserEntity :: ENTITY_TYPE;
-
-        $weblcms_rights->set_location_entity_right(
-            $context,
-            WeblcmsRights :: VIEW_RIGHT,
-            $entity_id,
-            $entity_type,
-            $location_id
-        );
-    }
-
-    /*
-     * sets the rights to publication category. For example to document category
-     */
-    public function set_rights_content_object_publication_category(
-        $content_object_publication_category, $course_group,
-        $rights
-    )
-    {
-        $context = \Chamilo\Application\Weblcms\Manager:: context();
-        $weblcms_rights = WeblcmsRights:: get_instance();
-
-        $entity_id = $course_group->get_id();
-        $entity_type = CourseGroupEntity :: ENTITY_TYPE;
-        $course_id = $course_group->get_course_code();
-        $category_id = $content_object_publication_category->get_id();
-
-        // get location object
-        $location = $weblcms_rights->get_weblcms_location_by_identifier_from_courses_subtree(
-            WeblcmsRights :: TYPE_COURSE_CATEGORY,
-            $category_id,
-            $course_id
-        );
-
-        $location->disinherit();
-        $location_id = $location->get_id();
-        $location->update();
-
-        foreach ($rights as $right)
-        {
-            $weblcms_rights->set_location_entity_right($context, $right, $entity_id, $entity_type, $location_id);
-        }
-    }
-
-    /*
-     * creates a content object publication category. For example: document publication category
-     */
-    public function create_category($course_group, $tool, $parent)
-    {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_NAME
-            ),
-            new StaticConditionVariable($course_group->get_name())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_COURSE
-            ),
-            new StaticConditionVariable($course_group->get_course_code())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_TOOL
-            ),
-            new StaticConditionVariable($tool)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_PARENT
-            ),
-            new StaticConditionVariable($parent)
-        );
-        $condition = new AndCondition($conditions);
-
-        $data_set = DataManager:: retrieves(
-            ContentObjectPublicationCategory:: class_name(),
-            new DataClassRetrievesParameters($condition)
-        );
-
-        $category = $data_set->next_result();
-        if ($category)
-        {
-            return $category->get_id();
-        }
-        else
-        {
-            $content_object_publication_category = new ContentObjectPublicationCategory();
-            $content_object_publication_category->set_parent($parent);
-            $content_object_publication_category->set_tool($tool);
-            $content_object_publication_category->set_course($this->course_group->get_course_code());
-            $content_object_publication_category->set_name($course_group->get_name());
-            $content_object_publication_category->set_allow_change(0);
-            $content_object_publication_category->set_display_order("1");
-            $content_object_publication_category->create();
-
-            return $content_object_publication_category;
-        }
     }
 
     /**

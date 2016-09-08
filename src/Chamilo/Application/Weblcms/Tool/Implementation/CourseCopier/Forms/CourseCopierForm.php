@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Forms;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Form\PublicationSelectorForm;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
@@ -29,7 +30,7 @@ class CourseCopierForm extends FormValidator
      */
     public function __construct($parent, $publications, $categories, $courses)
     {
-        parent :: __construct('course_copier');
+        parent:: __construct('course_copier');
         $this->parent = $parent;
         $this->publications = $publications;
         $this->categories = $categories;
@@ -44,10 +45,10 @@ class CourseCopierForm extends FormValidator
         $defaults = array();
         $translations = array();
 
-        $this->addElement('category', Translation :: get('Publications'));
+        $this->addElement('category', $this->getTranslation('Publications'));
         $this->addElement('html', '<div id="categories" style="display: none;">');
 
-        foreach($this->categories as $index => $category)
+        foreach ($this->categories as $index => $category)
         {
             $tool = $category[ContentObjectPublicationCategory::PROPERTY_TOOL];
             $label = '';
@@ -55,10 +56,10 @@ class CourseCopierForm extends FormValidator
 
             $this->addElement('checkbox', $id, $label, $category[ContentObjectPublicationCategory::PROPERTY_NAME]);
             $defaults[$id] = true;
-            if(!array_key_exists($tool, $translations))
+            if (!array_key_exists($tool, $translations))
             {
-                $translations[$tool] = Translation :: get(
-                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool)
+                $translations[$tool] = $this->getTranslation(
+                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager:: get_tool_type_namespace($tool)
                 );
             }
         }
@@ -73,25 +74,30 @@ class CourseCopierForm extends FormValidator
             $this->addElement('checkbox', $id, $label, $publication[ContentObject::PROPERTY_TITLE]);
             $defaults[$id] = true;
 
-            if(!array_key_exists($tool, $translations))
+            if (!array_key_exists($tool, $translations))
             {
-                $translations[$tool] = Translation :: get(
-                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool)
+                $translations[$tool] = $this->getTranslation(
+                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager:: get_tool_type_namespace($tool)
                 );
             }
         }
 
         $this->addElement('html', '</div>');
-        $publication_selector_form = new PublicationSelectorForm($this->publications, $this->categories,
-            $this->parent->get_course()->get_title(), true, $translations);
+        $publication_selector_form = new PublicationSelectorForm(
+            $this->publications, $this->categories,
+            $this->parent->get_course()->get_title(), true, $translations
+        );
         $this->addElement('html', $publication_selector_form->render());
 
-        $this->addElement('checkbox', 'content_object_categories', Translation :: get('PublicationCategories'));
+        $this->addElement('checkbox', 'content_object_categories', $this->getTranslation('PublicationCategories'));
         $defaults['content_object_categories'] = false;
+
+        $this->addElement('checkbox', 'course_groups', $this->getTranslation('CourseGroups'));
+        $defaults['course_groups'] = true;
 
         $this->setDefaults($defaults);
 
-        $this->addElement('category', Translation :: get('SelectCourse'));
+        $this->addElement('category', $this->getTranslation('SelectCourse'));
 
         $current_code = $this->parent->get_course_id();
         $options = array();
@@ -106,26 +112,45 @@ class CourseCopierForm extends FormValidator
         asort($options);
 
         $this->addElement(
-            'select', 'course', Translation :: get('Course'), $options,
-            array('multiple' => 'multiple','style' => 'min-height: 250px; max-height: 400px; min-width: 250px;')
+            'select', 'course', $this->getTranslation('Course'), $options,
+            array('multiple' => 'multiple', 'style' => 'min-height: 250px; max-height: 400px; min-width: 250px;')
         );
-        $this->addRule('course', Translation :: get('Required', null, Utilities :: COMMON_LIBRARIES), 'required');
+        $this->addRule('course', $this->getTranslation('Required', null, Utilities :: COMMON_LIBRARIES), 'required');
 
-        $this->addElement('category', Translation :: get('CopyThisCourseInformation'));
+        $this->addElement('category', $this->getTranslation('CopyThisCourseInformation'));
 
-        $this->addElement('checkbox', 'confirm', Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES));
+        $this->addElement('checkbox', 'confirm', $this->getTranslation('Confirm', null, Utilities :: COMMON_LIBRARIES));
         $this->addRule(
-            'confirm', Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 'required'
+            'confirm', $this->getTranslation('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 'required'
         );
         $prevnext = array();
 
         $prevnext[] = $this->createElement(
             'style_submit_button',
             self :: PARAM_SUBMIT,
-            Translation:: get('Copy')
+            $this->getTranslation('Copy')
         );
 
         $this->addGroup($prevnext, 'buttons', '', ' ', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));
+    }
+
+    /**
+     * Helper function to get translations
+     *
+     * @param string $variable
+     * @param array $parameters
+     * @param string $context
+     *
+     * @return string
+     */
+    protected function getTranslation($variable, $parameters = array(), $context = null)
+    {
+        if(is_null($context))
+        {
+            $context = Manager::context();
+        }
+
+        return Translation::getInstance()->getTranslation($variable, $parameters, $context);
     }
 }
