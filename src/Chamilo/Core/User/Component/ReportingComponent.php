@@ -20,7 +20,7 @@ class ReportingComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $this->set_parameter(self :: PARAM_USER_USER_ID, $this->get_user_id());
+        $this->set_parameter(self::PARAM_USER_USER_ID, $this->getRequest()->query->get(self::PARAM_USER_USER_ID));
 
         if (! $this->get_user()->is_platform_admin())
         {
@@ -28,7 +28,7 @@ class ReportingComponent extends Manager implements DelegateComponent
         }
 
         $factory = new ApplicationFactory(
-            \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager :: context(),
+            \Chamilo\Core\User\Integration\Chamilo\Core\Reporting\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
