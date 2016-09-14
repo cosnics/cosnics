@@ -35,8 +35,8 @@ class Slideshare extends ContentObject implements Versionable
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE),
-            new StaticConditionVariable(\Chamilo\Core\Repository\External\Manager :: get_namespace('slideshare')));
+            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_IMPLEMENTATION),
+            new StaticConditionVariable('Chamilo\Core\Repository\Implementation\Slideshare'));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_ENABLED),
             new StaticConditionVariable(1));
@@ -45,7 +45,6 @@ class Slideshare extends ContentObject implements Versionable
         $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
             Instance :: class_name(),
             new DataClassRetrievesParameters($condition));
-
         return $external_repositories->size() == 1;
     }
 }
