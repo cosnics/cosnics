@@ -6,7 +6,9 @@ use Chamilo\Application\Portfolio\Rights;
 use Chamilo\Application\Portfolio\Storage\DataClass\Feedback;
 use Chamilo\Application\Portfolio\Storage\DataClass\Notification;
 use Chamilo\Application\Portfolio\Storage\DataClass\Publication;
+use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Application\Portfolio\Storage\DataManager;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Bookmark\Storage\DataClass\Bookmark;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
@@ -77,27 +79,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
 
         if (! $this->publication instanceof Publication && $this->get_current_user_id() == $this->get_user_id())
         {
-            $template_registration = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
-                Portfolio :: package());
-
-            $portfolio = new Portfolio();
-            $portfolio->set_title($this->get_user()->get_fullname());
-            $portfolio->set_description(Translation :: get('NoInstructionYetDescription'));
-            $portfolio->set_owner_id($this->get_user_id());
-
-            $portfolio->set_template_registration_id($template_registration->get_id());
-            $portfolio->create();
-
-            $this->publication = new Publication();
-            $this->publication->set_content_object_id($portfolio->get_id());
-            $this->publication->set_publisher_id($this->get_user_id());
-            $this->publication->set_published(time());
-            $this->publication->set_modified(time());
-
-            if (! $this->publication->create())
-            {
-                throw new NotAllowedException();
-            }
+            $this->initializeRootPortfolio();
         }
         elseif (! $this->publication instanceof Publication)
         {
@@ -602,5 +584,63 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager implements Po
         $notification = new Notification();
         $notification->set_publication_id($this->get_publication()->get_id());
         return $notification;
+    }
+
+    /**
+     * Initializes the root portfolio for the current user
+     *
+     * @throws NotAllowedException
+     */
+    protected function initializeRootPortfolio()
+    {
+        $template_registration = \Chamilo\Core\Repository\Configuration:: registration_default_by_type(
+            Portfolio:: package()
+        );
+
+        $portfolio = new Portfolio();
+        $portfolio->set_title($this->get_user()->get_fullname());
+        $portfolio->set_description(Translation:: get('NoInstructionYetDescription'));
+        $portfolio->set_owner_id($this->get_user_id());
+
+        $portfolio->set_template_registration_id($template_registration->getId());
+        $portfolio->create();
+
+        $this->publication = new Publication();
+        $this->publication->set_content_object_id($portfolio->getId());
+        $this->publication->set_publisher_id($this->getUser()->getId());
+        $this->publication->set_published(time());
+        $this->publication->set_modified(time());
+
+        if (!$this->publication->create())
+        {
+            throw new NotAllowedException();
+        }
+
+        /** @var ComplexContentObjectPath $contentObjectPath */
+        $contentObjectPath = $portfolio->get_complex_content_object_path();
+        $rootNode = $contentObjectPath->get_root();
+        $rootNodeHash = $rootNode->get_hash();
+
+        $this->createRightsForEveryTeacherOnLocation($this->publication->getId(), $rootNodeHash);
+    }
+
+    /**
+     * Creates rights for the "everyone" entity on a given location
+     *
+     * @param int $publicationId
+     * @param string $nodeId
+     *
+     * @return bool
+     */
+    protected function createRightsForEveryTeacherOnLocation($publicationId, $nodeId)
+    {
+        $location_entity_right = new RightsLocationEntityRight();
+        $location_entity_right->set_location_id($nodeId);
+        $location_entity_right->set_publication_id($publicationId);
+        $location_entity_right->set_right_id(Rights::VIEW_RIGHT);
+        $location_entity_right->set_entity_id(0);
+        $location_entity_right->set_entity_type(0);
+
+        return $location_entity_right->create();
     }
 }
