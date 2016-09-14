@@ -32,21 +32,28 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         $slideshowIndex = $application->getRequest()->query->get(SlideshowRenderer :: PARAM_INDEX, 0);
         $slideshowAutoPlay = $application->getRequest()->query->get(SlideshowRenderer :: PARAM_AUTOPLAY, 0);
 
-        $contentObject = $contentObjectService->getContentObjectsForWorkspace(
+        $filterData = FilterData:: get_instance($workspace);
+
+        $contentObject = $contentObjectService->getContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(),
             $workspace,
-            ConditionFilterRenderer :: factory(FilterData :: get_instance($workspace), $workspace),
+            ConditionFilterRenderer:: factory($filterData, $workspace),
             1,
-            $slideshowIndex)->next_result();
+            $slideshowIndex, array()
+        )->next_result();
 
-        $contentObjectCount = $contentObjectService->countContentObjectsForWorkspace(
+        $contentObjectCount = $contentObjectService->countContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(),
             $workspace,
-            ConditionFilterRenderer :: factory(FilterData :: get_instance($workspace), $workspace));
+            ConditionFilterRenderer:: factory($filterData, $workspace)
+        );
 
-        $contentObjectRenditionImplementation = ContentObjectRenditionImplementation :: factory(
+        $contentObjectRenditionImplementation = ContentObjectRenditionImplementation:: factory(
             $contentObject,
             ContentObjectRendition :: FORMAT_HTML,
             ContentObjectRendition :: VIEW_PREVIEW,
-            $this->get_repository_browser());
+            $this->get_repository_browser()
+        );
 
         $slideshowRender = new SlideshowRenderer(
             $contentObject,
@@ -55,7 +62,8 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
             $this->get_content_object_actions($contentObject),
             $this->get_parameters(),
             $slideshowIndex,
-            $slideshowAutoPlay);
+            $slideshowAutoPlay
+        );
 
         return $slideshowRender->render();
     }

@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\Workspace\Repository;
 
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
@@ -14,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -29,88 +31,136 @@ class ContentObjectRepository
 
     /**
      *
-     * @param PersonalWorkspace $personalWorkspace
+     * @param string $contentObjectClassName
+     * @param WorkspaceInterface $personalWorkspace
+     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param int $count
+     * @param int $offset
+     * @param OrderBy[] $orderProperty
+     *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findAllInPersonalWorkspace(PersonalWorkspace $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
+    public function findAllInPersonalWorkspace(
+        $contentObjectClassName, WorkspaceInterface $personalWorkspace,
+        ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty
+    )
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer),
             $count,
             $offset,
-            $orderProperty);
+            $orderProperty
+        );
 
-        return $this->findAll($parameters);
+        return $this->findAll($contentObjectClassName, $parameters);
     }
 
-    public function countAllInPersonalWorkspace(PersonalWorkspace $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer)
+    /**
+     * @param string $contentObjectClassName
+     * @param WorkspaceInterface $personalWorkspace
+     * @param ConditionFilterRenderer $filterConditionRenderer
+     *
+     * @return int
+     */
+    public function countAllInPersonalWorkspace(
+        $contentObjectClassName, WorkspaceInterface $personalWorkspace,
+        ConditionFilterRenderer $filterConditionRenderer
+    )
     {
         $parameters = new DataClassCountParameters(
-            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer));
-        return $this->countAll($parameters);
+            $this->getPersonalWorkspaceConditions($personalWorkspace, $filterConditionRenderer)
+        );
+
+        return $this->countAll($contentObjectClassName, $parameters);
     }
 
-    private function getPersonalWorkspaceConditions(PersonalWorkspace $personalWorkspace,
-        ConditionFilterRenderer $filterConditionRenderer)
+    /**
+     * @param WorkspaceInterface $personalWorkspace
+     * @param ConditionFilterRenderer $filterConditionRenderer
+     *
+     * @return AndCondition
+     */
+    protected function getPersonalWorkspaceConditions(
+        WorkspaceInterface $personalWorkspace,
+        ConditionFilterRenderer $filterConditionRenderer
+    )
     {
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OWNER_ID),
-            new StaticConditionVariable($personalWorkspace->getId()));
+            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_OWNER_ID),
+            new StaticConditionVariable($personalWorkspace->getId())
+        );
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
 
         return new AndCondition($conditions);
     }
 
     /**
+     * @param string $contentObjectClassName
+     * @param WorkspaceInterface $workspace
+     * @param ConditionFilterRenderer $filterConditionRenderer
+     * @param int $count
+     * @param int $offset
+     * @param OrderBy[] $orderProperty
      *
-     * @param Workspace $workspace
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findAllInWorkspace(Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer, $count,
-        $offset, $orderProperty)
+    public function findAllInWorkspace(
+        $contentObjectClassName, WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer,
+        $count,
+        $offset, $orderProperty
+    )
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
             $count,
             $offset,
             $orderProperty,
-            $this->getWorkspaceJoins());
+            $this->getWorkspaceJoins()
+        );
 
-        return $this->findAll($parameters);
+        return $this->findAll($contentObjectClassName, $parameters);
     }
 
     /**
-     *
-     * @param Workspace $workspace
+     * @param string $contentObjectClassName
+     * @param WorkspaceInterface $workspace
      * @param ConditionFilterRenderer $filterConditionRenderer
-     * @return integer
+     *
+     * @return int
      */
-    public function countAllInWorkspace(Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer)
+    public function countAllInWorkspace(
+        $contentObjectClassName, WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer
+    )
     {
         $parameters = new DataClassCountParameters(
             $this->getWorkspaceConditions($workspace, $filterConditionRenderer),
-            $this->getWorkspaceJoins());
-        return $this->countAll($parameters);
+            $this->getWorkspaceJoins()
+        );
+
+        return $this->countAll($contentObjectClassName, $parameters);
     }
 
     /**
      *
-     * @param Workspace $workspace
+     * @param WorkspaceInterface $workspace
      * @param ConditionFilterRenderer $filterConditionRenderer
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    private function getWorkspaceConditions(Workspace $workspace, ConditionFilterRenderer $filterConditionRenderer)
+    protected function getWorkspaceConditions(
+        WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer
+    )
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
-            new StaticConditionVariable($workspace->getId()));
+                WorkspaceContentObjectRelation:: class_name(),
+                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID
+            ),
+            new StaticConditionVariable($workspace->getId())
+        );
         $conditions[] = $this->getActiveContentObjectConditions($filterConditionRenderer);
 
         return new AndCondition($conditions);
@@ -120,39 +170,46 @@ class ContentObjectRepository
      *
      * @return \Chamilo\Libraries\Storage\Query\Joins
      */
-    private function getWorkspaceJoins()
+    protected function getWorkspaceJoins()
     {
         $joinCondition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OBJECT_NUMBER),
+            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_OBJECT_NUMBER),
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID));
+                WorkspaceContentObjectRelation:: class_name(),
+                WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID
+            )
+        );
 
-        $join = new Join(WorkspaceContentObjectRelation :: class_name(), $joinCondition);
+        $join = new Join(WorkspaceContentObjectRelation:: class_name(), $joinCondition);
+
         return new Joins(array($join));
     }
 
     /**
      *
+     * @param $contentObjectClassName
      * @param DataClassRetrievesParameters $parameters
+     *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findAll(DataClassRetrievesParameters $parameters)
+    public function findAll($contentObjectClassName, DataClassRetrievesParameters $parameters)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieves(ContentObject :: class_name(), $parameters);
+        return \Chamilo\Core\Repository\Storage\DataManager:: retrieves($contentObjectClassName, $parameters);
     }
 
     /**
      *
+     * @param $contentObjectClassName
      * @param DataClassCountParameters $parameters
-     * @return integer
+     *
+     * @return int
      */
-    public function countAll(DataClassCountParameters $parameters)
+    public function countAll($contentObjectClassName, DataClassCountParameters $parameters)
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: count(ContentObject :: class_name(), $parameters);
+        return \Chamilo\Core\Repository\Storage\DataManager:: count($contentObjectClassName, $parameters);
     }
 
-    private function getActiveContentObjectConditions(ConditionFilterRenderer $filterConditionRenderer)
+    protected function getActiveContentObjectConditions(ConditionFilterRenderer $filterConditionRenderer)
     {
         $conditions = array();
 
@@ -165,8 +222,10 @@ class ContentObjectRepository
 
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_CURRENT),
-                new StaticConditionVariable(ContentObject :: CURRENT_OLD)));
+                new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_CURRENT),
+                new StaticConditionVariable(ContentObject :: CURRENT_OLD)
+            )
+        );
 
         $conditions[] = $this->getStateCondition(ContentObject :: STATE_NORMAL);
         $conditions[] = $this->getActiveHelperTypeConditions();
@@ -178,17 +237,19 @@ class ContentObjectRepository
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    private function getActiveHelperTypeConditions()
+    protected function getActiveHelperTypeConditions()
     {
         $conditions = array();
-        $types = \Chamilo\Core\Repository\Storage\DataManager :: get_active_helper_types();
+        $types = \Chamilo\Core\Repository\Storage\DataManager:: get_active_helper_types();
 
         foreach ($types as $type)
         {
             $conditions[] = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-                    new StaticConditionVariable($type)));
+                    new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_TYPE),
+                    new StaticConditionVariable($type)
+                )
+            );
         }
 
         return new AndCondition($conditions);
@@ -197,12 +258,14 @@ class ContentObjectRepository
     /**
      *
      * @param integer $state
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
      */
-    private function getStateCondition($state)
+    protected function getStateCondition($state)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_STATE),
-            new StaticConditionVariable($state));
+            new PropertyConditionVariable(ContentObject:: class_name(), ContentObject :: PROPERTY_STATE),
+            new StaticConditionVariable($state)
+        );
     }
 }

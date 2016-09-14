@@ -12,32 +12,32 @@ class GalleryTableDataProvider extends DataClassGalleryTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $orderProperty = null)
     {
+        $filterData = FilterData:: get_instance($this->get_component()->get_repository_browser()->getWorkspace());
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-        return $contentObjectService->getContentObjectsForWorkspace(
+        
+        return $contentObjectService->getContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(),
             $this->get_component()->get_repository_browser()->getWorkspace(),
             ConditionFilterRenderer :: factory(
-                FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace()),
+                $filterData,
                 $this->get_component()->get_repository_browser()->getWorkspace()),
             $count,
             $offset,
             $orderProperty);
 
-        // return DataManager :: retrieve_active_content_objects(
-        // $this->get_table()->get_type(),
-        // new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)
     {
+        $filterData = FilterData:: get_instance($this->get_component()->get_repository_browser()->getWorkspace());
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-        return $contentObjectService->countContentObjectsForWorkspace(
+        
+        return $contentObjectService->countContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(),
             $this->get_component()->get_repository_browser()->getWorkspace(),
             ConditionFilterRenderer :: factory(
-                FilterData :: get_instance($this->get_component()->get_repository_browser()->getWorkspace()),
+                $filterData,
                 $this->get_component()->get_repository_browser()->getWorkspace()));
 
-        // return DataManager :: count_active_content_objects(
-        // $this->get_table()->get_type(),
-        // new DataClassCountParameters($condition));
     }
 }

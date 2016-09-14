@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Filter;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -155,6 +156,24 @@ class FilterData
         }
 
         return $this->context;
+    }
+
+    /**
+     * Returns the dataclass for the given type (if there is a filter on the type)
+     */
+    public function getTypeDataClass()
+    {
+        $type = $this->get_type();
+
+        if(!is_null($type))
+        {
+            $context = $this->get_context();
+
+            return $context . '\Storage\DataClass\\' .
+                ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($context);
+        }
+
+        return ContentObject::class_name();
     }
 
     /**
