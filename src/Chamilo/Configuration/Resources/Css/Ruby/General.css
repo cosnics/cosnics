@@ -1,0 +1,25 @@
+@import url('../Aqua/General.css');
+/*****************************************************
+ *  MAIN STYLES FILE                                 *
+ *****************************************************/
+body {
+	color: #000;
+	margin: 0px;
+}
+
+/*****************************************************
+ *  MAIN STYLES                                      *
+ *****************************************************/
+div.block div.title {
+	color: #B1071C;
+}
+
+div.block div.title a {
+	float: right;
+	font-weight: normal;
+	font-size: 11px;
+	text-decoration: none;
+	color: #B1071C;
+	cursor: pointer;
+	margin-left: 4px;
+}
