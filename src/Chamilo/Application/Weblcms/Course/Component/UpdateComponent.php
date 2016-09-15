@@ -45,6 +45,11 @@ class UpdateComponent extends CourseFormActionComponent
             return false;
         }
 
+        if($course->isCourseTypeChanged())
+        {
+            DataManager::delete_course_type_user_category_rel_courses_by_course_id($course->getId());
+        }
+
         $titular_id = (int) $course->get_titular_id();
 
         if ($titular_id)
