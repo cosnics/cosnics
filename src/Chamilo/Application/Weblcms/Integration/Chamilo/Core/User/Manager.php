@@ -18,17 +18,17 @@ class Manager implements UserInterface
 
         $table = new HTML_Table(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
 
-        $table->setHeaderContents(0, 0, Translation :: get('Courses'));
+        $table->setHeaderContents(0, 0, Translation::get('Courses'));
         $table->setCellAttributes(0, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
 
-        $table->setHeaderContents(1, 0, Translation :: get('CourseCode'));
-        $table->setHeaderContents(1, 1, Translation :: get('CourseName'));
+        $table->setHeaderContents(1, 0, Translation::get('CourseCode'));
+        $table->setHeaderContents(1, 1, Translation::get('CourseName'));
 
-        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_all_courses_from_user($user);
+        $courses = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_all_courses_from_user($user);
 
         if ($courses->size() == 0)
         {
-            $table->setCellContents(2, 0, Translation :: get('NoCourses'));
+            $table->setCellContents(2, 0, Translation::get('NoCourses'));
             $table->setCellAttributes(2, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
         }
 
@@ -38,8 +38,9 @@ class Manager implements UserInterface
         {
             $redirect = new Redirect(
                 array(
-                    \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
-                    \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $course->get_id()));
+                    \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+                    \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
+                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->get_id()));
             $url = $redirect->getUrl();
 
             $url = '<a href="' . $url . '">';
