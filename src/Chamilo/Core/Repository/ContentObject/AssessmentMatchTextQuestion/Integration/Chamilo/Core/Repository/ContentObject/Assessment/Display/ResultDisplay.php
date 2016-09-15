@@ -135,12 +135,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '<thead>';
                 $html[] = '<tr>';
                 $html[] = '<th style="width: 50%;">' . Translation :: get('BestPossibleAnswer') . '</th>';
-                
+
                 $answer_feedback_display = AnswerFeedbackDisplay :: allowed(
                     $configuration, 
                     $this->get_complex_content_object_question(), 
-                    false, 
-                    true);
+                    !empty($user_answer[0]),
+                    false
+                );
                 
                 if ($answer_feedback_display)
                 {
