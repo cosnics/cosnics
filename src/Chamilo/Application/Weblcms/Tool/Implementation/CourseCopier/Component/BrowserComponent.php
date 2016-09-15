@@ -7,12 +7,15 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Forms\CourseCop
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\Repository\CourseCopierRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\Service\CourseCopier;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Service\PublicationSelectorDataMapper;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /*
  * This tool is for copying information from othe current course to another @author Mattias De Pauw - Hogeschool Gent
@@ -34,16 +37,23 @@ class BrowserComponent extends Manager
     {
         $course_id = $this->get_course_id();
 
+        $courseGroupService = new CourseGroupService(
+            WeblcmsRights::get_instance(), new CourseGroupRepository()
+        );
+
         // $trail = BreadcrumbTrail :: get_instance();
         if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
 
-        if (\Chamilo\Application\Weblcms\Course\Storage\DataManager:: count_course_content_object_publications(
-                $course_id
-            ) == 0
-        )
+        $contentObjectPublicationsCount = \Chamilo\Application\Weblcms\Course\Storage\DataManager::count_course_content_object_publications(
+            $course_id
+        );
+
+        $courseGroupsCount = $courseGroupService->countCourseGroupsInCourse($course_id);
+
+        if ($contentObjectPublicationsCount == 0 && $courseGroupsCount <= 1)
         {
             throw new \Exception(Translation:: get('NoPublications'));
         }
@@ -98,9 +108,7 @@ class BrowserComponent extends Manager
                 $copyCourseGroups = boolval($values['course_groups']);
 
                 $courseCopier = new CourseCopier(
-                    new CourseCopierRepository(), new CourseGroupService(
-                        WeblcmsRights::get_instance()
-                    )
+                    new CourseCopierRepository(), $courseGroupService
                 );
 
                 $courseCopier->copyCourse(

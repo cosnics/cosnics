@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepositoryInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -26,12 +27,19 @@ class CourseGroupService implements CourseGroupServiceInterface
     protected $weblcmsRights;
 
     /**
+     * @var CourseGroupRepositoryInterface
+     */
+    protected $courseGroupRepository;
+
+    /**
      * CourseGroupService constructor.
      *
      * @param WeblcmsRights $weblcmsRights
+     * @param CourseGroupRepositoryInterface $courseGroupRepository
      */
-    public function __construct(WeblcmsRights $weblcmsRights)
+    public function __construct(WeblcmsRights $weblcmsRights, CourseGroupRepositoryInterface $courseGroupRepository)
     {
+        $this->courseGroupRepository = $courseGroupRepository;
         $this->weblcmsRights = $weblcmsRights;
     }
 
@@ -79,6 +87,18 @@ class CourseGroupService implements CourseGroupServiceInterface
                 'Could not set the newly created category id to the course group with id ' . $courseGroup->getId()
             );
         }
+    }
+
+    /**
+     * Counts the course groups in a given course
+     *
+     * @param int $courseId
+     *
+     * @return int
+     */
+    public function countCourseGroupsInCourse($courseId)
+    {
+        return $this->courseGroupRepository->countCourseGroupsInCourse($courseId);
     }
 
     /**

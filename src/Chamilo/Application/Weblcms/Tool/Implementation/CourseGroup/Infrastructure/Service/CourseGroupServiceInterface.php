@@ -30,4 +30,13 @@ interface CourseGroupServiceInterface
      * @throws \Exception
      */
     public function createForumCategoryAndPublicationForCourseGroup(CourseGroup $courseGroup, User $user);
+
+    /**
+     * Counts the course groups in a given course
+     *
+     * @param int $courseId
+     *
+     * @return int
+     */
+    public function countCourseGroupsInCourse($courseId);
 }
