@@ -218,6 +218,16 @@ class Course extends DataClass
     }
 
     /**
+     * Returns whether or not the course type has been changed for this course
+     *
+     * @return bool
+     */
+    public function isCourseTypeChanged()
+    {
+       return !is_null($this->old_course_type_id) && $this->old_course_type_id != $this->get_course_type_id();
+    }
+
+    /**
      * Returns the dependencies for this dataclass
      *
      * @return string[string]
