@@ -23,13 +23,14 @@ class CopierComponent extends Manager
     public function run()
     {
         $complexContentObjectItemIdentifiers = $this->getRequest()->get(
-            \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
+            \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID
+        );
 
-        if (! $complexContentObjectItemIdentifiers)
+        if (!$complexContentObjectItemIdentifiers)
         {
             throw new \InvalidArgumentException();
         }
-        elseif (! is_array($complexContentObjectItemIdentifiers))
+        elseif (!is_array($complexContentObjectItemIdentifiers))
         {
             $complexContentObjectItemIdentifiers = array($complexContentObjectItemIdentifiers);
         }
@@ -39,24 +40,26 @@ class CopierComponent extends Manager
 
         foreach ($complexContentObjectItemIdentifiers as $complexContentObjectItemIdentifier)
         {
-            $complexContentObjectItem = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ComplexContentObjectItem :: class_name(),
-                $complexContentObjectItemIdentifier);
+            $complexContentObjectItem = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
+                ComplexContentObjectItem:: class_name(),
+                $complexContentObjectItemIdentifier
+            );
 
             try
             {
-                if (! $complexContentObjectItem instanceof ComplexContentObjectItem)
+                if (!$complexContentObjectItem instanceof ComplexContentObjectItem)
                 {
-                    throw new ObjectNotExistException(Translation :: get('ComplexContentObjectItem'));
+                    throw new ObjectNotExistException(Translation:: get('ComplexContentObjectItem'));
                 }
 
-                $contentObject = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
-                    $complexContentObjectItem->get_ref());
+                $contentObject = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
+                    ContentObject:: class_name(),
+                    $complexContentObjectItem->get_ref()
+                );
 
-                if (! $contentObject instanceof ContentObject)
+                if (!$contentObject instanceof ContentObject)
                 {
-                    throw new ObjectNotExistException(Translation :: get('ContentObject'));
+                    throw new ObjectNotExistException(Translation:: get('ContentObject'));
                 }
 
                 $contentObjectCopier = new ContentObjectCopier(
@@ -65,7 +68,9 @@ class CopierComponent extends Manager
                     new PersonalWorkspace($contentObject->get_owner()),
                     $contentObject->get_owner_id(),
                     new PersonalWorkspace($this->get_user()),
-                    $this->get_user_id());
+                    $this->get_user_id()
+                );
+
                 $copiedContentObjectIdentifiers = $contentObjectCopier->run();
 
                 if ($contentObjectCopier->has_messages(ContentObjectCopier :: TYPE_ERROR))
@@ -74,58 +79,55 @@ class CopierComponent extends Manager
                 }
                 else
                 {
-                    if (count($copiedContentObjectIdentifiers) > 0)
+                    $parentIdentifier = $this->get_parent_content_object_id();
+                    $copiedContentObjectId = $copiedContentObjectIdentifiers[$contentObject->getId()];
+
+                    if (method_exists($this->get_parent(), 'get_helper_object'))
                     {
-                        foreach ($copiedContentObjectIdentifiers as $copiedContentObjectIdentifier)
+                        $helperObject = $this->get_parent()->get_helper_object($contentObject->get_type());
+
+                        if ($helperObject)
                         {
-                            $copiedContentObjectType = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
-                                ContentObject :: class_name(),
-                                $copiedContentObjectIdentifier);
-                            $parentIdentifier = $this->get_parent_content_object_id();
+                            $helperObject->set_title($helperObject->get_type_name());
+                            $helperObject->set_description($helperObject->get_type_name());
+                            $helperObject->set_owner_id($this->getUser()->getId());
+                            $helperObject->set_reference($copiedContentObjectId);
+                            $helperObject->set_parent_id(0);
 
-                            if (method_exists($this->get_parent(), 'get_helper_object'))
+                            if (!$helperObject->create())
                             {
-                                $helperObject = $this->get_parent()->get_helper_object($copiedContentObjectType);
-
-                                if ($helperObject)
-                                {
-                                    $helperObject->set_title($helperObject->get_type_name());
-                                    $helperObject->set_description($helperObject->get_type_name());
-                                    $helperObject->set_owner_id($this->get_user_id());
-                                    $helperObject->set_reference($copiedContentObjectIdentifier);
-                                    $helperObject->set_parent_id(0);
-
-                                    if (! $helperObject->create())
-                                    {
-                                        throw new \Exception(Translation :: get('HelperObjectCreationFailed'));
-                                    }
-
-                                    $copiedContentObjectIdentifier = $helperObject->get_id();
-                                }
+                                throw new \Exception(Translation:: get('HelperObjectCreationFailed'));
                             }
 
-                            $copiedContentObjectType = \Chamilo\Core\Repository\Storage\DataManager :: determineDataClassType(
-                                ContentObject :: class_name(),
-                                $copiedContentObjectIdentifier);
-
-                            $complexContentObjectItem = \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem :: factory(
-                                $copiedContentObjectType);
-                            $complexContentObjectItem->set_ref($copiedContentObjectIdentifier);
-                            $complexContentObjectItem->set_parent($parentIdentifier);
-                            $complexContentObjectItem->set_display_order(
-                                \Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order(
-                                    $parentIdentifier));
-                            $complexContentObjectItem->set_user_id($this->get_user_id());
-
-                            if (! $complexContentObjectItem->create())
-                            {
-                                throw new \Exception(Translation :: get('ComplexContentObjectItemCreationFailed'));
-                            }
-                            else
-                            {
-                                $copiedComplexContentObjectItemIdentifiers[] = $complexContentObjectItem->getId();
-                            }
+                            $copiedContentObjectId = $helperObject->get_id();
                         }
+                    }
+
+                    $copiedContentObjectType = \Chamilo\Core\Repository\Storage\DataManager:: determineDataClassType(
+                        ContentObject:: class_name(),
+                        $copiedContentObjectId
+                    );
+
+                    $complexContentObjectItem =
+                        \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem::factory(
+                            $copiedContentObjectType
+                        );
+                    $complexContentObjectItem->set_ref($copiedContentObjectId);
+                    $complexContentObjectItem->set_parent($parentIdentifier);
+                    $complexContentObjectItem->set_display_order(
+                        \Chamilo\Core\Repository\Storage\DataManager:: select_next_display_order(
+                            $parentIdentifier
+                        )
+                    );
+                    $complexContentObjectItem->set_user_id($this->getUser()->getId());
+
+                    if (!$complexContentObjectItem->create())
+                    {
+                        throw new \Exception(Translation:: get('ComplexContentObjectItemCreationFailed'));
+                    }
+                    else
+                    {
+                        $copiedComplexContentObjectItemIdentifiers[] = $complexContentObjectItem->getId();
                     }
                 }
             }
@@ -145,28 +147,37 @@ class CopierComponent extends Manager
             if ($numberOfCopiedContentOBjects > 1 || $numberOfCopiedContentOBjects == 0)
             {
                 $this->redirect(
-                    Translation :: get(
+                    Translation:: get(
                         'ObjectCopied',
-                        array('OBJECT' => Translation :: get('ContentObject')),
-                        Utilities :: COMMON_LIBRARIES),
+                        array('OBJECT' => Translation:: get('ContentObject')),
+                        Utilities :: COMMON_LIBRARIES
+                    ),
                     false,
                     array(
                         \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_BROWSE,
-                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id()));
+                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent(
+                        )->get_complex_content_object_item_id()
+                    )
+                );
             }
             else
             {
                 $this->redirect(
-                    Translation :: get(
+                    Translation:: get(
                         'ObjectCopied',
-                        array('OBJECT' => Translation :: get('ContentObject')),
-                        Utilities :: COMMON_LIBRARIES),
+                        array('OBJECT' => Translation:: get('ContentObject')),
+                        Utilities :: COMMON_LIBRARIES
+                    ),
                     false,
                     array(
                         \Chamilo\Core\Repository\Builder\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Builder\Manager :: ACTION_UPDATE_COMPLEX_CONTENT_OBJECT_ITEM,
                         \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => array_pop(
-                            $copiedComplexContentObjectItemIdentifiers),
-                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id()));
+                            $copiedComplexContentObjectItemIdentifiers
+                        ),
+                        \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent(
+                        )->get_complex_content_object_item_id()
+                    )
+                );
             }
         }
     }
