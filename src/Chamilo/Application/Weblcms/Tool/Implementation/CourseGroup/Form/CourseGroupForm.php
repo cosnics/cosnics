@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\CourseGroupMenu;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Repository\CourseGroupRepository;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
@@ -327,7 +328,7 @@ class CourseGroupForm extends FormValidator
      */
     public function update_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance());
+        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance(), new CourseGroupRepository());
 
         $values = $this->exportValues();
         $course_group = $this->course_group;
@@ -1079,7 +1080,7 @@ class CourseGroupForm extends FormValidator
      */
     public function create_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance());
+        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance(), new CourseGroupRepository());
 
         $this->rights = array();
         $this->rights[] = WeblcmsRights :: VIEW_RIGHT;

@@ -46,51 +46,55 @@ class CourseCopierForm extends FormValidator
         $translations = array();
 
         $this->addElement('category', $this->getTranslation('Publications'));
-        $this->addElement('html', '<div id="categories" style="display: none;">');
 
-        foreach ($this->categories as $index => $category)
+        if(count($this->categories) > 0 || count($this->publications) > 0)
         {
-            $tool = $category[ContentObjectPublicationCategory::PROPERTY_TOOL];
-            $label = '';
-            $id = 'categories[' . $category[ContentObjectPublicationCategory::PROPERTY_ID] . ']';
-
-            $this->addElement('checkbox', $id, $label, $category[ContentObjectPublicationCategory::PROPERTY_NAME]);
-            $defaults[$id] = true;
-            if (!array_key_exists($tool, $translations))
+            $this->addElement('html', '<div id="categories" style="display: none;">');
+            
+            foreach ($this->categories as $index => $category)
             {
-                $translations[$tool] = $this->getTranslation(
-                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager:: get_tool_type_namespace($tool)
-                );
+                $tool = $category[ContentObjectPublicationCategory::PROPERTY_TOOL];
+                $label = '';
+                $id = 'categories[' . $category[ContentObjectPublicationCategory::PROPERTY_ID] . ']';
+
+                $this->addElement('checkbox', $id, $label, $category[ContentObjectPublicationCategory::PROPERTY_NAME]);
+                $defaults[$id] = true;
+                if (!array_key_exists($tool, $translations))
+                {
+                    $translations[$tool] = $this->getTranslation(
+                        'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager:: get_tool_type_namespace($tool)
+                    );
+                }
             }
-        }
 
-        $this->addElement('html', '</div><div id="publications" style="display: none;">');
-        foreach ($this->publications as $publication)
-        {
-            $tool = $publication[ContentObjectPublication::PROPERTY_TOOL];
-            $label = '';
-            $id = 'publications[' . $publication[ContentObjectPublication::PROPERTY_ID] . ']';
-
-            $this->addElement('checkbox', $id, $label, $publication[ContentObject::PROPERTY_TITLE]);
-            $defaults[$id] = true;
-
-            if (!array_key_exists($tool, $translations))
+            $this->addElement('html', '</div><div id="publications" style="display: none;">');
+            foreach ($this->publications as $publication)
             {
-                $translations[$tool] = $this->getTranslation(
-                    'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager:: get_tool_type_namespace($tool)
-                );
+                $tool = $publication[ContentObjectPublication::PROPERTY_TOOL];
+                $label = '';
+                $id = 'publications[' . $publication[ContentObjectPublication::PROPERTY_ID] . ']';
+
+                $this->addElement('checkbox', $id, $label, $publication[ContentObject::PROPERTY_TITLE]);
+                $defaults[$id] = true;
+
+                if (!array_key_exists($tool, $translations))
+                {
+                    $translations[$tool] = $this->getTranslation(
+                        'TypeName', null, \Chamilo\Application\Weblcms\Tool\Manager:: get_tool_type_namespace($tool)
+                    );
+                }
             }
+
+            $this->addElement('html', '</div>');
+            $publication_selector_form = new PublicationSelectorForm(
+                $this->publications, $this->categories,
+                $this->parent->get_course()->get_title(), true, $translations
+            );
+            $this->addElement('html', $publication_selector_form->render());
+
+            $this->addElement('checkbox', 'content_object_categories', $this->getTranslation('PublicationCategories'));
+            $defaults['content_object_categories'] = false;
         }
-
-        $this->addElement('html', '</div>');
-        $publication_selector_form = new PublicationSelectorForm(
-            $this->publications, $this->categories,
-            $this->parent->get_course()->get_title(), true, $translations
-        );
-        $this->addElement('html', $publication_selector_form->render());
-
-        $this->addElement('checkbox', 'content_object_categories', $this->getTranslation('PublicationCategories'));
-        $defaults['content_object_categories'] = false;
 
         $this->addElement('checkbox', 'course_groups', $this->getTranslation('CourseGroups'));
         $defaults['course_groups'] = true;
