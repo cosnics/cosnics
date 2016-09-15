@@ -3,10 +3,10 @@
 ; Language = de
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Ankündigingen"
+TypeName = "Ankündigungen"
 InstallTypeName = ""
-BrowserComponent = "Ankündigingen durchsuchen"
-ViewerComponent = "Ankündiging ansehen"
-PublisherComponent = "Ankündiging veröffentlichen"
-UpdaterComponent = "Ankündiging bearbeiten"
+BrowserComponent = "Ankündigungen durchsuchen"
+ViewerComponent = "Ankündigung ansehen"
+PublisherComponent = "Ankündigung veröffentlichen"
+UpdaterComponent = "Ankündigung bearbeiten"
 IntroductionPublisherComponent = "Vorstellung veröffentlichen"
