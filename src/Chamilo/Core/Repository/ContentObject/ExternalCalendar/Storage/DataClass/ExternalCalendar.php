@@ -225,7 +225,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 $calendar->expand($start_date_time, $end_date_time);
                 $occurences = $calendar->VEVENT;
 
-                $cache->save($cacheId, $occurences);
+                $cache->save($cacheId, $occurences, 3600);
             }
         }
         catch (\Exception $exception)
