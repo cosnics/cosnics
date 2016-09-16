@@ -169,7 +169,7 @@ class Display extends QuestionDisplay
 
             $html[] = '<div class="panel-body">';
             $html[] = '<a id="' . $hint_name .
-                 '" class="btn btn-default"><span class="glyphicon glyphicon-gift"></span> ' .
+                 '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
                  Translation::get('GetAHint') . '</a>';
             $html[] = '</div>';
 
