@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Ajax\Component;
 
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -36,15 +38,14 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\Aj
 
     public function factory($complex_content_object_item)
     {
-        $context = $complex_content_object_item->get_ref_object()->context();
-        $class = $context . '\HintComponent';
+        $context = $complex_content_object_item->get_ref_object()->package();
 
-        if (! class_exists($class))
-        {
-            JsonAjaxResult :: bad_request();
-        }
+        $factory = new ApplicationFactory(
+            $context . '\Ajax',
+            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+        );
 
-        $component = new $class($this->get_user());
+        $component = $factory->getComponent('Hint');
         $component->set_complex_content_object_item($complex_content_object_item);
         return $component;
     }
