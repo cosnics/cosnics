@@ -110,13 +110,15 @@ class BrowserComponent extends Manager implements TableSupport
                     Filesystem :: format_file_size($this->calculator->getUsedAllocatedDiskSpace()) . ' / ' . Filesystem :: format_file_size(
                         $this->calculator->getMaximumAllocatedDiskSpace()));
                 $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
-                
-                $tabs->add_tab(
-                    new DynamicContentTab(
-                        'platform', 
-                        Translation :: get('Platform'), 
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Platform'), 
-                        implode(PHP_EOL, $platform_quota)));
+
+                if ($this->getUser()->is_platform_admin()) {
+                    $tabs->add_tab(
+                        new DynamicContentTab(
+                            'platform',
+                            Translation :: get('Platform'),
+                            Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Platform'),
+                            implode(PHP_EOL, $platform_quota)));
+                }
                 
                 if ($this->calculator->isEnabled())
                 {
@@ -141,7 +143,7 @@ class BrowserComponent extends Manager implements TableSupport
                         new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION), 
                         new StaticConditionVariable(Request :: DECISION_PENDING));
                     
-                    if (! $this->get_user()->is_platform_admin())
+                    if (! $this->getUser()->is_platform_admin())
                     {
                         $conditions[] = $target_condition;
                     }
