@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Learning Path</name>
+		<code>LearningPath</code>
+		<context>Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration\Chamilo\Core\Repository\ContentObject\LearningPath</context>
+		<type>Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Integration</type>
+		<category>core</category>
+		<authors>
+		</authors>
+		<version>5.0.0</version>
+		<description>Add metadata to content objects, users, groups
+		</description>
+		<pre-depends>
+			<dependencies operator="1">
+				<dependency type="registration">
+					<id>Chamilo\Application\Weblcms\Tool\Implementation\LearningPath</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+				<dependency type="registration">
+					<id>Chamilo\Core\Repository\ContentObject\LearningPath</id>
+					<version operator="4">5.0.0</version>
+				</dependency>
+			</dependencies>
+		</pre-depends>
+	</package>
+</packages>

@@ -1,0 +1,23 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\flickr
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Flickr"
+FlickrExternalRepositoryManagerBrowserComponent = "Browser"
+FlickrExternalRepositoryManagerViewerComponent = "Viewer"
+ContentObject = "Content object"
+ExternalRepository = "Externe repository"
+FlickrUploadProblem = "Upload probleem"
+MostRecent = "Meest recent"
+MostInteresting = "Meest interessant"
+MyPhotos = "Mijn foto's"
+AvailableSizes = "Beschikbare groottes"
+Tags = "Tags"
+License = "Licentie"
+FileName = "Bestandsnaam"
+Credentials = "Toegewezen rechten"
+SessionToken = "Session token"
+UploaderComponent = "Upload"
+LoginTitle = "Inloggen"
+LogoutTitle = "Uitloggen"
