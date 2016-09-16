@@ -7,6 +7,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Group\Table\Group\GroupTable;
 use Chamilo\Core\Group\Table\GroupRelUser\GroupRelUserTable;
+use Chamilo\Core\Lynx\Action;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -96,13 +97,6 @@ class BrowserComponent extends Manager implements TableSupport
         // Subgroups table tab
         // if ($subgroup_count > 0)
         // {
-        $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        
-        $parameters = $this->get_parameters();
-        $parameters[self :: PARAM_GROUP_ID] = $this->get_group();
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        
         $table = new GroupTable($this);
         $tabs->add_tab(
             new DynamicContentTab(
@@ -422,5 +416,10 @@ class BrowserComponent extends Manager implements TableSupport
             case GroupRelUserTable :: class_name() :
                 return $this->get_users_condition();
         }
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_GROUP_ID, ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY);
     }
 }
