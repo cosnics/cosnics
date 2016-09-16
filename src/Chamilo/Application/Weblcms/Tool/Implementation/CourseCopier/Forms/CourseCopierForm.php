@@ -97,7 +97,7 @@ class CourseCopierForm extends FormValidator
         }
 
         $this->addElement('checkbox', 'course_groups', $this->getTranslation('CourseGroups'));
-        $defaults['course_groups'] = true;
+        $defaults['course_groups'] = false;
 
         $this->setDefaults($defaults);
 
