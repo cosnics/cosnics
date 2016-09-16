@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Peer Assessment</name>
+		<code>PeerAssessment</code>
+		<context>Chamilo\Core\Repository\ContentObject\PeerAssessment</context>
+		<type>Chamilo\Core\Repository\ContentObject</type>
+		<category>PeerAssessment</category>
+		<authors>
+			<author>
+				<name>Renaat De Muynck</name>
+				<email>renaat.demuynck@arteveldehs.be</email>
+				<company>Arteveldehogeschool</company>
+			</author>
+			<author>
+				<name>jens vanderheyden</name>
+				<email>jevdheyd@vub.ac.be</email>
+				<company>Vrije Universiteit Brussel</company>
+			</author>
+		</authors>
+		<version>5.0.0</version>
+		<description />
+		<pre-depends>
+			<dependency type="registration">
+				<id>Chamilo\Core\Repository</id>
+				<version operator="4">5.0.0</version>
+			</dependency>
+		</pre-depends>
+	</package>
+</packages>
