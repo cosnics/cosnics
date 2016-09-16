@@ -77,7 +77,7 @@ class Display extends QuestionDisplay
 
             $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
             $html[] = '<div class="with_borders"><a id="' . $hint_name .
-                 '" class="btn btn-default"><span class="glyphicon glyphicon-gift"></span> ' .
+                 '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
                  Translation :: get('GetAHint') . '</a></div>';
 
             $footer = implode(PHP_EOL, $html);
