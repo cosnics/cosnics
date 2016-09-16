@@ -33,10 +33,10 @@ class ViewAsComponent extends Manager
             $this->get_course(),
             CourseSettingsConnector :: COURSE_ACCESS);
 
-        if ($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
-        {
-            throw new NotAllowedException();
-        }
+//        if ($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+//        {
+//            throw new NotAllowedException();
+//        }
 
         $view_as_user_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS);
         if (! isset($view_as_user_id))
