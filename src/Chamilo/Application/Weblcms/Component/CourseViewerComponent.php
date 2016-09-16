@@ -306,7 +306,11 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                 $this->get_course(),
                 CourseSettingsConnector :: COURSE_ACCESS);
 
-            if ($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+            $viewAsCourseId = Session::get('view_as_course_id');
+
+            if (
+                $course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED &&
+                (!isset($viewAsCourseId) || $viewAsCourseId != $this->get_course_id()))
             {
                 $allowed = false;
             }
