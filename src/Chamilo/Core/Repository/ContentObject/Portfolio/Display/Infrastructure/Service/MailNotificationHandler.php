@@ -33,7 +33,7 @@ class MailNotificationHandler extends \Chamilo\Core\Repository\Feedback\Infrastr
 
     /**
      * The URL to the feedback
-     * 
+     *
      * @var string
      */
     protected $feedbackURL;
@@ -96,7 +96,7 @@ class MailNotificationHandler extends \Chamilo\Core\Repository\Feedback\Infrastr
         $html[] = '</head>';
         $html[] = '<body>';
 
-        $html[] = '<div class="container-fluid">';
+        $html[] = '<div class="container-fluid" style="margin-top: 20px;">';
 
         $html[] = $this->getTranslation(
             'NewFeedbackForItem',
