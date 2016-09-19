@@ -139,7 +139,7 @@ class EventParser
         $googleCalendarEvent = $this->getGoogleCalendarEvent();
 
         if (is_null($googleCalendarEvent) ||
-            is_null($googleCalendarEvent->getStart() || is_null($googleCalendarEvent->getEnd()))
+            is_null($googleCalendarEvent->getStart()) || is_null($googleCalendarEvent->getEnd())
         )
         {
             return array();
