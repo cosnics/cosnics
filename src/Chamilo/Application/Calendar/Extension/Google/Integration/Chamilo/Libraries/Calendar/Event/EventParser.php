@@ -135,7 +135,12 @@ class EventParser
     public function getEvents()
     {
         $googleCalendarEvent = $this->getGoogleCalendarEvent();
-        
+
+        if(is_null($googleCalendarEvent))
+        {
+            return array();
+        }
+
         $url = null;
         
         $event = new Event(
