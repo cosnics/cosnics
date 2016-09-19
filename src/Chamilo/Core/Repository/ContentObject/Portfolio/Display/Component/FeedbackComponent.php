@@ -1,10 +1,16 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
+use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Infrastructure\Service\MailNotificationHandler;
+use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
+use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationHandlerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Feedback management of the portfolio item or folder
@@ -12,7 +18,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FeedbackComponent extends ItemComponent implements FeedbackSupport
+class FeedbackComponent extends ItemComponent implements FeedbackSupport, FeedbackNotificationSupport
 {
 
     /**
@@ -130,6 +136,16 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport
     public function retrieve_notification()
     {
         return $this->get_parent()->retrieve_portfolio_notification($this->get_current_node());
+    }
+
+    /**
+     * Retrieves all the notifications
+     *
+     * @return ResultSet<Notification>
+     */
+    public function retrieve_notifications()
+    {
+        return $this->get_application()->retrievePortfolioNotifications($this->get_current_node());
     }
 
     /**
