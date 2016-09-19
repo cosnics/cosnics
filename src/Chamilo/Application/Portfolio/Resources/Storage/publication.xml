@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="publication">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="content_object_id" type="integer" unsigned="1" notnull="1" />
+		<property name="publisher_id" type="integer" unsigned="1" notnull="1" />
+		<property name="published" type="integer" unsigned="1" notnull="1" />
+		<property name="modified" type="integer" unsigned="1" notnull="1" />
+	</properties>
+	<index name="publisher_id">
+		<indexproperty name="publisher_id" />
+	</index>
+	<index name="content_object_id">
+		<indexproperty name="content_object_id" />
+	</index>
+</object>
