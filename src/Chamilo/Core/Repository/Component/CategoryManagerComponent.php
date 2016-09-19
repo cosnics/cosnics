@@ -209,6 +209,8 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      */
     public function allowed_to_delete_category($category_id)
     {
+        return true;
+        /*
         if ($this->getWorkspace() instanceof PersonalWorkspace)
         {
             $object_count = $this->count_category_objects($category_id);
@@ -222,7 +224,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         else
         {
             return true;
-        }
+        }*/
     }
 
     /**
