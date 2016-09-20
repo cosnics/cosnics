@@ -1,17 +1,21 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioBookmarkSupport;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Infrastructure\Service\MailNotificationHandler;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Portfolio;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
+use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationHandlerInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
@@ -26,9 +30,11 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -100,7 +106,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     /**
      * Render the basic statistics for the portfolio item / folder
      *
-     * @param \core\repository\ContentObject $content_object
+     * @param ContentObject $content_object
      *
      * @return string
      */
@@ -294,6 +300,16 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     public function retrieve_notification()
     {
         return $this->get_parent()->retrieve_portfolio_notification($this->get_current_node());
+    }
+
+    /**
+     * Retrieves all the notifications
+     *
+     * @return ResultSet<Notification>
+     */
+    public function retrieve_notifications()
+    {
+        return $this->get_application()->retrievePortfolioNotifications($this->get_current_node());
     }
 
     /**

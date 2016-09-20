@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback\Storage\DataClass;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
@@ -45,7 +46,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
     /**
      *
-     * @return \core\user\User
+     * @return User
      */
     public function get_user()
     {
