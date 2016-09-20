@@ -716,7 +716,7 @@ abstract class HtmlTable extends \HTML_Table
             }
 
             $queryParameters = $this->getQueryParameters(
-                $this->getPageNumber(),
+                null,
                 null,
                 $this->getOrderColumn(),
                 $this->getOrderDirection()

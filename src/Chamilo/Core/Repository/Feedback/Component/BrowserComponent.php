@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\Feedback\Component;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
+use Chamilo\Core\Repository\Feedback\Infrastructure\Service\MailNotificationHandler;
+use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationService;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
@@ -38,7 +40,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $form = new FeedbackForm($this, $this->get_url());
-
+        
         if ($form->validate())
         {
             if (!$this->get_parent()->is_allowed_to_create_feedback())
@@ -57,6 +59,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             $feedback->set_modification_date(time());
 
             $success = $feedback->create();
+
+            $this->notifyNewFeedback($feedback);
 
             $this->redirect(
                 Translation:: get(

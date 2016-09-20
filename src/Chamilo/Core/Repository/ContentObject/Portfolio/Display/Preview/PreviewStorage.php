@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview;
 
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  *
@@ -251,5 +252,17 @@ class PreviewStorage
     {
         $notifications = $this->get_notifications();
         return $notifications[$content_object_id][$complex_content_object_item_id];
+    }
+
+    /**
+     * @param int $content_object_id
+     * @param int $complex_content_object_item_id
+     *
+     * @return ResultSet
+     */
+    public function retrieve_notifications($content_object_id, $complex_content_object_item_id)
+    {
+        $notifications = $this->get_notifications();
+        return new ArrayResultSet(array($notifications[$content_object_id][$complex_content_object_item_id]));
     }
 }

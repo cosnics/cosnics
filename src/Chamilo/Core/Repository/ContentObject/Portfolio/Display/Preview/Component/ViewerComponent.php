@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository
@@ -149,6 +150,19 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
         return PreviewStorage :: get_instance()->retrieve_notification(
             $this->get_root_content_object()->get_id(),
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
+    }
+
+    /**
+     * @param ComplexContentObjectPathNode $node
+     *
+     * @return ResultSet
+     */
+    public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
+    {
+        return PreviewStorage :: get_instance()->retrieve_notifications(
+            $this->get_root_content_object()->get_id(),
+            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0
+        );
     }
 
     /**

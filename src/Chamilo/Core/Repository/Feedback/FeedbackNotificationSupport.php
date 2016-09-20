@@ -1,6 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback;
 
+use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationHandlerInterface;
+use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
+
 /**
  * Interface which indicates a component implements the Feedback manager
  * 
@@ -10,16 +14,30 @@ interface FeedbackNotificationSupport
 {
 
     /**
-     * Retrieve the Notification instance
+     * Retrieve the Notification instance for the current user
      * 
-     * @return \core\repository\content_object\portfolio\feedback\Notification
+     * @return Notification
      */
     public function retrieve_notification();
 
     /**
+     * Retrieves all the notifications
+     *
+     * @return ResultSet<Notification>
+     */
+    public function retrieve_notifications();
+
+    /**
+     * Returns an array of notification handlers
+     *
+     * @return NotificationHandlerInterface[]
+     */
+    public function get_notification_handlers();
+
+    /**
      * Returns an newly instantiated Notification object
      * 
-     * @return \core\repository\content_object\portfolio\feedback\Notification
+     * @return Notification
      */
     public function get_notification();
 }
