@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\link
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Lien"
+Properties = "Propriétés"
+URL = "URL"
+ShowInIframe = "Montrer dans la fenêtre"
+Linker = "Linker"
+Title = "Titre"
+Description = "Description"
+ShowInIFrame = "Montrer dans la page"
+DeleteSelected = "Supprimer le lien sélectionné"
+LinkToolBrowserComponent = "Parcourir les liens"
+LinkToolIntroductionPublisherComponent = "Publier un texte d'introduction"
+LinkToolMoverComponent = "Déplacer un lien"
+LinkToolPublisherComponent = "Publier un lien"
+LinkToolUpdaterComponent = "Modifier un lien"
+LinkToolViewerComponent = "Voir un lien"

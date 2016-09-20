@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\dynamic_form_manager
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+﻿AddElement = "Voeg element toe"
+UpdateElement = "Werk element bij"
+Textbox = "Tekstvak"
+HtmlEditor = "HTML-editor"
+Checkbox = "Selecteervak"
+RadioButtons = "Keuzerondje"
+SelectBox = "Keuzeveld"
+Name = "Naam"
+Options = "Opties"
+OptionName = "Naam optie"
+TypeName = "Dynamic Form Manager"
+AddElement = "Voeg element toe"
+Type = ""
+Required = "Verplicht"
+Type = ""
