@@ -76,8 +76,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $html = array();
 
-            $buttonToolbar = $this->getFeedbackButtonToolbar();
-            $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+
 
             $feedbacks = $this->get_parent()->retrieve_feedbacks(
                 $this->getPager()->getNumberOfItemsPerPage(),
@@ -86,7 +85,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($feedbacks->size() == 0 && !$this->get_parent()->is_allowed_to_create_feedback())
             {
-                $html[] = $buttonToolbarRenderer->render();
+                $html[] = $this->renderFeedbackButtonToolbar();
                 $html[] = '<div class="clearfix"></div>';
                 $html[] = '<div class="alert alert-info">';
                 $html[] = Translation:: get('NoFeedbackYet');
@@ -95,13 +94,12 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($feedbacks->size() > 0)
             {
-                $html[] = '<h3>';
-
                 if (!$this->get_parent()->is_allowed_to_create_feedback())
                 {
-                    $html[] = $buttonToolbarRenderer->render();
+                    $html[] = $this->renderFeedbackButtonToolbar();
                 }
 
+                $html[] = '<h3>';
                 $html[] = Translation:: get('Feedback');
                 $html[] = '<div class="clearfix"></div>';
                 $html[] = '</h3>';
@@ -163,8 +161,9 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($this->get_parent()->is_allowed_to_create_feedback())
             {
+                $html[] = $this->renderFeedbackButtonToolbar();
+
                 $html[] = '<h3>';
-                $html[] = $buttonToolbarRenderer->render();
                 $html[] = Translation:: get('AddFeedback');
                 $html[] = '<div class="clearfix"></div>';
                 $html[] = '</h3>';
@@ -176,14 +175,20 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
     }
 
-    protected function getFeedbackButtonToolbar()
+    /**
+     * Renders the feedback button
+     * @return ButtonToolBar|string
+     */
+    protected function renderFeedbackButtonToolbar()
     {
-        $buttonToolbar = new ButtonToolBar(null, array(), array('pull-right'));
+        $buttonToolbar = new ButtonToolBar(null, array(), array('receive-feedback-buttons'));
 
         if (!$this->get_application() instanceof FeedbackNotificationSupport)
         {
             return $buttonToolbar;
         }
+
+        $hasNotification = false;
 
         $isAllowedToViewFeedback = $this->get_parent()->is_allowed_to_view_feedback();
         $isAllowedToCreateFeedback = $this->get_parent()->is_allowed_to_create_feedback();
@@ -215,7 +220,27 @@ class BrowserComponent extends Manager implements DelegateComponent
             $buttonToolbar->addItems($actionsGenerator->run());
         }
 
-        return $buttonToolbar;
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+
+        $html = array();
+
+        $html[] = '<div class="receive-feedback-spacer"></div>';
+
+        if($hasNotification)
+        {
+            $html[] = '<div class="alert alert-info alert-receive-feedback">';
+            $html[] = '<div class="pull-left receive-feedback-info">Nieuwe feedback wordt naar jouw e-mail verzonden.</div>';
+        }
+        
+        $html[] = $buttonToolbarRenderer->render();
+
+        if($hasNotification)
+        {
+            $html[] = '<div class="clearfix"></div>';
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 
     /**

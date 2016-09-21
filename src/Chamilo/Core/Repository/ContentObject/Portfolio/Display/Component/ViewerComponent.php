@@ -70,11 +70,13 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         if ($this->get_current_node()->is_root())
         {
             $content[] = $this->render_last_actions();
+            $content[] = '<a name="view_feedback"></a>';
             $content[] = $this->renderFeedback();
         }
         else
         {
             $content[] = $this->renderFeedback();
+            $content[] = '<a name="view_feedback"></a>';
             $content[] = $this->render_statistics($this->get_current_content_object());
         }
 
@@ -567,6 +569,17 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                 }
             }
 
+            if($this->get_application()->is_allowed_to_view_feedback($this->get_current_node()))
+            {
+                $this->buttonToolBar->addItem(
+                    new Button(
+                        Translation::get('ViewFeedback'),
+                        new BootstrapGlyph('inbox'),
+                        '#view_feedback'
+                    )
+                );
+            }
+
             if (!$this->get_current_node()->is_root() &&
                 $this->canEditComplexContentObjectPathNode($this->get_current_node()->get_parent())
             )
@@ -629,7 +642,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                 {
 
                     $rightsButton = new Button(
-                        Translation:: get('UserComponent'),
+                        Translation:: get('ReturnToYourPortfolio'),
                         Theme:: getInstance()->getImagePath(Manager:: package(), 'Tab/' . self :: ACTION_USER),
                         $this->get_url(
                             array(

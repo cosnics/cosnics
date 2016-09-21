@@ -38,9 +38,11 @@ class ActionsGenerator extends NavigationGenerator
                     $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_UNSUBSCRIBER;
 
                     $actions[] = new Button(
-                        Translation :: get('StopReceivingNotifications'),
+                        Translation:: get('StopReceivingNotifications'),
                         new BootstrapGlyph('remove'),
-                        $application->get_url($baseParameters));
+                        $application->get_url($baseParameters),
+                        Button::DISPLAY_ICON_AND_LABEL, false, 'btn-receive-feedback'
+                    );
                 }
                 else
                 {
@@ -48,9 +50,11 @@ class ActionsGenerator extends NavigationGenerator
                     $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBER;
 
                     $actions[] = new Button(
-                        Translation :: get('ReceiveNotifications'),
+                        Translation:: get('ReceiveNotifications'),
                         new FontAwesomeGlyph('envelope'),
-                        $application->get_url($baseParameters));
+                        $application->get_url($baseParameters),
+                        Button::DISPLAY_ICON_AND_LABEL, false, 'btn-receive-feedback'
+                    );
                 }
             }
         }
