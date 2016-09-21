@@ -379,7 +379,7 @@ class Calculator
      */
     public function getAvailableAllocatedDiskSpace()
     {
-        $quota = $this->getMaximumAllocatedDiskSpace() - $this->getUsedAllocatedDiskSpace();
+        return $this->getMaximumAllocatedDiskSpace() - $this->getUsedAllocatedDiskSpace();
     }
 
     /**
