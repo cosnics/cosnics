@@ -273,13 +273,15 @@ class ForumPost extends DataClass implements AttachmentSupport
             $text = Translation :: get(
                 "PostAddedEmailTitle",
                 null,
-                ContentObject :: get_content_object_type_namespace('forum'));
+                'Chamilo\Core\Repository\ContentObject\Forum\Display'
+            );
             $email_notificator->set_action_title($text);
 
             $text = Translation :: get(
                 "PostAddedEmailBody",
                 null,
-                ContentObject :: get_content_object_type_namespace('forum'));
+                'Chamilo\Core\Repository\ContentObject\Forum\Display'
+            );
             $email_notificator->set_action_body($text);
 
             $email_notificator->set_action_user(
