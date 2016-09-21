@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Architecture;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  *
