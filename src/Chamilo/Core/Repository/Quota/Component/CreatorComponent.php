@@ -30,8 +30,9 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $this->calculator = new Calculator($this->get_user());
+
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if (!$this->calculator->requestAllowed())
         {
             throw new NotAllowedException();
@@ -129,7 +130,7 @@ class CreatorComponent extends Manager
             $allow_upgrade = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
             $maximum_user_disk_space = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
 
-            if ($this->calculator->upgrade_allowed())
+            if ($this->calculator->upgradeAllowed())
             {
                 $commonActions->addButton(
                     new Button(
