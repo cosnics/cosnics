@@ -28,7 +28,7 @@ abstract class AjaxManager extends Application
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent::__construct($applicationConfiguration);
         $this->validateRequest();
     }
 
@@ -46,7 +46,7 @@ abstract class AjaxManager extends Application
             }
             else
             {
-                JsonAjaxResult :: bad_request('Invalid Post parameters');
+                JsonAjaxResult::bad_request('Invalid Post parameters');
             }
         }
     }
@@ -58,11 +58,11 @@ abstract class AjaxManager extends Application
      */
     public function getRequestedPostDataValue($parameter)
     {
-        $getValue = Request :: get($parameter);
+        $getValue = $this->getRequest()->query->get($parameter);
 
         if (! isset($getValue))
         {
-            $postValue = Request :: post($parameter);
+            $postValue = $this->getRequest()->request->get($parameter);
 
             if (! isset($postValue))
             {
