@@ -89,34 +89,48 @@ class BrowserComponent extends Manager implements TableSupport
             
             if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
             {
-                $platform_quota = array();
-                $platform_quota[] = '<h3>' . htmlentities(Translation :: get('AggregatedUserDiskQuotas')) . '</h3>';
-                $platform_quota[] = Calculator :: getBar(
-                    $this->calculator->getAggregatedUserDiskQuotaPercentage(), 
-                    Filesystem :: format_file_size($this->calculator->getUsedAggregatedUserDiskQuota()) . ' / ' . Filesystem :: format_file_size(
-                        $this->calculator->getMaximumAggregatedUserDiskQuota()));
-                $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
-                
-                $platform_quota[] = '<h3>' . htmlentities(Translation :: get('ReservedDiskSpace')) . '</h3>';
-                $platform_quota[] = Calculator :: getBar(
-                    $this->calculator->getReservedDiskSpacePercentage(), 
-                    Filesystem :: format_file_size($this->calculator->getUsedReservedDiskSpace()) . ' / ' . Filesystem :: format_file_size(
-                        $this->calculator->getMaximumReservedDiskSpace()));
-                $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
-                
-                $platform_quota[] = '<h3>' . htmlentities(Translation :: get('AllocatedDiskSpace')) . '</h3>';
-                $platform_quota[] = Calculator :: getBar(
-                    $this->calculator->getAllocatedDiskSpacePercentage(), 
-                    Filesystem :: format_file_size($this->calculator->getUsedAllocatedDiskSpace()) . ' / ' . Filesystem :: format_file_size(
-                        $this->calculator->getMaximumAllocatedDiskSpace()));
-                $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
-                
-                $tabs->add_tab(
-                    new DynamicContentTab(
-                        'platform', 
-                        Translation :: get('Platform'), 
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Platform'), 
-                        implode(PHP_EOL, $platform_quota)));
+                if($this->getUser()->is_platform_admin())
+                {
+                    $platform_quota = array();
+                    $platform_quota[] = '<h3>' . htmlentities(Translation:: get('AggregatedUserDiskQuotas')) . '</h3>';
+                    $platform_quota[] = Calculator:: getBar(
+                        $this->calculator->getAggregatedUserDiskQuotaPercentage(),
+                        Filesystem:: format_file_size($this->calculator->getUsedAggregatedUserDiskQuota()) . ' / ' .
+                        Filesystem:: format_file_size(
+                            $this->calculator->getMaximumAggregatedUserDiskQuota()
+                        )
+                    );
+                    $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
+
+                    $platform_quota[] = '<h3>' . htmlentities(Translation:: get('ReservedDiskSpace')) . '</h3>';
+                    $platform_quota[] = Calculator:: getBar(
+                        $this->calculator->getReservedDiskSpacePercentage(),
+                        Filesystem:: format_file_size($this->calculator->getUsedReservedDiskSpace()) . ' / ' .
+                        Filesystem:: format_file_size(
+                            $this->calculator->getMaximumReservedDiskSpace()
+                        )
+                    );
+                    $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
+
+                    $platform_quota[] = '<h3>' . htmlentities(Translation:: get('AllocatedDiskSpace')) . '</h3>';
+                    $platform_quota[] = Calculator:: getBar(
+                        $this->calculator->getAllocatedDiskSpacePercentage(),
+                        Filesystem:: format_file_size($this->calculator->getUsedAllocatedDiskSpace()) . ' / ' .
+                        Filesystem:: format_file_size(
+                            $this->calculator->getMaximumAllocatedDiskSpace()
+                        )
+                    );
+                    $platform_quota[] = '<div style="clear: both;">&nbsp;</div>';
+
+                    $tabs->add_tab(
+                        new DynamicContentTab(
+                            'platform',
+                            Translation:: get('Platform'),
+                            Theme:: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Tab/Platform'),
+                            implode(PHP_EOL, $platform_quota)
+                        )
+                    );
+                }
                 
                 if ($this->calculator->isEnabled())
                 {
