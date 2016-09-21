@@ -10,7 +10,6 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -144,14 +143,14 @@ class GranterComponent extends Manager
         $title = Translation :: get(
             'RequestGrantedMailTitle',
             array(
-                'PLATFORM' => PlatformSetting :: get('site_name'),
+                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'ADDED_QUOTA' => Filesystem :: format_file_size($request->get_quota())));
 
         $body = Translation :: get(
             'RequestGrantedMailBody',
             array(
                 'USER' => $recipient->get_fullname(),
-                'PLATFORM' => PlatformSetting :: get('site_name'),
+                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'ADDED_QUOTA' => Filesystem :: format_file_size($request->get_quota()),
                 'QUOTA' => Filesystem :: format_file_size($calculator->getMaximumUserDiskQuota())));
 

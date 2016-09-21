@@ -119,3 +119,5 @@ ManageSubscriptionsComponent = "Cursusgroepen"
 
 SubscriptionTime = "Inschrijvingsdatum"
 Users = "Gebruikers"
+
+RemoveSelectedCourseGroups = "Verwijder geselecteerde cursusgroepen"

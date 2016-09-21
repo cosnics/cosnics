@@ -119,3 +119,5 @@ ManageSubscriptionsComponent = "Course Groups"
 
 SubscriptionTime = "Subscription time"
 Users = "Users"
+
+RemoveSelectedCourseGroups = "Remove selected course groups"

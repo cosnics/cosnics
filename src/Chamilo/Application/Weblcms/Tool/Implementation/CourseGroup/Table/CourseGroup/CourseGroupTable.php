@@ -20,15 +20,19 @@ class CourseGroupTable extends DataClassTable implements TableFormActionsSupport
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
+        $actions = new TableFormActions(Manager::context(), self :: TABLE_IDENTIFIER);
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_component()->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COURSE_GROUP)),
-                    Translation :: get('RemoveSelected')));
+                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_COURSE_GROUP
+                        )
+                    ),
+                    Translation:: get('RemoveSelectedCourseGroups')
+                )
+            );
         }
 
         return $actions;
