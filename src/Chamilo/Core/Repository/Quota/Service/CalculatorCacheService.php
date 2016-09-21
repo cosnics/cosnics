@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Service;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -30,8 +30,8 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        $policy = PlatformSetting :: get('quota_policy', $this->getCachePathNamespace());
-        $fallback = PlatformSetting :: get('quota_fallback', $this->getCachePathNamespace());
+        $policy = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
+        $fallback = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
 
         if ($policy == Calculator :: POLICY_USER && ! $fallback)
         {

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Quota\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Quota\Manager;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
 class UpgraderComponent extends Manager
@@ -11,7 +11,7 @@ class UpgraderComponent extends Manager
 
     public function run()
     {
-        $quota_step = (int) PlatformSetting :: get('step', 'Chamilo\Core\Repository');
+        $quota_step = (int) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'step'));
 
         $calculator = new Calculator($this->get_user());
 
