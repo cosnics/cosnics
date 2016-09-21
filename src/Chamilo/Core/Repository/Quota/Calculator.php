@@ -329,7 +329,7 @@ class Calculator
      */
     public function getMaximumReservedDiskSpace()
     {
-        return disk_total_space(Path :: getInstance()->getStoragePath());
+        return disk_total_space(Path :: getInstance()->getRepositoryPath());
     }
 
     /**
