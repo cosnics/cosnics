@@ -27,8 +27,8 @@ class CreatorComponent extends TabComponent
             try
             {
                 $values = $form->exportValues();
-                $values[Workspace :: PROPERTY_CREATOR_ID] = $this->get_user_id();
-                $values[Workspace :: PROPERTY_CREATION_DATE] = time();
+                $values[Workspace::PROPERTY_CREATOR_ID] = $this->get_user_id();
+                $values[Workspace::PROPERTY_CREATION_DATE] = time();
 
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $workspace = $workspaceService->createWorkspace($values);
@@ -36,21 +36,30 @@ class CreatorComponent extends TabComponent
                 $success = $workspace instanceof Workspace;
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
-                $message = Translation :: get(
+                $message = Translation:: get(
                     $translation,
-                    array('OBJECT' => Translation :: get('Workspace')),
-                    Utilities :: COMMON_LIBRARIES);
+                    array('OBJECT' => Translation:: get('Workspace')),
+                    Utilities::COMMON_LIBRARIES
+                );
+
+                if(!$success)
+                {
+                    throw new \Exception($message);
+                }
+
+                $redirectParameters = array(
+                    self::PARAM_ACTION => self::ACTION_RIGHTS, self::PARAM_WORKSPACE_ID => $workspace->getId()
+                );
             }
             catch (\Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();
+
+                $redirectParameters = array(self::PARAM_ACTION => self::ACTION_BROWSE_PERSONAL);
             }
 
-            $this->redirect(
-                $message,
-                ! $success,
-                array(self :: PARAM_ACTION => self :: ACTION_RIGHTS, self :: PARAM_WORKSPACE_ID => $workspace->getId()));
+            $this->redirect($message, !$success, $redirectParameters);
         }
         else
         {
