@@ -46,12 +46,23 @@ class CasAuthentication extends ExternalAuthentication
 
         if (PlatformSetting::get('cas_user_login') == 'email')
         {
-            if (is_numeric($userAttributes['person_number']) ||
+            if ((is_numeric($userAttributes['person_number']) && $userAttributes['person_number'] > 0) ||
                  strpos($userAttributes['person_number'], PlatformSetting::get('cas_validation_string')) !== false)
 
             {
                 $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_official_code(
                     $userAttributes['person_number']);
+
+                if (! $user instanceof User)
+                {
+                    $user = $this->registerUser();
+                }
+
+                return $user;
+            }
+            elseif (is_numeric($userAttributes['person_number']) && $userAttributes['person_number'] == - 1)
+            {
+                $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_username($userAttributes['email']);
 
                 if (! $user instanceof User)
                 {

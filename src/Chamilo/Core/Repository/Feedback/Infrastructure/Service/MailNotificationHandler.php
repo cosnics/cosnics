@@ -1,10 +1,7 @@
 <?php
-
 namespace Chamilo\Core\Repository\Feedback\Infrastructure\Service;
 
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
-use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 
@@ -15,7 +12,9 @@ use Chamilo\Libraries\Mail\ValueObject\Mail;
  */
 abstract class MailNotificationHandler implements NotificationHandlerInterface
 {
+
     /**
+     *
      * @var MailerInterface
      */
     protected $mailer;
@@ -40,7 +39,7 @@ abstract class MailNotificationHandler implements NotificationHandlerInterface
     {
         $targetUsers = array();
 
-        foreach($notifications as $notification)
+        foreach ($notifications as $notification)
         {
             $user = $notification->get_user();
             $targetUsers[] = $user->get_email();

@@ -1,13 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer;
 
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 
 class Legend
@@ -40,12 +38,12 @@ class Legend
     {
         $dataProviderType = get_class($dataProvider);
 
-        if (is_null(static :: $instance[$dataProviderType]))
+        if (is_null(static::$instance[$dataProviderType]))
         {
-            self :: $instance[$dataProviderType] = new static($dataProvider);
+            self::$instance[$dataProviderType] = new static($dataProvider);
         }
 
-        return static :: $instance[$dataProviderType];
+        return static::$instance[$dataProviderType];
     }
 
     /**
@@ -138,7 +136,7 @@ class Legend
 
         if ($sourceKey === false)
         {
-            throw new \Exception(Translation :: get('InvalidLegendSource'));
+            throw new \Exception(Translation::get('InvalidLegendSource'));
         }
         else
         {
@@ -180,7 +178,7 @@ class Legend
 
             $result[] = '<div class="panel panel-default table-calendar-legend">';
             $result[] = '<div class="panel-heading">';
-            $result[] = '<h4 class="panel-title">' . Translation :: get('Legend') . '</h4>';
+            $result[] = '<h4 class="panel-title">' . Translation::get('Legend') . '</h4>';
             $result[] = '</div>';
             $result[] = '<ul class="list-group">';
 
@@ -230,17 +228,16 @@ class Legend
                      json_encode($this->getDataProvider()->getVisibilityContext()) . ';';
                 $result[] = '</script>';
 
-                $result[] = ResourceManager :: get_instance()->get_resource_html(
-                    Path :: getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js');
+                $result[] = ResourceManager::get_instance()->get_resource_html(
+                    Path::getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Highlight.js');
 
                 if ($visibleSources == 0)
                 {
                     $notificationMessageManager = new NotificationMessageManager();
                     $notificationMessageManager->addMessage(
                         new NotificationMessage(
-                            Translation :: get('AllEventSourcesHidden'), NotificationMessage::TYPE_WARNING
-                        )
-                    );
+                            Translation::get('AllEventSourcesHidden'),
+                            NotificationMessage::TYPE_WARNING));
                 }
             }
         }

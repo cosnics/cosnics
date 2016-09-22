@@ -14,16 +14,18 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
+
     /**
+     *
      * @var Google_Service_Drive
      */
     private $service;
 
     /**
+     *
      * @var GoogleClientService;
      */
     protected $googleClientService;
-
     const FOLDERS_MINE = 1;
     const FOLDERS_SHARED = 2;
     const DOCUMENTS_OWNED = 'mine';
@@ -39,16 +41,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function __construct($external_repository_instance)
     {
-        parent:: __construct($external_repository_instance);
+        parent::__construct($external_repository_instance);
 
         $user = new User();
         $user->setId(Session::get_user_id());
 
         $this->googleClientService = new GoogleClientService(
             new GoogleClientSettingsProvider(
-                $external_repository_instance, $user, 'https://www.googleapis.com/auth/drive'
-            )
-        );
+                $external_repository_instance,
+                $user,
+                'https://www.googleapis.com/auth/drive'));
 
         $this->service = new Google_Service_Drive($this->googleClientService->getGoogleClient());
     }
@@ -57,13 +59,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => Manager:: package(),
-                Manager :: PARAM_ACTION => Manager :: ACTION_LOGIN,
-                Manager :: PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id()
-            )
-        );
+                Application::PARAM_CONTEXT => Manager::package(),
+                Manager::PARAM_ACTION => Manager::ACTION_LOGIN,
+                Manager::PARAM_EXTERNAL_REPOSITORY => $this->get_external_repository_instance_id()));
 
-        $code = Request:: get('code');
+        $code = Request::get('code');
         $this->googleClientService->login($redirect->getUrl(), $code);
 
         return true;
@@ -123,10 +123,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
 
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = $file->copyable;
-        $rights[ExternalObject :: RIGHT_EDIT] = false;
-        $rights[ExternalObject :: RIGHT_DOWNLOAD] = $file->copyable;
-        $rights[ExternalObject :: RIGHT_DELETE] = false;
+        $rights[ExternalObject::RIGHT_USE] = $file->copyable;
+        $rights[ExternalObject::RIGHT_EDIT] = false;
+        $rights[ExternalObject::RIGHT_DOWNLOAD] = $file->copyable;
+        $rights[ExternalObject::RIGHT_DELETE] = false;
         $object->set_rights($rights);
 
         return $object;
@@ -138,13 +138,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function count_external_repository_objects($condition)
     {
-        if (!is_null($condition))
+        if (! is_null($condition))
         {
             $condition = 'title contains \'' . $condition . '\' and ';
         }
         $condition .= 'trashed=false';
 
-        $folder = Request:: get(Manager :: PARAM_FOLDER);
+        $folder = Request::get(Manager::PARAM_FOLDER);
         if (is_null($folder))
         {
             $folder = 'root';
@@ -191,11 +191,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function retrieve_external_repository_objects($condition, $order_property, $offset, $count)
     {
-        if ($order_property[0]->get_property()->get_property() == ExternalObject :: PROPERTY_TITLE)
+        if ($order_property[0]->get_property()->get_property() == ExternalObject::PROPERTY_TITLE)
         {
             $orderBy = 'title' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
         }
-        elseif ($order_property[0]->get_property()->get_property() == ExternalObject :: PROPERTY_CREATED)
+        elseif ($order_property[0]->get_property()->get_property() == ExternalObject::PROPERTY_CREATED)
         {
             $orderBy = 'createdDate' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
         }
@@ -204,13 +204,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $orderBy = null;
         }
 
-        if (!is_null($condition))
+        if (! is_null($condition))
         {
             $condition = 'title contains \'' . $condition . '\' and ';
         }
         $condition .= 'trashed=false';
 
-        $folder = Request:: get(Manager :: PARAM_FOLDER);
+        $folder = Request::get(Manager::PARAM_FOLDER);
         if (is_null($folder))
         {
             $folder = 'root';
@@ -218,8 +218,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $condition .= ' and \'' . $folder . '\' in parents and mimeType != \'application/vnd.google-apps.folder\'';
 
         $files = $this->service->files->listFiles(
-            array('q' => $condition, 'maxResults' => $count, 'orderBy' => $orderBy)
-        );
+            array('q' => $condition, 'maxResults' => $count, 'orderBy' => $orderBy));
         $files_items = $files['modelData']['items'];
         $objects = array();
 
@@ -255,7 +254,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             {
                 $object->set_export_links($exportLinks);
             }
-            elseif($file_item['downloadUrl'])
+            elseif ($file_item['downloadUrl'])
             {
                 $object->set_export_links(array($file_item['mimeType'] => $file_item['downloadUrl']));
             }
@@ -271,10 +270,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             }
 
             $rights = array();
-            $rights[ExternalObject :: RIGHT_USE] = $file_item['copyable'];
-            $rights[ExternalObject :: RIGHT_EDIT] = false;
-            $rights[ExternalObject :: RIGHT_DOWNLOAD] = $file_item['copyable'];
-            $rights[ExternalObject :: RIGHT_DELETE] = false;
+            $rights[ExternalObject::RIGHT_USE] = $file_item['copyable'];
+            $rights[ExternalObject::RIGHT_EDIT] = false;
+            $rights[ExternalObject::RIGHT_DOWNLOAD] = $file_item['copyable'];
+            $rights[ExternalObject::RIGHT_DELETE] = false;
             $object->set_rights($rights);
 
             $newParent = new \Google_Service_Drive_ParentReference();
@@ -305,16 +304,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_my_folders($id)
     {
         return $this->retrieve_folders(
-            "'" . $id . "' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'"
-        );
+            "'" . $id . "' in parents and trashed = false and mimeType = 'application/vnd.google-apps.folder'");
     }
 
     public function retrieve_shared_folders($id)
     {
         return $this->retrieve_folders(
             "'" . $id .
-            "' in parents and sharedWithMe and trashed=false and mimeType = 'application/vnd.google-apps.folder'"
-        );
+                 "' in parents and sharedWithMe and trashed=false and mimeType = 'application/vnd.google-apps.folder'");
     }
 
     private function retrieve_folders($query)
@@ -357,11 +354,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function import_external_repository_object($externalExportURL)
     {
-        if (!$externalExportURL)
+        if (! $externalExportURL)
         {
-            throw new \InvalidArgumentException(
-                'Could not import an Google Drive because the download URL is invalid'
-            );
+            throw new \InvalidArgumentException('Could not import an Google Drive because the download URL is invalid');
         }
 
         $request = new \Google_Http_Request($externalExportURL, 'GET', null, null);
