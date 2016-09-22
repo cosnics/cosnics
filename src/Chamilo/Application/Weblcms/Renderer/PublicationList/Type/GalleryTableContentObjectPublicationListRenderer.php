@@ -3,11 +3,9 @@ namespace Chamilo\Application\Weblcms\Renderer\PublicationList\Type;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Table\Publication\Gallery\ObjectPublicationGalleryTable;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessage;
 use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageManager;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -22,7 +20,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
 
     public function __construct($tool_browser, $parameters = array())
     {
-        parent :: __construct($tool_browser, $parameters);
+        parent::__construct($tool_browser, $parameters);
         $this->addWarning();
     }
 
@@ -48,9 +46,8 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
     public function addWarning()
     {
         $notificationMessageManager = new NotificationMessageManager();
-        $notificationMessageManager->addMessage(new NotificationMessage(
-            Translation:: get('BrowserWarningPreview'), NotificationMessage::TYPE_WARNING
-        ));
+        $notificationMessageManager->addMessage(
+            new NotificationMessage(Translation::get('BrowserWarningPreview'), NotificationMessage::TYPE_WARNING));
     }
 
     /**

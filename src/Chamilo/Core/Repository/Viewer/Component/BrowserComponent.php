@@ -23,7 +23,6 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -54,6 +53,7 @@ class BrowserComponent extends Manager implements TableSupport
     protected $workspace;
 
     /**
+     *
      * @var FilterData
      */
     protected $filterData;
@@ -148,13 +148,13 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         $filterData->set_filter_property(FilterData::FILTER_TYPE, $types);
-        
+
         $this->filterData = $filterData;
     }
 
     /**
      * Returns the previously setup filterdata
-     * 
+     *
      * @return FilterData
      */
     public function getFilterData()
