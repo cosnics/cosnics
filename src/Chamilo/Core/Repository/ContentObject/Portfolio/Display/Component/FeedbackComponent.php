@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
+use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FeedbackComponent extends ItemComponent implements FeedbackSupport
+class FeedbackComponent extends ItemComponent implements FeedbackSupport, FeedbackNotificationSupport
 {
 
     /**
@@ -27,7 +28,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport
         }
 
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Feedback\Manager :: context(),
+            \Chamilo\Core\Repository\Feedback\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $result = $factory->run();
 
@@ -46,7 +47,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP);
+        return array(self::PARAM_STEP);
     }
 
     /**
@@ -130,6 +131,16 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport
     public function retrieve_notification()
     {
         return $this->get_parent()->retrieve_portfolio_notification($this->get_current_node());
+    }
+
+    /**
+     * Retrieves all the notifications
+     *
+     * @return ResultSet<Notification>
+     */
+    public function retrieve_notifications()
+    {
+        return $this->get_application()->retrievePortfolioNotifications($this->get_current_node());
     }
 
     /**

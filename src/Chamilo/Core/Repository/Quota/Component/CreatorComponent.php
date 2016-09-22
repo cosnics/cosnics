@@ -14,7 +14,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -31,8 +30,9 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $this->calculator = new Calculator($this->get_user());
+
+        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if (!$this->calculator->requestAllowed())
         {
             throw new NotAllowedException();
@@ -65,7 +65,7 @@ class CreatorComponent extends Manager
 
                 $title = Translation:: get(
                     'QuotaCreatedMailTitle',
-                    array('PLATFORM' => PlatformSetting:: get('site_name'))
+                    array('PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')))
                 );
 
                 $mailerFactory = new MailerFactory(Configuration::get_instance());
@@ -78,7 +78,7 @@ class CreatorComponent extends Manager
                         'QuotaCreatedMailBody',
                         array(
                             'USER' => $authorized_user->get_fullname(),
-                            'PLATFORM' => PlatformSetting:: get('site_name')
+                            'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name'))
                         )
                     ), $authorized_user->get_email()
                     );
@@ -127,10 +127,10 @@ class CreatorComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            $allow_upgrade = PlatformSetting:: get('allow_upgrade', __NAMESPACE__);
-            $maximum_user_disk_space = PlatformSetting:: get('maximum_user', __NAMESPACE__);
+            $allow_upgrade = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+            $maximum_user_disk_space = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
 
-            if ($this->calculator->upgrade_allowed())
+            if ($this->calculator->upgradeAllowed())
             {
                 $commonActions->addButton(
                     new Button(

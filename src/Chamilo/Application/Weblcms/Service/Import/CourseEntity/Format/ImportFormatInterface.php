@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service\Import\CourseEntity\Format;
 
-use Chamilo\Application\Weblcms\Domain\ValueObject\ImportedCourseEntityRelation;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**

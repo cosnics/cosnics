@@ -216,13 +216,9 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
             {
                 return false;
             }
+        }
 
-            return ! $this->contain_subcategories_objects($category_id);
-        }
-        else
-        {
-            return true;
-        }
+        return true;
     }
 
     /**

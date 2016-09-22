@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository
@@ -24,7 +25,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: context(),
+            \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
@@ -35,12 +36,12 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
     function get_portfolio_tree_menu_url()
     {
-        return Path :: getInstance()->getBasePath(true) . 'index.php?' . Application :: PARAM_CONTEXT . '=' .
-             \Chamilo\Core\Repository\Preview\Manager :: context() . '&' . Application :: PARAM_ACTION . '=' .
-             \Chamilo\Core\Repository\Preview\Manager :: ACTION_DISPLAY . '&' .
-             \Chamilo\Core\Repository\Preview\Manager :: PARAM_CONTENT_OBJECT_ID . '=' .
+        return Path::getInstance()->getBasePath(true) . 'index.php?' . Application::PARAM_CONTEXT . '=' .
+             \Chamilo\Core\Repository\Preview\Manager::context() . '&' . Application::PARAM_ACTION . '=' .
+             \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY . '&' .
+             \Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID . '=' .
              $this->get_root_content_object()->get_id() . '&' .
-             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_STEP . '=%s';
+             \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP . '=%s';
     }
 
     /**
@@ -58,7 +59,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
     function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
     {
-        return PreviewStorage :: get_instance()->retrieve_feedbacks(
+        return PreviewStorage::get_instance()->retrieve_feedbacks(
             $this->get_root_content_object()->get_id(),
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }
@@ -71,7 +72,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     {
         try
         {
-            return PreviewStorage :: get_instance()->retrieve_feedback($feedback_id);
+            return PreviewStorage::get_instance()->retrieve_feedback($feedback_id);
         }
         catch (\Exception $exception)
         {
@@ -146,7 +147,20 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
     function retrieve_portfolio_notification(ComplexContentObjectPathNode $node)
     {
-        return PreviewStorage :: get_instance()->retrieve_notification(
+        return PreviewStorage::get_instance()->retrieve_notification(
+            $this->get_root_content_object()->get_id(),
+            $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
+    }
+
+    /**
+     *
+     * @param ComplexContentObjectPathNode $node
+     *
+     * @return ResultSet
+     */
+    public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
+    {
+        return PreviewStorage::get_instance()->retrieve_notifications(
             $this->get_root_content_object()->get_id(),
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }

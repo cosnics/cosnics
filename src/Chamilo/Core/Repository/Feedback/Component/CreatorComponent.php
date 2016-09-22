@@ -41,6 +41,8 @@ class CreatorComponent extends Manager
 
                 $success = $feedback->create();
 
+                $this->notifyNewFeedback($feedback);
+
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
 
                 $message = Translation :: get(

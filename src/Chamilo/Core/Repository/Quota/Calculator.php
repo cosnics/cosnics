@@ -11,7 +11,6 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -123,9 +122,9 @@ class Calculator
     {
         if (is_null($this->maximumUserDiskQuota))
         {
-            $policy = PlatformSetting :: get('quota_policy', __NAMESPACE__);
-            $fallback = PlatformSetting :: get('quota_fallback', __NAMESPACE__);
-            $fallbackUser = PlatformSetting :: get('quota_fallback_user', __NAMESPACE__);
+            $policy = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
+            $fallback = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
+            $fallbackUser = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback_user'));
 
             switch ($policy)
             {
@@ -330,7 +329,7 @@ class Calculator
      */
     public function getMaximumReservedDiskSpace()
     {
-        return disk_total_space(Path :: getInstance()->getStoragePath());
+        return disk_total_space(Path :: getInstance()->getRepositoryPath());
     }
 
     /**
@@ -371,7 +370,7 @@ class Calculator
      */
     public function getMaximumAllocatedDiskSpace()
     {
-        return disk_total_space(Path :: getInstance()->getStoragePath());
+        return disk_total_space(Path :: getInstance()->getRepositoryPath());
     }
 
     /**
@@ -380,7 +379,7 @@ class Calculator
      */
     public function getAvailableAllocatedDiskSpace()
     {
-        $quota = $this->getMaximumAllocatedDiskSpace() - $this->getUsedAllocatedDiskSpace();
+        return $this->getMaximumAllocatedDiskSpace() - $this->getUsedAllocatedDiskSpace();
     }
 
     /**
@@ -464,9 +463,9 @@ class Calculator
             return false;
         }
 
-        $quotaStep = (int) PlatformSetting :: get('step', __NAMESPACE__);
-        $allowUpgrade = (boolean) PlatformSetting :: get('allow_upgrade', __NAMESPACE__);
-        $maximumUserDiskSpace = (int) PlatformSetting :: get('maximum_user', __NAMESPACE__);
+        $quotaStep = (int) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'step'));
+        $allowUpgrade = (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+        $maximumUserDiskSpace = (int) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
 
         if (! $this->usesUserDiskQuota())
         {
@@ -514,8 +513,8 @@ class Calculator
             return false;
         }
 
-        $quotaStep = (int) PlatformSetting :: get('step', __NAMESPACE__);
-        $allowRequest = PlatformSetting :: get('allow_request', __NAMESPACE__);
+        $quotaStep = (int) Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'step'));
+        $allowRequest = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
 
         if (! $this->usesUserDiskQuota())
         {
@@ -545,9 +544,9 @@ class Calculator
      */
     public function usesUserDiskQuota()
     {
-        $policy = PlatformSetting :: get('quota_policy', __NAMESPACE__);
-        $fallback = PlatformSetting :: get('quota_fallback', __NAMESPACE__);
-        $fallbackUser = PlatformSetting :: get('quota_fallback_user', __NAMESPACE__);
+        $policy = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
+        $fallback = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
+        $fallbackUser = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback_user'));
 
         switch ($policy)
         {
@@ -667,7 +666,7 @@ class Calculator
      */
     public function addUploadWarningToForm(FormValidator $form)
     {
-        $enableQuota = (boolean) PlatformSetting :: get('enable_quota', \Chamilo\Core\Repository\Manager :: context());
+        $enableQuota = (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
 
         $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
         $uploadMaxFilesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));
@@ -686,8 +685,8 @@ class Calculator
                     \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null));
             $url = $redirect->getUrl();
 
-            $allowUpgrade = PlatformSetting :: get('allow_upgrade', \Chamilo\Core\Repository\Manager :: context());
-            $allowRequest = PlatformSetting :: get('allow_request', \Chamilo\Core\Repository\Manager :: context());
+            $allowUpgrade = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+            $allowRequest = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
 
             $translation = ($allowUpgrade || $allowRequest) ? 'MaximumFileSizeUser' : 'MaximumFileSizeUserNoUpgrade';
 
@@ -723,7 +722,7 @@ class Calculator
      */
     public function getMaximumUploadSize()
     {
-        $enableQuota = (boolean) PlatformSetting :: get('enable_quota', \Chamilo\Core\Repository\Manager :: context());
+        $enableQuota = (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
 
         $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
         $uploadMaxFilesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));

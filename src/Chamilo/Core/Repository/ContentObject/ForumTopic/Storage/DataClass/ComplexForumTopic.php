@@ -51,12 +51,12 @@ class ComplexForumTopic extends ComplexContentObjectItem
         $text = Translation :: get(
             "TopicAddedEmailTitle",
             null,
-            ContentObject :: get_content_object_type_namespace('forum'));
+            'Chamilo\Core\Repository\ContentObject\Forum\Display');
         $email_notificator->set_action_title($text);
         $text = Translation :: get(
             "TopicAddedEmailBody",
             null,
-            ContentObject :: get_content_object_type_namespace('forum'));
+            'Chamilo\Core\Repository\ContentObject\Forum\Display');
         $email_notificator->set_action_body($text);
         $email_notificator->set_action_user(
             \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(

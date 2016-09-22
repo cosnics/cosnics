@@ -16,7 +16,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -200,7 +199,7 @@ class DenierComponent extends Manager
         $title = Translation :: get(
             'RequestDeniedMailTitle', 
             array(
-                'PLATFORM' => PlatformSetting :: get('site_name'), 
+                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'QUOTA' => Filesystem :: format_file_size($request->get_quota())));
         
         if (strlen($request->get_decision_motivation()) > 0)
@@ -216,7 +215,7 @@ class DenierComponent extends Manager
             $variable, 
             array(
                 'USER' => $recipient->get_fullname(), 
-                'PLATFORM' => PlatformSetting :: get('site_name'), 
+                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'QUOTA' => Filesystem :: format_file_size($request->get_quota()), 
                 'MOTIVATION' => $request->get_decision_motivation()));
 
@@ -243,8 +242,8 @@ class DenierComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
-            $allow_upgrade = PlatformSetting :: get('allow_upgrade', __NAMESPACE__);
-            $maximum_user_disk_space = PlatformSetting :: get('maximum_user', __NAMESPACE__);
+            $allow_upgrade = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+            $maximum_user_disk_space = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
             
             if ($calculator->upgradeAllowed())
             {

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Repository\Viewer\Table\ContentObject;
 
 use Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Core\Repository\Viewer\Filter\FilterData;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
@@ -13,6 +12,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
  */
 class ContentObjectTableDataProvider extends DataClassTableDataProvider
 {
+
     /*
      * Inherited
      */
@@ -25,12 +25,10 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
             $this->get_component()->getWorkspace(),
             ConditionFilterRenderer::factory(
                 $this->get_component()->getFilterData(),
-                $this->get_component()->getWorkspace()
-            ),
+                $this->get_component()->getWorkspace()),
             $count,
             $offset,
-            $order_property
-        );
+            $order_property);
     }
 
     /*
@@ -45,8 +43,6 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
             $this->get_component()->getWorkspace(),
             ConditionFilterRenderer::factory(
                 $this->get_component()->getFilterData(),
-                $this->get_component()->getWorkspace()
-            )
-        );
+                $this->get_component()->getWorkspace()));
     }
 }

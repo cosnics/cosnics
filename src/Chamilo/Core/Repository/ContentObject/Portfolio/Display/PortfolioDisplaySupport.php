@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
+use Chamilo\Core\Repository\ContentObject\Portfolio\Storage\DataClass\Notification;
+use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Interface which indicates a component implements a repository\content_object\portfolio\display
@@ -128,10 +130,19 @@ interface PortfolioDisplaySupport
     /**
      * Retrieve a Notification
      *
-     * @param \core\repository\common\path\ComplexContentObjectPathNode $node
-     * @return \core\repository\content_object\portfolio\Notification
+     * @param ComplexContentObjectPathNode $node
+     * @return Notification
      */
     public function retrieve_portfolio_notification(ComplexContentObjectPathNode $node);
+
+    /**
+     * Retrieves the notifications for the current node
+     * 
+     * @param ComplexContentObjectPathNode $node
+     *
+     * @return ResultSet
+     */
+    public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node);
 
     /**
      * Returns an newly instantiated Notification object
