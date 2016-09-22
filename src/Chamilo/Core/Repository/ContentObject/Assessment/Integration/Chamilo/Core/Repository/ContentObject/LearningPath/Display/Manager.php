@@ -38,6 +38,8 @@ abstract class Manager extends Application
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
                                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
+                                $this->get_application()->get_current_content_object()->getId(),
                             self::PARAM_ACTION => self::ACTION_MASTERY
                         )
                     )
@@ -52,6 +54,8 @@ abstract class Manager extends Application
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
                                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
+                                $this->get_application()->get_current_content_object()->getId(),
                             self::PARAM_ACTION => self::ACTION_CONFIGURE
                         )
                     )
@@ -66,6 +70,8 @@ abstract class Manager extends Application
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION =>
                                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,
+                            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CONTENT_OBJECT_ID =>
+                                $this->get_application()->get_current_content_object()->getId(),
                             self::PARAM_ACTION => self::ACTION_BUILDER
                         )
                     )
