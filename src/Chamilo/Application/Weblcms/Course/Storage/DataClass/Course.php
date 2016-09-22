@@ -893,7 +893,7 @@ class Course extends DataClass
                 null,
                 array(
                     new OrderBy(
-                        new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_TITLE)))));
+                        new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME)))));
 
         return ($as_array ? $result->as_array() : $result);
     }

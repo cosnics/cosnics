@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\NestedTreeNode;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -319,7 +320,7 @@ class CourseGroup extends NestedTreeNode
      * @param $include_subgroups boolean - Include the children of the subgroups
      * @param $recursive_subgroups boolean - Include the direct subgroups or include all the subgroups
      * @param $include_users boolean - Includes the users as real user objects
-     * @return DatabaseUserResultSet
+     * @return User[]
      */
     public function get_members($include_subgroups = false, $recursive_subgroups = false, $include_users = false)
     {
