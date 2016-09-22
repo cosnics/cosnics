@@ -39,7 +39,11 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
         $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
             \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
             (int) $user_id);
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), $user->get_fullname()));
+
+        if($user)
+        {
+            BreadcrumbTrail:: get_instance()->add(new Breadcrumb($this->get_url(), $user->get_fullname()));
+        }
     }
     
 }
