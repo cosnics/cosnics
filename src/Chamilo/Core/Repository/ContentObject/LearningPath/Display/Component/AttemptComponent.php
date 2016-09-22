@@ -21,7 +21,6 @@ class AttemptComponent extends Manager
      */
     public function run()
     {
-
         if (! $this->is_allowed_to_edit_attempt_data())
         {
             throw new NotAllowedException();

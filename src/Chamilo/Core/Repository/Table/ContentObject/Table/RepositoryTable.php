@@ -3,8 +3,13 @@ namespace Chamilo\Core\Repository\Table\ContentObject\Table;
 
 use Chamilo\Core\Repository\Filter\FilterData;
 use Chamilo\Core\Repository\Manager;
+use Chamilo\Core\Repository\Quota\Rights\Rights;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
+use Chamilo\Core\Repository\Workspace\Service\EntityService;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
@@ -96,14 +101,30 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
         }
         else
         {
-            $actions->add_form_action(
-                new TableFormAction(
-                    $this->get_component()->get_url(
-                        array(
-                            Application :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
-                            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE)),
-                    Translation :: get('UnshareSelected', null, Manager::context()),
-                    false));
+            $entityRelationService = new EntityRelationService(new EntityRelationRepository());
+            $entityService = new EntityService();
+
+            $canDelete = $entityRelationService->hasRight(
+                $entityService->getEntitiesForUser($this->get_component()->get_repository_browser()->getUser()),
+                RightsService::RIGHT_DELETE,
+                $this->get_component()->get_repository_browser()->getWorkspace()
+            );
+
+            if($canDelete)
+            {
+                $actions->add_form_action(
+                    new TableFormAction(
+                        $this->get_component()->get_url(
+                            array(
+                                Application :: PARAM_ACTION => Manager :: ACTION_WORKSPACE,
+                                \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE
+                            )
+                        ),
+                        Translation:: get('UnshareSelected', null, Manager::context()),
+                        false
+                    )
+                );
+            }
         }
 
         return $actions;

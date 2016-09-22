@@ -22,6 +22,7 @@ class ActivityComponent extends TabComponent implements TableSupport, DelegateCo
      */
     public function build()
     {
+        $this->validateAndFixCurrentStep();
 
         $activity_table = new ActivityTable($this);
 
@@ -45,5 +46,10 @@ class ActivityComponent extends TabComponent implements TableSupport, DelegateCo
      */
     public function get_table_condition($table_class_name)
     {
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
     }
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Menu;
+use Chamilo\Libraries\Architecture\Application\Parameters;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -133,6 +134,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = '</h3>';
 
         $html[] = '<div class="learning-path-tree-menu">';
+
         $html[] = $this->learning_path_menu->render();
         $html[] = '</div>';
         $html[] = '</div>';
