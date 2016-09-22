@@ -1,13 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\Feedback;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Repository\Feedback\Infrastructure\Service\MailNotificationHandler;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationService;
 use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationServiceInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 
 abstract class Manager extends Application
 {
@@ -23,7 +20,7 @@ abstract class Manager extends Application
     const ACTION_UNSUBSCRIBER = 'Unsubscriber';
 
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      * Returns the notification service
@@ -34,7 +31,7 @@ abstract class Manager extends Application
     {
         $application = $this->get_application();
 
-        if($application instanceof FeedbackNotificationSupport)
+        if ($application instanceof FeedbackNotificationSupport)
         {
             return new NotificationService($application->get_notification_handlers());
         }
@@ -51,7 +48,7 @@ abstract class Manager extends Application
     {
         $application = $this->get_application();
 
-        if($application instanceof FeedbackNotificationSupport)
+        if ($application instanceof FeedbackNotificationSupport)
         {
             $this->getNotificationService()->notify($feedback, $application->retrieve_notifications()->as_array());
         }

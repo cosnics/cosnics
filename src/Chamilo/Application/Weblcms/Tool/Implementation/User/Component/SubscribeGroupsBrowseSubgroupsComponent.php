@@ -3,7 +3,6 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\UnsubscribedGroup\UnsubscribedGroupTable;
 use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
@@ -49,7 +48,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
     public function get_table_condition($table_class_name)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupId()));
 
         // filter already subscribed groups
@@ -57,7 +56,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_ID),
+                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
                     $this->subscribedGroups));
         }
 
@@ -65,10 +64,10 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
         if (isset($query) && $query != '')
         {
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME),
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
                 '*' . $query . '*');
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION),
                 '*' . $query . '*');
             $conditions[] = new OrCondition($conditions2);
         }

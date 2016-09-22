@@ -6,8 +6,6 @@ use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -27,9 +25,9 @@ class ExportParameters
 
     private $category_ids = array();
 
-    private $type = ContentObjectExport :: TYPE_DEFAULT;
+    private $type = ContentObjectExport::TYPE_DEFAULT;
 
-    private $format = ContentObjectExport :: FORMAT_CPO;
+    private $format = ContentObjectExport::FORMAT_CPO;
 
     /**
      *
@@ -41,11 +39,8 @@ class ExportParameters
 
     private $category_content_object_ids;
 
-    public function __construct(
-        WorkspaceInterface $workspace, $user, $format = ContentObjectExport :: FORMAT_CPO,
-        $content_object_ids = array(),
-        $category_ids = array(), $type = ContentObjectExport :: TYPE_DEFAULT
-    )
+    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport :: FORMAT_CPO, $content_object_ids = array(),
+        $category_ids = array(), $type = ContentObjectExport :: TYPE_DEFAULT)
     {
         $this->workspace = $workspace;
         $this->user = $user;
@@ -56,7 +51,7 @@ class ExportParameters
 
         if (count($content_object_ids) > 0 && count($category_ids) > 0)
         {
-            throw new Exception(Translation:: get('ChooseContentObjectsOrCategories'));
+            throw new Exception(Translation::get('ChooseContentObjectsOrCategories'));
         }
     }
 
@@ -68,7 +63,7 @@ class ExportParameters
     {
         if (count($this->get_category_ids()) > 0)
         {
-            if (!isset($this->category_content_object_ids))
+            if (! isset($this->category_content_object_ids))
             {
                 if (in_array(0, $this->get_category_ids()))
                 {
@@ -83,42 +78,33 @@ class ExportParameters
                     {
                         $condition = new EqualityCondition(
                             new PropertyConditionVariable(
-                                ContentObject:: class_name(),
-                                ContentObject :: PROPERTY_OWNER_ID
-                            ),
-                            new StaticConditionVariable($this->get_user())
-                        );
+                                ContentObject::class_name(),
+                                ContentObject::PROPERTY_OWNER_ID),
+                            new StaticConditionVariable($this->get_user()));
 
-                        $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID);
+                        $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_ID);
                     }
                     else
                     {
                         $joins = new Joins();
                         $joins->add(
                             new Join(
-                                WorkspaceContentObjectRelation:: class_name(),
+                                WorkspaceContentObjectRelation::class_name(),
                                 new EqualityCondition(
                                     new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation:: class_name(),
-                                        WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID
-                                    ),
+                                        WorkspaceContentObjectRelation::class_name(),
+                                        WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
                                     new PropertyConditionVariable(
-                                        ContentObject:: class_name(),
-                                        ContentObject :: PROPERTY_OBJECT_NUMBER
-                                    )
-                                )
-                            )
-                        );
+                                        ContentObject::class_name(),
+                                        ContentObject::PROPERTY_OBJECT_NUMBER))));
 
                         $condition = new EqualityCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation:: class_name(),
-                                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID
-                            ),
-                            new StaticConditionVariable($this->getWorkspace()->getId())
-                        );
+                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
+                            new StaticConditionVariable($this->getWorkspace()->getId()));
 
-                        $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID, $joins);
+                        $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_ID, $joins);
                     }
                 }
                 else
@@ -127,7 +113,7 @@ class ExportParameters
 
                     foreach ($this->get_category_ids() as $category_id)
                     {
-                        $category = DataManager:: retrieve_by_id(RepositoryCategory:: class_name(), $category_id);
+                        $category = DataManager::retrieve_by_id(RepositoryCategory::class_name(), $category_id);
 
                         $category_ids[] = $category_id;
                         $category_ids = array_merge($category_ids, $category->get_children_ids());
@@ -138,65 +124,54 @@ class ExportParameters
                         $conditions = array();
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                ContentObject:: class_name(), ContentObject :: PROPERTY_OWNER_ID
-                            ),
-                            new StaticConditionVariable($this->get_user())
-                        );
+                                ContentObject::class_name(),
+                                ContentObject::PROPERTY_OWNER_ID),
+                            new StaticConditionVariable($this->get_user()));
                         $conditions[] = new InCondition(
                             new PropertyConditionVariable(
-                                ContentObject:: class_name(), ContentObject :: PROPERTY_PARENT_ID
-                            ),
-                            $category_ids
-                        );
+                                ContentObject::class_name(),
+                                ContentObject::PROPERTY_PARENT_ID),
+                            $category_ids);
 
                         $condition = new AndCondition($conditions);
 
-                        $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID);
+                        $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_ID);
                     }
                     else
                     {
                         $joins = new Joins();
                         $joins->add(
                             new Join(
-                                WorkspaceContentObjectRelation:: class_name(),
+                                WorkspaceContentObjectRelation::class_name(),
                                 new EqualityCondition(
                                     new PropertyConditionVariable(
-                                        WorkspaceContentObjectRelation:: class_name(),
-                                        WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID
-                                    ),
+                                        WorkspaceContentObjectRelation::class_name(),
+                                        WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID),
                                     new PropertyConditionVariable(
-                                        ContentObject:: class_name(),
-                                        ContentObject :: PROPERTY_OBJECT_NUMBER
-                                    )
-                                )
-                            )
-                        );
+                                        ContentObject::class_name(),
+                                        ContentObject::PROPERTY_OBJECT_NUMBER))));
 
                         $conditions = array();
 
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation:: class_name(),
-                                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID
-                            ),
-                            new StaticConditionVariable($this->getWorkspace()->getId())
-                        );
+                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID),
+                            new StaticConditionVariable($this->getWorkspace()->getId()));
 
                         $conditions[] = new InCondition(
                             new PropertyConditionVariable(
-                                WorkspaceContentObjectRelation:: class_name(),
-                                WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID
-                            ),
-                            $category_ids
-                        );
+                                WorkspaceContentObjectRelation::class_name(),
+                                WorkspaceContentObjectRelation::PROPERTY_CATEGORY_ID),
+                            $category_ids);
 
                         $condition = new AndCondition($conditions);
 
-                        $parameters = new DataClassDistinctParameters($condition, ContentObject :: PROPERTY_ID, $joins);
+                        $parameters = new DataClassDistinctParameters($condition, ContentObject::PROPERTY_ID, $joins);
                     }
                 }
 
-                $this->category_content_object_ids = DataManager:: distinct(ContentObject:: class_name(), $parameters);
+                $this->category_content_object_ids = DataManager::distinct(ContentObject::class_name(), $parameters);
             }
 
             return $this->category_content_object_ids;
@@ -207,10 +182,9 @@ class ExportParameters
 
             foreach ($this->content_object_ids as $contentObjectIdentifier)
             {
-                $contentObject = \Chamilo\Libraries\Storage\DataManager\DataManager:: retrieve_by_id(
-                    ContentObject:: class_name(),
-                    $contentObjectIdentifier
-                );
+                $contentObject = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                    ContentObject::class_name(),
+                    $contentObjectIdentifier);
 
                 // if (RightsService :: getInstance()->canCopyContentObject(
                 // $this->get_user(),

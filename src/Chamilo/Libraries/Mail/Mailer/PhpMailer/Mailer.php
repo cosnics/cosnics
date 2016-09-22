@@ -3,7 +3,6 @@ namespace Chamilo\Libraries\Mail\Mailer\PhpMailer;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\MailLog;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Mail\Mailer\AbstractMailer;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 

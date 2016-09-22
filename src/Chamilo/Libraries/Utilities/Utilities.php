@@ -71,7 +71,7 @@ class Utilities
         {
             $properties = array($properties);
         }
-        $queries = self :: split_query($query);
+        $queries = self::split_query($query);
         if (is_null($queries))
         {
             return null;
@@ -126,7 +126,7 @@ class Utilities
         foreach ($objects as $object)
         {
             $id = $object->get_id();
-            $return[$id] = self :: content_object_for_element_finder($object);
+            $return[$id] = self::content_object_for_element_finder($object);
         }
         return $return;
     }
@@ -144,12 +144,12 @@ class Utilities
         $date = date('r', $object->get_modification_date());
         $return = array();
         $return['id'] = 'lo_' . $object->get_id();
-        $return['classes'] = 'type type_' . ClassnameUtilities :: getInstance()->getClassNameFromNamespace($type, true);
+        $return['classes'] = 'type type_' . ClassnameUtilities::getInstance()->getClassNameFromNamespace($type, true);
         $return['title'] = $object->get_title();
-        $return['description'] = Translation :: get(
+        $return['description'] = Translation::get(
             'TypeName',
             array(),
-            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($type)) . ' (' . $date . ')';
+            ClassnameUtilities::getInstance()->getNamespaceFromClassname($type)) . ' (' . $date . ')';
         return $return;
     }
 
@@ -204,16 +204,16 @@ class Utilities
         {
             if (! isset($message))
             {
-                $message = self :: underscores_to_camelcase($id);
+                $message = self::underscores_to_camelcase($id);
             }
 
             $show_message = 'Show' . $message;
             $hide_message = 'Hide' . $message;
 
-            $html[] = '<div id="plus-' . $id . '"><a href="javascript:showElement(\'' . $id . '\')">' . Translation :: get(
+            $html[] = '<div id="plus-' . $id . '"><a href="javascript:showElement(\'' . $id . '\')">' . Translation::get(
                 'Show' . $message) . '</a></div>';
             $html[] = '<div id="minus-' . $id . '" style="display: none;"><a href="javascript:showElement(\'' . $id .
-                 '\')">' . Translation :: get('Hide' . $message) . '</a></div>';
+                 '\')">' . Translation::get('Hide' . $message) . '</a></div>';
             $html[] = '<div id="' . $id . '" style="display: ' . ($display_block ? 'block' : 'none') . ';">';
         }
         else
@@ -239,7 +239,7 @@ class Utilities
             {
                 if (is_array($array[$i]))
                 {
-                    $html[] = self :: DisplayInlineArray($array[$i], $depth + 1, $i);
+                    $html[] = self::DisplayInlineArray($array[$i], $depth + 1, $i);
                 }
                 else
                 {
@@ -279,7 +279,7 @@ class Utilities
 
             if (is_array($inlinearray[$i]))
             {
-                $html[] = self :: DisplayInlineArray($inlinearray[$i], $depth + 1, $i);
+                $html[] = self::DisplayInlineArray($inlinearray[$i], $depth + 1, $i);
             }
             else
             {
@@ -310,7 +310,7 @@ class Utilities
         {
             $icon = 'Action/SettingFalse';
         }
-        return '<img src="' . Theme :: getInstance()->getCommonImagePath($icon) . '">';
+        return '<img src="' . Theme::getInstance()->getCommonImagePath($icon) . '">';
     }
 
     /**
@@ -330,13 +330,13 @@ class Utilities
     public static function mimetype_to_image($mimetype)
     {
         $mimetype_image = str_replace('/', '_', $mimetype);
-        $mimetype_image = (string) StringUtilities :: getInstance()->createString($mimetype_image)->upperCamelize();
-        return Theme :: getInstance()->getCommonImage(
+        $mimetype_image = (string) StringUtilities::getInstance()->createString($mimetype_image)->upperCamelize();
+        return Theme::getInstance()->getCommonImage(
             'Mimetype/' . $mimetype_image,
             'png',
             $mimetype,
             '',
-            ToolbarItem :: DISPLAY_ICON);
+            ToolbarItem::DISPLAY_ICON);
     }
 
     /**
@@ -453,19 +453,19 @@ class Utilities
                 {
                     newrelic_notice_error($errstr, new \Exception($errstr, $errno));
                 }
-                self :: write_error('PHP Fatal error', $errstr, $errfile, $errline);
+                self::write_error('PHP Fatal error', $errstr, $errfile, $errline);
                 break;
             case E_USER_WARNING :
-                self :: write_error('PHP Warning', $errstr, $errfile, $errline);
+                self::write_error('PHP Warning', $errstr, $errfile, $errline);
                 break;
             case E_USER_NOTICE :
-                self :: write_error('PHP Notice', $errstr, $errfile, $errline);
+                self::write_error('PHP Notice', $errstr, $errfile, $errline);
             case E_RECOVERABLE_ERROR :
                 if (extension_loaded('newrelic'))
                 {
                     newrelic_notice_error($errstr, new \Exception($errstr, $errno));
                 }
-                self :: write_error('PHP Recoverable error', $errstr, $errfile, $errline);
+                self::write_error('PHP Recoverable error', $errstr, $errfile, $errline);
             default :
         }
         return true;
@@ -473,7 +473,7 @@ class Utilities
 
     public static function write_error($errno, $errstr, $errfile, $errline)
     {
-        $path = Path :: getInstance()->getLogPath();
+        $path = Path::getInstance()->getLogPath();
         $file = $path . 'error_log.txt';
         $fh = fopen($file, 'a');
 

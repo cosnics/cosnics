@@ -192,19 +192,19 @@ class Kernel
      */
     protected function checkUpgrade()
     {
-        $package_info = \Chamilo\Configuration\Package\Storage\DataClass\Package:: get('Chamilo\Configuration');
-        $registration = \Chamilo\Configuration\Configuration:: registration('Chamilo\Configuration');
+        $package_info = \Chamilo\Configuration\Package\Storage\DataClass\Package::get('Chamilo\Configuration');
+        $registration = \Chamilo\Configuration\Configuration::registration('Chamilo\Configuration');
 
-        if ($package_info->get_version() != $registration[Registration :: PROPERTY_VERSION])
+        if ($package_info->get_version() != $registration[Registration::PROPERTY_VERSION])
         {
-            $theme = \Chamilo\Libraries\Platform\Session\Request:: get('theme');
-            $server_type = \Chamilo\Libraries\Platform\Session\Request:: get('server_type');
-            $time = \Chamilo\Libraries\Platform\Session\Request:: get('time');
+            $theme = \Chamilo\Libraries\Platform\Session\Request::get('theme');
+            $server_type = \Chamilo\Libraries\Platform\Session\Request::get('server_type');
+            $time = \Chamilo\Libraries\Platform\Session\Request::get('time');
 
-            if (!$theme && !$server_type && !$time)
+            if (! $theme && ! $server_type && ! $time)
             {
-                Request:: set_get(Application :: PARAM_CONTEXT, \Chamilo\Core\Lynx\Manager:: context());
-                Request:: set_get(Application :: PARAM_ACTION, \Chamilo\Core\Lynx\Manager :: ACTION_UPGRADE);
+                Request::set_get(Application::PARAM_CONTEXT, \Chamilo\Core\Lynx\Manager::context());
+                Request::set_get(Application::PARAM_ACTION, \Chamilo\Core\Lynx\Manager::ACTION_UPGRADE);
             }
 
             $settings = array(
@@ -215,42 +215,34 @@ class Kernel
                 'server_type',
                 'theme',
                 'hide_dcda_markup',
-                'session_timeout'
-            );
+                'session_timeout');
 
             foreach ($settings as $setting)
             {
-                $old_setting = \Chamilo\Libraries\Platform\Configuration\PlatformSetting:: get(
+                $old_setting = \Chamilo\Libraries\Platform\Configuration\PlatformSetting::get(
                     $setting,
-                    'Chamilo\Core\Admin'
-                );
-                \Chamilo\Libraries\Platform\Configuration\PlatformSetting:: set($setting, $old_setting);
+                    'Chamilo\Core\Admin');
+                \Chamilo\Libraries\Platform\Configuration\PlatformSetting::set($setting, $old_setting);
             }
 
-            $language_interface = $platform_language = \Chamilo\Libraries\Platform\Configuration\PlatformSetting:: get(
-                'platform_language'
-            );
+            $language_interface = $platform_language = \Chamilo\Libraries\Platform\Configuration\PlatformSetting::get(
+                'platform_language');
             $conditions = array();
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Configuration\Storage\DataClass\Language:: class_name(),
-                    \Chamilo\Configuration\Storage\DataClass\Language :: PROPERTY_ISOCODE
-                ),
-                new StaticConditionVariable($platform_language)
-            );
+                    \Chamilo\Configuration\Storage\DataClass\Language::class_name(),
+                    \Chamilo\Configuration\Storage\DataClass\Language::PROPERTY_ISOCODE),
+                new StaticConditionVariable($platform_language));
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Configuration\Storage\DataClass\Language:: class_name(),
-                    \Chamilo\Configuration\Storage\DataClass\Language :: PROPERTY_AVAILABLE
-                ),
-                new StaticConditionVariable(1)
-            );
+                    \Chamilo\Configuration\Storage\DataClass\Language::class_name(),
+                    \Chamilo\Configuration\Storage\DataClass\Language::PROPERTY_AVAILABLE),
+                new StaticConditionVariable(1));
             $parameters = new DataClassCountParameters(new AndCondition($conditions));
-            DataClassCountCache:: set_cache(
-                \Chamilo\Configuration\Storage\DataClass\Language:: class_name(),
+            DataClassCountCache::set_cache(
+                \Chamilo\Configuration\Storage\DataClass\Language::class_name(),
                 $parameters->hash(),
-                1
-            );
+                1);
         }
 
         return $this;
@@ -263,16 +255,15 @@ class Kernel
     protected function checkAuthentication()
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName();
-        $applicationRequiresAuthentication = !is_subclass_of(
+        $applicationRequiresAuthentication = ! is_subclass_of(
             $applicationClassName,
-            'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport'
-        );
+            'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
 
         $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfiguration());
 
         if ($applicationRequiresAuthentication)
         {
-            if (!$authenticationValidator->validate() && !Authentication:: anonymous_user_exists())
+            if (! $authenticationValidator->validate() && ! Authentication::anonymous_user_exists())
             {
                 throw new NotAuthenticatedException(true);
             }
@@ -287,37 +278,33 @@ class Kernel
      */
     protected function loadUser()
     {
-        $user_id = Session:: get_user_id();
+        $user_id = Session::get_user_id();
         if ($user_id)
         {
-            $this->user = \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(User:: class_name(), $user_id);
+            $this->user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $user_id);
         }
 
-        if (!$this->getUser() instanceof User)
+        if (! $this->getUser() instanceof User)
         {
-            $this->user = Authentication:: as_anonymous_user();
+            $this->user = Authentication::as_anonymous_user();
         }
 
         if ($this->getUser() instanceof User)
         {
             $themeSelectionAllowed = $this->getConfiguration()->get_setting(
-                array('Chamilo\Core\User', 'allow_user_theme_selection')
-            );
+                array('Chamilo\Core\User', 'allow_user_theme_selection'));
 
             if ($themeSelectionAllowed)
             {
-                Theme:: getInstance()->setTheme(LocalSetting:: getInstance()->get('theme'));
+                Theme::getInstance()->setTheme(LocalSetting::getInstance()->get('theme'));
             }
 
             $languageSelectionAllowed = $this->getConfiguration()->get_setting(
-                array('Chamilo\Core\User', 'allow_user_change_platform_language')
-            );
+                array('Chamilo\Core\User', 'allow_user_change_platform_language'));
 
             if ($languageSelectionAllowed)
             {
-                Translation:: getInstance()->setLanguageIsocode(
-                    LocalSetting:: getInstance()->get('platform_language')
-                );
+                Translation::getInstance()->setLanguageIsocode(LocalSetting::getInstance()->get('platform_language'));
             }
         }
 
@@ -330,14 +317,14 @@ class Kernel
      */
     protected function setup()
     {
-        if (!\Chamilo\Configuration\Configuration:: get('Chamilo\Configuration', 'debug', 'show_errors'))
+        if (! \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'debug', 'show_errors'))
         {
             set_exception_handler('\Chamilo\Libraries\Utilities\Utilities::handle_exception');
             set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
-//            register_shutdown_function('\Chamilo\Libraries\Utilities\Utilities::checkShutdown');
+            // register_shutdown_function('\Chamilo\Libraries\Utilities\Utilities::checkShutdown');
         }
 
-        $timezone = \Chamilo\Configuration\Configuration:: get('Chamilo\Core\Admin', 'platform_timezone');
+        $timezone = \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'platform_timezone');
         date_default_timezone_set($timezone);
 
         $this->configureNewRelic();
@@ -346,6 +333,7 @@ class Kernel
     }
 
     /**
+     *
      * @return \Chamilo\Libraries\Architecture\Kernel
      */
     protected function configureNewRelic()
@@ -358,7 +346,7 @@ class Kernel
             newrelic_add_custom_parameter($prefix . 'http_method', $_SERVER['REQUEST_METHOD']);
 
             $user_id = Session::get_user_id();
-            if (!empty($user_id))
+            if (! empty($user_id))
             {
                 newrelic_add_custom_parameter($prefix . 'user_id', Session::get_user_id());
             }
@@ -400,15 +388,15 @@ class Kernel
      */
     protected function determineContext()
     {
-        $getContext = $this->getRequest()->query->get(Application :: PARAM_CONTEXT);
+        $getContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
 
-        if (!$getContext)
+        if (! $getContext)
         {
-            $postContext = $this->getRequest()->request->get(Application :: PARAM_CONTEXT);
+            $postContext = $this->getRequest()->request->get(Application::PARAM_CONTEXT);
 
-            if (!$postContext)
+            if (! $postContext)
             {
-                $this->getRequest()->query->set(Application :: PARAM_CONTEXT, 'Chamilo\Core\Home');
+                $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Home');
 
                 return 'Chamilo\Core\Home';
             }
@@ -430,36 +418,30 @@ class Kernel
     protected function traceVisit()
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName();
-        $applicationRequiresTracing = !is_subclass_of(
+        $applicationRequiresTracing = ! is_subclass_of(
             $applicationClassName,
-            'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface'
-        );
+            'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');
 
         if ($applicationRequiresTracing)
         {
             if ($this->getUser() instanceof User)
             {
-                Event:: trigger(
+                Event::trigger(
                     'Online',
-                    \Chamilo\Core\Admin\Manager:: context(),
-                    array('user' => $this->getUser()->get_id())
-                );
+                    \Chamilo\Core\Admin\Manager::context(),
+                    array('user' => $this->getUser()->get_id()));
 
                 $requestUri = $this->getRequest()->server->get('REQUEST_URI');
 
-                if ($this->getRequest()->query->get(Application :: PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
-                    $this->getRequest()->query->get(Application :: PARAM_ACTION) != 'LeaveComponent'
-                )
+                if ($this->getRequest()->query->get(Application::PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
+                     $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
                 {
-                    $return = Event:: trigger(
+                    $return = Event::trigger(
                         'Enter',
-                        \Chamilo\Core\User\Manager:: context(),
+                        \Chamilo\Core\User\Manager::context(),
                         array(
-                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
-                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit :: PROPERTY_USER_ID => $this->getUser(
-                            )->get_id()
-                        )
-                    );
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_USER_ID => $this->getUser()->get_id()));
                 }
             }
         }
@@ -503,7 +485,7 @@ class Kernel
     {
         $response = $this->getApplication()->run();
 
-        if (!$response instanceof Response)
+        if (! $response instanceof Response)
         {
             $response = new Response($response);
         }
@@ -512,7 +494,8 @@ class Kernel
     }
 
     /**
-     * Redirects response of Microsoft OAuth 2.0 Authorization workflow to the component which have called MicrosoftClientService::login(...).
+     * Redirects response of Microsoft OAuth 2.0 Authorization workflow to the component which have called
+     * MicrosoftClientService::login(...).
      *
      * @return \Chamilo\Libraries\Architecture\Kernel
      *
@@ -520,17 +503,17 @@ class Kernel
      */
     public function handleOAuth2()
     {
-        $code = $this->getRequest()->query->get(self :: PARAM_CODE);
-        $state = $this->getRequest()->query->get(self :: PARAM_STATE);
-        $session_state = $this->getRequest()->query->get(self :: PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
+        $code = $this->getRequest()->query->get(self::PARAM_CODE);
+        $state = $this->getRequest()->query->get(self::PARAM_STATE);
+        $session_state = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
 
         if ($code && $state)
         {
             $stateParameters = (array) unserialize(base64_decode($state));
-            $stateParameters[self :: PARAM_CODE] = $code;
+            $stateParameters[self::PARAM_CODE] = $code;
             if ($session_state)
             {
-                $stateParameters[self :: PARAM_SESSION_STATE] = $session_state;
+                $stateParameters[self::PARAM_SESSION_STATE] = $session_state;
             }
 
             $redirect = new Redirect($stateParameters);
@@ -542,14 +525,13 @@ class Kernel
 
     protected function logException(\Exception $exception)
     {
-        if (!$exception instanceof NotAllowedException)
+        if (! $exception instanceof NotAllowedException)
         {
-            Utilities:: write_error(
+            Utilities::write_error(
                 $exception->getCode(),
                 $exception->getMessage(),
                 $exception->getFile(),
-                $exception->getLine()
-            );
+                $exception->getLine());
 
             if (extension_loaded('newrelic'))
             {
@@ -565,15 +547,14 @@ class Kernel
     {
         try
         {
-            if (!$this->getConfiguration()->is_available())
+            if (! $this->getConfiguration()->is_available())
             {
                 $this->configureContext();
                 $this->buildApplication()->runApplication();
             }
             else
             {
-                $this->checkUpgrade()->setup()->handleOAuth2()->checkAuthentication()->loadUser()->buildApplication()
-                    ->traceVisit()->runApplication();
+                $this->checkUpgrade()->setup()->handleOAuth2()->checkAuthentication()->loadUser()->buildApplication()->traceVisit()->runApplication();
             }
         }
         catch (NotAuthenticatedException $exception)
