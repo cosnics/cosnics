@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Format\Structure\ActionBar;
 
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Table\HtmlTable;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -34,6 +33,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
     private $renderer;
 
     /**
+     *
      * @var string
      */
     protected $actionURL;
@@ -45,7 +45,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function __construct($url)
     {
-        parent :: __construct(self :: FORM_NAME, 'post', $url);
+        parent::__construct(self::FORM_NAME, 'post', $url);
 
         $this->actionURL = $url;
 
@@ -55,7 +55,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
         $query = $this->getQuery();
         if ($query)
         {
-            $this->setDefaults(array(self :: PARAM_SIMPLE_SEARCH_QUERY => $query));
+            $this->setDefaults(array(self::PARAM_SIMPLE_SEARCH_QUERY => $query));
         }
 
         $this->buildForm();
@@ -72,21 +72,15 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
         $this->addElement(
             'text',
-            self :: PARAM_SIMPLE_SEARCH_QUERY,
-            Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES),
+            self::PARAM_SIMPLE_SEARCH_QUERY,
+            Translation::get('Search', null, Utilities::COMMON_LIBRARIES),
             array('class' => 'form-group form-control action-bar-search'));
 
-        $this->renderer->setElementTemplate('{element} ', self :: PARAM_SIMPLE_SEARCH_QUERY);
+        $this->renderer->setElementTemplate('{element} ', self::PARAM_SIMPLE_SEARCH_QUERY);
 
         $this->addElement('html', '<div class="input-group-btn">');
 
-        $this->addElement(
-            'style_button',
-            'submit',
-            null,
-            null,
-            'submit',
-            'search');
+        $this->addElement('style_button', 'submit', null, null, 'submit', 'search');
 
         $buttonElementTemplate = '{element}';
 
@@ -94,13 +88,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
         if ($this->getQuery())
         {
-            $this->addElement(
-                'style_button',
-                'clear',
-                null,
-                null,
-                'clear',
-                'remove');
+            $this->addElement('style_button', 'clear', null, null, 'clear', 'remove');
             $this->renderer->setElementTemplate($buttonElementTemplate, 'clear');
         }
 
@@ -124,11 +112,11 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function getQuery()
     {
-        $query = Request :: post(self :: PARAM_SIMPLE_SEARCH_QUERY);
+        $query = Request::post(self::PARAM_SIMPLE_SEARCH_QUERY);
 
         if (! $query)
         {
-            $query = Request :: get(self :: PARAM_SIMPLE_SEARCH_QUERY);
+            $query = Request::get(self::PARAM_SIMPLE_SEARCH_QUERY);
         }
 
         return $query;
@@ -136,7 +124,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
     public function clearFormSubmitted()
     {
-        return ! is_null(Request :: post('clear'));
+        return ! is_null(Request::post('clear'));
     }
 
     /**
@@ -146,7 +134,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      */
     public function registerTableParametersInSearchForm(array $tableParameters = array())
     {
-        foreach($tableParameters as $tableParameter => $value)
+        foreach ($tableParameters as $tableParameter => $value)
         {
             $this->actionURL .= '&' . $tableParameter . '=' . $value;
         }
@@ -166,7 +154,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
 
     /**
      * Returns the action URL
-     * 
+     *
      * @return string
      */
     public function getActionURL()

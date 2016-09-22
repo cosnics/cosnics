@@ -1,16 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Portfolio\Display\Component;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Repository\ContentObject\Portfolio\Infrastructure\Service\MailNotificationHandler;
 use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
-use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationHandlerInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Feedback management of the portfolio item or folder
@@ -33,7 +28,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
         }
 
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Feedback\Manager :: context(),
+            \Chamilo\Core\Repository\Feedback\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $result = $factory->run();
 
@@ -52,7 +47,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP);
+        return array(self::PARAM_STEP);
     }
 
     /**

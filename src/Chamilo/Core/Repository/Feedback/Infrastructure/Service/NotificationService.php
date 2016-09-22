@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Repository\Feedback\Infrastructure\Service;
 
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
-use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 
 /**
  * Service to handle notifications of new feedback

@@ -1,8 +1,6 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseCopier\Infrastructure\Repository;
 
-use Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
@@ -22,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class CourseCopierRepository implements CourseCopierRepositoryInterface
 {
+
     /**
      * Returns the root course group for a given course
      *
@@ -32,8 +31,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
     public function findRootCourseGroupForCourse($courseId)
     {
         return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_course_group_root(
-            $courseId
-        );
+            $courseId);
     }
 
     /**
@@ -52,32 +50,25 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
 
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_ID
-            ),
-            $categoryIds
-        );
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_ID),
+            $categoryIds);
 
         $order_by = array();
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_PARENT
-            )
-        );
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_PARENT));
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_DISPLAY_ORDER
-            )
-        );
+                ContentObjectPublicationCategory::class_name(),
+                ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER));
 
-        return \Chamilo\Application\Weblcms\Storage\DataManager:: retrieves(
-            ContentObjectPublicationCategory:: class_name(),
-            new DataClassRetrievesParameters($condition, null, null, $order_by)
-        )->as_array();
+        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+            ContentObjectPublicationCategory::class_name(),
+            new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
     }
 
     /**
@@ -89,10 +80,9 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
      */
     public function findContentObjectPublicationById($contentObjectPublicationId)
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
-            ContentObjectPublication:: class_name(),
-            $contentObjectPublicationId
-        );
+        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(),
+            $contentObjectPublicationId);
     }
 
     /**
@@ -105,25 +95,21 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
     public function findContentObjectPublicationExtension(ContentObjectPublication $contentObjectPublication)
     {
         $possible_publication_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
-            $contentObjectPublication->get_tool() . '\\Storage\\DataClass\\Publication';
+             $contentObjectPublication->get_tool() . '\\Storage\\DataClass\\Publication';
 
         if (class_exists($possible_publication_class))
         {
             $datamanager_class = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
-                $contentObjectPublication->get_tool() . '\\Storage\\DataManager';
+                 $contentObjectPublication->get_tool() . '\\Storage\\DataManager';
 
-            return $datamanager_class:: retrieve(
+            return $datamanager_class::retrieve(
                 $possible_publication_class,
                 new DataClassRetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(
                             $possible_publication_class,
-                            $possible_publication_class::PROPERTY_PUBLICATION_ID
-                        ),
-                        new StaticConditionVariable($contentObjectPublication->getId())
-                    )
-                )
-            );
+                            $possible_publication_class::PROPERTY_PUBLICATION_ID),
+                        new StaticConditionVariable($contentObjectPublication->getId()))));
         }
 
         return null;

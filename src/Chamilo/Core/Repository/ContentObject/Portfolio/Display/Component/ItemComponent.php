@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Menu;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\PortfolioComplexRights;
 use Chamilo\Core\Repository\ContentObject\Portfolio\Display\Infrastructure\Service\MailNotificationHandler;
-use Chamilo\Core\Repository\Feedback\Infrastructure\Service\NotificationHandlerInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Redirect;

@@ -18,9 +18,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -31,6 +29,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
@@ -38,14 +37,13 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: content_object_form.class.php 204 2009-11-13 12:51:30Z kariboe $
@@ -787,20 +785,20 @@ EOT;
         $defaults[ContentObject::PROPERTY_ID] = $content_object->get_id();
         $defaults[ContentObject::PROPERTY_MODIFICATION_DATE] = $content_object->get_modification_date();
 
-        if(!$this->workspace instanceof PersonalWorkspace)
+        if (! $this->workspace instanceof PersonalWorkspace)
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelation = $contentObjectRelationService->getContentObjectRelationForWorkspaceAndContentObject(
-                $this->workspace, $content_object
-            );
+                $this->workspace,
+                $content_object);
 
-            if($contentObjectRelation)
+            if ($contentObjectRelation)
             {
                 $defaults[ContentObject::PROPERTY_PARENT_ID] = $contentObjectRelation->getCategoryId();
             }
         }
 
-        if(!array_key_exists(ContentObject::PROPERTY_PARENT_ID, $defaults))
+        if (! array_key_exists(ContentObject::PROPERTY_PARENT_ID, $defaults))
         {
             $defaults[ContentObject::PROPERTY_PARENT_ID] = $content_object->get_parent_id();
         }
