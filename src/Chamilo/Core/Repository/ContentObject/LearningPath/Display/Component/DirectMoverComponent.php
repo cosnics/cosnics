@@ -17,6 +17,8 @@ class DirectMoverComponent extends Manager
 {
     function run()
     {
+        $this->validateAndFixCurrentStep();
+
         $currentNode = $this->get_current_node();
         if (!$this->canEditComplexContentObjectPathNode($currentNode))
         {
@@ -91,6 +93,11 @@ class DirectMoverComponent extends Manager
 
         $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-        $this->redirect($message, (!$success), $parameters);
+        $this->redirect($message, (!$success), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
+    }
+
+    public function get_additional_parameters()
+    {
+        return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
     }
 }

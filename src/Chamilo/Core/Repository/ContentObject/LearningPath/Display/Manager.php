@@ -1,9 +1,12 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -40,6 +43,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_FULL_SCREEN = 'full_screen';
     const PARAM_PARENT_ID = 'parent_id';
     const PARAM_DISPLAY_ORDER = 'display_order';
+    const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
 
     // Sorting
     const SORT_UP = 'Up';
@@ -47,6 +51,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+
+    /**
+     * @var int
+     */
+    protected $current_step;
 
     /**
      * Get the id of the currently requested step
@@ -123,6 +132,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         return $this->get_complex_content_object_path()->get_node($this->get_current_step());
     }
 
+    /**
+     * @return ComplexContentObjectPath
+     */
     public function get_complex_content_object_path()
     {
         $learning_path_item_attempt_data = $this->get_parent()->retrieve_learning_path_tracker_items(
@@ -148,5 +160,57 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function get_additional_parameters()
     {
         return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN);
+    }
+
+    /**
+     * Helper function to validate the current node based on the given content object id
+     */
+    protected function validateCurrentNode()
+    {
+        if ($this->get_current_node()->get_content_object()->getId() !=
+            $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID)
+        )
+        {
+            throw new \Exception(
+                Translation::getInstance()->getTranslation(
+                    'StepNoLongerValid', null, Manager::context()
+                )
+            );
+        }
+    }
+
+    /**
+     * Helper function to detect the best possible node based on the current content object id
+     */
+    protected function detectBestPossibleNode()
+    {
+        $contentObjectId = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
+        $nodes = $this->get_complex_content_object_path()->get_nodes();
+
+        foreach($nodes as $node)
+        {
+            if($node->get_content_object()->getId() == $contentObjectId)
+            {
+                return $node;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper function to validate and possibly fix the current step when it became corrupt
+     */
+    protected function validateAndFixCurrentStep()
+    {
+        try
+        {
+            $this->validateCurrentNode();
+        }
+        catch (\Exception $ex)
+        {
+            $bestPossibleNode = $this->detectBestPossibleNode();
+            $this->current_step = $bestPossibleNode->get_id();
+        }
     }
 }

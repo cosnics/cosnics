@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager;
 use Chamilo\Core\Repository\Form\ContentObjectForm;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
@@ -31,6 +32,8 @@ class UpdaterComponent extends TabComponent
      */
     public function build()
     {
+        $this->validateAndFixCurrentStep();
+
         if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
@@ -117,7 +120,7 @@ class UpdaterComponent extends TabComponent
                 $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-                $this->redirect($message, (!$succes), $params);
+                $this->redirect($message, (!$succes), $params, array(self::PARAM_CONTENT_OBJECT_ID));
             }
             else
             {
@@ -159,6 +162,6 @@ class UpdaterComponent extends TabComponent
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP);
+        return array(self :: PARAM_STEP, self::PARAM_CONTENT_OBJECT_ID);
     }
 }

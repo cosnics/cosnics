@@ -30,6 +30,8 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function build()
     {
+        $this->validateAndFixCurrentStep();
+
         if (! $this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             throw new NotAllowedException();
@@ -222,7 +224,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP);
+        return array(self :: PARAM_STEP, self::PARAM_CONTENT_OBJECT_ID);
     }
 
     /**

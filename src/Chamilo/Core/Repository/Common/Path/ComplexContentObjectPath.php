@@ -54,7 +54,7 @@ abstract class ComplexContentObjectPath
 
     /**
      *
-     * @return multitype:ComplexContentObjectPathNode
+     * @return ComplexContentObjectPathNode[]
      */
     public function get_nodes()
     {
