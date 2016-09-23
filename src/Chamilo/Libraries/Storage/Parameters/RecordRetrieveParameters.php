@@ -44,6 +44,17 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
     {
         parent :: __construct($condition, $order_by, $joins);
 
+        if(!is_null($properties) && !$properties instanceof DataClassProperties)
+        {
+            throw new \Exception(
+                sprintf(
+                    'The given parameter $properties should be of type ' .
+                    '\Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties but an object of type %s was given',
+                    gettype($properties)
+                )
+            );
+        }
+
         $this->properties = $properties;
         $this->group_by = $group_by;
     }

@@ -187,7 +187,7 @@ abstract class ComplexContentObjectPathNode
 
     /**
      *
-     * @return \core\repository\ContentObject
+     * @return ContentObject
      */
     public function get_content_object()
     {

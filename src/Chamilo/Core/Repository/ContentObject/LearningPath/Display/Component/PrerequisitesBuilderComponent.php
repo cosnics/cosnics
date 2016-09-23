@@ -19,6 +19,8 @@ class PrerequisitesBuilderComponent extends TabComponent
 
     public function build()
     {
+        $this->validateAndFixCurrentStep();
+        
         if (! $this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
             throw new NotAllowedException();
@@ -53,7 +55,7 @@ class PrerequisitesBuilderComponent extends TabComponent
             $parameters = array();
             $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-            $this->redirect(Translation :: get($message), ! $succes, $parameters);
+            $this->redirect(Translation :: get($message), ! $succes, $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
         }
         else
         {
@@ -67,12 +69,8 @@ class PrerequisitesBuilderComponent extends TabComponent
         }
     }
 
-    /**
-     *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
-     */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP);
+        return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
     }
 }

@@ -5,11 +5,16 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Repository\EntityRelationRepository;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
+use Chamilo\Core\Repository\Workspace\Service\EntityService;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
@@ -37,6 +42,20 @@ class UnshareComponent extends Manager
 
     public function run()
     {
+        $entityRelationService = new EntityRelationService(new EntityRelationRepository());
+        $entityService = new EntityService();
+
+        $canDelete = $entityRelationService->hasRight(
+            $entityService->getEntitiesForUser($this->getUser()),
+            RightsService::RIGHT_DELETE,
+            $this->getCurrentWorkspace()
+        );
+
+        if(!$canDelete)
+        {
+            throw new NotAllowedException();
+        }
+
         $selectedContentObjectIdentifiers = $this->getSelectedContentObjectIdentifiers();
 
         if (empty($selectedContentObjectIdentifiers))
