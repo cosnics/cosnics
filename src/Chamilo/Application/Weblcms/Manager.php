@@ -62,8 +62,6 @@ abstract class Manager extends Application
     const PARAM_STATUS = 'user_status';
     const PARAM_EXTRA = 'extra';
     const PARAM_PUBLICATION = 'publication';
-    const PARAM_ALLOW_SELECTED_REQUESTS = 'allow_selected_requests';
-    const PARAM_REFUSE_SELECTED_REQUESTS = 'refuse_selected_requests';
     const PARAM_TEMPLATE_ID = 'template_id';
 
     // Actions
@@ -74,6 +72,7 @@ abstract class Manager extends Application
     const ACTION_MANAGER_SORT = 'Sorter';
     const ACTION_COURSE_CATEGORY_MANAGER = 'CourseCategoryManager';
     const ACTION_ADMIN_REQUEST_BROWSER = 'AdminRequestBrowser';
+    const ACTION_COURSE_USER_SUBSCRIPTION_REQUEST_GRANT = 'course_user_subscription_request_granter';
     const ACTION_REPORTING = 'Reporting';
     const ACTION_REQUEST = 'Request';
     const ACTION_COURSE_TYPE_MANAGER = 'CourseTypeManager';
