@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
@@ -58,9 +59,10 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class_name(),
-            $publication_id);
+            $publication_id
+        );
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
                 Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
@@ -68,7 +70,27 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 array(),
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                )
+            );
+        }
+
+        if ($this->get_root_content_object()->get_type() == Assessment::class_name())
+        {
+            try
+            {
+                $this->checkMaximumAssessmentAttempts();
+            }
+            catch (\Exception $ex)
+            {
+                $html = array();
+
+                $html[] = $this->render_header();
+                $html[] = '<div class="alert alert-danger">' . $ex->getMessage() . '</div>';
+                $html[] = $this->render_footer();
+
+                return implode(PHP_EOL, $html);
+            }
         }
 
         // BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
@@ -76,7 +98,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $context = $this->get_root_content_object()->package() . '\Display';
         $factory = new ApplicationFactory(
             $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
+
         return $factory->run();
     }
 
@@ -86,19 +110,25 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         {
             $embedded_content_object_id = $this->get_embedded_content_object_id();
             $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
+
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
                 ContentObject::class_name(),
-                $embedded_content_object_id);
+                $embedded_content_object_id
+            );
         }
         else
         {
             $this->set_parameter(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
                 Request::get(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID));
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
+                )
+            );
             $this->set_parameter(
                 \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-                Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID));
+                Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID)
+            );
+
             return $this->publication->get_content_object();
         }
     }
@@ -110,6 +140,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     function is_embedded()
     {
         $embedded_content_object_id = $this->get_embedded_content_object_id();
+
         return isset($embedded_content_object_id);
     }
 
@@ -131,6 +162,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         if ($this->is_embedded())
         {
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+
             return Application::render_header();
         }
         else
@@ -149,7 +181,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return array(
             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID,
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN);
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN
+        );
     }
 
     public function retrieve_learning_path_tracker()
@@ -157,22 +190,27 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($this->get_course_id()));
+            new StaticConditionVariable($this->get_course_id())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 LearningPathAttempt::class_name(),
-                LearningPathAttempt::PROPERTY_LEARNING_PATH_ID),
-            new StaticConditionVariable($this->get_publication()->get_id()));
+                LearningPathAttempt::PROPERTY_LEARNING_PATH_ID
+            ),
+            new StaticConditionVariable($this->get_publication()->get_id())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(LearningPathAttempt::class_name(), LearningPathAttempt::PROPERTY_USER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new StaticConditionVariable($this->get_user_id())
+        );
         $condition = new AndCondition($conditions);
 
         $learning_path_tracker = DataManager::retrieve(
             LearningPathAttempt::class_name(),
-            new DataClassRetrieveParameters($condition));
+            new DataClassRetrieveParameters($condition)
+        );
 
-        if (! $learning_path_tracker)
+        if (!$learning_path_tracker)
         {
             $learning_path_tracker = new LearningPathAttempt();
             $learning_path_tracker->set_user_id($this->get_user_id());
@@ -194,12 +232,15 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 LearningPathItemAttempt::class_name(),
-                LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID),
-            new StaticConditionVariable($learning_path_tracker->get_id()));
+                LearningPathItemAttempt::PROPERTY_LEARNING_PATH_ATTEMPT_ID
+            ),
+            new StaticConditionVariable($learning_path_tracker->get_id())
+        );
 
         $attempts = DataManager::retrieves(
             LearningPathItemAttempt::class_name(),
-            new DataClassRetrievesParameters($condition));
+            new DataClassRetrievesParameters($condition)
+        );
 
         $attempt_data = array();
 
@@ -218,16 +259,24 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $parameters[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = Request::get('course');
-        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
-            $this->package());
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] =
+            ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
+                $this->package()
+            );
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+            \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->publication->get_id();
-        $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP] = Menu::NODE_PLACEHOLDER;
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN] = $this->getRequest()->query->get(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN);
+        $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] =
+            $this->get_root_content_object()->get_id();
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP] =
+            Menu::NODE_PLACEHOLDER;
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN] =
+            $this->getRequest()->query->get(
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN
+            );
 
         $redirect = new Redirect($parameters);
+
         return $redirect->getUrl();
     }
 
@@ -267,7 +316,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->publication->get_id(),
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_SHOW_PROGRESS => 'true',
                 \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_id,
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_DETAILS => $details));
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_DETAILS => $details
+            )
+        );
     }
 
     public function save_assessment_answer($complex_question_id, $answer, $score, $hint)
@@ -285,25 +336,29 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(LearningPathItemAttempt::class_name(), LearningPathItemAttempt::PROPERTY_ID),
-            new StaticConditionVariable($this->get_current_node()->get_current_attempt()->get_id()));
+            new StaticConditionVariable($this->get_current_node()->get_current_attempt()->get_id())
+        );
 
         $learning_path_item_attempt = DataManager::retrieve(
             LearningPathItemAttempt::class_name(),
-            new DataClassRetrieveParameters($condition));
+            new DataClassRetrieveParameters($condition)
+        );
 
-        if (! $learning_path_item_attempt instanceof LearningPathItemAttempt)
+        if (!$learning_path_item_attempt instanceof LearningPathItemAttempt)
         {
             return;
         }
 
         $learning_path_item_attempt->set_score($total_score);
         $learning_path_item_attempt->set_total_time(
-            $learning_path_item_attempt->get_total_time() + (time() - $learning_path_item_attempt->get_start_time()));
+            $learning_path_item_attempt->get_total_time() + (time() - $learning_path_item_attempt->get_start_time())
+        );
 
         $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
         $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ContentObject::class_name(),
-            $complex_content_object_item->get_ref());
+            $complex_content_object_item->get_ref()
+        );
         $mastery_score = $learning_path_item->get_mastery_score();
 
         if ($mastery_score)
@@ -322,7 +377,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function get_assessment_current_attempt_id()
     {
         return $this->get_parameter(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID);
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
+        );
     }
 
     /**
@@ -333,13 +389,16 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     {
         $root_content_object = $this->publication->get_content_object();
         $learning_path_item_attempt_data = $this->retrieve_learning_path_tracker_items(
-            $this->retrieve_learning_path_tracker());
+            $this->retrieve_learning_path_tracker()
+        );
         $path = $root_content_object->get_complex_content_object_path($learning_path_item_attempt_data);
 
         return $path->get_node(
             Request::get(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP,
-                $path->get_root()->get_id()));
+                $path->get_root()->get_id()
+            )
+        );
     }
 
     public function get_assessment_configuration()
@@ -347,7 +406,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $complex_content_object_item = $this->get_current_node()->get_complex_content_object_item();
         $learning_path_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ContentObject::class_name(),
-            $complex_content_object_item->get_ref());
+            $complex_content_object_item->get_ref()
+        );
 
         return $learning_path_item->get_configuration();
     }
@@ -357,7 +417,8 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return array(
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
             \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP);
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP
+        );
     }
 
     /**
@@ -387,12 +448,15 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 LearningPathQuestionAttempt::class_name(),
-                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID),
-            new StaticConditionVariable($this->get_current_node()->get_current_attempt()->get_id()));
+                LearningPathQuestionAttempt::PROPERTY_ITEM_ATTEMPT_ID
+            ),
+            new StaticConditionVariable($this->get_current_node()->get_current_attempt()->get_id())
+        );
 
         $question_attempts_result_set = DataManager::retrieves(
             LearningPathQuestionAttempt::class_name(),
-            new DataClassRetrievesParameters($condition));
+            new DataClassRetrievesParameters($condition)
+        );
 
         while ($question_attempt = $question_attempts_result_set->next_result())
         {
@@ -454,9 +518,12 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function forum_topic_viewed($complex_topic_id)
     {
         $parameters = array();
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->get_publication()->get_id();
-        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
+        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_USER_ID] =
+            $this->get_user_id();
+        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID] =
+            $this->get_publication()->get_id();
+        $parameters[\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID] =
+            $complex_topic_id;
 
         Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
     }
@@ -465,20 +532,28 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->get_publication()->get_id()));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(
+                ),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_PUBLICATION_ID
+            ),
+            new StaticConditionVariable($this->get_publication()->get_id())
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
-            new StaticConditionVariable($complex_topic_id));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(
+                ),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::PROPERTY_FORUM_TOPIC_ID
+            ),
+            new StaticConditionVariable($complex_topic_id)
+        );
         $condition = new AndCondition($conditions);
 
         return DataManager::count(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(),
-            new DataClassCountParameters($condition));
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name(
+            ),
+            new DataClassCountParameters($condition)
+        );
     }
 
     /**
@@ -523,7 +598,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function is_allowed_to_edit_content_object()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication)
-            && $this->publication->get_allow_collaboration();
+        && $this->publication->get_allow_collaboration();
     }
 
     public function is_allowed_to_view_content_object()
@@ -567,5 +642,25 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
     public function retrieve_learning_path_item_attempt($learning_path_item_attempt_id)
     {
         return DataManager::retrieve_by_id(LearningPathItemAttempt::class_name(), $learning_path_item_attempt_id);
+    }
+
+    /**
+     * Checks the maximum allowed assessment attempts
+     */
+    protected function checkMaximumAssessmentAttempts()
+    {
+        $attemptsCount =count($this->get_current_node()->get_data());
+
+        if ($this->get_root_content_object()->get_maximum_attempts() != 0 &&
+            $attemptsCount > $this->get_root_content_object()->get_maximum_attempts()
+        )
+        {
+            throw new \Exception(
+                Translation::get(
+                    'YouHaveReachedYourMaximumAttempts', null,
+                    'Chamilo\Application\Weblcms\Tool\Implementation\Assessment'
+                )
+            );
+        }
     }
 }
