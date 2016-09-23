@@ -35,9 +35,33 @@ abstract class DataClassParameters implements Hashable
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
+     *
+     * @throws \Exception
      */
     public function __construct($condition = null, Joins $joins = null)
     {
+        if(!is_null($condition) && !$condition instanceof Condition)
+        {
+            throw new \Exception(
+                sprintf(
+                    'The given parameter $condition should be of type ' .
+                    '\Chamilo\Libraries\Storage\Query\Condition\Condition but an object of type %s was given',
+                    gettype($condition)
+                )
+            );
+        }
+
+        if(!is_null($joins) && !$joins instanceof Joins)
+        {
+            throw new \Exception(
+                sprintf(
+                    'The given parameter $joins should be of type ' .
+                    '\Chamilo\Libraries\Storage\Query\Joins but an object of type %s was given',
+                    gettype($joins)
+                )
+            );
+        }
+
         $this->condition = $condition;
         $this->joins = $joins;
     }

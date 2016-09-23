@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Exception;
 
@@ -30,6 +31,18 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
     public function __construct($condition = null, $property = array(), $having = null, Joins $joins = null)
     {
         parent :: __construct($condition, $property, $joins);
+
+        if(!is_null($having) && !$having instanceof Condition)
+        {
+            throw new \Exception(
+                sprintf(
+                    'The given parameter $having should be of type ' .
+                    '\Chamilo\Libraries\Storage\Query\Condition\Condition but an object of type %s was given',
+                    gettype($having)
+                )
+            );
+        }
+
         $this->having = $having;
     }
 

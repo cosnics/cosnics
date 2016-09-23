@@ -32,6 +32,7 @@ class DataClassCountParameters extends DataClassParameters
     public function __construct($condition = null, Joins $joins = null, $property = array())
     {
         parent :: __construct($condition, $joins);
+
         $this->property = $property;
     }
 
