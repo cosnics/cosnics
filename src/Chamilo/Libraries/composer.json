@@ -15,7 +15,8 @@
         "phpoffice/phpexcel" : "1.8.*",
         "kigkonsult/icalcreator": "*",
         "fastfeed/fastfeed": "=0.4.0",
-        "simplepie/simplepie": "1.*"
+        "simplepie/simplepie": "1.*",
+        "sentry/sentry": "*"
     },
     "require-dev" : {
         "friendsofphp/php-cs-fixer" : "1.*"

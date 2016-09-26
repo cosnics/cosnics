@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -63,6 +64,7 @@ class ErrorHandler
      */
     public function handleException($exception)
     {
+        $this->exceptionLogger->logException($exception);
         Utilities::handle_exception($exception);
     }
 
