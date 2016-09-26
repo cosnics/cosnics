@@ -1,7 +1,12 @@
 <?php
 
-namespace Chamilo\Libraries\Architecture\ErrorHandler;
+namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
+/**
+ * Exception Logger that chains other exception loggers
+ * 
+ * @author Sven Vanpoucke - Hogeschool Gent
+ */
 class ExceptionLoggerChain implements ExceptionLoggerInterface
 {
     /**
@@ -26,7 +31,7 @@ class ExceptionLoggerChain implements ExceptionLoggerInterface
                 'You must provide at least one exception logger that implements ExceptionLoggerInterface'
             );
         }
-        
+
         foreach ($exceptionLoggers as $exceptionLogger)
         {
             if (!$exceptionLogger instanceof ExceptionLoggerInterface)

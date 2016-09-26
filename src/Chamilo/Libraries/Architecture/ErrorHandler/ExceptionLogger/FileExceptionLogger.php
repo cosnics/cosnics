@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Libraries\Architecture\ErrorHandler;
+namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 /**
  * Logs errors to a file
