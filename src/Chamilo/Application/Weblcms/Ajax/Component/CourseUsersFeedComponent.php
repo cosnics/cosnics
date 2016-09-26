@@ -209,8 +209,10 @@ class CourseUsersFeedComponent extends \Chamilo\Application\Weblcms\Ajax\Manager
             100,
             $this->get_offset(),
             array(
-                new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME))));
+                new OrderBy(new PropertyConditionVariable(User:: class_name(), User :: PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User:: class_name(), User :: PROPERTY_FIRSTNAME))
+            )
+        );
 
         return \Chamilo\Core\User\Storage\DataManager :: retrieves(User :: class_name(), $parameters);
     }
