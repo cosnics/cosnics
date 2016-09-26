@@ -9,23 +9,23 @@ use Chamilo\Libraries\Utilities\Utilities;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ErrorHandlerManager
+class ErrorHandler
 {
     /**
-     * List of registered error handlers
+     * The Exception Logger
      * 
-     * @var ErrorHandlerInterface[]
+     * @var ExceptionLoggerInterface
      */
-    protected $errorHandlers;
+    protected $exceptionLogger;
 
     /**
      * ErrorHandlerManager constructor.
      *
-     * @param ErrorHandlerInterface[] $errorHandlers
+     * @param ExceptionLoggerInterface $exceptionLogger
      */
-    public function __construct($errorHandlers = array())
+    public function __construct(ExceptionLoggerInterface $exceptionLogger)
     {
-        $this->errorHandlers = $errorHandlers;
+        $this->exceptionLogger = $exceptionLogger;
     }
 
     /**
@@ -37,10 +37,7 @@ class ErrorHandlerManager
 
         if(!is_null($error) && $error['type'] == E_ERROR)
         {
-            foreach($this->errorHandlers as $errorHandler)
-            {
-                $errorHandler->handleFatalError($error['message'], $error['file'], $error['line']);
-            }
+            $this->exceptionLogger->logException(new \Exception($error['message']), $error['file'], $error['line']);
         }
     }
 
