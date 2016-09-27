@@ -73,8 +73,12 @@ class ErrorHandler
      */
     public function registerErrorHandlers()
     {
-        set_exception_handler(array($this, 'handleException'));
-        set_error_handler(array($this, 'handleError'));
+//        set_exception_handler(array($this, 'handleException'));
+//        set_error_handler(array($this, 'handleError'));
+
+        set_exception_handler('\Chamilo\Libraries\Utilities\Utilities::handle_exception');
+        set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
+
         register_shutdown_function(array($this, 'handleShutdown'));
     }
 }
