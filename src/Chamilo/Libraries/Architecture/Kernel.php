@@ -9,12 +9,11 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
-use Chamilo\Libraries\Architecture\ErrorHandler\FileLoggerErrorHandler;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
@@ -349,19 +348,11 @@ class Kernel
      */
     protected function registerErrorHandlers()
     {
-        set_exception_handler('\Chamilo\Libraries\Utilities\Utilities::handle_exception');
-        set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
-        // register_shutdown_function('\Chamilo\Libraries\Utilities\Utilities::checkShutdown');
+        $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
+        $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
 
-//        $errorHandlerManager = new ErrorHandlerManager(
-//            array(
-//                new FileLoggerErrorHandler(
-//                    Path::getInstance()->getLogPath()
-//                )
-//            )
-//        );
-//
-//        $errorHandlerManager->registerErrorHandlers();
+        $errorHandler = new ErrorHandler($exceptionLogger);
+        $errorHandler->registerErrorHandlers();
     }
 
     /**
