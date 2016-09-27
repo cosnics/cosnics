@@ -33,7 +33,7 @@ class NewRelicExceptionLogger implements ExceptionLoggerInterface
      * @param string $file
      * @param int $line
      */
-    public function logException(\Exception $exception, $file = null, $line = 0)
+    public function logException($exception, $file = null, $line = 0)
     {
         newrelic_notice_error('chamilo_exception', $exception);
     }

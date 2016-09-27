@@ -351,7 +351,7 @@ class Kernel
         $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
         $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
 
-        $errorHandler = new ErrorHandler($exceptionLogger);
+        $errorHandler = new ErrorHandler($exceptionLogger, Translation::getInstance());
         $errorHandler->registerErrorHandlers();
     }
 

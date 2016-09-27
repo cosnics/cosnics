@@ -47,7 +47,7 @@ class FileExceptionLogger implements ExceptionLoggerInterface
      * @param string $file
      * @param int $line
      */
-    public function logException(\Exception $exception, $file = null, $line = 0)
+    public function logException($exception, $file = null, $line = 0)
     {
         $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'FatalErrors.log';
         $fileHandler = fopen($logFile, 'a');

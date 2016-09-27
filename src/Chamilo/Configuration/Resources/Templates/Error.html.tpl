@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>500 - Er is iets fout gelopen op de server</title>
+    <title>{ error_code } - { error_title }</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -17,7 +17,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="../Css/Aqua/ErrorPages.css">
+    <link rel="stylesheet" href="Chamilo/Configuration/Resources/Css/Aqua/ErrorPages.css">
 
 </head>
 <body>
@@ -29,11 +29,10 @@
 
 <div class="main">
     <div class="error-message-container">
-        <div class="error-heading">500</div>
+        <div class="error-heading">{ error_code }</div>
         <div class="logo"></div>
-        <p>There was something wrong on the server. The error has been sent to the administrators of Chamilo. Please return to the previous page with the "previous" button of your browser or with the button below.</p>
-        <br /><p>If the problem continues you should contact the administrators of Chamilo.</p>
-        <br/><button type="button" class="btn btn-success pull-right" onclick="goBack();">Return to the previous page</button>
+        <p>{ error_content }</p>
+        <br/><button type="button" class="btn btn-success pull-right" onclick="goBack();">{ return_button_content }</button>
         <div class="clearfix"></div>
     </div>
 </div>
