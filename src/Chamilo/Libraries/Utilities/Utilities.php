@@ -398,46 +398,57 @@ class Utilities
     public static function handle_exception($exception)
     {
         $html = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-        	<head>
-        		<title>Uncaught exception</title>
-        		<link rel="stylesheet" href="Chamilo/Configuration/Resources/Css/Aqua/Stylesheet.css" type="text/css"/>
-        	</head>
-        	<body dir="ltr">
-        		<div id="outerframe">
-        			<div id="header">
-        				<div id="header1">
-        					<div class="banner"><span class="logo"></span><span class="text">Chamilo</span></div>
-        					<div class="clear">&nbsp;</div>
-        				</div>
-        				<div class="clear">&nbsp;</div>
-        			</div>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>Uncaught exception</title>
+<link rel="stylesheet" href="Chamilo/Configuration/Resources/Css/Aqua/Stylesheet.css" type="text/css" />
+<link rel="stylesheet" href="Chamilo/Core/Menu/Resources/Css/Aqua/Stylesheet.css" type="text/css" />
+</head>
+<body dir="ltr">
+    <a name="top"></a>
+    <nav class="navbar navbar-chamilo navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">
+                <img alt="Desiderius"
+                    src="Chamilo/Configuration/Resources/Images/Aqua/LogoHeader.png">
+            </a>
+        </div>
+    </div>
+    </nav>
+    <div class="container-breadcrumb">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="#">Uncaught exception</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="main" style="min-height: 300px;">
+                    <div class="error-message">' . $exception->getMessage() . '</div>
+                    <br />
+                    <br />
+                </div>
 
-                    <div id="trailbox">
-                        <ul id="breadcrumbtrail">
-                        	<li><a href="#">Uncaught exception</a></li>
-                        </ul>
-                    </div>
-
-        			<div id="main" style="min-height: 300px;">
-        				<div class="error-message">' . $exception->getMessage() . '</div><br /><br />
-        			</div>
-
-        			<div id="footer">
-        				<div id="copyright">
-        					<div class="logo">
-        					<a href="http://www.chamilo.org"><img src="Configuration/Resources/Images/Aqua/logo_footer.png" alt="footer"/></a>
-        					</div>
-        					<div class="links">
-        						<a href="http://www.chamilo.org">http://www.chamilo.org</a>&nbsp;|&nbsp;&copy;&nbsp;' . @date(
-            'Y') . '
-        					</div>
-        					<div class="clear"></div>
-        				</div>
-        			</div>
-        		</div>
-        	</body>
-        </html>';
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!-- end of .container-fluid" -->
+    <footer class="chamilo-footer">
+    <div class="container-fluid">
+        <div class="row footer">
+            <div class="col-xs-12">&copy; ' . @date('Y') . '</div>
+        </div>
+    </div>
+    <!-- end of .container-fluid" --> </footer>
+</body>
+</html>';
         echo $html;
     }
 
