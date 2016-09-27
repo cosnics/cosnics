@@ -53,11 +53,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->set_parameter(ViewRenderer :: PARAM_TYPE, $this->getCurrentRendererType());
         $this->set_parameter(ViewRenderer :: PARAM_TIME, $this->getCurrentRendererTime());
 
-        if ($this->getJumpForm()->validate())
-        {
-            $this->setCurrentRendererTime($this->getJumpForm()->getTime());
-        }
-
         $html = array();
 
         $html[] = $this->render_header();
@@ -67,16 +62,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
-    }
-
-    public function getJumpForm()
-    {
-        if (! isset($this->jumpForm))
-        {
-            $this->jumpForm = new JumpForm($this->get_url(), $this->getCurrentRendererTime());
-        }
-
-        return $this->jumpForm;
     }
 
     protected function getCalendarDataProvider()
@@ -98,26 +83,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->calendarDataProvider;
-    }
-
-    protected function renderSidebar()
-    {
-        $dataProvider = $this->getCalendarDataProvider();
-        $calendarLegend = new Legend($dataProvider);
-
-        $mini_month_renderer = new MiniMonthRenderer(
-            $dataProvider,
-            $calendarLegend,
-            $this->getCurrentRendererTime(),
-            null,
-            $this->getMiniMonthMarkPeriod());
-
-        $html = array();
-
-        $html[] = $mini_month_renderer->render();
-        $html[] = $this->getJumpForm()->toHtml();
-
-        return implode(PHP_EOL, $html);
     }
 
     protected function renderNormalCalendar()
