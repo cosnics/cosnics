@@ -1,123 +1,135 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Renderer\Form;
 
-use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Calendar\Table\Calendar;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package libraries\calendar\renderer
+ * @package Chamilo\Libraries\Calendar\Renderer\Form$JumpForm
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class JumpForm extends FormValidator
+class JumpForm
 {
-    const JUMP_DAY = 'day';
-    const JUMP_MONTH = 'month';
-    const JUMP_YEAR = 'year';
 
     /**
      *
-     * @var \HTML_QuickForm_Renderer
+     * @var string
      */
-    private $renderer;
+    private $navigationUrl;
 
     /**
      *
      * @var int
      */
-    private $time;
+    private $currentTime;
 
     /**
      *
-     * @param int $time
-     * @param string $url
+     * @param string $navigationUrl
+     * @param integer $currentTime
      */
-    public function __construct($url, $time = null)
+    public function __construct($navigationUrl, $currentTime = null)
     {
-        parent :: __construct('calendar_jump_form', 'post', $url);
-
-        $this->renderer = $this->defaultRenderer();
-        $this->time = is_null($time) ? intval($time) : $time;
-
-        $this->buildForm();
-        $this->accept($this->renderer);
+        $this->navigationUrl = $navigationUrl;
+        $this->currentTime = is_null($currentTime) ? intval($currentTime) : $currentTime;
     }
 
     /**
-     * Build the simple search form.
+     *
+     * @return string
      */
-    private function buildForm()
+    public function getNavigationUrl()
     {
-        $this->renderer->setFormTemplate(
-            '<form {attributes}><div class="jump_form">{content}</div><div class="clear">&nbsp;</div></form>');
-        $this->renderer->setElementTemplate('<div class="form-row"><div class="formw">{element}</div></div>');
-
-        $this->addElement('category', Translation :: get('JumpTo', null, Utilities :: COMMON_LIBRARIES));
-
-        $dateGroup = array();
-
-        $dateGroup[] = $this->createElement(
-            'select',
-            self :: JUMP_DAY,
-            null,
-            $this->getDays(),
-            array('class' => 'postback'));
-        $dateGroup[] = $this->createElement(
-            'select',
-            self :: JUMP_MONTH,
-            null,
-            $this->getMonths(),
-            array('class' => 'postback'));
-        $dateGroup[] = $this->createElement(
-            'select',
-            self :: JUMP_YEAR,
-            null,
-            $this->getYears(),
-            array('class' => 'postback'));
-
-        $this->addGroup($dateGroup, null, null, ' ', false);
-
-        $this->addElement('style_button', 'submit', Translation :: get('Jump'));
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js'));
-        $this->addElement('category');
-
-        $this->setDefaults(
-            array(
-                self :: JUMP_DAY => date('j', $this->time),
-                self :: JUMP_MONTH => date('n', $this->time),
-                self :: JUMP_YEAR => date('Y', $this->time)));
+        return $this->navigationUrl;
     }
 
     /**
-     * Display the form
+     *
+     * @return string
+     */
+    public function getCurrentTime()
+    {
+        return $this->currentTime;
+    }
+
+    /**
+     *
+     * @return string
      */
     public function render()
     {
-        $html = array();
-        $html[] = '<div class="panel panel-default">';
-        $html[] = '<div class="panel-body">';
-        $html[] = $this->renderer->toHTML();
-        $html[] = '</div>';
-        $html[] = '</div>';
-        return implode('', $html);
+        return $this->getButtonToolBarRenderer()->render();
     }
 
     /**
      *
-     * @return int
+     * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
      */
-    public function getTime()
+    private function getButtonToolBarRenderer()
     {
-        $values = $this->exportValues();
-        return mktime(0, 0, 0, $values[self :: JUMP_MONTH], $values[self :: JUMP_DAY], $values[self :: JUMP_YEAR]);
+        $buttonToolbar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup();
+        $buttonToolbar->addItem($buttonGroup);
+
+        $dateButton = new DropdownButton(date('j', $this->getCurrentTime()));
+
+        foreach ($this->getDays() as $day)
+        {
+            $dayUrl = str_replace(
+                Calendar::TIME_PLACEHOLDER,
+                mktime(null, null, null, date('n', $this->getCurrentTime()), $day, date('Y', $this->getCurrentTime())),
+                $this->getNavigationUrl());
+
+            $classes = date('j', $this->getCurrentTime()) == $day ? 'selected' : 'not-selected';
+            $dateButton->addSubButton(new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, $classes));
+        }
+
+        $months = $this->getMonths();
+        $monthButton = new DropdownButton($months[date('n', $this->getCurrentTime())]);
+
+        foreach ($this->getMonths() as $month => $monthLabel)
+        {
+            $monthUrl = str_replace(
+                Calendar::TIME_PLACEHOLDER,
+                mktime(null, null, null, $month, date('j', $this->getCurrentTime()), date('Y', $this->getCurrentTime())),
+                $this->getNavigationUrl());
+
+            $classes = date('n', $this->getCurrentTime()) == $month ? 'selected' : 'not-selected';
+            $monthButton->addSubButton(
+                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, $classes));
+        }
+
+        $yearButton = new DropdownButton(date('Y', $this->getCurrentTime()));
+
+        foreach ($this->getYears() as $year)
+        {
+            $yearUrl = str_replace(
+                Calendar::TIME_PLACEHOLDER,
+                mktime(null, null, null, date('n', $this->getCurrentTime()), date('j', $this->getCurrentTime()), $year),
+                $this->getNavigationUrl());
+
+            $classes = date('Y', $this->getCurrentTime()) == $year ? 'selected' : 'not-selected';
+            $yearButton->addSubButton(new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, $classes));
+        }
+
+        $buttonGroup->addButton(
+            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link'));
+
+        $buttonGroup->addButton($dateButton);
+        $buttonGroup->addButton($monthButton);
+        $buttonGroup->addButton($yearButton);
+
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        return $buttonToolbarRenderer;
     }
 
     /**
@@ -126,7 +138,7 @@ class JumpForm extends FormValidator
      */
     public function getDays()
     {
-        $numberDays = date('t', $this->time);
+        $numberDays = date('t', $this->getCurrentTime());
         $days = array();
 
         for ($i = 1; $i <= $numberDays; $i ++)
@@ -144,18 +156,18 @@ class JumpForm extends FormValidator
     public function getMonths()
     {
         $monthNames = array(
-            Translation :: get("JanuaryLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("FebruaryLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("MarchLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("AprilLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("MayLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("JuneLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("JulyLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("AugustLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("SeptemberLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("OctoberLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("NovemberLong", null, Utilities :: COMMON_LIBRARIES),
-            Translation :: get("DecemberLong", null, Utilities :: COMMON_LIBRARIES));
+            Translation::get("JanuaryLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("FebruaryLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("MarchLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("AprilLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("MayLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("JuneLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("JulyLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("AugustLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("SeptemberLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("OctoberLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("NovemberLong", null, Utilities::COMMON_LIBRARIES),
+            Translation::get("DecemberLong", null, Utilities::COMMON_LIBRARIES));
         $months = array();
 
         foreach ($monthNames as $key => $month)
@@ -172,7 +184,7 @@ class JumpForm extends FormValidator
      */
     public function getYears()
     {
-        $year = date('Y', $this->time);
+        $year = date('Y', $this->getCurrentTime());
         $years = array();
 
         for ($i = $year - 5; $i <= $year + 5; $i ++)

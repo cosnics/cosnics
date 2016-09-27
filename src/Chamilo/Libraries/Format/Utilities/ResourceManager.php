@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Utilities;
 
 /**
  * $Id: resource_manager.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
+ *
  * @package common
  */
 use Chamilo\Libraries\File\Path;
@@ -12,7 +12,7 @@ use Chamilo\Libraries\File\Path;
  * Manages resources, ensuring that they are only loaded when necessary.
  * Currently only relevant for JavaScript and CSS
  * files.
- * 
+ *
  * @author Tim De Pauw
  * @package common
  */

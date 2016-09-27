@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\Calendar\Renderer\Type\View;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Calendar\Renderer\Form\JumpForm;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -29,6 +31,20 @@ abstract class FullRenderer extends ViewRenderer
             null);
 
         return $renderer->render();
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Calendar\Renderer\Form\JumpForm
+     */
+    protected function getJumpForm()
+    {
+        if (! isset($this->form))
+        {
+            $this->form = new JumpForm($this->determineNavigationUrl(), $this->getDisplayTime());
+        }
+
+        return $this->form;
     }
 
     /**
@@ -85,12 +101,13 @@ abstract class FullRenderer extends ViewRenderer
         $html[] = '<div class="col-xs-12 col-lg-2 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth();
         $html[] = $this->getLegend()->render();
+        $html[] = $this->getJumpForm()->render();
         $html[] = '</div>';
 
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
+        $html[] = ResourceManager::get_instance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
 
         return implode(PHP_EOL, $html);
     }
