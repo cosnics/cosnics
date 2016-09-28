@@ -233,7 +233,7 @@ class Course extends DataClass
      * @return string[string]
      *
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = array())
     {
         $id = $this->get_id();
 
