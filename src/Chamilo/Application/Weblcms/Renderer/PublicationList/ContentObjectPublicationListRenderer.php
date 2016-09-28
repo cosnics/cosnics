@@ -829,7 +829,7 @@ abstract class ContentObjectPublicationListRenderer
         )
         {
 
-            if (!$publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT])
+            if (!$publication[ContentObjectPublication :: PROPERTY_EMAIL_SENT] && !$publication[ContentObjectPublication :: PROPERTY_HIDDEN])
                 // && RightsUtilities :: is_allowed(EmailRights :: MAIL_ALLOWED, EmailRights :: LOCATION, EmailRights ::
                 // TYPE))
             {
