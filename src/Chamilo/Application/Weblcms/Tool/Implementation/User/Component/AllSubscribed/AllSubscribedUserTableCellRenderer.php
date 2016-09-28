@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Interfaces\UserListActionsExtenderInterface;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -46,7 +47,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
      */
     public function __construct($table)
     {
-        parent :: __construct($table);
+        parent:: __construct($table);
         $this->unknown_status_cache = array();
     }
 
@@ -69,27 +70,28 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
                 switch ($type)
                 {
                     case 1 :
-                        return Translation :: get('SubscribedDireclty');
+                        return Translation:: get('SubscribedDireclty');
                     case 2 :
-                        return Translation :: get('SubscribedGroup');
+                        return Translation:: get('SubscribedGroup');
                     default :
-                        return ($type % 2 == 0) ? Translation :: get('SubscribedGroup') : Translation :: get(
-                            'SubscribedDirecltyAndGroup');
+                        return ($type % 2 == 0) ? Translation:: get('SubscribedGroup') : Translation:: get(
+                            'SubscribedDirecltyAndGroup'
+                        );
                 }
             case AllSubscribedUserTableColumnModel :: SUBSCRIPTION_STATUS :
                 switch ($user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel :: SUBSCRIPTION_STATUS])
                 {
                     case CourseEntityRelation :: STATUS_TEACHER :
-                        return Translation :: get('CourseAdmin');
+                        return Translation:: get('CourseAdmin');
                     case CourseEntityRelation :: STATUS_STUDENT :
-                        return Translation :: get('Student');
+                        return Translation:: get('Student');
                     default :
-                        return Translation :: get('Unknown');
+                        return Translation:: get('Unknown');
                 }
             case User :: PROPERTY_PLATFORMADMIN :
                 if ($user_with_subscription_status_and_type[User :: PROPERTY_PLATFORM_ADMIN] == '1')
                 {
-                    return Translation :: get('PlatformAdministrator');
+                    return Translation:: get('PlatformAdministrator');
                 }
                 else
                 {
@@ -98,21 +100,23 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
             case User :: PROPERTY_EMAIL :
                 $email = $user_with_subscription_status_and_type[User :: PROPERTY_EMAIL];
 
-                if (PlatformSetting :: get('active_online_email_editor'))
+                if (PlatformSetting:: get('active_online_email_editor'))
                 {
                     $parameters = array();
                     $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_EMAIL;
-                    $parameters[Manager :: PARAM_OBJECTS] = $user_with_subscription_status_and_type[User :: PROPERTY_ID];
+                    $parameters[Manager :: PARAM_OBJECTS] =
+                        $user_with_subscription_status_and_type[User :: PROPERTY_ID];
                     $email_url = $this->get_component()->get_url($parameters);
                 }
                 else
                 {
                     $email_url = 'mailto:' . $email;
                 }
+
                 return '<a href="' . $email_url . '">' . $email . '</a>';
         }
 
-        return parent :: render_cell($column, $user_with_subscription_status_and_type);
+        return parent:: render_cell($column, $user_with_subscription_status_and_type);
     }
 
     /**
@@ -131,17 +135,19 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
 
         $parameters = array();
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_USER_DETAILS;
-        $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
+        $parameters[Manager :: PARAM_TAB] = Request:: get(Manager :: PARAM_TAB);
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
         $details_url = $this->get_component()->get_url($parameters);
 
         // always show details
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Details'),
-                Theme :: getInstance()->getCommonImagePath('Action/Details'),
+                Translation:: get('Details'),
+                Theme:: getInstance()->getCommonImagePath('Action/Details'),
                 $details_url,
-                ToolbarItem :: DISPLAY_ICON));
+                ToolbarItem :: DISPLAY_ICON
+            )
+        );
 
         // display the actions to change the individual status and unsubscribe
         // if:
@@ -152,70 +158,88 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
         // (3) the row is not a group-only subscription
         if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
-            if ($user_id != $this->get_component()->get_user()->get_id() && $user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel :: SUBSCRIPTION_TYPE] %
-                 2)
+            if ($user_id != $this->get_component()->get_user()->get_id() &&
+                $user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel :: SUBSCRIPTION_TYPE] %
+                2
+            )
             {
-                if ($this->get_component()->get_user()->is_platform_admin() || CourseManagementRights :: get_instance()->is_allowed(
-                    CourseManagementRights :: TEACHER_UNSUBSCRIBE_RIGHT,
-                    $this->get_component()->get_course_id(),
-                    CourseManagementRights :: TYPE_COURSE,
-                    $user_id))
+                if ($this->get_component()->get_user()->is_platform_admin() ||
+                    CourseManagementRights:: get_instance()->is_allowed(
+                        CourseManagementRights :: TEACHER_UNSUBSCRIBE_RIGHT,
+                        $this->get_component()->get_course_id(),
+                        CourseManagementRights :: TYPE_COURSE,
+                        $user_id
+                    )
+                )
 
                 {
                     $parameters = array();
-                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_UNSUBSCRIBE;
-                    $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
+                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
+                        Manager :: ACTION_UNSUBSCRIBE;
+                    $parameters[Manager :: PARAM_TAB] = Request:: get(Manager :: PARAM_TAB);
                     $parameters[Manager :: PARAM_OBJECTS] = $user_id;
                     $unsubscribe_url = $this->get_component()->get_url($parameters);
 
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('DirectUnsubscribe'),
-                            Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'),
+                            Translation:: get('DirectUnsubscribe'),
+                            Theme:: getInstance()->getCommonImagePath('Action/Unsubscribe'),
                             $unsubscribe_url,
-                            ToolbarItem :: DISPLAY_ICON));
+                            ToolbarItem :: DISPLAY_ICON
+                        )
+                    );
                 }
                 else
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation :: get('UnsubscribeNotAvailable'),
-                            Theme :: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
+                            Translation:: get('UnsubscribeNotAvailable'),
+                            Theme:: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
                             null,
-                            ToolbarItem :: DISPLAY_ICON));
+                            ToolbarItem :: DISPLAY_ICON
+                        )
+                    );
                 }
 
-                $weblcms_manager_namespace = \Chamilo\Application\Weblcms\Manager :: context();
+                $weblcms_manager_namespace = \Chamilo\Application\Weblcms\Manager:: context();
 
                 switch ($user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel :: SUBSCRIPTION_STATUS])
                 {
                     case CourseEntityRelation :: STATUS_TEACHER :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseEntityRelation :: STATUS_STUDENT);
+                            CourseEntityRelation :: STATUS_STUDENT
+                        );
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation :: get('MakeStudent'),
-                                Theme :: getInstance()->getImagePath(
+                                Translation:: get('MakeStudent'),
+                                Theme:: getInstance()->getImagePath(
                                     $weblcms_manager_namespace,
-                                    'Action/SubscribeStudent'),
+                                    'Action/SubscribeStudent'
+                                ),
                                 $status_change_url,
-                                ToolbarItem :: DISPLAY_ICON));
+                                ToolbarItem :: DISPLAY_ICON
+                            )
+                        );
                         break;
                     case CourseEntityRelation :: STATUS_STUDENT :
                         $status_change_url = $this->get_component()->get_status_changer_url(
                             $user_id,
-                            CourseEntityRelation :: STATUS_TEACHER);
+                            CourseEntityRelation :: STATUS_TEACHER
+                        );
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation :: get('MakeTeacher'),
-                                Theme :: getInstance()->getImagePath(
+                                Translation:: get('MakeTeacher'),
+                                Theme:: getInstance()->getImagePath(
                                     $weblcms_manager_namespace,
-                                    'Action/SubscribeTeacher'),
+                                    'Action/SubscribeTeacher'
+                                ),
                                 $status_change_url,
-                                ToolbarItem :: DISPLAY_ICON));
+                                ToolbarItem :: DISPLAY_ICON
+                            )
+                        );
                         break;
                 }
             }
@@ -223,29 +247,34 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation :: get('UnsubscribeNotAvailable'),
-                        Theme :: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
+                        Translation:: get('UnsubscribeNotAvailable'),
+                        Theme:: getInstance()->getCommonImagePath('Action/UnsubscribeNa'),
                         null,
-                        ToolbarItem :: DISPLAY_ICON));
+                        ToolbarItem :: DISPLAY_ICON
+                    )
+                );
             }
 
             // if we have editing rights, display the reporting action
             $params = array();
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
             $params[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_REPORTING;
-            $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
+            $parameters[Manager :: PARAM_TAB] = Request:: get(Manager :: PARAM_TAB);
             $reporting_url = $this->get_component()->get_url($params);
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Report'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Reporting'),
+                    Translation:: get('Report'),
+                    Theme:: getInstance()->getCommonImagePath('Action/Reporting'),
                     $reporting_url,
-                    ToolbarItem :: DISPLAY_ICON));
+                    ToolbarItem :: DISPLAY_ICON
+                )
+            );
         }
 
-        $userViewAllowed = Configuration :: get_instance()->get_setting(
-            array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
+        $userViewAllowed = Configuration:: get_instance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'allow_view_as_user')
+        );
 
         // add action for view as user
         if ($userViewAllowed || $this->get_component()->get_user()->is_platform_admin())
@@ -254,24 +283,28 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
             {
                 if ($user_id != $this->get_component()->get_user()->get_id())
                 {
-                    $course_settings_controller = CourseSettingsController :: get_instance();
+                    $course_settings_controller = CourseSettingsController:: get_instance();
                     $course_access = $course_settings_controller->get_course_setting(
                         $this->get_component()->get_course(),
-                        CourseSettingsConnector :: COURSE_ACCESS);
+                        CourseSettingsConnector :: COURSE_ACCESS
+                    );
 
 //                    if ($course_access != CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
                     {
                         $parameters = array();
-                        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_VIEW_AS;
+                        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
+                            Manager :: ACTION_VIEW_AS;
                         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = $user_id;
                         $view_as_url = $this->get_component()->get_url($parameters);
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation :: get('ViewAsUser'),
-                                Theme :: getInstance()->getCommonImagePath('Action/Login'),
+                                Translation:: get('ViewAsUser'),
+                                Theme:: getInstance()->getCommonImagePath('Action/Login'),
                                 $view_as_url,
-                                ToolbarItem :: DISPLAY_ICON));
+                                ToolbarItem :: DISPLAY_ICON
+                            )
+                        );
                     }
 //                    else
 //                    {
@@ -286,7 +319,52 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer impleme
             }
         }
 
+        $this->addAdditionalActions($toolbar, $user_id);
+
         // return
         return $toolbar->as_html();
+    }
+
+    /**
+     * Adds additional actions to the user table
+     *
+     * @param Toolbar $toolbar
+     * @param int $currentUserId
+     *
+     * @throws \Exception
+     */
+    protected function addAdditionalActions(Toolbar $toolbar, $currentUserId)
+    {
+        $configuration = Configuration::get_instance();
+        $integrationPackages = $configuration->getIntegrationRegistrations(Manager::context());
+
+        foreach ($integrationPackages as $integrationPackage)
+        {
+            $class = $integrationPackage['context'] . '\UserListActionsExtender';
+
+            if (!class_exists($class))
+            {
+                throw new \Exception(
+                    sprintf(
+                        'The given package %s does not have a UserListActionsExtender class',
+                        $integrationPackage['context']
+                    )
+                );
+            }
+
+            $userListActionsExtender = new $class();
+
+            if (!$userListActionsExtender instanceof UserListActionsExtenderInterface)
+            {
+                throw new \Exception(
+                    sprintf(
+                        'The given package %s does not have a valid UserListActionsExtender class ' .
+                        'that extends from UserListActionsExtenderInterface', $integrationPackage['context']
+                    )
+                );
+            }
+
+            $userListActionsExtender->getActions($toolbar, $this, $currentUserId);
+        }
     }
 }
