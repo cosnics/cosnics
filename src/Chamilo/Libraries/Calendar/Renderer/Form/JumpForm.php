@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
- * @package Chamilo\Libraries\Calendar\Renderer\Form$JumpForm
+ * @package Chamilo\Libraries\Calendar\Renderer\Form
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
@@ -78,6 +78,9 @@ class JumpForm
     {
         $buttonToolbar = new ButtonToolBar();
         $buttonGroup = new ButtonGroup();
+
+        $buttonToolbar->addItem(
+            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link'));
         $buttonToolbar->addItem($buttonGroup);
 
         $dateButton = new DropdownButton(date('j', $this->getCurrentTime()));
@@ -120,9 +123,6 @@ class JumpForm
             $classes = date('Y', $this->getCurrentTime()) == $year ? 'selected' : 'not-selected';
             $yearButton->addSubButton(new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, $classes));
         }
-
-        $buttonGroup->addButton(
-            new Button(Translation::get('JumpTo'), null, null, Button::DISPLAY_LABEL, false, 'btn-link'));
 
         $buttonGroup->addButton($dateButton);
         $buttonGroup->addButton($monthButton);
