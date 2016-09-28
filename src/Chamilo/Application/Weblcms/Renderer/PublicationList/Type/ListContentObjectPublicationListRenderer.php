@@ -222,7 +222,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         if ($publication[ContentObjectPublication::PROPERTY_TOOL] == self::TOOL_TYPE_ANNOUNCEMENT)
         {
-            if (! $publication[ContentObjectPublication::PROPERTY_EMAIL_SENT])
+            if (! $publication[ContentObjectPublication::PROPERTY_EMAIL_SENT] && $this->isPublicationVisible($publication))
             {
                 $email_url = $this->get_url(
                     array(
@@ -497,6 +497,31 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             return false;
         }
+    }
+
+    /**
+     * Returns whether or not the publication is visible
+     *
+     * @param $publication
+     *
+     * @return bool
+     */
+    protected function isPublicationVisible($publication)
+    {
+        if($publication[ContentObjectPublication :: PROPERTY_HIDDEN])
+        {
+            return false;
+        }
+
+        $fromDate = $publication[ContentObjectPublication::PROPERTY_FROM_DATE];
+        $toDate = $publication[ContentObjectPublication::PROPERTY_TO_DATE];
+
+        if($fromDate == 0 && $toDate == 0)
+        {
+            return true;
+        }
+
+        return $fromDate <= time() && $toDate >= time();
     }
 
     /**

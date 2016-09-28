@@ -380,25 +380,22 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
-        $this->addLeaveWarning();
+        $this->addCreateJavascript();
     }
 
     /**
-     * Adds a warning when you leave the screen and the submit button is not clicked
+     * Adds the mail check javascript
      */
-    protected function addLeaveWarning()
+    protected function addCreateJavascript()
     {
-        $html = array();
-
-        $html[] = '<script type="text/javascript">';
-        $html[] = '$(document).ready( function() {';
-        $html[] = 'var leaveHandler = function() { return "' . $this->getTranslation('LeavePublicationPage') . '"; }';
-        $html[] = '$(window).on("beforeunload", leaveHandler);';
-        $html[] = '$(\'[type="submit"]\').on("click", function() { $(window).unbind("beforeunload", leaveHandler) });';
-        $html[] = '})';
-        $html[] = '</script>';
-
-        $this->addElement('html', implode(PHP_EOL, $html));
+        $this->addElement(
+            'html',
+            ResourceManager::get_instance()->get_resource_html(
+                Path::getInstance()->namespaceToFullPath(
+                    Manager::context(), true
+                ) . 'Resources/Javascript/ContentObjectPublicationForm.js'
+            )
+        );
     }
 
     /**
@@ -422,9 +419,12 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->build_basic_form();
 
         $this->addElement(
-            'checkbox', ContentObjectPublication :: PROPERTY_EMAIL_SENT, Translation:: get(
-            'SendByEMail'
-        )
+            'checkbox', ContentObjectPublication :: PROPERTY_EMAIL_SENT, Translation:: get('SendByEMail'),
+            null, array('class' => 'send_by_email')
+        );
+
+        $this->addElement('static', null, '', '<div class="email-not-possible alert alert-info hidden">' .
+            $this->getTranslation('SendEmailNotPossibleForDelayedPublications') . '</div>'
         );
 
         $this->addElement(
@@ -519,7 +519,9 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->addElement(
             'checkbox',
             ContentObjectPublication :: PROPERTY_HIDDEN,
-            Translation:: get('Hidden', null, Utilities :: COMMON_LIBRARIES)
+            Translation:: get('Hidden', null, Utilities :: COMMON_LIBRARIES),
+            null,
+            array('class' => 'hidden_publication')
         );
 
         $force_collaborate = PlatformSetting:: get('force_collaborate', Manager:: package()) === 1 ? true : false;

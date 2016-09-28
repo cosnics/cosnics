@@ -673,3 +673,4 @@ LeavePublicationPage = "Je staat op het punt om deze pagina af te sluiten zonder
 ManageCategoriesRight = "Beheer categorieën"
 AnnouncementComponent = "Nieuwe aankondigingen"
 ShowAllItems = "Toon alle publicaties"
+SendEmailNotPossibleForDelayedPublications = "Het is niet mogelijk om de publicatie via e-mail te versturen wanneer de publicatie (momenteel) niet zichtbaar is"
