@@ -1,0 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\rss_feed\integration\core\home
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+Feeder = "RSS Feed"
+SelectRssFeed = "Selecteer een RSS feed uit jouw repository"
+UseObject = "Selecteer RSS feed"
+PleaseRefreshPageToSeeChanges = "Gelieve de pagina opnieuw te laden om de wijzigingen te kunnen zien"

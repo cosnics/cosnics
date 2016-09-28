@@ -1,0 +1,28 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = reporting\viewer
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Reporting viewer"
+HtmlTable = "Table"
+HtmlPieChart = "Pie chart"
+HtmlThreeDeePieChart = "3D pie chart"
+HtmlRingChart = "Ring chart"
+HtmlBarChart = "Bar chart"
+HtmlLineChart = "Line chart"
+HtmlAreaChart = "Area chart"
+HtmlPolarChart = "Polar chart"
+HtmlRadarChart = "Radar chart"
+HtmlStackedBarChart = "Stacked bar chart"
+HtmlStackedAreaChart = "Stacked area chart"
+HtmlCsv = "CSV"
+HtmlXml = "XML"
+HtmlXlsx = "Excel"
+HtmlOds = "OpenDocument"
+HtmlPdf = "PDF"
+ExportToExcel = "Export to Excel"
+ExportToOds = "Export to OpenDocument"
+ShowAll = "Show complete report"
+ShowOne = "Show block per block"
+SaverComponent = "Save reporting"
+PdfReportFooter = "- PAGENUMBER -"
