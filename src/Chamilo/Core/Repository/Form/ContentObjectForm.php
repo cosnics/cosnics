@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\Common\Includes\ContentObjectIncludeParser;
 use Chamilo\Core\Repository\Exception\NoTemplateException;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Menu\ContentObjectCategoryMenu;
+use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
@@ -22,11 +23,13 @@ use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport;
 use Chamilo\Libraries\Architecture\Interfaces\ForcedVersionSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
@@ -688,11 +691,30 @@ EOT;
 
         if ($object instanceof AttachmentSupport)
         {
+            $calculator = new Calculator(
+                \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
+                    \Chamilo\Core\User\Storage\DataClass\User:: class_name(),
+                    (int) $this->get_owner_id()
+                )
+            );
 
-            $html[] = '<script type="text/javascript">';
-            $html[] = 'var support_attachments = true';
-            $html[] = '</script>';
-            $this->addElement('html', implode(PHP_EOL, $html));
+            $uploadUrl = new Redirect(
+                array(
+                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager:: context(),
+                    \Chamilo\Core\Repository\Ajax\Manager :: PARAM_ACTION =>
+                        \Chamilo\Core\Repository\Ajax\Manager :: ACTION_IMPORT_FILE
+                )
+            );
+
+            $dropZoneParameters = array(
+                'name' => 'attachments_importer',
+                'maxFilesize' => $calculator->getMaximumUploadSize(),
+                'uploadUrl' => $uploadUrl->getUrl(),
+                'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
+                'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
+                'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
+            );
+
             if ($this->form_type != self::TYPE_REPLY)
             {
                 $attached_objects = $object->get_attachments();
@@ -710,13 +732,7 @@ EOT;
             $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
             $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
             $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
-            $hidden = true;
 
-            $this->addElement(
-                'html',
-                ResourceManager::get_instance()->get_resource_html(
-                    Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                         'Plugin/Uploadify/jquery.uploadify.min.js'));
             $this->addElement(
                 'html',
                 ResourceManager::get_instance()->get_resource_html(
@@ -727,7 +743,16 @@ EOT;
                 '<a href="#">' . Translation::get('Attachments') . '</a>',
                 'content_object_attachments collapsible collapsed');
 
-            $this->addElement('static', 'uploadify', Translation::get('UploadDocument'), '<div id="uploadify"></div>');
+            $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
+
+            $this->addElement(
+                'html',
+                ResourceManager:: get_instance()->get_resource_html(
+                    Path:: getInstance()->getJavascriptPath(Manager:: context(), true) .
+                    'Plugin/jquery.file.upload.import.js'
+                )
+            );
+
             $elem = $this->addElement(
                 'element_finder',
                 'attachments',
@@ -735,6 +760,7 @@ EOT;
                 $url,
                 $locale,
                 $attachments);
+
             $this->addElement('category');
 
             if ($id = $object->get_id())

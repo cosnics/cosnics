@@ -39,6 +39,39 @@ dropzoneCallbacks.chamilo = {
                         data : parameters
                     });
                 }
+            },
+            importWithElementFinder: {
+                processUploadedFile: function (elementFinderId, environment, file, serverResponse) {
+                    dropzoneCallbacks.chamilo.core.repository.import.processUploadedFile(
+                        environment, file, serverResponse
+                    );
+
+                    var name = serverResponse.properties.contentObjectTitle;
+                    var contentObjectId = serverResponse.properties.contentObjectId;
+
+                    $('#' + elementFinderId + '_search_field').val(name);
+                    $('#tbl_' + elementFinderId).trigger('update_search');
+
+                    $('#elf_' + elementFinderId + '_inactive').find('#lo_' + contentObjectId).trigger('activate');
+                },
+                prepareRequest: function (environment, file, xhrObject, formData) {
+                    formData.append('parentId', 0);
+                },
+                deleteUploadedFile: function (elementFinderId, environment, file, serverResponse) {
+                    dropzoneCallbacks.chamilo.core.repository.import.deleteUploadedFile(
+                        environment, file, serverResponse
+                    );
+
+                    var contentObjectId = $(file.previewElement).data('content-object-id');
+                    $('#elf_' + elementFinderId + '_active').find('#lo_' + contentObjectId).trigger(
+                        'deactivateElement'
+                    );
+                    setTimeout(
+                        function () {
+                            $('#tbl_' + elementFinderId).trigger('update_search')
+                        }, 500
+                    );
+                }
             }
         }
     }
