@@ -10,6 +10,7 @@
     var disableMailIfNecessary = function() {
         var isLimited = $('#limited').prop('checked');
         var isHidden = $('.hidden_publication').prop('checked');
+        var inDate = true;
 
         var sendByEmail = $('.send_by_email');
         var emailNotPossible = $('.email-not-possible');
