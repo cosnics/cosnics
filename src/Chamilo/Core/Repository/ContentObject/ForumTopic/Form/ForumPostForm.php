@@ -2,9 +2,13 @@
 namespace Chamilo\Core\Repository\ContentObject\ForumTopic\Form;
 
 use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
+use Chamilo\Core\Repository\Quota\Calculator;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -120,10 +124,6 @@ class ForumPostForm extends FormValidator
      */
     protected function add_footer()
     {
-        $html[] = '<script type="text/javascript">';
-        $html[] = 'var support_attachments = true';
-        $html[] = '</script>';
-        $this->addElement('html', implode(PHP_EOL, $html));
         if ($this->form_type == self::TYPE_EDIT)
         {
 
@@ -135,6 +135,31 @@ class ForumPostForm extends FormValidator
             $attachments = array();
         }
 
+        $calculator = new Calculator(
+            \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User:: class_name(),
+                Session::get_user_id()
+            )
+        );
+
+        $uploadUrl = new Redirect(
+            array(
+                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager:: context(),
+                \Chamilo\Core\Repository\Ajax\Manager :: PARAM_ACTION =>
+                    \Chamilo\Core\Repository\Ajax\Manager :: ACTION_IMPORT_FILE
+            )
+        );
+
+        $dropZoneParameters = array(
+            'name' => 'attachments_importer',
+            'maxFilesize' => $calculator->getMaximumUploadSize(),
+            'uploadUrl' => $uploadUrl->getUrl(),
+            'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
+            'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
+            'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
+        );
+
+
         $url = Path :: getInstance()->getBasePath(true) .
             'index.php?application=Chamilo%5CCore%5CRepository%5CAjax&go=XmlFeed';
 
@@ -143,13 +168,7 @@ class ForumPostForm extends FormValidator
         $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
         $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
         $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
-        $hidden = true;
 
-        $this->addElement(
-            'html',
-            ResourceManager :: get_instance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
-                     'Plugin/Uploadify/jquery.uploadify.min.js'));
         $this->addElement(
             'html',
             ResourceManager :: get_instance()->get_resource_html(
@@ -158,7 +177,17 @@ class ForumPostForm extends FormValidator
             'category',
             '<a href="#">' . Translation :: get('Attachments') . '</a>',
             'content_object_attachments collapsible collapsed');
-        $this->addElement('static', 'uploadify', Translation :: get('UploadDocument'), '<div id="uploadify"></div>');
+
+        $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
+
+        $this->addElement(
+            'html',
+            ResourceManager:: get_instance()->get_resource_html(
+                Path:: getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager:: context(), true) .
+                'Plugin/jquery.file.upload.import.js'
+            )
+        );
+
         $elem = $this->addElement(
             'element_finder',
             'attachments',

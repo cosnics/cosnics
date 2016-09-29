@@ -1,3 +1,22 @@
+dropzoneCallbacks.chamilo.core.repository.importImage = {
+    processUploadedFile : function(environment, file, serverResponse) {
+        dropzoneCallbacks.chamilo.core.repository.importWithElementFinder.processUploadedFile(
+            'image', environment, file, serverResponse
+        );
+    },
+    prepareRequest : function(environment, file, xhrObject, formData)
+    {
+        dropzoneCallbacks.chamilo.core.repository.importWithElementFinder.prepareRequest(
+            environment, file, xhrObject, formData
+        );
+    },
+    deleteUploadedFile: function(environment, file, serverResponse) {
+        dropzoneCallbacks.chamilo.core.repository.importWithElementFinder.deleteUploadedFile(
+            'image', environment, file, serverResponse
+        );
+    }
+};
+
 /**
  * Copyright (c) 2009, Hans De Bisschop, conversion to seperate (non ui-tabs
  * based) plugin
@@ -258,36 +277,6 @@
 
                 $(this).bind('update_search', updateSearchResults);
 
-                // Initialize the uploadify plugin
-                $('#' + settings.name + '_uploadify').uploadify({
-                    'swf' : getPath('WEB_PATH') + 'Chamilo/Libraries/Resources/Javascript/Plugin/Uploadify/uploadify.swf',
-                    'uploader' : getPath('WEB_PATH') + 'index.php',
-                    'auto' : true,
-                    'progressData' : 'percentage',
-                    'formData' : {
-                        'user_id' : getMemory('_uid'),
-                        'application' : 'Chamilo\\Core\\Repository\\Ajax',
-                        'go' : 'UploadImage'
-                    },
-                    onUploadSuccess : function(file, data, response) {
-                        var ajaxResult = eval('(' + data + ')');
-                        setSelectedImage(ajaxResult.properties);
-                        $('input[name="' + settings.name + '"]').trigger('change');
-                    },
-                    'onSelectError': function(file, errorCode) {
-                        var errorMessage = null;
-
-                        switch(errorCode) {
-                            case -120:
-                                errorMessage = getTranslation('ZeroByteFile', null, 'Chamilo\\Libraries');
-                        }
-
-                        if(errorMessage) {
-                            this.queueData.errorMsg = errorMessage;
-                        }
-                    }
-                });
-
                 // Only show the selection options if no image was selected yet
                 if ($('input[name="' + settings.name + '"]').val() == '') {
                 $('#image_select').show();
@@ -295,6 +284,11 @@
 
                 // Process image selection
                 $(inactiveBox).on('click', 'a:not(.disabled, .category)', processSelectedImage);
+
+                $(inactiveBox).on('activate', 'a:not(.disabled, .category)', processSelectedImage);
+                $(inactiveBox).on('activate', 'a:not(.disabled, .category)', function(event) {
+                    $('input[name="' + settings.name + '"]').trigger('change');
+                });
 
                 // Allow selection of a different image
                 $("#change_image").bind('click', resetImage);

@@ -509,6 +509,7 @@
 						}
 
 						$(activeBox).on("click", "a", deactivateElement);
+						$(activeBox).on("deactivateElement", "a", deactivateElement);
 
 						if (settings.nodesSelectable) {
 							$(inactiveBox).on("click", "a:not(.disabled)",
