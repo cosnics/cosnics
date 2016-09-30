@@ -170,10 +170,11 @@ class BrowserComponent extends Manager implements DelegateComponent
     protected function renderFeedbackButtonToolbar()
     {
         $buttonToolbar = new ButtonToolBar(null, array(), array('receive-feedback-buttons'));
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
 
         if (! $this->get_application() instanceof FeedbackNotificationSupport)
         {
-            return $buttonToolbar;
+            return $buttonToolbarRenderer->render();
         }
 
         $hasNotification = false;
@@ -206,8 +207,6 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $buttonToolbar->addItems($actionsGenerator->run());
         }
-
-        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
 
         $html = array();
 
