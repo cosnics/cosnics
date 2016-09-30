@@ -37,6 +37,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.browser.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap-toggle.min.js');
+        $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'BootstrapConflictFixes.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.ui.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tabula.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.dynamic.visual_tabs.js');
