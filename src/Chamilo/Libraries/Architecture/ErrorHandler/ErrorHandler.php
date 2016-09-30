@@ -16,7 +16,7 @@ class ErrorHandler
 {
     /**
      * The Exception Logger
-     * 
+     *
      * @var ExceptionLoggerInterface
      */
     protected $exceptionLogger;
@@ -45,9 +45,12 @@ class ErrorHandler
     {
         $error = error_get_last();
 
-        if(!is_null($error) && $error['type'] == E_ERROR)
+        if (!is_null($error) && $error['type'] == E_ERROR)
         {
-            $this->exceptionLogger->logException(new \Exception($error['message']), $error['file'], $error['line']);
+            $this->exceptionLogger->logException(
+                new \Exception($error['message']), ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR,
+                $error['file'], $error['line']
+            );
             $this->displayGeneralErrorPage();
         }
     }
@@ -64,7 +67,18 @@ class ErrorHandler
      */
     public function handleError($errorNumber, $errorString, $file, $line)
     {
-        return Utilities::handle_error($errorNumber, $errorString, $file, $line);
+        $exceptionTypes = array(
+            E_USER_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR,
+            E_USER_WARNING => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
+            E_USER_NOTICE => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
+            E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR
+        );
+
+        $exceptionLevel = $exceptionTypes[$errorNumber];
+
+        $this->exceptionLogger->logException(new \Exception($errorString), $exceptionLevel, $file, $line);
+
+        return true;
     }
 
     /**
@@ -74,7 +88,7 @@ class ErrorHandler
      */
     public function handleException($exception)
     {
-        $this->exceptionLogger->logException($exception);
+        $this->exceptionLogger->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
         $this->displayGeneralErrorPage();
     }
 
@@ -84,9 +98,7 @@ class ErrorHandler
     public function registerErrorHandlers()
     {
         set_exception_handler(array($this, 'handleException'));
-//        set_error_handler(array($this, 'handleError'));
-
-        set_error_handler('\Chamilo\Libraries\Utilities\Utilities::handle_error');
+        set_error_handler(array($this, 'handleError'));
 
         register_shutdown_function(array($this, 'handleShutdown'));
     }
@@ -96,9 +108,10 @@ class ErrorHandler
      */
     protected function displayGeneralErrorPage()
     {
-        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/Templates/Error.html.tpl';
+        $path =
+            Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/Templates/Error.html.tpl';
         $template = file_get_contents($path);
-        
+
         $variables = array(
             'error_code' => 500,
             'error_title' => $this->getTranslation('FatalErrorTitle'),
@@ -106,7 +119,7 @@ class ErrorHandler
             'return_button_content' => $this->getTranslation('ReturnToPreviousPage')
         );
 
-        foreach($variables as $variable => $value)
+        foreach ($variables as $variable => $value)
         {
             $template = str_replace('{ ' . $variable . ' }', $value, $template);
         }

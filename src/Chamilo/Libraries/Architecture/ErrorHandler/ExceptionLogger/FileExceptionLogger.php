@@ -44,15 +44,18 @@ class FileExceptionLogger implements ExceptionLoggerInterface
      * Logs an exception
      *
      * @param \Exception $exception
+     * @param int $exceptionLevel
      * @param string $file
      * @param int $line
      */
-    public function logException($exception, $file = null, $line = 0)
+    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {
         $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'FatalErrors.log';
         $fileHandler = fopen($logFile, 'a');
 
-        $message = date('[d/m/Y - H:i:s] ', time()) . $exception->getMessage();
+        $type = $this->determineExceptionLevelString($exceptionLevel);
+
+        $message = date('[d/m/Y - H:i:s] ', time()) . ' - [' . $type . '] ' . $exception->getMessage();
 
         if (!is_null($file))
         {
@@ -61,5 +64,26 @@ class FileExceptionLogger implements ExceptionLoggerInterface
 
         fwrite($fileHandler, $message . "\n");
         fclose($fileHandler);
+    }
+
+    /**
+     * Determines the exception level string
+     *
+     * @param int $exceptionLevel
+     *
+     * @return string
+     */
+    protected function determineExceptionLevelString($exceptionLevel = self::EXCEPTION_LEVEL_ERROR)
+    {
+        switch ($exceptionLevel) {
+            case self::EXCEPTION_LEVEL_WARNING:
+                return 'WARNING';
+            case self::EXCEPTION_LEVEL_ERROR:
+                return 'ERROR';
+            case self::EXCEPTION_LEVEL_FATAL_ERROR:
+                return 'FATAL';
+            default:
+                return '[ERROR]';
+        }
     }
 }

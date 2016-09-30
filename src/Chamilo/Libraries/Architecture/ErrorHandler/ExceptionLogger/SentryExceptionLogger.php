@@ -44,11 +44,17 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * Logs an exception
      *
      * @param \Exception $exception
+     * @param int $exceptionLevel
      * @param string $file
      * @param int $line
      */
-    public function logException($exception, $file = null, $line = 0)
+    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {
+        if($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR)
+        {
+            return;
+        }
+
         $this->sentryClient->captureException($exception);
     }
 

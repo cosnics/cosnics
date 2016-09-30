@@ -10,6 +10,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Authentication\Authentication;
@@ -86,6 +87,11 @@ class Kernel
      * @var \Chamilo\Libraries\Architecture\Application\ApplicationFactory
      */
     private $applicationFactory;
+
+    /**
+     * @var ExceptionLoggerInterface
+     */
+    protected $exceptionLogger;
 
     /**
      *
@@ -338,8 +344,6 @@ class Kernel
         $timezone = \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'platform_timezone');
         date_default_timezone_set($timezone);
 
-        $this->configureNewRelic();
-
         return $this->configureContext();
     }
 
@@ -348,34 +352,24 @@ class Kernel
      */
     protected function registerErrorHandlers()
     {
-        $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
-        $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
-
-        $errorHandler = new ErrorHandler($exceptionLogger, Translation::getInstance());
+        $errorHandler = new ErrorHandler($this->getExceptionLogger(), Translation::getInstance());
         $errorHandler->registerErrorHandlers();
     }
 
     /**
+     * Returns the exception logger
      *
-     * @return \Chamilo\Libraries\Architecture\Kernel
+     * @return ExceptionLoggerInterface
      */
-    protected function configureNewRelic()
+    protected function getExceptionLogger()
     {
-        if (extension_loaded('newrelic'))
+        if(!isset($this->exceptionLogger))
         {
-            $prefix = 'chamilo_';
-
-            newrelic_add_custom_parameter($prefix . 'url', $_SERVER['REQUEST_URI']);
-            newrelic_add_custom_parameter($prefix . 'http_method', $_SERVER['REQUEST_METHOD']);
-
-            $user_id = Session::get_user_id();
-            if (!empty($user_id))
-            {
-                newrelic_add_custom_parameter($prefix . 'user_id', Session::get_user_id());
-            }
+            $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
+            $this->exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
         }
 
-        return $this;
+        return $this->exceptionLogger;
     }
 
     /**
@@ -552,24 +546,6 @@ class Kernel
         return $this;
     }
 
-    protected function logException(\Exception $exception)
-    {
-        if (!$exception instanceof NotAllowedException)
-        {
-            Utilities::write_error(
-                $exception->getCode(),
-                $exception->getMessage(),
-                $exception->getFile(),
-                $exception->getLine()
-            );
-
-            if (extension_loaded('newrelic'))
-            {
-                newrelic_notice_error('chamilo_exception', $exception);
-            }
-        }
-    }
-
     /**
      * Launch the kernel, executing some common checks, building the application component and executing it
      */
@@ -595,7 +571,9 @@ class Kernel
         }
         catch (\Exception $exception)
         {
-            $this->logException($exception);
+            $this->getExceptionLogger()->logException(
+                $exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
+            );
 
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
