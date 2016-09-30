@@ -13,6 +13,7 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerF
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
@@ -569,10 +570,10 @@ class Kernel
             $response = $this->getNotAuthenticatedResponse();
             $response->send();
         }
-        catch (\Exception $exception)
+        catch (UserException $exception)
         {
             $this->getExceptionLogger()->logException(
-                $exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR
+                $exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING
             );
 
             $response = new ExceptionResponse($exception, $this->getApplication());
