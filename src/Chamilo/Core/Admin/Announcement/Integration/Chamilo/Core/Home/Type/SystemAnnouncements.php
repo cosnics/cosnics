@@ -21,14 +21,14 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
      */
     public function getConfigurationVariables()
     {
-        return array(self :: CONFIGURATION_SHOW_EMPTY);
+        return array(self::CONFIGURATION_SHOW_EMPTY);
     }
 
     public static function getDefaultImagePath($application = '', $type = '', $size = Theme :: ICON_MINI)
     {
         if ($type)
         {
-            return parent :: getDefaultImagePath($application, $type, $size);
+            return parent::getDefaultImagePath($application, $type, $size);
         }
         else
         {
@@ -36,8 +36,8 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
              * SystemAnnouncement may not be available if not installed.
              * Therefore do not use SystemAnnouncement::...
              */
-            return Theme :: getInstance()->getImagePath(
-                ContentObject :: get_content_object_type_namespace('SystemAnnouncement'),
+            return Theme::getInstance()->getImagePath(
+                ContentObject::get_content_object_type_namespace('SystemAnnouncement'),
                 'Logo/' . $size);
         }
     }
@@ -54,7 +54,7 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
 
     public function showWhenEmpty()
     {
-        return $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_EMPTY, true);
+        return $this->getBlock()->getSetting(self::CONFIGURATION_SHOW_EMPTY, true);
     }
 
     public function isEmpty()
@@ -69,14 +69,14 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
      */
     public function getIcon()
     {
-        return self :: getDefaultImagePath();
+        return self::getDefaultImagePath();
     }
 
     public function getPublications()
     {
         if (! isset($this->publications))
         {
-            $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager :: retrieve_publications_for_user(
+            $this->publications = \Chamilo\Core\Admin\Announcement\Storage\DataManager::retrieve_publications_for_user(
                 $this->getUserId());
         }
 
@@ -86,10 +86,10 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
     public function getPublicationLink($publication, $admin)
     {
         $paremeters = array();
-        $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager :: package();
-        $parameters[\Chamilo\Core\Admin\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS;
-        $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
-        $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication :: PROPERTY_ID];
+        $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager::package();
+        $parameters[\Chamilo\Core\Admin\Manager::PARAM_ACTION] = \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS;
+        $parameters[\Chamilo\Core\Admin\Announcement\Manager::PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager::ACTION_VIEW;
+        $parameters[\Chamilo\Core\Admin\Announcement\Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID] = $publication[Publication::PROPERTY_ID];
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
@@ -115,24 +115,25 @@ class SystemAnnouncements extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRe
 
     public function displayContent()
     {
+        $html = array();
         $publcations = $this->getPublications();
 
         if ($publcations->size() == 0)
         {
-            return htmlspecialchars(Translation :: get('NoSystemAnnouncementsCurrently'));
+            $html[] = '<div class="panel-body portal-block-content">';
+            $html[] = htmlspecialchars(Translation::get('NoSystemAnnouncementsCurrently'));
+            $html[] = '</div>';
         }
-
-        $html = array();
 
         while ($publication = $publcations->next_result())
         {
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
-                (int) $publication[Publication :: PROPERTY_CONTENT_OBJECT_ID]);
+            $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(),
+                (int) $publication[Publication::PROPERTY_CONTENT_OBJECT_ID]);
 
             $icon = $content_object->get_icon_image(
-                Theme :: ICON_MINI,
-                ! (boolean) $publication[Publication :: PROPERTY_HIDDEN]);
+                Theme::ICON_MINI,
+                ! (boolean) $publication[Publication::PROPERTY_HIDDEN]);
 
             $href = htmlspecialchars($this->getPublicationLink($publication));
             $title = htmlspecialchars($content_object->get_title());
