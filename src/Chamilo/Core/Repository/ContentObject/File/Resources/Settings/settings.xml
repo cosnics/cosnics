@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Repository\ContentObject\File">
+	<settings>
+		<category name="OfficeWebViewer">
+			<setting name="office_viewer_type" field="radio" default="embed">
+				<options type="static">
+					<option name="office_viewer_type_full" value="full" />
+					<option name="office_viewer_type_embed" value="embed" />
+				</options>
+			</setting>
+		</category>
+	</settings>
+</package>

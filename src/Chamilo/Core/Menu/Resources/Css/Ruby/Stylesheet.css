@@ -1,0 +1,57 @@
+@import url('../Aqua/Stylesheet.css');
+
+.navbar.navbar-chamilo {
+	background-color: #C50C2E;
+}
+
+.navbar.navbar-chamilo .container-fluid {
+	background-color: #C50C2E;
+}
+
+.navbar-chamilo ul.navbar-nav li a:hover {
+	color: #ebebeb;
+}
+
+.navbar-chamilo ul.navbar-nav li.active>a, .navbar-chamilo ul.navbar-nav li.active.dropdown.open>a,
+	.navbar-chamilo ul.navbar-nav li.active>a:hover {
+	color: #8e4040 !important;
+}
+
+.navbar-chamilo .navbar-nav .dropdown-menu li, .navbar-chamilo .navbar-nav .dropdown-menu li a,
+	.navbar-chamilo .navbar-nav .dropdown-menu li a:hover {
+	background: #8e4040;
+}
+
+.navbar-chamilo .navbar-nav .dropdown-menu li a:hover, .navbar-chamilo .navbar-nav li.dropdown.open .dropdown-menu li a:hover
+	{
+	color: #ebebeb;
+}
+
+.navbar-chamilo ul.navbar-nav li.dropdown.open>a {
+	background: #ebebeb;
+	border-top: 1px solid #ebebeb;
+	border-bottom: 1px solid #ebebeb;
+}
+
+.navbar-chamilo ul li div.chamilo-menu-item-account {
+	background-color: #8e4040;
+	color: #d88e8e;
+}
+
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo img {
+	border: 1px solid #993a3a;
+}
+
+div.chamilo-menu-item-account div.chamilo-menu-item-account-photo div.chamilo-menu-item-account-photo-edit
+	{
+	background-color: rgba(82, 38, 38, 0.5);
+}
+
+div.chamilo-menu-item-account div.chamilo-menu-item-account-logout {
+	background-color: #8e4040;
+}
+
+.navbar-chamilo .navbar-nav .dropdown-menu div.chamilo-menu-item-account div.chamilo-menu-item-account-logout a
+	{
+	background-color: #8e4040;
+}
