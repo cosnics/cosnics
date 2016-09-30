@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_tool_rel_course_section">
+	<properties>
+		<property name="id" type="integer" notnull="1" autoincrement="true" />
+		<property name="tool_id" type="integer" notnull="1" />
+		<property name="section_id" type="integer" notnull="1" />
+	</properties>
+	<index name="course_tool_rel_course_section">
+		<indexproperty name="id" />
+	</index>
+</object>
