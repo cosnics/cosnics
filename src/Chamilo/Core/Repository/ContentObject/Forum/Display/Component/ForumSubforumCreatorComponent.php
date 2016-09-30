@@ -27,7 +27,11 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
 
     public function run()
     {
-        if ($this->get_parent()->is_allowed(ADD_RIGHT))
+        $forum = $this->getForum();
+
+        if ($this->get_user()->is_platform_admin() || $this->get_user_id() == $forum->get_owner_id() ||
+            $this->isForumManager($this->get_user())
+        )
         {
 
             if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())

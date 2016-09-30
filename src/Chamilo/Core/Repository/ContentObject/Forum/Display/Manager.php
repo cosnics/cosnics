@@ -48,6 +48,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const PARAM_LAST_POST = 'last_post';
     const DEFAULT_ACTION = self :: ACTION_VIEW_FORUM;
 
+    protected $forum;
+
     /**
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -152,5 +154,38 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                 return $wrappers;
             }
         }
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::is_forum_manager()
+     */
+    public function isForumManager($user)
+    {
+        return $this->get_parent()->is_forum_manager($user);
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
+     */
+    public function getForum()
+    {
+        if (!isset($this->forum))
+        {
+            if (!$this->get_complex_content_object_item())
+            {
+                $this->forum = $this->get_root_content_object();
+            }
+            else
+            {
+                $this->forum = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
+                    ContentObject:: class_name(),
+                    $this->get_complex_content_object_item()->get_ref()
+                );
+            }
+        }
+
+        return $this->forum;
     }
 }

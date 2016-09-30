@@ -126,6 +126,12 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
             {
                 $is_forum_manager = $course->is_course_admin($user);
             }
+
+        }
+
+        if(!$is_forum_manager)
+        {
+            $is_forum_manager = $this->is_allowed(WeblcmsRights::ADD_RIGHT, $this->publication);
         }
 
         return $is_forum_manager;
@@ -135,7 +141,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
     public function is_allowed_to_edit_content_object()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-        $this->publication->get_allow_collaboration();
+            $this->publication->get_allow_collaboration();
     }
 
     public function is_allowed_to_view_content_object()
