@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  * Throw this if you expected an URL parameter that is not
  * there
  */
-class NotAllowedException extends \Exception
+class NotAllowedException extends UserException
 {
 
     public function __construct($show_login_form = false)

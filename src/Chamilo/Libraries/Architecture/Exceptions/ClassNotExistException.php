@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Architecture\Exceptions;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
-class ClassNotExistException extends \Exception
+class ClassNotExistException extends UserException
 {
 
     public function __construct($class)

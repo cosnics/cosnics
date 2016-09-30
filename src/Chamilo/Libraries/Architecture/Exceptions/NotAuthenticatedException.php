@@ -7,7 +7,7 @@ namespace Chamilo\Libraries\Architecture\Exceptions;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class NotAuthenticatedException extends \Exception
+class NotAuthenticatedException extends UserException
 {
 
 }
