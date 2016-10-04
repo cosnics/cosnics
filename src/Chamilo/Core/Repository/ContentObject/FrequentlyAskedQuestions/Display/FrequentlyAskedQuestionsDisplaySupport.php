@@ -27,7 +27,7 @@ interface FrequentlyAskedQuestionsDisplaySupport
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node);
+   //public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node);
 
     /**
      * Is the user allowed to view the content for the given node
@@ -35,7 +35,7 @@ interface FrequentlyAskedQuestionsDisplaySupport
      * @param ComplexContentObjectPathNode $node
      * @return boolean
      */
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node);
+    //public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node);
 
     /**
      *
