@@ -135,6 +135,8 @@ class EventParser
      */
     public function getEvents()
     {
+        $events = array();
+        
         $publisher = $this->getPublication()->get_publisher();
         $publishingUser = $this->getPublication()->get_publication_publisher();
 
