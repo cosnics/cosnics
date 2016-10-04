@@ -43,23 +43,29 @@ class CalendarEventDataProviderRepository extends
     {
         $conditions = array();
 
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(
-                Assignment::class_name(),
-                Assignment::PROPERTY_END_TIME
-            ),
-            ComparisonCondition::GREATER_THAN_OR_EQUAL,
-            new StaticConditionVariable($fromDate)
-        );
+        if(!empty($fromDate))
+        {
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(
+                    Assignment::class_name(),
+                    Assignment::PROPERTY_END_TIME
+                ),
+                ComparisonCondition::GREATER_THAN_OR_EQUAL,
+                new StaticConditionVariable($fromDate)
+            );
+        }
 
-        $conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(
-                Assignment::class_name(),
-                Assignment::PROPERTY_END_TIME
-            ),
-            ComparisonCondition::LESS_THAN_OR_EQUAL,
-            new StaticConditionVariable($toDate)
-        );
+        if(!empty($toDate))
+        {
+            $conditions[] = new ComparisonCondition(
+                new PropertyConditionVariable(
+                    Assignment::class_name(),
+                    Assignment::PROPERTY_END_TIME
+                ),
+                ComparisonCondition::LESS_THAN_OR_EQUAL,
+                new StaticConditionVariable($toDate)
+            );
+        }
 
         return new AndCondition($conditions);
     }
