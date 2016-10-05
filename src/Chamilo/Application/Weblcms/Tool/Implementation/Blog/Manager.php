@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Blog;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
@@ -14,7 +15,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 /**
  * This tool allows a user to publish learning paths in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
 {
 
     public static function get_allowed_types()

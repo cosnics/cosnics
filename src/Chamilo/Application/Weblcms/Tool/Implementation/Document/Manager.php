@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Document;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhorn;
 use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
@@ -26,7 +27,7 @@ use Chamilo\Libraries\Platform\Translation;
 /**
  * This tool allows a user to publish documents in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
 {
     const ACTION_VIEW_DOCUMENTS = 'Viewer';
     const ACTION_DOWNLOAD = 'Downloader';

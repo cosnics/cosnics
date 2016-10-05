@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Service\ContentObjectPublicationMailer;
@@ -11,8 +12,10 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\Repository\CourseRepository;
 use Chamilo\Application\Weblcms\Storage\Repository\PublicationRepository;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\Location\Locations;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Core\Repository\Publication\PublicationInterface;
@@ -172,6 +175,14 @@ class Manager implements PublicationInterface
                     $types[$tool->get_id()] = $allowed_types;
                     $tool_names[$tool->get_id()] = $tool->get_name();
                 }
+
+                if (is_subclass_of(
+                    $class, 'Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface'
+                ))
+                {
+                    $types[$tool->get_id()][] = Introduction::class_name();
+                    $tool_names[$tool->get_id()] = $tool->get_name();
+                }
             }
         }
 
@@ -181,6 +192,23 @@ class Manager implements PublicationInterface
             {
                 foreach ($possible_courses as $course)
                 {
+                    if(
+                        $type == Introduction::class_name() &&
+                        (
+                            !$course_settings_controller->get_course_setting(
+                                $course,
+                                CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
+                            ) ||
+                            !empty(
+                                \Chamilo\Application\Weblcms\Storage\DataManager::
+                                    retrieve_introduction_publication_by_course_and_tool($course->getId(), $tool_names[$tool_id])
+                            )
+                        )
+                    )
+                    {
+                        continue;
+                    }
+
                     if ($course_settings_controller->get_course_setting(
                             $course,
                             CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
