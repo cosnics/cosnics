@@ -1,0 +1,28 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_sections
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Course sections"
+DragAndDrop = "Drag and drop"
+RemoveSelected = "Remove the selected section"
+Disabled = "Disabled"
+CourseAdministration = "Course administration"
+Links = "Links"
+Tools = "Tools"
+SelectTools = "Select desired tools"
+SelectToolsNA = "Select tools not available"
+ChangeVisible = "Change visibility"
+NoCourseSectionsSelected = "No course sections are selected"
+NoCourseSectionSelected = "No course section is selected"
+CourseSectionMoved = "The course section is moved"
+CourseSectionNotMoved = "The course section is not moved"
+CourseSectionUpdated = "The course section is updated"
+CourseSectionNotUpdated = "The course section is not updated"
+Name = "Name"
+Visible = "Visible"
+ChangeSectionComponent = "Change course section"
+CreatorComponent = "Create a course section"
+ViewerComponent = "View course section"
+UpdaterComponent = "Edit course section"
+SelectedCourseSectionDeleted = ""

@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeCategory = "Workspace"
+TypeName = "Workspaces"
+CreatorComponent = "Create workspace"
+FavouriteComponent = "Favourites"
+PublisherComponent = "Add from your repository"
+PersonalBrowserComponent = "My workspaces"
+SharedBrowserComponent = "Workspaces shared with me"
+BrowserComponent = "All workspaces"
+UpdaterComponent = "Update workspace"
+RightsComponent = "Configure workspace rights"
+CreateRightsComponent = "Add users / groups to the workspace"
+ConfigureWorkspaces = "Manage workspaces"
+CreatorId = "Owner"
+Favourite = "Add as favorite"
+RemoveFavourite = "Remove as favorite"
+FavouriteNA = "Already added as favorite"
+FavouriteSelected = "Add selected as favorite"
+Rights = "Configure workspace rights"
+ShareComponent = "Share object(s)"
+ShareInformation = "<p>Sharing a content object with another user has changed in this version of Chamilo. Sharing content objects has been moved from the repository to workspaces.</p><br /> <p>A workspace is a shared repository instance in which several users have access, each with their own rights. When you add a content object to a workspace the content object is available to every user of that workspace.</p><br /><p>If you want to share the current content object you have to add it to one of your workspaces. Below you can find a list of your available workspaces. If you do not have access to a workspace you can <a href={WORKSPACE_URL}>create a new one here.</a></p>"
+ShareInWorkspaces = "Share the selected content objects in one or more workspaces"

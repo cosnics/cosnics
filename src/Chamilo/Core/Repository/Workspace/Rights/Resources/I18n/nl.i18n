@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeCategory = "Rights"
+CreatorComponent = "Nieuwe gebruikers / groepen toevoegen"
+BrowserComponent = "Rechten van gebruikers / groepen beheren"
+ContentRight = "Inhoudsrechten"
+UseRight = "Mag inhoud publiceren"
+CopyRight = "Kopiëren toestaan"
+ManageRight = "Medebeheerder"
+ViewRight = "Bekijken"
+AddRight = "Bekijken + Toevoegen"
+EditRight = "Bekijken + Toevoegen + Aanpassen"
+DeleteRight = "Bekijken + Toevoegen + Aanpassen + Verwijderen"
+ManageRightWarning = "Wanneer je gebruikers en/of groepen medebeheerder maakt van deze workspace, dan zullen ze DEZELFDE rechten hebben als de eigenaar van de workspace. Ze kunnen de toegangsrechten en alle inhoud beheren en zullen zelfs in staat zijn de workspace te verwijderen. Voorzichtigheid geboden!"
+UsersGroups = "Gebruikers / Groepen"
+SaveAndAddNew = "Opslaan en nieuwe gebruikers / groepen toevoegen"
+RightsSet = "Nieuwe gebruikers / groepen toegevoegd aan de workspace"
+RightsUpdated = "Rechten voor gebruikers / groepen geüpdatet"
+Entity = "Gebruiker / Groep"
