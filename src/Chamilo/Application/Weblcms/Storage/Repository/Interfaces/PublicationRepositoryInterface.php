@@ -109,4 +109,13 @@ interface PublicationRepositoryInterface
      * @return ContentObjectPublicationCategory
      */
     public function findPublicationCategoryById($categoryId);
+
+    /**
+     * Returns the target users of a content object publication
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     *
+     * @return array
+     */
+    public function findPublicationTargetUsers(ContentObjectPublication $contentObjectPublication);
 }

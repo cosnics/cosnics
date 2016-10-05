@@ -206,6 +206,20 @@ class ContentObjectRepository
         return \Chamilo\Core\Repository\Storage\DataManager:: count($contentObjectClassName, $parameters);
     }
 
+    /**
+     * Finds a content object by a given id
+     *
+     * @param int $contentObjectId
+     *
+     * @return ContentObject
+     */
+    public function findById($contentObjectId)
+    {
+        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(), $contentObjectId
+        );
+    }
+
     protected function getActiveContentObjectConditions(ConditionFilterRenderer $filterConditionRenderer)
     {
         $conditions = array();
