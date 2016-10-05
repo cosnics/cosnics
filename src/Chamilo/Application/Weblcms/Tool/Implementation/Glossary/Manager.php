@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Glossary;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Glossary\Storage\DataClass\Glossary;
 
 /**
@@ -13,7 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Glossary\Storage\DataClass\Glossary;
 /**
  * This tool allows a user to publish glossarys in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
 
     public static function get_allowed_types()

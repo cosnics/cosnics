@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\FrequentlyAskedQuestions;
 
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Storage\DataClass\FrequentlyAskedQuestions;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 
@@ -13,7 +14,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 /**
  * This tool allows a user to publish forums in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
 {
     const ACTION_MANAGE_CATEGORIES = 'CategoryManager';
     const PARAM_SUBSCRIBE_ID = 'subscribe';

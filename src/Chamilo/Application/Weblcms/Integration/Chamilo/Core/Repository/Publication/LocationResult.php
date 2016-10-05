@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication;
 
+use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Publication\LocationSupport;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
@@ -46,13 +47,20 @@ class LocationResult extends \Chamilo\Core\Repository\Publication\Location\Locat
      */
     public function get_link(\Chamilo\Core\Repository\Publication\LocationSupport $location, $result)
     {
+        $contentObject = $result->get_content_object();
+
         $parameters = array();
         $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $location->get_course_id();
         $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = $location->get_tool_id();
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $result->get_id();
+
+        if(!$contentObject instanceof Introduction)
+        {
+            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] =
+                \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
+            $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $result->get_id();
+        }
 
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();

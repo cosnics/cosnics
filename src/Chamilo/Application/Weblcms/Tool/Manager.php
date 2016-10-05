@@ -739,24 +739,9 @@ abstract class Manager extends Application
         {
             $this->introduction_cache[$course_id][$tool_id] = false;
 
-            $conditions = array();
+            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::
+                retrieve_introduction_publication_by_course_and_tool($course_id, $tool_id);
 
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_COURSE_ID),
-                new StaticConditionVariable($course_id));
-
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_TOOL),
-                new StaticConditionVariable($tool_id));
-
-            $condition = new AndCondition($conditions);
-
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_introduction_publication(
-                $condition);
             if ($publication)
             {
                 $this->introduction_cache[$course_id][$tool_id] = $publication;
