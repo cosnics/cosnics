@@ -74,6 +74,11 @@ class ErrorHandler
             E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR
         );
 
+        if(!array_key_exists($errorNumber, $exceptionTypes))
+        {
+            return true;
+        }
+
         $exceptionLevel = $exceptionTypes[$errorNumber];
 
         $this->exceptionLogger->logException(new \Exception($errorString), $exceptionLevel, $file, $line);
