@@ -2737,13 +2737,42 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
 
     /**
+     * Helper function to retrieve an introduction publication by a given course and tool
+     *
+     * @param int $course_id
+     * @param string $tool
+     *
+     * @return ContentObjectPublication
+     */
+    public static function retrieve_introduction_publication_by_course_and_tool($course_id, $tool)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($course_id));
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ContentObjectPublication::class_name(),
+                ContentObjectPublication::PROPERTY_TOOL),
+            new StaticConditionVariable($tool));
+
+        $condition = new AndCondition($conditions);
+
+        return self::retrieve_introduction_publication($condition);
+    }
+
+    /**
      * Retrieves an introduction from a given condition
      *
      * @static Static method
      *
      * @param Condition $condition
      *
-     * @return mixed[string]
+     * @return ContentObjectPublication
      */
     public static function retrieve_introduction_publication($condition)
     {

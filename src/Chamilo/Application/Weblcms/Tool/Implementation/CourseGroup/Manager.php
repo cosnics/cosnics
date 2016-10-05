@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Libraries\Platform\Session\Request;
 
 /**
@@ -12,7 +13,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 /**
  * This tool allows a course_group to publish course_groups in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
     const TOOL_NAME = 'course_group';
     const PARAM_COURSE_GROUP_ACTION = 'tool_action';

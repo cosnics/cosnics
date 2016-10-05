@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Description;
 
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Description;
 
 /*
@@ -17,7 +18,7 @@ use Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Descript
 /**
  * This tool allows a user to publish descriptions in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
     const ACTION_VIEW_DESCRIPTIONS = 'Viewer';
 

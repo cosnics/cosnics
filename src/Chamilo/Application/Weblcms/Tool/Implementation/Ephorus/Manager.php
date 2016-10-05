@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus;
 
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
+
 /**
  * This class represents the manager for the ephorus tool
  *
@@ -8,7 +10,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus;
  * @author Tom Goethals - Hogeschool Gent
  * @author Vanpoucke Sven - Hogeschool Gent
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements  IntroductionTextSupportInterface
 {
     const ACTION_PUBLISH_DOCUMENT = 'DocumentPublisher';
     const ACTION_EPHORUS_REQUEST = 'EphorusRequest';

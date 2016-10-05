@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -25,7 +26,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 /**
  * This tool allows a user to publish learning paths in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
 {
     const ACTION_DOWNLOAD_DOCUMENTS = 'DocumentSaver';
     const ACTION_VIEW_ASSESSMENT_RESULTS = 'AssessmentResultsViewer';

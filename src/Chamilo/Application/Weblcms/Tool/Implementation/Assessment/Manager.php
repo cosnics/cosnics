@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -32,7 +33,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * This tool allows a user to publish assessments in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
 {
     const ACTION_VIEW_RESULTS = 'ResultsViewer';
     const ACTION_ATTEMPT_RESULT_VIEWER = 'AttemptResultViewer';
