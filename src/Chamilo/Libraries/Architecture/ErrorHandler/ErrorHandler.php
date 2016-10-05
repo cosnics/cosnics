@@ -1,11 +1,9 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function
@@ -14,6 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ErrorHandler
 {
+
     /**
      * The Exception Logger
      *
@@ -22,6 +21,7 @@ class ErrorHandler
     protected $exceptionLogger;
 
     /**
+     *
      * @var Translation
      */
     protected $translator;
@@ -45,12 +45,13 @@ class ErrorHandler
     {
         $error = error_get_last();
 
-        if (!is_null($error) && $error['type'] == E_ERROR)
+        if (! is_null($error) && $error['type'] == E_ERROR)
         {
             $this->exceptionLogger->logException(
-                new \Exception($error['message']), ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR,
-                $error['file'], $error['line']
-            );
+                new \Exception($error['message']),
+                ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR,
+                $error['file'],
+                $error['line']);
             $this->displayGeneralErrorPage();
         }
     }
@@ -71,10 +72,9 @@ class ErrorHandler
             E_USER_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR,
             E_USER_WARNING => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
             E_USER_NOTICE => ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING,
-            E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR
-        );
+            E_RECOVERABLE_ERROR => ExceptionLoggerInterface::EXCEPTION_LEVEL_ERROR);
 
-        if(!array_key_exists($errorNumber, $exceptionTypes))
+        if (! array_key_exists($errorNumber, $exceptionTypes))
         {
             return true;
         }
@@ -113,16 +113,14 @@ class ErrorHandler
      */
     protected function displayGeneralErrorPage()
     {
-        $path =
-            Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/Templates/Error.html.tpl';
+        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/Templates/Error.html.tpl';
         $template = file_get_contents($path);
 
         $variables = array(
             'error_code' => 500,
             'error_title' => $this->getTranslation('FatalErrorTitle'),
             'error_content' => $this->getTranslation('FatalErrorContent'),
-            'return_button_content' => $this->getTranslation('ReturnToPreviousPage')
-        );
+            'return_button_content' => $this->getTranslation('ReturnToPreviousPage'));
 
         foreach ($variables as $variable => $value)
         {
