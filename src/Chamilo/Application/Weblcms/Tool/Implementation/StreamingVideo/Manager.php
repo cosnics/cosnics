@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\StreamingVideo;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Matterhorn\Storage\DataClass\Matterhorn;
 use Chamilo\Core\Repository\ContentObject\Office365Video\Storage\DataClass\Office365Video;
 use Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo;
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 /**
  * This tool allows a user to publish announcements in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable, IntroductionTextSupportInterface
 {
 
     public static function get_allowed_types()

@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Wiki;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
 
 /**
@@ -13,7 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
 /**
  * This tool allows a user to publish wikis in his or her course.
  */
-abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
+abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
 
     public function get_available_browser_types()
