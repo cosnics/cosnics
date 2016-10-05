@@ -323,4 +323,16 @@ class PublicationRepository implements PublicationRepositoryInterface
     {
         return DataManager::retrieve_by_id(ContentObjectPublicationCategory::class_name(), $categoryId);
     }
+
+    /**
+     * Returns the target users of a content object publication
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     *
+     * @return array
+     */
+    public function findPublicationTargetUsers(ContentObjectPublication $contentObjectPublication)
+    {
+        return DataManager::get_publication_target_users($contentObjectPublication);
+    }
 }

@@ -50,6 +50,11 @@ class FileExceptionLogger implements ExceptionLoggerInterface
      */
     public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_ERROR, $file = null, $line = 0)
     {
+        if($exceptionLevel != self::EXCEPTION_LEVEL_WARNING)
+        {
+            return;
+        }
+
         $logFile = $this->logPath . DIRECTORY_SEPARATOR . 'FatalErrors.log';
         $fileHandler = fopen($logFile, 'a');
 
