@@ -108,7 +108,7 @@ class SubscribeComponent extends Manager
                         continue;
                     }
 
-                    $userStatus[self::STATUS_SUCCESS][] = $user;
+                    $usersStatus[self::STATUS_SUCCESS][] = $user;
                 }
 
                 if ($failures == 0)
