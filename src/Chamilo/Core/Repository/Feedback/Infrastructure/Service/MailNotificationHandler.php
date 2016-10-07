@@ -37,6 +37,11 @@ abstract class MailNotificationHandler implements NotificationHandlerInterface
      */
     public function handleNotifications(Feedback $feedback, array $notifications = array())
     {
+        if(empty($notifications))
+        {
+            return;
+        }
+        
         $targetUsers = array();
 
         foreach ($notifications as $notification)
@@ -46,6 +51,11 @@ abstract class MailNotificationHandler implements NotificationHandlerInterface
         }
 
         $targetUsers = array_unique($targetUsers);
+
+        if(empty($targetUsers))
+        {
+            return;
+        }
 
         $mail = new Mail($this->getMailSubject($feedback), $this->getMailContent($feedback), $targetUsers);
         $this->mailer->sendMail($mail);
