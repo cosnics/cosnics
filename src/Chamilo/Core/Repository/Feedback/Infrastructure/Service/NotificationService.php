@@ -42,6 +42,11 @@ class NotificationService implements NotificationServiceInterface
      */
     public function notify(Feedback $feedback, array $notifications = array())
     {
+        if(empty($notifications))
+        {
+            return;
+        }
+        
         foreach($this->notificationHandlers as $notificationHandler)
         {
             $notificationHandler->handleNotifications($feedback, $notifications);
