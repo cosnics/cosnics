@@ -60,7 +60,7 @@ abstract class ContentObjectPublicationListRenderer
     /**
      * private counter to keep track of first/last status;
      */
-    private $row_counter = 0;
+    protected $row_counter = 0;
 
     /**
      * Constructor.

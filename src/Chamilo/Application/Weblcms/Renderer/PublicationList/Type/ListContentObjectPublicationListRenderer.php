@@ -220,7 +220,9 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     SubButton::DISPLAY_LABEL));
         }
 
-        if ($publication[ContentObjectPublication::PROPERTY_TOOL] == self::TOOL_TYPE_ANNOUNCEMENT)
+        $has_edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication);
+
+        if ($has_edit_right && $publication[ContentObjectPublication::PROPERTY_TOOL] == self::TOOL_TYPE_ANNOUNCEMENT)
         {
             if (! $publication[ContentObjectPublication::PROPERTY_EMAIL_SENT] && $this->isPublicationVisible($publication))
             {
@@ -264,7 +266,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
                     'btn-link'));
         }
 
-        $has_edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication);
+
 
         if ($has_edit_right)
         {
