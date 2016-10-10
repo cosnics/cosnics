@@ -1,0 +1,91 @@
+default:
+  calls:
+    error_reporting: 22519 # E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'http://localhost/chamilo/web/' # Change to your local Chamilo base url
+      #show_auto: true # Run a command when a test fails (uncomment one of the following commands)
+      #show_cmd: cat %s >> files/temp/behat_dump.html # Dump all HTML to file (Linux)
+      #show_cmd: type %s >> files/temp/behat_dump.html # Dump all HTML to file (Windows)
+      #show_cmd: firefox %s # Open a tab for each failed test in Firefox (Linux)
+      #show_cmd: '"C:\Program Files (x86)\Mozilla Firefox\Firefox.exe" %s' # Open a tab for each failed test in Firefox (Windows)
+      goutte: ~
+  suites:
+    core_admin:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Admin/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Admin\Test\Acceptance\Behat\Context'
+    core-group:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Group/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Group\Test\Acceptance\Behat\Context'
+    core-help:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Help/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Help\Test\Acceptance\Behat\Context'
+    core-home:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Home/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Home\Test\Acceptance\Behat\Context'
+    core-install:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Install/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Install\Test\Acceptance\Behat\Context'
+    core-lynx:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Lynx/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Lynx\Test\Acceptance\Behat\Context'
+    core-menu:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Menu/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Menu\Test\Acceptance\Behat\Context'
+    core-metadata:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Metadata/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Metadata\Test\Acceptance\Behat\Context'
+    core-reporting:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Reporting/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Reporting\Test\Acceptance\Behat\Context'
+    core-repository:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Repository/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Repository\Test\Acceptance\Behat\Context'
+    core-rights:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Rights/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Rights\Test\Acceptance\Behat\Context'
+    core-tracking:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/Tracking/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\Tracking\Test\Acceptance\Behat\Context'
+    core-user:
+      paths:
+        - '%paths.base%/src/Chamilo/Core/User/Test/Acceptance/Behat/features'
+      contexts:
+        - 'Chamilo\Libraries\Architecture\Test\Behat\FeatureContext'
+        - 'Chamilo\Core\User\Test\Acceptance\Behat\Context'

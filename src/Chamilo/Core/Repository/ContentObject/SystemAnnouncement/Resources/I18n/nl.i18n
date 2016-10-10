@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\system_announcement
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Systeembericht"
+Confirmation = "Bevestiging"
+Error = "Fout"
+Warning = "Waarschuwing"
+Stop = "Stop"
+Question = "Vraag"
+Config = "Configuratie"
+Properties = "Eigenschappen"
+Icon = "Icoon"
+Title = "Onderwerp"
+Description = "Bericht"

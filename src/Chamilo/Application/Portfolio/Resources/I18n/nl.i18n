@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\portfolio
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Portfolio"
+GoBackHome = "Ga terug naar je eigen portfolio"
+NoInstructionYetDescription = "Start het gebruik van je portfolio door de introductietekst aan te passen. Nadien kan je extra mappen en andere inhoud toevoegen om je portfolio op te vullen."
+BookmarkTitle = "Portfolio-bladwijzer {NAME}"
+BookmarkDescription = "Bladwijzer voor het portfolio van {NAME}"
+BrowserComponent = "Zoek gebruikers"
+FavouritesComponent = "Bekijk favoriete gebruikers"
+ShowPortfolio = "Bekijk het portfolio van {USER}"
+ShowPortfolioNotAllowed = "Je hebt (nog) geen toestemming om het portfolio van {USER} te bekijken"
+ViewRight = "Bekijken"
+EditRight = "Aanpassen <b style=\"color: maroon;\">(Let op !  Gebruiker kan inhoud wijzigen)</b>"
+ViewFeedbackRight = "Feedback bekijken" 
+GiveFeedbackRight = "Feedback geven"
+FavouriteUsers = "Favoriete portfolio gebruikers"

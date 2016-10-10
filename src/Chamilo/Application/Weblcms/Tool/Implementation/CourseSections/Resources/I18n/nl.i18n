@@ -1,0 +1,31 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_sections
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Cursustabs"
+DragAndDrop = "Slepen en neerzetten"
+RemoveSelected = "Verwijder geselecteerde sectie"
+Disabled = "Uit"
+CourseAdministration = "Cursusadministratie"
+Links = "Links"
+Tools = "Tools"
+SelectTools = "Selecteer gewenste tools"
+SelectToolsNA = "Selecteer gewenste tools niet beschikbaar"
+ChangeVisible = "Verander zichtbaarheid"
+NoCourseSectionsSelected = "Geen cursustabs geselecteerd"
+NoCourseSectionSelected = "Geen cursustabs geselecteerd"
+CourseSectionMoved = "De cursustab is verplaatst"
+CourseSectionNotMoved = "De cursustab is niet verplaatst"
+CourseSectionUpdated = "De cursustab is bijgewerkt"
+CourseSectionNotUpdated = "De cursustab is niet bijgewerkt"
+Name = "Naam"
+Visible = "Zichtbaar"
+ChangeSectionComponent = "Verander cursustab"
+CreatorComponent = "Maak cursustab"
+ViewerComponent = "Cursustabs"
+UpdaterComponent = "Bewerk cursustab"
+SelectedCourseSectionDeleted = "Geselecteerde cursustab verwijderd"
+SelectedCourseSectionNotDeleted = "Geselecteerde cursustab niet verwijderd"
+SelectedCourseSectionsVisibilityChanged = "Zichtbaarheid cursustab aangepast"
+CourseSection = "Cursustab"
