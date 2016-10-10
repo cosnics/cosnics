@@ -70,7 +70,7 @@ class MonthRenderer extends FullTableRenderer
             $tableDate = $nextTableDate;
         }
 
-        return $calendar->render();
+        return '<div class="month-calendar">' . $calendar->render() . '</div>';
     }
 
     /**

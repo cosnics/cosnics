@@ -440,7 +440,7 @@ h4 .calendar-event-range {
 	{
 	color: dimgray;
 	font-size: 12px;
-	height: 20px;
+	min-height: 20px;
 }
 
 .event-container-hidden {
@@ -514,4 +514,14 @@ h4 .calendar-event-range {
 .tooltip-calendar .tooltip-event-prefix,
 .tooltip-calendar .tooltip-event-postfix {
 	color: dimgray;
+}
+
+@media screen and (max-width: 900px) {
+	.month-calendar {
+		overflow: auto;
+	}
+
+	.table-calendar-month {
+		min-width: 900px;
+	}
 }

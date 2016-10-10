@@ -44,14 +44,23 @@ abstract class Manager extends Application
      */
     public function getCurrentRendererType()
     {
-        $requestRendererType = $this->getRequest()->query->get(ViewRenderer :: PARAM_TYPE);
+        $rendererType = $this->getRequest()->query->get(ViewRenderer :: PARAM_TYPE);
 
-        if (! $requestRendererType)
+        if (! $rendererType)
         {
-            return LocalSetting :: getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
+            $rendererType = LocalSetting :: getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
+
+            if($rendererType == ViewRenderer::TYPE_MONTH)
+            {
+                $detect = new \Mobile_Detect();
+                if($detect->isMobile() && !$detect->isTablet() )
+                {
+                    $rendererType = ViewRenderer::TYPE_LIST;
+                }
+            }
         }
 
-        return $requestRendererType;
+        return $rendererType;
     }
 
     /**
