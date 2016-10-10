@@ -490,7 +490,9 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $response->headers->add(
             array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
 
-        $safeFileName = StringUtilities :: getInstance()->createString($fileName)->toAscii()->__toString();
+        $safeFileName = StringUtilities :: getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
+            '\\',
+            '-')->replace('%', '_')->__toString();
 
         $dispositionHeader = $response->headers->makeDisposition(
             ResponseHeaderBag :: DISPOSITION_INLINE,
