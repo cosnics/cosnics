@@ -21,7 +21,7 @@ class Google_Service_Drive extends \Google_Service_Drive
     {
         parent :: __construct($client);
 
-        $this->files = new \Google_Service_Drive_Files_Resource(
+       /* $this->files = new \Google_Service_Drive_Files_Resource(
             $this,
             $this->serviceName,
             'files',
@@ -133,6 +133,6 @@ class Google_Service_Drive extends \Google_Service_Drive
                             'acknowledgeAbuse' => array('location' => 'query', 'type' => 'boolean'),
                             'updateViewedDate' => array('location' => 'query', 'type' => 'boolean'),
                             'revisionId' => array('location' => 'query', 'type' => 'string'),
-                            'projection' => array('location' => 'query', 'type' => 'string'))))));
+                            'projection' => array('location' => 'query', 'type' => 'string'))))));*/
     }
 }

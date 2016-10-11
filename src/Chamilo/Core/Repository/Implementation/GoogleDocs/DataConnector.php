@@ -75,40 +75,42 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function retrieve_external_repository_object($id)
     {
-        $file = $this->service->files->get($id);
+        $file = $this->service->files->get($id,array('fields'=>'id,name,modifiedTime,createdTime,owners,iconLink,description,mimeType,viewedByMeTime,lastModifyingUser,thumbnailLink'));
+
         $object = new ExternalObject();
         $object->set_id($file->id);
         $object->set_description($file->description);
         $object->set_external_repository_id($this->get_external_repository_instance_id());
-        $object->set_title($file->title);
-        $object->set_created(strtotime($file->createdDate));
+        $object->set_title($file->name);
+        $object->set_created(strtotime($file->createdTime));
         $object->set_type($file->mimeType);
         $object->set_icon_link($file->iconLink);
 
-        $exportLinks = $file->exportLinks;
-        if (count($exportLinks) > 0)
+        //$exportLinks = $file->exportLinks;
+        //$exportLinks = $this->service->files->get($file->id, array('alt'=>'media'));//$file->exportLinks;
+        //$exportLinks = $this->service->files->get($file->id, 'application/pdf');//$file->exportLinks;
+        /*if (count($exportLinks) > 0)
         {
             $object->set_export_links($exportLinks);
         }
         else
         {
             $object->set_export_links(array($file->mimeType => $file->downloadUrl));
-        }
-
-        if ($file->lastViewedByMeDate != null)
+        }*/
+        if ($file->viewedByMeTime != null)
         {
-            $object->set_viewed(strtotime($file->lastViewedByMeDate));
+            $object->set_viewed(strtotime($file->viewedByMeTime));
         }
-        elseif ($file->modifiedDate != null)
+        elseif ($file->modifiedTime != null)
         {
-            $object->set_viewed(strtotime($file->modifiedDate));
+            $object->set_viewed(strtotime($file->modifiedTime));
         }
         else
         {
-            $object->set_viewed(strtotime($file->createdDate));
+            $object->set_viewed(strtotime($file->createdTime));
         }
 
-        $object->set_modified(strtotime($file->modifiedDate));
+        $object->set_modified(strtotime($file->modifiedTime));
         $object->set_owner_id($file->owners[0]['emailAddress']);
         $object->set_owner_name($file->owners[0]['displayName']);
         $object->set_modifier_id($file->lastModifyingUser['emailAddress']);
@@ -140,7 +142,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         if (! is_null($condition))
         {
-            $condition = 'title contains \'' . $condition . '\' and ';
+            $condition = 'name contains \'' . $condition . '\' and ';
         }
         $condition .= 'trashed=false';
 
@@ -152,7 +154,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $condition .= ' and \'' . $folder . '\' in parents and mimeType != \'application/vnd.google-apps.folder\'';
 
         $files = $this->service->files->listFiles(array('q' => $condition));
-        $files_items = $files['modelData']['items'];
+
+        $files_items = $files['modelData']['files'];
 
         return count($files_items);
     }
@@ -193,11 +196,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         if ($order_property[0]->get_property()->get_property() == ExternalObject::PROPERTY_TITLE)
         {
-            $orderBy = 'title' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
+            $orderBy = 'name' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
         }
         elseif ($order_property[0]->get_property()->get_property() == ExternalObject::PROPERTY_CREATED)
         {
-            $orderBy = 'createdDate' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
+            $orderBy = 'createdTime' . ($order_property[0]->get_direction() == SORT_DESC ? ' desc' : '');
         }
         else
         {
@@ -206,7 +209,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         if (! is_null($condition))
         {
-            $condition = 'title contains \'' . $condition . '\' and ';
+            $condition = 'name contains \'' . $condition . '\' and ';
         }
         $condition .= 'trashed=false';
 
@@ -218,8 +221,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $condition .= ' and \'' . $folder . '\' in parents and mimeType != \'application/vnd.google-apps.folder\'';
 
         $files = $this->service->files->listFiles(
-            array('q' => $condition, 'maxResults' => $count, 'orderBy' => $orderBy));
-        $files_items = $files['modelData']['items'];
+            array('q' => $condition, 'pageSize' => $count, 'orderBy' => $orderBy, 'fields'=>'files(id,name,modifiedTime,createdTime,iconLink,description,mimeType,viewedByMeTime,owners,capabilities)'));
+        $files_items = $files['modelData']['files'];
         $objects = array();
 
         foreach ($files_items as $file_item)
@@ -227,35 +230,38 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object = new ExternalObject();
             $object->set_id($file_item['id']);
             $object->set_external_repository_id($this->get_external_repository_instance_id());
-            $object->set_title($file_item['title']);
-            $object->set_created(strtotime($file_item['createdDate']));
+            $object->set_title($file_item['name']);
+            $object->set_created(strtotime($file_item['createdTime']));
 
             $object->set_type($file_item['mimeType']);
             $object->set_icon_link($file_item['iconLink']);
-            if ($file_item['lastViewedByMeDate'] != null)
+            if ($file_item['viewedByMeTime'] != null)
             {
-                $object->set_viewed(strtotime($file_item['lastViewedByMeDate']));
+                $object->set_viewed(strtotime($file_item['viewedByMeTime']));
             }
-            elseif ($file_item['modifiedDate'] != null)
+            elseif ($file_item['modifiedTime'] != null)
             {
-                $object->set_viewed(strtotime($file_item['modifiedDate']));
+                $object->set_viewed(strtotime($file_item['modifiedTime']));
             }
             else
             {
-                $object->set_viewed(strtotime($file_item['createdDate']));
+                $object->set_viewed(strtotime($file_item['createdTime']));
             }
 
-            $object->set_modified(strtotime($file_item['modifiedDate']));
+            $object->set_modified(strtotime($file_item['modifiedTime']));
             $object->set_owner_id($file_item['owners'][0]['emailAddress']);
             $object->set_owner_name($file_item['owners'][0]['displayName']);
 
+            //$exportLinks = $file_item['files']['export'];
             $exportLinks = $file_item['exportLinks'];
+
             if (count($exportLinks) > 0)
             {
                 $object->set_export_links($exportLinks);
             }
             elseif ($file_item['downloadUrl'])
             {
+                //$object->set_export_links(array($file_item['mimeType']=>'test', 'application/Pdf'=>'test'));
                 $object->set_export_links(array($file_item['mimeType'] => $file_item['downloadUrl']));
             }
 
@@ -270,13 +276,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             }
 
             $rights = array();
-            $rights[ExternalObject::RIGHT_USE] = $file_item['copyable'];
+            $rights[ExternalObject::RIGHT_USE] = $file_item['capabilities']['canCopy'];
             $rights[ExternalObject::RIGHT_EDIT] = false;
-            $rights[ExternalObject::RIGHT_DOWNLOAD] = $file_item['copyable'];
+            $rights[ExternalObject::RIGHT_DOWNLOAD] = $file_item['capabilities']['canCopy'];
             $rights[ExternalObject::RIGHT_DELETE] = false;
             $object->set_rights($rights);
 
-            $newParent = new \Google_Service_Drive_ParentReference();
+            //$newParent = new \Google_Service_Drive_ParentReference();
 
             if ($file_item['parents'][0]['id'])
             {
@@ -316,8 +322,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     private function retrieve_folders($query)
     {
-        $files = $this->service->files->listFiles(array('orderBy' => 'title', 'q' => $query));
-        $files_items = $files['modelData']['items'];
+        $files = $this->service->files->listFiles(array('orderBy' => 'name', 'q' => $query));
+        $files_items = $files['modelData']['files'];
         $folders = array();
 
         foreach ($files_items as $file_item)
@@ -325,7 +331,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $folder = new Folder();
 
             $folder->setId($file_item['id']);
-            $folder->setTitle($file_item['title']);
+            $folder->setTitle($file_item['name']);
             $folder->setParent($file_item['parents'][0]['id']);
 
             $folders[] = $folder;
@@ -405,7 +411,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $file = $this->service->files->get($id);
         $folder = new Folder();
         $folder->setId($file['id']);
-        $folder->setTitle($file['title']);
+        $folder->setTitle($file['name']);
         $folder->setParent($file['parents'][0]['id']);
 
         return $folder;
