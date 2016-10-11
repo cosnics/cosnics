@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Document\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -191,7 +192,7 @@ class ZipAndDownloadComponent extends Manager
 
         if ($count == 0)
         {
-            throw new \Exception(Translation :: get('NoDocumentsPublished'));
+            throw new UserException(Translation :: get('NoDocumentsPublished'));
         }
 
         $compression = Filecompression :: factory();
