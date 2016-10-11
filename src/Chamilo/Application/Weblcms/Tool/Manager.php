@@ -25,6 +25,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -173,7 +174,7 @@ abstract class Manager extends Application
 
         if (! class_exists($class))
         {
-            throw new Exception(Translation::get('ToolTypeDoesNotExist', array('type' => $namespace)));
+            throw new UserException(Translation::get('ToolTypeDoesNotExist', array('type' => $namespace)));
         }
 
         $factory = new ApplicationFactory(
