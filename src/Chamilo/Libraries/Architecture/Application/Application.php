@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Architecture\Application;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -855,7 +856,7 @@ abstract class Application
             $context_path = Path :: getInstance()->namespaceToFullPath($context);
             if (! is_dir($context_path))
             {
-                throw new \Exception(Translation :: get('NoContextFound', array('CONTEXT' => $context)));
+                throw new UserException(Translation :: get('NoContextFound', array('CONTEXT' => $context)));
             }
             else
             {

@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
@@ -120,7 +121,7 @@ class LocationForm extends FormValidator
             }
             elseif ($this->type != $content_object->get_type())
             {
-                throw new \Exception(Translation :: get('ObjectsNotSameType'));
+                throw new UserException(Translation :: get('ObjectsNotSameType'));
             }
         }
 
