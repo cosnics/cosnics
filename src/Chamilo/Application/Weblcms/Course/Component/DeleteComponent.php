@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Course\Component;
 use Chamilo\Application\Weblcms\Course\Manager;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -30,6 +31,11 @@ class DeleteComponent extends Manager
      */
     public function run()
     {
+        if(!$this->getUser()->is_platform_admin())
+        {
+            throw new NotAllowedException();
+        }
+
         $course_ids = $this->get_selected_course_ids();
         $this->set_parameter(self :: PARAM_COURSE_ID, $course_ids);
         $failures = 0;
