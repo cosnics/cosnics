@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -171,7 +172,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID)
         )
         {
-            throw new \Exception(
+            throw new UserException(
                 Translation::getInstance()->getTranslation(
                     'StepNoLongerValid', null, Manager::context()
                 )

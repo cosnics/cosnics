@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Component;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -50,7 +51,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
         $security_code = Request :: get(ContentObject :: PARAM_SECURITY_CODE);
         if ($security_code != $object->calculate_security_code())
         {
-            throw new \Exception(Translation :: get('SecurityCodeNotValid', null, Utilities :: COMMON_LIBRARIES));
+            throw new UserException(Translation :: get('SecurityCodeNotValid', null, Utilities :: COMMON_LIBRARIES));
         }
         
         if (Request :: get('display') == 1)
