@@ -35,7 +35,10 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
 
                 if ($subscriptionTime)
                 {
-                    return DatetimeUtilities::format_locale_date(null, $subscriptionTime);
+                    return DatetimeUtilities::format_locale_date(
+                        Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()),
+                        $subscriptionTime
+                    );
                 }
 
                 return null;
@@ -63,13 +66,16 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                     Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'),
                     $unsubscribe_url,
                     ToolbarItem::DISPLAY_ICON,
-                    true));
+                    true
+                )
+            );
         }
 
         $course_group = $browser->get_course_group();
 
-        if (! $browser->is_allowed(WeblcmsRights::EDIT_RIGHT) && $course_group->is_self_unregistration_allowed() &&
-             $course_group->is_member($user) && $browser->get_user()->get_id() == $user->getId())
+        if (!$browser->is_allowed(WeblcmsRights::EDIT_RIGHT) && $course_group->is_self_unregistration_allowed() &&
+            $course_group->is_member($user) && $browser->get_user()->get_id() == $user->getId()
+        )
         {
             $parameters = array();
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->getId();
@@ -80,7 +86,9 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                     Translation::get('Unsubscribe'),
                     Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'),
                     $unsubscribe_url,
-                    ToolbarItem::DISPLAY_ICON));
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
         }
 
         return $toolbar->as_html();
