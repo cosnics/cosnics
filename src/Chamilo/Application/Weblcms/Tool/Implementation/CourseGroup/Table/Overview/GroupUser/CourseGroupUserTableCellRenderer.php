@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Table\Overview\GroupUser;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableCellRenderer;
+use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 
 class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
@@ -14,6 +16,7 @@ class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
      * @param type $column
      * @param type $user_with_subscription_status User from the advanced join query in weblcms database class that
      *        includes his subscription status.
+     *
      * @return type
      */
     public function render_cell($column, $user)
@@ -25,7 +28,10 @@ class CourseGroupUserTableCellRenderer extends RecordTableCellRenderer
 
                 if ($subscriptionTime)
                 {
-                    return DatetimeUtilities::format_locale_date(null, $subscriptionTime);
+                    return DatetimeUtilities::format_locale_date(
+                        Translation::getInstance()->getTranslation('SubscriptionTimeFormat', null, Manager::context()),
+                        $subscriptionTime
+                    );
                 }
 
                 return null;
