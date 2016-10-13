@@ -43,13 +43,8 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Exception;
 
 /**
  * This is the base class for all tools used in applications.
@@ -416,6 +411,7 @@ abstract class Manager extends Application
     }
 
     /**
+     *
      * @return Course
      */
     public function get_course()
@@ -740,8 +736,9 @@ abstract class Manager extends Application
         {
             $this->introduction_cache[$course_id][$tool_id] = false;
 
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::
-                retrieve_introduction_publication_by_course_and_tool($course_id, $tool_id);
+            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_introduction_publication_by_course_and_tool(
+                $course_id,
+                $tool_id);
 
             if ($publication)
             {
@@ -791,9 +788,7 @@ abstract class Manager extends Application
     public function get_complex_display_url($pid)
     {
         return $this->get_url(
-            array(
-                self::PARAM_ACTION => self::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
-                self::PARAM_PUBLICATION_ID => $pid));
+            array(self::PARAM_ACTION => self::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT, self::PARAM_PUBLICATION_ID => $pid));
     }
 
     public static function get_pcattree_parents($pcattree)
