@@ -89,3 +89,5 @@ CourseGroupNotUpdated = "Failed to update course group {OLD_NAME}"
 CannotCreateCourseGroup = "Cannot create course group with name {NAME}"
 CreationFailed = "Cannot create course group"
 MaximumMembersToSmall = "The set maximum amount of members is too small compared to the current actual amount of members"
+
+SubscriptionTimeFormat = "%B %d, %Y at %I:%M:%S %p"
