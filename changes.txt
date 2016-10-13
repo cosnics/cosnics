@@ -1,0 +1,265 @@
+[29/04/2016]
+
+* [Assessment] Removed subitems in the builder of the complex content object because assessment doesn't have subpaths
+* [Assets] Added a timestamp for client cache clearing
+* [Assignment Tool] Limited the amount of allowed content object types in the creation form of an assignment
+* [Calendar Event] Fixed css for datepicker
+* [Calendar Event] fixes for aqua theme for layout
+* [CSS] Fixed toggle options in the course settings form
+* [File Content Object] Added clickable download link on inline images
+* [File Content Object] Display docx and other office documents inline using the official office viewer
+* [File Content Object] Removed buttons for inline image rendering
+* [Home] Bugfix in home javascript when moving to and from an empty column
+* [Learning Path] Changed tabs to buttons
+* [Learning Path] A new mover component in which you can move an item directly to a new parent and a new position
+* [Learning Path] Allow HTML5 full screen display of learning paths
+* [Learning Path] Changed previous and next buttons
+* [Learning Path] Changed progressbar
+* [Learning Path] Selected path expanded in tree menu
+* [Learning Path] Use Bootstrap TreeView for the learning path
+* [Menu] Added the homepage link to the navbar brand
+* [Portfolio] Changed tabs to buttons
+* [Portfolio] Changes to the feedback subscribe button
+* [Portfolio] Feedback icons changed
+* [Weblcms] Added a warning when the user leaves the publication form without publishing
+* [Weblcms] Bugfixes to the course visit tracking
+* [Weblcms] Navigate to menu: alphabetical order
+* [Weblcms] Removed option "Menu Layout" from course settings since it is no longer used and replaced by much more intuitive "Navigate To"
+* [Weblcms] Translations of course setting "Tool Layout"
+
+[06/05/2016]
+
+* [Admin] Translations whois online page
+* [Caching] Fixed issue between PhpFileCache and OpCache
+* [CSS/Javascript] Fixed client caching of resources
+* [Menu] Fixed cache reset of menu items when editing the menu
+* [Portfolio] Fixes for the portfolio breadcrumbs
+* [Streaming Videos] Translation: Streaming Video's
+* [User] Fixed the asynchronous loading of the userpicture in the menu
+* [User] Fixed user settings that could not be updated
+* [Vimeo] Fixed vimeo browse layout
+* [Weblcms] Added some changes to the publication form to have a more distinct view between several options
+* [Weblcms] Fixed the reset button bug in the publication form
+* [Workspaces] Moved the "manager" option in the rights form above the warning message
+* [Workspaces] Redirect to browser when saving the rights form
+* [Workspaces] Translation: Shared Workspaces => Workspaces shared with me
+* [Workspaces] Visualize the workspace description in the workspace
+
+[13/05/2016]
+
+* [Course Groups] Changed the color of "unsubscribe yourself" button to red
+* [CSS] Alerts on smaller screen are now responsive
+* [CSS] Change the way categories in forms are displayed
+* [CSS] Fixed the z-index for notifications and dropdown menu's
+* [CSS] Platform footer re-implemented to be more bootstrap compliant
+* [Home] Fixed translations
+* [Installer] Complete visual redesign using Bootstrap
+* [Learning Path] Made the menu wider
+* [Personal Calendar] Moved publish button to front, make sure primary buttons like the publish button are always placed first 
+* [PHP7] Eliminated dependencies on old non-compatible libraries and/or provided working alternatives whenever necessary
+* [Platform] Allow the layout container to be either fixed or fluid on demand
+* [Repository] Fixed translations when a file is uploaded through uploadify (attachments)
+* [Repository] Fixed translations
+* [User Tool] Fixed translations
+* [Weblcms] Fixed publisher translations
+* [Weblcms] Fixed translations in the manage rights component
+* [Weblcms] Navigate to overlaps with the course title on smaller screens
+* [Calendar] Changed every translation from "Agenda" To "Calendar" for more consistency in translations
+* [Weblcms] Changed introduction publisher icon
+* [LearningPath] Fixed bug with multiple selected items when viewing the results
+* [LearningPath] Fixed the abscence of the extra button when the learning path is first opened
+* [LearningPath] Fixed the completed icon on the root of the learning path
+* [Repository] Always include the latest version of content objects in the workspaces
+* [Weblcms] Changed icons in list view for select / unselect all
+* [Course Groups] Fixes for breadcrumbs
+* [Repository] Fixed a bug where the search parameters in a workspace could not be removed
+* [Repository] Fixed a bug where adding an existing content object doesn't keep track of the selected category in the workspaces
+* [Repository] Remember the search parameter when navigating in the repo viewer
+* [Weblcms] Fixed a fatal error in the course menu home block
+* [Course Groups] Added a complete introduction text publisher where you can create a new introduction or select / import an existing one.
+* [Repository] Fixed the update of the content object versions in workspaces
+* [Repository] Removed translations with {ICON} in them
+* [Repository] Fixed the selected icon in the menu item for workspaces when navigating in a workspace
+* [Repository] Changed the titles of the imported content objects through drag and drop to exclude file extensions
+* [User] Fixed correct redirect after user logout
+* [Repository] Links between workspaces and objects are now based on content object numbers instead of content object ids
+* [Webpage] Added usability fixes to make a distinct difference between page and webpage
+* [Assignment] Bugfix for reporting of course group submissions
+
+[20/05/2016]
+* [Repository] Changed the files importer to add a message when a file is imported
+* [Repository] Bugfix in the workspaces for the "make favourite" action as table actions
+* [Course Groups] Added better course group form layout
+* [User] Added a retry button when a login has failed
+* [Portfolio] Use the same menu structure as the learning path
+* [Course Copier] Cleanup of the form layout
+* [Course Truncater] Cleanup of the form layout
+* [LearningPath] Changed the mover of items to a new layout with separate parent and position
+* [Calendar] Added links to the day-view in the month and week views
+* [Forum] Layout redesign to use bootstrap elements 
+* [Javascript] CKEditor updated to version 4.5.9 (was 4.4.7)
+* [Javascript] Switched CKEditor theme to "moono" (was "moonokolor")
+* [Javascript] Added OEmbed plugin to CKEditor to allow easy adding of a multitude of media elements
+* [Layout] Use webfont-based identification logos for Weblcms tools instead of rendered images
+* [Portfolio] Allow "favouriting" of portfolios
+* [Weblcms] Added subscription dates to course memberships
+
+[27/05/2016]
+* [Personal Calendar] Translations for home blocks
+* [Assessment] Cleanup of assessment question forms
+* [Assessment] Cleanup of assessment builder
+* [Assessment] Cleanup of assessment display
+* [Repository] Cleanup of the type selector
+* [Assessment] Fixed fatal error in 'Manage Attempts'
+* [Reporting] Fixed fatal error in tool details
+* [Weblcms] Fixed a bug with the breadcrumbs in the publication viewer
+* [Weblcms] Fixed a fatal error when changing the titular of a course
+* [Weblcms] Changed the publish button so that the create button is always shown, even when only one item is available
+* [Home] Fixed a bug in the resizing of columns
+* [CKEditor] Fixed the automatic removal of empty <i> tags - usage of font-awesome in ckeditor
+* [Google Docs] Fixed the exporter
+* [Weblcms] Fixed visibility of tools in the home tool
+* [Hotpotatoes] Fixed the saving of results for hotpotatoes
+* [Reporting] Fixed fatal error
+* [Repository] My Views - Fatal error bugfix
+* [Reporting] Fatal error when viewing results of hotpotatoes
+* [Home] Several translation bugfixes
+* [Repository] Removed sub-tabs in rights management for workspaces for better usability
+
+[03/06/2016]
+* [Repository] Readding the repository search bar and putting it in sync with the filterdata
+* [Learning Path] Fixed the mover component
+* [Weblcms] Fixed a bug where the selection of the root category was not possible
+* [Category Manager] Fixed the removal of categories through table actions
+* [Repository] Cleanup of preview action buttons
+* [Google Docs] Fixed the importer, allowing all the possible types that google docs provides as import, fixing icons and translations for importer
+* [Google Client] Added a separate google client service which can be used to authenticate with google API services
+* [Youtube] Adding google client to youtube connector
+* [Google Client] Making it possible to save the refresh token
+* [Google Client] Removing the token when refreshing the token is not possible
+* [Google Client] Added some more exception caching and removing the access tokens
+* [Youtube] Login bugfixes
+* [Common] Translation bugfixes for the (Gallery) Table
+* [Youtube] Changed default row count
+* [Repository] Changed default row count
+* [Personal Calendar] Fix for fatal error
+* [Google Docs] Bugfixes for internal syncer
+* [Google Docs] Redirect URL's fixed
+* [Personal Calendar] Bugfix to retrieve the external_refresh timeout through the local settings instead of the global settings
+* [Personal Calendar] Fixed a next month bug that only occurs on the 31st of may
+* [Youtube] Fixed rendition for https
+* [Youtube] Changed rendition sizes
+* [Learning Path] Fixed the removal of the menu bar on smaller screens
+* [Repository] Workspace fix fatal error in updater component
+* [Repository] Workspace fix the manage rights in the updater component
+* [Repository] Fixes of translations in workspace management
+* [Repository] Changed the preview information text
+* [Calendar Tool] Fixes for calendar events outside the visible edges of the display
+* [Assessment] Assessment display cleanup
+* [Weblcms] Cleanup translations as discussed with community
+* [Repository] Added the possibility to add a title (tooltip) to the repository tabs
+* [Calendar] Small fix to make the redirect URI's the same between all requests in the office 365 connector
+* [Assessment] Removed download documents / export results from hotpotatoes results since detailled results are not saved for hotpotatoes
+* [Assessment] Fixed the document downloader for attempts
+* [Course Truncater] Removed incorrect form rule
+* [Forum Tool] Added a correct redirect to the complex display
+* [Assessment] Added a correction to the publication handler for the assessments to add the publication record when assessments are created directly
+* [Forum Tool] Invisibility fixes + translations
+* [Wiki] Fixed the creation of new wiki pages
+* [Wiki] Fixed the update of existing wiki pages
+* [Blog] Removed layout selection because there is only one
+* [Geolocation Tool] Fixed translations
+* [Weblcms] Disabled the bookmark block as discussed
+* [Google Docs] Fix for double login message
+* [Search Tool] Small bugfix in the search tabs
+* [LearningPath] Default expansion of selected node
+* [Reporting] Fixes for PDF exporter
+* [Course Groups] Fixed tree menu rendering
+
+[10/06/2016]
+
+* [Multiple] Added a bunch of translations for the user acocunt settings
+* [Office Viewer] Small bugfix viewer type
+* [Home] Target groups / users for default home block elements
+* [Portfolio] Several small bugfixes
+* [Calendar] Re-added the day names to the MonthCalendar
+* [Personal Calendar] Performance upgrades for personal calendar
+* [RepoViewer] Added select from workspaces in repoviewer
+* [Weblcms] Added HoGent services to the weblcms
+* [Weblcms] Fixed the rights checks for the personal calendar integration of the weblcms
+
+[17/06/2016]
+
+* [Home] Target groups / users for home block types
+* [Calendar] Bugfix for personal calendar
+* [Home] Added a real publication table for the home
+* [Common] Refactoring of the mailer system. Extracting Mail and Mailer from each other, making it possible to make your own mailer class and selecting it through admin settings
+* [Common] Moved conflicting javascript (jquery UI must be below bootstrap to ensure no conflicts) and removed simplemodal since this conflicts with bootstrap modal
+* [External Repository] First implementation of Office365 external repository
+
+[24/06/2016]
+
+* [Home] Layout bugfix for the configuration form
+* [Home] Limited the height of the day calendar with overflow
+* [Home] Limited the width of the home blocks with overflow to prevent overlap
+* [Weblcms] Fixed subscribe / unsubscribe fatal error
+* [User] Removed save and reset buttons when no field is editable
+* [Weblcms] Fixed fatal error in sort courses
+* [Portfolio] Fixed the user picture beeing too big
+* [Repository] Fixed the CPO export in the workspaces when a content object with attachments that are not published in the workspace are exported
+* [Vimeo] Removed a bunch of functionality that only works when a user is logged-in and now doesn't work due to the missing feature of a logged in user
+* [Weblcms] Fixed new submissions block
+* [Course Groups] Fixed subscriptions in course groups
+* [Reporting] Fixed showing reports as diagrams fatal error
+* [User Reporting] Fixed fatal error
+* [Personal Calendar] Removed settings year due to the view not beeing available anymore
+* [Forum Tool] Bugfix for the default forum and forum category for a course group
+* [Course Tabs] Tabs that are fixed should not be allowed to be removed
+* [Wiki Feedback] Added removed functionality for wiki page feedback
+* [Youtube] Logout Fix
+* [Youtube] Export movies fix
+* [Youtube] Changed private to unlisted status of movies so they can be embedded
+* [Rss] Added a decent message when settings are changed to refresh the homepage
+* [Learning Path] Fix for prerequisites
+* [Portfolio] Added a button to the portfolio of favourite users
+* [Weblcms] Fixed new announcements table
+* [LearningPath] Fixed double louding of learning path displays
+* [Portfolio] Fixed javascript issue on last node
+* [Portfolio] Fixed an error when feedback could not be viewed but could be created by the user
+* [Assignment] Fixed fatal error when using importer
+* [Weblcms] Fixed the not allowed message to show in the context of the tool, still making it possible to view other categories
+* [LearningPath] Moved the navigation to the center of the screen
+* [LearningPath] Making it possible to navigate with the arrows of the keyboard
+* [LearningPath] Waiting for a learning path to set the flag to completed untill all the children have been viewed
+* [LearningPath] Fixed the link to the progress overview
+* [Assignment] Added a wizard for better usability in the add submission component, added a better confirmation message and added the option to send an email after a submission has been received
+* [Repo Viewer] Fixed the importer to take the maximum number of selectable files into account
+* [Common] Changed the way the css classes for columns are rendered, splitsing the css between header and content css
+
+[02/07/2016]
+
+* [Repository] Fixed fatal error in displayer block
+* [Calendar] Fixed the home block links
+* [Weblcms] Fixed calendar links to days
+* [Learning Path] Make sure learning paths remain full screen and headerless in all relevant contexts
+* [Learning Path] Re-added node-specific actions (assessment)
+* [Common] Various translation fixes
+* [Forum] Topic and subforum title synchronization
+* [Forum] Fixed the direct link to the last post in a topic
+* [Calendar] Fixed the untranslated week calendar header
+* [Calendar] Popup datepicker calendar layout fixed
+* [Common] PHP Mailer Bugfix
+* [Home] Removed contexts of home blocks when no blocks are found for the current user
+* [Repository] Bugfix search form in browser
+* [Learning path] Make sure the step parameter is set to the parent step if the current item can't have any children
+* [Assessment] constant typo fixed
+* [Mail] Don't add the phpmailer config to the codebase
+* [User] Make sure the profile picture in the form is not a cached version
+* [Platform Groups] Fixed translations and readded the subscribe button
+
+[12/08/2016]
+
+* [Weblcms] Fixed course request denier
+* [Core] Added Google Analytics Tracking
+* [Menu] Changing the way menu's are rendered for mobile view
+* [Core] Refactoring of notification messages

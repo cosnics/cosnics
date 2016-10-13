@@ -1,0 +1,32 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_multiple_choice_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Multiple choice question"
+TypeCategory = "Content Objects"
+SwitchToCheckboxes = "Allow multiple answers"
+SwitchToRadioButtons = "Only allow one answer"
+AddMultipleChoiceOption = "Add an option"
+Answer = "Answer"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Correct"
+SelectAtLeastOneCorrectAnswer = "Select at least one correct answer"
+SelectACorrectAnswer = "Select the correct answer"
+Weight = "Weight"
+Options = "Options"
+Title = "Question"
+Description = "Extra instructions"
+Hint = "Hint"
+RecalculateWeight = "Recalculate weight"
+RandomizeOptions = "Randomize options"
+FeedbackOptions = "Show feedback for"
+FeedbackOptionsAll = "All answers"
+FeedbackOptionsSelected = "Selected answer(s)"
+FeedbackAnswer = "Only show feedback for wrong answers"
+InstructionsText = ""
+AddHint = "Configure hint"
+ConfirmOptionDelete = "Are you certain you want to delete this answer?"
+SelectCorrectAnswer = "Select the correct answer"
+SelectCorrectAnswers = "Select the correct answer(s)"
