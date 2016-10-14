@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\preview
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Voorbeeld"
+PreviewModeWarning = "Opgelet: voorbeeldmodus"
+AvailableTemplates = "Beschikbare templates"
+ViewFull = "Standaard"
+ViewPreview = "Presentatie"
+ViewThumbnail = "Miniatuur"
+ViewDescription = "Omschrijving"
+ViewShort = "Kort"
+ViewInline = "Inline"
+ViewForm = "Formulier"
+DisplayType = "Weergave"
+DisplayPreview = "Volledige structuur"
+ResetDisplayPreview = "Herstart preview"
