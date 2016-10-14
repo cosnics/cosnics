@@ -90,7 +90,14 @@ class DoctrineExtension
         $query_builder = $this->database->get_connection()->createQueryBuilder();
 
         $group_by = new GroupBy();
+
+        $group_by->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID));
+        $group_by->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE));
+        $group_by->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME));
+        $group_by->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME));
         $group_by->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME));
+        $group_by->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL));
+        $group_by->add(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_STATUS));
 
         $query_builder = $this->process_group_by($query_builder, $group_by);
         $query_builder = $this->process_order_by($query_builder, User :: class_name(), $order_property);
