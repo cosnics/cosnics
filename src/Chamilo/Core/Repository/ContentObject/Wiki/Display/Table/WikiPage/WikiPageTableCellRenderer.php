@@ -113,7 +113,10 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
                     ToolbarItem :: DISPLAY_ICON
                 )
             );
+        }
 
+        if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object())
+        {
             if (($publication->get_additional_property('is_homepage') == 0))
             {
                 $toolbar->add_item(
