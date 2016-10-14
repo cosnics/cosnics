@@ -904,27 +904,8 @@ abstract class ContentObjectPublicationListRenderer
                     ToolbarItem :: DISPLAY_ICON
                 )
             );
-        }
 
-        if ($has_edit_right)
-        {
-            $toolbar->add_item(
-                new ToolbarItem(
-                    Translation:: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
-                    Theme:: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id
-                        )
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
-
-            if ($content_object instanceof ComplexContentObjectSupport && ($content_object->get_owner_id() ==
-                    $this->get_tool_browser()->get_user_id())
-            )
+            if ($content_object instanceof ComplexContentObjectSupport)
             {
                 if (\Chamilo\Core\Repository\Builder\Manager:: exists($content_object->package()))
                 {
@@ -958,6 +939,23 @@ abstract class ContentObjectPublicationListRenderer
                     );
                 }
             }
+        }
+
+        if ($has_edit_right)
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation:: get('EditPublicationDetails', null, Utilities :: COMMON_LIBRARIES),
+                    Theme:: getInstance()->getImagePath('Chamilo\Application\Weblcms', 'Action/EditPublication'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_UPDATE_PUBLICATION,
+                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication_id
+                        )
+                    ),
+                    ToolbarItem :: DISPLAY_ICON
+                )
+            );
 
             // quick-win: correct implementation of moving up and down.
             // Move publications up and down with the arrow buttons.
