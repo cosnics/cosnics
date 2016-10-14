@@ -78,7 +78,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $isOwner = $this->wikiPage->get_owner_id() == $this->get_component()->getUser()->getId();
 
         $toolbar = new Toolbar();
-        if ($this->get_component()->get_parent()->is_allowed_to_delete_child() || $isOwner)
+        if ($this->get_component()->get_parent()->is_allowed_to_delete_child())
         {
             $toolbar->add_item(
                 new ToolbarItem(
