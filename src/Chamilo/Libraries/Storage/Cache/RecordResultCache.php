@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Cache;
 
-use Chamilo\Libraries\Storage\Exception\NoRecordException;
+use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Exception;
 
@@ -33,7 +33,7 @@ class RecordResultCache extends RecordCache
 
         if ($parameters instanceof RecordRetrieveParameters)
         {
-            self :: set_cache($className, $parameters->hash(), $record);
+            self::set_cache($className, $parameters->hash(), $record);
         }
 
         return true;
@@ -43,12 +43,12 @@ class RecordResultCache extends RecordCache
      * Process a DataClassNoResultException for the DataClassCache, preventing continued access to the storage layer for
      * empty results
      *
-     * @param \Chamilo\Libraries\Storage\Exception\NoRecordException $exception
+     * @param \Chamilo\Libraries\Storage\Exception\DataClassNoResultException $exception
      * @return boolean
      */
-    public static function no_result(NoRecordException $exception)
+    public static function no_result(DataClassNoResultException $exception)
     {
-        self :: set_cache($exception->get_parameters()->hash(), false);
+        self::set_cache($exception->get_class_name(), $exception->get_parameters()->hash(), false);
         return true;
     }
 }

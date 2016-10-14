@@ -1,18 +1,12 @@
 <?php
 namespace Chamilo\Application\Weblcms\Component;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseRequest;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Configuration\Configuration;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Mail\Mailer\MailerFactory;
-use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
-use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 
 /**
  * Class CourseUserSubscriptionRequestGranterComponent
@@ -25,23 +19,25 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
      */
     public function run()
     {
-        if (!$this->getUser()->is_platform_admin())
+        if (! $this->getUser()->is_platform_admin())
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
 
         $requestIds = $this->getRequest()->get(Manager::PARAM_REQUEST);
 
-        if (empty($requestIds)) {
+        if (empty($requestIds))
+        {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
+                    Translation::get(
                         'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('Request')),
-                        Utilities :: COMMON_LIBRARIES)));
+                        array('OBJECT' => Translation::get('Request')),
+                        Utilities::COMMON_LIBRARIES)));
         }
 
-        if (!is_array($requestIds)) {
+        if (! is_array($requestIds))
+        {
             $requestIds = array($requestIds);
         }
 
@@ -50,13 +46,16 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
         foreach ($requestIds as $requestId)
         {
             /**
+             *
              * @var CourseRequest $request
              */
             $request = DataManager::retrieve_by_id(CourseRequest::class_name(), (int) $requestId);
-            if (!CourseDataManager::subscribe_user_to_course($request->get_course_id(), '5', $request->get_user_id()))
+            if (! CourseDataManager::subscribe_user_to_course($request->get_course_id(), '5', $request->get_user_id()))
             {
                 $failures ++;
-            } else {
+            }
+            else
+            {
                 $request->set_decision(CourseRequest::ALLOWED_DECISION);
                 $request->set_decision_date(time());
 
@@ -65,27 +64,22 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
                     $failures ++;
                 }
             }
-
         }
 
         if ($failures)
         {
             $message = 'ObjectsNotGranted';
-            $parameter = array('OBJECTS' => Translation :: get('Requests'));
+            $parameter = array('OBJECTS' => Translation::get('Requests'));
         }
-        else {
+        else
+        {
             $message = 'ObjectsGranted';
-            $parameter = array('OBJECTS' => Translation :: get('Requests'));
+            $parameter = array('OBJECTS' => Translation::get('Requests'));
         }
 
         $this->redirect(
-            Translation::getInstance()->getTranslation(
-                $message,
-                $parameter,
-                Utilities :: COMMON_LIBRARIES),
-                ($failures ? true : false),
-                array(self :: PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER)
-        );
+            Translation::getInstance()->getTranslation($message, $parameter, Utilities::COMMON_LIBRARIES),
+            ($failures ? true : false),
+            array(self::PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER));
     }
-
 }

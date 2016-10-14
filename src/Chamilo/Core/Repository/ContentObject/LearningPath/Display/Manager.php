@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath;
-use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -51,9 +50,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const SORT_DOWN = 'Down';
 
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+    const DEFAULT_ACTION = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
     /**
+     *
      * @var int
      */
     protected $current_step;
@@ -91,7 +91,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function is_current_step_set()
     {
-        return ! is_null(Request :: get(self :: PARAM_STEP));
+        return ! is_null(Request::get(self::PARAM_STEP));
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     private function get_current_step_from_request()
     {
-        return Request :: get(self :: PARAM_STEP);
+        return Request::get(self::PARAM_STEP);
     }
 
     /**
@@ -134,6 +134,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
+     *
      * @return ComplexContentObjectPath
      */
     public function get_complex_content_object_path()
@@ -160,7 +161,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN);
+        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN);
     }
 
     /**
@@ -169,14 +170,10 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function validateCurrentNode()
     {
         if ($this->get_current_node()->get_content_object()->getId() !=
-            $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID)
-        )
+             $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID))
         {
             throw new UserException(
-                Translation::getInstance()->getTranslation(
-                    'StepNoLongerValid', null, Manager::context()
-                )
-            );
+                Translation::getInstance()->getTranslation('StepNoLongerValid', null, Manager::context()));
         }
     }
 
@@ -188,9 +185,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $contentObjectId = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
         $nodes = $this->get_complex_content_object_path()->get_nodes();
 
-        foreach($nodes as $node)
+        foreach ($nodes as $node)
         {
-            if($node->get_content_object()->getId() == $contentObjectId)
+            if ($node->get_content_object()->getId() == $contentObjectId)
             {
                 return $node;
             }
