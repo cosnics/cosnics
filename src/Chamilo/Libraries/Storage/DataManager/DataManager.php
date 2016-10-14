@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Exception\NoRecordException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -270,8 +269,7 @@ class DataManager
     private static function determineCompositeDataClassType($className, $parameters)
     {
         $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
-                array(new PropertyConditionVariable($className, CompositeDataClass::PROPERTY_TYPE))),
+            new DataClassProperties(array(new PropertyConditionVariable($className, CompositeDataClass::PROPERTY_TYPE))),
             $parameters->get_condition(),
             $parameters->get_order_by(),
             $parameters->get_joins());
@@ -306,7 +304,7 @@ class DataManager
                 {
                     $record = RecordResultCache::add($class, static::__record($class, $parameters), $parameters);
                 }
-                catch (NoRecordException $exception)
+                catch (DataClassNoResultException $exception)
                 {
                     RecordResultCache::no_result($exception);
                 }
@@ -319,7 +317,7 @@ class DataManager
             {
                 return static::__record($class, $parameters);
             }
-            catch (NoRecordException $exception)
+            catch (DataClassNoResultException $exception)
             {
                 return false;
             }

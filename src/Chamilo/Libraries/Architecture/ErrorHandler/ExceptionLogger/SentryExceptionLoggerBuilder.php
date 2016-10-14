@@ -1,19 +1,17 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\File\Path;
 
 /*
  * Builds the SentryExceptionLogger class
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-
 class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
+
     /**
+     *
      * @var Configuration
      */
     protected $configuration;
@@ -37,16 +35,13 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
      */
     public function createExceptionLogger()
     {
-        $clientDSNKey = $this->configuration->get_setting(
-            array('Chamilo\Configuration', 'sentry_error_logger', 'DSN')
-        );
+        $clientDSNKey = $this->configuration->get_setting(array('Chamilo\Configuration', 'sentry_error_logger', 'DSN'));
 
         if (empty($clientDSNKey))
         {
             throw new \Exception(
                 'The DSN key should be configured when using the sentry exception logger. ' .
-                'The configuration should be put in exception_logger_parameters["sentry"]["DSN"]'
-            );
+                     'The configuration should be put in exception_logger_parameters["sentry"]["DSN"]');
         }
 
         return new SentryExceptionLogger($clientDSNKey);
