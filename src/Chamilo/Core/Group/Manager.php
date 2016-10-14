@@ -84,20 +84,22 @@ abstract class Manager extends Application
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent:: __construct($applicationConfiguration);
         $this->create_url = $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_GROUP));
     }
 
     public function count_groups($condition = null)
     {
         $parameters = new DataClassCountParameters($condition);
-        return DataManager :: count(Group :: class_name(), $parameters);
+
+        return DataManager:: count(Group:: class_name(), $parameters);
     }
 
     public function count_group_rel_users($condition = null)
     {
         $parameters = new DataClassCountParameters($condition);
-        return DataManager :: count(GroupRelUser :: class_name(), $parameters);
+
+        return DataManager:: count(GroupRelUser:: class_name(), $parameters);
     }
 
     public function get_search_condition()
@@ -112,21 +114,24 @@ abstract class Manager extends Application
 
     private function get_search_form()
     {
-        if (! isset($this->search_form))
+        if (!isset($this->search_form))
         {
             $this->search_form = new GroupSearchForm($this, $this->get_url());
         }
+
         return $this->search_form;
     }
 
     private function get_user_search_form()
     {
-        if (! isset($this->user_search_form))
+        if (!isset($this->user_search_form))
         {
             $this->user_search_form = new UserSearchForm(
                 $this,
-                $this->get_url(array(self :: PARAM_GROUP_ID => Request :: get(self :: PARAM_GROUP_ID))));
+                $this->get_url(array(self :: PARAM_GROUP_ID => Request:: get(self :: PARAM_GROUP_ID)))
+            );
         }
+
         return $this->user_search_form;
     }
 
@@ -144,11 +149,12 @@ abstract class Manager extends Application
      * Gets the parameter list
      *
      * @param boolean $include_search Include the search parameters in the returned list?
+     *
      * @return array The list of parameters.
      */
     public function get_parameters($include_search = false, $include_user_search = false)
     {
-        $parms = parent :: get_parameters();
+        $parms = parent:: get_parameters();
 
         if ($include_search && isset($this->search_parameters))
         {
@@ -165,73 +171,86 @@ abstract class Manager extends Application
 
     public function retrieve_groups($condition = null, $offset = null, $count = null, $order_property = null)
     {
-        return DataManager :: retrieves(
-            Group :: class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+        return DataManager:: retrieves(
+            Group:: class_name(),
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+        );
     }
 
-    public static function retrieve_group_rel_users($condition = null, $offset = null, $count = null, $order_property = null)
+    public static function retrieve_group_rel_users(
+        $condition = null, $offset = null, $count = null, $order_property = null
+    )
     {
-        return DataManager :: retrieves(
-            GroupRelUser :: class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
+        return DataManager:: retrieves(
+            GroupRelUser:: class_name(),
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+        );
     }
 
     public static function retrieve_group_rel_user($user_id, $group_id)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
+            new PropertyConditionVariable(GroupRelUser:: class_name(), GroupRelUser :: PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id)
+        );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
-            new StaticConditionVariable($group_id));
+            new PropertyConditionVariable(GroupRelUser:: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
+            new StaticConditionVariable($group_id)
+        );
         $condition = new AndCondition($conditions);
 
-        return DataManager :: retrieve(GroupRelUser :: class_name(), new DataClassRetrieveParameters($condition));
+        return DataManager:: retrieve(GroupRelUser:: class_name(), new DataClassRetrieveParameters($condition));
     }
 
     public function retrieve_group($id)
     {
-        return DataManager :: retrieve_by_id(Group :: class_name(), $id);
+        return DataManager:: retrieve_by_id(Group:: class_name(), $id);
     }
 
     public function get_group_editing_url($group)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_EDIT_GROUP, self :: PARAM_GROUP_ID => $group->get_id()));
+            array(self :: PARAM_ACTION => self :: ACTION_EDIT_GROUP, self :: PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
     public function get_create_group_url($parent_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_CREATE_GROUP, self :: PARAM_GROUP_ID => $parent_id));
+            array(self :: PARAM_ACTION => self :: ACTION_CREATE_GROUP, self :: PARAM_GROUP_ID => $parent_id)
+        );
     }
 
     public function get_group_emptying_url($group)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_TRUNCATE_GROUP, self :: PARAM_GROUP_ID => $group->get_id()));
+            array(self :: PARAM_ACTION => self :: ACTION_TRUNCATE_GROUP, self :: PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
     public function get_group_viewing_url($group)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_VIEW_GROUP, self :: PARAM_GROUP_ID => $group->get_id()));
+            array(self :: PARAM_ACTION => self :: ACTION_VIEW_GROUP, self :: PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
     public function get_group_metadata_url($group)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_MANAGE_METADATA, self :: PARAM_GROUP_ID => $group->get_id()));
+            array(self :: PARAM_ACTION => self :: ACTION_MANAGE_METADATA, self :: PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
-    public function get_group_rel_user_unsubscribing_url($groupreluser)
+    public function get_group_rel_user_unsubscribing_url(GroupRelUser $groupreluser)
     {
         return $this->get_url(
             array(
                 self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_USER_FROM_GROUP,
-                self :: PARAM_GROUP_REL_USER_ID => $groupreluser->get_group_id() . '|' . $groupreluser->get_user_id()));
+                self :: PARAM_GROUP_REL_USER_ID => $groupreluser->getId()
+            )
+        );
     }
 
     public function get_group_rel_user_subscribing_url($group, $user)
@@ -240,7 +259,9 @@ abstract class Manager extends Application
             array(
                 self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_TO_GROUP,
                 self :: PARAM_GROUP_ID => $group->get_id(),
-                self :: PARAM_USER_ID => $user->get_id()));
+                self :: PARAM_USER_ID => $user->get_id()
+            )
+        );
     }
 
     public function get_group_suscribe_user_browser_url($group)
@@ -248,13 +269,16 @@ abstract class Manager extends Application
         return $this->get_url(
             array(
                 self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER_BROWSER,
-                self :: PARAM_GROUP_ID => $group->get_id()));
+                self :: PARAM_GROUP_ID => $group->get_id()
+            )
+        );
     }
 
     public function get_group_delete_url($group)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_DELETE_GROUP, self :: PARAM_GROUP_ID => $group->get_id()));
+            array(self :: PARAM_ACTION => self :: ACTION_DELETE_GROUP, self :: PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
     public function get_import_url()
@@ -270,7 +294,8 @@ abstract class Manager extends Application
     public function get_move_group_url($group)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_MOVE_GROUP, self :: PARAM_GROUP_ID => $group->get_id()));
+            array(self :: PARAM_ACTION => self :: ACTION_MOVE_GROUP, self :: PARAM_GROUP_ID => $group->get_id())
+        );
     }
 
     /**
@@ -283,18 +308,18 @@ abstract class Manager extends Application
      */
     protected function get_selected_group()
     {
-        if (! isset($this->selected_group))
+        if (!isset($this->selected_group))
         {
-            $group_id = Request :: get(self :: PARAM_GROUP_ID);
-            if (! $group_id)
+            $group_id = Request:: get(self :: PARAM_GROUP_ID);
+            if (!$group_id)
             {
-                throw new NoObjectSelectedException(Translation :: get('Group'));
+                throw new NoObjectSelectedException(Translation:: get('Group'));
             }
 
-            $group = DataManager :: retrieve_by_id(Group :: class_name(), $group_id);
-            if (! $group)
+            $group = DataManager:: retrieve_by_id(Group:: class_name(), $group_id);
+            if (!$group)
             {
-                throw new ObjectNotExistException(Translation :: get('Group', $group_id));
+                throw new ObjectNotExistException(Translation:: get('Group', $group_id));
             }
 
             $this->selected_group = $group;
@@ -310,6 +335,6 @@ abstract class Manager extends Application
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail:: get_instance());
     }
 }

@@ -77,9 +77,8 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
 
     public function get_user_subscribe_html()
     {
-        $this->set_parameter(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolbarRenderer->getSearchForm()->getQuery());
-        
         $table = new SubscribeUserTable($this);
+        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         
         $html = array();
         $html[] = $table->as_html();
