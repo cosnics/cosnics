@@ -40,8 +40,8 @@ class DeleterComponent extends Manager
                     ComplexContentObjectItem :: class_name(),
                     $complex_content_object_item_id);
 
-                if ($complex_content_object_item->get_user_id() == $this->get_user_id())
-                {
+//                if ($complex_content_object_item->get_user_id() == $this->get_user_id())
+//                {
                     // TODO: check if deletion is allowed
                     // if
                     // ($this->get_parent()->complex_content_object_item_deletion_allowed($complex_content_object_item))
@@ -51,11 +51,11 @@ class DeleterComponent extends Manager
                             $failures ++;
                         }
                     }
-                }
-                else
-                {
-                    $failures ++;
-                }
+//                }
+//                else
+//                {
+//                    $failures ++;
+//                }
             }
 
             if ($failures)
