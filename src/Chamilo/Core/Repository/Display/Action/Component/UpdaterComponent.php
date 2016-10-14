@@ -5,7 +5,9 @@ use Chamilo\Core\Repository\Display\Action\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Translation;
@@ -25,12 +27,22 @@ class UpdaterComponent extends Manager
 
     public function run()
     {
-        if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object())
+        $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
+        $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
+            ContentObject :: class_name(),
+            $selected_complex_content_object_item->get_ref());
+
+        if(!$content_object)
         {
-            $selected_complex_content_object_item = $this->get_selected_complex_content_object_item();
-            $content_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
-                $selected_complex_content_object_item->get_ref());
+            throw new NoObjectSelectedException(Translation::getInstance()->getTranslation(
+                'ContentObject', null, 'Chamilo\Core\Repository'
+            ));
+        }
+
+        $isOwner = $content_object->get_owner_id() == $this->getUser()->getId();
+
+        if ($this->get_parent()->get_parent()->is_allowed_to_edit_content_object() || $isOwner)
+        {
             $form = \Chamilo\Core\Repository\Form\ContentObjectForm :: factory(
                 \Chamilo\Core\Repository\Form\ContentObjectForm :: TYPE_EDIT, 
                 new PersonalWorkspace($this->get_user()), 

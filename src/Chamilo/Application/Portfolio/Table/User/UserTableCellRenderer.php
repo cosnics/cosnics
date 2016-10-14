@@ -141,6 +141,11 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
             new DataClassRetrieveParameters($condition)
         );
 
+        if(!$user_publication)
+        {
+            return true;
+        }
+        
         $node_id = md5(serialize(array($user_publication->get_content_object_id())));
 
         $location = new RightsLocation();
