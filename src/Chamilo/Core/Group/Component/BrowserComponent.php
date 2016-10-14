@@ -97,6 +97,7 @@ class BrowserComponent extends Manager implements TableSupport
         // if ($subgroup_count > 0)
         // {
         $table = new GroupTable($this);
+        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_SUBGROUPS,
@@ -107,6 +108,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $table->as_html()));
 
         $table = new GroupRelUserTable($this);
+        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         $tabs->add_tab(
             new DynamicContentTab(
                 self :: TAB_USERS,
@@ -419,6 +421,6 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_additional_parameters()
     {
-        return array(self::PARAM_GROUP_ID, ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY);
+        return array(self::PARAM_GROUP_ID);
     }
 }
