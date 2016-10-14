@@ -30,6 +30,7 @@ class BrowserComponent extends TabComponent implements TableSupport
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $table = new UserTable($this);
+        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         
         $html = array();
         
