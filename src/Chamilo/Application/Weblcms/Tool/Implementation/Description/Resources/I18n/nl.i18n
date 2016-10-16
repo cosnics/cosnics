@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\description
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Cursusbeschrijving"
+TypeNameSingle = "Cursusbeschrijving"
+BrowserComponent = "Doorblader cursusbeschrijvingen"
+ViewerComponent = "Bekijk cursusbeschrijving"
+EvaluateComponent = "Evalueer cursusbeschrijving"
+IntroductionPublisherComponent = "Publiceer cursusbeschrijving"
+MoverComponent = "Verplaats cursusbeschrijving"
+PublisherComponent = "Publiceer cursusbeschrijving"
+UpdaterComponent = "Werk cursusbeschrijving bij"
