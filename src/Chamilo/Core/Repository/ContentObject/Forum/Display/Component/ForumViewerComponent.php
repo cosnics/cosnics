@@ -33,6 +33,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 use HTML_Table;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
+use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 
 /**
  *
@@ -85,7 +87,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         $html[] = $this->render_header();
 
-        if (!$this->isLocked())
+        $html[] = $this->renderDescription();
+
+        if (! $this->isLocked())
         {
             $html[] = $this->getButtonToolbarRenderer()->render();
         }
@@ -97,29 +101,48 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         return implode(PHP_EOL, $html);
     }
 
+    public function renderDescription()
+    {
+        $forum = $this->getForum();
+        $html = array();
+
+        if ($forum->has_description())
+        {
+            $rendition_implementation = ContentObjectRenditionImplementation::factory(
+                $forum,
+                ContentObjectRendition::FORMAT_HTML,
+                ContentObjectRendition::VIEW_DESCRIPTION,
+                $this);
+
+            $html[] = '<div class="panel panel-default">';
+            $html[] = '<div class="panel-body">';
+            $html[] = $rendition_implementation->render();
+
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
     public function setBreadcrumbs()
     {
-        $trail = BreadcrumbTrail:: get_instance();
+        $trail = BreadcrumbTrail::get_instance();
 
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                        self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null
-                    )
-                ),
-                $this->get_root_content_object()->get_title()
-            )
-        );
+                        self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
+                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)),
+                $this->get_root_content_object()->get_title()));
 
         if ($this->get_complex_content_object_item())
         {
             $forums_with_key_cloi = array();
             $forums_with_key_cloi = $this->retrieve_children_from_root_to_cloi(
                 $this->get_root_content_object()->get_id(),
-                $this->get_complex_content_object_item()->get_id()
-            );
+                $this->get_complex_content_object_item()->get_id());
 
             if ($forums_with_key_cloi)
             {
@@ -130,13 +153,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         new Breadcrumb(
                             $this->get_url(
                                 array(
-                                    self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key
-                                )
-                            ),
-                            $value->get_title()
-                        )
-                    );
+                                    self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
+                                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)),
+                            $value->get_title()));
                 }
             }
             else
@@ -152,7 +171,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function isLocked()
     {
-        if (!isset($this->isLocked))
+        if (! isset($this->isLocked))
         {
             $this->isLocked = $this->getForum()->is_locked();
         }
@@ -166,7 +185,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function getTopics()
     {
-        if (!isset($this->topics))
+        if (! isset($this->topics))
         {
             $this->prepareTopicsAndSubforums();
         }
@@ -180,7 +199,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function getSubforums()
     {
-        if (!isset($this->subforums))
+        if (! isset($this->subforums))
         {
             $this->prepareTopicsAndSubforums();
         }
@@ -193,41 +212,34 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $order_property = array();
         $order_property[] = new OrderBy(
             new PropertyConditionVariable(
-                ComplexContentObjectItem:: class_name(),
-                ComplexContentObjectItem :: PROPERTY_ADD_DATE
-            )
-        );
+                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::PROPERTY_ADD_DATE));
 
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem:: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_PARENT
-                ),
-                new StaticConditionVariable($this->getForum()->get_id())
-            ),
+                    ComplexContentObjectItem::class_name(),
+                    ComplexContentObjectItem::PROPERTY_PARENT),
+                new StaticConditionVariable($this->getForum()->get_id())),
             null,
             null,
-            $order_property
-        );
+            $order_property);
 
-        $children = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_complex_content_object_items(
-            ComplexContentObjectItem:: class_name(),
-            $parameters
-        );
+        $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(),
+            $parameters);
 
         $this->topics = array();
         $this->subforums = array();
 
         while ($child = $children->next_result())
         {
-            $contentObject = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                ContentObject:: class_name(),
-                $child->get_ref()
-            );
+            $contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(),
+                $child->get_ref());
             $child->set_ref($contentObject);
 
-            if ($contentObject->get_type() == ForumTopic:: class_name())
+            if ($contentObject->get_type() == ForumTopic::class_name())
             {
                 $this->topics[] = $child;
             }
@@ -283,22 +295,21 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         $header->setHeaderContents(0, 0, '');
         $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
-        $header->setHeaderContents(0, 1, '<h3>' . Translation:: get('Topics') . '</h3>');
+        $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Topics') . '</h3>');
 
-        $bootstrapGlyph = new FontAwesomeGlyph('user', array(), Translation:: get("Author", null, Forum:: package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('user', array(), Translation::get("Author", null, Forum::package()));
         $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 2, array('class' => 'cell-stat-2x text-center'));
 
-        $bootstrapGlyph =
-            new FontAwesomeGlyph('comment', array(), Translation:: get("Replies", null, Forum:: package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', array(), Translation::get("Replies", null, Forum::package()));
         $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center'));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('eye', array(), Translation:: get("Views", null, Forum:: package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('eye', array(), Translation::get("Views", null, Forum::package()));
         $header->setHeaderContents(0, 4, $bootstrapGlyph->render());
 
         $header->setCellAttributes(0, 4, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
-        $header->setHeaderContents(0, 5, Translation:: get("LastPostForum", null, Forum:: package()));
+        $header->setHeaderContents(0, 5, Translation::get("LastPostForum", null, Forum::package()));
         $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
         $header->setHeaderContents(0, 6, '');
         $header->setCellAttributes(0, 6, array('class' => 'cell-stat-2x'));
@@ -310,12 +321,10 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             foreach ($this->getTopics() as $topic)
             {
                 $title = '<h4><a href="' . $this->get_url(
-                        array(
-                            self :: PARAM_ACTION => self :: ACTION_VIEW_TOPIC,
-                            self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id()
-                        )
-                    ) . '">' .
-                    $topic->get_ref()->get_title() . '</a></h4>';
+                    array(
+                        self::PARAM_ACTION => self::ACTION_VIEW_TOPIC,
+                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id())) . '">' .
+                     $topic->get_ref()->get_title() . '</a></h4>';
 
                 $count = $topic->get_ref()->get_total_posts();
 
@@ -339,7 +348,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $table->setCellContents($row, 1, Translation:: get('NoTopics'));
+            $table->setCellContents($row, 1, Translation::get('NoTopics'));
         }
 
         return $table->toHtml();
@@ -361,22 +370,17 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
             $header->setHeaderContents(0, 0, '');
             $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
-            $header->setHeaderContents(0, 1, '<h3>' . Translation:: get('Subforums') . '</h3>');
+            $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Subforums') . '</h3>');
 
-            $bootstrapGlyph = new FontAwesomeGlyph(
-                'comments',
-                array(),
-                Translation:: get("Topics", null, Forum:: package())
-            );
+            $bootstrapGlyph = new FontAwesomeGlyph('comments', array(), Translation::get("Topics", null, Forum::package()));
             $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
             $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-            $bootstrapGlyph =
-                new FontAwesomeGlyph('comment', array(), Translation:: get("Posts", null, Forum:: package()));
+            $bootstrapGlyph = new FontAwesomeGlyph('comment', array(), Translation::get("Posts", null, Forum::package()));
             $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
             $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-            $header->setHeaderContents(0, 4, Translation:: get("LastPostForum", null, Forum:: package()));
+            $header->setHeaderContents(0, 4, Translation::get("LastPostForum", null, Forum::package()));
             $header->setCellAttributes(0, 4, array('class' => 'cell-stat-2x hidden-xs hidden-sm'));
             $header->setHeaderContents(0, 5, '');
             $header->setCellAttributes(0, 5, array('class' => 'cell-stat-2x'));
@@ -415,7 +419,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $isLocked = $this->isLocked() || $subforum->get_ref()->get_locked();
 
         $subforumGlyphType = $isLocked ? 'lock' : 'file';
-        $subforumGlyph = new BootstrapGlyph($subforumGlyphType, array('text-muted'), Translation:: get('NoNewPosts'));
+        $subforumGlyph = new BootstrapGlyph($subforumGlyphType, array('text-muted'), Translation::get('NoNewPosts'));
 
         return $subforumGlyph->render();
     }
@@ -428,21 +432,18 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderSubforumTitle(ComplexForum $subforum)
     {
-        $isNotAllowedToView = ($subforum->get_ref()->is_locked() && (!$this->get_user()->is_platform_admin() ||
-                !($this->get_user_id() == $subforum->get_ref()->get_owner_id()) || !$this->isForumManager(
-                    $this->get_user()
-                )));
+        $isNotAllowedToView = ($subforum->get_ref()->is_locked() && (! $this->get_user()->is_platform_admin() ||
+             ! ($this->get_user_id() == $subforum->get_ref()->get_owner_id()) || ! $this->isForumManager(
+                $this->get_user())));
 
         $title = $subforum->get_ref()->get_title();
 
-        if (!$isNotAllowedToView)
+        if (! $isNotAllowedToView)
         {
             $viewUrl = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM,
-                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $subforum->get_id()
-                )
-            );
+                    self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
+                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $subforum->get_id()));
 
             $titleParts = array();
 
@@ -451,9 +452,9 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $titleParts[] = '</a>';
 
             $description = $subforum->get_ref()->get_description();
-            $descriptionString = StringUtilities:: getInstance()->createString(strip_tags($description));
+            $descriptionString = StringUtilities::getInstance()->createString(strip_tags($description));
 
-            if (!$descriptionString->isBlank())
+            if (! $descriptionString->isBlank())
             {
                 $titleParts[] = '<br />';
                 $titleParts[] = '<small>';
@@ -477,22 +478,19 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderSubforumLastPost(ComplexForum $subforum)
     {
-        $lastPost = DataManager:: retrieve_by_id(ForumPost:: class_name(), $subforum->get_ref()->get_last_post());
+        $lastPost = DataManager::retrieve_by_id(ForumPost::class_name(), $subforum->get_ref()->get_last_post());
 
-        $isLocked = ($subforum->get_ref()->is_locked() &&
-            (!$this->isForumManager($this->get_user()) || !$this->get_user()->is_platform_admin() ||
-                !($this->get_user_id() == $subforum->get_ref()->get_owner_id())));
+        $isLocked = ($subforum->get_ref()->is_locked() && (! $this->isForumManager($this->get_user()) ||
+             ! $this->get_user()->is_platform_admin() || ! ($this->get_user_id() == $subforum->get_ref()->get_owner_id())));
 
         if ($lastPost instanceof ForumPost)
         {
             $viewUrl = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_TOPIC,
+                    self::PARAM_ACTION => self::ACTION_VIEW_TOPIC,
                     'pid' => $subforum->get_ref(),
-                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $subforum->get_ref()->get_last_topic_changed_cloi(),
-                    self :: PARAM_LAST_POST => $lastPost->get_id()
-                )
-            );
+                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $subforum->get_ref()->get_last_topic_changed_cloi(),
+                    self::PARAM_LAST_POST => $lastPost->get_id()));
         }
         else
         {
@@ -500,7 +498,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $viewUrl = null;
         }
 
-        return $this->renderLastPost($lastPost, !$isLocked, $viewUrl);
+        return $this->renderLastPost($lastPost, ! $isLocked, $viewUrl);
     }
 
     /**
@@ -515,12 +513,11 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     {
         if ($lastPost instanceof ForumPost)
         {
-            $html[] = DatetimeUtilities:: format_locale_date(null, $lastPost->get_creation_date());
+            $html[] = DatetimeUtilities::format_locale_date(null, $lastPost->get_creation_date());
 
-            $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User:: class_name(),
-                $lastPost->get_user_id()
-            );
+            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                $lastPost->get_user_id());
 
             if ($user instanceof User)
             {
@@ -533,8 +530,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $fileBootstrapGlyph = new BootstrapGlyph(
                     'file',
                     array(),
-                    Translation:: get('ViewLastPost', null, Forum:: package())
-                );
+                    Translation::get('ViewLastPost', null, Forum::package()));
 
                 $html[] = '&nbsp;';
                 $html[] = '<a href="' . $viewUrl . '">';
@@ -560,25 +556,24 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderTopicGlyph(ComplexForumTopic $topic)
     {
-        $forumGlyph = new BootstrapGlyph('file', array('text-muted'), Translation:: get('NoNewPosts'));
+        $forumGlyph = new BootstrapGlyph('file', array('text-muted'), Translation::get('NoNewPosts'));
 
         switch ($topic->get_forum_type())
         {
             case 1 :
-                $forumGlyph = new BootstrapGlyph('star', array('text-danger'), Translation:: get('Sticky'));
+                $forumGlyph = new BootstrapGlyph('star', array('text-danger'), Translation::get('Sticky'));
                 break;
             case 2 :
                 $forumGlyph = new BootstrapGlyph(
                     'exclamation-sign',
                     array('text-danger'),
-                    Translation:: get('Important')
-                );
+                    Translation::get('Important'));
                 break;
         }
 
         if ($this->isLocked() || $topic->get_ref()->get_locked())
         {
-            $forumGlyph = new BootstrapGlyph('lock', array(), Translation:: get('Locked'));
+            $forumGlyph = new BootstrapGlyph('lock', array(), Translation::get('Locked'));
         }
 
         return $forumGlyph->render();
@@ -592,15 +587,12 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderAuthor(ComplexForumTopic $topic)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
-            User:: class_name(),
-            (int) $topic->get_user_id()
-        );
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), (int) $topic->get_user_id());
         $name = "";
 
-        if (!$user)
+        if (! $user)
         {
-            return Translation:: get('UserNotFound');
+            return Translation::get('UserNotFound');
         }
         else
         {
@@ -616,21 +608,19 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function renderTopicLastPost(ComplexForumTopic $topic)
     {
-        $lastPost = DataManager:: retrieve_by_id(ForumPost:: class_name(), $topic->get_ref()->get_last_post());
+        $lastPost = DataManager::retrieve_by_id(ForumPost::class_name(), $topic->get_ref()->get_last_post());
 
-        $isLocked = $topic->get_ref()->is_locked() && (!$this->get_user()->is_platform_admin() ||
-                !($this->get_user_id() == $topic->get_ref()->get_owner_id()));
+        $isLocked = $topic->get_ref()->is_locked() && (! $this->get_user()->is_platform_admin() ||
+             ! ($this->get_user_id() == $topic->get_ref()->get_owner_id()));
 
         if ($lastPost instanceof ForumPost)
         {
             $viewUrl = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_VIEW_TOPIC,
+                    self::PARAM_ACTION => self::ACTION_VIEW_TOPIC,
                     'pid' => $this->pid,
-                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id(),
-                    self :: PARAM_LAST_POST => $lastPost->get_id()
-                )
-            );
+                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $topic->get_id(),
+                    self::PARAM_LAST_POST => $lastPost->get_id()));
         }
         else
         {
@@ -638,7 +628,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $viewUrl = null;
         }
 
-        return $this->renderLastPost($lastPost, !$isLocked, $viewUrl);
+        return $this->renderLastPost($lastPost, ! $isLocked, $viewUrl);
     }
 
     /**
@@ -653,175 +643,151 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         $parameters = array();
 
-        $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-        $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $topic->get_id();
+        $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $topic->get_id();
 
-        if (!$this->isLocked())
+        if (! $this->isLocked())
         {
-            if ($this->get_user()->get_id() == $topic->get_user_id() || $this->get_user()->is_platform_admin() ||
-                $this->isForumManager(
-                    $this->get_user()
-                )
-            )
+            if ($this->get_user()->get_id() == $topic->get_user_id() || $this->get_user()->is_platform_admin() || $this->isForumManager(
+                $this->get_user()))
             {
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_DELETE_TOPIC;
+                $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_TOPIC;
 
-                if (!$this->get_complex_content_object_item())
+                if (! $this->get_complex_content_object_item())
                 {
                     $parent_cloi = null;
                 }
                 else
                 {
-                    $parent_cloi = Request:: get('cloi');
+                    $parent_cloi = Request::get('cloi');
                 }
 
-                $parameters[self :: PARAM_CURRENT_SESSION_PARENT_CLOI] = $parent_cloi;
+                $parameters[self::PARAM_CURRENT_SESSION_PARENT_CLOI] = $parent_cloi;
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation:: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
                         new BootstrapGlyph('remove'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         true,
-                        'btn-link'
-                    )
-                );
+                        'btn-link'));
 
-                $parameters[self :: PARAM_CURRENT_SESSION_PARENT_CLOI] = null;
+                $parameters[self::PARAM_CURRENT_SESSION_PARENT_CLOI] = null;
 
                 if ($topic->get_forum_type() == 1 && $this->get_user()->is_platform_admin())
                 {
-                    $parameters[self :: PARAM_ACTION] = self :: ACTION_MAKE_STICKY;
+                    $parameters[self::PARAM_ACTION] = self::ACTION_MAKE_STICKY;
 
                     $buttonToolBar->addItem(
                         new Button(
-                            Translation:: get('UnSticky'),
+                            Translation::get('UnSticky'),
                             new FontAwesomeGlyph('star'),
                             $this->get_url($parameters),
-                            Button :: DISPLAY_ICON,
+                            Button::DISPLAY_ICON,
                             false,
-                            'btn-link'
-                        )
-                    );
+                            'btn-link'));
                 }
                 else
                 {
-                    if ($topic->get_forum_type() == 2 &&
-                        ($this->get_user()->is_platform_admin() || $this->isForumManager(
-                                $this->get_user()
-                            ))
-                    )
+                    if ($topic->get_forum_type() == 2 && ($this->get_user()->is_platform_admin() || $this->isForumManager(
+                        $this->get_user())))
                     {
-                        $parameters[self :: PARAM_ACTION] = self :: ACTION_MAKE_IMPORTANT;
+                        $parameters[self::PARAM_ACTION] = self::ACTION_MAKE_IMPORTANT;
 
                         $buttonToolBar->addItem(
                             new Button(
-                                Translation:: get('UnImportant'),
+                                Translation::get('UnImportant'),
                                 new FontAwesomeGlyph('exclamation-circle'),
                                 $this->get_url($parameters),
-                                Button :: DISPLAY_ICON,
+                                Button::DISPLAY_ICON,
                                 false,
-                                'btn-link'
-                            )
-                        );
+                                'btn-link'));
                     }
                     else
                     {
                         if ($this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user()))
                         {
-                            $parameters[self :: PARAM_ACTION] = self :: ACTION_MAKE_STICKY;
+                            $parameters[self::PARAM_ACTION] = self::ACTION_MAKE_STICKY;
                             $buttonToolBar->addItem(
                                 new Button(
-                                    Translation:: get('MakeSticky'),
+                                    Translation::get('MakeSticky'),
                                     new FontAwesomeGlyph('star-o'),
                                     $this->get_url($parameters),
-                                    Button :: DISPLAY_ICON,
+                                    Button::DISPLAY_ICON,
                                     false,
-                                    'btn-link'
-                                )
-                            );
+                                    'btn-link'));
 
-                            $parameters[self :: PARAM_ACTION] = self :: ACTION_MAKE_IMPORTANT;
+                            $parameters[self::PARAM_ACTION] = self::ACTION_MAKE_IMPORTANT;
                             $buttonToolBar->addItem(
                                 new Button(
-                                    Translation:: get('MakeImportant'),
+                                    Translation::get('MakeImportant'),
                                     new FontAwesomeGlyph('circle-o'),
                                     $this->get_url($parameters),
-                                    Button :: DISPLAY_ICON,
+                                    Button::DISPLAY_ICON,
                                     false,
-                                    'btn-link'
-                                )
-                            );
+                                    'btn-link'));
                         }
                     }
                 }
                 if ($this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user()))
                 {
-                    if (!$this->isLocked())
+                    if (! $this->isLocked())
                     {
                         if ($topic->get_ref()->get_locked())
                         {
-                            $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
+                            $parameters[self::PARAM_ACTION] = self::ACTION_CHANGE_LOCK;
                             $buttonToolBar->addItem(
                                 new Button(
-                                    Translation:: get('Unlock'),
+                                    Translation::get('Unlock'),
                                     new FontAwesomeGlyph('unlock'),
                                     $this->get_url($parameters),
-                                    Button :: DISPLAY_ICON,
+                                    Button::DISPLAY_ICON,
                                     false,
-                                    'btn-link'
-                                )
-                            );
+                                    'btn-link'));
                         }
                         else
                         {
-                            $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
+                            $parameters[self::PARAM_ACTION] = self::ACTION_CHANGE_LOCK;
                             $buttonToolBar->addItem(
                                 new Button(
-                                    Translation:: get('Lock'),
+                                    Translation::get('Lock'),
                                     new FontAwesomeGlyph('lock'),
                                     $this->get_url($parameters),
-                                    Button :: DISPLAY_ICON,
+                                    Button::DISPLAY_ICON,
                                     false,
-                                    'btn-link'
-                                )
-                            );
+                                    'btn-link'));
                         }
                     }
                 }
             }
 
-            $subscribed = DataManager:: retrieve_subscribe($topic->get_ref()->get_id(), $this->get_user_id());
+            $subscribed = DataManager::retrieve_subscribe($topic->get_ref()->get_id(), $this->get_user_id());
 
-            if (!$subscribed)
+            if (! $subscribed)
             {
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_TOPIC_SUBSCRIBE;
+                $parameters[self::PARAM_ACTION] = self::ACTION_TOPIC_SUBSCRIBE;
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation:: get('Subscribe', null, ForumTopic:: package()),
+                        Translation::get('Subscribe', null, ForumTopic::package()),
                         new FontAwesomeGlyph('envelope'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         true,
-                        'btn-link'
-                    )
-                );
+                        'btn-link'));
             }
             else
             {
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_TOPIC_UNSUBSCRIBE;
-                $parameters[self :: PARAM_SUBSCRIBE_ID] = $topic->get_ref()->get_id();
+                $parameters[self::PARAM_ACTION] = self::ACTION_TOPIC_UNSUBSCRIBE;
+                $parameters[self::PARAM_SUBSCRIBE_ID] = $topic->get_ref()->get_id();
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation:: get('UnSubscribe', null, ForumTopic:: package()),
+                        Translation::get('UnSubscribe', null, ForumTopic::package()),
                         new FontAwesomeGlyph('envelope-o'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         true,
-                        'btn-link'
-                    )
-                );
+                        'btn-link'));
             }
         }
 
@@ -836,44 +802,37 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     public function getButtonToolbarRenderer()
     {
-        if (!isset($this->buttonToolbarRenderer))
+        if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
 
             $publishParameters = $this->get_parameters();
-            $publishParameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
-                $this->get_complex_content_object_item_id();
-            $publishParameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_TOPIC;
+            $publishParameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+            $publishParameters[self::PARAM_ACTION] = self::ACTION_CREATE_TOPIC;
 
             $commonActions->addButton(
                 $this->getPublicationButton(
-                    Translation:: get('NewTopic'),
+                    Translation::get('NewTopic'),
                     new BootstrapGlyph('plus'),
-                    array(ForumTopic:: class_name()),
+                    array(ForumTopic::class_name()),
                     $publishParameters,
                     array(),
-                    'btn-primary'
-                )
-            );
+                    'btn-primary'));
 
             if ($this->get_user()->is_platform_admin() || $this->get_user_id() == $this->forum->get_owner_id() ||
-                $this->isForumManager($this->get_user())
-            )
+                 $this->isForumManager($this->get_user()))
             {
                 $publishParameters = $this->get_parameters();
-                $publishParameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
-                    $this->get_complex_content_object_item_id();
-                $publishParameters[self :: PARAM_ACTION] = self :: ACTION_CREATE_SUBFORUM;
+                $publishParameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                $publishParameters[self::PARAM_ACTION] = self::ACTION_CREATE_SUBFORUM;
 
                 $commonActions->addButton(
                     $this->getPublicationButton(
-                        Translation:: get('NewSubForum'),
+                        Translation::get('NewSubForum'),
                         new FontAwesomeGlyph('plus'),
-                        array(Forum:: class_name()),
-                        $publishParameters
-                    )
-                );
+                        array(Forum::class_name()),
+                        $publishParameters));
             }
 
             $buttonToolbar->addButtonGroup($commonActions);
@@ -893,154 +852,139 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     {
         $buttonToolBar = new ButtonToolBar();
 
-        if (!$this->isLocked())
+        if (! $this->isLocked())
         {
             $hasEditRights = $this->get_user()->get_id() == $forum->get_user_id() ||
-                $this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user());
+                 $this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user());
 
             if ($hasEditRights)
             {
-                if (!$this->get_complex_content_object_item())
+                if (! $this->get_complex_content_object_item())
                 {
                     $parent_cloi = null;
                 }
                 else
                 {
-                    $parent_cloi = Request:: get('cloi');
+                    $parent_cloi = Request::get('cloi');
                 }
 
                 $parameters = array();
-                $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-                $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_EDIT_SUBFORUM;
+                $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
+                $parameters[self::PARAM_ACTION] = self::ACTION_EDIT_SUBFORUM;
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation:: get('Edit', null, Utilities :: COMMON_LIBRARIES),
+                        Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('pencil'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         false,
-                        'btn-link'
-                    )
-                );
+                        'btn-link'));
 
                 if ($this->get_user()->is_platform_admin() || $this->isForumManager($this->get_user()))
                 {
-                    if (!$this->isLocked())
+                    if (! $this->isLocked())
                     {
                         if ($forum->get_ref()->get_locked())
                         {
                             $parameters = array();
-                            $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
-                                $this->get_complex_content_object_item_id();
-                            $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
-                            $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
+                            $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                            $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
+                            $parameters[self::PARAM_ACTION] = self::ACTION_CHANGE_LOCK;
 
                             $buttonToolBar->addItem(
                                 new Button(
-                                    Translation:: get('Unlock'),
+                                    Translation::get('Unlock'),
                                     new FontAwesomeGlyph('unlock'),
                                     $this->get_url($parameters),
-                                    Button :: DISPLAY_ICON,
+                                    Button::DISPLAY_ICON,
                                     false,
-                                    'btn-link'
-                                )
-                            );
+                                    'btn-link'));
                         }
                         else
                         {
                             $parameters = array();
-                            $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
-                                $this->get_complex_content_object_item_id();
-                            $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
-                            $parameters[self :: PARAM_ACTION] = self :: ACTION_CHANGE_LOCK;
+                            $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                            $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
+                            $parameters[self::PARAM_ACTION] = self::ACTION_CHANGE_LOCK;
 
                             $buttonToolBar->addItem(
                                 new Button(
-                                    Translation:: get('Lock'),
+                                    Translation::get('Lock'),
                                     new FontAwesomeGlyph('lock'),
                                     $this->get_url($parameters),
-                                    Button :: DISPLAY_ICON,
+                                    Button::DISPLAY_ICON,
                                     false,
-                                    'btn-link'
-                                )
-                            );
+                                    'btn-link'));
                         }
                     }
                 }
             }
 
-            $subscribed = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager:: retrieve_subscribe(
+            $subscribed = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::retrieve_subscribe(
                 $forum->get_ref()->get_id(),
-                $this->get_user_id()
-            );
+                $this->get_user_id());
 
-            if (!$subscribed)
+            if (! $subscribed)
             {
                 $parameters = array();
-                $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-                $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_FORUM_SUBSCRIBE;
+                $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
+                $parameters[self::PARAM_ACTION] = self::ACTION_FORUM_SUBSCRIBE;
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation:: get('Subscribe'),
+                        Translation::get('Subscribe'),
                         new FontAwesomeGlyph('envelope'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         true,
-                        'btn-link'
-                    )
-                );
+                        'btn-link'));
             }
             else
             {
                 $parameters = array();
-                $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-                $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_FORUM_UNSUBSCRIBE;
-                $parameters[self :: PARAM_SUBSCRIBE_ID] = $subscribed->get_id();
+                $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
+                $parameters[self::PARAM_ACTION] = self::ACTION_FORUM_UNSUBSCRIBE;
+                $parameters[self::PARAM_SUBSCRIBE_ID] = $subscribed->get_id();
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation:: get('UnSubscribe'),
+                        Translation::get('UnSubscribe'),
                         new FontAwesomeGlyph('envelope-o'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         true,
-                        'btn-link'
-                    )
-                );
+                        'btn-link'));
             }
 
             if ($hasEditRights)
             {
-                if (!$this->get_complex_content_object_item())
+                if (! $this->get_complex_content_object_item())
                 {
                     $parent_cloi = null;
                 }
                 else
                 {
-                    $parent_cloi = Request:: get('cloi');
+                    $parent_cloi = Request::get('cloi');
                 }
 
                 $parameters = array();
-                $parameters[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
-                $parameters[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_DELETE_SUBFORUM;
-                $parameters[self :: PARAM_CURRENT_SESSION_PARENT_CLOI] = $parent_cloi;
+                $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+                $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
+                $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_SUBFORUM;
+                $parameters[self::PARAM_CURRENT_SESSION_PARENT_CLOI] = $parent_cloi;
 
                 $buttonToolBar->addItem(
                     new Button(
-                        Translation:: get('Delete', null, Utilities :: COMMON_LIBRARIES),
+                        Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
                         new BootstrapGlyph('remove'),
                         $this->get_url($parameters),
-                        Button :: DISPLAY_ICON,
+                        Button::DISPLAY_ICON,
                         true,
-                        'btn-link'
-                    )
-                );
+                        'btn-link'));
             }
         }
 
@@ -1060,10 +1004,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
-    public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters,
-        $extraActions = array(), $classes = null
-    )
+    public function getPublicationButton($label, $glyph, $allowedContentObjectTypes, $parameters,
+        $extraActions = array(), $classes = null)
     {
         $actionSelector = new ActionSelector(
             $this,
@@ -1071,8 +1013,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $allowedContentObjectTypes,
             $parameters,
             $extraActions,
-            $classes
-        );
+            $classes);
 
         return $actionSelector->getActionButton($label, $glyph);
     }
