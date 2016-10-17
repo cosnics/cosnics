@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\calendar
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Kalender"
+TypeNameSingle = "kalenderitem"
+UpcomingEvents = "Aankomende kalenderitems"
+BrowserComponent = "Doorblader kalender"
+ViewerComponent = "Bekijk kalender"
+UpdaterComponent = "Bewerk kalender"
+PublisherComponent = "Publiceer kalenderitem"
+IntroductionPublisherComponent = "Publiceer introductie"

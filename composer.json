@@ -1,0 +1,57 @@
+{
+    "name" : "chamilo/lcms-connect",
+    "description" : "Chamilo LCMS Connect",
+    "license" : [ "GPL-3.0" ],
+    "keywords" : [ "ELO", "LCMS" ],
+    "support" : {
+        "forum" : "http://lcms.chamilo.org/phpbbforum",
+        "source" : "https://bitbucket.org/chamilo/lcms-connect/src",
+        "issues" : "https://support.chamilo.org/projects/lcms-backlog"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require" : {
+        "symfony/http-foundation" : "2.*",
+        "symfony/form" : "2.*",
+        "symfony/twig-bridge": "2.*",
+        "symfony/translation": "2.*",
+        "twig/twig" : "1.*",
+        "doctrine/dbal" : "2.5.4",
+        "doctrine/cache" : "1.5.*",
+        "chamilo/pear-libraries" : "*",
+        "glenscott/soundcloud": "dev-psr-4",
+        "google/apiclient": "1.*"
+    },
+    "require-dev" : {
+        "phpunit/phpunit" : "4.4.*",
+        "behat/behat" : "*",
+        "behat/mink" : "*",
+        "behat/mink-extension" : "*",
+        "behat/mink-goutte-driver" : "*",
+        "fabpot/goutte" : "<3",
+        "composer/composer": "*@dev"
+    },
+    "repositories" : [
+        {
+            "type": "vcs",
+            "url": "https://bitbucket.org/chamilo/pear-libraries"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Chamilo\\": "src/Chamilo/"
+        }
+    },
+    "config" : {
+        "bin-dir" : "bin/"
+    },
+    "extra" : {
+        "install-path" : ""
+    },
+    "scripts":{
+        "pre-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
+        "pre-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processComposer",
+        "post-update-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources",
+        "post-install-cmd": "Chamilo\\Libraries\\Format\\Utilities\\BuildUtilities::processResources"
+    }
+}
