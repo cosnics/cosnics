@@ -1,10 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Service;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Storage\Cache\DataManagerCache;
-use Chamilo\Libraries\Storage\DataManager\StorageUnitManagerRepositoryInterface;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
 
 /**
  *
@@ -12,42 +10,51 @@ use Chamilo\Libraries\Storage\DataManager\StorageUnitManagerRepositoryInterface;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class StorageUnitManagerService
+class StorageUnitRepository
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\StorageUnitManagerRepositoryInterface
-     */
-    private $storageUnitManagerRepository;
+    // Storage unit actions
+    const ALTER_STORAGE_UNIT_ADD = 1;
+    const ALTER_STORAGE_UNIT_CHANGE = 2;
+    const ALTER_STORAGE_UNIT_DROP = 3;
+    const ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY = 4;
+    const ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY = 5;
+    const ALTER_STORAGE_UNIT_DROP_INDEX = 6;
+    const ALTER_STORAGE_UNIT_ADD_INDEX = 7;
+    const ALTER_STORAGE_UNIT_ADD_UNIQUE = 8;
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageUnitManagerRepositoryInterface $storageUnitManagerRepository
+     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface
      */
-    public function __construct(Configuration $configuration, DataManagerCache $dataManagerCache,
-        StorageUnitManagerRepositoryInterface $storageUnitManagerRepository)
+    private $storageUnitDatabase;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface $storageUnitDatabase
+     */
+    public function __construct(StorageUnitDatabaseInterface $storageUnitDatabase)
     {
-        $this->storageUnitManagerRepository = $storageUnitManagerRepository;
+        $this->storageUnitDatabase = $storageUnitDatabase;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\StorageUnitManagerRepositoryInterface
+     * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface
      */
-    public function getStorageUnitManagerRepository()
+    public function getStorageUnitDatabase()
     {
-        return $this->storageUnitManagerRepository;
+        return $this->storageUnitDatabase;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\StorageUnitManagerRepositoryInterface $storageUnitManagerRepository
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface $storageUnitDatabase
      */
-    public function setStorageUnitManagerRepository($storageUnitManagerRepository)
+    public function setStorageUnitDatabase($storageUnitDatabase)
     {
-        $this->storageUnitManagerRepository = $storageUnitManagerRepository;
+        $this->storageUnitDatabase = $storageUnitDatabase;
     }
 
     /**
@@ -60,7 +67,7 @@ class StorageUnitManagerService
      */
     public function create($name, $properties, $indexes)
     {
-        return $this->getStorageUnitManagerRepository()->createStorageUnit($name, $properties, $indexes);
+        return $this->getStorageUnitDatabase()->createStorageUnit($name, $properties, $indexes);
     }
 
     /**
@@ -71,7 +78,7 @@ class StorageUnitManagerService
      */
     public function exists($name)
     {
-        return $this->getStorageUnitManagerRepository()->storageUnitExists($name);
+        return $this->getStorageUnitDatabase()->storageUnitExists($name);
     }
 
     /**
@@ -82,7 +89,7 @@ class StorageUnitManagerService
      */
     public function drop($name)
     {
-        return $this->getStorageUnitManagerRepository()->dropStorageUnit($name);
+        return $this->getStorageUnitDatabase()->dropStorageUnit($name);
     }
 
     /**
@@ -93,7 +100,7 @@ class StorageUnitManagerService
      */
     public function rename($old_name, $new_name)
     {
-        return $this->getStorageUnitManagerRepository()->renameStorageUnit($old_name, $new_name);
+        return $this->getStorageUnitDatabase()->renameStorageUnit($old_name, $new_name);
     }
 
     /**
@@ -106,7 +113,7 @@ class StorageUnitManagerService
      */
     public function alter($type, $table_name, $property, $attributes = array())
     {
-        return $this->getStorageUnitManagerRepository()->alterStorageUnit($type, $table_name, $property, $attributes);
+        return $this->getStorageUnitDatabase()->alterStorageUnit($type, $table_name, $property, $attributes);
     }
 
     /**
@@ -119,7 +126,7 @@ class StorageUnitManagerService
      */
     public function alterIndex($type, $table_name, $name = null, $columns = array())
     {
-        return $this->getStorageUnitManagerRepository()->alterStorageUnitIndex($type, $table_name, $name, $columns);
+        return $this->getStorageUnitDatabase()->alterStorageUnitIndex($type, $table_name, $name, $columns);
     }
 
     /**
@@ -131,7 +138,7 @@ class StorageUnitManagerService
      */
     public function truncate($name, $optimize = true)
     {
-        if (! $this->getStorageUnitManagerRepository()->truncateStorageUnit($name))
+        if (! $this->getStorageUnitDatabase()->truncateStorageUnit($name))
         {
             return false;
         }
@@ -152,7 +159,7 @@ class StorageUnitManagerService
      */
     public function optimize($name)
     {
-        return $this->getStorageUnitManagerRepository()->optimizeStorageUnit($name);
+        return $this->getStorageUnitDatabase()->optimizeStorageUnit($name);
     }
 
     /**
