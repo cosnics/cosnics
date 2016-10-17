@@ -2,31 +2,31 @@
 namespace Chamilo\Libraries\Storage\DataManager\Service;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Storage\Cache\DataManagerCache;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\DataManagerRepositoryInterface;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Storage\Cache\DataManagerCache;
+use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Join;
+use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
@@ -34,7 +34,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DataManagerService
+class DataClassRepository
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
@@ -52,31 +52,22 @@ class DataManagerService
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\DataManagerRepositoryInterface
+     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
      */
-    private $dataManagerRepository;
+    private $dataClassDatabase;
 
     /**
      *
      * @param \Chamilo\Configuration\Configuration $configuration
      * @param \Chamilo\Libraries\Storage\Cache\DataManagerCache $dataManagerCache
-     * @param \Chamilo\Libraries\Storage\DataManager\DataManagerRepositoryInterface $dataManagerRepository
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      */
     public function __construct(Configuration $configuration, DataManagerCache $dataManagerCache,
-        DataManagerRepositoryInterface $dataManagerRepository)
+        DataClassDatabaseInterface $dataClassDatabase)
     {
         $this->configuration = $configuration;
         $this->dataManagerCache = $dataManagerCache;
-        $this->dataManagerRepository = $dataManagerRepository;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManagerRepositoryInterface
-     */
-    public function getDataManagerRepository()
-    {
-        return $this->dataManagerRepository;
+        $this->dataClassDatabase = $dataClassDatabase;
     }
 
     /**
@@ -99,11 +90,20 @@ class DataManagerService
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManagerRepositoryInterface $dataManagerRepository
+     * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
      */
-    public function setDataManagerRepository($dataManagerRepository)
+    public function getDataClassDatabase()
     {
-        $this->dataManagerRepository = $dataManagerRepository;
+        return $this->dataClassDatabase;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
+     */
+    public function setDataClassDatabase($dataClassDatabase)
+    {
+        $this->dataClassDatabase = $dataClassDatabase;
     }
 
     /**
@@ -132,7 +132,7 @@ class DataManagerService
      */
     public function create(DataClass $object)
     {
-        if (! $this->getDataManagerRepository()->create($object))
+        if (! $this->getDataClassDatabase()->create($object))
         {
             return false;
         }
@@ -165,7 +165,7 @@ class DataManagerService
      */
     public function createRecord($className, $record)
     {
-        return $this->getDataManagerRepository()->createRecord($className, $record);
+        return $this->getDataClassDatabase()->createRecord($className, $record);
     }
 
     /**
@@ -251,7 +251,7 @@ class DataManagerService
 
     private function __retrieveClass($objectClass, $factoryClass, $parameters)
     {
-        $record = $this->processRecord($this->getDataManagerRepository()->retrieve($objectClass, $parameters));
+        $record = $this->processRecord($this->getDataClassDatabase()->retrieve($objectClass, $parameters));
         return $factoryClass::factory($objectClass, $record);
     }
 
@@ -318,7 +318,7 @@ class DataManagerService
 
     private static function __record($class, $parameters)
     {
-        return $this->processRecord($this->getDataManagerRepository()->record($class, $parameters));
+        return $this->processRecord($this->getDataClassDatabase()->record($class, $parameters));
     }
 
     public function record($class, RecordRetrieveParameters $parameters = null)
@@ -511,7 +511,7 @@ class DataManagerService
      */
     private function __retrievesClass($objectClass, $parameters)
     {
-        return $this->getDataManagerRepository()->retrieves($objectClass, $parameters);
+        return $this->getDataClassDatabase()->retrieves($objectClass, $parameters);
     }
 
     private function retrievesClass($cacheClass, $objectClass, $parameters = null)
@@ -540,7 +540,7 @@ class DataManagerService
 
     private function __records($class, $parameters)
     {
-        return $this->getDataManagerRepository()->records($class, $parameters);
+        return $this->getDataClassDatabase()->records($class, $parameters);
     }
 
     public function records($class, $parameters = null)
@@ -572,7 +572,7 @@ class DataManagerService
 
     private function __distinct($class, $parameters)
     {
-        return $this->getDataManagerRepository()->distinct($class, $parameters);
+        return $this->getDataClassDatabase()->distinct($class, $parameters);
     }
 
     /**
@@ -618,7 +618,7 @@ class DataManagerService
         $condition = new EqualityCondition(
             new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
             new StaticConditionVariable($object->getId()));
-        return $this->getDataManagerRepository()->update($object, $condition);
+        return $this->getDataClassDatabase()->update($object, $condition);
     }
 
     /**
@@ -643,13 +643,7 @@ class DataManagerService
             $propertiesClass = new DataClassProperties($properties);
         }
 
-        if (! $this->getDataManagerRepository()->updates(
-            $class,
-            $propertiesClass,
-            $condition,
-            $offset,
-            $count,
-            $order_by))
+        if (! $this->getDataClassDatabase()->updates($class, $propertiesClass, $condition, $offset, $count, $order_by))
         {
             return false;
         }
@@ -678,7 +672,7 @@ class DataManagerService
             new PropertyConditionVariable($className, $className::PROPERTY_ID),
             new StaticConditionVariable($object->getId()));
 
-        if (! $this->getDataManagerRepository()->delete($className, $condition))
+        if (! $this->getDataClassDatabase()->delete($className, $condition))
         {
             return false;
         }
@@ -688,7 +682,7 @@ class DataManagerService
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
                 new StaticConditionVariable($object->getId()));
-            if (! $this->getDataManagerRepository()->delete($object::class_name(), $condition))
+            if (! $this->getDataClassDatabase()->delete($object::class_name(), $condition))
             {
                 return false;
             }
@@ -713,7 +707,7 @@ class DataManagerService
      */
     public function deletes($class, Condition $condition)
     {
-        if (! $this->getDataManagerRepository()->delete($class, $condition))
+        if (! $this->getDataClassDatabase()->delete($class, $condition))
         {
             return false;
         }
@@ -762,7 +756,7 @@ class DataManagerService
 
     private function __countClass($objectClass, $parameters)
     {
-        return $this->getDataManagerRepository()->count($objectClass, $parameters);
+        return $this->getDataClassDatabase()->count($objectClass, $parameters);
     }
 
     private function countClass($cacheClass, $objectClass, $parameters)
@@ -789,7 +783,7 @@ class DataManagerService
 
     private function __countGrouped($class, $parameters)
     {
-        return $this->getDataManagerRepository()->countGrouped($class, $parameters);
+        return $this->getDataClassDatabase()->countGrouped($class, $parameters);
     }
 
     /**
@@ -832,7 +826,7 @@ class DataManagerService
      */
     public function retrieveMaximumValue($class, $property, Condition $condition = null)
     {
-        return $this->getDataManagerRepository()->retrieveMaximumValue($class, $property, $condition);
+        return $this->getDataClassDatabase()->retrieveMaximumValue($class, $property, $condition);
     }
 
     /**
@@ -856,7 +850,7 @@ class DataManagerService
      */
     public function getAlias($storageUnitName)
     {
-        return $this->getDataManagerRepository()->getAlias($storageUnitName);
+        return $this->getDataClassDatabase()->getAlias($storageUnitName);
     }
 
     /**
@@ -867,7 +861,7 @@ class DataManagerService
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $object)
     {
-        return $this->getDataManagerRepository()->retrieveCompositeDataClassAdditionalProperties($object);
+        return $this->getDataClassDatabase()->retrieveCompositeDataClassAdditionalProperties($object);
     }
 
     /**
@@ -875,7 +869,7 @@ class DataManagerService
      */
     public function transactional($function)
     {
-        return $this->getDataManagerRepository()->transactional($function);
+        return $this->getDataClassDatabase()->transactional($function);
     }
 
     /**
@@ -1013,7 +1007,7 @@ class DataManagerService
      */
     public function translateCondition(Condition $condition = null)
     {
-        return $this->getDataManagerRepository()->translateCondition($condition);
+        return $this->getDataClassDatabase()->translateCondition($condition);
     }
 
     /**
