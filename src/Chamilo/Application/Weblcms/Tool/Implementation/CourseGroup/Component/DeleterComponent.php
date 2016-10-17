@@ -51,7 +51,7 @@ class DeleterComponent extends Manager
             }
         }
 
-        $ids = $this->getRequest()->get(self :: PARAM_COURSE_GROUP);
+        $ids = $this->getCourseGroupFromRequest();
 
         if ($ids)
         {
@@ -102,5 +102,27 @@ class DeleterComponent extends Manager
         // Display :: error_message('NoObjectSelected');
         // }
         $this->redirect($message, '', array('course_group' => null, self :: PARAM_ACTION => null));
+    }
+
+    /**
+     * Retrieves the course group from the requests. First checks the POST parameter (for table actions) and then
+     * fall back to the GET parameter
+     *
+     * @return int
+     */
+    protected function getCourseGroupFromRequest()
+    {
+        $key = self::PARAM_COURSE_GROUP;
+        $request = $this->getRequest();
+
+        if (false !== $result = $request->request->get($key, false)) {
+            return $result;
+        }
+
+        if (false !== $result = $request->query->get($key, false)) {
+            return $result;
+        }
+
+        return null;
     }
 }
