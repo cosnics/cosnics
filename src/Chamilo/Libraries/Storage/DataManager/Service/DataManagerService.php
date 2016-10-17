@@ -789,7 +789,7 @@ class DataManagerService
 
     private function __countGrouped($class, $parameters)
     {
-        return $this->getDataManagerRepository()->count_grouped($class, $parameters);
+        return $this->getDataManagerRepository()->countGrouped($class, $parameters);
     }
 
     /**
@@ -832,7 +832,7 @@ class DataManagerService
      */
     public function retrieveMaximumValue($class, $property, Condition $condition = null)
     {
-        return $this->getDataManagerRepository()->retrieve_maximum_value($class, $property, $condition);
+        return $this->getDataManagerRepository()->retrieveMaximumValue($class, $property, $condition);
     }
 
     /**
@@ -849,111 +849,6 @@ class DataManagerService
     }
 
     /**
-     * Create a storage unit in the storage layer
-     *
-     * @param $name string
-     * @param $properties multitype:mixed
-     * @param $indexes multitype:mixed
-     * @return boolean
-     */
-    public function createStorageUnit($name, $properties, $indexes)
-    {
-        return $this->getDataManagerRepository()->create_storage_unit($name, $properties, $indexes);
-    }
-
-    /**
-     * Determine whether a storage unit exists in the storage layer
-     *
-     * @param $name string
-     * @return boolean
-     */
-    public function storageUnitExists($name)
-    {
-        return $this->getDataManagerRepository()->storage_unit_exists($name);
-    }
-
-    /**
-     * Drop a storage unit from the storage layer
-     *
-     * @param $name string
-     * @return boolean
-     */
-    public function dropStorageUnit($name)
-    {
-        return $this->getDataManagerRepository()->drop_storage_unit($name);
-    }
-
-    /**
-     * Rename a storage unit
-     *
-     * @param string $old_name
-     * @param string $new_name
-     */
-    public function renameStorageUnit($old_name, $new_name)
-    {
-        return $this->getDataManagerRepository()->rename_storage_unit($old_name, $new_name);
-    }
-
-    /**
-     *
-     * @param integer $type
-     * @param string $table_name
-     * @param string $property
-     * @param multitype:mixed $attributes
-     * @return boolean
-     */
-    public function alterStorageUnit($type, $table_name, $property, $attributes = array())
-    {
-        return $this->getDataManagerRepository()->alter_storage_unit($type, $table_name, $property, $attributes);
-    }
-
-    /**
-     *
-     * @param integer $type
-     * @param string $table_name
-     * @param string $name
-     * @param multitype:string $columns
-     * @return boolean
-     */
-    public function alterStorageUnit_index($type, $table_name, $name = null, $columns = array())
-    {
-        return $this->getDataManagerRepository()->alter_storage_unit_index($type, $table_name, $name, $columns);
-    }
-
-    /**
-     * Truncate a storage unit in the storage layer and optionally optimize it afterwards
-     *
-     * @param $name string
-     * @param $optimize boolean
-     * @return boolean
-     */
-    public static function truncateStorageUnit($name, $optimize = true)
-    {
-        if (! $this->getDataManagerRepository()->truncate_storage_unit($name))
-        {
-            return false;
-        }
-
-        if ($optimize && ! $this->optimizeStorageUnit($name))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Optimize a storage unit in the storage layer
-     *
-     * @param $name string
-     * @return boolean
-     */
-    public function optimizeStorageUnit($name)
-    {
-        return $this->getDataManagerRepository()->optimize_storage_unit($name);
-    }
-
-    /**
      * Get the alias of a storage unit in the storage layer
      *
      * @param $storage_unit_name string
@@ -961,7 +856,7 @@ class DataManagerService
      */
     public function getAlias($storageUnitName)
     {
-        return $this->getDataManagerRepository()->get_alias($storageUnitName);
+        return $this->getDataManagerRepository()->getAlias($storageUnitName);
     }
 
     /**
@@ -972,7 +867,7 @@ class DataManagerService
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $object)
     {
-        return $this->getDataManagerRepository()->retrieve_composite_data_class_additional_properties($object);
+        return $this->getDataManagerRepository()->retrieveCompositeDataClassAdditionalProperties($object);
     }
 
     /**
