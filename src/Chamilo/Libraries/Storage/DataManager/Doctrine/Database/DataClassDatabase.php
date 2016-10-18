@@ -2,8 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\FileLogger;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator;
@@ -16,13 +15,10 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
 
 /**
@@ -35,88 +31,105 @@ use Exception;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Database
+class DataClassDatabase
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
     // Constants
-    const STORAGE_TYPE = 'Doctrine';
     const ALIAS_MAX_SORT = 'max_sort';
 
     /**
      *
      * @var \Doctrine\DBAL\Connection
      */
-    private $connection;
+    protected $connection;
 
     /**
-     * Static error log so we don't open the error log every time an error is written
      *
-     * @var FileLogger
+     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
      */
-    private static $error_log;
+    protected $storageAliasGenerator;
 
     /**
-     * Used for debug
      *
-     * @var int
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
-    private static $query_counter;
+    protected $exceptionLogger;
 
     /**
-     * Constructor
+     *
+     * @param \Doctrine\DBAL\Connection $connection
      */
-    public function __construct($connection = null)
+    public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
+        ExceptionLoggerInterface $exceptionLogger)
     {
-        if (is_null($connection))
-        {
-            $this->connection = Connection::get_instance()->get_connection();
-        }
-        else
-        {
-            $this->connection = $connection;
-        }
+        $this->connection = $connection;
+        $this->storageAliasGenerator = $storageAliasGenerator;
+        $this->exceptionLogger = $exceptionLogger;
     }
 
     /**
      *
      * @return \Doctrine\DBAL\Connection
      */
-    public function get_connection()
+    public function getConnection()
     {
         return $this->connection;
     }
 
     /**
-     * Debug function Uncomment the lines if you want to debug
+     *
+     * @param \Doctrine\DBAL\Connection $connection
      */
-    public static function debug()
+    public function setConnection($connection)
     {
-        $args = func_get_args();
-        // Do something with the arguments
-        if ($args[1] == 'query' || $args[1] == 'prepare')
-        {
-            // echo '<pre>';
-            // echo($args[2]);
-            // echo self :: $query_counter;
-            // echo '</pre>';
-            // self :: $query_counter++;
-        }
+        $this->connection = $connection;
     }
 
-    /*
-     * A workaround to the fact that MDB2 hardcodes a default PEAR_Error error mode of PEAR_ERROR_RETURN
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
      */
-    public function error_handling($error)
+    public function getStorageAliasGenerator()
     {
-        if (! self::$error_log)
-        {
-            $logfile = Path::getInstance()->getLogPath() . '/doctrine_errors.log';
-            self::$error_log = new FileLogger($logfile, true);
-        }
+        return $this->storageAliasGenerator;
+    }
 
-        $message = "[Message: {$error->getMessage()}] [Information: { USER INFO GOES HERE}]";
-        self::$error_log->log_message($message);
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     */
+    public function setStorageAliasGenerator($storageAliasGenerator)
+    {
+        $this->storageAliasGenerator = $storageAliasGenerator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     */
+    public function getExceptionLogger()
+    {
+        return $this->exceptionLogger;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     */
+    public function setExceptionLogger($exceptionLogger)
+    {
+        $this->exceptionLogger = $exceptionLogger;
+    }
+
+    /**
+     *
+     * @param \Exception $exception
+     */
+    public function handleError(\Exception $exception)
+    {
+        $this->getExceptionLogger()->logException(
+            '[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]');
     }
 
     /**
@@ -230,42 +243,23 @@ class Database
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param string[] $propertiesToUpdate
      * @throws Exception
      * @return boolean
      */
-    public function update($object, $condition = false)
+    public function update($objectTableName, $condition, $propertiesToUpdate)
     {
-        if ($object instanceof CompositeDataClass)
-        {
-            $parent_class = $object::parent_class_name();
-            $object_table = $parent_class::get_table_name();
-        }
-        else
-        {
-            $object_table = $object->get_table_name();
-        }
-
         $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->update($object_table, $this->get_alias($object_table));
+        $query_builder->update($objectTableName, $this->get_alias($objectTableName));
 
-        foreach ($object->get_default_properties() as $key => $value)
+        foreach ($propertiesToUpdate as $key => $value)
         {
             $query_builder->set($key, $this->escape($value));
         }
 
-        if ($condition)
+        if ($condition instanceof Condition)
         {
-            if ($object instanceof CompositeDataClass)
-            {
-                $composite_condition = new EqualityCondition(
-                    new PropertyConditionVariable($parent_class, $parent_class::PROPERTY_ID),
-                    new StaticConditionVariable($object->get_id()));
-                $query_builder->where(ConditionTranslator::render($composite_condition));
-            }
-            else
-            {
-                $query_builder->where(ConditionTranslator::render($condition));
-            }
+            $query_builder->where(ConditionTranslator::render($condition));
         }
         else
         {
@@ -278,35 +272,6 @@ class Database
         {
             $this->error_handling($statement);
             return false;
-        }
-
-        if ($object instanceof CompositeDataClass && $object::is_extended())
-        {
-            $query_builder = $this->connection->createQueryBuilder();
-            $query_builder->update($object->get_table_name(), $this->get_alias($object->get_table_name()));
-
-            $props = array();
-            foreach ($object->get_additional_properties() as $key => $value)
-            {
-                $query_builder->set($key, $this->escape($value));
-            }
-
-            if ($condition)
-            {
-                $query_builder->where(ConditionTranslator::render($condition));
-            }
-            else
-            {
-                throw new Exception('Cannot update records without a condition');
-            }
-
-            $statement = $this->get_connection()->query($query_builder->getSQL());
-
-            if ($statement instanceof \PDOException)
-            {
-                $this->error_handling($statement);
-                return false;
-            }
         }
 
         return true;
