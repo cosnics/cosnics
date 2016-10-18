@@ -5,6 +5,9 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 
 /**
  *
@@ -113,19 +116,26 @@ class ConditionPartTranslatorService
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator
      */
-    protected function getConditionPartTranslator(ConditionPart $conditionPart)
+    protected function getConditionPartTranslator(DataClassDatabaseInterface $dataClassDatabase,
+        ConditionPart $conditionPart)
     {
-        return $this->getConditionPartTranslatorFactory()->getConditionPartTranslator($this, $conditionPart);
+        return $this->getConditionPartTranslatorFactory()->getConditionPartTranslator(
+            $this,
+            $dataClassDatabase,
+            $conditionPart);
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $condition
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
+     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
+     * @return string
      */
-    public function translateConditionPart(ConditionPart $conditionPart)
+    public function translateConditionPart(DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart)
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -133,7 +143,7 @@ class ConditionPartTranslatorService
             {
                 $this->getConditionPartCache()->set(
                     $conditionPart,
-                    $this->getConditionPartTranslator($conditionPart)->translate());
+                    $this->getConditionPartTranslator($dataClassDatabase, $conditionPart)->translate());
             }
 
             return $this->getConditionPartCache()->get($conditionPart);
@@ -142,5 +152,28 @@ class ConditionPartTranslatorService
         {
             return $this->getConditionPartTranslator($conditionPart)->translate();
         }
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @return string
+     */
+    public function translateCondition(DataClassDatabaseInterface $dataClassDatabase, Condition $condition)
+    {
+        return $this->translateConditionPart($dataClassDatabase, $condition);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
+     * @return string
+     */
+    public function translateConditionVariable(DataClassDatabaseInterface $dataClassDatabase,
+        ConditionVariable $conditionVariable)
+    {
+        return $this->translateConditionPart($dataClassDatabase, $conditionVariable);
     }
 }

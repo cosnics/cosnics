@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 
 /**
@@ -16,11 +15,11 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
      */
     public function translate()
     {
-        return Database::escape_column_name(
+        return $this->getDataClassDatabase()->escapeColumnName(
             $this->getConditionVariable()->get_property(),
             $this->getConditionVariable()->get_alias());
     }

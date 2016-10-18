@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 
 /**
  *
@@ -50,15 +51,16 @@ class ConditionPartTranslatorFactory
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      * @return \Chamilo\Libraries\Storage\Query\ConditionPartTranslator
      */
     public function getConditionPartTranslator(ConditionPartTranslatorService $conditionPartTranslatorService,
-        ConditionPart $conditionPart)
+        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart)
     {
         $className = '\Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\\' .
              $this->getClassNameUtilities()->getClassnameFromObject($conditionPart) . 'Translator';
 
-        return new $className($conditionPartTranslatorService, $conditionPart);
+        return new $className($conditionPartTranslatorService, $dataClassDatabase, $conditionPart);
     }
 }

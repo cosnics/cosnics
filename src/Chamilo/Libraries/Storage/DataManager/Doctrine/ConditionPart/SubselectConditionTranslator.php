@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,7 +14,7 @@ class SubselectConditionTranslator extends ConditionTranslator
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
      */
     public function translate()
     {
@@ -35,7 +34,7 @@ class SubselectConditionTranslator extends ConditionTranslator
         $class = $this->getCondition()->get_value()->get_class();
         $table = $class::get_table_name();
 
-        $alias = DataManager::get_alias($table);
+        $alias = $this->getDataClassDatabase()->getAlias($table);
 
         $string[] = $table;
 

@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,12 +14,12 @@ class PatternMatchConditionTranslator extends ConditionTranslator
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
      */
     public function translate()
     {
         return $this->getConditionPartTranslatorService()->translateConditionPart($this->getCondition()->get_name()) .
-             ' LIKE ' . Database::quote($this->searchString($this->getCondition()->get_pattern()));
+             ' LIKE ' . $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
     }
 
     /**

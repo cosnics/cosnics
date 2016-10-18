@@ -43,4 +43,8 @@ interface DataClassDatabaseInterface
     public function transactional($function);
 
     public function translateCondition($condition);
+
+    public function quote($value, $type = null, $quote = true, $escape_wildcards = false);
+
+    public function escapeColumnName($columnName, $tableAlias = null);
 }
