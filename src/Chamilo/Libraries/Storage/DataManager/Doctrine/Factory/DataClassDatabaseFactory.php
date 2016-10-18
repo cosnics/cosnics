@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 
 /**
@@ -13,13 +13,13 @@ use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class StorageUnitDatabaseFactory
+class DataClassDatabaseFactory
 {
 
     /**
      * Instance of this class for the singleton pattern.
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\StorageUnitDatabaseFactory
+     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\DataClassDatabaseFactory
      */
     private static $instance;
 
@@ -82,15 +82,6 @@ class StorageUnitDatabaseFactory
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
-     */
-    public function setStorageAliasGenerator($storageAliasGenerator)
-    {
-        $this->storageAliasGenerator = $storageAliasGenerator;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
     public function getExceptionLogger()
@@ -109,11 +100,20 @@ class StorageUnitDatabaseFactory
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
      */
-    public function getStorageUnitDatabase()
+    public function setStorageAliasGenerator($storageAliasGenerator)
     {
-        return new StorageUnitDatabase(
+        $this->storageAliasGenerator = $storageAliasGenerator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase
+     */
+    public function getDataClassDatabase()
+    {
+        return new DataClassDatabase(
             $this->getConnection(),
             $this->getStorageAliasGenerator(),
             $this->getExceptionLogger());
@@ -121,7 +121,7 @@ class StorageUnitDatabaseFactory
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\StorageUnitDatabaseFactory
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\DataClassDatabaseFactory
      */
     public static function getInstance()
     {

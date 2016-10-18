@@ -615,10 +615,36 @@ class DataClassRepository
      */
     public function update(DataClass $object)
     {
+        if ($object instanceof CompositeDataClass)
+        {
+            $propertyConditionClass = $object::parent_class_name();
+            $objectTableName = $parent_class::get_table_name();
+        }
+        else
+        {
+            $propertyConditionClass = $object::class_name();
+            $objectTableName = $object->get_table_name();
+        }
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
+            new PropertyConditionVariable($propertyConditionClass, $object::PROPERTY_ID),
             new StaticConditionVariable($object->getId()));
-        return $this->getDataClassDatabase()->update($object, $condition);
+
+        $result = $this->getDataClassDatabase()->update($objectTableName, $condition, $object->get_default_properties());
+
+        if ($object instanceof CompositeDataClass && $object::is_extended() && $result === true)
+        {
+            $condition = new EqualityCondition(
+                new PropertyConditionVariable($propertyConditionClass, $object::PROPERTY_ID),
+                new StaticConditionVariable($object->getId()));
+
+            $result = $this->getDataClassDatabase()->update(
+                $object->get_table_name(),
+                $condition,
+                $object->get_additional_properties());
+        }
+
+        return $result;
     }
 
     /**

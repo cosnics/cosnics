@@ -2,13 +2,13 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
-use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\DataManager\Service\StorageUnitRepository;
+use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 
 /**
- * This class provides basic functionality for database connections Insert, Update, Delete,
- * Select, Count, etc.
+ * This class provides basic functionality for storage unit manipulations via Doctrine
  *
  * @package Chamilo\Libraries\Storage\DataManager\Doctrine
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -32,12 +32,32 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
     /**
      *
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
+     */
+    protected $storageAliasGenerator;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     */
+    protected $exceptionLogger;
+
+    /**
+     *
      * @param \Doctrine\DBAL\Connection $connection
      */
-    public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator)
+    public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
+        ExceptionLoggerInterface $exceptionLogger)
     {
         $this->connection = $connection;
         $this->storageAliasGenerator = $storageAliasGenerator;
+        $this->exceptionLogger = $exceptionLogger;
     }
 
     /**
@@ -76,8 +96,32 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     */
+    public function getExceptionLogger()
+    {
+        return $this->exceptionLogger;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     */
+    public function setExceptionLogger($exceptionLogger)
+    {
+        $this->exceptionLogger = $exceptionLogger;
+    }
+
+    /**
+     *
+     * @param \Exception $exception
+     */
     public function handleError(\Exception $exception)
     {
+        $this->getExceptionLogger()->logException(
+            '[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]');
     }
 
     /**
@@ -281,7 +325,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 $columnData['length'] = $column->getLength();
                 $columnData['notnull'] = $column->getNotNull();
                 $columnData['fixed'] = $column->getFixed();
-                $columnData['unique'] = false; // TODO: what do we do about this?
+                $columnData['unique'] = false;
                 $columnData['version'] = ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
 
                 if (strtolower($columnData['type']) == "string" && $columnData['length'] === null)

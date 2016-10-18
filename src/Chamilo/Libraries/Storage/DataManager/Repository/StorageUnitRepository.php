@@ -58,92 +58,95 @@ class StorageUnitRepository
     }
 
     /**
-     * Create a storage unit in the storage layer
+     * Create a storage unit
      *
-     * @param $name string
-     * @param $properties multitype:mixed
-     * @param $indexes multitype:mixed
+     * @param string $storageUnitName
+     * @param string[] $properties
+     * @param string[] $indexes
      * @return boolean
      */
-    public function create($name, $properties, $indexes)
+    public function create($storageUnitName, $properties, $indexes)
     {
-        return $this->getStorageUnitDatabase()->createStorageUnit($name, $properties, $indexes);
+        return $this->getStorageUnitDatabase()->create($storageUnitName, $properties, $indexes);
     }
 
     /**
-     * Determine whether a storage unit exists in the storage layer
+     * Determine whether a storage unit exists
      *
-     * @param $name string
+     * @param string $storageUnitName
      * @return boolean
      */
-    public function exists($name)
+    public function exists($storageUnitName)
     {
-        return $this->getStorageUnitDatabase()->storageUnitExists($name);
+        return $this->getStorageUnitDatabase()->exists($storageUnitName);
     }
 
     /**
-     * Drop a storage unit from the storage layer
+     * Drop a storage unit
      *
-     * @param $name string
+     * @param string $storageUnitName
      * @return boolean
      */
-    public function drop($name)
+    public function drop($storageUnitName)
     {
-        return $this->getStorageUnitDatabase()->dropStorageUnit($name);
+        return $this->getStorageUnitDatabase()->drop($storageUnitName);
     }
 
     /**
      * Rename a storage unit
      *
-     * @param string $old_name
-     * @param string $new_name
+     * @param string $oldStorageUnitName
+     * @param string $newStorageUnitName
+     * @return boolean
      */
-    public function rename($old_name, $new_name)
+    public function rename($oldStorageUnitName, $newStorageUnitName)
     {
-        return $this->getStorageUnitDatabase()->renameStorageUnit($old_name, $new_name);
+        return $this->getStorageUnitDatabase()->rename($oldStorageUnitName, $newStorageUnitName);
     }
 
     /**
+     * Alter a storage unit
      *
      * @param integer $type
-     * @param string $table_name
+     * @param string $storageUnitName
      * @param string $property
-     * @param multitype:mixed $attributes
+     * @param string[] $attributes
      * @return boolean
      */
-    public function alter($type, $table_name, $property, $attributes = array())
+    public function alter($type, $storageUnitName, $property, $attributes = array())
     {
-        return $this->getStorageUnitDatabase()->alterStorageUnit($type, $table_name, $property, $attributes);
+        return $this->getStorageUnitDatabase()->alter($type, $storageUnitName, $property, $attributes);
     }
 
     /**
+     * Alter a storage unit index
      *
      * @param integer $type
-     * @param string $table_name
-     * @param string $name
-     * @param multitype:string $columns
+     * @param string $storageUnitName
+     * @param string $indexName
+     * @param string[] $columns
      * @return boolean
      */
-    public function alterIndex($type, $table_name, $name = null, $columns = array())
+    public function alterIndex($type, $storageUnitName, $indexName = null, $columns = array())
     {
-        return $this->getStorageUnitDatabase()->alterStorageUnitIndex($type, $table_name, $name, $columns);
+        return $this->getStorageUnitDatabase()->alterIndex($type, $storageUnitName, $indexName, $columns);
     }
 
     /**
-     * Truncate a storage unit in the storage layer and optionally optimize it afterwards
+     * Truncate a storage unit and optionally optimize it afterwards
      *
-     * @param $name string
+     * @param $storageUnitName string
      * @param $optimize boolean
      * @return boolean
      */
-    public function truncate($name, $optimize = true)
+    public function truncate($storageUnitName, $optimize = true)
     {
-        if (! $this->getStorageUnitDatabase()->truncateStorageUnit($name))
+        if (! $this->getStorageUnitDatabase()->truncate($storageUnitName))
         {
             return false;
         }
 
-        if ($optimize && ! $this->optimizeStorageUnit($name))
+        if ($optimize && ! $this->optimize($storageUnitName))
         {
             return false;
         }
@@ -152,14 +155,14 @@ class StorageUnitRepository
     }
 
     /**
-     * Optimize a storage unit in the storage layer
+     * Optimize a storage unit
      *
-     * @param $name string
+     * @param $storageUnitName string
      * @return boolean
      */
-    public function optimize($name)
+    public function optimize($storageUnitName)
     {
-        return $this->getStorageUnitDatabase()->optimizeStorageUnit($name);
+        return $this->getStorageUnitDatabase()->optimize($storageUnitName);
     }
 
     /**
