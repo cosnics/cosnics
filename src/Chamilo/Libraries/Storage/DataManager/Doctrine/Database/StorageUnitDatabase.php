@@ -22,18 +22,6 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      *
      * @var \Doctrine\DBAL\Connection
      */
-    private $connection;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    private $storageAliasGenerator;
-
-    /**
-     *
-     * @var \Doctrine\DBAL\Connection
-     */
     protected $connection;
 
     /**

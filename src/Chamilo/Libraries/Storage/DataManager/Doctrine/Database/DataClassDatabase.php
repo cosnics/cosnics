@@ -20,6 +20,8 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Exception;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -58,14 +60,24 @@ class DataClassDatabase
 
     /**
      *
+     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory
+     */
+    protected $conditionPartTranslatorFactory;
+
+    /**
+     *
      * @param \Doctrine\DBAL\Connection $connection
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
      */
     public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
-        ExceptionLoggerInterface $exceptionLogger)
+        ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorFactory $conditionPartTranslatorFactory)
     {
         $this->connection = $connection;
         $this->storageAliasGenerator = $storageAliasGenerator;
         $this->exceptionLogger = $exceptionLogger;
+        $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
     }
 
     /**
@@ -124,6 +136,24 @@ class DataClassDatabase
 
     /**
      *
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory
+     */
+    public function getConditionPartTranslatorFactory()
+    {
+        return $this->conditionPartTranslatorFactory;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
+     */
+    public function setConditionPartTranslatorFactory($conditionPartTranslatorFactory)
+    {
+        $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
+    }
+
+    /**
+     *
      * @param \Exception $exception
      */
     public function handleError(\Exception $exception)
@@ -139,100 +169,84 @@ class DataClassDatabase
      * @param $table_alias String The alias of the table the coloumn is in
      * @return string The escaped column name.
      */
-    public static function escape_column_name($name, $table_alias = null)
+    public static function escapeColumnName($columnName, $tableAlias = null)
     {
-        if (! empty($table_alias))
+        if (! empty($tableAlias))
         {
-            return $table_alias . '.' . $name;
+            return $tableAlias . '.' . $columnName;
         }
         else
         {
-            return $name;
+            return $columnName;
         }
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
-     * @param boolean $auto_id
+     * @param boolean $autoAssignIdentifier
      * @return boolean
      */
-    public function create($object, $auto_id = true)
+    public function create(DataClass $dataClass, $autoAssignIdentifier = true)
     {
-        if ($object instanceof CompositeDataClass)
+        if ($dataClass instanceof CompositeDataClass)
         {
-            $parent_class = $object::parent_class_name();
-            $object_table = $parent_class::get_table_name();
+            $parentClass = $object::parent_class_name();
+            $objectTableName = $parent_class::get_table_name();
         }
         else
         {
-            $object_table = $object->get_table_name();
+            $objectTableName = $dataClass->get_table_name();
         }
 
-        $props = array();
-        foreach ($object->get_default_properties() as $key => $value)
-        {
-            $props[$key] = $value;
-        }
+        $objectProperties = $dataClass->get_default_properties();
 
-        if ($auto_id && in_array('id', $object->get_default_property_names()))
+        if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
         {
-            $props['id'] = null;
+            $objectProperties[DataClass::PROPERTY_ID] = null;
         }
 
         try
         {
-            $result = $this->connection->insert($object_table, $props);
+            $this->getConnection()->insert($objectTableName, $objectProperties);
 
-            if ($auto_id && in_array('id', $object->get_default_property_names()))
+            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
             {
-                $object->set_id($this->connection->lastInsertId($object_table));
+                $dataClass->setId($this->getConnection()->lastInsertId($objectTableName));
             }
 
-            if ($object instanceof CompositeDataClass && $object::is_extended())
+            if ($dataClass instanceof CompositeDataClass && $object::is_extended())
             {
-                $props = array();
-                foreach ($object->get_additional_properties() as $key => $value)
-                {
-                    $props[$key] = $value;
-                }
-                $props['id'] = $object->get_id();
+                $objectProperties = $dataClass->get_additional_properties();
+                $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
-                try
-                {
-                    $result = $this->connection->insert($object->get_table_name(), $props);
-                }
-                catch (\Exception $exception)
-                {
-                    $this->error_handling($exception);
-                    return false;
-                }
+                $this->getConnection()->insert($dataClass->get_table_name(), $objectProperties);
             }
 
             return true;
         }
         catch (\Exception $exception)
         {
-            $this->error_handling($exception);
+            $this->handleError($exception);
             return false;
         }
     }
 
     /**
      *
-     * @param string $class_name
+     * @param string $className
      * @param string[] $record
      * @return boolean
      */
-    public function create_record($class_name, $record)
+    public function createRecord($className, $record)
     {
         try
         {
-            $result = $this->connection->insert($class_name::get_table_name(), $record);
+            $result = $this->getConnection()->insert($className::get_table_name(), $record);
         }
         catch (\Exception $exception)
         {
-            $this->error_handling($exception);
+            $this->handleError($exception);
             return false;
         }
 
@@ -249,28 +263,28 @@ class DataClassDatabase
      */
     public function update($objectTableName, $condition, $propertiesToUpdate)
     {
-        $query_builder = $this->connection->createQueryBuilder();
-        $query_builder->update($objectTableName, $this->get_alias($objectTableName));
+        $queryBuilder = $this->getConnection()->createQueryBuilder();
+        $queryBuilder->update($objectTableName, $this->getAlias($objectTableName));
 
         foreach ($propertiesToUpdate as $key => $value)
         {
-            $query_builder->set($key, $this->escape($value));
+            $queryBuilder->set($key, $this->escape($value));
         }
 
         if ($condition instanceof Condition)
         {
-            $query_builder->where(ConditionTranslator::render($condition));
+            $queryBuilder->where(ConditionTranslator::render($condition));
         }
         else
         {
             throw new Exception('Cannot update records without a condition');
         }
 
-        $statement = $this->get_connection()->query($query_builder->getSQL());
+        $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
         if ($statement instanceof \PDOException)
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             return false;
         }
 
@@ -289,7 +303,7 @@ class DataClassDatabase
     {
         if (count($properties->get()) > 0)
         {
-            $query_builder = $this->connection->createQueryBuilder();
+            $query_builder = $this->getConnection()->createQueryBuilder();
             $query_builder->update($class::get_table_name(), $this->get_alias($class::get_table_name()));
 
             foreach ($properties->get() as $data_class_property)
@@ -316,7 +330,7 @@ class DataClassDatabase
             }
             else
             {
-                $this->error_handling($statement);
+                $this->handleError($statement);
                 return false;
             }
         }
@@ -331,7 +345,7 @@ class DataClassDatabase
      */
     public function delete($class, $condition)
     {
-        $query_builder = new QueryBuilder($this->connection);
+        $query_builder = new QueryBuilder($this->getConnection());
         $query_builder->delete($class::get_table_name(), $this->get_alias($class::get_table_name()));
         if (isset($condition))
         {
@@ -346,7 +360,7 @@ class DataClassDatabase
         }
         else
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             return false;
         }
     }
@@ -359,7 +373,7 @@ class DataClassDatabase
      */
     public function count($class, $parameters)
     {
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
 
         if ($parameters->get_property() instanceof ConditionVariable)
         {
@@ -384,7 +398,7 @@ class DataClassDatabase
         }
         else
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             return false;
         }
     }
@@ -397,7 +411,7 @@ class DataClassDatabase
      */
     public function count_grouped($class, $parameters)
     {
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
         foreach ($parameters->get_property()->get() as $property)
         {
 
@@ -428,7 +442,7 @@ class DataClassDatabase
         }
         else
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             return false;
         }
     }
@@ -504,7 +518,7 @@ class DataClassDatabase
         }
         catch (\PDOException $exception)
         {
-            $this->error_handling($exception);
+            $this->handleError($exception);
             throw new DataClassNoResultException($class, $parameters, $sql);
         }
     }
@@ -517,7 +531,7 @@ class DataClassDatabase
      */
     public function build_retrieves_sql($class, DataClassRetrievesParameters $parameters)
     {
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
 
         $select = $this->get_alias($this->prepare_table_name($class)) . '.*';
 
@@ -541,7 +555,7 @@ class DataClassDatabase
      */
     public function build_records_sql($class, RecordRetrievesParameters $parameters)
     {
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
 
         $query_builder = $this->process_data_class_properties($query_builder, $class, $parameters->get_properties());
         $query_builder = $this->process_group_by($query_builder, $parameters->get_group_by());
@@ -574,7 +588,7 @@ class DataClassDatabase
      */
     public function retrieve_maximum_value($class, $property, $condition = null)
     {
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
         $query_builder->addSelect(
             'MAX(' . self::escape_column_name($property, $this->get_alias($class::get_table_name())) . ') AS ' .
                  self::ALIAS_MAX_SORT);
@@ -594,7 +608,7 @@ class DataClassDatabase
         }
         else
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             return false;
         }
     }
@@ -607,7 +621,7 @@ class DataClassDatabase
      */
     public function retrieve($class, $parameters = null)
     {
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
         $query_builder->addSelect($this->get_alias($this->prepare_table_name($class)) . '.*');
 
         $this->process_composite_data_class_joins($query_builder, $class, $parameters);
@@ -652,7 +666,7 @@ class DataClassDatabase
      */
     public function record($class, $parameters = null)
     {
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
 
         $group_by = $parameters->get_group_by();
         if ($group_by instanceof GroupBy)
@@ -708,13 +722,13 @@ class DataClassDatabase
         }
         else
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
 
         if ($record instanceof \PDOException)
         {
-            $this->error_handling($record);
+            $this->handleError($record);
             throw new DataClassNoResultException($class, $parameters, $sqlQuery);
         }
 
@@ -759,7 +773,7 @@ class DataClassDatabase
             $select[] = self::escape_column_name($property, $this->get_alias($class::get_table_name()));
         }
 
-        $query_builder = $this->connection->createQueryBuilder();
+        $query_builder = $this->getConnection()->createQueryBuilder();
         $query_builder->addSelect('DISTINCT ' . implode(',', $select));
         $query_builder->from($class::get_table_name(), $this->get_alias($class::get_table_name()));
 
@@ -786,7 +800,7 @@ class DataClassDatabase
         }
         else
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             return false;
         }
     }
@@ -842,7 +856,7 @@ class DataClassDatabase
     {
         if (! is_null($text))
         {
-            return $this->connection->quote($text);
+            return $this->getConnection()->quote($text);
         }
         else
         {
@@ -859,7 +873,7 @@ class DataClassDatabase
      */
     public function exec($query)
     {
-        return $this->connection->exec($query);
+        return $this->getConnection()->exec($query);
     }
 
     /**
@@ -915,7 +929,7 @@ class DataClassDatabase
         }
         else
         {
-            $this->error_handling($statement);
+            $this->handleError($statement);
             return false;
         }
     }
@@ -947,7 +961,7 @@ class DataClassDatabase
 
         try
         {
-            $this->connection->transactional($throw_on_false);
+            $this->getConnection()->transactional($throw_on_false);
             return true;
         }
         catch (Exception $e)

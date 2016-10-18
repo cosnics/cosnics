@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query\Variable;
 
-use Chamilo\Libraries\Architecture\Interfaces\Hashable;
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 
 /**
  * Parent class for all abstract condition variables used to build conditions for the storage layer
@@ -11,22 +11,6 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class ConditionVariable implements Hashable
+abstract class ConditionVariable extends ConditionPart
 {
-    use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-    use \Chamilo\Libraries\Architecture\Traits\HashableTrait;
-
-    public function getHashParts()
-    {
-        return array(static :: class_name());
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function package()
-    {
-        return static :: context();
-    }
 }

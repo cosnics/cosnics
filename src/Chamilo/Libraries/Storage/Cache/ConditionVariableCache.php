@@ -123,7 +123,7 @@ class ConditionVariableCache
     /**
      * Set the cache value for a specific ConditionVariable
      *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $condition
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @param string $value
      */
     public function set($conditionVariable, $value)

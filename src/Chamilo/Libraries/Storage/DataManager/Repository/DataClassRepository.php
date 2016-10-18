@@ -151,7 +151,7 @@ class DataClassRepository
      *
      * @return boolean
      */
-    private function isQueryCacheEnabled()
+    protected function isQueryCacheEnabled()
     {
         return (bool) $this->getConfiguration()->get_setting(
             array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
