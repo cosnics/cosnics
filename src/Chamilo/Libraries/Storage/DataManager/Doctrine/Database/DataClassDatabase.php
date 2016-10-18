@@ -4,11 +4,14 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Variable\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -20,8 +23,6 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Exception;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -33,7 +34,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslat
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassDatabase
+class DataClassDatabase implements DataClassDatabaseInterface
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
 
@@ -69,15 +70,15 @@ class DataClassDatabase
      * @param \Doctrine\DBAL\Connection $connection
      * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      */
     public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
-        ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorFactory $conditionPartTranslatorFactory)
+        ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService)
     {
         $this->connection = $connection;
         $this->storageAliasGenerator = $storageAliasGenerator;
         $this->exceptionLogger = $exceptionLogger;
-        $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
+        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
     }
 
     /**
@@ -136,20 +137,20 @@ class DataClassDatabase
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
      */
-    public function getConditionPartTranslatorFactory()
+    public function getConditionPartTranslatorService()
     {
-        return $this->conditionPartTranslatorFactory;
+        return $this->conditionPartTranslatorService;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      */
-    public function setConditionPartTranslatorFactory($conditionPartTranslatorFactory)
+    public function setConditionPartTranslatorService($conditionPartTranslatorService)
     {
-        $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
+        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
     }
 
     /**
@@ -273,7 +274,7 @@ class DataClassDatabase
 
         if ($condition instanceof Condition)
         {
-            $queryBuilder->where(ConditionTranslator::render($condition));
+            $queryBuilder->where($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
         }
         else
         {

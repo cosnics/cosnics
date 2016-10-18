@@ -6,6 +6,9 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerF
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 
 /**
  *
@@ -43,14 +46,18 @@ class DataClassDatabaseFactory
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
+     * @param \Doctrine\DBAL\Connection $connection
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      */
     public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
-        ExceptionLoggerInterface $exceptionLogger)
+        ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService)
     {
         $this->connection = $connection;
         $this->storageAliasGenerator = $storageAliasGenerator;
         $this->exceptionLogger = $exceptionLogger;
+        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
     }
 
     /**
@@ -82,6 +89,15 @@ class DataClassDatabaseFactory
 
     /**
      *
+     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     */
+    public function setStorageAliasGenerator($storageAliasGenerator)
+    {
+        $this->storageAliasGenerator = $storageAliasGenerator;
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
     public function getExceptionLogger()
@@ -100,11 +116,20 @@ class DataClassDatabaseFactory
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
      */
-    public function setStorageAliasGenerator($storageAliasGenerator)
+    public function getConditionPartTranslatorService()
     {
-        $this->storageAliasGenerator = $storageAliasGenerator;
+        return $this->conditionPartTranslatorService;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
+     */
+    public function setConditionPartTranslatorService($conditionPartTranslatorService)
+    {
+        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
     }
 
     /**
@@ -116,7 +141,8 @@ class DataClassDatabaseFactory
         return new DataClassDatabase(
             $this->getConnection(),
             $this->getStorageAliasGenerator(),
-            $this->getExceptionLogger());
+            $this->getExceptionLogger(),
+            $this->getConditionPartTranslatorService());
     }
 
     /**
@@ -128,11 +154,16 @@ class DataClassDatabaseFactory
         if (! isset(self::$instance))
         {
             $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
+            $conditionPartTranslatorService = new ConditionPartTranslatorService(
+                Configuration::get_instance(),
+                new ConditionPartTranslatorFactory(ClassnameUtilities::getInstance()),
+                new ConditionPartCache());
 
             self::$instance = new self(
                 ConnectionFactory::getInstance()->getConnection(),
                 StorageAliasGenerator::get_instance(),
-                $exceptionLoggerFactory->createExceptionLogger());
+                $exceptionLoggerFactory->createExceptionLogger(),
+                $conditionPartTranslatorService);
         }
 
         return self::$instance;

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 
 /**
  *
@@ -21,6 +22,12 @@ abstract class ConditionPartTranslator
 
     /**
      *
+     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
+     */
+    private $dataClassDatabase;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Storage\Query\ConditionPart
      */
     private $conditionPart;
@@ -28,12 +35,14 @@ abstract class ConditionPartTranslator
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      */
     public function __construct(ConditionPartTranslatorService $conditionPartTranslatorService,
-        ConditionPart $conditionPart)
+        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+        $this->dataClassDatabase = $dataClassDatabase;
         $this->conditionPart = $conditionPart;
     }
 
@@ -53,6 +62,24 @@ abstract class ConditionPartTranslator
     public function setConditionPartTranslatorService($conditionPartTranslatorService)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
+     */
+    public function getDataClassDatabase()
+    {
+        return $this->dataClassDatabase;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
+     */
+    public function setDataClassDatabase($dataClassDatabase)
+    {
+        $this->dataClassDatabase = $dataClassDatabase;
     }
 
     /**

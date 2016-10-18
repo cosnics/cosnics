@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,7 +14,7 @@ class InConditionTranslator extends ConditionTranslator
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
      */
     public function translate()
     {
@@ -49,7 +48,7 @@ class InConditionTranslator extends ConditionTranslator
 
             foreach ($values as $value)
             {
-                $placeholders[] = Database::quote($value);
+                $placeholders[] = $this->getDataClassDatabase()->quote($value);
             }
 
             $where_clause[] = implode(',', $placeholders);

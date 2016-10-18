@@ -14,7 +14,7 @@ class EqualityConditionTranslator extends ConditionTranslator
 
     /**
      *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator::translate()
+     * @see \Chamilo\Libraries\Storage\Query\ConditionPartTranslator::translate()
      */
     public function translate()
     {
