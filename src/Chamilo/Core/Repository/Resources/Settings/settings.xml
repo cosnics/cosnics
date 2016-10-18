@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Repository">
+	<settings>
+		<category name="administrator">
+			<setting name="description_required" field="toggle" default="1">
+				<options type="static">
+					<option name="description_required" value="1" />
+				</options>
+			</setting>
+		</category>
+		<category name="rights">
+			<setting name="all_objects_searchable" field="toggle" default="0">
+				<options type="static">
+					<option name="all_objects_searchable" value="1" />
+				</options>
+			</setting>
+			<setting name="hide_sharing" field="toggle" default="0">
+				<options type="static">
+					<option name="hide_sharing" value="1" />
+				</options>
+			</setting>
+		</category>
+		<category name="content_objects">
+			<setting name="omit_content_object_title_check" field="toggle" default="0">
+				<options type="static">
+					<option name="omit_content_objet_title_check" value="1" />
+				</options>
+			</setting>
+		</category>
+		<category name="quota">
+			<setting name="enable_quota" field="toggle" default="1">
+				<options type="static">
+					<option name="enable_quota" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_upgrade" field="toggle" default="0">
+				<options type="static">
+					<option name="allow_upgrade" value="1" />
+				</options>
+			</setting>
+			<setting name="allow_request" field="toggle" default="0">
+				<options type="static">
+					<option name="allow_request" value="1" />
+				</options>
+			</setting>
+			<setting name="step" field="text" default="52428800">
+				<validations>
+					<validation rule="numeric" message="MustBeNumeric" />
+				</validations>
+			</setting>
+			<setting name="maximum_user" field="text" default="524288000">
+				<validations>
+					<validation rule="numeric" message="MustBeNumeric" />
+				</validations>
+			</setting>
+		</category>
+		<category name="disk_quota">
+			<setting name="quota_policy" field="radio" default="0">
+				<options type="static">
+					<option name="quota_policy_user" value="0" />
+					<option name="quota_policy_group_highest" value="1" />
+					<option name="quota_policy_group_lowest" value="2" />
+					<option name="quota_policy_highest" value="3" />
+					<option name="quota_policy_lowest" value="4" />
+				</options>
+			</setting>
+			<setting name="quota_fallback" field="toggle" default="0">
+				<options type="static">
+					<option name="quota_fallback" value="1" />
+				</options>
+			</setting>
+			<setting name="quota_fallback_user" field="radio" default="0">
+				<options type="static">
+					<option name="quota_fallback_user_group_highest" value="0" />
+					<option name="quota_fallback_user_group_lowest" value="1" />
+				</options>
+			</setting>
+		</category>
+	</settings>
+</package>

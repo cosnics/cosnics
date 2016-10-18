@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_rating_question
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Rating vraag"
+Properties = "Eigenschappen"
+Percentage = "Percentage"
+Rating = "Rating"
+CorrectValue = "Correct waarde"
+Weight = "Gewicht"
+Title = "Vraag"
+Description = "Extra instructies"
+Hint = "Hint"
+InstructionsText = "Is een vraagtype waarbij je een percentage of rating dient op te geven.<br />Bepaal of je met een rating of een percentage wilt werken onder Eigenschappen --&gt;Type<br />B.v. hoeveel % van de Belgische bevolking beoefende in 2010 een beroep?<br /><strong>Percentage</strong>: hier moet je een exact percentage invullen, b.v. 46.<br /><strong>Rating</strong>: geef aan wat de laagste (neerwaarts pijltje) en wat de hoogste (opwaarts pijltje) is, b.v. 40 en 50, de deelnemer zal met een schuifknop tussen die waarden kunnen kiezen.<ol><li>  Geef een titel aan de vraag.</li><li>Bepaal de Categorie waarin je de vraag (het object) gaat opslaan.</li><li>Geef een beschrijving en de opdracht in.</li><li>Geef aan of het om een rating of om een percentage gaat, en geef de limieten aan (bij ratingvraag), de juiste oplossing en eventueel een hint in.</li><li>Bepaal de score die voor het juiste antwoord geldt.</li><li>Klik op Maak.</li></ol>"
+FeedbackAnswer = "Enkel feedback bij fout antwoord"
+AddHint = "Stel hint in"
