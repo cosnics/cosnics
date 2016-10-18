@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="structure_location">
+	<properties>
+		<property name="id" type="integer" notnull="1" autoincrement="true" />
+		<property name="context" type="text" length="255" notnull="1" default="" />
+		<property name="component" type="text" length="255" notnull="0" default="" />
+	</properties>
+	<index name="location" type="unique">
+		<indexproperty name="context" />
+		<indexproperty name="component" />
+	</index>
+</object>
