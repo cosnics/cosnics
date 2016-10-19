@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+	<services>
+		<service id="chamilo.configuration.configuration" class="Chamilo\Configuration\Service\ConfigurationService">
+			<argument type="service" id="chamilo.libraries.string_utilities" />
+			<argument type="service" id="chamilo.configuration.configuration_repository" />
+		</service>
+
+		<service id="chamilo.configuration.configuration_repository" class="Chamilo\Configuration\Repository\ConfigurationRepository">
+			<argument type="service" id="chamilo.configuration.configuration_cache" />
+			<argument type="service" id="chamilo.libraries.storage.cache.data_manager" />
+		</service>
+
+		<service id="chamilo.configuration.configuration_cache" class="Chamilo\Configuration\Service\ConfigurationCacheService" />
+	</services>
+</container>

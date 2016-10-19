@@ -12,7 +12,7 @@ use Doctrine\DBAL\DriverManager;
 
 /**
  * This class represents the current configuration
- * 
+ *
  * @package Chamilo\Configuration
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -24,7 +24,7 @@ class Configuration
 
     /**
      * Instance of this class for the singleton pattern.
-     * 
+     *
      * @var Configuration
      */
     private static $instance;
@@ -62,7 +62,7 @@ class Configuration
     /**
      * Constructor.
      */
-    private function __construct(ConfigurationCacheService $configurationCacheService)
+    public function __construct(ConfigurationCacheService $configurationCacheService)
     {
         $this->configurationCacheService = $configurationCacheService;
         $this->initialize();
@@ -88,7 +88,7 @@ class Configuration
 
     /**
      * Returns the instance of this class.
-     * 
+     *
      * @return \Chamilo\Configuration\Configuration The instance.
      */
     public static function get_instance()
@@ -96,7 +96,7 @@ class Configuration
         if (! isset(self :: $instance))
         {
             self :: $instance = new static(new ConfigurationCacheService());
-            
+
             if (self :: $instance->is_available() && self :: $instance->is_connectable())
             {
                 self :: $instance->loadFromStorage();
@@ -111,7 +111,7 @@ class Configuration
 
     /**
      * Gets a parameter from the configuration.
-     * 
+     *
      * @param string[] $keys
      * @throws \Exception
      * @return mixed
@@ -120,11 +120,11 @@ class Configuration
     {
         $variables = $keys;
         $values = $this->settings;
-        
+
         while (count($variables) > 0)
         {
             $key = array_shift($variables);
-            
+
             if (! isset($values[$key]))
             {
                 if ($this->is_available())
@@ -146,7 +146,7 @@ class Configuration
                 $values = $values[$key];
             }
         }
-        
+
         return $values;
     }
 
@@ -159,11 +159,11 @@ class Configuration
     {
         $variables = $keys;
         $values = &$this->settings;
-        
+
         while (count($variables) > 0)
         {
             $key = array_shift($variables);
-            
+
             if (! isset($values[$key]))
             {
                 $values[$key] = null;
@@ -174,7 +174,7 @@ class Configuration
                 $values = &$values[$key];
             }
         }
-        
+
         $values = $value;
     }
 
@@ -210,7 +210,7 @@ class Configuration
         if (! isset($this->isAvailable))
         {
             $file = $this->getConfigurationCacheService()->getConfigurationFilePath();
-            
+
             if (is_file($file) && is_readable($file))
             {
                 $this->isAvailable = true;
@@ -220,28 +220,28 @@ class Configuration
                 $this->isAvailable = false;
             }
         }
-        
+
         return $this->isAvailable;
     }
 
     public function is_connectable()
     {
         $configuration = new \Doctrine\DBAL\Configuration();
-        
+
         $data_source_name = DataSourceName :: factory(
-            'Doctrine', 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'driver')), 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'username')), 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'host')), 
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'name')), 
+            'Doctrine',
+            $this->get_setting(array('Chamilo\Configuration', 'database', 'driver')),
+            $this->get_setting(array('Chamilo\Configuration', 'database', 'username')),
+            $this->get_setting(array('Chamilo\Configuration', 'database', 'host')),
+            $this->get_setting(array('Chamilo\Configuration', 'database', 'name')),
             $this->get_setting(array('Chamilo\Configuration', 'database', 'password')));
-        
+
         $connection_parameters = array(
-            'user' => $data_source_name->get_username(), 
-            'password' => $data_source_name->get_password(), 
-            'host' => $data_source_name->get_host(), 
+            'user' => $data_source_name->get_username(),
+            'password' => $data_source_name->get_password(),
+            'host' => $data_source_name->get_host(),
             'driverClass' => $data_source_name->get_driver(true));
-        
+
         try
         {
             DriverManager :: getConnection($connection_parameters, $configuration)->connect();
@@ -277,9 +277,9 @@ class Configuration
     {
         $this->registrations = $this->getConfigurationCacheService()->getRegistrationsCache();
         $this->languages = $this->getConfigurationCacheService()->getLanguagesCache();
-        
+
         $storedSettings = $this->getConfigurationCacheService()->getSettingsCache();
-        
+
         if ($this->is_available())
         {
             $this->settings = $storedSettings;
@@ -412,7 +412,7 @@ class Configuration
         if ($root)
         {
             $rootIntegrationRegistrations = array();
-            
+
             foreach ($integrationRegistrations as $rootContext => $registration)
             {
                 $rootContextStringUtilities = StringUtilities :: getInstance()->createString($rootContext);
@@ -421,7 +421,7 @@ class Configuration
                     $rootIntegrationRegistrations[$rootContext] = $registration;
                 }
             }
-            
+
             return $rootIntegrationRegistrations;
         }
         else
@@ -448,7 +448,7 @@ class Configuration
     private function loadDefault()
     {
         $settings = array();
-        
+
         $this->set(array('Chamilo\Core\Admin', 'show_administrator_data'), false);
         $this->set(array('Chamilo\Core\Admin', 'whoisonlineaccess'), 2);
         $this->set(array('Chamilo\Core\Admin', 'site_name'), 'Chamilo');
@@ -473,23 +473,23 @@ class Configuration
         $this->set(array('Chamilo\Core\Admin', 'administrator_website'), '');
         $this->set(array('Chamilo\Core\Admin', 'administrator_surname'), '');
         $this->set(array('Chamilo\Core\Admin', 'administrator_firstname'), '');
-        
+
         $this->set(array('Chamilo\Core\Menu', 'show_sitemap'), false);
         $this->set(array('Chamilo\Core\Menu', 'menu_renderer'), 'Bar');
         $this->set(array('Chamilo\Core\Menu', 'brand_image'), '');
-        
+
         $this->set(array('Chamilo\Core\Help', 'hide_empty_pages'), true);
-        
+
         $this->set(array('Chamilo\Core\User', 'allow_user_change_platform_language'), false);
         $this->set(array('Chamilo\Core\User', 'allow_user_quick_change_platform_language'), false);
-        
+
         $url_append = str_replace('/src/Core/Install/index.php', '', $_SERVER['PHP_SELF']);
-        
+
         $this->set(
-            array('Chamilo\Configuration', 'general', 'root_web'), 
+            array('Chamilo\Configuration', 'general', 'root_web'),
             'http://' . $_SERVER['HTTP_HOST'] . $url_append . '/');
         $this->set(array('Chamilo\Configuration', 'general', 'url_append'), $url_append);
-        
+
         $this->set(array('Chamilo\Configuration', 'general', 'hashing_algorithm'), 'sha1');
         $this->set(array('Chamilo\Configuration', 'debug', 'show_errors'), false);
         $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_cache'), true);
@@ -497,31 +497,31 @@ class Configuration
         $this->set(array('Chamilo\Configuration', 'session', 'session_handler'), 'chamilo');
 
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'archive'), 
+            array('Chamilo\Configuration', 'storage', 'archive'),
             Path :: getInstance()->getStoragePath('archive'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'cache_path'), 
+            array('Chamilo\Configuration', 'storage', 'cache_path'),
             Path :: getInstance()->getStoragePath('cache'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'garbage'), 
+            array('Chamilo\Configuration', 'storage', 'garbage'),
             Path :: getInstance()->getStoragePath('garbage_path'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'hotpotatoes_path'), 
+            array('Chamilo\Configuration', 'storage', 'hotpotatoes_path'),
             Path :: getInstance()->getStoragePath('hotpotatoes'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'logs_path'), 
+            array('Chamilo\Configuration', 'storage', 'logs_path'),
             Path :: getInstance()->getStoragePath('logs'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'repository_path'), 
+            array('Chamilo\Configuration', 'storage', 'repository_path'),
             Path :: getInstance()->getStoragePath('repository'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'scorm_path'), 
+            array('Chamilo\Configuration', 'storage', 'scorm_path'),
             Path :: getInstance()->getStoragePath('scorm'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'temp_path'), 
+            array('Chamilo\Configuration', 'storage', 'temp_path'),
             Path :: getInstance()->getStoragePath('temp'));
         $this->set(
-            array('Chamilo\Configuration', 'storage', 'userpictures'), 
+            array('Chamilo\Configuration', 'storage', 'userpictures'),
             Path :: getInstance()->getStoragePath('userpictures_path'));
     }
 
