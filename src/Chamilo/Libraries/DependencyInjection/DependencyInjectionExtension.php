@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
+use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
+use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -18,7 +20,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface
+class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
 {
 
     /**
@@ -35,6 +37,17 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
             new FileLocator(Path::getInstance()->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection'));
 
         $xmlFileLoader->load('services.xml');
+        $xmlFileLoader->load('console.xml');
+    }
+
+    /**
+     * Registers the compiler passes in the container
+     *
+     * @param ContainerBuilder $container
+     */
+    public function registerCompilerPasses(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new ConsoleCompilerPass());
     }
 
     /**
