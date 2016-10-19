@@ -7,8 +7,9 @@ use Symfony\Component\Translation\MessageCatalogue;
 /**
  * Optimizes the translation resources
  *
- * @package common\libraries
+ * @package Chamilo\Libraries\Translation
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TranslationResourcesOptimizer
 {

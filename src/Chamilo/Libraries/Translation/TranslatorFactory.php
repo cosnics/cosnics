@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Translation;
 
-use Chamilo\Configuration\Package\Finder\BasicBundles;
-use Chamilo\Configuration\Package\PackageList;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\Path;
@@ -10,12 +8,14 @@ use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\Translation\Loader\IniFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
 use Symfony\Component\Translation\Translator;
+use Chamilo\Configuration\Configuration;
 
 /**
  * Builds the symfony translator
  *
- * @package common\libraries
+ * @package Chamilo\Libraries\Translation
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TranslatorFactory
 {
@@ -31,7 +31,7 @@ class TranslatorFactory
     {
         if (! $locale)
         {
-            $isoCode = Translation :: getInstance()->getLanguageIsocode();
+            $isoCode = Translation::getInstance()->getLanguageIsocode();
             $locale = $isoCode . '_' . strtoupper($isoCode);
         }
 
@@ -52,18 +52,18 @@ class TranslatorFactory
      */
     protected function addOptimizedTranslationResources(Translator $translator)
     {
-        $translationCachePath = Path :: getInstance()->getCachePath() . 'translation';
+        $translationCachePath = Path::getInstance()->getCachePath(__NAMESPACE__);
+
         if (! is_dir($translationCachePath))
         {
-            Filesystem :: create_dir($translationCachePath);
+            Filesystem::create_dir($translationCachePath);
         }
 
-        $packageBundles = new BasicBundles(PackageList :: ROOT);
-        $packageNamespaces = $packageBundles->getPackageNamespaces();
+        $packageNamespaces = Configuration::get_instance()->get_registration_contexts();
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
             array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),
-            new PackagesTranslationResourcesFinder(new PackagesFilesFinder(Path :: getInstance(), $packageNamespaces)),
+            new PackagesTranslationResourcesFinder(new PackagesFilesFinder(Path::getInstance(), $packageNamespaces)),
             $translationCachePath);
 
         $resources = $translationResourcesOptimizer->getOptimizedTranslationResources();

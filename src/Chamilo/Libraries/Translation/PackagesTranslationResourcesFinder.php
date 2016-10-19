@@ -6,7 +6,9 @@ use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 /**
  * Implementation of the translation resources finder which scans chamilo packages for translation resources
  *
- * @package common\libraries
+ * @package Chamilo\Libraries\Translation
+ * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PackagesTranslationResourcesFinder implements TranslationResourcesFinderInterface
 {
@@ -38,7 +40,7 @@ class PackagesTranslationResourcesFinder implements TranslationResourcesFinderIn
     {
         $resources = array();
 
-        $translationFiles = $this->packagesFilesFinder->findFiles('Resources/i18n/', '/.*(\.i18n|\.xliff)$/');
+        $translationFiles = $this->packagesFilesFinder->findFiles('Resources/I18n/', '/.*(\.i18n|\.xliff)$/');
         foreach ($translationFiles as $package => $translationFilesPerPackage)
         {
             foreach ($translationFilesPerPackage as $translationFile)

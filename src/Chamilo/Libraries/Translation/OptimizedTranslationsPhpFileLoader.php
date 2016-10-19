@@ -11,8 +11,9 @@ use Symfony\Component\Translation\MessageCatalogue;
  * This loader does not take the given domain into account and
  * loads every translation from the given resource into the message catalogue.
  *
- * @package common\libraries
+ * @package Chamilo\Libraries\Translation
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class OptimizedTranslationsPhpFileLoader implements LoaderInterface
 {
