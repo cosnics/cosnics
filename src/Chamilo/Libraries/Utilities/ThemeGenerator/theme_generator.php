@@ -138,7 +138,7 @@ foreach ($content_objects as $content_object)
 /*
  * COMMON LIBRARIES
  */
-$configuration = Path :: getInstance()->getConfigurationPath();
+$configuration = Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration');
 create_and_copy($configuration);
 
 /*

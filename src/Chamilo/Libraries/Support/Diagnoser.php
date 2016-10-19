@@ -85,7 +85,6 @@ class Diagnoser
         $writable_folders[] = $pathRenderer->getStoragePath();
         $writable_folders[] = $pathRenderer->getRepositoryPath();
         $writable_folders[] = $pathRenderer->getTemporaryPath();
-        $writable_folders[] = $pathRenderer->getConfigurationPath();
 
         foreach ($writable_folders as $index => $folder)
         {

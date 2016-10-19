@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+	<services>
+		<service id="symfony.component.http_foundation.request" class="Symfony\Component\HttpFoundation\Request"
+			factory-method="createFromGlobals" factory-class="Symfony\Component\HttpFoundation\Request" />
+
+		<service id="chamilo.libraries.storage.cache.data_manager" class="Chamilo\Libraries\Storage\Cache\DataManagerCache" />
+
+		<service id="chamilo.libraries.string_utilities" class="Chamilo\Libraries\Utilities\StringUtilities" />
+
+		<!-- <service id="chamilo.libraries.storage.data_manager.repository.data_class_repository" class="Chamilo\Libraries\Storage\DataManager\Service\Repository"> -->
+		<!-- <argument type="service" id="chamilo.configuration.configuration" /> -->
+		<!-- <argument type="service" id="chamilo.libraries.storage.cache.data_manager_cache" /> -->
+		<!-- <argument type="service" id="chamilo.libraries.storage.data_manager.data_class_database" /> -->
+		<!-- </service> -->
+	</services>
+</container>
