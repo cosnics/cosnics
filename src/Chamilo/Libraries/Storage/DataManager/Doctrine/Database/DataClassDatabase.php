@@ -459,7 +459,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      */
@@ -678,6 +678,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
         $groupBy = $parameters->get_group_by();
+
         if ($groupBy instanceof GroupBy)
         {
             foreach ($groupBy->get_group_by() as $groupByVariable)
@@ -689,7 +690,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if ($parameters->get_properties() instanceof DataClassProperties)
         {
-
             foreach ($parameters->get_properties()->get() as $conditionVariable)
             {
                 $queryBuilder->addSelect(
@@ -707,23 +707,23 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @throws DataClassNoResultException
      * @return string[]
      */
-    protected function fetchRecord($query_builder, $class, $parameters)
+    protected function fetchRecord($queryBuilder, $class, $parameters)
     {
-        $query_builder->from($this->prepare_table_name($class), $this->get_alias($this->prepare_table_name($class)));
+        $queryBuilder->from($this->prepareTableName($class), $this->getAlias($this->prepareTableName($class)));
 
-        $query_builder = $this->process_parameters($query_builder, $class, $parameters);
-        $query_builder = $this->process_order_by($query_builder, $class, $parameters->get_order_by());
+        $queryBuilder = $this->processParameters($queryBuilder, $class, $parameters);
+        $queryBuilder = $this->processOrderBy($queryBuilder, $class, $parameters->get_order_by());
 
-        $query_builder->setFirstResult(0);
-        $query_builder->setMaxResults(1);
+        $queryBuilder->setFirstResult(0);
+        $queryBuilder->setMaxResults(1);
 
-        $sqlQuery = $query_builder->getSQL();
+        $sqlQuery = $queryBuilder->getSQL();
 
         $statement = $this->getConnection()->query($sqlQuery);
 
@@ -781,33 +781,33 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         foreach ($properties as $property)
         {
-            $select[] = $this->escapeColumnName($property, $this->get_alias($class::get_table_name()));
+            $select[] = $this->escapeColumnName($property, $this->getAlias($class::get_table_name()));
         }
 
-        $query_builder = $this->getConnection()->createQueryBuilder();
-        $query_builder->addSelect('DISTINCT ' . implode(',', $select));
-        $query_builder->from($class::get_table_name(), $this->get_alias($class::get_table_name()));
+        $queryBuilder = $this->getConnection()->createQueryBuilder();
+        $queryBuilder->addSelect('DISTINCT ' . implode(',', $select));
+        $queryBuilder->from($class::get_table_name(), $this->getAlias($class::get_table_name()));
 
-        $query_builder = $this->process_parameters($query_builder, $class, $parameters);
-        $query_builder = $this->process_order_by($query_builder, $class, $parameters->getOrderBy());
+        $queryBuilder = $this->processParameters($queryBuilder, $class, $parameters);
+        $queryBuilder = $this->processOrderBy($queryBuilder, $class, $parameters->getOrderBy());
 
-        $statement = $this->getConnection()->query($query_builder->getSQL());
+        $statement = $this->getConnection()->query($queryBuilder->getSQL());
 
         if (! $statement instanceof \PDOException)
         {
-            $distinct_elements = array();
+            $distinctElements = array();
             while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
             {
                 if (count($properties) > 1)
                 {
-                    $distinct_elements[] = $record;
+                    $distinctElements[] = $record;
                 }
                 else
                 {
-                    $distinct_elements[] = array_pop($record);
+                    $distinctElements[] = array_pop($record);
                 }
             }
-            return $distinct_elements;
+            return $distinctElements;
         }
         else
         {
@@ -818,12 +818,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $table_name
+     * @param string $tableName
      * @return string
      */
-    public function getAlias($table_name)
+    public function getAlias($tableName)
     {
-        return $this->getStorageAliasGenerator()->get_table_alias($table_name);
+        return $this->getStorageAliasGenerator()->get_table_alias($tableName);
     }
 
     /**
@@ -833,14 +833,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function getConstraintName($name)
     {
-        $possible_name = '';
+        $possibleName = '';
         $parts = explode('_', $name);
         foreach ($parts as & $part)
         {
-            $possible_name .= $part{0};
+            $possibleName .= $part{0};
         }
 
-        return $possible_name;
+        return $possibleName;
     }
 
     /**
@@ -848,13 +848,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param string $value
      * @param string $type
      * @param boolean $quote
-     * @param boolean $escape_wildcards
+     * @param boolean $escapeWildcards
      *
      * @return string
      */
-    public function quote($value, $type = null, $quote = true, $escape_wildcards = false)
+    public function quote($value, $type = null, $quote = true, $escapeWildcards = false)
     {
-        return $this->getConnection()->quote($value, $type, $quote, $escape_wildcards);
+        return $this->getConnection()->quote($value, $type, $quote, $escapeWildcards);
     }
 
     /**
@@ -863,7 +863,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param boolean $escape_wildcards
      * @return string
      */
-    public function escape($text, $escape_wildcards = false)
+    public function escape($text, $escapeWildcards = false)
     {
         if (! is_null($text))
         {
@@ -907,16 +907,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
 
         $query = 'SELECT ' . implode(',', $array) . ' FROM ' . $object::get_table_name() . ' WHERE ' .
-             $object::PROPERTY_ID . '=' . $this->quote($object->get_id());
+             $object::PROPERTY_ID . '=' . $this->quote($object->getId());
 
         $statement = $this->getConnection()->query($query);
 
         if (! $statement instanceof \PDOException)
         {
-            $distinct_elements = array();
             $record = $statement->fetch(\PDO::FETCH_ASSOC);
-
-            $additional_properties = array();
+            $additionalProperties = array();
 
             if (is_array($record))
             {
@@ -933,11 +931,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
                                 $data .= fread($record[$prop], 1024);
                             $record[$prop] = $data;
                         }
-                        $additional_properties[$prop] = $record[$prop];
+
+                        $additionalProperties[$prop] = $record[$prop];
                     }
                 }
             }
-            return $additional_properties;
+            return $additionalProperties;
         }
         else
         {
@@ -958,7 +957,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         // an intermediate function that throws an exception if the function returns #f.
         // This mediates between Chamilo's convention of returning #f to signal failure
         // versus Doctrine's use of Exceptions.
-        $throw_on_false = function ($connection) use ($function)
+        $throwOnFalse = function ($connection) use ($function)
         {
             $result = call_user_func($function, $connection);
             if (! $result)
@@ -973,7 +972,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         try
         {
-            $this->getConnection()->transactional($throw_on_false);
+            $this->getConnection()->transactional($throwOnFalse);
             return true;
         }
         catch (Exception $e)
@@ -984,170 +983,170 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $class
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function processOrderBy($query_builder, $class, $order_by)
+    protected function processOrderBy($queryBuilder, $class, $orderBy)
     {
-        if (is_null($order_by))
+        if (is_null($orderBy))
         {
-            $order_by = array();
+            $orderBy = array();
         }
-        elseif (! is_array($order_by))
+        elseif (! is_array($orderBy))
         {
-            $order_by = array($order_by);
+            $orderBy = array($orderBy);
         }
 
-        foreach ($order_by as $order)
+        foreach ($orderBy as $order)
         {
-            $query_builder->addOrderBy(
+            $queryBuilder->addOrderBy(
                 $this->getConditionPartTranslatorService()->translateCondition($this, $order->get_property()),
                 ($order->get_direction() == SORT_DESC ? 'DESC' : 'ASC'));
         }
 
-        return $query_builder;
+        return $queryBuilder;
     }
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param int $count
      * @param int $offset
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function processLimit($query_builder, $count = null, $offset = null)
+    protected function processLimit($queryBuilder, $count = null, $offset = null)
     {
         if (intval($count) > 0)
         {
-            $query_builder->setMaxResults(intval($count));
+            $queryBuilder->setMaxResults(intval($count));
         }
 
         if (intval($offset) > 0)
         {
-            $query_builder->setFirstResult(intval($offset));
+            $queryBuilder->setFirstResult(intval($offset));
         }
 
-        return $query_builder;
+        return $queryBuilder;
     }
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $class
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function processDataClassProperties($query_builder, $class, $properties)
+    protected function processDataClassProperties($queryBuilder, $class, $properties)
     {
         if ($properties instanceof DataClassProperties)
         {
-            foreach ($properties->get() as $condition_variable)
+            foreach ($properties->get() as $conditionVariable)
             {
-                $query_builder->addSelect(
-                    $this->getConditionPartTranslatorService()->translateCondition($this, $condition_variable));
+                $queryBuilder->addSelect(
+                    $this->getConditionPartTranslatorService()->translateCondition($this, $conditionVariable));
             }
         }
         else
         {
-            $query_builder->addSelect($this->get_alias($class::get_table_name()) . '.*');
+            $queryBuilder->addSelect($this->getAlias($class::get_table_name()) . '.*');
         }
 
-        return $query_builder;
+        return $queryBuilder;
     }
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
-     * @param \Chamilo\Libraries\Storage\Query\GroupBy $group_by
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
+     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function processGroupBy($query_builder, $group_by)
+    protected function processGroupBy($queryBuilder, $groupBy)
     {
-        if ($group_by instanceof GroupBy)
+        if ($groupBy instanceof GroupBy)
         {
-            foreach ($group_by->get() as $group_by_variable)
+            foreach ($groupBy->get() as $groupByVariable)
             {
-                $query_builder->addGroupBy(
-                    $this->getConditionPartTranslatorService()->translateCondition($this, $group_by_variable));
+                $queryBuilder->addGroupBy(
+                    $this->getConditionPartTranslatorService()->translateCondition($this, $groupByVariable));
             }
         }
 
-        return $query_builder;
+        return $queryBuilder;
     }
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function processJoins($query_builder, $class, $joins)
+    protected function processJoins($queryBuilder, $class, $joins)
     {
         if ($joins instanceof Joins)
         {
             foreach ($joins->get() as $join)
             {
-                $join_condition = $this->getConditionPartTranslatorService()->translateCondition(
+                $joinCondition = $this->getConditionPartTranslatorService()->translateCondition(
                     $this,
                     $join->get_condition());
-                $data_class_name = $join->get_data_class();
+                $dataClassName = $join->get_data_class();
 
                 switch ($join->get_type())
                 {
                     case Join::TYPE_NORMAL :
-                        $query_builder->join(
-                            $this->get_alias($class::get_table_name()),
-                            $data_class_name::get_table_name(),
-                            $this->get_alias($data_class_name::get_table_name()),
-                            $join_condition);
+                        $queryBuilder->join(
+                            $this->getAlias($class::get_table_name()),
+                            $dataClassName::get_table_name(),
+                            $this->getAlias($dataClassName::get_table_name()),
+                            $joinCondition);
                         break;
                     case Join::TYPE_RIGHT :
-                        $query_builder->rightJoin(
-                            $this->get_alias($class::get_table_name()),
-                            $data_class_name::get_table_name(),
-                            $this->get_alias($data_class_name::get_table_name()),
-                            $join_condition);
+                        $queryBuilder->rightJoin(
+                            $this->getAlias($class::get_table_name()),
+                            $dataClassName::get_table_name(),
+                            $this->getAlias($dataClassName::get_table_name()),
+                            $joinCondition);
                         break;
                     case Join::TYPE_LEFT :
-                        $query_builder->leftJoin(
-                            $this->get_alias($class::get_table_name()),
-                            $data_class_name::get_table_name(),
-                            $this->get_alias($data_class_name::get_table_name()),
-                            $join_condition);
+                        $queryBuilder->leftJoin(
+                            $this->getAlias($class::get_table_name()),
+                            $dataClassName::get_table_name(),
+                            $this->getAlias($dataClassName::get_table_name()),
+                            $joinCondition);
                         break;
                 }
             }
         }
-        return $query_builder;
+        return $queryBuilder;
     }
 
     /**
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function processCondition($query_builder, $class, $condition)
+    protected function processCondition($queryBuilder, $class, $condition)
     {
         if ($condition instanceof Condition)
         {
-            $query_builder->where(
+            $queryBuilder->where(
                 $this->getConditionPartTranslatorService()->translateCondition(
                     $this,
                     $condition,
-                    $this->get_alias($this->prepare_table_name($class))));
+                    $this->getAlias($this->prepareTableName($class))));
         }
 
-        return $query_builder;
+        return $queryBuilder;
     }
 
     /**
@@ -1163,17 +1162,17 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * Processes the parameters
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query_builder
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function processParameters($query_builder, $class, $parameters)
+    protected function processParameters($queryBuilder, $class, $parameters)
     {
-        $query_builder = $this->process_joins($query_builder, $class, $parameters->get_joins());
-        $query_builder = $this->process_condition($query_builder, $class, $parameters->get_condition());
-        return $query_builder;
+        $queryBuilder = $this->processJoins($queryBuilder, $class, $parameters->get_joins());
+        $queryBuilder = $this->processCondition($queryBuilder, $class, $parameters->get_condition());
+        return $queryBuilder;
     }
 
     /**
