@@ -23,15 +23,24 @@ class StorageAliasGenerator
 
     /**
      *
+     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    private $classnameUtilities;
+
+    /**
+     *
      * @var string[]
      */
     private $aliases = array();
 
     /**
-     * Constructor
+     *
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
-    private function __construct()
+    private function __construct(ClassnameUtilities $classnameUtilities)
     {
+        $this->classnameUtilities = $classnameUtilities;
+
         foreach ($this->get_types() as $type)
         {
             $this->aliases[$type] = array();
@@ -44,11 +53,29 @@ class StorageAliasGenerator
      */
     public static function get_instance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self(ClassnameUtilities::getInstance());
         }
-        return self :: $instance;
+        return self::$instance;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities()
+    {
+        return $this->classnameUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     */
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
+    {
+        $this->classnameUtilities = $classnameUtilities;
     }
 
     /**
@@ -57,7 +84,7 @@ class StorageAliasGenerator
      */
     public function get_types()
     {
-        return array(self :: TYPE_TABLE, self :: TYPE_CONSTRAINT);
+        return array(self::TYPE_TABLE, self::TYPE_CONSTRAINT);
     }
 
     /**
@@ -76,9 +103,10 @@ class StorageAliasGenerator
      */
     public function get_data_class_alias($class)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace(
-            ClassnameUtilities :: getInstance()->getNamespaceFromClassname($class));
-        return $this->get_table_alias($class :: get_table_name(), $namespace . '_');
+        $classnameUtilities = $this->getClassnameUtilities();
+        $namespace = $classnameUtilities->getPackageNameFromNamespace(
+            $classnameUtilities->getNamespaceFromClassname($class));
+        return $this->get_table_alias($class::get_table_name(), $namespace . '_');
     }
 
     /**
@@ -88,9 +116,9 @@ class StorageAliasGenerator
      */
     public function get_table_alias($table_name)
     {
-        if (array_key_exists($table_name, $this->aliases[self :: TYPE_TABLE]))
+        if (array_key_exists($table_name, $this->aliases[self::TYPE_TABLE]))
         {
-            return $this->aliases[self :: TYPE_TABLE][$table_name];
+            return $this->aliases[self::TYPE_TABLE][$table_name];
         }
         else
         {
@@ -102,19 +130,19 @@ class StorageAliasGenerator
                 $possible_name .= $part{0};
             }
 
-            if (in_array($possible_name, $this->aliases[self :: TYPE_TABLE]))
+            if (in_array($possible_name, $this->aliases[self::TYPE_TABLE]))
             {
                 $original_name = $possible_name;
                 $index = 'a';
 
-                while (in_array($possible_name, $this->aliases[self :: TYPE_TABLE]))
+                while (in_array($possible_name, $this->aliases[self::TYPE_TABLE]))
                 {
                     $possible_name = $original_name . '_' . $index;
                     $index ++;
                 }
             }
 
-            $this->aliases[self :: TYPE_TABLE][$table_name] = $possible_name;
+            $this->aliases[self::TYPE_TABLE][$table_name] = $possible_name;
 
             return $possible_name;
         }
@@ -138,9 +166,9 @@ class StorageAliasGenerator
 
         $possible_name = $possible_name . '_' . $column;
 
-        if (! array_key_exists($possible_name, $this->aliases[self :: TYPE_CONSTRAINT]))
+        if (! array_key_exists($possible_name, $this->aliases[self::TYPE_CONSTRAINT]))
         {
-            $this->aliases[self :: TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
+            $this->aliases[self::TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
             return $possible_name;
         }
         else
@@ -148,13 +176,13 @@ class StorageAliasGenerator
             $original_name = $possible_name;
             $index = 'a';
 
-            while (array_key_exists($possible_name, $this->aliases[self :: TYPE_CONSTRAINT]))
+            while (array_key_exists($possible_name, $this->aliases[self::TYPE_CONSTRAINT]))
             {
                 $possible_name = $original_name . '_' . $index;
                 $index ++;
             }
 
-            $this->aliases[self :: TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
+            $this->aliases[self::TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
             return $possible_name;
         }
     }
