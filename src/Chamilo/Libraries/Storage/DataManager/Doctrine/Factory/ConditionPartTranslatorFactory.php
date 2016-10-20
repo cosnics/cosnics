@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
-use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 
 /**
  *

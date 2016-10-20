@@ -37,9 +37,9 @@ class DataClassCountCache extends DataClassCache
                      '.');
         }
 
-        if (! DataClassCache :: exists($class, $parameters))
+        if (! DataClassCache::exists($class, $parameters))
         {
-            DataClassCache :: set_cache($class, $parameters->hash(), $count);
+            DataClassCache::set_cache($class, $parameters->hash(), $count);
         }
 
         return true;

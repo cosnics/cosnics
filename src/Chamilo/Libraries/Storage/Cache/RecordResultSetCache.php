@@ -37,9 +37,9 @@ class RecordResultSetCache extends RecordCache
                      $type . '.');
         }
 
-        if (! self :: get($className, $parameters))
+        if (! self::get($className, $parameters))
         {
-            self :: set_cache($className, $parameters->hash(), $result_set);
+            self::set_cache($className, $parameters->hash(), $result_set);
         }
 
         return true;

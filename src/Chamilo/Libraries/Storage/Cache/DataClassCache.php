@@ -33,11 +33,11 @@ class DataClassCache
      */
     public static function get_instance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -49,9 +49,9 @@ class DataClassCache
      */
     public static function get($class, DataClassParameters $parameters)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
 
-        if (self :: exists($class, $parameters))
+        if (self::exists($class, $parameters))
         {
             return $instance->cache[$class][$parameters->hash()];
         }
@@ -71,7 +71,7 @@ class DataClassCache
      */
     public static function exists($class, DataClassParameters $parameters)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
         $hash = $parameters->hash();
 
         if (isset($instance->cache[$class][$hash]))
@@ -92,7 +92,7 @@ class DataClassCache
      */
     public static function truncate($class)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
 
         if (isset($instance->cache[$class]))
         {
@@ -112,7 +112,7 @@ class DataClassCache
     {
         foreach ($classes as $class)
         {
-            if (! self :: truncate($class))
+            if (! self::truncate($class))
             {
                 return false;
             }
@@ -130,13 +130,13 @@ class DataClassCache
      */
     public static function set_cache($class, $hash, $value)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
         $instance->cache[$class][$hash] = $value;
     }
 
     public static function reset()
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
         $instance->cache = array();
     }
 }
