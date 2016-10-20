@@ -37,9 +37,9 @@ class DataClassCountGroupedCache extends DataClassCache
                      $type . '.');
         }
 
-        if (! DataClassCache :: exists($class, $parameters))
+        if (! DataClassCache::exists($class, $parameters))
         {
-            DataClassCache :: set_cache($class, $parameters->hash(), $counts);
+            DataClassCache::set_cache($class, $parameters->hash(), $counts);
         }
 
         return true;

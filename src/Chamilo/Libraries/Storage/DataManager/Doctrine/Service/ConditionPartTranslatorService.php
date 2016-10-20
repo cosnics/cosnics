@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
 
+use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
-use Chamilo\Libraries\Storage\Query\ConditionPart;
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
-use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  *

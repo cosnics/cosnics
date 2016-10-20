@@ -37,7 +37,7 @@ class DataClassResultCache extends DataClassCache
                      '.');
         }
 
-        $class_name = self :: getCacheClassName($object);
+        $class_name = self::getCacheClassName($object);
 
         foreach ($object->get_cacheable_property_names() as $cacheable_property)
         {
@@ -48,13 +48,13 @@ class DataClassResultCache extends DataClassCache
                     new EqualityCondition(
                         new PropertyConditionVariable($class_name, $cacheable_property),
                         new StaticConditionVariable($value)));
-                DataClassCache :: set_cache($class_name, $cacheable_property_parameters->hash(), $object);
+                DataClassCache::set_cache($class_name, $cacheable_property_parameters->hash(), $object);
             }
         }
 
         if ($parameters instanceof DataClassRetrieveParameters)
         {
-            DataClassCache :: set_cache($class_name, $parameters->hash(), $object);
+            DataClassCache::set_cache($class_name, $parameters->hash(), $object);
         }
 
         return true;
@@ -67,7 +67,7 @@ class DataClassResultCache extends DataClassCache
      */
     public static function no_result(DataClassNoResultException $exception)
     {
-        DataClassCache :: set_cache($exception->get_class_name(), $exception->get_parameters()->hash(), false);
+        DataClassCache::set_cache($exception->get_class_name(), $exception->get_parameters()->hash(), false);
         return true;
     }
 
@@ -84,7 +84,7 @@ class DataClassResultCache extends DataClassCache
             throw new Exception('Not a DataClass');
         }
 
-        $class_name = self :: getCacheClassName($object);
+        $class_name = self::getCacheClassName($object);
 
         foreach ($object->get_cacheable_property_names() as $cacheable_property)
         {
@@ -92,7 +92,7 @@ class DataClassResultCache extends DataClassCache
                 new EqualityCondition(
                     new PropertyConditionVariable($class_name, $cacheable_property),
                     new StaticConditionVariable($object->get_default_property($cacheable_property))));
-            DataClassCache :: set_cache($class_name, $cacheable_property_parameters->hash(), null);
+            DataClassCache::set_cache($class_name, $cacheable_property_parameters->hash(), null);
         }
 
         return true;
@@ -100,18 +100,18 @@ class DataClassResultCache extends DataClassCache
 
     private static function getCacheClassName(DataClass $object)
     {
-        $compositeDataClassName = CompositeDataClass :: class_name();
+        $compositeDataClassName = CompositeDataClass::class_name();
 
         $isCompositeDataClass = $object instanceof $compositeDataClassName;
         $isExtensionClass = get_parent_class($object) !== $compositeDataClassName;
 
         if ($isCompositeDataClass && $isExtensionClass)
         {
-            return $object :: parent_class_name();
+            return $object::parent_class_name();
         }
         else
         {
-            return $object :: class_name();
+            return $object::class_name();
         }
     }
 }

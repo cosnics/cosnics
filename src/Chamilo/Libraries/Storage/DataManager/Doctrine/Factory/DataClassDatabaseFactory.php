@@ -2,13 +2,13 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassDatabase;
-use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassDatabase;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 
 /**
  *

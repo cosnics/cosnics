@@ -37,9 +37,9 @@ class DataClassDistinctCache extends DataClassCache
                      $type . '.');
         }
 
-        if (! DataClassCache :: exists($class, $parameters))
+        if (! DataClassCache::exists($class, $parameters))
         {
-            DataClassCache :: set_cache($class, $parameters->hash(), $property_values);
+            DataClassCache::set_cache($class, $parameters->hash(), $property_values);
         }
 
         return true;

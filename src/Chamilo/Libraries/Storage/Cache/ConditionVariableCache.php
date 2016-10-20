@@ -54,14 +54,14 @@ class ConditionVariableCache
 
         if ($this->queryFileCacheEnabled)
         {
-            $this->phpFileCache = new PhpFileCache(Path :: getInstance()->getCachePath(__NAMESPACE__));
+            $this->phpFileCache = new PhpFileCache(Path::getInstance()->getCachePath(__NAMESPACE__));
 
-            if (! $this->phpFileCache->contains(self :: PHP_FILE_CACHE_KEY))
+            if (! $this->phpFileCache->contains(self::PHP_FILE_CACHE_KEY))
             {
-                $this->phpFileCache->save(self :: PHP_FILE_CACHE_KEY, array());
+                $this->phpFileCache->save(self::PHP_FILE_CACHE_KEY, array());
             }
 
-            $this->cache = $this->phpFileCache->fetch(self :: PHP_FILE_CACHE_KEY);
+            $this->cache = $this->phpFileCache->fetch(self::PHP_FILE_CACHE_KEY);
         }
     }
 
@@ -72,15 +72,15 @@ class ConditionVariableCache
      */
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            $queryFileCacheEnabled = Configuration :: get_instance()->get_setting(
+            $queryFileCacheEnabled = Configuration::get_instance()->get_setting(
                 array('Chamilo\Configuration', 'debug', 'enable_query_file_cache'));
 
-            self :: $instance = new self($queryFileCacheEnabled);
+            self::$instance = new self($queryFileCacheEnabled);
         }
 
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -132,7 +132,7 @@ class ConditionVariableCache
 
         if ($this->queryFileCacheEnabled)
         {
-            $this->phpFileCache->save(self :: PHP_FILE_CACHE_KEY, $this->cache);
+            $this->phpFileCache->save(self::PHP_FILE_CACHE_KEY, $this->cache);
         }
     }
 
@@ -142,7 +142,7 @@ class ConditionVariableCache
 
         if ($this->queryFileCacheEnabled)
         {
-            $this->phpFileCache->save(self :: PHP_FILE_CACHE_KEY, $this->cache);
+            $this->phpFileCache->save(self::PHP_FILE_CACHE_KEY, $this->cache);
         }
     }
 }

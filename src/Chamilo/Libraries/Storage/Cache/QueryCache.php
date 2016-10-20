@@ -34,11 +34,11 @@ class QueryCache
      */
     public static function get_instance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -48,9 +48,9 @@ class QueryCache
      */
     public static function get($hash)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
 
-        if (self :: exists($hash))
+        if (self::exists($hash))
         {
             return $instance->cache[$hash];
         }
@@ -67,7 +67,7 @@ class QueryCache
      */
     public static function exists($hash)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
 
         if (isset($instance->cache[$hash]))
         {
@@ -86,7 +86,7 @@ class QueryCache
      */
     public static function truncate()
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
 
         if (isset($instance->cache))
         {
@@ -103,13 +103,13 @@ class QueryCache
      */
     public static function set_cache($hash, $value)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
         $instance->cache[$hash] = $value;
     }
 
     public static function reset()
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
         $instance->cache = array();
     }
 
@@ -127,9 +127,9 @@ class QueryCache
             throw new Exception('Illegal hash passed to the QueryCache');
         }
 
-        if (! self :: get($hash))
+        if (! self::get($hash))
         {
-            self :: set_cache($hash, $result);
+            self::set_cache($hash, $result);
         }
 
         return true;
