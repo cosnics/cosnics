@@ -77,6 +77,24 @@ class Path
 
     /**
      *
+     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
+     */
+    public function getClassnameUtilities()
+    {
+        return $this->classnameUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
+     */
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
+    {
+        $this->classnameUtilities = $classnameUtilities;
+    }
+
+    /**
+     *
      * @param boolean $web
      * @return string
      */
@@ -85,6 +103,7 @@ class Path
         if ($web)
         {
             $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] . 'x'));
+
             if ($dir !== '/')
             {
                 $dir .= '/';
@@ -112,7 +131,7 @@ class Path
         $basePath = realpath($this->getBasePath() . '../files/');
 
         return $this->cache[self::STORAGE][(string) $namespace] = $basePath . DIRECTORY_SEPARATOR .
-             ($namespace ? $this->classnameUtilities->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
+             ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
     }
 
     public function getPublicStoragePath($namespace = null, $web = false)
@@ -127,9 +146,9 @@ class Path
                 $this->getBasePath($web) . '..' . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'Files');
         }
         return $this->cache[self::PUBLIC_STORAGE][(string) $namespace][(string) $web] = $basePath .
-             ($web ? '/' : DIRECTORY_SEPARATOR) . ($namespace ? $this->classnameUtilities->namespaceToPath(
-                $namespace,
-                $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+             ($web ? '/' : DIRECTORY_SEPARATOR) .
+             ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace, $web) .
+             ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 
     /**
@@ -153,6 +172,7 @@ class Path
      * @param string $namespace
      * @param boolean $web
      * @return string
+     * @deprecated Use the ConfigurablePath service now
      */
     public function getTemporaryPath($namespace = null)
     {
@@ -168,6 +188,7 @@ class Path
      * @param string $namespace
      * @param boolean $web
      * @return string
+     * @deprecated Use the ConfigurablePath service now
      */
     public function getCachePath($namespace = null)
     {
@@ -182,6 +203,7 @@ class Path
      *
      * @param boolean $web
      * @return string
+     * @deprecated Use the ConfigurablePath service now
      */
     public function getLogPath()
     {
@@ -194,6 +216,7 @@ class Path
     /**
      *
      * @return string
+     * @deprecated Use the ConfigurablePath service now
      */
     public function getArchivePath()
     {
@@ -207,6 +230,7 @@ class Path
      *
      * @param boolean $web
      * @return string
+     * @deprecated Use the ConfigurablePath service now
      */
     public function getRepositoryPath()
     {
@@ -220,6 +244,7 @@ class Path
      *
      * @param boolean $web
      * @return string
+     * @deprecated Use the ConfigurablePath service now
      */
     public function getProfilePicturePath($web = false)
     {
@@ -301,9 +326,9 @@ class Path
      */
     public function namespaceToFullPath($namespace = null, $web = false)
     {
-        return $this->cache[self::FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) . ($namespace ? $this->classnameUtilities->namespaceToPath(
-            $namespace,
-            $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
+        return $this->cache[self::FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) .
+             ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace, $web) .
+             ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 
     /*
