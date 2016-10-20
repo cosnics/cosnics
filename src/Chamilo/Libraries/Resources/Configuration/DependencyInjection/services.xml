@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+	<services>
+		<service id="symfony.component.http_foundation.request" class="Symfony\Component\HttpFoundation\Request">
+			<factory class="Symfony\Component\HttpFoundation\Request" method="createFromGlobals" />
+		</service>
+
+		<service id="symfony.component.translation.translator" class="Symfony\Component\Translation\Translator">
+			<factory service="chamilo.libraries.translation.translator_factory" method="createTranslator" />
+		</service>
+
+		<service id="chamilo.libraries.translation.translator_factory" class="Chamilo\Libraries\Translation\TranslatorFactory" />
+
+		<service id="chamilo.libraries.storage.cache.data_manager_cache" class="Chamilo\Libraries\Storage\Cache\DataManagerCache" />
+
+		<service id="chamilo.libraries.utilities.string_utilities" class="Chamilo\Libraries\Utilities\StringUtilities" />
+
+		<!-- <service id="chamilo.libraries.storage.data_manager.repository.data_class_repository" class="Chamilo\Libraries\Storage\DataManager\Service\Repository"> -->
+		<!-- <argument type="service" id="chamilo.configuration.configuration" /> -->
+		<!-- <argument type="service" id="chamilo.libraries.storage.cache.data_manager_cache" /> -->
+		<!-- <argument type="service" id="chamilo.libraries.storage.data_manager.data_class_database" /> -->
+		<!-- </service> -->
+
+		<service id="chamilo.libraries.cache.cache_director" class="Chamilo\Libraries\Cache\CacheDirector">
+			<factory service="chamilo.libraries.cache.cache_director_builder" method="buildCacheDirector" />
+		</service>
+
+		<service id="chamilo.libraries.cache.cache_director_builder" class="Chamilo\Libraries\Cache\CacheDirectorBuilder">
+			<argument type="service" id="service_container" />
+		</service>
+
+		<service id="chamilo.libraries.storage.data_manager.mdb2.database" class="Chamilo\Libraries\Storage\DataManager\Mdb2\DataBase">
+		</service>
+
+		<service id="chamilo.libraries.storage.data_manager.doctrine.database" class="Chamilo\Libraries\Storage\DataManager\Doctrine\DataBase">
+		</service>
+
+		<service id="chamilo.libraries.storage.data_manager.mdb2.data_class_repository" class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
+			<argument type="service" id="chamilo.libraries.storage.data_manager.mdb2.database" />
+		</service>
+
+		<service id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
+			<argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.database" />
+		</service>
+
+		<service id="chamilo.core.repository.content_object_repository" class="Chamilo\Core\Repository\Storage\Repository\ContentObjectRepository">
+			<argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+		</service>
+
+		<service id="chamilo.core.rights.content_object_repository" class="Chamilo\Core\Rights\Storage\Repository\ContentObjectRepository">
+			<argument type="service" id="chamilo.libraries.storage.data_manager.mdb2.data_class_repository" />
+		</service>
+
+	</services>
+</container>
