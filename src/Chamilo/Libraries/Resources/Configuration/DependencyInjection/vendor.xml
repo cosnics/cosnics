@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- SYMFONY -->
+        <service
+            id="symfony.component.http_foundation.request"
+            class="Symfony\Component\HttpFoundation\Request">
+            <factory
+                class="Symfony\Component\HttpFoundation\Request"
+                method="createFromGlobals" />
+        </service>
+
+        <service
+            id="symfony.component.translation.translator"
+            class="Symfony\Component\Translation\Translator">
+            <factory
+                service="chamilo.libraries.translation.translator_factory"
+                method="createTranslator" />
+        </service>
+
+        <!-- DOCTRINE -->
+        <service
+            id="doctrine.dbal.connection"
+            class="Doctrine\DBAL\Connection">
+            <factory
+                service="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory"
+                method="getConnection" />
+        </service>
+
+    </services>
+</container>
