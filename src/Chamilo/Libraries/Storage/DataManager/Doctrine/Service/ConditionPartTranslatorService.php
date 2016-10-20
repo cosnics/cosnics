@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Configuration\Service\ConfigurationService;
 
 /**
  *
@@ -20,9 +20,9 @@ class ConditionPartTranslatorService
 
     /**
      *
-     * @var \Chamilo\Configuration\Configuration
+     * @var \Chamilo\Configuration\Service\ConfigurationService
      */
-    private $configuration;
+    private $configurationService;
 
     /**
      *
@@ -38,34 +38,34 @@ class ConditionPartTranslatorService
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
+     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionTranslatorFactory $conditionPartTranslatorFactory
      * @param \Chamilo\Libraries\Storage\Cache\ConditionPartCache $conditionPartCache
      */
-    public function __construct(Configuration $configuration,
+    public function __construct(ConfigurationService $configurationService,
         ConditionPartTranslatorFactory $conditionPartTranslatorFactory, ConditionPartCache $conditionPartCache)
     {
-        $this->configuration = $configuration;
+        $this->configurationService = $configurationService;
         $this->conditionTranslatorFactory = $conditionPartTranslatorFactory;
         $this->conditionPartCache = $conditionPartCache;
     }
 
     /**
      *
-     * @return \Chamilo\Configuration\Configuration
+     * @return Chamilo\Configuration\Service\ConfigurationService
      */
-    public function getConfiguration()
+    public function getConfigurationService()
     {
-        return $this->configuration;
+        return $this->configurationService;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
+     * @param Chamilo\Configuration\Service\ConfigurationService $configurationService
      */
-    public function setConfiguration($configuration)
+    public function setConfigurationService($configurationService)
     {
-        $this->configuration = $configuration;
+        $this->configurationService = $configurationService;
     }
 
     /**
@@ -110,7 +110,7 @@ class ConditionPartTranslatorService
      */
     protected function isQueryCacheEnabled()
     {
-        return (bool) $this->getConfiguration()->get_setting(
+        return (bool) $this->getConfigurationService()->getSetting(
             array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
     }
 

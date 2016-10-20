@@ -37,7 +37,7 @@ class StorageAliasGenerator
      *
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
-    private function __construct(ClassnameUtilities $classnameUtilities)
+    public function __construct(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
 

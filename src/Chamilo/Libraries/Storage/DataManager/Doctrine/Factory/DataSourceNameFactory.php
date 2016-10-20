@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 
 /**
@@ -15,46 +15,46 @@ class DataSourceNameFactory
 
     /**
      *
-     * @var \Chamilo\Configuration\Configuration
+     * @var \Chamilo\Configuration\Service\ConfigurationService
      */
-    protected $configuration;
+    protected $configurationService;
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
+     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
      */
-    public function __construct(Configuration $configuration)
+    public function __construct(ConfigurationService $configurationService)
     {
-        $this->configuration = $configuration;
+        $this->configurationService = $configurationService;
     }
 
     /**
      *
-     * @return \Chamilo\Configuration\Configuration
+     * @return \Chamilo\Configuration\Service\ConfigurationService
      */
-    public function getConfiguration()
+    public function getConfigurationService()
     {
-        return $this->configuration;
+        return $this->configurationService;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
+     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
      */
-    public function setConfiguration($configuration)
+    public function setConfigurationService(ConfigurationService $configurationService)
     {
-        $this->configuration = $configuration;
+        $this->configurationService = $configurationService;
     }
 
     public function getDataSourceName()
     {
-        $configuration = $this->getConfiguration();
+        $configurationService = $this->getConfigurationService();
 
         return new DataSourceName(
-            $configuration->get_setting(array('Chamilo\Configuration', 'database', 'driver')),
-            $configuration->get_setting(array('Chamilo\Configuration', 'database', 'username')),
-            $configuration->get_setting(array('Chamilo\Configuration', 'database', 'host')),
-            $configuration->get_setting(array('Chamilo\Configuration', 'database', 'name')),
-            $configuration->get_setting(array('Chamilo\Configuration', 'database', 'password')));
+            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'driver')),
+            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'username')),
+            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'host')),
+            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'name')),
+            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'password')));
     }
 }

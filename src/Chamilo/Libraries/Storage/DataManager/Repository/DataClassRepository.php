@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Service;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Cache\DataManagerCache;
@@ -40,9 +40,9 @@ class DataClassRepository
 
     /**
      *
-     * @var \Chamilo\Configuration\Configuration
+     * @var \Chamilo\Configuration\Service\ConfigurationService
      */
-    private $configuration;
+    private $configurationService;
 
     /**
      *
@@ -58,34 +58,34 @@ class DataClassRepository
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
+     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
      * @param \Chamilo\Libraries\Storage\Cache\DataManagerCache $dataManagerCache
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      */
-    public function __construct(Configuration $configuration, DataManagerCache $dataManagerCache,
+    public function __construct(ConfigurationService $configurationService, DataManagerCache $dataManagerCache,
         DataClassDatabaseInterface $dataClassDatabase)
     {
-        $this->configuration = $configuration;
+        $this->configurationService = $configurationService;
         $this->dataManagerCache = $dataManagerCache;
         $this->dataClassDatabase = $dataClassDatabase;
     }
 
     /**
      *
-     * @return \Chamilo\Configuration\Configuration
+     * @return Chamilo\Configuration\Service\ConfigurationService
      */
-    public function getConfiguration()
+    public function getConfigurationService()
     {
-        return $this->configuration;
+        return $this->configurationService;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Configuration $configuration
+     * @param Chamilo\Configuration\Service\ConfigurationService $configurationService
      */
-    public function setConfiguration($configuration)
+    public function setConfigurationService($configurationService)
     {
-        $this->configuration = $configuration;
+        $this->configurationService = $configurationService;
     }
 
     /**
@@ -153,7 +153,7 @@ class DataClassRepository
      */
     protected function isQueryCacheEnabled()
     {
-        return (bool) $this->getConfiguration()->get_setting(
+        return (bool) $this->getConfigurationService()->getSetting(
             array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
     }
 
