@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
+namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Exception;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\QueryBuilder;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -260,7 +261,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @throws Exception
      * @return boolean
      */
-    public function update($objectTableName, $condition, $propertiesToUpdate)
+    public function update($objectTableName, Condition $condition, $propertiesToUpdate)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
         $queryBuilder->update($objectTableName, $this->getAlias($objectTableName));
@@ -488,23 +489,23 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet
      */
-    public function retrieves($class, DataClassRetrievesParameters $parameters)
+    public function retrieves($objectClass, DataClassRetrievesParameters $parameters)
     {
         return new DataClassResultSet(
-            $this->getRecordsResult($this->buildRetrievesSql($class, $parameters), $class, $parameters),
-            $class);
+            $this->getRecordsResult($this->buildRetrievesSql($objectClass, $parameters), $objectClass, $parameters),
+            $objectClass);
     }
 
     /**
      *
-     * @param string $class
+     * @param string $objectClass
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet
      */
-    public function records($class, RecordRetrievesParameters $parameters)
+    public function records($objectClass, RecordRetrievesParameters $parameters)
     {
         return new RecordResultSet(
-            $this->getRecordsResult($this->buildRecordsSql($class, $parameters), $class, $parameters));
+            $this->getRecordsResult($this->buildRecordsSql($objectClass, $parameters), $objectClass, $parameters));
     }
 
     /**
@@ -628,14 +629,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return string[]
      */
-    public function retrieve($class, $parameters = null)
+    public function retrieve($objectClass, $parameters = null)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
-        $queryBuilder->addSelect($this->getAlias($this->prepareTableName($class)) . '.*');
+        $queryBuilder->addSelect($this->getAlias($this->prepareTableName($objectClass)) . '.*');
 
-        $this->processCompositeDataClassJoins($queryBuilder, $class, $parameters);
+        $this->processCompositeDataClassJoins($queryBuilder, $objectClass, $parameters);
 
-        return $this->fetchRecord($queryBuilder, $class, $parameters);
+        return $this->fetchRecord($queryBuilder, $objectClass, $parameters);
     }
 
     /**
@@ -673,7 +674,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @return string[]
      */
-    public function record($class, $parameters = null)
+    public function record($objectClass, $parameters = null)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
@@ -699,10 +700,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
         else
         {
 
-            return $this->retrieve($class, $parameters);
+            return $this->retrieve($objectClass, $parameters);
         }
 
-        return $this->fetchRecord($queryBuilder, $class, $parameters);
+        return $this->fetchRecord($queryBuilder, $objectClass, $parameters);
     }
 
     /**
