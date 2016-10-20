@@ -32,7 +32,11 @@
         <!-- ARCHITECTURE -->
         <service
             id="chamilo.libraries.architecture.classname_utilities"
-            class="Chamilo\Libraries\Architecture\ClassnameUtilities" />
+            class="Chamilo\Libraries\Architecture\ClassnameUtilities">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+        </service>
 
         <service
             id="chamilo.libraries.architecture.error_handler.exception_logger"
