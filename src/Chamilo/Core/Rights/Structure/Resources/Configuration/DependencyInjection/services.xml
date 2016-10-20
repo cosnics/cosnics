@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="chamilo.core.rights.structure.structure_location_configuration_loader"
+                 class="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\StructureLocationConfigurationLoader">
+            <argument type="service" id="chamilo.libraries.file.path" />
+        </service>
+
+        <service id="chamilo.core.rights.structure.structure_location_configuration_synchronizer"
+                 class="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\StructureLocationConfigurationSynchronizer">
+            <argument type="service" id="chamilo.core.rights.structure.structure_location_configuration_loader" />
+            <argument type="service" id="chamilo.configuration.service.configuration_service" />
+        </service>
+    </services>
+</container>
