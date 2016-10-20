@@ -11,5 +11,12 @@
                 type="service"
                 id="chamilo.libraries.architecture.classname_utilities" />
         </service>
+        <service
+            id="chamilo.libraries.file.configurable_path"
+            class="Chamilo\Libraries\File\ConfigurablePath">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_service" />
+        </service>
     </services>
 </container>
