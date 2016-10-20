@@ -1,0 +1,26 @@
+<?php
+use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Translation;
+
+require_once __DIR__ . '/src/Chamilo/Libraries/Architecture/Bootstrap.php';
+
+\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
+
+if (! \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'debug', 'show_errors'))
+{
+    $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
+    $exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
+
+    $errorHandler = new ErrorHandler($exceptionLogger, Translation::getInstance());
+    $errorHandler->registerErrorHandlers();
+}
+
+$containerBuilder = new DependencyInjectionContainerBuilder();
+$container = $containerBuilder->createContainer();
+
+$console = $container->get('chamilo.libraries.console');
+$console->setHelperSet($container->get('chamilo.libraries.console.helper_set'));
+$console->run();
