@@ -40,6 +40,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('cache.xml');
         $xmlFileLoader->load('file.xml');
         $xmlFileLoader->load('storage.xml');
+        $xmlFileLoader->load('storage.doctrine.xml');
         $xmlFileLoader->load('translation.xml');
         $xmlFileLoader->load('utilities.xml');
         $xmlFileLoader->load('vendor.xml');

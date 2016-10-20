@@ -6,8 +6,8 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Cache\DataManagerCache;
-use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 
 /**
  *
@@ -47,6 +47,12 @@ class ConfigurationRepository
 
     /**
      *
+     * @var \Chamilo\Libraries\File\Path
+     */
+    private $pathUtilities;
+
+    /**
+     *
      * @var \Chamilo\Configuration\Service\ConfigurationCacheService
      */
     private $configurationCacheService;
@@ -60,8 +66,10 @@ class ConfigurationRepository
     /**
      * Constructor.
      */
-    public function __construct(ConfigurationCacheService $configurationCacheService, DataManagerCache $dataManagerCache)
+    public function __construct(Path $pathUtilities, ConfigurationCacheService $configurationCacheService,
+        DataManagerCache $dataManagerCache)
     {
+        $this->pathUtilities = $pathUtilities;
         $this->configurationCacheService = $configurationCacheService;
         $this->dataManagerCache = $dataManagerCache;
         $this->initialize();
@@ -77,6 +85,24 @@ class ConfigurationRepository
         {
             $this->loadDefault();
         }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\File\Path
+     */
+    public function getPathUtilities()
+    {
+        return $this->pathUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     */
+    public function setPathUtilities(Path $pathUtilities)
+    {
+        $this->pathUtilities = $pathUtilities;
     }
 
     /**
@@ -232,8 +258,7 @@ class ConfigurationRepository
     {
         $configuration = new \Doctrine\DBAL\Configuration();
 
-        $dataSourceName = DataSourceName::factory(
-            'Doctrine',
+        $dataSourceName = new DataSourceName(
             $this->getSetting(array('Chamilo\Configuration', 'database', 'driver')),
             $this->getSetting(array('Chamilo\Configuration', 'database', 'username')),
             $this->getSetting(array('Chamilo\Configuration', 'database', 'host')),
@@ -362,31 +387,31 @@ class ConfigurationRepository
 
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'archive'),
-            Path::getInstance()->getStoragePath('archive'));
+            $this->getPathUtilities()->getStoragePath('archive'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'cache_path'),
-            Path::getInstance()->getStoragePath('cache'));
+            $this->getPathUtilities()->getStoragePath('cache'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'garbage'),
-            Path::getInstance()->getStoragePath('garbage_path'));
+            $this->getPathUtilities()->getStoragePath('garbage_path'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'hotpotatoes_path'),
-            Path::getInstance()->getStoragePath('hotpotatoes'));
+            $this->getPathUtilities()->getStoragePath('hotpotatoes'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'logs_path'),
-            Path::getInstance()->getStoragePath('logs'));
+            $this->getPathUtilities()->getStoragePath('logs'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'repository_path'),
-            Path::getInstance()->getStoragePath('repository'));
+            $this->getPathUtilities()->getStoragePath('repository'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'scorm_path'),
-            Path::getInstance()->getStoragePath('scorm'));
+            $this->getPathUtilities()->getStoragePath('scorm'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'temp_path'),
-            Path::getInstance()->getStoragePath('temp'));
+            $this->getPathUtilities()->getStoragePath('temp'));
         $this->setSetting(
             array('Chamilo\Configuration', 'storage', 'userpictures'),
-            Path::getInstance()->getStoragePath('userpictures_path'));
+            $this->getPathUtilities()->getStoragePath('userpictures_path'));
     }
 
     /**
