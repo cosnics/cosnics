@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
@@ -93,7 +94,13 @@ class ExporterComponent extends Manager
      */
     public function export_users()
     {
-        $user_records = CourseDataManager:: retrieve_all_course_users($this->get_course_id());
+        $user_records = CourseDataManager:: retrieve_all_course_users(
+            $this->get_course_id(), null, null, null,
+            array(
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+            )
+        );
 
         $users = array();
 
@@ -286,7 +293,10 @@ class ExporterComponent extends Manager
                 null,
                 null,
                 null,
-                null
+                array(
+                    new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+                    new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+                )
             );
 
             $users_table = $this->get_users_table($course_group_users);
@@ -372,7 +382,10 @@ class ExporterComponent extends Manager
         // retrieve_all_course_users($this->get_course_id(),
         // $this->get_condition(), null, null, null);
         $data = DataManager:: retrieve_course_group_users_with_subscription_time(
-            $this->course_group->get_id(), null, null, null, null
+            $this->course_group->get_id(), null, null, null, array(
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME))
+            )
         );
 
         $table = $this->get_users_table($data);
