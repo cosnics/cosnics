@@ -13,12 +13,6 @@ class ConditionPartCache
 {
 
     /**
-     *
-     * @var \Chamilo\Libraries\Storage\Cache\ConditionPartCache
-     */
-    private static $instance;
-
-    /**
      * The cache
      *
      * @var string[][]
@@ -30,20 +24,6 @@ class ConditionPartCache
     public function __construct()
     {
         $this->cache = array();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Cache\ConditionPartCache
-     */
-    public static function getInstance()
-    {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
     }
 
     /**

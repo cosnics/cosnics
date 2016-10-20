@@ -81,18 +81,4 @@ class ConnectionFactory
             throw new \Exception('Could not connect to the database. Please contact your system administrator.');
         }
     }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    public static function getInstance()
-    {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new self(DataSourceNameFactory::getInstance()->getDataSourceName());
-        }
-
-        return self::$instance;
-    }
 }

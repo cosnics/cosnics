@@ -14,13 +14,6 @@ class DataSourceNameFactory
 {
 
     /**
-     * Instance of this class for the singleton pattern.
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\DataSourceNameFactory
-     */
-    private static $instance;
-
-    /**
      *
      * @var \Chamilo\Configuration\Configuration
      */
@@ -63,19 +56,5 @@ class DataSourceNameFactory
             $configuration->get_setting(array('Chamilo\Configuration', 'database', 'host')),
             $configuration->get_setting(array('Chamilo\Configuration', 'database', 'name')),
             $configuration->get_setting(array('Chamilo\Configuration', 'database', 'password')));
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\DataSourceNameFactory
-     */
-    public static function getInstance()
-    {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new self(Configuration::get_instance());
-        }
-
-        return self::$instance;
     }
 }
