@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Service;
+namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
