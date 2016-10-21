@@ -6,8 +6,7 @@ use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerI
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
@@ -21,7 +20,6 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Exception;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\QueryBuilder;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -258,9 +256,18 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
     {
-        return new DataClassResultSet(
-            $this->getRecordsResult($this->buildRetrievesSql($dataClassName, $parameters), $dataClassName, $parameters),
-            $dataClassName);
+        $statement = $this->getRecordsResult(
+            $this->buildRetrievesSql($dataClassName, $parameters),
+            $dataClassName,
+            $parameters);
+        $dataClasses = array();
+
+        while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
+        {
+            $dataClasses[] = $this->getDataClass($dataClassName, $this->processRecord($record));
+        }
+
+        return $dataClasses;
     }
 
     /**
@@ -309,8 +316,18 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters)
     {
-        return new RecordResultSet(
-            $this->getRecordsResult($this->buildRecordsSql($dataClassName, $parameters), $dataClassName, $parameters));
+        $statement = $this->getRecordsResult(
+            $this->buildRecordsSql($dataClassName, $parameters),
+            $dataClassName,
+            $parameters);
+        $records = array();
+
+        while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
+        {
+            $records[] = $this->processRecord($record);
+        }
+
+        return $records;
     }
 
     /**
@@ -937,13 +954,26 @@ class DataClassDatabase implements DataClassDatabaseInterface
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
 
+        return $this->processRecord($record);
+    }
+
+    /**
+     * Processes a given record by transforming to the correct type
+     *
+     * @param mixed[] $record
+     * @return mixed[]
+     */
+    protected function processRecord($record)
+    {
         foreach ($record as &$field)
         {
             if (is_resource($field))
             {
                 $data = '';
                 while (! feof($field))
+                {
                     $data .= fread($field, 1024);
+                }
                 $field = $data;
             }
         }
@@ -1143,6 +1173,19 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $queryBuilder = $this->processJoins($queryBuilder, $dataClassName, $parameters->get_joins());
         $queryBuilder = $this->processCondition($queryBuilder, $dataClassName, $parameters->get_condition());
         return $queryBuilder;
+    }
+
+    /**
+     *
+     * @param string $dataClassName
+     * @param string[] $record
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    protected function getDataClass($dataClassName, $record)
+    {
+        $baseClassName = (is_subclass_of($dataClassName, CompositeDataClass::class_name()) ? CompositeDataClass::class_name() : DataClass::class_name());
+        $dataClassName = (is_subclass_of($dataClassName, CompositeDataClass::class_name()) ? $record[CompositeDataClass::PROPERTY_TYPE] : $dataClassName);
+        return $baseClassName::factory($dataClassName, $record);
     }
 
     /**

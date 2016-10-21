@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Service;
+namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
 use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -27,6 +28,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 
 /**
  *
@@ -251,7 +253,7 @@ class DataClassRepository
 
     private function __retrieveClass($objectClass, $factoryClass, $parameters)
     {
-        $record = $this->processRecord($this->getDataClassDatabase()->retrieve($objectClass, $parameters));
+        $record = $this->getDataClassDatabase()->retrieve($objectClass, $parameters);
         return $factoryClass::factory($objectClass, $record);
     }
 
@@ -316,9 +318,9 @@ class DataClassRepository
         }
     }
 
-    private static function __record($class, $parameters)
+    private function __record($class, $parameters)
     {
-        return $this->processRecord($this->getDataClassDatabase()->record($class, $parameters));
+        return $this->getDataClassDatabase()->record($class, $parameters);
     }
 
     public function record($class, RecordRetrieveParameters $parameters = null)
@@ -354,37 +356,13 @@ class DataClassRepository
     }
 
     /**
-     * Processes a given record by transforming to the correct type
-     *
-     * @param mixed[] $record
-     * @return mixed[]
-     */
-    public static function processRecord($record)
-    {
-        foreach ($record as &$field)
-        {
-            if (is_resource($field))
-            {
-                $data = '';
-                while (! feof($field))
-                {
-                    $data .= fread($field, 1024);
-                }
-                $field = $data;
-            }
-        }
-
-        return $record;
-    }
-
-    /**
      * Retrieve an instance of a DataClass object from the storage layer by it's unique identifier
      *
      * @param $class string
      * @param $id int
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    public static function retrieveById($className, $id)
+    public function retrieveById($className, $id)
     {
         $parentClass = $this->determineCompositeDataClassParentClassName($className);
 
@@ -511,7 +489,7 @@ class DataClassRepository
      */
     private function __retrievesClass($objectClass, $parameters)
     {
-        return $this->getDataClassDatabase()->retrieves($objectClass, $parameters);
+        return new DataClassIterator($this->getDataClassDatabase()->retrieves($objectClass, $parameters));
     }
 
     private function retrievesClass($cacheClass, $objectClass, $parameters = null)
@@ -540,7 +518,7 @@ class DataClassRepository
 
     private function __records($class, $parameters)
     {
-        return $this->getDataClassDatabase()->records($class, $parameters);
+        return new RecordIterator($this->getDataClassDatabase()->records($class, $parameters));
     }
 
     public function records($class, $parameters = null)
@@ -658,7 +636,7 @@ class DataClassRepository
      * @param $order_by multitype:\common\libraries\ObjectTableOrder
      * @return boolean
      */
-    public static function updates($class, $properties, Condition $condition, $offset = null, $count = null, $order_by = array())
+    public function updates($class, $properties, Condition $condition, $offset = null, $count = null, $order_by = array())
     {
         if ($properties instanceof DataClassProperties)
         {
