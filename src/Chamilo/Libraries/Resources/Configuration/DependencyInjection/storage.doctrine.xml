@@ -9,7 +9,16 @@
             class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
             <argument
                 type="service"
+                id="chamilo.configuration.service.configuration_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.data_manager_cache" />
+            <argument
+                type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_class.data_class_factory" />
         </service>
 
         <service

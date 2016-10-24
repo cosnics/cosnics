@@ -260,14 +260,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $this->buildRetrievesSql($dataClassName, $parameters),
             $dataClassName,
             $parameters);
-        $dataClasses = array();
 
-        while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
-        {
-            $dataClasses[] = $this->getDataClass($dataClassName, $this->processRecord($record));
-        }
-
-        return $dataClasses;
+        return $this->fetchRecords($statement);
     }
 
     /**
@@ -320,14 +314,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $this->buildRecordsSql($dataClassName, $parameters),
             $dataClassName,
             $parameters);
-        $records = array();
 
-        while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
-        {
-            $records[] = $this->processRecord($record);
-        }
-
-        return $records;
+        return $this->fetchRecords($statement);
     }
 
     /**
@@ -736,7 +724,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return string
      */
     public function translateCondition(Condition $condition = null)
@@ -955,6 +943,23 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
 
         return $this->processRecord($record);
+    }
+
+    /**
+     *
+     * @param \Doctrine\DBAL\Driver\Statement $statement
+     * @return string[]
+     */
+    protected function fetchRecords(\Doctrine\DBAL\Driver\Statement $statement)
+    {
+        $records = array();
+
+        while ($record = $statement->fetch(\PDO::FETCH_ASSOC))
+        {
+            $records[] = $this->processRecord($record);
+        }
+
+        return $records;
     }
 
     /**
