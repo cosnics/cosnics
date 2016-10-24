@@ -16,11 +16,11 @@ class RecordProcessor
      * @param mixed[] $record
      * @return mixed[]
      */
-    public function processRecord($record, $encoding = 'UTF-8', $typeMap = array())
+    public function processRecord($record, $typeMap = array())
     {
         foreach ($record as $key => &$field)
         {
-            $field = $this->processField($field, $this->determineFieldTypeFromMap($key, $typeMap), $encoding);
+            $field = $this->processField($field, $this->determineFieldTypeFromMap($key, $typeMap));
         }
 
         return $record;
@@ -42,10 +42,9 @@ class RecordProcessor
      * @param mixed $field
      * @return mixed
      */
-    protected function processField($field, $fieldType = null, $encoding = 'UTF-8')
+    protected function processField($field, $fieldType = null)
     {
         $field = $this->processResource($field);
-        $field = $this->processEncoding($field, $encoding);
 
         if ($fieldType)
         {
@@ -72,21 +71,6 @@ class RecordProcessor
             }
 
             $field = $data;
-        }
-
-        return $field;
-    }
-
-    /**
-     *
-     * @param mixed $field
-     * @return string
-     */
-    protected function processEncoding($field, $encoding = 'UTF-8')
-    {
-        if ($encoding !== 'UTF-8' && is_string($field) && ! is_numeric($field) && ! mb_check_encoding($field, 'UTF-8'))
-        {
-            $field = trim(mb_convert_encoding($field, 'UTF-8', $encoding));
         }
 
         return $field;
