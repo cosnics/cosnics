@@ -42,12 +42,9 @@ class UnshareComponent extends Manager
 
     public function run()
     {
-        $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-        $entityService = new EntityService();
-
-        $canDelete = $entityRelationService->hasRight(
-            $entityService->getEntitiesForUser($this->getUser()),
-            RightsService::RIGHT_DELETE,
+        $rightsService = RightsService::getInstance();
+        $canDelete = $rightsService->canDeleteContentObjects(
+            $this->getUser(),
             $this->getCurrentWorkspace()
         );
 
