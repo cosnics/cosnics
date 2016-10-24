@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 use Exception;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -58,9 +59,15 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory
+     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
      */
-    protected $conditionPartTranslatorFactory;
+    protected $conditionPartTranslatorService;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor
+     */
+    protected $recordProcessor;
 
     /**
      *
@@ -68,14 +75,17 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor $recordProcessor
      */
     public function __construct(\Doctrine\DBAL\Connection $connection, StorageAliasGenerator $storageAliasGenerator,
-        ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService)
+        ExceptionLoggerInterface $exceptionLogger, ConditionPartTranslatorService $conditionPartTranslatorService,
+        RecordProcessor $recordProcessor = null)
     {
         $this->connection = $connection;
         $this->storageAliasGenerator = $storageAliasGenerator;
         $this->exceptionLogger = $exceptionLogger;
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+        $this->recordProcessor = $recordProcessor;
     }
 
     /**
@@ -91,7 +101,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Doctrine\DBAL\Connection $connection
      */
-    public function setConnection($connection)
+    public function setConnection(\Doctrine\DBAL\Connection $connection)
     {
         $this->connection = $connection;
     }
@@ -109,7 +119,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
      */
-    public function setStorageAliasGenerator($storageAliasGenerator)
+    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator)
     {
         $this->storageAliasGenerator = $storageAliasGenerator;
     }
@@ -127,7 +137,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      */
-    public function setExceptionLogger($exceptionLogger)
+    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
     {
         $this->exceptionLogger = $exceptionLogger;
     }
@@ -145,9 +155,27 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      */
-    public function setConditionPartTranslatorService($conditionPartTranslatorService)
+    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor
+     */
+    public function getRecordProcessor()
+    {
+        return $this->recordProcessor;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor $recordProcessor
+     */
+    public function setRecordProcessor(RecordProcessor $recordProcessor)
+    {
+        $this->recordProcessor = $recordProcessor;
     }
 
     /**
@@ -281,7 +309,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($groupBy->get_group_by() as $groupByVariable)
             {
                 $queryBuilder->addGroupBy(
-                    $this->getConditionPartTranslatorService()->translateCondition($this, $groupByVariable));
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $groupByVariable));
             }
         }
 
@@ -290,7 +318,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($parameters->get_properties()->get() as $conditionVariable)
             {
                 $queryBuilder->addSelect(
-                    $this->getConditionPartTranslatorService()->translateCondition($this, $conditionVariable));
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $conditionVariable));
             }
         }
         else
@@ -374,10 +402,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($properties->get() as $dataClassProperty)
             {
                 $queryBuilder->set(
-                    $this->getConditionPartTranslatorService()->translateCondition(
+                    $this->getConditionPartTranslatorService()->translateConditionVariable(
                         $this,
                         $dataClassProperty->get_property()),
-                    $this->getConditionPartTranslatorService()->translateCondition(
+                    $this->getConditionPartTranslatorService()->translateConditionVariable(
                         $this,
                         $dataClassProperty->get_value()));
             }
@@ -417,6 +445,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
         $queryBuilder->delete($dataClassName::get_table_name(), $this->getAlias($dataClassName::get_table_name()));
+
         if (isset($condition))
         {
             $queryBuilder->where($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
@@ -447,7 +476,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if ($parameters->get_property() instanceof ConditionVariable)
         {
-            $property = $this->getConditionPartTranslatorService()->translateCondition(
+            $property = $this->getConditionPartTranslatorService()->translateConditionVariable(
                 $this,
                 $parameters->get_property());
         }
@@ -489,8 +518,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         foreach ($parameters->get_property()->get() as $property)
         {
-
-            $queryBuilder->addSelect($this->getConditionPartTranslatorService()->translateCondition($this, $property));
+            $queryBuilder->addSelect(
+                $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));
         }
 
         $queryBuilder->addSelect('COUNT(1)');
@@ -500,7 +529,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         foreach ($parameters->get_property()->get() as $property)
         {
-            $queryBuilder->addGroupBy($this->getConditionPartTranslatorService()->translateCondition($this, $property));
+            $queryBuilder->addGroupBy(
+                $this->getConditionPartTranslatorService()->translateConditionVariable($this, $property));
         }
 
         $queryBuilder->having(
@@ -970,17 +1000,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     protected function processRecord($record)
     {
-        foreach ($record as &$field)
+        if ($this->getRecordProcessor() instanceof RecordProcessor)
         {
-            if (is_resource($field))
-            {
-                $data = '';
-                while (! feof($field))
-                {
-                    $data .= fread($field, 1024);
-                }
-                $field = $data;
-            }
+            return $this->getRecordProcessor()->processRecord($record);
         }
 
         return $record;
@@ -1024,7 +1046,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         foreach ($orderBy as $order)
         {
             $queryBuilder->addOrderBy(
-                $this->getConditionPartTranslatorService()->translateCondition($this, $order->get_property()),
+                $this->getConditionPartTranslatorService()->translateConditionVariable($this, $order->get_property()),
                 ($order->get_direction() == SORT_DESC ? 'DESC' : 'ASC'));
         }
 
@@ -1067,7 +1089,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($properties->get() as $conditionVariable)
             {
                 $queryBuilder->addSelect(
-                    $this->getConditionPartTranslatorService()->translateCondition($this, $conditionVariable));
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $conditionVariable));
             }
         }
         else
@@ -1091,7 +1113,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             foreach ($groupBy->get() as $groupByVariable)
             {
                 $queryBuilder->addGroupBy(
-                    $this->getConditionPartTranslatorService()->translateCondition($this, $groupByVariable));
+                    $this->getConditionPartTranslatorService()->translateConditionVariable($this, $groupByVariable));
             }
         }
 
@@ -1156,11 +1178,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->where(
-                $this->getConditionPartTranslatorService()->translateCondition(
-                    $this,
-                    $condition,
-                    $this->getAlias($this->prepareTableName($dataClassName))));
+            $queryBuilder->where($this->getConditionPartTranslatorService()->translateCondition($this, $condition));
         }
 
         return $queryBuilder;

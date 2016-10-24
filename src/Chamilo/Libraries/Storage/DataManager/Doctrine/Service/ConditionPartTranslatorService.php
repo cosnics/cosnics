@@ -22,7 +22,7 @@ class ConditionPartTranslatorService
      *
      * @var \Chamilo\Configuration\Service\ConfigurationService
      */
-    private $configurationService;
+    protected $configurationService;
 
     /**
      *
@@ -46,7 +46,7 @@ class ConditionPartTranslatorService
         ConditionPartTranslatorFactory $conditionPartTranslatorFactory, ConditionPartCache $conditionPartCache)
     {
         $this->configurationService = $configurationService;
-        $this->conditionTranslatorFactory = $conditionPartTranslatorFactory;
+        $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
         $this->conditionPartCache = $conditionPartCache;
     }
 
