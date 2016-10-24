@@ -26,7 +26,9 @@ class AggregateConditionTranslator extends ConditionTranslator
         foreach ($this->getCondition()->get_conditions() as $key => $condition)
         {
             $count ++;
-            $translation = $this->getConditionPartTranslatorService()->translateConditionPart($condition);
+            $translation = $this->getConditionPartTranslatorService()->translateConditionPart(
+                $this->getDataClassDatabase(),
+                $condition);
 
             if (! empty($translation))
             {

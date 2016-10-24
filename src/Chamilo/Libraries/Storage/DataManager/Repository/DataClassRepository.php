@@ -308,16 +308,16 @@ class DataClassRepository
 
             if (! $dataManagerCache->exists($dataClassName, $parameters))
             {
-                $dataManagerCache->addForRecordResultSet(
+                $dataManagerCache->addForRecordIterator(
                     $dataClassName,
                     $this->__records($dataClassName, $parameters),
                     $parameters);
             }
 
-            $resultSet = $dataManagerCache->get($dataClassName, $parameters);
-            $resultSet->reset();
+            $recordIterator = $dataManagerCache->get($dataClassName, $parameters);
+            $recordIterator->rewind();
 
-            return $resultSet;
+            return $recordIterator;
         }
         else
         {
@@ -819,15 +819,15 @@ class DataClassRepository
 
             if (! $dataManagerCache->exists($cacheDataClassName, $parameters))
             {
-                $dataManagerCache->addForDataClassResultSet(
+                $dataManagerCache->addForDataClassIterator(
                     $this->__retrievesClass($dataClassName, $parameters),
                     $parameters);
             }
 
-            $resultSet = $dataManagerCache->get($cacheDataClassName, $parameters);
-            $resultSet->reset();
+            $dataClassIterator = $dataManagerCache->get($cacheDataClassName, $parameters);
+            $dataClassIterator->rewind();
 
-            return $resultSet;
+            return $dataClassIterator;
         }
         else
         {
