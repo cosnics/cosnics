@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="workspace_user_favourite">
+	<properties>
+		<property name="id" type="integer" notnull="1" autoincrement="true" />
+		<property name="workspace_id" type="integer" notnull="1" default="0" />
+		<property name="user_id" type="integer" notnull="1" default="0" />
+	</properties>
+	<index name="user_favourite" type="unique">
+		<indexproperty name="workspace_id" />
+		<indexproperty name="user_id" />
+	</index>
+</object>

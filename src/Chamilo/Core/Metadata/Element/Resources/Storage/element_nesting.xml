@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="element_nesting">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="parent_element_id" type="integer" unsigned="1" notnull="1" />
+		<property name="child_element_id" type="integer" unsigned="1" notnull="1" />
+	</properties>
+	<index name="parent_element_id">
+		<indexproperty name="parent_element_id" />
+	</index>
+	<index name="child_element_id">
+		<indexproperty name="child_element_id" />
+	</index>
+</object>

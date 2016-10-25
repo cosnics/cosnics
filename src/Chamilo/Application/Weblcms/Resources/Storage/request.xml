@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="request">
+	<properties>
+		<property name="id" type="integer" notnull="1" autoincrement="true" />
+		<property name="user_id" type="integer" notnull="1" />
+		<property name="name" type="text" length="50" notnull="1" />
+		<property name="course_type_id" type="integer" notnull="1" />
+		<property name="subject" type="text" length="50" notnull="1" />
+		<property name="motivation" type="text" notnull="1" />
+		<property name="creation_date" type="integer" unsigned="1" notnull="1" />
+		<property name="decision_date" type="integer" unsigned="1" />
+		<property name="decision" type="integer" length="1" notnull="1" />
+		<property name="decision_motivation" type="text" />
+	</properties>
+</object>

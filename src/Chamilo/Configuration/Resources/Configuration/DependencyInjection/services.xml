@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.configuration.service.configuration"
+            class="Chamilo\Configuration\Configuration">
+            <factory
+                class="Chamilo\Configuration\Configuration"
+                method="get_instance" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.configuration_service"
+            class="Chamilo\Configuration\Service\ConfigurationService">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
+                id="chamilo.configuration.repository.configuration_repository" />
+        </service>
+
+        <service
+            id="chamilo.configuration.repository.configuration_repository"
+            class="Chamilo\Configuration\Repository\ConfigurationRepository">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_cache_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.data_manager_cache" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.configuration_cache_service"
+            class="Chamilo\Configuration\Service\ConfigurationCacheService" />
+    </services>
+</container>

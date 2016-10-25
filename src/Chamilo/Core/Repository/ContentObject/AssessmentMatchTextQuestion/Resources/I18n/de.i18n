@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_text_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Übereinstimmende Textfrage"
+PossibleAnswer = "Mögliche Antwort"
+Options = "Optionen"
+UseWildcards = "Platzhalter verwenden"
+IgnoreCase = "Groß- und Kleinschreibung nicht unterschieden"
+AddItem = "Eine Position hinzufügen"
+Feedback = "Feedback"
+Score = "Punktzahl"
+Answer = "Antwort"
+Comment = "Kommentar"
+Weight = "Gewicht"
+Title = "Titel"
+Description = "Beschreibung"
+Hint = ""
