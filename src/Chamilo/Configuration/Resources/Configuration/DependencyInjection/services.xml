@@ -25,16 +25,7 @@
             class="Chamilo\Configuration\Service\ConfigurationService">
             <argument
                 type="service"
-                id="chamilo.configuration.service.base_configuration_service" />
-            <argument
-                type="service"
-                id="chamilo.libraries.file.path" />
-            <argument
-                type="service"
-                id="chamilo.libraries.utilities.string_utilities" />
-            <argument
-                type="service"
-                id="chamilo.configuration.repository.configuration_repository" />
+                id="chamilo.configuration.cache.configuration_cache" />
         </service>
 
         <service
@@ -47,6 +38,35 @@
 
         <service
             id="chamilo.configuration.service.configuration_cache_service"
-            class="Chamilo\Configuration\Service\ConfigurationCacheService" />
+            class="Chamilo\Configuration\Service\ConfigurationCacheService">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_loader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.cache.configuration_cache"
+            class="Chamilo\Configuration\Cache\ConfigurationCache">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_loader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.configuration_loader"
+            class="Chamilo\Configuration\Service\ConfigurationLoader">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.base_configuration_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.file.path" />
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
+                id="chamilo.configuration.repository.configuration_repository" />
+        </service>
     </services>
 </container>

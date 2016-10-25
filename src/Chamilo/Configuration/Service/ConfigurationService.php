@@ -1,12 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Configuration\Repository\ConfigurationRepository;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\File\Path;
-use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Configuration\Storage\DataClass\Language;
+use Chamilo\Configuration\Cache\ConfigurationCache;
 
 /**
  *
@@ -16,10 +12,6 @@ use Chamilo\Configuration\Storage\DataClass\Language;
  */
 class ConfigurationService
 {
-    // Registration cache types
-    const REGISTRATION_CONTEXT = 1;
-    const REGISTRATION_TYPE = 2;
-    const REGISTRATION_INTEGRATION = 3;
 
     /**
      *
@@ -41,167 +33,46 @@ class ConfigurationService
 
     /**
      *
-     * @var BaseConfigurationService
+     * @var \Chamilo\Configuration\Cache\ConfigurationCache
      */
-    private $baseConfigurationService;
+    private $configurationCache;
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @param \Chamilo\Configuration\Cache\ConfigurationCache $configurationCache
      */
-    private $pathUtilities;
-
-    /**
-     *
-     * @var \Chamilo\Configuration\Repository\ConfigurationRepository
-     */
-    private $configurationRepository;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    private $stringUtilities;
-
-    /**
-     *
-     * @param BaseConfigurationService $baseConfigurationService
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities;
-     * @param \Chamilo\Configuration\Repository\ConfigurationRepository $configurationRepository
-     */
-    public function __construct(BaseConfigurationService $baseConfigurationService, Path $pathUtilities,
-        StringUtilities $stringUtilities, ConfigurationRepository $configurationRepository)
+    public function __construct(ConfigurationCache $configurationCache)
     {
-        $this->baseConfigurationService = $baseConfigurationService;
-        $this->pathUtilities = $pathUtilities;
-        $this->stringUtilities = $stringUtilities;
-        $this->configurationRepository = $configurationRepository;
+        $this->configurationCache = $configurationCache;
     }
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\BaseConfigurationService
+     * @return \Chamilo\Configuration\Cache\ConfigurationCache
      */
-    protected function getBaseConfigurationService()
+    protected function getConfigurationCache()
     {
-        return $this->baseConfigurationService;
+        return $this->configurationCache;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\BaseConfigurationService $baseConfigurationService
+     * @param \Chamilo\Configuration\Cache\ConfigurationCache $configurationCache
      */
-    protected function setBaseConfigurationService(BaseConfigurationService $baseConfigurationService)
+    protected function setConfigurationCache(ConfigurationCache $configurationCache)
     {
-        $this->baseConfigurationService = $baseConfigurationService;
+        $this->configurationCache = $configurationCache;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return string[]
      */
-    public function getPathUtilities()
-    {
-        return $this->pathUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
-     */
-    public function setPathUtilities(Path $pathUtilities)
-    {
-        $this->pathUtilities = $pathUtilities;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Utilities\StringUtilities
-     */
-    public function getStringUtilities()
-    {
-        return $this->stringUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     */
-    public function setStringUtilities(StringUtilities $stringUtilities)
-    {
-        $this->stringUtilities = $stringUtilities;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Repository\ConfigurationRepository
-     */
-    public function getConfigurationRepository()
-    {
-        return $this->configurationRepository;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Repository\ConfigurationRepository $configurationRepository
-     */
-    public function setConfigurationRepository($configurationRepository)
-    {
-        $this->configurationRepository = $configurationRepository;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function isAvailable()
-    {
-        $baseConfigurationService = $this->getBaseConfigurationService();
-
-        $driver = $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'driver'));
-        $userName = $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'username'));
-        $host = $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'host'));
-        $name = $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'name'));
-        $password = $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'password'));
-
-        return $this->getConfigurationRepository()->isAvailable($driver, $userName, $host, $name, $password);
-    }
-
     protected function getRegistrations()
     {
         if (! isset($this->registrations))
         {
-            $baseConfigurationService = $this->getBaseConfigurationService();
-
-            if ($baseConfigurationService->isAvailable())
-            {
-                $registrationRecords = $this->getConfigurationRepository()->findRegistrations();
-                $this->registrations = array();
-
-                foreach ($registrationRecords as $registrationRecord)
-                {
-                    $this->registrations[self::REGISTRATION_TYPE][$registrationRecord[Registration::PROPERTY_TYPE]][$registrationRecord[Registration::PROPERTY_CONTEXT]] = $registrationRecord;
-                    $this->registrations[self::REGISTRATION_CONTEXT][$registrationRecord[Registration::PROPERTY_CONTEXT]] = $registrationRecord;
-
-                    $contextStringUtilities = StringUtilities::getInstance()->createString(
-                        $registrationRecord[Registration::PROPERTY_CONTEXT]);
-                    $isIntegration = $contextStringUtilities->contains('\Integration\\');
-
-                    if ($isIntegration)
-                    {
-                        /**
-                         * Take last occurrence of integration instead of first
-                         */
-                        $lastIntegrationIndex = $contextStringUtilities->indexOfLast('\Integration\\');
-
-                        $integrationContext = $contextStringUtilities->substr($lastIntegrationIndex + 13)->__toString();
-                        $rootContext = $contextStringUtilities->substr(0, $lastIntegrationIndex)->__toString();
-
-                        $this->registrations[self::REGISTRATION_INTEGRATION][$integrationContext][$rootContext] = $registrationRecord;
-                    }
-                }
-            }
+            $this->registrations = $this->getConfigurationCache()->getRegistrationsCache();
         }
 
         return $this->registrations;
@@ -215,16 +86,24 @@ class ConfigurationService
     {
         if (! isset($this->settings))
         {
-            $this->settings = $this->getBaseConfigurationService()->getSettings();
-            $settingRecords = $this->getConfigurationRepository()->findSettings();
-
-            foreach ($settingRecords as $settingRecord)
-            {
-                $this->settings[$settingRecord[Setting::PROPERTY_APPLICATION]][$settingRecord[Setting::PROPERTY_VARIABLE]] = $settingRecord[Setting::PROPERTY_VALUE];
-            }
+            $this->settings = $this->getConfigurationCache()->getSettingsCache();
         }
 
         return $this->settings;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getLanguages()
+    {
+        if (! isset($this->languages))
+        {
+            $this->languages = $this->getConfigurationCache()->getLanguagesCache();
+        }
+
+        return $this->languages;
     }
 
     /**
@@ -250,7 +129,7 @@ class ConfigurationService
 
             if (! isset($values[$key]))
             {
-                if ($this->isAvailable())
+                if ($this->getConfigurationCache()->isAvailable())
                 {
                     return null;
                 }
@@ -317,7 +196,7 @@ class ConfigurationService
     public function getRegistrationForContext($context)
     {
         $registrations = $this->getRegistrations();
-        return $registrations[ConfigurationRepository::REGISTRATION_CONTEXT][$context];
+        return $registrations[ConfigurationLoader::REGISTRATION_CONTEXT][$context];
     }
 
     /**
@@ -327,7 +206,7 @@ class ConfigurationService
     public function getRegistrationContexts()
     {
         $registrations = $this->getRegistrations();
-        return array_keys($registrations[ConfigurationRepository::REGISTRATION_CONTEXT]);
+        return array_keys($registrations[ConfigurationLoader::REGISTRATION_CONTEXT]);
     }
 
     /**
@@ -338,7 +217,7 @@ class ConfigurationService
     public function getRegistrationsByType($type)
     {
         $registrations = $this->getRegistrations();
-        return $registrations[self::REGISTRATION_TYPE][$type];
+        return $registrations[ConfigurationLoader::REGISTRATION_TYPE][$type];
     }
 
     /**
@@ -373,7 +252,7 @@ class ConfigurationService
     public function getIntegrationRegistrations($integration, $root = null)
     {
         $registrations = $this->getRegistrations();
-        $integrationRegistrations = $registrations[self::REGISTRATION_INTEGRATION][$integration];
+        $integrationRegistrations = $registrations[ConfigurationLoader::REGISTRATION_INTEGRATION][$integration];
 
         if ($root)
         {
@@ -395,21 +274,6 @@ class ConfigurationService
         {
             return $integrationRegistrations;
         }
-    }
-
-    public function getLanguages()
-    {
-        if (! isset($this->languages))
-        {
-            $languageRecords = $this->getConfigurationRepository()->findLanguages();
-
-            foreach ($languageRecords as $languageRecord)
-            {
-                $this->languages[$languageRecord[Language::PROPERTY_ISOCODE]] = $languageRecord[Language::PROPERTY_ORIGINAL_NAME];
-            }
-        }
-
-        return $this->languages;
     }
 
     public function getLanguageNameFromIsocode($isocode)

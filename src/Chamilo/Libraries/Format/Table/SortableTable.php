@@ -49,8 +49,8 @@ class SortableTable extends HtmlTable
      */
     public function getTableActionsJavascript()
     {
-        return ResourceManager :: get_instance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'SortableTable.js');
+        return ResourceManager::get_instance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'SortableTable.js');
     }
 
     /**
@@ -68,7 +68,7 @@ class SortableTable extends HtmlTable
      */
     public function processRowAttributes($rowIdentifier, $currentRow)
     {
-        $this->setRowAttributes($currentRow, array('id' => 'row_' . $rowIdentifier), true);
+        // $this->setRowAttributes($currentRow, array('id' => 'row_' . $rowIdentifier), true);
     }
 
     /**
@@ -77,7 +77,7 @@ class SortableTable extends HtmlTable
      */
     public function processContentAttributes()
     {
-        $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
+        // $this->altRowAttributes(0, array('class' => 'row_even'), array('class' => 'row_odd'), true);
     }
 
     /**
@@ -86,7 +86,7 @@ class SortableTable extends HtmlTable
      */
     public function setTableFormActions(TableFormActions $actions = null)
     {
-        parent :: setTableFormActions($actions);
+        parent::setTableFormActions($actions);
 
         if ($actions instanceof TableFormActions && $actions->has_form_actions())
         {
