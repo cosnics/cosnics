@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 
-use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\BaseConfigurationService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataSourceNameFactoryInterface;
 
 /**
  *
@@ -10,51 +11,51 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DataSourceNameFactory
+class DataSourceNameFactory implements DataSourceNameFactoryInterface
 {
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\ConfigurationService
+     * @var \Chamilo\Configuration\Service\BaseConfigurationService
      */
-    protected $configurationService;
+    protected $baseConfigurationService;
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
+     * @param \Chamilo\Configuration\Service\BaseConfigurationService $baseConfigurationService
      */
-    public function __construct(ConfigurationService $configurationService)
+    public function __construct(BaseConfigurationService $baseConfigurationService)
     {
-        $this->configurationService = $configurationService;
+        $this->baseConfigurationService = $baseConfigurationService;
     }
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\ConfigurationService
+     * @return \Chamilo\Configuration\Service\BaseConfigurationService
      */
-    public function getConfigurationService()
+    public function getBaseConfigurationService()
     {
-        return $this->configurationService;
+        return $this->baseConfigurationService;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
+     * @param \Chamilo\Configuration\Service\BaseConfigurationService $baseConfigurationService
      */
-    public function setConfigurationService(ConfigurationService $configurationService)
+    public function setBaseConfigurationService(BaseConfigurationService $baseConfigurationService)
     {
-        $this->configurationService = $configurationService;
+        $this->baseConfigurationService = $baseConfigurationService;
     }
 
     public function getDataSourceName()
     {
-        $configurationService = $this->getConfigurationService();
+        $baseConfigurationService = $this->getBaseConfigurationService();
 
         return new DataSourceName(
-            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'driver')),
-            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'username')),
-            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'host')),
-            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'name')),
-            $configurationService->getSetting(array('Chamilo\Configuration', 'database', 'password')));
+            $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'driver')),
+            $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'username')),
+            $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'host')),
+            $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'name')),
+            $baseConfigurationService->getSetting(array('Chamilo\Configuration', 'database', 'password')));
     }
 }
