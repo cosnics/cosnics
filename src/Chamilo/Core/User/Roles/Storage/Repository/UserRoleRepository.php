@@ -57,7 +57,7 @@ class UserRoleRepository implements UserRoleRepositoryInterface
         $joins = new Joins();
         $joins->add(
             new Join(
-                Role::class_name(), new EqualityCondition(
+                RoleRelation::class_name(), new EqualityCondition(
                     new PropertyConditionVariable(RoleRelation::class_name(), RoleRelation::PROPERTY_ROLE_ID),
                     new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ID)
                 )

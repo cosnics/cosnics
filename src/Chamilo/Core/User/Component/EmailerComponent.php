@@ -22,6 +22,8 @@ class EmailerComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
         $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
         $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
 

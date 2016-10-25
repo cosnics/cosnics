@@ -22,13 +22,15 @@ abstract class UserApproverComponent extends Manager
     const CHOICE_APPROVE = 1;
     const CHOICE_DENY = 0;
 
-    abstract private function getChoice();
+    abstract protected function getChoice();
 
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();

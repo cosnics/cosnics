@@ -11,16 +11,16 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 interface StructureLocationServiceInterface
 {
     /**
-     * Creates a structure location based on a given context and component
+     * Creates a structure location based on a given context and action
      *
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @return StructureLocation
      *
      * @throws \Exception
      */
-    public function createStructureLocation($context, $component = null);
+    public function createStructureLocation($context, $action = null);
 
     /**
      * Deletes a given structure location
@@ -29,17 +29,24 @@ interface StructureLocationServiceInterface
      *
      * @throws \Exception
      */
-    public function deleteRole(StructureLocation $structureLocation);
+    public function deleteStructureLocation(StructureLocation $structureLocation);
 
     /**
-     * Returns the structure location by a given context and component
+     * Truncates the structure locations with their roles
+     *
+     * @throws \Exception
+     */
+    public function truncateStructureLocations();
+
+    /**
+     * Returns the structure location by a given context and action
      *
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @return StructureLocation
      *
      * @throws \Exception
      */
-    public function getStructureLocationByContextAndComponent($context, $component = null);
+    public function getStructureLocationByContextAndAction($context, $action = null);
 }

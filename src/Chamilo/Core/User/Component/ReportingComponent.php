@@ -20,6 +20,8 @@ class ReportingComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
         $this->set_parameter(self::PARAM_USER_USER_ID, $this->getRequest()->query->get(self::PARAM_USER_USER_ID));
 
         if (! $this->get_user()->is_platform_admin())

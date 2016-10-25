@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -129,6 +130,42 @@ abstract class Application
     public function getRequest()
     {
         return $this->getService('symfony.component.http_foundation.request');
+    }
+
+    /**
+     * @return AuthorizationCheckerInterface
+     */
+    public function getAuthorizationChecker()
+    {
+        return $this->getService('chamilo.core.rights.structure.service.authorization_checker');
+    }
+
+    /**
+     * Helper function to call the authorization checker with the current logged in user. Throws the
+     * NotAllowedException when not valid.
+     *
+     * @param string $context
+     * @param string $action
+     *
+     * @throws NotAllowedException
+     */
+    public function checkAuthorization($context, $action = null)
+    {
+        return $this->getAuthorizationChecker()->checkAuthorization($this->getUser(), $context, $action);
+    }
+
+    /**
+     * Helper function to call the authorization checker with the current logged in user, returns true or false
+     * and can be used in if statements
+     *
+     * @param string $context
+     * @param string $action
+     *
+     * @return bool
+     */
+    public function isAuthorized($context, $action = null)
+    {
+        return $this->getAuthorizationChecker()->isAuthorized($this->getUser(), $context, $action);
     }
 
     /**

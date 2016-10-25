@@ -54,7 +54,7 @@ class StructureLocationRoleRepository implements StructureLocationRoleRepository
         $joins = new Joins();
         $joins->add(
             new Join(
-                Role::class_name(), new EqualityCondition(
+                StructureLocationRole::class_name(), new EqualityCondition(
                     new PropertyConditionVariable(
                         StructureLocationRole::class_name(), StructureLocationRole::PROPERTY_ROLE_ID
                     ),
