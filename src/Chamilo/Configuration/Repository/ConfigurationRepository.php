@@ -5,9 +5,9 @@ use Chamilo\Configuration\Service\ConfigurationCacheService;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\Cache\DataManagerCache;
-use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
+use Doctrine\DBAL\DriverManager;
 
 /**
  *
@@ -59,19 +59,19 @@ class ConfigurationRepository
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\Cache\DataManagerCache
+     * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
-    private $dataManagerCache;
+    private $dataClassRepositoryCache;
 
     /**
      * Constructor.
      */
     public function __construct(Path $pathUtilities, ConfigurationCacheService $configurationCacheService,
-        DataManagerCache $dataManagerCache)
+        DataClassRepositoryCache $dataClassRepositoryCache)
     {
         $this->pathUtilities = $pathUtilities;
         $this->configurationCacheService = $configurationCacheService;
-        $this->dataManagerCache = $dataManagerCache;
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
         $this->initialize();
     }
 
@@ -125,20 +125,20 @@ class ConfigurationRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Cache\DataManagerCache
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
-    public function getDataManagerCache()
+    public function getDataClassRepositoryCache()
     {
-        return $this->dataManagerCache;
+        return $this->dataClassRepositoryCache;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Cache\DataManagerCache $dataManagerCache
+     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
      */
-    public function setDataManagerCache($dataManagerCache)
+    public function setDataClassRepositoryCache($dataClassRepositoryCache)
     {
-        $this->dataManagerCache = $dataManagerCache;
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
     }
 
     /**
@@ -419,7 +419,7 @@ class ConfigurationRepository
      */
     public function reset()
     {
-        $this->dataManagerCache->truncates(array(Registration::class_name(), Setting::class_name()));
+        $this->dataClassRepositoryCache->truncates(array(Registration::class_name(), Setting::class_name()));
         $this->getConfigurationCacheService()->clear();
         $this->loadFromStorage();
     }
