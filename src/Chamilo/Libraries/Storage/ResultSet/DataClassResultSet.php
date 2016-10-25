@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use DataClassIterator, RecordIterator or ArrayIterator now
  */
 class DataClassResultSet extends ArrayResultSet
 {
@@ -29,7 +30,7 @@ class DataClassResultSet extends ArrayResultSet
      */
     public function __construct($class_name, $objects)
     {
-        parent :: __construct($objects);
+        parent::__construct($objects);
 
         $this->class_name = $class_name;
     }
@@ -46,7 +47,7 @@ class DataClassResultSet extends ArrayResultSet
 
     public function getCacheClassName()
     {
-        $compositeDataClassName = CompositeDataClass :: class_name();
+        $compositeDataClassName = CompositeDataClass::class_name();
         $className = $this->get_class_name();
 
         $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
@@ -54,7 +55,7 @@ class DataClassResultSet extends ArrayResultSet
 
         if ($isCompositeDataClass && $isExtensionClass)
         {
-            return $className :: parent_class_name();
+            return $className::parent_class_name();
         }
         else
         {
@@ -71,8 +72,8 @@ class DataClassResultSet extends ArrayResultSet
      */
     public function get_object($className, $record)
     {
-        $baseClassName = (is_subclass_of($className, CompositeDataClass :: class_name()) ? CompositeDataClass :: class_name() : DataClass :: class_name());
-        $className = (is_subclass_of($className, CompositeDataClass :: class_name()) ? $record[CompositeDataClass :: PROPERTY_TYPE] : $className);
-        return $baseClassName :: factory($className, $record);
+        $baseClassName = (is_subclass_of($className, CompositeDataClass::class_name()) ? CompositeDataClass::class_name() : DataClass::class_name());
+        $className = (is_subclass_of($className, CompositeDataClass::class_name()) ? $record[CompositeDataClass::PROPERTY_TYPE] : $className);
+        return $baseClassName::factory($className, $record);
     }
 }

@@ -25,14 +25,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataManagerCache
+class DataClassRepositoryCache
 {
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Cache\DataManagerCache
-     */
-    private static $instance;
 
     /**
      * The cache
@@ -40,20 +34,6 @@ class DataManagerCache
      * @var mixed[][]
      */
     private $cache;
-
-    /**
-     * Get an instance of the DataManagerCache
-     *
-     * @return \Chamilo\Libraries\Storage\Cache\DataManagerCache
-     */
-    public static function get_instance()
-    {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
 
     /**
      * Constructor

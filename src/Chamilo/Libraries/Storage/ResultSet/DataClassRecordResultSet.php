@@ -10,6 +10,7 @@ use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
  * Wrapper class for the RecordResultSet that maps the records from the resultset to dataclasses (without caching)
  *
  * @package Chamilo\Libraries\Storage\ResultSet
+ * @deprecated Use DataClassIterator, RecordIterator or ArrayIterator now
  */
 class DataClassRecordResultSet extends ArrayResultSet
 {

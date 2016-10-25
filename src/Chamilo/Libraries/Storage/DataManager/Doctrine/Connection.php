@@ -9,6 +9,7 @@ use Doctrine\DBAL\DriverManager;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Replaced by the service-based ConnectionFactory
  */
 class Connection
 {

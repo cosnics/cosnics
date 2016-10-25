@@ -12,7 +12,7 @@
                 id="chamilo.configuration.service.configuration_service" />
             <argument
                 type="service"
-                id="chamilo.libraries.storage.cache.data_manager_cache" />
+                id="chamilo.libraries.storage.cache.data_class_repository_cache" />
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database" />

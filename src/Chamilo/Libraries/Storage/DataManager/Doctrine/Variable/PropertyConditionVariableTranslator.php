@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Replaced by the ConditionPartTranslators and related service and factory
  */
 class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 {
@@ -19,7 +20,7 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        return Database :: escape_column_name(
+        return Database::escape_column_name(
             $this->get_condition_variable()->get_property(),
             $this->get_condition_variable()->get_alias());
     }
