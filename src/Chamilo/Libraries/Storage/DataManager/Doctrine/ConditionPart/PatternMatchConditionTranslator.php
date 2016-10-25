@@ -18,8 +18,10 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      */
     public function translate()
     {
-        return $this->getConditionPartTranslatorService()->translateConditionPart($this->getCondition()->get_name()) .
-             ' LIKE ' . $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
+        return $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
+            $this->getCondition()->get_name()) . ' LIKE ' .
+             $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
     }
 
     /**

@@ -38,8 +38,10 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 /**
  * General and basic DataManager, providing basic functionality for all other DataManager objects
  *
- * @author Hans De Bisschop
- * @package common.libraries
+ * @package Chamilo\Libraries\Storage\DataManager
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ * @deprecated Replaced by the service-based DataClassRepository and StorageUnitRepository
  */
 class DataManager
 {

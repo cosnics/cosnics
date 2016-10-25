@@ -9,6 +9,7 @@ use Exception;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Should no longer be used
  */
 class QueryCache
 {

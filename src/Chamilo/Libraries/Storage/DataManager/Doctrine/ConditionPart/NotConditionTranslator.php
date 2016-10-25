@@ -22,6 +22,7 @@ class NotConditionTranslator extends ConditionTranslator
 
         $string[] = 'NOT (';
         $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
             $this->getCondition()->get_condition());
         $string[] = ')';
 

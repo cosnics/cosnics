@@ -46,7 +46,7 @@ interface DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\DataClassResultSet
+     * @return string[]
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters);
 
@@ -62,7 +62,7 @@ interface DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\ResultSet\RecordResultSet
+     * @return string[]
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters);
 
@@ -106,7 +106,7 @@ interface DataClassDatabaseInterface
      *
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
-     * @return integer
+     * @return integer[]
      */
     public function countGrouped($dataClassName, $parameters);
 

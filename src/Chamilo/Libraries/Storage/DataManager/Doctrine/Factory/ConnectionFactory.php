@@ -15,12 +15,6 @@ class ConnectionFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    private static $instance;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName
      */
     private $dataSourceName;

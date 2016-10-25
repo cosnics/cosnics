@@ -20,7 +20,7 @@ class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection
 
         if (! extension_loaded('pdo_dblib') && extension_loaded('pdo_sqlsrv'))
         {
-            $stmt->setAttribute(\PDO :: SQLSRV_ATTR_ENCODING, \PDO :: SQLSRV_ENCODING_UTF8);
+            $stmt->setAttribute(\PDO::SQLSRV_ATTR_ENCODING, \PDO::SQLSRV_ENCODING_UTF8);
         }
 
         return $stmt;

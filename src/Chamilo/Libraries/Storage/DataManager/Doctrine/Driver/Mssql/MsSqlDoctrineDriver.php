@@ -44,6 +44,11 @@ class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
             {
                 $dsn .= 'dbname=' . $params['dbname'] . ';';
             }
+
+            if (isset($params['charset']))
+            {
+                $dsn .= 'charset=' . $params['charset'] . ';';
+            }
         }
         elseif (extension_loaded('pdo_sqlsrv'))
         {

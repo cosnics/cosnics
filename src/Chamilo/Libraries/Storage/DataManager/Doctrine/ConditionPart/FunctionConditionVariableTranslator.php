@@ -53,6 +53,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
             $this->getConditionVariable()->get_condition_variable());
 
         if ($this->getConditionVariable()->get_function() !== FunctionConditionVariable::DISTINCT)

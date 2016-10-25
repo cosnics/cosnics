@@ -37,8 +37,11 @@ class InequalityConditionTranslator extends ConditionTranslator
                 die('Unknown operator for inequality condition');
         }
 
-        return $this->getConditionPartTranslatorService()->translateConditionPart($this->getCondition()->get_name()) .
-             ' ' . $operator . ' ' .
-             $this->getConditionPartTranslatorService()->translateConditionPart($this->getCondition()->get_value());
+        return $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
+            $this->getCondition()->get_name()) . ' ' . $operator . ' ' .
+             $this->getConditionPartTranslatorService()->translateConditionPart(
+                $this->getDataClassDatabase(),
+                $this->getCondition()->get_value());
     }
 }

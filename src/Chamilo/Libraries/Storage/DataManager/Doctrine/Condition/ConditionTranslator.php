@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Replaced by the ConditionPartTranslators and related service and factory
  */
 abstract class ConditionTranslator extends \Chamilo\Libraries\Storage\Query\Condition\ConditionTranslator
 {
@@ -20,6 +21,6 @@ abstract class ConditionTranslator extends \Chamilo\Libraries\Storage\Query\Cond
      */
     public static function runTranslator($conditionVariable)
     {
-        return parent :: factory(DataManager :: TYPE_DOCTRINE, $conditionVariable)->translate();
+        return parent::factory(DataManager::TYPE_DOCTRINE, $conditionVariable)->translate();
     }
 }
