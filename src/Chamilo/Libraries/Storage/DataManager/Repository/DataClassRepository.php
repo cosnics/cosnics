@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Repository;
 use Chamilo\Configuration\Service\ConfigurationService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Storage\Cache\DataManagerCache;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
@@ -49,9 +49,9 @@ class DataClassRepository
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\Cache\DataManagerCache
+     * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
-    private $dataManagerCache;
+    private $dataClassRepositoryCache;
 
     /**
      *
@@ -68,15 +68,16 @@ class DataClassRepository
     /**
      *
      * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
-     * @param \Chamilo\Libraries\Storage\Cache\DataManagerCache $dataManagerCache
+     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\DataClass\DataClassFactory $dataClassFactory
      */
-    public function __construct(ConfigurationService $configurationService, DataManagerCache $dataManagerCache,
-        DataClassDatabaseInterface $dataClassDatabase, DataClassFactory $dataClassFactory)
+    public function __construct(ConfigurationService $configurationService,
+        DataClassRepositoryCache $dataClassRepositoryCache, DataClassDatabaseInterface $dataClassDatabase,
+        DataClassFactory $dataClassFactory)
     {
         $this->configurationService = $configurationService;
-        $this->dataManagerCache = $dataManagerCache;
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
         $this->dataClassDatabase = $dataClassDatabase;
         $this->dataClassFactory = $dataClassFactory;
     }
@@ -119,20 +120,20 @@ class DataClassRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Cache\DataManagerCache
+     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
      */
-    public function getDataManagerCache()
+    public function getDataClassRepositoryCache()
     {
-        return $this->dataManagerCache;
+        return $this->dataClassRepositoryCache;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Cache\DataManagerCache $dataManagerCache
+     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
      */
-    public function setDataManagerCache(DataManagerCache $dataManagerCache)
+    public function setDataClassRepositoryCache(DataClassRepositoryCache $dataClassRepositoryCache)
     {
-        $this->dataManagerCache = $dataManagerCache;
+        $this->dataClassRepositoryCache = $dataClassRepositoryCache;
     }
 
     /**
@@ -168,7 +169,7 @@ class DataClassRepository
 
         if ($this->isQueryCacheEnabled())
         {
-            return $this->getDataManagerCache()->addForDataClass($dataClass);
+            return $this->getDataClassRepositoryCache()->addForDataClass($dataClass);
         }
         else
         {
@@ -258,23 +259,23 @@ class DataClassRepository
     {
         if ($this->isQueryCacheEnabled())
         {
-            $dataManagerCache = $this->getDataManagerCache();
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataManagerCache->exists($dataClassName, $parameters))
+            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
                 try
                 {
-                    $record = $dataManagerCache->addForRecord(
+                    $record = $dataClassRepositoryCache->addForRecord(
                         $dataClassName,
                         $this->__record($dataClassName, $parameters),
                         $parameters);
                 }
                 catch (DataClassNoResultException $exception)
                 {
-                    $dataManagerCache->addForNoResult($exception);
+                    $dataClassRepositoryCache->addForNoResult($exception);
                 }
             }
-            return $dataManagerCache->get($dataClassName, $parameters);
+            return $dataClassRepositoryCache->get($dataClassName, $parameters);
         }
         else
         {
@@ -304,17 +305,17 @@ class DataClassRepository
 
         if ($this->isQueryCacheEnabled())
         {
-            $dataManagerCache = $this->getDataManagerCache();
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataManagerCache->exists($dataClassName, $parameters))
+            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
-                $dataManagerCache->addForRecordIterator(
+                $dataClassRepositoryCache->addForRecordIterator(
                     $dataClassName,
                     $this->__records($dataClassName, $parameters),
                     $parameters);
             }
 
-            $recordIterator = $dataManagerCache->get($dataClassName, $parameters);
+            $recordIterator = $dataClassRepositoryCache->get($dataClassName, $parameters);
             $recordIterator->rewind();
 
             return $recordIterator;
@@ -395,7 +396,7 @@ class DataClassRepository
 
         if ($this->isQueryCacheEnabled())
         {
-            return $this->getDataManagerCache()->truncate($dataClassName);
+            return $this->getDataClassRepositoryCache()->truncate($dataClassName);
         }
         else
         {
@@ -436,7 +437,7 @@ class DataClassRepository
 
         if ($this->isQueryCacheEnabled())
         {
-            return $this->getDataManagerCache()->truncate($dataClassName);
+            return $this->getDataClassRepositoryCache()->truncate($dataClassName);
         }
         else
         {
@@ -460,7 +461,7 @@ class DataClassRepository
 
         if ($this->isQueryCacheEnabled())
         {
-            return $this->getDataManagerCache()->truncate($dataClassName);
+            return $this->getDataClassRepositoryCache()->truncate($dataClassName);
         }
         else
         {
@@ -504,17 +505,17 @@ class DataClassRepository
     {
         if ($this->isQueryCacheEnabled())
         {
-            $dataManagerCache = $this->getDataManagerCache();
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataManagerCache->exists($dataClassName, $parameters))
+            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
-                $dataManagerCache->addForDataClassCountGrouped(
+                $dataClassRepositoryCache->addForDataClassCountGrouped(
                     $dataClassName,
                     $parameters,
                     $this->__countGrouped($dataClassName, $parameters));
             }
 
-            return $dataManagerCache->get($dataClassName, $parameters);
+            return $dataClassRepositoryCache->get($dataClassName, $parameters);
         }
         else
         {
@@ -538,17 +539,17 @@ class DataClassRepository
 
         if ($this->isQueryCacheEnabled())
         {
-            $dataManagerCache = $this->getDataManagerCache();
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataManagerCache->exists($dataClassName, $parameters))
+            if (! $dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
-                $dataManagerCache->addForDataClassDistinct(
+                $dataClassRepositoryCache->addForDataClassDistinct(
                     $dataClassName,
                     $parameters,
                     $this->__distinct($dataClassName, $parameters));
             }
 
-            return $dataManagerCache->get($dataClassName, $parameters);
+            return $dataClassRepositoryCache->get($dataClassName, $parameters);
         }
         else
         {
@@ -755,21 +756,23 @@ class DataClassRepository
     {
         if ($this->isQueryCacheEnabled())
         {
-            $dataManagerCache = $this->getDataManagerCache();
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataManagerCache->exists($cacheDataClassName, $parameters))
+            if (! $dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
                 try
                 {
-                    $dataManagerCache->addForDataClass($this->__retrieveClass($dataClassName, $parameters), $parameters);
+                    $dataClassRepositoryCache->addForDataClass(
+                        $this->__retrieveClass($dataClassName, $parameters),
+                        $parameters);
                 }
                 catch (DataClassNoResultException $exception)
                 {
-                    $dataManagerCache->addForNoResult($exception);
+                    $dataClassRepositoryCache->addForNoResult($exception);
                 }
             }
 
-            return $dataManagerCache->get($cacheDataClassName, $parameters);
+            return $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
         }
         else
         {
@@ -815,16 +818,16 @@ class DataClassRepository
     {
         if ($this->isQueryCacheEnabled())
         {
-            $dataManagerCache = $this->getDataManagerCache();
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataManagerCache->exists($cacheDataClassName, $parameters))
+            if (! $dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
-                $dataManagerCache->addForDataClassIterator(
+                $dataClassRepositoryCache->addForDataClassIterator(
                     $this->__retrievesClass($dataClassName, $parameters),
                     $parameters);
             }
 
-            $dataClassIterator = $dataManagerCache->get($cacheDataClassName, $parameters);
+            $dataClassIterator = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
             $dataClassIterator->rewind();
 
             return $dataClassIterator;
@@ -860,17 +863,17 @@ class DataClassRepository
     {
         if ($this->isQueryCacheEnabled())
         {
-            $dataManagerCache = $this->getDataManagerCache();
+            $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
 
-            if (! $dataManagerCache->exists($cacheDataClassName, $parameters))
+            if (! $dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
-                $dataManagerCache->addForDataClassCount(
+                $dataClassRepositoryCache->addForDataClassCount(
                     $cacheDataClassName,
                     $parameters,
                     $this->__countClass($dataClassName, $parameters));
             }
 
-            return $dataManagerCache->get($cacheDataClassName, $parameters);
+            return $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
         }
         else
         {

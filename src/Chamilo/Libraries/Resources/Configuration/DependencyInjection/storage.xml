@@ -9,8 +9,8 @@
             class="Chamilo\Libraries\Storage\Cache\ConditionPartCache" />
 
         <service
-            id="chamilo.libraries.storage.cache.data_manager_cache"
-            class="Chamilo\Libraries\Storage\Cache\DataManagerCache" />
+            id="chamilo.libraries.storage.cache.data_class_repository_cache"
+            class="Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache" />
 
         <service
             id="chamilo.libraries.storage.data_class.data_class_factory"

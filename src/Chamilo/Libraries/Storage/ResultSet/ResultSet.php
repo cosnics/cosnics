@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Use DataClassIterator, RecordIterator or ArrayIterator now
  */
 abstract class ResultSet
 {
@@ -86,23 +87,23 @@ abstract class ResultSet
     {
         if ($this->size() == 1)
         {
-            return self :: POSITION_SINGLE;
+            return self::POSITION_SINGLE;
         }
         elseif ($this->size() > 1 && $this->current() == $this->size())
         {
-            return self :: POSITION_LAST;
+            return self::POSITION_LAST;
         }
         elseif ($this->size() > 1 && $this->current() == 1)
         {
-            return self :: POSITION_FIRST;
+            return self::POSITION_FIRST;
         }
         elseif ($this->current() == 0 || $this->current() > $this->size())
         {
-            return self :: POSITION_INVALID;
+            return self::POSITION_INVALID;
         }
         else
         {
-            return self :: POSITION_MIDDLE;
+            return self::POSITION_MIDDLE;
         }
     }
 
@@ -124,7 +125,7 @@ abstract class ResultSet
      */
     public function is_first()
     {
-        return $this->is_position(self :: POSITION_FIRST);
+        return $this->is_position(self::POSITION_FIRST);
     }
 
     /**
@@ -134,7 +135,7 @@ abstract class ResultSet
      */
     public function is_last()
     {
-        return $this->is_position(self :: POSITION_LAST);
+        return $this->is_position(self::POSITION_LAST);
     }
 
     /**
@@ -145,7 +146,7 @@ abstract class ResultSet
      */
     public function is_middle()
     {
-        return $this->is_position(self :: POSITION_MIDDLE);
+        return $this->is_position(self::POSITION_MIDDLE);
     }
 
     /**
@@ -166,6 +167,6 @@ abstract class ResultSet
      */
     public function process_record($record)
     {
-        return DataManager :: process_record($record);
+        return DataManager::process_record($record);
     }
 }

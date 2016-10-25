@@ -35,6 +35,7 @@ use Exception;
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Replaced by the service-based DataClassDatabase and StorageUnitDatabase
  */
 class Database
 {
