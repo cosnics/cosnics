@@ -18,6 +18,8 @@ class AdminUserComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
         $admin_user = \Chamilo\Libraries\Platform\Session\Session :: retrieve('_as_admin');
 
         if ($admin_user)

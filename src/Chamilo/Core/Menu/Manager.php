@@ -4,6 +4,7 @@ namespace Chamilo\Core\Menu;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Menu\ItemMenu;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -30,6 +31,13 @@ abstract class Manager extends Application
     const PARAM_DIRECTION_UP = 'up';
     const PARAM_DIRECTION_DOWN = 'down';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
+
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent:: __construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 
     public function get_item_creation_url()
     {

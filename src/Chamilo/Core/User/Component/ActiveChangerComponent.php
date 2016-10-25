@@ -19,7 +19,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 abstract class ActiveChangerComponent extends Manager
 {
 
-    abstract private function getState();
+    abstract protected function getState();
 
     /**
      * Runs this component and displays its output.
@@ -30,6 +30,8 @@ abstract class ActiveChangerComponent extends Manager
         {
             throw new NotAllowedException();
         }
+
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
 
         $ids = $this->getRequest()->get(self :: PARAM_USER_USER_ID);
         $this->set_parameter(self :: PARAM_USER_USER_ID, $ids);
@@ -102,7 +104,7 @@ abstract class ActiveChangerComponent extends Manager
                 htmlentities(
                     Translation :: get(
                         'NoObjectSelected',
-                        array('OBJECT' => TRanslation :: get('User')),
+                        array('OBJECT' => Translation :: get('User')),
                         Utilities :: COMMON_LIBRARIES)));
         }
     }

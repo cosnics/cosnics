@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Metadata;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 
 /**
@@ -16,6 +17,13 @@ abstract class Manager extends Application
 {
     const DEFAULT_ACTION = self :: ACTION_SCHEMA;
     const ACTION_SCHEMA = 'Schema';
+
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent:: __construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 
     /**
      * Returns the admin breadcrumb generator

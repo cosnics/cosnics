@@ -6,6 +6,7 @@ use Chamilo\Core\Help\Storage\DataClass\HelpItem;
 use Chamilo\Core\Help\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
@@ -33,6 +34,13 @@ abstract class Manager extends Application
     const ACTION_UPDATE_HELP_ITEM = 'Updater';
     const ACTION_BROWSE_HELP_ITEMS = 'Browser';
     const DEFAULT_ACTION = self :: ACTION_BROWSE_HELP_ITEMS;
+
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent:: __construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 
     public function count_help_items($condition)
     {

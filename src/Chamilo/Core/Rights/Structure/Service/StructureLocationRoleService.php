@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Rights\Structure\Service;
 
+use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
@@ -13,7 +14,7 @@ use Chamilo\Core\User\Roles\Storage\DataClass\Role;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class StructureLocationRoleService
+class StructureLocationRoleService implements StructureLocationRoleServiceInterface
 {
     /**
      * @var RoleServiceInterface
@@ -70,7 +71,7 @@ class StructureLocationRoleService
         {
             throw new \Exception(
                 'The structure location role for context ' . $structureLocation->getContext() .
-                ', component ' . $structureLocation->getComponent() .
+                ', action ' . $structureLocation->getAction() .
                 ' and role ' . $roleName . ' could not be created'
             );
         }
@@ -111,7 +112,7 @@ class StructureLocationRoleService
         {
             throw new \Exception(
                 'The structure location role for context ' . $structureLocation->getContext() .
-                ', component ' . $structureLocation->getComponent() .
+                ', action ' . $structureLocation->getAction() .
                 ' and role ' . $roleName . ' could not be removed'
             );
         }
@@ -133,16 +134,16 @@ class StructureLocationRoleService
      * Returns a list of roles for a given structure location identified by given context and comnponent
      *
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
      */
-    public function getRolesForLocationByContextAndComponent($context, $component = null)
+    public function getRolesForLocationByContextAndAction($context, $action= null)
     {
         try
         {
-            $structureLocation = $this->structureLocationService->getStructureLocationByContextAndComponent(
-                $context, $component
+            $structureLocation = $this->structureLocationService->getStructureLocationByContextAndAction(
+                $context, $action
             );
 
             return $this->getRolesForLocation($structureLocation);

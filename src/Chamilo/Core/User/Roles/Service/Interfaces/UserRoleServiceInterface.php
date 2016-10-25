@@ -57,5 +57,5 @@ interface UserRoleServiceInterface
      *
      * @return bool
      */
-    public function doesUserHaveRoles(User $user, $rolesToMatch = array());
+    public function doesUserHasAtLeastOneRole(User $user, $rolesToMatch = array());
 }

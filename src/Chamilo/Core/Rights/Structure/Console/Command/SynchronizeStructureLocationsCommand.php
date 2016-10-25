@@ -2,7 +2,7 @@
 
 namespace Chamilo\Core\Rights\Structure\Console\Command;
 
-use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\StructureLocationConfigurationSynchronizer;
+use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\SynchronizerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,16 +15,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SynchronizeStructureLocationsCommand extends Command
 {
     /**
-     * @var StructureLocationConfigurationSynchronizer
+     * @var SynchronizerInterface
      */
     protected $structureLocationsConfigurationSynchronizer;
 
     /**
      * SynchronizeStructureLocationsCommand constructor.
      *
-     * @param StructureLocationConfigurationSynchronizer $structureLocationsConfigurationSynchronizer
+     * @param SynchronizerInterface $structureLocationsConfigurationSynchronizer
      */
-    public function __construct(StructureLocationConfigurationSynchronizer $structureLocationsConfigurationSynchronizer)
+    public function __construct(
+        SynchronizerInterface $structureLocationsConfigurationSynchronizer
+    )
     {
         $this->structureLocationsConfigurationSynchronizer = $structureLocationsConfigurationSynchronizer;
 

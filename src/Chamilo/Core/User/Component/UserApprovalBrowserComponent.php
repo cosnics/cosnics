@@ -39,6 +39,8 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if (! $this->get_user()->is_platform_admin())
         {
