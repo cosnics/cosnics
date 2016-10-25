@@ -1,0 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Core\Repository\Publication\Publisher
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Publisher"
+FirstStepCreate = "Step 1: Create"
+FirstStepBrowseInWorkspaces = "Step 1: Select"
+FirstStepImport = "Step 1: Import"
+SecondStepPublish = "Step 2: Publish"

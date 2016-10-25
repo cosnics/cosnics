@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\admin\announcement
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "System Announcements"
+CreatorComponent = "Publish an announcement"
+NotAllowed = "You're not allowed to access this page. Please contact your platform administrator if you think this is incorrect."
+EditorComponent = "Edit"
+DeleterComponent = "Delete"
+HiderComponent = "Hide"
+ViewerComponent = "View"
+AllPublications = "All publications"
+PublishedForMe = "Published for me"
+MyPublications = "My publications"
+Everyone = "Everyone"
+OnlyForMe = "Only for me"
+SelectSpecificEntities = "Select target audience"
+PublicationPeriod = "Publication period"
+Hidden = "Hidden"
+Status = "Status"
+Published = "Gepuliceerd op"
+PublisherId = "Gepubliceerd door"
+PublishedFor = "Gepubliceerd voor"
+Object = "Announcement"
+SystemAnnouncementPublication = "System announcement publication"

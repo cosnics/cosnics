@@ -1,0 +1,62 @@
+/*****************************************************
+ *  PORTFOLIO STYLES
+ *****************************************************/
+.portfolio-container {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.portfolio-container .introduction {
+	width: 100%;
+	position: relative;
+}
+
+.portfolio-container .body {
+	width: 100%;
+	float: left;
+	overflow: hidden;
+}
+
+.portfolio-container .content {
+	padding: 0px 10px 0px 222px;
+}
+
+.portfolio-container .user {
+	font-weight: bold;
+	color: #4171B5;
+}
+
+.portfolio-container .date {
+	font-size: 11px;
+	color: gray;
+	padding-top: 2px;
+}
+
+.portfolio-container .content p {
+	margin-top: 0px;
+}
+
+.portfolio-container .photo {
+	float: left;
+	width: 202px;
+	padding: 0px;
+	margin-left: -100%;
+	position: relative;
+}
+
+.portfolio-container .photo img {
+	width: 200px;
+	border: 1px solid grey;
+}
+
+.introduction-actions {
+	padding: 0px 10px 0px 0px;
+	position: relative;
+	margin-top: -36px;
+	clear: both;
+	margin-bottom: 15px;
+}
+
+.introduction-actions .toolbar ul {
+	float: right;
+}

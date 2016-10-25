@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Announcement">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Announcement</translation>
+			<translation language="nl">Aankondiging</translation>
+		</variable>
+	</translations>
+</template>

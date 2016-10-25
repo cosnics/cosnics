@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\blog
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Blog"
+Properties = "Eigenschappen"
+BlogLayout = "Lay-out"
+AuthorUnknown = "Onbekende auteur"
+Attachments = "Bijlagen"
+BlogLayoutNotExists = "De geselecteerde lay-out bestaat niet"
+Title = "Titel"
+Description = "Beschrijving"
+BlogToolBrowserComponent = "Browser"
+BlogToolIntroductionPublisherComponent = "Publiceer"
+BlogToolUpdaterComponent = "Bewerk"
+BlogToolViewerComponent = "Toon"
+PersonalBlogLayout = "Lay-out persoonlijke blog"

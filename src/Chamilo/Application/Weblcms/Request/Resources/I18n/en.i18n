@@ -1,0 +1,88 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\request
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Request Manager"
+BrowserComponent = "Browse requests"
+ConfigureManagementRights = "Configure access rights"
+CreationDate = "Requested on"
+CreatorComponent = "Request a course"
+Decision = "Decision"
+DecisionGranted = "Request granted"
+DecisionMotivation = "Decision motivation"
+DecisionPending = "Pending review"
+DecisionDenied = "Request denied"
+DecisionsDenied = "Requests denied"
+DecisionNotDenied = "Request not denied"
+SomeDecisionsNotDenied = "Some requests are not denied"
+DecisionsNotDenied = "Requests not denied"
+DeniedRequests = "Denied requests"
+DenierComponent = "Deny a request"
+Deny = "Deny"
+Grant = "Grant"
+GrantedRequests = "Granted requests"
+GranterComponent = "Grant a request"
+Motivation = "Motivation"
+PendingRequests = "Pending requests"
+Request = "Request"
+RequestCourse = "Request a course"
+User = "User"
+YourRequests = "Your requests"
+GrantSelected = "Grant request(s)"
+DenySelected = "Deny request(s)"
+DeleteSelected = "Delete request(s)"
+RequestGrantedMailTitle = "Your {PLATFORM} course ({NAME}) was created"
+RequestDeniedMailTitle = "Your {PLATFORM} course request ({NAME}) was denied"
+RequestGrantedMailBody = "Dear {USER},<br />
+<br />
+Your course "{NAME}" was just created. You can now access it via the courses homepage on {PLATFORM}.<br />
+<br />
+Best regards,<br />
+Your {PLATFORM} team"
+RequestDeniedMailBody = "Dear {USER},<br />
+<br />
+The request you recently made for a new course ({NAME}) was denied for the following reason:<br />
+{MOTIVATION}<br />
+<br />
+Please contact {DENIER} for more information.<br />
+<br />
+Best regards,<br />
+Your {PLATFORM} team"
+RequestDeniedMailBodySimple = "Dear {USER},<br />
+<br />
+The request you recently made for the course "{NAME}" was denied. Please contact your administrator for more information.<br />
+<br />
+Best regards,<br />
+Your {PLATFORM} team"
+RequestCreatedMailTitle = "[{PLATFORM}] New course request"
+RequestCreatedMailBody = "Dear {USER},<br />
+<br />
+A new course request was submitted. Please review it at your earliest possible convenience on the course request management page. (Courses >> Manage requests >> Pending requests)<br />  
+<br />
+Best regards,<br />
+Your {PLATFORM} team"
+RightsComponent = "Configure access rights"
+NoRequestsPending = "You have no pending requests"
+NoRequestsFormDirectly = "You have no prior or pending requests so we've automatically forwarded you to the course request form."
+Name = "Name"
+Subject = "Subject"
+CourseType = "Course type"
+AllowUpgrade = "Allow upgrade"
+AllowRequest = "Allow request"
+Step = "Step"
+MaximumUser = "Maximum user"
+DiskQuota = "Disk quota"
+QuotaPolicy = "Quota policy"
+QuotaFallback = "Quota fallback"
+CategoryId = "Course category"
+General = "General"
+QuotaPolicyUser = "QuotaPolicyUser"
+QuotaPolicyGroupHighest = "QuotaPolicyGroupHighest"
+QuotaPolicyGroupLowest = "QuotaPolicyGroupLowest"
+QuotaPolicyHighest = "QuotaPolicyHighest"
+QuotaPolicyLowest = "QuotaPolicyLowest"
+QuotaFallbackUserGroupHighest = "QuotaFallbackUserGroupHighest"
+QuotaFallbackUserGroupLowest = "QuotaFallbackUserGroupLowest"
+QuotaFallbackUser = "QuotaFallbackUser"
+CategoryId = "Course category"

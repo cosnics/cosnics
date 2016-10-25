@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\RssFeed">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">RSS feed</translation>
+			<translation language="nl">RSS feed</translation>
+			<translation language="fr">Flux RSS</translation>
+			<translation language="de">RSS Feed</translation>
+		</variable>
+	</translations>
+</template>
