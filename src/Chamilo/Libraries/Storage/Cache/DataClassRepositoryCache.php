@@ -4,6 +4,8 @@ namespace Chamilo\Libraries\Storage\Cache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -15,8 +17,6 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\DataClassResultSet;
-use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
 
 /**
  *
@@ -25,14 +25,8 @@ use Chamilo\Libraries\Storage\ResultSet\RecordResultSet;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataManagerCache
+class DataClassRepositoryCache
 {
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Cache\DataManagerCache
-     */
-    private static $instance;
 
     /**
      * The cache
@@ -40,20 +34,6 @@ class DataManagerCache
      * @var mixed[][]
      */
     private $cache;
-
-    /**
-     * Get an instance of the DataManagerCache
-     *
-     * @return \Chamilo\Libraries\Storage\Cache\DataManagerCache
-     */
-    public static function get_instance()
-    {
-        if (! isset(self::$instance))
-        {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
 
     /**
      * Constructor
@@ -280,27 +260,28 @@ class DataManagerCache
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\ResultSet\DataClassResultSet $resultSet
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $dataClassIterator
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      * @throws \Exception
      * @return boolean
      */
-    public function addForDataClassResultSet(DataClassResultSet $resultSet, DataClassRetrievesParameters $parameters)
+    public function addForDataClassIterator(DataClassIterator $dataClassIterator,
+        DataClassRetrievesParameters $parameters)
     {
         if (! $parameters instanceof DataClassRetrievesParameters)
         {
             throw new \Exception('Illegal parameters passed to the DataClassResultSetCache');
         }
 
-        if (! $resultSet instanceof DataClassResultSet)
+        if (! $dataClassIterator instanceof DataClassIterator)
         {
-            $type = is_object($resultSet) ? get_class($resultSet) : gettype($resultSet);
+            $type = is_object($dataClassIterator) ? get_class($dataClassIterator) : gettype($dataClassIterator);
             throw new \Exception(
                 'The DataClassResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
 
-        return $this->add($resultSet->getCacheClassName(), $parameters, $resultSet);
+        return $this->add($dataClassIterator->getCacheClassName(), $parameters, $dataClassIterator);
     }
 
     /**
@@ -407,12 +388,12 @@ class DataManagerCache
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\ResultSet\RecordResultSet $resultSet
+     * @param \Chamilo\Libraries\Storage\Iterator\RecordIterator $recordIterator
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      * @throws \Exception
      * @return boolean
      */
-    public static function addForRecordResultSet($className, RecordResultSet $resultSet,
+    public function addForRecordIterator($className, RecordIterator $recordIterator,
         RecordRetrievesParameters $parameters)
     {
         if (! $parameters instanceof RecordRetrievesParameters)
@@ -420,14 +401,14 @@ class DataManagerCache
             throw new \Exception('Illegal parameters passed to the RecordResultSetCache');
         }
 
-        if (! $resultSet instanceof RecordResultSet)
+        if (! $recordIterator instanceof RecordIterator)
         {
-            $type = is_object($resultSet) ? get_class($resultSet) : gettype($resultSet);
+            $type = is_object($recordIterator) ? get_class($recordIterator) : gettype($recordIterator);
             throw new \Exception(
                 'The RecordResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
 
-        return $this->add($className, $parameters, $resultSet);
+        return $this->add($className, $parameters, $recordIterator);
     }
 }

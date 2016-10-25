@@ -26,7 +26,9 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
 
         foreach ($this->getConditionVariable()->get_case_elements() as $caseElement)
         {
-            $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart($caseElement);
+            $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+                $this->getDataClassDatabase(),
+                $caseElement);
         }
 
         $strings[] = ' END';

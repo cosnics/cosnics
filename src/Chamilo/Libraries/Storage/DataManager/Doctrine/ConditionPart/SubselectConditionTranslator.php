@@ -21,12 +21,14 @@ class SubselectConditionTranslator extends ConditionTranslator
         $string = array();
 
         $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
             $this->getCondition()->get_name());
 
         $string[] = 'IN (';
         $string[] = 'SELECT';
 
         $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
             $this->getCondition()->get_value());
 
         $string[] = 'FROM';
@@ -45,6 +47,7 @@ class SubselectConditionTranslator extends ConditionTranslator
         {
             $string[] = 'WHERE ';
             $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+                $this->getDataClassDatabase(),
                 $this->getCondition()->get_condition(),
                 $alias);
         }

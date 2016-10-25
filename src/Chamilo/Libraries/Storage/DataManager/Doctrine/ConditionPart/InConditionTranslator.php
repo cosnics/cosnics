@@ -42,6 +42,7 @@ class InConditionTranslator extends ConditionTranslator
             $where_clause = array();
 
             $where_clause[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+                $this->getDataClassDatabase(),
                 $this->getCondition()->get_name()) . ' IN (';
 
             $placeholders = array();

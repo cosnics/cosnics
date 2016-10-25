@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Replaced by the ConditionPartTranslators and related service and factory
  */
 class ComparisonConditionTranslator extends ConditionTranslator
 {
@@ -24,7 +25,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
         $operator_string = $this->translate_operator($this->get_condition()->get_operator());
 
         // if the operator is an equality operator and no value is given, translate to 'is null' equality condition
-        if ($this->get_condition()->get_operator() == ComparisonCondition :: EQUAL &&
+        if ($this->get_condition()->get_operator() == ComparisonCondition::EQUAL &&
              is_null($this->get_condition()->get_value()))
         {
             return $this->translate_equality_condition_with_empty_value($this->get_condition());
@@ -45,19 +46,19 @@ class ComparisonConditionTranslator extends ConditionTranslator
     {
         switch ($condition_operator)
         {
-            case ComparisonCondition :: GREATER_THAN :
+            case ComparisonCondition::GREATER_THAN :
                 $translated_operator = '>';
                 break;
-            case ComparisonCondition :: GREATER_THAN_OR_EQUAL :
+            case ComparisonCondition::GREATER_THAN_OR_EQUAL :
                 $translated_operator = '>=';
                 break;
-            case ComparisonCondition :: LESS_THAN :
+            case ComparisonCondition::LESS_THAN :
                 $translated_operator = '<';
                 break;
-            case ComparisonCondition :: LESS_THAN_OR_EQUAL :
+            case ComparisonCondition::LESS_THAN_OR_EQUAL :
                 $translated_operator = '<=';
                 break;
-            case ComparisonCondition :: EQUAL :
+            case ComparisonCondition::EQUAL :
                 $translated_operator = '=';
                 break;
             default :
@@ -75,7 +76,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
      */
     private function translate_equality_condition_with_empty_value($condition)
     {
-        return ConditionVariableTranslator :: render($condition->get_name()) . ' IS NULL';
+        return ConditionVariableTranslator::render($condition->get_name()) . ' IS NULL';
     }
 
     /**
@@ -87,7 +88,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
      */
     private function translate_condition($condition, $operator_string)
     {
-        return ConditionVariableTranslator :: render($condition->get_name()) . ' ' . $operator_string . ' ' .
-             ConditionVariableTranslator :: render($condition->get_value());
+        return ConditionVariableTranslator::render($condition->get_name()) . ' ' . $operator_string . ' ' .
+             ConditionVariableTranslator::render($condition->get_value());
     }
 }

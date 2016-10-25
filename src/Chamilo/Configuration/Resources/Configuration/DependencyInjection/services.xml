@@ -28,10 +28,13 @@
             class="Chamilo\Configuration\Repository\ConfigurationRepository">
             <argument
                 type="service"
+                id="chamilo.libraries.file.path" />
+            <argument
+                type="service"
                 id="chamilo.configuration.service.configuration_cache_service" />
             <argument
                 type="service"
-                id="chamilo.libraries.storage.cache.data_manager_cache" />
+                id="chamilo.libraries.storage.cache.data_class_repository_cache" />
         </service>
 
         <service

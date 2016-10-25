@@ -29,6 +29,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
         {
             $strings[] = 'WHEN ';
             $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
+                $this->getDataClassDatabase(),
                 $conditionVariable->get_condition());
             $strings[] = ' THEN ';
         }

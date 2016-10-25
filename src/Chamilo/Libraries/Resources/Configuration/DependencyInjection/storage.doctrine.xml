@@ -9,7 +9,16 @@
             class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
             <argument
                 type="service"
+                id="chamilo.configuration.service.configuration_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.data_class_repository_cache" />
+            <argument
+                type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_class.data_class_factory" />
         </service>
 
         <service
@@ -43,6 +52,9 @@
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor" />
         </service>
 
         <service
@@ -81,6 +93,11 @@
             <argument
                 type="service"
                 id="chamilo.configuration.service.configuration_service" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor">
         </service>
 
         <service

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @deprecated Replaced by the ConditionPartTranslators and related service and factory
  */
 class OperationConditionVariableTranslator extends ConditionVariableTranslator
 {
@@ -22,31 +23,31 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
         $strings = array();
 
         $strings[] = '(';
-        $strings[] = static :: render($this->get_condition_variable()->get_left());
+        $strings[] = static::render($this->get_condition_variable()->get_left());
 
         switch ($this->get_condition_variable()->get_operator())
         {
-            case OperationConditionVariable :: ADDITION :
+            case OperationConditionVariable::ADDITION :
                 $strings[] = '+';
                 break;
-            case OperationConditionVariable :: DIVISION :
+            case OperationConditionVariable::DIVISION :
                 $strings[] = '/';
                 break;
-            case OperationConditionVariable :: MINUS :
+            case OperationConditionVariable::MINUS :
                 $strings[] = '-';
                 break;
-            case OperationConditionVariable :: MULTIPLICATION :
+            case OperationConditionVariable::MULTIPLICATION :
                 $strings[] = '*';
                 break;
-            case OperationConditionVariable :: BITWISE_AND :
+            case OperationConditionVariable::BITWISE_AND :
                 $strings[] = '&';
                 break;
-            case OperationConditionVariable :: BITWISE_OR :
+            case OperationConditionVariable::BITWISE_OR :
                 $strings[] = '|';
                 break;
         }
 
-        $strings[] = static :: render($this->get_condition_variable()->get_right());
+        $strings[] = static::render($this->get_condition_variable()->get_right());
         $strings[] = ')';
 
         return implode(' ', $strings);

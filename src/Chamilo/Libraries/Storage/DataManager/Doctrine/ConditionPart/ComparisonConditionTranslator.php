@@ -72,7 +72,9 @@ class ComparisonConditionTranslator extends ConditionTranslator
      */
     private function translateEqualityConditionWithEmptyValue($condition)
     {
-        return $this->getConditionPartTranslatorService()->translateConditionPart($condition->get_name()) . ' IS NULL';
+        return $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
+            $condition->get_name()) . ' IS NULL';
     }
 
     /**
@@ -84,8 +86,11 @@ class ComparisonConditionTranslator extends ConditionTranslator
      */
     private function translateCondition($condition, $operatorString)
     {
-        return $this->getConditionPartTranslatorService()->translateConditionPart($condition->get_name()) . ' ' .
-             $operatorString . ' ' .
-             $this->getConditionPartTranslatorService()->translateConditionPart($condition->get_value());
+        return $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(),
+            $condition->get_name()) . ' ' . $operatorString . ' ' .
+             $this->getConditionPartTranslatorService()->translateConditionPart(
+                $this->getDataClassDatabase(),
+                $condition->get_value());
     }
 }
