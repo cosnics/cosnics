@@ -25,8 +25,8 @@ class RoleRelation extends DataClass
     {
         $extended_property_names[] = self::PROPERTY_USER_ID;
         $extended_property_names[] = self::PROPERTY_ROLE_ID;
-        
-        return $extended_property_names;
+
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**

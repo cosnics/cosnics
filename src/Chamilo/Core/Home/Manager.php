@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Home;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * $Id: home_manager.class.php 227 2009-11-13 14:45:05Z kariboe $
@@ -48,5 +49,12 @@ abstract class Manager extends Application
     public function get_home_tab_viewing_url($home_tab)
     {
         return $this->get_url(array(self :: PARAM_TAB_ID => $home_tab->get_id()));
+    }
+
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent:: __construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
     }
 }

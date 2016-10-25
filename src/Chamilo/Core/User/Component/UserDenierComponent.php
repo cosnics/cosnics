@@ -9,7 +9,7 @@ namespace Chamilo\Core\User\Component;
 class UserDenierComponent extends UserApproverComponent
 {
 
-    private function getChoice()
+    protected function getChoice()
     {
         return 0;
     }

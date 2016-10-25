@@ -86,6 +86,8 @@ abstract class Manager extends Application
     {
         parent:: __construct($applicationConfiguration);
         $this->create_url = $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_GROUP));
+
+        $this->checkAuthorization(Manager::context());
     }
 
     public function count_groups($condition = null)

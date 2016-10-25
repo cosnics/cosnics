@@ -4,7 +4,7 @@
     <services>
         <service id="chamilo.core.rights.structure.console.command.synchronize_structure_locations"
                  class="Chamilo\Core\Rights\Structure\Console\Command\SynchronizeStructureLocationsCommand">
-            <argument type="service" id="chamilo.core.rights.structure.structure_location_configuration_synchronizer" />
+            <argument type="service" id="chamilo.core.rights.structure.service.structure_location_configuration.synchronizer" />
             <tag name="chamilo.libraries.console.command" />
         </service>
 

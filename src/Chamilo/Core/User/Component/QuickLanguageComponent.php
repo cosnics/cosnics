@@ -32,6 +32,8 @@ class QuickLanguageComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ChangeLanguage');
+
         if ($this->isAllowedToChangeLanguage())
         {
             $choice = Request :: get(self :: PARAM_CHOICE);

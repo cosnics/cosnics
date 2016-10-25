@@ -29,26 +29,26 @@ class StructureLocationService implements StructureLocationServiceInterface
     }
 
     /**
-     * Creates a structure location based on a given context and component
+     * Creates a structure location based on a given context and action
      *
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @return StructureLocation
      *
      * @throws \Exception
      */
-    public function createStructureLocation($context, $component = null)
+    public function createStructureLocation($context, $action = null)
     {
         $structureLocation = new StructureLocation();
 
         $structureLocation->setContext($context);
-        $structureLocation->setComponent($component);
+        $structureLocation->setAction($action);
 
         if (!$structureLocation->create())
         {
             throw new \Exception(
-                'The structure location with context ' . $context . ' and component ' . $component .
+                'The structure location with context ' . $context . ' and action ' . $action .
                 ' could not be created'
             );
         }
@@ -63,37 +63,52 @@ class StructureLocationService implements StructureLocationServiceInterface
      *
      * @throws \Exception
      */
-    public function deleteRole(StructureLocation $structureLocation)
+    public function deleteStructureLocation(StructureLocation $structureLocation)
     {
         if (!$structureLocation->delete())
         {
             throw new \Exception(
-                'The structure location with context ' . $structureLocation->getContext() . ' and component ' .
-                $structureLocation->getComponent() . ' could not be deleted'
+                'The structure location with context ' . $structureLocation->getContext() . ' and action ' .
+                $structureLocation->getAction() . ' could not be deleted'
             );
         }
     }
 
     /**
-     * Returns the structure location by a given context and component
+     * Truncates the structure locations with their roles
+     *
+     * @throws \Exception
+     */
+    public function truncateStructureLocations()
+    {
+        if(!$this->structureLocationRepository->truncateStructureLocationsAndRoles())
+        {
+            throw new \Exception(
+                'The structure locations and their roles could not be truncated'
+            );
+        }
+    }
+
+    /**
+     * Returns the structure location by a given context and action
      *
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @return StructureLocation
      *
      * @throws \Exception
      */
-    public function getStructureLocationByContextAndComponent($context, $component = null)
+    public function getStructureLocationByContextAndAction($context, $action = null)
     {
-        $structureLocation = $this->structureLocationRepository->findStructureLocationByContextAndComponent(
-            $context, $component
+        $structureLocation = $this->structureLocationRepository->findStructureLocationByContextAndAction(
+            $context, $action
         );
 
         if (!$structureLocation instanceof StructureLocation)
         {
             throw new \Exception(
-                'Could not find a structure location with context ' . $context . ' and component ' . $component
+                'Could not find a structure location with context ' . $context . ' and action ' . $action
             );
         }
 

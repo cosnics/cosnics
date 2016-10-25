@@ -24,6 +24,8 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageUsers');
+        
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();

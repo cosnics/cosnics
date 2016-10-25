@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class StructureLocation extends DataClass
 {
     const PROPERTY_CONTEXT = 'context';
-    const PROPERTY_COMPONENT = 'component';
+    const PROPERTY_ACTION = 'action';
 
     /**
      * Get the default properties of all data classes.
@@ -24,9 +24,9 @@ class StructureLocation extends DataClass
     public static function get_default_property_names($extended_property_names = array())
     {
         $extended_property_names[] = self::PROPERTY_CONTEXT;
-        $extended_property_names[] = self::PROPERTY_COMPONENT;
-        
-        return $extended_property_names;
+        $extended_property_names[] = self::PROPERTY_ACTION;
+
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -52,19 +52,19 @@ class StructureLocation extends DataClass
     /**
      * @return string
      */
-    public function getComponent()
+    public function getAction()
     {
-        return $this->get_default_property(self::PROPERTY_COMPONENT);
+        return $this->get_default_property(self::PROPERTY_ACTION);
     }
 
     /**
-     * @param string $component
+     * @param string $action
      *
      * @return $this
      */
-    public function setComponent($component)
+    public function setAction($action)
     {
-        $this->set_default_property(self::PROPERTY_COMPONENT, $component);
+        $this->set_default_property(self::PROPERTY_ACTION, $action);
 
         return $this;
     }

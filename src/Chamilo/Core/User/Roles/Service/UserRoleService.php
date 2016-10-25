@@ -30,10 +30,12 @@ class UserRoleService implements UserRoleServiceInterface
      * UserRoleService constructor.
      *
      * @param RoleServiceInterface $roleService
+     * @param UserRoleRepositoryInterface $userRoleRepository
      */
-    public function __construct(RoleServiceInterface $roleService)
+    public function __construct(RoleServiceInterface $roleService, UserRoleRepositoryInterface $userRoleRepository)
     {
         $this->roleService = $roleService;
+        $this->userRoleRepository = $userRoleRepository;
     }
 
     /**
@@ -45,7 +47,19 @@ class UserRoleService implements UserRoleServiceInterface
      */
     public function getRolesForUser(User $user)
     {
-        return $this->userRoleRepository->findRolesForUser($user->getId());
+        $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
+
+        if(empty($userRoles))
+        {
+            $userRoles = array($this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER'));
+        }
+
+        if($user->is_platform_admin())
+        {
+            $userRoles[] = $this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR');
+        }
+
+        return $userRoles;
     }
 
     /**
@@ -56,7 +70,7 @@ class UserRoleService implements UserRoleServiceInterface
      *
      * @return bool
      */
-    public function doesUserHaveRoles(User $user, $rolesToMatch = array())
+    public function doesUserHasAtLeastOneRole(User $user, $rolesToMatch = array())
     {
         $userRoles = $this->getRolesForUser($user);
         $userRoleIds = array();

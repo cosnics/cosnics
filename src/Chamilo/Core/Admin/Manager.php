@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Admin;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * The admin allows the platform admin to configure certain aspects of his platform
@@ -24,4 +25,15 @@ abstract class Manager extends Application
     const ACTION_IMPORTER = 'Importer';
     const ACTION_SYSTEM_ANNOUNCEMENTS = 'Announcer';
     const DEFAULT_ACTION = self :: ACTION_ADMIN_BROWSER;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 }

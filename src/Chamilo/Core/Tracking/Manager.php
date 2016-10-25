@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Tracking;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -18,4 +19,11 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
+
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent:: __construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 }

@@ -5,6 +5,7 @@ namespace Chamilo\Core\User\Roles\Service;
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 /**
  * Manages roles
@@ -101,7 +102,10 @@ class RoleService implements RoleServiceInterface
         }
         catch(\Exception $ex)
         {
-            return $this->createRoleByName($roleName);
+            $role = $this->createRoleByName($roleName);
+            DataClassCache::truncate(Role::class_name());
+
+            return $role;
         }
     }
 }

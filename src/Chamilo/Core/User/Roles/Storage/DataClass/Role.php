@@ -24,7 +24,7 @@ class Role extends DataClass
     {
         $extended_property_names[] = self::PROPERTY_ROLE;
 
-        return $extended_property_names;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**

@@ -1,4 +1,0 @@
-Chamilo\Core\User:
-  - BrowserComponent: ROLE_ADMINISTRATOR
-Chamilo\Core\Repository:
-  - EditComponent: ROLE_DEFAULT_USER
