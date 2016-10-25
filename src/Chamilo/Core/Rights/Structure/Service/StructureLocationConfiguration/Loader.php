@@ -2,10 +2,9 @@
 
 namespace Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration;
 
+use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\LoaderInterface;
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Loader\FileLoader;
-use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -13,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class StructureLocationConfigurationLoader
+class Loader implements LoaderInterface
 {
     /**
      * @var Path

@@ -12,22 +12,22 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 interface AuthorizationCheckerInterface
 {
     /**
-     * Returns whether or not a user is authorized to view a certain component in a certain context
+     * Returns whether or not a user is authorized to view a certain action in a certain context
      *
      * @param User $user
      * @param $context
-     * @param $component
+     * @param $action
      */
-    public function isAuthorized(User $user, $context, $component = null);
+    public function isAuthorized(User $user, $context, $action = null);
 
     /**
-     * Checks the authorization for the user in the given context / component and throws an exception if necessary
+     * Checks the authorization for the user in the given context / action and throws an exception if necessary
      *
      * @param User $user
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @throws NotAllowedException
      */
-    public function checkAuthorization(User $user, $context, $component = null);
+    public function checkAuthorization(User $user, $context, $action = null);
 }

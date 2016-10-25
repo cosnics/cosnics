@@ -89,7 +89,7 @@ INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user
 CREATE TABLE `rights_structure_location` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `context` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `component` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `action` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `rsl_location` (`context`,`component`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

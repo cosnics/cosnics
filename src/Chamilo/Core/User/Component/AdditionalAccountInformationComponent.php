@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -18,6 +19,8 @@ class AdditionalAccountInformationComponent extends ProfileComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageAccount');
+
         return $this->renderPage();
     }
 

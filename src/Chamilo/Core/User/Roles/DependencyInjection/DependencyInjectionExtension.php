@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Rights\Structure\DependencyInjection;
+namespace Chamilo\Core\User\Roles\DependencyInjection;
 
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\Config\FileLocator;
@@ -34,13 +34,12 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader = new XmlFileLoader(
             $container,
             new FileLocator(
-                Path::getInstance()->getConfigurationPath('Chamilo\Core\Rights\Structure') . 'DependencyInjection'
+                Path::getInstance()->getConfigurationPath('Chamilo\Core\User\Roles') . 'DependencyInjection'
             )
         );
 
         $xmlFileLoader->load('repository.xml');
         $xmlFileLoader->load('services.xml');
-        $xmlFileLoader->load('console.xml');
     }
 
     /**
@@ -51,6 +50,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.core.rights.structure';
+        return 'chamilo.core.user.roles';
     }
 }

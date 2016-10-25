@@ -181,10 +181,7 @@ abstract class Manager extends Application
     {
         parent:: __construct($applicationConfiguration);
 
-        if (!is_null($applicationConfiguration->getUser()) && $applicationConfiguration->getUser()->is_anonymous_user())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(self::context());
 
         $this->set_optional_parameters();
     }

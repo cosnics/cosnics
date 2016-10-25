@@ -39,19 +39,19 @@ class AuthorizationChecker implements AuthorizationCheckerInterface
     }
 
     /**
-     * Returns whether or not a user is authorized to view a certain component in a certain context. When no roles
+     * Returns whether or not a user is authorized to view a certain action in a certain context. When no roles
      * are defined on the given location then by default, every user is authorized
      *
      * @param User $user
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @return boolean
      */
-    public function isAuthorized(User $user, $context, $component = null)
+    public function isAuthorized(User $user, $context, $action = null)
     {
-        $locationRoles = $this->structureLocationRoleService->getRolesForLocationByContextAndComponent(
-            $context, $component
+        $locationRoles = $this->structureLocationRoleService->getRolesForLocationByContextAndAction(
+            $context, $action
         );
 
         if(empty($locationRoles))
@@ -59,21 +59,21 @@ class AuthorizationChecker implements AuthorizationCheckerInterface
             return true;
         }
 
-        return $this->userRoleService->doesUserHaveRoles($user, $locationRoles);
+        return $this->userRoleService->doesUserHasAtLeastOneRole($user, $locationRoles);
     }
 
     /**
-     * Checks the authorization for the user in the given context / component and throws an exception if necessary
+     * Checks the authorization for the user in the given context / action and throws an exception if necessary
      *
      * @param User $user
      * @param string $context
-     * @param string $component
+     * @param string $action
      *
      * @throws NotAllowedException
      */
-    public function checkAuthorization(User $user, $context, $component = null)
+    public function checkAuthorization(User $user, $context, $action = null)
     {
-        if(!$this->isAuthorized($user, $context, $component))
+        if(!$this->isAuthorized($user, $context, $action))
         {
             throw new NotAllowedException();
         }

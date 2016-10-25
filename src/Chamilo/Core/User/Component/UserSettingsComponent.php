@@ -3,6 +3,7 @@ namespace Chamilo\Core\User\Component;
 
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Admin\Form\ConfigurationForm;
+use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
@@ -42,6 +43,7 @@ class UserSettingsComponent extends ProfileComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageAccount');
         $this->context = Request :: get(self :: PARAM_CONTEXT);
 
         if (! $this->context)
