@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface;
-use Chamilo\Libraries\Storage\DataManager\Service\StorageUnitRepository;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 
 /**

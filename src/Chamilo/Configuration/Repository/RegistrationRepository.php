@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Repository;
 
-use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class ConfigurationRepository
+class RegistrationRepository
 {
 
     /**
@@ -51,8 +51,8 @@ class ConfigurationRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findSettingsAsRecords()
+    public function findRegistrationsAsRecords()
     {
-        return $this->getDataClassRepository()->records(Setting::class_name(), new RecordRetrievesParameters());
+        return $this->getDataClassRepository()->records(Registration::class_name(), new RecordRetrievesParameters());
     }
 }

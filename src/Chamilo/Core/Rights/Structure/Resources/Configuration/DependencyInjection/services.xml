@@ -22,7 +22,7 @@
         <service id="chamilo.core.rights.structure.service.structure_location_configuration.synchronizer"
              class="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer">
             <argument type="service" id="chamilo.core.rights.structure.service.structure_location_configuration.loader" />
-            <argument type="service" id="chamilo.configuration.service.configuration_service" />
+            <argument type="service" id="chamilo.configuration.service.registration_consulter" />
             <argument type="service" id="chamilo.core.rights.structure.service.structure_location_service" />
             <argument type="service" id="chamilo.core.rights.structure.service.structure_location_role_service" />
         </service>
