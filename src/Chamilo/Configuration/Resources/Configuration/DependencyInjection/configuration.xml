@@ -52,7 +52,7 @@
             class="Chamilo\Configuration\Service\FileConfigurationLoader">
             <argument
                 type="service"
-                id="chamilo.libraries.file.path_utilities" />
+                id="chamilo.libraries.file.path_builder" />
         </service>
 
         <service
