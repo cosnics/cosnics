@@ -2,7 +2,7 @@
 namespace Chamilo\Configuration\Service;
 
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
-use Chamilo\Libraries\File\PathUtilities;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -15,35 +15,35 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @var \Chamilo\Libraries\File\PathUtilities
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
-    private $pathUtilities;
+    private $pathBuilder;
 
     /**
      *
-     * @param \Chamilo\Libraries\File\PathUtilities $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
-    public function __construct(PathUtilities $pathUtilities)
+    public function __construct(PathBuilder $pathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\File\PathUtilities
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
-    public function getPathUtilities()
+    public function getPathBuilder()
     {
-        return $this->pathUtilities;
+        return $this->pathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\Path $pathBuilder
      */
-    public function setPathUtilities(PathUtilities $pathUtilities)
+    public function setPathBuilder(PathBuilder $pathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -80,7 +80,7 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
      */
     protected function getConfigurationFilePath()
     {
-        return $this->getPathUtilities()->getStoragePath() . 'configuration' . DIRECTORY_SEPARATOR . 'configuration.ini';
+        return $this->getPathBuilder()->getStoragePath() . 'configuration' . DIRECTORY_SEPARATOR . 'configuration.ini';
     }
 
     protected function getDefaultSettings()
@@ -132,18 +132,17 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
         $settings['Chamilo\Configuration']['debug']['enable_query_file_cache'] = false;
         $settings['Chamilo\Configuration']['session']['session_handler'] = 'chamilo';
 
-        $pathUtilities = $this->getPathUtilities();
+        $pathBuilder = $this->getPathBuilder();
 
-        $settings['Chamilo\Configuration']['storage']['archive'] = $pathUtilities->getStoragePath('archive');
-        $settings['Chamilo\Configuration']['storage']['cache_path'] = $pathUtilities->getStoragePath('cache');
-        $settings['Chamilo\Configuration']['storage']['garbage'] = $pathUtilities->getStoragePath('garbage_path');
-        $settings['Chamilo\Configuration']['storage']['hotpotatoes_path'] = $pathUtilities->getStoragePath(
-            'hotpotatoes');
-        $settings['Chamilo\Configuration']['storage']['logs_path'] = $pathUtilities->getStoragePath('logs');
-        $settings['Chamilo\Configuration']['storage']['repository_path'] = $pathUtilities->getStoragePath('repository');
-        $settings['Chamilo\Configuration']['storage']['scorm_path'] = $pathUtilities->getStoragePath('scorm');
-        $settings['Chamilo\Configuration']['storage']['temp_path'] = $pathUtilities->getStoragePath('temp');
-        $settings['Chamilo\Configuration']['storage']['userpictures'] = $pathUtilities->getStoragePath(
+        $settings['Chamilo\Configuration']['storage']['archive'] = $pathBuilder->getStoragePath('archive');
+        $settings['Chamilo\Configuration']['storage']['cache_path'] = $pathBuilder->getStoragePath('cache');
+        $settings['Chamilo\Configuration']['storage']['garbage'] = $pathBuilder->getStoragePath('garbage_path');
+        $settings['Chamilo\Configuration']['storage']['hotpotatoes_path'] = $pathBuilder->getStoragePath('hotpotatoes');
+        $settings['Chamilo\Configuration']['storage']['logs_path'] = $pathBuilder->getStoragePath('logs');
+        $settings['Chamilo\Configuration']['storage']['repository_path'] = $pathBuilder->getStoragePath('repository');
+        $settings['Chamilo\Configuration']['storage']['scorm_path'] = $pathBuilder->getStoragePath('scorm');
+        $settings['Chamilo\Configuration']['storage']['temp_path'] = $pathBuilder->getStoragePath('temp');
+        $settings['Chamilo\Configuration']['storage']['userpictures'] = $pathBuilder->getStoragePath(
             'userpictures_path');
 
         return $settings;
