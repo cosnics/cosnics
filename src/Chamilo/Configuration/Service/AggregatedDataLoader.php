@@ -55,7 +55,7 @@ class AggregatedDataLoader implements DataLoaderInterface
 
         foreach ($this->getDataLoaders() as $dataLoader)
         {
-            $data = array_merge_recursive($data, $dataLoader->getSettings());
+            $data = array_merge_recursive($data, $dataLoader->getData());
         }
 
         return $data;

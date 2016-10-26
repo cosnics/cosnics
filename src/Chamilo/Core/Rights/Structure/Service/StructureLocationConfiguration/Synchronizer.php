@@ -1,8 +1,7 @@
 <?php
-
 namespace Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration;
 
-use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationServiceInterface;
 use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfaces\LoaderInterface;
@@ -15,22 +14,27 @@ use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfa
  */
 class Synchronizer implements SynchronizerInterface
 {
+
     /**
+     *
      * @var LoaderInterface
      */
     protected $structureLocationConfigurationLoader;
 
     /**
-     * @var ConfigurationService
+     *
+     * @var RegistrationConsulter
      */
-    protected $configuration;
+    protected $registrationConsulter;
 
     /**
+     *
      * @var StructureLocationServiceInterface
      */
     protected $structureLocationService;
 
     /**
+     *
      * @var StructureLocationRoleServiceInterface
      */
     protected $structureLocationRoleService;
@@ -39,19 +43,16 @@ class Synchronizer implements SynchronizerInterface
      * StructureLocationConfigurationSynchronizer constructor.
      *
      * @param LoaderInterface $structureLocationConfigurationLoader
-     * @param ConfigurationService $configuration
+     * @param RegistrationConsulter $registrationConsulter
      * @param StructureLocationServiceInterface $structureLocationService
      * @param StructureLocationRoleServiceInterface $structureLocationRoleService
      */
-    public function __construct(
-        LoaderInterface $structureLocationConfigurationLoader,
-        ConfigurationService $configuration,
-        StructureLocationServiceInterface $structureLocationService,
-        StructureLocationRoleServiceInterface $structureLocationRoleService
-    )
+    public function __construct(LoaderInterface $structureLocationConfigurationLoader,
+        RegistrationConsulter $registrationConsulter, StructureLocationServiceInterface $structureLocationService,
+        StructureLocationRoleServiceInterface $structureLocationRoleService)
     {
         $this->structureLocationConfigurationLoader = $structureLocationConfigurationLoader;
-        $this->configuration = $configuration;
+        $this->registrationConsulter = $registrationConsulter;
         $this->structureLocationService = $structureLocationService;
         $this->structureLocationRoleService = $structureLocationRoleService;
     }
@@ -62,16 +63,15 @@ class Synchronizer implements SynchronizerInterface
     public function synchronize()
     {
         $configuration = $this->structureLocationConfigurationLoader->loadConfiguration(
-            $this->configuration->getRegistrationContexts()
-        );
+            $this->registrationConsulter->getRegistrationContexts());
 
         $this->structureLocationService->truncateStructureLocations();
-        
-        foreach($configuration as $package => $packageConfiguration)
+
+        foreach ($configuration as $package => $packageConfiguration)
         {
-            foreach($packageConfiguration as $actions)
+            foreach ($packageConfiguration as $actions)
             {
-                foreach($actions as $action => $roles)
+                foreach ($actions as $action => $roles)
                 {
                     if ($action == 'Package')
                     {
@@ -80,7 +80,7 @@ class Synchronizer implements SynchronizerInterface
 
                     $structureLocation = $this->structureLocationService->createStructureLocation($package, $action);
 
-                    if(!is_array($roles))
+                    if (! is_array($roles))
                     {
                         $roles = array($roles);
                     }

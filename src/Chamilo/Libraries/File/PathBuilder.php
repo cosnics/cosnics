@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class PathUtilities
+class PathBuilder
 {
     const FULL = 1;
     const BASE = 2;

@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Libraries\File\Path;
-use Chamilo\Configuration\Interfaces\DataLoaderInterface;
+use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
+use Chamilo\Libraries\File\PathUtilities;
 
 /**
  *
@@ -10,27 +10,27 @@ use Chamilo\Configuration\Interfaces\DataLoaderInterface;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class FileConfigurationLoader implements DataLoaderInterface
+class FileConfigurationLoader implements CacheableDataLoaderInterface
 {
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @var \Chamilo\Libraries\File\PathUtilities
      */
     private $pathUtilities;
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathUtilities $pathUtilities
      */
-    public function __construct(Path $pathUtilities)
+    public function __construct(PathUtilities $pathUtilities)
     {
         $this->pathUtilities = $pathUtilities;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return \Chamilo\Libraries\File\PathUtilities
      */
     public function getPathUtilities()
     {
@@ -41,7 +41,7 @@ class FileConfigurationLoader implements DataLoaderInterface
      *
      * @param \Chamilo\Libraries\File\Path $pathUtilities
      */
-    public function setPathUtilities(Path $pathUtilities)
+    public function setPathUtilities(PathUtilities $pathUtilities)
     {
         $this->pathUtilities = $pathUtilities;
     }
@@ -165,5 +165,14 @@ class FileConfigurationLoader implements DataLoaderInterface
         }
 
         return $settings;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return md5(__CLASS__);
     }
 }
