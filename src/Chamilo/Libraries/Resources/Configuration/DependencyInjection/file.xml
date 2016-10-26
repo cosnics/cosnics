@@ -13,16 +13,16 @@
         </service>
 
         <service
-            id="chamilo.libraries.file.path_utilities"
-            class="Chamilo\Libraries\File\PathUtilities">
+            id="chamilo.libraries.file.path_builder"
+            class="Chamilo\Libraries\File\PathBuilder">
             <argument
                 type="service"
                 id="chamilo.libraries.architecture.classname_utilities" />
         </service>
 
         <service
-            id="chamilo.libraries.file.configurable_path_utilities"
-            class="Chamilo\Libraries\File\ConfigurablePathUtilities">
+            id="chamilo.libraries.file.configurable_path_builder"
+            class="Chamilo\Libraries\File\ConfigurablePathBuilder">
             <argument
                 type="service"
                 id="chamilo.configuration.service.file_configuration_consulter" />

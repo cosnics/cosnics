@@ -10,7 +10,7 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class ConfigurablePathUtilities
+class ConfigurablePathBuilder
 {
     const TEMPORARY = 1;
     const CACHE = 2;
