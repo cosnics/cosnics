@@ -15,12 +15,9 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class SecurityTokenAuthentication extends QueryAuthentication
 {
-
     /**
-     *
-     * @param string $username
-     * @param string $password
      * @return \Chamilo\Core\User\Storage\DataClass\User
+     *
      * @throws AuthenticationException
      */
     public function login()
@@ -29,18 +26,11 @@ class SecurityTokenAuthentication extends QueryAuthentication
 
         if ($securityToken)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user_by_security_token($securityToken);
+            return $this->retrieveUserBySecurityToken($securityToken);
 
-            if (! $user instanceof User)
-            {
-                throw new AuthenticationException(Translation :: get('InvalidSecurityToken'));
-            }
+        }
 
-            return $user;
-        }
-        else
-        {
-            return null;
-        }
+        return null;
     }
+
 }

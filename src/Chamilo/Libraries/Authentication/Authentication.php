@@ -2,7 +2,9 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
@@ -38,7 +40,7 @@ abstract class Authentication
      */
     public static function getQueryAuthenticationTypes()
     {
-        return array('SecurityToken');
+        return array('SecurityToken', 'Anonymous');
     }
 
     public static function anonymous_user_exists()

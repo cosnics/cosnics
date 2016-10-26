@@ -1,6 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Authentication;
 
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Platform\Translation;
+
 /**
  *
  * @package Chamilo\Libraries\Authentication
@@ -62,5 +65,26 @@ abstract class QueryAuthentication extends Authentication
         $authenticationClass = __NAMESPACE__ . '\\' . $authenticationMethod . '\\' . $authenticationMethod .
              'Authentication';
         return new $authenticationClass($request);
+    }
+
+    /**
+     * Retrieves a user by a given security token
+     *
+     * @param $securityToken
+     *
+     * @return User
+     *
+     * @throws AuthenticationException
+     */
+    protected function retrieveUserBySecurityToken($securityToken)
+    {
+        $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_user_by_security_token($securityToken);
+
+        if (!$user instanceof User)
+        {
+            throw new AuthenticationException(Translation:: get('InvalidSecurityToken'));
+        }
+
+        return $user;
     }
 }
