@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Configuration\Service;
+namespace Chamilo\Configuration\Service\Old;
 
 use Chamilo\Configuration\Repository\ConfigurationRepository;
 use Chamilo\Configuration\Storage\DataClass\Registration;
@@ -14,7 +14,7 @@ use Chamilo\Configuration\Storage\DataClass\Language;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class ConfigurationLoader
+class OldConfigurationLoader
 {
     const REGISTRATION_CONTEXT = 1;
     const REGISTRATION_TYPE = 2;

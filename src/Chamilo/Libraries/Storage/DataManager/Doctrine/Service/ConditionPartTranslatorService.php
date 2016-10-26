@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Service;
 
-use Chamilo\Configuration\Service\BaseConfigurationService;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
@@ -20,9 +20,9 @@ class ConditionPartTranslatorService
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\BaseConfigurationService
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    protected $baseBaseConfigurationService;
+    protected $configurationConsulter;
 
     /**
      *
@@ -38,34 +38,34 @@ class ConditionPartTranslatorService
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\BaseConfigurationService $baseBaseConfigurationService
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionTranslatorFactory $conditionPartTranslatorFactory
      * @param \Chamilo\Libraries\Storage\Cache\ConditionPartCache $conditionPartCache
      */
-    public function __construct(BaseConfigurationService $baseBaseConfigurationService,
+    public function __construct(ConfigurationConsulter $configurationConsulter,
         ConditionPartTranslatorFactory $conditionPartTranslatorFactory, ConditionPartCache $conditionPartCache)
     {
-        $this->baseBaseConfigurationService = $baseBaseConfigurationService;
+        $this->configurationConsulter = $configurationConsulter;
         $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
         $this->conditionPartCache = $conditionPartCache;
     }
 
     /**
      *
-     * @return Chamilo\Configuration\Service\BaseConfigurationService
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    public function getBaseConfigurationService()
+    public function getConfigurationConsulter()
     {
-        return $this->baseBaseConfigurationService;
+        return $this->configurationConsulter;
     }
 
     /**
      *
-     * @param Chamilo\Configuration\Service\BaseConfigurationService $baseBaseConfigurationService
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
-    public function setBaseConfigurationService($baseBaseConfigurationService)
+    public function setConfigurationConsulter($configurationConsulter)
     {
-        $this->baseBaseConfigurationService = $baseBaseConfigurationService;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -110,7 +110,7 @@ class ConditionPartTranslatorService
      */
     protected function isQueryCacheEnabled()
     {
-        return (bool) $this->getBaseConfigurationService()->getSetting(
+        return (bool) $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
     }
 
