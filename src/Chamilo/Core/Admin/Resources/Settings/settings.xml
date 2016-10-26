@@ -167,6 +167,15 @@
 					<option name="enableSecurityTokenAuthentication" value="1" />
 				</options>
 			</setting>
+			<setting name="enableAnonymousAuthentication" field="toggle">
+				<options type="static">
+					<option name="enableAnonymousAuthentication" value="0" />
+				</options>
+			</setting>
+		</category>
+
+		<category name="anonymous_authentication">
+			<setting name="anonymous_authentication_url" field="text" default="" />
 		</category>
 
 		<category name="external_authentication">
