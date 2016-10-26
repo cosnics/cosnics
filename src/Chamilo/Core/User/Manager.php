@@ -58,6 +58,8 @@ abstract class Manager extends Application
     const ACTION_DENY_USER = 'UserDenier';
     const ACTION_MANAGE_METADATA = 'MetadataManager';
     const ACTION_QUICK_LANG = 'QuickLanguage';
+    const ACTION_ACCESS_ANONYMOUSLY = 'AnonymousAccess';
+    
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_BROWSE_USERS;

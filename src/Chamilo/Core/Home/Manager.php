@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Home;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -55,6 +56,9 @@ abstract class Manager extends Application
     {
         parent:: __construct($applicationConfiguration);
 
-        $this->checkAuthorization(Manager::context());
+        if($this->getUser() instanceof User)
+        {
+            $this->checkAuthorization(Manager::context());
+        }
     }
 }
