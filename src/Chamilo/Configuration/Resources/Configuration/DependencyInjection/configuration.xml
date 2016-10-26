@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.configuration.service.configuration"
+            class="Chamilo\Configuration\Configuration">
+            <factory
+                class="Chamilo\Configuration\Configuration"
+                method="get_instance" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.configuration_consulter"
+            class="Chamilo\Configuration\Service\ConfigurationConsulter">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_cache_loader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.configuration_cache_loader"
+            class="Chamilo\Configuration\Service\DataCacheLoader">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_loader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.configuration_loader"
+            class="Chamilo\Configuration\Service\CacheableAggregatedDataLoader">
+            <factory
+                service="chamilo.configuration.factory.configuration_loader_factory"
+                method="getConfigurationLoader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.factory.configuration_loader_factory"
+            class="Chamilo\Configuration\Factory\ConfigurationLoaderFactory">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_loader" />
+            <argument
+                type="service"
+                id="chamilo.configuration.service.storage_configuration_loader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.file_configuration_loader"
+            class="Chamilo\Configuration\Service\FileConfigurationLoader">
+            <argument
+                type="service"
+                id="chamilo.libraries.file.path_utilities" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.storage_configuration_loader"
+            class="Chamilo\Configuration\Service\StorageConfigurationLoader">
+            <argument
+                type="service"
+                id="chamilo.configuration.repository.configuration_repository" />
+        </service>
+
+        <service
+            id="chamilo.configuration.repository.configuration_repository"
+            class="Chamilo\Configuration\Repository\ConfigurationRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.file_configuration_consulter"
+            class="Chamilo\Configuration\Service\ConfigurationConsulter">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_loader" />
+        </service>
+    </services>
+</container>

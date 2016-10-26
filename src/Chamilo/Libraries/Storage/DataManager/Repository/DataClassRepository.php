@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
-use Chamilo\Configuration\Service\BaseConfigurationService;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
@@ -43,9 +43,9 @@ class DataClassRepository
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\BaseConfigurationService
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    private $baseConfigurationService;
+    private $configurationConsulter;
 
     /**
      *
@@ -67,16 +67,16 @@ class DataClassRepository
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\BaseConfigurationService $baseConfigurationService
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\DataClass\DataClassFactory $dataClassFactory
      */
-    public function __construct(BaseConfigurationService $baseConfigurationService,
+    public function __construct(ConfigurationConsulter $configurationConsulter,
         DataClassRepositoryCache $dataClassRepositoryCache, DataClassDatabaseInterface $dataClassDatabase,
         DataClassFactory $dataClassFactory)
     {
-        $this->baseConfigurationService = $baseConfigurationService;
+        $this->configurationConsulter = $configurationConsulter;
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
         $this->dataClassDatabase = $dataClassDatabase;
         $this->dataClassFactory = $dataClassFactory;
@@ -84,20 +84,20 @@ class DataClassRepository
 
     /**
      *
-     * @return Chamilo\Configuration\Service\BaseConfigurationService
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    public function getBaseConfigurationService()
+    public function getConfigurationConsulter()
     {
-        return $this->baseConfigurationService;
+        return $this->configurationConsulter;
     }
 
     /**
      *
-     * @param Chamilo\Configuration\Service\BaseConfigurationService $baseConfigurationService
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
-    public function setBaseConfigurationService(BaseConfigurationService $baseConfigurationService)
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
     {
-        $this->baseConfigurationService = $baseConfigurationService;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -950,7 +950,7 @@ class DataClassRepository
      */
     protected function isQueryCacheEnabled()
     {
-        return (bool) $this->getBaseConfigurationService()->getSetting(
+        return (bool) $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
     }
 

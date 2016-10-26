@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File;
 
-use Chamilo\Configuration\Service\ConfigurationService;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 
 /**
  *
@@ -10,7 +10,7 @@ use Chamilo\Configuration\Service\ConfigurationService;
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class ConfigurablePath
+class ConfigurablePathUtilities
 {
     const TEMPORARY = 1;
     const CACHE = 2;
@@ -27,18 +27,18 @@ class ConfigurablePath
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\ConfigurationService
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    protected $configurationService;
+    protected $configurationConsulter;
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
-    public function __construct(ConfigurationService $configurationService)
+    public function __construct(ConfigurationConsulter $configurationConsulter)
     {
         $this->cache = array();
-        $this->configurationService = $configurationService;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -61,20 +61,20 @@ class ConfigurablePath
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\ConfigurationService
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    public function getConfigurationService()
+    public function getConfigurationConsulter()
     {
-        return $this->configurationService;
+        return $this->configurationConsulter;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationService $configurationService
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
      */
-    public function setConfigurationService(ConfigurationService $configurationService)
+    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
     {
-        $this->configurationService = $configurationService;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -86,7 +86,7 @@ class ConfigurablePath
     public function getTemporaryPath($namespace = null)
     {
         $completeNamespace = ($namespace ? 'temp\\' . $namespace : 'temp');
-        return $this->cache[self::TEMPORARY][(string) $completeNamespace] = $this->getConfigurationService()->getSetting(
+        return $this->cache[self::TEMPORARY][(string) $completeNamespace] = $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'storage', 'temp_path')) . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
@@ -99,7 +99,7 @@ class ConfigurablePath
     public function getCachePath($namespace = null)
     {
         $completeNamespace = ($namespace ? 'cache\\' . $namespace : 'cache');
-        return $this->cache[self::CACHE][(string) $completeNamespace] = $this->getConfigurationService()->getSetting(
+        return $this->cache[self::CACHE][(string) $completeNamespace] = $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'storage', 'cache_path')) . md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
@@ -110,7 +110,7 @@ class ConfigurablePath
      */
     public function getLogPath()
     {
-        return $this->cache[self::LOG] = $this->getConfigurationService()->getSetting(
+        return $this->cache[self::LOG] = $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'storage', 'logs_path'));
     }
 
@@ -120,7 +120,7 @@ class ConfigurablePath
      */
     public function getArchivePath()
     {
-        return $this->cache[self::ARCHIVE] = $this->getConfigurationService()->getSetting(
+        return $this->cache[self::ARCHIVE] = $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'storage', 'archive_path'));
     }
 
@@ -131,7 +131,7 @@ class ConfigurablePath
      */
     public function getRepositoryPath()
     {
-        return $this->cache[self::REPOSITORY] = $this->getConfigurationService()->getSetting(
+        return $this->cache[self::REPOSITORY] = $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'storage', 'repository_path'));
     }
 
@@ -142,7 +142,7 @@ class ConfigurablePath
      */
     public function getProfilePicturePath()
     {
-        return $this->cache[self::PROFILE_PICTURE] = $this->getConfigurationService()->getSetting(
+        return $this->cache[self::PROFILE_PICTURE] = $this->getConfigurationConsulter()->getSetting(
             array('Chamilo\Configuration', 'storage', 'userpictures_path'));
     }
 }
