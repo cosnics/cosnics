@@ -1,0 +1,9 @@
+@import url ('../../HtmlEditor/Ckeditor/Aqua');
+
+.cke_chamilo_office365_video {
+	background-image: url(../../../../../Images/Ruby/Logo/48.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+	border: 1px solid #cc0000;
+	background-position: center center;
+}

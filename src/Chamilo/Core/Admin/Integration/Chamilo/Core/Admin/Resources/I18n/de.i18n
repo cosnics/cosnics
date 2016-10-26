@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+Settings = "Einstellungen"
+SettingsDescription = "Die Einstellungen dieser Anwendung verwalten"
+Importer = "Importeur"
+ImporterDescription = "Kurse, Benutzer, Anmeldungen in das System importieren"
+SystemAnnouncement = "Systemankündigung"
+SystemAnnouncementsDescription = "Die Systemankündigungen auf der Plattform verwalten"
+TranslationsImport = ""
+TranslationsImportDescription = ""
+Diagnose = "Diagnostizieren"
+DiagnoseDescription = "Diagnose des Systems, der Einstellungen und der Server"
+LogsViewer = "Protokollansicht"
+LogsViewerDescription = "Verschiedene Systemprotokolle (wie apache, php, mysql) einsehen"

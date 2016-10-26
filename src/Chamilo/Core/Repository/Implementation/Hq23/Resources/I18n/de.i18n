@@ -1,0 +1,30 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\hq23
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "23"
+DeleteSuccesfull = "Löschung erfolgreich"
+DeleteFailed = "Löschung fehlgeschlagen"
+ExportSuccesfull = "Export erfolgreich"
+ExportFailed = "Export fehlgeschlagen"
+ContentObjectUpdatedSuccessful = "Content Objekt erfolgreich aktualisiert"
+ContentObjectUpdatedFailed = "Aktualisierung des Content Objekts fehlgeschlagen"
+ExternalRepositoryObjectUpdatedFailed = "Aktualisierung des Objekts aus dem Externen Repositorium fehlgeschlagen"
+ImportSuccesfull = "Import erfolgreich"
+ImportFailed = "Import fehlgeschlagen"
+Hq23UploadProblem = "Hq23 Upload-Problem"
+Title = "Titel"
+ThisFieldIsRequired = "Dieses Feld ist erforderlich"
+Tags = "Tags"
+Description = "Beschreibung"
+Edit = "Bearbeiten"
+Reset = "Zurücksetzen"
+FileName = "Dateiname"
+Create = "Erstellen"
+MyPhotos = "Meine Fotos"
+Public = "Öffentlich"
+AvailableSizes = "Verfügbare Größen"
+License = "Lizenz"
+Credentials = ""
+SessionToken = ""

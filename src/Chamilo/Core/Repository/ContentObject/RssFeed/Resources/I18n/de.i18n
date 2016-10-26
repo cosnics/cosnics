@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\rss_feed
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "RSS Feed"
+Description = "Beschreibung"
+Properties = "Eigenschaften"
+URL = "URL-Adresse"
+NoFeedsFound = "Keine Feeds gefunden"
+Feeder = ""
+Title = "Titel"
+Newsfeed = ""

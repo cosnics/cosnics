@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\note
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Notitie"
+Title = "Titel"
+Description = "Notitie"
+DeleteSelected = "Verwijder geselecteerde"
+NoteToolBrowserComponent = "Doorblader notities"
+NoteToolIntroductionPublisherComponent = "Publiceer introductietekst"
+NoteToolPublisherComponent = "Publiceer"
+NoteToolUpdaterComponent = "Bewerk"
+NoteToolViewerComponent = "Bekijk"

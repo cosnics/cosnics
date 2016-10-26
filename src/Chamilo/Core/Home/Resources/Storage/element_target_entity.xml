@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="element_target_entity">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+        <property name="element_id" type="integer" unsigned="1" notnull="1" default="0" />
+        <property name="entity_type" type="integer" unsigned="1" notnull="1" default="0" />
+        <property name="entity_id" type="integer" unsigned="1" notnull="1" default="0" />
+    </properties>
+    <index name="element_id">
+        <indexproperty name="element_id" />
+    </index>
+    <index name="entity">
+        <indexproperty name="entity_type" />
+        <indexproperty name="entity_id" />
+    </index>
+</object>

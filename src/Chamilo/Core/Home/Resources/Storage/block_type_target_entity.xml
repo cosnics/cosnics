@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="block_type_target_entity">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+        <property name="entity_type" type="integer" unsigned="1" notnull="1" default="0" />
+        <property name="entity_id" type="integer" unsigned="1" notnull="1" default="0" />
+        <property name="block_type" type="text" length="255" notnull="1" />
+    </properties>
+    <index name="block_type">
+        <indexproperty name="block_type" />
+    </index>
+    <index name="entity">
+        <indexproperty name="entity_type" />
+        <indexproperty name="entity_id" />
+    </index>
+</object>

@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matching_question
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Koppel vraag"
+Options = "Opties"
+AddMatchingQuestionOption = "Voeg optie toe"
+Answer = "Antwoord"
+Matches = "Matches"
+Feedback = "Feedback"
+Score = "Score"
+Comment = "Commentaar"
+Weight = "Gewicht"
+AddMatch = "Voeg een match toe"
+Match = "Match"
+Title = "Titel"
+Description = "Beschrijving"
+RecalculateWeight = "Herbereken gewicht"
+RandomizeOptions = "Randomiseer opties"
+FeedbackAnswer = "Enkel feedback bij fout antwoord"
+Display = "Matches weergavemodus"
+DisplaySelect = "Selectievak"
+DisplayList = "Lijst"
+MakeASelection = "Maak je selectie"
+SelectAnswer = "Selecteer je antwoord"

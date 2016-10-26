@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\lynx
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Lynx Package Manager"
+TypeCategory = "Core Applications"
+PackageTypeNameLynx = "Lynx"
+UpgraderComponent = "Upgrade"
+Upgrade = "Upgrading {PACKAGE}"
+CoreUpgraded = "The core was successfully upgraded. Click <a href=\"{URL}\">here</a> to upgrade the content objects."
+ContentObjectsUpgraded = "The content objects were successfully upgraded. Click <a href=\"{URL}\">here</a> to upgrade the applications."
+ApplicationsUpgraded = "The applications were successfully upgraded. Click <a href=\"{URL}\">here</a> to go back to the homepage."
+ContentObjectUpgraderComponent = "Upgrade content objects"
+ApplicationUpgraderComponent = "Upgrade applications"
+CreateRegistrationFailed = "Failed to create the registration for <i>{CONTEXT}</i>"
+UpdateRegistrationFailed = "Updating the registration failed"
+CreateStorageUnitFailed = "Failed to create the storage unit <i>{UNIT}</i>"
+AlterStorageUnitFailed = "Altering of <i>{PROPERTY}</i> in <i>{UNIT}</i> failed"
+RenameStorageUnitFailed = "Failed to rename the storage unit <i>{UNIT}</i> into <i>{NEW_UNIT}</i>"
+UpdateTrackerRegistrationFailed = "Failed to update the tracker registration for <i>{TRACKER}</i>"
+UpgraderNotFoundIgnoringPackage = "Could not find a valid upgrader for <i>{CONTEXT}</i>, ignoring update for package"
+ManagePackages = "Manage packages"
+ManagePackagesDescription = "Install or delete system packages"
+Finished = "Finished"
+Faield = "Failed"

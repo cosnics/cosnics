@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\note
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Hinweis"
+Title = "Titel"
+Description = "Beschreibung"
+DeleteSelected = ""
+NoteToolBrowserComponent = ""
+NoteToolIntroductionPublisherComponent = ""
+NoteToolPublisherComponent = ""
+NoteToolUpdaterComponent = ""
+NoteToolViewerComponent = ""
