@@ -14,9 +14,9 @@ trait ClassContext
      */
     public static function class_name($fully_qualified = true, $camel_case = true)
     {
-        if (!$fully_qualified)
+        if (! $fully_qualified)
         {
-			return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(get_called_class(), ! $camel_case);
+            return ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_called_class(), ! $camel_case);
         }
 
         if ($camel_case)
@@ -24,7 +24,7 @@ trait ClassContext
             return get_called_class();
         }
 
-		return (string) StringUtilities :: getInstance()->createString(get_called_class())->underscored();
+        return (string) StringUtilities::getInstance()->createString(get_called_class())->underscored();
     }
 
     /**
@@ -34,6 +34,6 @@ trait ClassContext
      */
     public static function context()
     {
-        return ClassnameUtilities :: getInstance()->getNamespaceFromClassname(get_called_class());
+        return ClassnameUtilities::getInstance()->getNamespaceFromClassname(get_called_class());
     }
 }
