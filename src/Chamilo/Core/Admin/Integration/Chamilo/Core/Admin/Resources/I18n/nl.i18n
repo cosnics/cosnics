@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+Settings = "Instellingen"
+SettingsDescription = "Beheer de instellingen van deze applicatie"
+Importer = "Importeer"
+ImporterDescription = "Importeer cursussen, gebruikers en inschrijvingen in het systeem"
+SystemAnnouncements = "Systeemberichten"
+SystemAnnouncementsDescription = "Beheer de systeemberichten op het platform"
+TranslationsImport = "Importeer vertalingen"
+TranslationsImportDescription = "Beschrijving import vertalingen"
+Diagnose = "Diagnose"
+DiagnoseDescription = "Diagnose van het systeem, de instellingen en de servers"
+LogsViewer = "Logs viewer"
+LogsViewerDescription = "Bekijk de verschillende systeem logs (like apache, php, mysql)"

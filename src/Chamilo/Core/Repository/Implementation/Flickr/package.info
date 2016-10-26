@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Flickr</name>
+		<code>Flickr</code>
+		<type>Chamilo\Core\Repository\Implementation</type>
+		<context>Chamilo\Core\Repository\Implementation\Flickr</context>
+		<category>Image</category>
+		<authors>
+			<author>
+				<name>Hans De Bisschop</name>
+				<email>hans.de.bisschop@ehb.be</email>
+				<company>Erasmushogeschool Brussel</company>
+			</author>
+		</authors>
+		<version>5.0.0</version>
+		<description>Flickr is an image hosting and video hosting website, web services suite, and online community that was
+			created by Ludicorp in 2004 and acquired by Yahoo! in 2005. In addition to being a popular website for users to share
+			and embed personal photographs, the service is widely used by bloggers to host images that they embed in blogs and
+			social media. Yahoo reported in June 2011 that Flickr had a total of 51 million registered members and 80 million
+			unique visitors. In August 2011 the site reported that it was hosting more than 6 billion images and this number
+			continues to grow steadily according to reporting sources. Photos and videos can be accessed from Flickr without the
+			need to register an account but an account must be made in order to upload content onto the website. Registering an
+			account also allows users to create a profile page containing photos and videos that the user has uploaded and also
+			grants the ability to add another Flickr user as a contact. For mobile users, Flickr has an official app for iOS,
+			Android, and Windows Phone 7 operating systems.</description>
+		<pre-depends>
+			<dependency type="registration">
+				<id>Chamilo\Core\Repository</id>
+				<version operator="4">5.0.0</version>
+			</dependency>
+		</pre-depends>
+	</package>
+</packages>

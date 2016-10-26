@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_open_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Frage eröffnen"
+OpenQuestion = "Frage eröffnen"
+OpenQuestionWithDocument = "Frage mit Dokument eröffnen"
+DocumentQuestion = "Dokument"
+Properties = "Eigenschaften"
+OpenQuestionQuestionType = "Typ"
+Weight = "Gewicht"
+Title = "Titel"
+Description = "Beschreibung"
+Feedback = ""
+Hint = ""

@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+List = "Gebruikerslijst"
+ListDescription = "De gebruikerslijst"
+CreateDescription = "Maak een nieuwe gebruiker in het platform"
+ExportDescription = "Exporteer de gebruikers naar csv / xml bestanden"
+ImportDescription = "Importeer gebruikers uit csv / xml bestanden"
+BuildUserFields = "Bouw gebruikersvelden"
+BuildUserFieldsDescription = "Voeg bijkomende velden toe aan de details van de gebruiker. De gebruiker kan deze velden invullen in 'Mijn Account'"
+EditTermsConditions = "Update terms and conditions"
+EditTermsConditionsDescription = "Make changes to the terms and conditions the users see when logging in"

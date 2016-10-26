@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="group">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="name" type="text" length="255" notnull="1" default="" />
+		<property name="description" type="text" />
+		<property name="parent_id" type="integer" unsigned="1" notnull="1" />
+		<property name="left_value" type="integer" unsigned="1" notnull="1" />
+		<property name="right_value" type="integer" unsigned="1" notnull="1" />
+		<property name="sort" type="integer" unsigned="1" notnull="1" />
+		<property name="code" type="text" length="50" fixed="1" notnull="1" default="" />
+		<property name="disk_quota" type="integer" unsigned="1" notnull="1" default="209715200" />
+		<property name="database_quota" type="integer" unsigned="1" notnull="1" default="10000" />
+	</properties>
+	<index name="parent_id">
+		<indexproperty name="parent_id" />
+	</index>
+	<index name="code">
+		<indexproperty name="code" />
+	</index>
+	<index name="sort">
+		<indexproperty name="sort" />
+	</index>
+	<index name="position">
+		<indexproperty name="parent_id" />
+		<indexproperty name="left_value" />
+		<indexproperty name="right_value" />
+	</index>
+	<index name="left_value">
+		<indexproperty name="left_value" />
+	</index>
+	<index name="right_value">
+		<indexproperty name="right_value" />
+	</index>
+</object>

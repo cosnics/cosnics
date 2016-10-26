@@ -1,0 +1,31 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\forum_topic
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Forum topic"
+Topic = "Onderwerp"
+Nothing = "Niets"
+LastChangedAt = "Laatst gewijzigd op {TIME}"
+Top = "Top"
+ReplyOnTopic = "Beantwoord topic"
+ReplyOnPost = "Antwoord op bericht"
+Subscribe = "Volg onderwerp"
+UnSubscribe = "Volg onderwerp niet meer"
+SuccesSubscribe = "Onderwerp met succes gevolgd"
+UnSuccesSubscribe = "Onderwerp niet gevolgd"
+SuccesUnSubscribe = "Onderwerp wordt niet meer gevolgd"
+SuccesUnsubscribe = "Onderwerp wordt niet meer gevolgd"
+UnSuccesUnSubscribe = "Niet uitgeschreven uit onderwerp"
+UnSuccesUnsubscribe = "Niet utigeschreven uit onderwerp"
+Title = "Titel"
+Description = "Beschrijving"
+Properties = "Eigenschappen"
+ForumTopicBuilderBrowserComponent = "Bouw forum onderwerp"
+ForumTopicBuilderCreatorComponent = "Bouw forum onderwerp"
+Content = "Inhoud"
+AddAttachments = "Voeg attachments toe"
+Attachments = "Attachments"
+UploadDocument = "Upload bestand"
+SelectAttachment = "Selecteer attachment"
+EditPost = "Bericht bewerken"

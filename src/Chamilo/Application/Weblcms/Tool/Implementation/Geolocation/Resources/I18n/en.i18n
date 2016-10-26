@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\geolocation
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Geolocation"
+TypeCategory = "Course Tools"
+LocationsSummary = "Summary of locations"
+BrowserComponent = "Browse locations"
+ViewerComponent = "View location"
+EvaluateComponent = "Evaluate"
+IntroductionPublisherComponent = "Publish introduction"
+ReportingViewerComponent = "Reporting"
+UpdaterComponent = "Edit location"
+TypeNameSingle = "Location"

@@ -1,0 +1,8 @@
+/**
+ * @package repository.lib.content_object.{TYPE}
+ * @author {AUTHOR}
+ */
+ 
+class Complex{OBJECT_CLASS} extends ComplexContentObjectItem
+{
+}
