@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
+use Chamilo\Configuration\Interfaces\DataLoaderInterface;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -11,6 +13,41 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
  */
 class RegistrationConsulter extends DataConsulter
 {
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    private $stringUtilities;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     * @param \Chamilo\Configuration\Repository\RegistrationRepository $registrationRepository
+     */
+    public function __construct(StringUtilities $stringUtilities, DataLoaderInterface $dataLoader)
+    {
+        parent::__construct($dataLoader);
+        $this->stringUtilities = $stringUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Utilities\StringUtilities
+     */
+    public function getStringUtilities()
+    {
+        return $this->stringUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     */
+    public function setStringUtilities(StringUtilities $stringUtilities)
+    {
+        $this->stringUtilities = $stringUtilities;
+    }
 
     /**
      *
