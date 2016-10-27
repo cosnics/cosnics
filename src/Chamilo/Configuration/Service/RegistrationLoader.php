@@ -56,7 +56,7 @@ class RegistrationLoader implements CacheableDataLoaderInterface
      */
     public function getData()
     {
-        $registrationRecords = $this->getRegistrationRepository()->findRegistrations();
+        $registrationRecords = $this->getRegistrationRepository()->findRegistrationsAsRecords();
         $registrations = array();
 
         foreach ($registrationRecords as $registrationRecord)
