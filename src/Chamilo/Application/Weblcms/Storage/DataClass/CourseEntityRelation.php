@@ -28,6 +28,7 @@ class CourseEntityRelation extends DataClass
      */
     const ENTITY_TYPE_USER = 1;
     const ENTITY_TYPE_GROUP = 2;
+    const ENTITY_TYPE_ROLE = 3;
 
     /**
      * **************************************************************************************************************
