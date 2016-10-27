@@ -9,6 +9,9 @@
             class="Chamilo\Configuration\Service\RegistrationConsulter">
             <argument
                 type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
                 id="chamilo.configuration.service.registration_cache_loader" />
         </service>
 
@@ -23,6 +26,9 @@
         <service
             id="chamilo.configuration.service.registration_loader"
             class="Chamilo\Configuration\Service\RegistrationLoader">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
             <argument
                 type="service"
                 id="chamilo.configuration.repository.registration_repository" />
