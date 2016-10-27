@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\blog
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Blog"
+TypeCategory = "Course Tools"
+BrowserComponent = "Browse blogs"
+ViewerComponent = "View blog"
+UpdaterComponent = "Edit blog"
+IntroductionPublisherComponent = "Publish introduction"
+CategoryMoverComponent = "Move blogs"
+Attachments = "Attachments"
+AuthorUnknown = "Author unknown"
+BlogLayout = "Blog lay-out"
+BlogLayoutNotExists = "Selected blog lay-out doesn't exist"
+Properties = "Properties"
+TypeNameSingle = "Blog"
+PublicationUpdaterComponent = "Edit blog"
+ComplexDisplayComponent = "View blog"

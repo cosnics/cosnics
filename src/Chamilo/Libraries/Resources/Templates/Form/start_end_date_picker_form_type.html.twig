@@ -1,0 +1,71 @@
+{% block start_end_date_picker_row %}
+    {% spaceless %}
+        {% set start_date_id = form.children.start_date.vars.id %}
+        {% set end_date_id = form.children.end_date.vars.id %}
+
+        {% set additional_options %}
+            {
+                onClose:function (dateText, inst) {
+                    var endDateTextBox = $('#{{ end_date_id }}');
+
+                    if (endDateTextBox.val() != '') {
+                        var testStartDate = new Date(dateText);
+                        var testEndDate = new Date(endDateTextBox.val());
+
+                        if (testStartDate > testEndDate)
+                            endDateTextBox.val(dateText);
+                    }
+                    else {
+                        endDateTextBox.val(dateText);
+                    }
+                },
+                onSelect:function (selectedDateTime) {
+                    $('#{{ end_date_id }}').datetimepicker(
+                        "option", "minDate", $('#{{ start_date_id }}').datetimepicker('getDate')
+                    );
+                }
+            }
+        {% endset %}
+
+        {{ form_row(form.children.start_date, { 'additional_options': additional_options}) }}
+
+        <div class="clear"></div>
+
+        {% set additional_options %}
+            {
+                onClose:function (dateText, inst) {
+                    var startDateTextBox = $('#{{ start_date_id }}');
+
+                    if (startDateTextBox.val() != '') {
+                        var testStartDate = new Date(startDateTextBox.val());
+                        var testEndDate = new Date(dateText);
+
+                        if (testStartDate > testEndDate)
+                            startDateTextBox.val(dateText);
+                    }
+                    else {
+                        startDateTextBox.val(dateText);
+                    }
+                },
+                onSelect:function (selectedDateTime) {
+                    $('#{{ start_date_id }}').datetimepicker(
+                        "option", "maxDate", $('#{{ end_date_id }}').datetimepicker('getDate')
+                    );
+                }
+            }
+        {% endset %}
+
+        {{ form_row(form.children.end_date, { 'additional_options': additional_options}) }}
+
+        <script type="text/javascript">
+            $('#{{ end_date_id }}').datetimepicker(
+                    "option", "minDate", $('#{{ start_date_id }}').datetimepicker('getDate')
+            );
+
+            $('#{{ start_date_id }}').datetimepicker(
+                    "option", "maxDate", $('#{{ end_date_id }}').datetimepicker('getDate')
+            );
+        </script>
+
+    {% endspaceless %}
+{% endblock %}

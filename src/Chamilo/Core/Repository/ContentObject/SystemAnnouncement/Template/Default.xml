@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\SystemAnnouncement">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">System announcement</translation>
+			<translation language="nl">Systeembericht</translation>
+			<translation language="fr">Annonce système</translation>
+			<translation language="de">Systemankündigung</translation>
+		</variable>
+	</translations>
+</template>

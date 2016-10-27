@@ -1,0 +1,28 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = reporting\viewer
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Rapporteringsweergave"
+HtmlTable = "Tabel"
+HtmlPieChart = "Cirkeldiagram"
+HtmlThreeDeePieChart = "3D cirkeldiagram"
+HtmlRingChart = "Ringdiagram"
+HtmlBarChart = "Staafdiagram"
+HtmlLineChart = "Lijndiagram"
+HtmlAreaChart = "Vlakdiagram"
+HtmlPolarChart = "Polar chart"
+HtmlRadarChart = "Radardiagram"
+HtmlStackedBarChart = "Gestapeld staafdiagram"
+HtmlStackedAreaChart = "Gestapeld vlakdiagram"
+HtmlCsv = "CSV"
+HtmlXml = "XML"
+HtmlXlsx = "Excel"
+HtmlOds = "OpenDocument"
+HtmlPdf = "PDF"
+ExportToExcel = "Exporteer naar Excel"
+ExportToOds = "Exporteer naar OpenDocument"
+ShowAll = "Toon volledig rapport"
+ShowOne = "Toon per onderdeel"
+SaverComponent = "Rapportering opslaan"
+PdfReportFooter = "- PAGENUMBER -"

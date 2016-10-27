@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_text_question
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Matching text question"
+PossibleAnswer = "Possible answer"
+Options = "Options"
+UseWildcards = "Use wildcards"
+IgnoreCase = "Case insensitive"
+AddItem = "Add an item"
+Feedback = "Feedback"
+Score = "Score"
+Answer = "Answer"
+Comment = "Comment"
+Weight = "Weight"
+Title = ""
+Description = ""
+Hint = ""
