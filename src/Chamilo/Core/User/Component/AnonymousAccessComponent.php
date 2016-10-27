@@ -1,8 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Form\AnonymousUserForm;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Translation;
@@ -19,6 +23,11 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
      */
     public function run()
     {
+        if(!$this->anonymousAccessAllowed())
+        {
+            throw new NotAllowedException();
+        }
+
         $form = new AnonymousUserForm($this->get_url());
         $errorMessage = null;
 
@@ -27,7 +36,9 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             try
             {
                 $this->validateCaptcha($this->getRequest()->get(AnonymousUserForm::CAPTCHA_RESPONS_VALUE));
-                $this->setAuthenticationCookie();
+                $anonymousUser = $this->createAnonymousUser();
+                $this->addAnonymousRoleToUser($anonymousUser);
+                $this->setAuthenticationCookie($anonymousUser);
             }
             catch(\Exception $ex)
             {
@@ -70,7 +81,11 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
      */
     protected function validateCaptcha($captchaResponseValue)
     {
-        $recaptcha = new \ReCaptcha\ReCaptcha('6Lf3TAoUAAAAAPF8E-METNpQZvSnExRAriCBB2pj');
+        $recaptchaSecretKey = Configuration::get_instance()->get_setting(
+            array('Chamilo\Core\Admin', 'recaptcha_secret_key')
+        );
+
+        $recaptcha = new \ReCaptcha\ReCaptcha($recaptchaSecretKey);
         $response = $recaptcha->verify($captchaResponseValue, $this->getRequest()->server->get('REMOTE_ADDR'));
 
         if (!$response->isSuccess())
@@ -80,11 +95,45 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     }
 
     /**
+     * Creates an anonymous user
+     *
+     * @return User
+     *
+     * @throws \Exception
+     */
+    protected function createAnonymousUser()
+    {
+        $user = new User();
+        $user->set_firstname('Anonymous');
+        $user->set_lastname('User');
+        $user->set_username(uniqid());
+        $user->set_email('no-reply@chamilo.org');
+
+        if(!$user->create())
+        {
+            throw new \Exception('Could not create a new anonymous user');
+        }
+
+        return $user;
+    }
+
+    /**
+     * Adds the anonymous role to the user
+     *
+     * @param User $user
+     */
+    protected function addAnonymousRoleToUser(User $user)
+    {
+        $userRoleService = $this->getUserRoleService();
+        $userRoleService->addRoleForUser($user, 'ROLE_ANONYMOUS');
+    }
+
+    /**
      * Sets the anonymous authentication cookie
      */
-    protected function setAuthenticationCookie()
+    protected function setAuthenticationCookie(User $user)
     {
-        $cookie = new Cookie(md5('anonymous_authentication'), '707d3e39e60d06fe589ae29de21854e97d75d942');
+        $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
 
         $redirect = new Redirect();
 
@@ -94,5 +143,42 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $response->send();
 
         exit;
+    }
+
+    /**
+     * Checks whether or not the anonymous access is allowed
+     *
+     * @return bool
+     */
+    protected function anonymousAccessAllowed()
+    {
+        if($this->getUser() instanceof User)
+        {
+            return false;
+        }
+
+        $anonymousAuthentication = Configuration::get_instance()->get_setting(
+            array('Chamilo\Core\Admin', 'enableAnonymousAuthentication')
+        );
+
+        if(!$anonymousAuthentication)
+        {
+            return false;
+        }
+
+        $allowedAnonymousAuthenticationUrl = Configuration::get_instance()->get_setting(
+            array('Chamilo\Core\Admin', 'anonymous_authentication_url')
+        );
+
+        $baseUrl = $this->getRequest()->server->get('SERVER_NAME');
+        return strpos($allowedAnonymousAuthenticationUrl, $baseUrl) !== false;
+    }
+
+    /**
+     * @return UserRoleServiceInterface
+     */
+    protected function getUserRoleService()
+    {
+        return $this->getService('chamilo.core.user.roles.service.user_role_service');
     }
 }
