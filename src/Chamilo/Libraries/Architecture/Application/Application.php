@@ -2,11 +2,9 @@
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
@@ -23,7 +21,6 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  *
@@ -35,13 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class Application
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-
-    /**
-     * The dependency injection container
-     *
-     * @var ContainerInterface
-     */
-    protected $container;
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
     /**
      *
@@ -81,8 +72,7 @@ abstract class Application
     {
         $this->applicationConfiguration = $applicationConfiguration;
 
-        $containerBuilder = new DependencyInjectionContainerBuilder();
-        $this->container = $containerBuilder->createContainer();
+        $this->initializeContainer();
     }
 
     /**
@@ -95,53 +85,8 @@ abstract class Application
     }
 
     /**
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     */
-    public function setContainer(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * Returns a service from the dependency injection container
-     *
-     * @param string $serviceIdentifier
-     * @return object
-     */
-    public function getService($serviceIdentifier)
-    {
-        return $this->getContainer()->get($serviceIdentifier);
-    }
-
-    /**
-     *
-     * @return \Symfony\Component\HttpFoundation\Request
-     */
-    public function getRequest()
-    {
-        return $this->getService('symfony.component.http_foundation.request');
-    }
-
-    /**
-     * @return AuthorizationCheckerInterface
-     */
-    public function getAuthorizationChecker()
-    {
-        return $this->getService('chamilo.core.rights.structure.service.authorization_checker');
-    }
-
-    /**
-     * Helper function to call the authorization checker with the current logged in user. Throws the
+     * Helper function to call the authorization checker with the current logged in user.
+     * Throws the
      * NotAllowedException when not valid.
      *
      * @param string $context
