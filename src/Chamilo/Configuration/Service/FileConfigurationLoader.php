@@ -53,7 +53,7 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
      */
     public function isAvailable()
     {
-        $file = $this->getConfigurationFilePath();
+        $file = $this->getConfigurationFilePathName();
 
         if (is_file($file) && is_readable($file))
         {
@@ -67,11 +67,20 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
 
     /**
      *
+     * @return string
+     */
+    protected function getSettingsContext()
+    {
+        return 'Chamilo\Configuration';
+    }
+
+    /**
+     *
      * @return string[]
      */
     protected function getSettingsFromFile()
     {
-        return array('Chamilo\Configuration' => parse_ini_file($this->getConfigurationFilePath(), true));
+        return array($this->getSettingsContext() => parse_ini_file($this->getConfigurationFilePathName(), true));
     }
 
     /**
@@ -80,7 +89,25 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
      */
     protected function getConfigurationFilePath()
     {
-        return $this->getPathBuilder()->getStoragePath() . 'configuration' . DIRECTORY_SEPARATOR . 'configuration.ini';
+        return $this->getPathBuilder()->getStoragePath() . 'configuration';
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getConfigurationFileName()
+    {
+        return 'configuration.ini';
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function getConfigurationFilePathName()
+    {
+        return $this->getConfigurationFilePath() . DIRECTORY_SEPARATOR . $this->getConfigurationFileName();
     }
 
     protected function getDefaultSettings()

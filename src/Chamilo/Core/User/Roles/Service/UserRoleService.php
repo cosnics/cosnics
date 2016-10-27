@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Roles\Service;
 
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
-use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -115,7 +114,7 @@ class UserRoleService implements UserRoleServiceInterface
     public function addRoleForUser(User $user, $roleName)
     {
         $role = $this->roleService->getOrCreateRoleByName($roleName);
-        
+
         $userRoleRelation = new RoleRelation();
 
         $userRoleRelation->setRoleId($role->getId());

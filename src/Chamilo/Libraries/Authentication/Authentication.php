@@ -2,9 +2,7 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Platform\Translation;
 
 /**
  *

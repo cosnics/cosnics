@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Form\AccountForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Translation;
 
 /**

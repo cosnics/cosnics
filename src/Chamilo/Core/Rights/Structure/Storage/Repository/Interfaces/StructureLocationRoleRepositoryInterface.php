@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces;
 
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
-use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 
 /**
  * Repository to manage the data of roles

@@ -4,7 +4,6 @@ namespace Chamilo\Core\User\Component;
 use Chamilo\Core\User\Form\PictureForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoContextComponent;
 use Chamilo\Libraries\Platform\Translation;
 

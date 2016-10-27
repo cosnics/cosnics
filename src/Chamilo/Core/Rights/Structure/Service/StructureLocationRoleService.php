@@ -7,7 +7,6 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
-use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 
 /**
  * Manages structure location roles

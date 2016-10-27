@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Core\User\Roles\Service\Interfaces;
 
-use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**

@@ -3,7 +3,6 @@ namespace Chamilo\Core\Rights\Structure\Service\Interfaces;
 
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
-use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 
 /**
  * Manages structure location roles

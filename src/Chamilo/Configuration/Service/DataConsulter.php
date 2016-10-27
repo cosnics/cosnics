@@ -37,7 +37,7 @@ class DataConsulter
      *
      * @return \Chamilo\Configuration\Interfaces\DataLoaderInterface
      */
-    protected function getDataLoader()
+    public function getDataLoader()
     {
         return $this->dataLoader;
     }
@@ -46,7 +46,7 @@ class DataConsulter
      *
      * @param \Chamilo\Configuration\Interfaces\DataLoaderInterface $configurationCache
      */
-    protected function setDataLoader(DataLoaderInterface $dataLoader)
+    public function setDataLoader(DataLoaderInterface $dataLoader)
     {
         $this->dataLoader = $dataLoader;
     }

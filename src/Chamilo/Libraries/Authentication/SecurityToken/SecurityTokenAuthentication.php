@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Authentication\SecurityToken;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\QueryAuthentication;
-use Chamilo\Libraries\Platform\Translation;
 
 /**
  *
