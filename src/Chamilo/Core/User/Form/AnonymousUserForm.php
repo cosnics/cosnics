@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\User\Form;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Translation;
@@ -54,10 +55,14 @@ class AnonymousUserForm extends FormValidator
      */
     protected function addCaptchaElement()
     {
+        $recaptchaSiteKey = Configuration::get_instance()->get_setting(
+            array('Chamilo\Core\Admin', 'recaptcha_site_key')
+        );
+
         $html = array();
 
         $html[] = '<script src="https://www.google.com/recaptcha/api.js"></script>';
-        $html[] = '<div class="g-recaptcha" data-sitekey="6Lf3TAoUAAAAAJCf0KHOT1EvqF-vfkoZFnvnMywH" style="display: inline-block;"></div>';
+        $html[] = '<div class="g-recaptcha" data-sitekey="' . $recaptchaSiteKey . '" style="display: inline-block;"></div>';
 
         $this->addElement('html', implode(PHP_EOL, $html));
     }

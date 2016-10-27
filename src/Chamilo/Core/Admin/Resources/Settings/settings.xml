@@ -176,6 +176,8 @@
 
 		<category name="anonymous_authentication">
 			<setting name="anonymous_authentication_url" field="text" default="" />
+			<setting name="recaptcha_site_key" field="text" default="" />
+			<setting name="recaptcha_secret_key" field="text" default="" />
 		</category>
 
 		<category name="external_authentication">
