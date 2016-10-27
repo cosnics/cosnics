@@ -5,32 +5,32 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
-            id="chamilo.configuration.service.registration_consulter"
-            class="Chamilo\Configuration\Service\RegistrationConsulter">
+            id="chamilo.configuration.service.language_consulter"
+            class="Chamilo\Configuration\Service\LanguageConsulter">
             <argument
                 type="service"
-                id="chamilo.configuration.service.registration_cache_loader" />
+                id="chamilo.configuration.service.language_cache_loader" />
         </service>
 
         <service
-            id="chamilo.configuration.service.registration_cache_loader"
+            id="chamilo.configuration.service.language_cache_loader"
             class="Chamilo\Configuration\Service\DataCacheLoader">
             <argument
                 type="service"
-                id="chamilo.configuration.service.registration_loader" />
+                id="chamilo.configuration.service.language_loader" />
         </service>
 
         <service
-            id="chamilo.configuration.service.registration_loader"
-            class="Chamilo\Configuration\Service\RegistrationLoader">
+            id="chamilo.configuration.service.language_loader"
+            class="Chamilo\Configuration\Service\LanguageLoader">
             <argument
                 type="service"
-                id="chamilo.configuration.repository.registration_repository" />
+                id="chamilo.configuration.repository.language_repository" />
         </service>
 
         <service
-            id="chamilo.configuration.repository.registration_repository"
-            class="Chamilo\Configuration\Repository\RegistrationRepository">
+            id="chamilo.configuration.repository.language_repository"
+            class="Chamilo\Configuration\Repository\LanguageRepository">
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
