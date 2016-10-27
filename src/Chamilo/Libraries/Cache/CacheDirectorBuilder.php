@@ -23,6 +23,31 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;
 use Chamilo\Libraries\Platform\TranslationCacheService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Chamilo\Configuration\Service\DataCacheLoader;
+use Chamilo\Configuration\Service\StorageConfigurationLoader;
+use Chamilo\Configuration\Repository\ConfigurationRepository;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
+use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
+use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory;
+use Chamilo\Configuration\Configuration;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
+use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\DataSourceNameFactory;
+use Chamilo\Configuration\Service\RegistrationLoader;
+use Chamilo\Configuration\Repository\RegistrationRepository;
+use Chamilo\Configuration\Service\LanguageLoader;
+use Chamilo\Configuration\Repository\LanguageRepository;
 
 /**
  * Builds the cache directory by adding custom cache services directly (through code) and indirectly
@@ -86,6 +111,41 @@ class CacheDirectorBuilder
         $cacheDirector->addCacheService('chamilo_dependency_injection', new DependencyInjectionCacheService());
         $cacheDirector->addCacheService('chamilo_configuration', new ConfigurationCacheService());
         $cacheDirector->addCacheService('chamilo_translations', new TranslationCacheService());
+
+        $stringUtilities = new StringUtilities();
+        $classnameUtilities = new ClassnameUtilities($stringUtilities);
+        $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
+        $configurationConsulter = new ConfigurationConsulter(
+            new FileConfigurationLoader(new PathBuilder($classnameUtilities)));
+        $dataSourceNameFactory = new DataSourceNameFactory($configurationConsulter);
+        $connectionFactory = new ConnectionFactory($dataSourceNameFactory->getDataSourceName());
+
+        $dataClassRepository = new DataClassRepository(
+            $configurationConsulter,
+            new DataClassRepositoryCache(),
+            new DataClassDatabase(
+                $connectionFactory->getConnection(),
+                new StorageAliasGenerator($classnameUtilities),
+                $exceptionLoggerFactory->createExceptionLogger(),
+                new ConditionPartTranslatorService(
+                    $configurationConsulter,
+                    new ConditionPartTranslatorFactory($classnameUtilities),
+                    new ConditionPartCache()),
+                new RecordProcessor()),
+            new DataClassFactory());
+
+        $cacheDirector->addCacheService(
+            'chamilo_configuration',
+            new DataCacheLoader(new StorageConfigurationLoader(new ConfigurationRepository($dataClassRepository))));
+
+        $cacheDirector->addCacheService(
+            'chamilo_registration',
+            new DataCacheLoader(
+                new RegistrationLoader($stringUtilities, new RegistrationRepository($dataClassRepository))));
+
+        $cacheDirector->addCacheService(
+            'chamilo_language',
+            new DataCacheLoader(new LanguageLoader(new LanguageRepository($dataClassRepository))));
 
         $cacheDirector->addCacheService(
             'chamilo_repository_configuration',
