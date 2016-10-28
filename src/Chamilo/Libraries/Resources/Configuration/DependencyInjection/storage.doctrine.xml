@@ -32,9 +32,11 @@
         <service
             id="chamilo.libraries.storage.data_manager.doctrine.data_source_name"
             class="Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName">
-            <factory
-                service="chamilo.libraries.storage.data_manager.doctrine.factory.data_source_name_factory"
-                method="getDataSourceName" />
+            <argument>%chamilo.configuration.database.driver%</argument>
+            <argument>%chamilo.configuration.database.username%</argument>
+            <argument>%chamilo.configuration.database.host%</argument>
+            <argument>%chamilo.configuration.database.name%</argument>
+            <argument>%chamilo.configuration.database.password%</argument>
         </service>
 
         <service
@@ -85,14 +87,6 @@
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.data_source_name" />
-        </service>
-
-        <service
-            id="chamilo.libraries.storage.data_manager.doctrine.factory.data_source_name_factory"
-            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\DataSourceNameFactory">
-            <argument
-                type="service"
-                id="chamilo.configuration.service.file_configuration_consulter" />
         </service>
 
         <service

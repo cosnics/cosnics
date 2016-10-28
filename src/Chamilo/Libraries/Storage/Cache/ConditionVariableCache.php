@@ -1,9 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Cache;
 
-use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\Cache\Doctrine\Provider\PhpFileCache;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
@@ -16,7 +13,6 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 class ConditionVariableCache
 {
-    const PHP_FILE_CACHE_KEY = 'cache.condition.variable';
 
     /**
      * The instance of the ConditionVariableCache
@@ -32,38 +28,9 @@ class ConditionVariableCache
      */
     private $cache;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\File\Cache\PhpFileCache
-     */
-    private $phpFileCache;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $queryFileCacheEnabled;
-
-    /**
-     *
-     * @param boolean $queryFileCacheEnabled
-     */
-    public function __construct($queryFileCacheEnabled = true)
+    public function __construct()
     {
         $this->cache = array();
-        $this->queryFileCacheEnabled = $queryFileCacheEnabled;
-
-        if ($this->queryFileCacheEnabled)
-        {
-            $this->phpFileCache = new PhpFileCache(Path::getInstance()->getCachePath(__NAMESPACE__));
-
-            if (! $this->phpFileCache->contains(self::PHP_FILE_CACHE_KEY))
-            {
-                $this->phpFileCache->save(self::PHP_FILE_CACHE_KEY, array());
-            }
-
-            $this->cache = $this->phpFileCache->fetch(self::PHP_FILE_CACHE_KEY);
-        }
     }
 
     /**
@@ -75,10 +42,7 @@ class ConditionVariableCache
     {
         if (! isset(self::$instance))
         {
-            $queryFileCacheEnabled = Configuration::get_instance()->get_setting(
-                array('Chamilo\Configuration', 'debug', 'enable_query_file_cache'));
-
-            self::$instance = new self($queryFileCacheEnabled);
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -130,20 +94,10 @@ class ConditionVariableCache
     public function set($conditionVariable, $value)
     {
         $this->cache[$conditionVariable->hash()] = $value;
-
-        if ($this->queryFileCacheEnabled)
-        {
-            $this->phpFileCache->save(self::PHP_FILE_CACHE_KEY, $this->cache);
-        }
     }
 
     public static function reset()
     {
         $this->cache = array();
-
-        if ($this->queryFileCacheEnabled)
-        {
-            $this->phpFileCache->save(self::PHP_FILE_CACHE_KEY, $this->cache);
-        }
     }
 }

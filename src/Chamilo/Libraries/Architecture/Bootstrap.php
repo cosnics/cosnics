@@ -10,6 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
  *
  * @package libraries
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @deprecated Use the new \Chamilo\Libraries\Architecture\Factory\BootstrapFactory now
  */
 class Bootstrap
 {
