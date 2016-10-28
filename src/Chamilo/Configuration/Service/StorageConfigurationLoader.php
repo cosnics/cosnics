@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Configuration\Service;
 
-use Chamilo\Configuration\Repository\ConfigurationRepository;
-use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
+use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
 
 /**
  *
@@ -16,13 +16,13 @@ class StorageConfigurationLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @var \Chamilo\Configuration\Repository\ConfigurationRepository
+     * @var \Chamilo\Configuration\Storage\Repository\ConfigurationRepository
      */
     private $configurationRepository;
 
     /**
      *
-     * @param \Chamilo\Configuration\Repository\ConfigurationRepository $configurationRepository
+     * @param \Chamilo\Configuration\Storage\Repository\ConfigurationRepository $configurationRepository
      */
     public function __construct(ConfigurationRepository $configurationRepository)
     {
@@ -31,7 +31,7 @@ class StorageConfigurationLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @return \Chamilo\Configuration\Repository\ConfigurationRepository
+     * @return \Chamilo\Configuration\Storage\Repository\ConfigurationRepository
      */
     public function getConfigurationRepository()
     {
@@ -40,7 +40,7 @@ class StorageConfigurationLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @param \Chamilo\Configuration\Repository\ConfigurationRepository $configurationRepository
+     * @param \Chamilo\Configuration\Storage\Repository\ConfigurationRepository $configurationRepository
      */
     public function setConfigurationRepository($configurationRepository)
     {

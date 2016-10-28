@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Configuration\Repository;
+namespace Chamilo\Configuration\Storage\Repository;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;

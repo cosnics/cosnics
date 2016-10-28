@@ -23,7 +23,7 @@ class RegistrationConsulter extends DataConsulter
     /**
      *
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Configuration\Repository\RegistrationRepository $registrationRepository
+     * @param \Chamilo\Configuration\Storage\Repository\RegistrationRepository $registrationRepository
      */
     public function __construct(StringUtilities $stringUtilities, DataLoaderInterface $dataLoader)
     {

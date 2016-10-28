@@ -2,8 +2,8 @@
 namespace Chamilo\Configuration\Service;
 
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
-use Chamilo\Configuration\Repository\RegistrationRepository;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -26,14 +26,14 @@ class RegistrationLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @var \Chamilo\Configuration\Repository\RegistrationRepository
+     * @var \Chamilo\Configuration\Storage\Repository\RegistrationRepository
      */
     private $registrationRepository;
 
     /**
      *
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
-     * @param \Chamilo\Configuration\Repository\RegistrationRepository $registrationRepository
+     * @param \Chamilo\Configuration\Storage\Repository\RegistrationRepository $registrationRepository
      */
     public function __construct(StringUtilities $stringUtilities, RegistrationRepository $registrationRepository)
     {
@@ -61,7 +61,7 @@ class RegistrationLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @return \Chamilo\Configuration\Repository\RegistrationRepository
+     * @return \Chamilo\Configuration\Storage\Repository\RegistrationRepository
      */
     public function getRegistrationRepository()
     {
@@ -70,7 +70,7 @@ class RegistrationLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @param \Chamilo\Configuration\Repository\RegistrationRepository $registrationRepository
+     * @param \Chamilo\Configuration\Storage\Repository\RegistrationRepository $registrationRepository
      */
     public function setRegistrationRepository($registrationRepository)
     {

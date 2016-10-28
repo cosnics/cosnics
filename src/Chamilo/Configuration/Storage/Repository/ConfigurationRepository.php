@@ -1,7 +1,7 @@
 <?php
-namespace Chamilo\Configuration\Repository;
+namespace Chamilo\Configuration\Storage\Repository;
 
-use Chamilo\Configuration\Storage\DataClass\Language;
+use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 
@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class LanguageRepository
+class ConfigurationRepository
 {
 
     /**
@@ -51,8 +51,8 @@ class LanguageRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function findLanguagesAsRecords()
+    public function findSettingsAsRecords()
     {
-        return $this->getDataClassRepository()->records(Language::class_name(), new RecordRetrievesParameters());
+        return $this->getDataClassRepository()->records(Setting::class_name(), new RecordRetrievesParameters());
     }
 }

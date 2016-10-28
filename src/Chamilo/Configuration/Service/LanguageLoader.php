@@ -2,8 +2,8 @@
 namespace Chamilo\Configuration\Service;
 
 use Chamilo\Configuration\Interfaces\CacheableDataLoaderInterface;
-use Chamilo\Configuration\Repository\LanguageRepository;
 use Chamilo\Configuration\Storage\DataClass\Language;
+use Chamilo\Configuration\Storage\Repository\LanguageRepository;
 
 /**
  *
@@ -16,13 +16,13 @@ class LanguageLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @var \Chamilo\Configuration\Repository\LanguageRepository
+     * @var \Chamilo\Configuration\Storage\Repository\LanguageRepository
      */
     private $registrationRepository;
 
     /**
      *
-     * @param \Chamilo\Configuration\Repository\LanguageRepository $registrationRepository
+     * @param \Chamilo\Configuration\Storage\Repository\LanguageRepository $registrationRepository
      */
     public function __construct(LanguageRepository $registrationRepository)
     {
@@ -31,7 +31,7 @@ class LanguageLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @return \Chamilo\Configuration\Repository\LanguageRepository
+     * @return \Chamilo\Configuration\Storage\Repository\LanguageRepository
      */
     public function getLanguageRepository()
     {
@@ -40,7 +40,7 @@ class LanguageLoader implements CacheableDataLoaderInterface
 
     /**
      *
-     * @param \Chamilo\Configuration\Repository\LanguageRepository $registrationRepository
+     * @param \Chamilo\Configuration\Storage\Repository\LanguageRepository $registrationRepository
      */
     public function setLanguageRepository($registrationRepository)
     {

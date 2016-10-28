@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Configuration\DependencyInjection;
+namespace Chamilo\Core\User\DependencyInjection;
 
 use Chamilo\Libraries\File\Path;
 use Symfony\Component\Config\FileLocator;
@@ -27,18 +27,11 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $xmlFileLoader = new XmlFileLoader(
+        $loader = new XmlFileLoader(
             $container,
-            new FileLocator(Path::getInstance()->getConfigurationPath('Chamilo\Configuration') . 'DependencyInjection'));
+            new FileLocator(Path::getInstance()->getConfigurationPath('Chamilo\Core\User') . 'DependencyInjection'));
 
-        $xmlFileLoader->load('configuration.xml');
-        $xmlFileLoader->load('registration.xml');
-        $xmlFileLoader->load('language.xml');
-
-        $xmlFileLoader = new XmlFileLoader(
-            $container,
-            new FileLocator(Path::getInstance()->getStoragePath() . 'configuration'));
-        $xmlFileLoader->load('configuration.xml');
+        $loader->load('services.xml');
     }
 
     /**
@@ -50,6 +43,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.configuration';
+        return 'chamilo.core.user';
     }
 }
