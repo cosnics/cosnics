@@ -18,13 +18,6 @@
 					<option name="closed" value="2" />
 				</options>
 			</setting>
-			<setting name="open_course_access_type" field="radio" default="1">
-				<options type="static">
-					<option name="registered_users" value="1" />
-					<option name="platform" value="2" />
-					<option name="the_world" value="3" />
-				</options>
-			</setting>
 		</category>
 		<category name="layout">
 			<setting name="theme" field="select" default="Aqua">

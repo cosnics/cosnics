@@ -8,6 +8,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\QueryAuthentication;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Session\Session;
 
 /**
  * Authentication method for anonymous users.
@@ -46,6 +47,9 @@ class AnonymousAuthentication extends QueryAuthentication
         {
             return $user;
         }
+
+        $requestedUrlParameters = $this->getRequest()->query->all();
+        Session::register('requested_url_parameters', $requestedUrlParameters);
 
         $redirect = new Redirect(
             array(

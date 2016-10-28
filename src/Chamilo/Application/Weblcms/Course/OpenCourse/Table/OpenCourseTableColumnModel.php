@@ -22,13 +22,16 @@ class OpenCourseTableColumnModel extends CourseTableColumnModel implements Table
     {
         parent::initialize_columns();
 
-        $this->add_column(
-            new DataClassPropertyTableColumn(
-                Role::class_name(),
-                Role::PROPERTY_ROLE,
-                Translation::getInstance()->getTranslation('Role', null, Manager::context()),
-                false
-            )
-        );
+        if($this->get_component()->isAuthorized(Manager::context(), 'ManageOpenCourses'))
+        {
+            $this->add_column(
+                new DataClassPropertyTableColumn(
+                    Role::class_name(),
+                    Role::PROPERTY_ROLE,
+                    Translation::getInstance()->getTranslation('Role', null, Manager::context()),
+                    false
+                )
+            );
+        }
     }
 }

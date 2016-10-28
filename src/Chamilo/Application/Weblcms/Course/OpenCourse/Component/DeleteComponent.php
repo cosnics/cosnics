@@ -17,7 +17,7 @@ class DeleteComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'manage_open_courses');
+        $this->checkAuthorization(Manager::context(), 'ManageOpenCourses');
         
         $courseIds = $this->getCourseIdsFromRequest();
 
