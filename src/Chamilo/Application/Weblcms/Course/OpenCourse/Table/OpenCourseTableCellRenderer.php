@@ -36,7 +36,23 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
         {
             switch ($column->get_class_name())
             {
+                case Course :: class_name() :
+                {
+                    switch ($column->get_name())
+                    {
+                        case Course :: PROPERTY_TITLE :
+                            $course_title = parent:: render_cell($column, $courseRecord);
+                            $courseViewerUrl = $this->get_component()->getViewCourseUrl(
+                                $courseRecord[Course::PROPERTY_ID]
+                            );
+
+                            return '<a href="' . $courseViewerUrl . '">' . $course_title . '</a>';
+                    }
+
+                    break;
+                }
                 case Role::class_name() :
+                {
                     switch ($column->get_name())
                     {
                         case Role::PROPERTY_ROLE:
@@ -46,7 +62,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
                             $rolesHtml = array();
 
                             $rolesHtml[] = '<select>';
-                            while($role = $roles->next_result())
+                            while ($role = $roles->next_result())
                             {
                                 $rolesHtml[] = '<option>' . $role->getRole() . '</option>';
                             }
@@ -54,6 +70,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
 
                             return implode(PHP_EOL, $rolesHtml);
                     }
+                }
             }
         }
 

@@ -54,14 +54,17 @@ class BrowseComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
-            $buttonToolbar->addItem(
-                new Button(
-                    Translation::getInstance()->getTranslation('AddOpenCourses', null, Manager::context()),
-                    new BootstrapGlyph('plus'),
-                    $this->getCreateOpenCourseUrl(),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+            if($this->isAuthorized(Manager::context(), 'manage_open_courses'))
+            {
+                $buttonToolbar->addItem(
+                    new Button(
+                        Translation::getInstance()->getTranslation('AddOpenCourses', null, Manager::context()),
+                        new BootstrapGlyph('plus'),
+                        $this->getCreateOpenCourseUrl(),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }

@@ -2,7 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 
+use Chamilo\Application\Weblcms\Course\OpenCourse\Form\OpenCourseForm;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Component to define existing courses as open by adding roles to them
@@ -16,6 +18,13 @@ class CreateComponent extends Manager
      */
     function run()
     {
-        // TODO: Implement run() method.
+        $form = new OpenCourseForm($this->get_url(), Translation::getInstance());
+        $html = array();
+
+        $html[] = $this->render_header();
+        $html[] = $form->toHtml();
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 }
