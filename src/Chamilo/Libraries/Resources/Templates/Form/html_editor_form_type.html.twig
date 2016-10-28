@@ -1,0 +1,6 @@
+{% block html_editor_widget %}
+    {% spaceless %}
+        <textarea class="html_editor" {{ block('widget_attributes') }}>{{ value }}</textarea>
+        {{ html_editor_javascript|raw }}
+    {% endspaceless %}
+{% endblock %}

@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\announcement
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Aankondigingen"
+TypeNameSingle = "Aankondiging"
+InstallTypeName = "Aankondigingen"
+BrowserComponent = "Doorblader aankondigingen"
+ViewerComponent = "Bekijk aankondiging"
+PublisherComponent = "Publiceer aankondiging"
+UpdaterComponent = "Bewerk aankondiging"
+IntroductionPublisherComponent = "Publiceer introductietekst"
+SentByEmail = "Verstuurd via email"
+ViewPeriodHeader = "Selecteer periode"

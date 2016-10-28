@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\metadata\schema
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Metadata Schema Manager"
+BrowserComponent = "Browse schema's"
+CreatorComponent = "Create schema"
+UpdaterComponent = "Update schema"
+DeleterComponent = "Delete schema"
+Namespace = "Namespace"
+Name = "Name"
+Url = "URL"

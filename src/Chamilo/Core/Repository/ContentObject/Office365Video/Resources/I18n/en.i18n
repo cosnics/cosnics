@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\Office365Video
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Office 365 Video"
+NoExternalObject = "Video not found. It might have been deleted or you are not logged in?"
+Properties = "Properties"
+Title = "Title"
+Description = "Description"
+ThisFieldIsRequired = "This field is required"
+Office365VideoExternalRepositoryManagerBrowserComponent = "Browse Offrice 365 Video"
+Office365VideoExternalRepositoryManagerSelecterComponent = "Select Office 365 Video"

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="complex_content_object_item">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="type" type="text" length="200" notnull="1" />
+		<property name="ref_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="parent_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="user_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="display_order" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="add_date" type="integer" unsigned="1" notnull="1" />
+	</properties>
+	<index name="type">
+		<indexproperty name="type" />
+	</index>
+	<index name="ref_id">
+		<indexproperty name="ref_id" />
+	</index>
+	<index name="parent_id">
+		<indexproperty name="parent_id" />
+	</index>
+	<index name="user_id">
+		<indexproperty name="user_id" />
+	</index>
+	<index name="display_order">
+		<indexproperty name="display_order" />
+	</index>
+</object>

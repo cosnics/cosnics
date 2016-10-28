@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Most Simple SCO</title>
+<script type="text/javascript" src="APIWrapper.js"></script>
+<script type="text/javascript">
+function init()
+{
+	doInitialize();
+	if(doGetValue("cmi.completion_status") != "completed")
+	{
+		doSetValue("cmi.completion_status", "incomplete");
+	}
+}
+
+function terminate()
+{
+	doSetValue("cmi.completion_status", "completed");
+	doSetValue("cmi.progress_measure", "1.0");
+	doSetValue("cmi.success_status", "passed");
+	doSetValue("cmi.score.scaled", "1.0");
+	doTerminate();
+}
+</script>
+</head>
+<body onload="init()" onunload="terminate()">Hoihoi
+</body>
+</html>
