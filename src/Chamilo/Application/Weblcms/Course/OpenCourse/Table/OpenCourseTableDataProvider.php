@@ -27,7 +27,7 @@ class OpenCourseTableDataProvider extends CourseTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return $this->getOpenCourseService()->retrieveOpenCourses(
+        return $this->getOpenCourseService()->getOpenCourses(
             $this->get_component()->getUser(), $condition, $offset, $count, $order_property
         );
     }

@@ -26,7 +26,8 @@ class OpenCourseTableColumnModel extends CourseTableColumnModel implements Table
             new DataClassPropertyTableColumn(
                 Role::class_name(),
                 Role::PROPERTY_ROLE,
-                Translation::getInstance()->getTranslation('Role', null, Manager::context())
+                Translation::getInstance()->getTranslation('Role', null, Manager::context()),
+                false
             )
         );
     }

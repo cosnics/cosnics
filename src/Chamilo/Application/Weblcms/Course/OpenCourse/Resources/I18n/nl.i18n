@@ -3,4 +3,19 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Open courses management"
+TypeName = "Beheer open cursussen"
+BrowseComponent = "Bekijk open cursussen"
+CreateComponent = "Open cursussen toevoegen"
+UpdateComponent = "Open cursus aanpassen"
+DeleterComponent = "Open cursus verwijderen"
+AddOpenCourses = "Open cursussen toevoegen"
+MarkSelectedCoursesAsNoLongerOpen = "Verwijder de cursussen van de open cursus lijst"
+OpenCoursesAdded = "Open cursussen toegevoegd"
+OpenCoursesNotAdded = "Open cursussen niet toegevoegd"
+CoursesRemovedFromOpenCourseList = "Cursussen verwijderd van de open cursus lijst"
+CoursesNotRemovedFromOpenCourseList = "Cursussen niet verwijderd van de open cursus lijst"
+OpenCoursesUpdated = "Open cursus aangepast"
+OpenCoursesNotUpdated = "Open cursus niet aangepast"
+Role = "Rol"
+SelectRoles = "Selecteer rollen"
+SelectCourses = "Selecteer cursussen"

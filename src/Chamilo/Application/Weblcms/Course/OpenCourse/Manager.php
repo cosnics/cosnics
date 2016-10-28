@@ -3,7 +3,9 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Subapplication for the management of open courses
@@ -48,6 +50,7 @@ abstract class Manager extends Application
         );
 
         $redirect = new Redirect($parameters);
+
         return $redirect->getUrl();
     }
 
@@ -61,6 +64,7 @@ abstract class Manager extends Application
     public function getDeleteOpenCourseUrl($courseId)
     {
         $parameters = array(self::PARAM_ACTION => self::ACTION_DELETE, self::PARAM_COURSE_ID => $courseId);
+
         return $this->get_url($parameters);
     }
 
@@ -74,6 +78,7 @@ abstract class Manager extends Application
     public function getUpdateOpenCourseUrl($courseId)
     {
         $parameters = array(self::PARAM_ACTION => self::ACTION_UPDATE, self::PARAM_COURSE_ID => $courseId);
+
         return $this->get_url($parameters);
     }
 
@@ -85,6 +90,32 @@ abstract class Manager extends Application
     public function getCreateOpenCourseUrl()
     {
         $parameters = array(self::PARAM_ACTION => self::ACTION_CREATE);
+
         return $this->get_url($parameters);
+    }
+
+    /**
+     * Returns the course ids from the request
+     *
+     * @return int[]
+     *
+     * @throws NoObjectSelectedException
+     */
+    public function getCourseIdsFromRequest()
+    {
+        $courseIds = $this->getRequest()->get(self::PARAM_COURSE_ID);
+        if (empty($courseIds))
+        {
+            throw new NoObjectSelectedException(
+                Translation::getInstance()->getTranslation('Course', null, self::context())
+            );
+        }
+
+        if(!is_array($courseIds))
+        {
+            $courseIds = array($courseIds);
+        }
+
+        return $courseIds;
     }
 }

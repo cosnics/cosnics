@@ -21,7 +21,7 @@ interface AjaxResultDataProviderInterface
     /**
      * Returns the number of total elements (without the offset)
      *
-     * @return mixed
+     * @return int
      */
     public function getTotalNumberOfElements();
 }

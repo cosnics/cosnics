@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -34,7 +35,7 @@ class OpenCourseRepository
     /**
      * Retrieves the open courses for the given user roles
      *
-     * @param Role[] $roles
+     * @param Role[]   $roles
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -46,12 +47,13 @@ class OpenCourseRepository
         $roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array()
     )
     {
-        $condition = $this->getOpenCoursesCondition($condition, $this->getConditionForRoles($roles));
-        return $this->findOpenCourses($condition, $offset, $count, $orderBy);
+        return $this->findOpenCourses(
+            $this->getOpenCoursesCondition($condition, $this->getConditionForRoles($roles)), $offset, $count, $orderBy
+        );
     }
 
     /**
-     * Retrieves the open courses for a given user
+     * Retrieves the open courses
      *
      * @param Condition $condition
      * @param int $offset
@@ -62,8 +64,7 @@ class OpenCourseRepository
      */
     public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
     {
-        $condition = $this->getOpenCoursesCondition($condition);
-        return $this->findOpenCourses($condition, $offset, $count, $orderBy);
+        return $this->findOpenCourses($this->getOpenCoursesCondition($condition), $offset, $count, $orderBy);
     }
 
     /**
@@ -100,9 +101,27 @@ class OpenCourseRepository
     }
 
     /**
+     * Retrieves the courses that are not open
+     *
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param OrderBy[] $orderBy
+     *
+     * @return RecordIterator
+     */
+    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
+    {
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+            Course::class_name(),
+            new DataClassRetrievesParameters($this->getClosedCoursesCondition($condition), $count, $offset, $orderBy)
+        );
+    }
+
+    /**
      * Counts the open courses by the given user roles
      *
-     * @param Role[] $roles
+     * @param Role[]   $roles
      * @param Condition $condition
      *
      * @return int
@@ -134,7 +153,22 @@ class OpenCourseRepository
     protected function countOpenCourses(Condition $condition = null)
     {
         $countParameters = new DataClassCountParameters($condition, $this->getOpenCoursesJoins());
+
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(Course::class_name(), $countParameters);
+    }
+
+    /**
+     * Counts the courses that are not open
+     *
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countClosedCourses(Condition $condition = null)
+    {
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
+            Course::class_name(), new DataClassCountParameters($this->getClosedCoursesCondition($condition))
+        );
     }
 
     /**
@@ -179,6 +213,37 @@ class OpenCourseRepository
 
         return \Chamilo\Core\User\Roles\Storage\DataManager::retrieves(
             Role::class_name(), new DataClassRetrievesParameters($condition, null, null, array(), $joins)
+        );
+    }
+
+    /**
+     * Removes a course as an open course
+     *
+     * @param int[] $courseIds
+     *
+     * @return bool
+     */
+    public function removeCoursesAsOpenCourse($courseIds)
+    {
+        $condition = new AndCondition(
+            array(
+                new InCondition(
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID
+                    ),
+                    $courseIds
+                ),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
+                    ),
+                    new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE)
+                )
+            )
+        );
+
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::deletes(
+            CourseEntityRelation::class_name(), $condition
         );
     }
 
@@ -230,6 +295,21 @@ class OpenCourseRepository
         }
 
         return new AndCondition($conditions);
+    }
+
+    /**
+     * Returns the condition for the closed courses
+     * 
+     * @param Condition $condition
+     * @param Condition $courseEntityRelationCondition
+     * 
+     * @return Condition
+     */
+    protected function getClosedCoursesCondition(
+        Condition $condition = null, Condition $courseEntityRelationCondition = null
+    )
+    {
+        return new NotCondition($this->getOpenCoursesCondition($condition, $courseEntityRelationCondition));
     }
 
     /**

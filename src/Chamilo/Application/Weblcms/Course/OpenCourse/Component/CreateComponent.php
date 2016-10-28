@@ -18,7 +18,35 @@ class CreateComponent extends Manager
      */
     function run()
     {
-        $form = new OpenCourseForm($this->get_url(), Translation::getInstance());
+        $this->checkAuthorization(Manager::context(), 'manage_open_courses');
+        
+        $form = new OpenCourseForm(OpenCourseForm::FORM_TYPE_ADD, $this->get_url(), Translation::getInstance());
+
+        if ($form->validate())
+        {
+            $exportValues = $form->exportValues();
+
+            try
+            {
+                $this->getOpenCourseService()->attachRolesToCoursesByIds(
+                    $exportValues['roles']['role'], $exportValues['courses']['course']
+                );
+
+                $success = true;
+                $messageVariable = 'OpenCoursesAdded';
+            }
+            catch (\Exception $ex)
+            {
+                $success = false;
+                $messageVariable = 'OpenCoursesNotAdded';
+            }
+
+            $this->redirect(
+                Translation::getInstance()->getTranslation($messageVariable, null, Manager::context()), !$success,
+                array(self::PARAM_ACTION => self::ACTION_BROWSE)
+            );
+        }
+
         $html = array();
 
         $html[] = $this->render_header();
