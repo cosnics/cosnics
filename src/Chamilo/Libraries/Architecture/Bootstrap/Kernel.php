@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -18,6 +19,9 @@ use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  *
@@ -69,6 +73,18 @@ class Kernel
 
     /**
      *
+     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
+     */
+    private $connectionFactory;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    private $sessionUtilities;
+
+    /**
+     *
      * @var string
      */
     private $context;
@@ -85,17 +101,25 @@ class Kernel
      */
     private $user;
 
-    public function __construct(FileConfigurationLoader $fileConfigurationLoader,
-        \Symfony\Component\HttpFoundation\Request $request, ApplicationFactory $applicationFactory,
-        ConfigurationConsulter $configurationConsulter, Translation $translationUtilities,
-        ExceptionLoggerInterface $exceptionLogger, User $user = null)
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, SessionUtilities $sessionUtilities,
+        Translation $translationUtilities, FileConfigurationLoader $fileConfigurationLoader,
+        ConfigurationConsulter $configurationConsulter, ConnectionFactory $connectionFactory,
+        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, User $user = null)
     {
-        $this->fileConfigurationLoader = $fileConfigurationLoader;
         $this->request = $request;
-        $this->applicationFactory = $applicationFactory;
+
+        $this->sessionUtilities = $sessionUtilities;
+        $this->translationUtilities = $translationUtilities;
+
+        $this->fileConfigurationLoader = $fileConfigurationLoader;
         $this->configurationConsulter = $configurationConsulter;
-        $this->translationUtilties = $translationUtilities;
+
+        $this->connectionFactory = $connectionFactory;
+        $this->applicationFactory = $applicationFactory;
+
         $this->exceptionLogger = $exceptionLogger;
+
+        $this->user = $user;
     }
 
     /**
@@ -208,6 +232,42 @@ class Kernel
 
     /**
      *
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
+     */
+    public function getConnectionFactory()
+    {
+        return $this->connectionFactory;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory $connectionFactory
+     */
+    public function setConnectionFactory(ConnectionFactory $connectionFactory)
+    {
+        $this->connectionFactory = $connectionFactory;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    public function getSessionUtilities()
+    {
+        return $this->sessionUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
+     */
+    public function setSessionUtilities(SessionUtilities $sessionUtilities)
+    {
+        $this->sessionUtilities = $sessionUtilities;
+    }
+
+    /**
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function getUser()
@@ -264,13 +324,15 @@ class Kernel
     {
         try
         {
+            // $this->checkInstallation()->startSession();
+
             if (! $this->getFileConfigurationLoader()->isAvailable())
             {
                 $this->configureContext()->buildApplication()->runApplication();
             }
             else
             {
-                $this->setup()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
+                $this->registerErrorHandlers()->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
             }
         }
         catch (NotAuthenticatedException $exception)
@@ -285,6 +347,38 @@ class Kernel
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }
+    }
+
+    /**
+     * Check if the system has been installed, if not display message accordingly
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     */
+    protected function checkInstallation()
+    {
+        if (! $this->getFileConfigurationLoader()->isAvailable())
+        {
+            $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
+            // TODO: This is old code to make sure those instances still accessing the parameter the old way keep on
+            // working for now
+            Request::set_get(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
+            return $this;
+        }
+
+        $this->getConnectionFactory()->getConnection();
+
+        return $this;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     */
+    protected function startSession()
+    {
+        $this->getSessionUtilities()->start();
+
+        return $this;
     }
 
     /**
@@ -401,24 +495,35 @@ class Kernel
      */
     protected function setup()
     {
-        if (! $this->getConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'debug', 'show_errors')))
-        {
-            $this->registerErrorHandlers();
-        }
+        return $this->registerErrorHandlers()->configureTimezone();
+    }
 
-        $timezone = $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'platform_timezone'));
-        date_default_timezone_set($timezone);
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     */
+    protected function configureTimezone()
+    {
+        date_default_timezone_set(
+            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'platform_timezone')));
 
-        return $this->configureContext();
+        return $this;
     }
 
     /**
      * Registers the error handler by using the error handler manager
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
      */
     protected function registerErrorHandlers()
     {
-        $errorHandler = new ErrorHandler($this->getExceptionLogger(), $this->getTranslationUtilities());
-        $errorHandler->registerErrorHandlers();
+        if (! $this->getConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'debug', 'show_errors')))
+        {
+            $errorHandler = new ErrorHandler($this->getExceptionLogger(), $this->getTranslationUtilities());
+            $errorHandler->registerErrorHandlers();
+        }
+
+        return $this;
     }
 
     /**
@@ -458,12 +563,14 @@ class Kernel
      */
     protected function checkAuthentication()
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName();
+        $applicationClassName = $this->getApplicationFactory()->getClassName(
+            $this->getContext(),
+            $this->getApplicationConfiguration());
         $applicationRequiresAuthentication = ! is_subclass_of(
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
 
-        $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfigurationConsulter());
+        $authenticationValidator = new AuthenticationValidator($this->getRequest(), Configuration::get_instance());
 
         if ($applicationRequiresAuthentication)
         {
@@ -482,7 +589,9 @@ class Kernel
      */
     protected function traceVisit()
     {
-        $applicationClassName = $this->getApplicationFactory()->getClassName();
+        $applicationClassName = $this->getApplicationFactory()->getClassName(
+            $this->getContext(),
+            $this->getApplicationConfiguration());
         $applicationRequiresTracing = ! is_subclass_of(
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');

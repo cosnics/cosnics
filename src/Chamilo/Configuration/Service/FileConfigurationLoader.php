@@ -156,8 +156,8 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
         $settings['Chamilo\Configuration']['general']['hashing_algorithm'] = 'sha1';
         $settings['Chamilo\Configuration']['debug']['show_errors'] = false;
         $settings['Chamilo\Configuration']['debug']['enable_query_cache'] = true;
-        $settings['Chamilo\Configuration']['debug']['enable_query_file_cache'] = false;
         $settings['Chamilo\Configuration']['session']['session_handler'] = 'chamilo';
+        $settings['Chamilo\Configuration']['kernel']['service'] = 'chamilo.libraries.architecture.bootstrap.kernel';
 
         $pathBuilder = $this->getPathBuilder();
 

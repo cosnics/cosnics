@@ -95,6 +95,7 @@ class AuthenticationValidator
 
             if ($this->performQueryAuthentication())
             {
+
                 return true;
             }
 
