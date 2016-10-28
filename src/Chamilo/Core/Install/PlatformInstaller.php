@@ -220,7 +220,6 @@ class PlatformInstaller
         $configuration['database']['name'] = $this->installer_config->get_db_name();
         $configuration['debug']['show_errors'] = false;
         $configuration['debug']['enable_query_cache'] = true;
-        $configuration['debug']['enable_query_file_cache'] = false;
         $configuration['storage']['archive_path'] = $this->installer_config->get_archive_path();
         $configuration['storage']['cache_path'] = $this->installer_config->get_cache_path();
         $configuration['storage']['garbage_path'] = $this->installer_config->get_garbage_path();

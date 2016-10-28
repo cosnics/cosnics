@@ -5,6 +5,67 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
+            id="chamilo.libraries.architecture.bootstrap.bootstrap"
+            class="Chamilo\Libraries\Architecture\Bootstrap\Bootstrap">
+            <argument
+                type="service"
+                id="symfony.component.http_foundation.request" />
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_loader" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
+
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.session.session_utilities" />
+        </service>
+
+        <service
+            id="chamilo.libraries.architecture.bootstrap.kernel"
+            class="Chamilo\Libraries\Architecture\Bootstrap\Kernel">
+            <argument
+                type="service"
+                id="symfony.component.http_foundation.request" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.session.session_utilities" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.translator" />
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_loader" />
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_consulter" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.factory.application_factory" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+            <argument
+                type="service"
+                id="chamilo.core.user.user" />
+        </service>
+
+        <service
+            id="chamilo.libraries.architecture.factory.application_factory"
+            class="Chamilo\Libraries\Architecture\Factory\ApplicationFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.translation" />
+        </service>
+
+        <service
             id="chamilo.libraries.architecture.classname_utilities"
             class="Chamilo\Libraries\Architecture\ClassnameUtilities">
             <argument
