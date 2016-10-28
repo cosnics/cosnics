@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Roles\Service\Interfaces;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Manages roles
@@ -49,4 +50,25 @@ interface RoleServiceInterface
      * @return Role
      */
     public function getOrCreateRoleByName($roleName);
+
+    /**
+     * Retrieves the roles
+     *
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return Role[]
+     */
+    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = array());
+
+    /**
+     * Counts the roles
+     *
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countRoles(Condition $condition = null);
 }

@@ -6,6 +6,7 @@ use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Manages roles
@@ -107,5 +108,32 @@ class RoleService implements RoleServiceInterface
 
             return $role;
         }
+    }
+
+    /**
+     * Retrieves the roles
+     *
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderBy
+     *
+     * @return Role[]
+     */
+    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = array())
+    {
+        return $this->roleRepository->findRoles($condition, $count, $offset, $orderBy);
+    }
+
+    /**
+     * Counts the roles
+     *
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function countRoles(Condition $condition = null)
+    {
+        return $this->roleRepository->countRoles($condition);
     }
 }

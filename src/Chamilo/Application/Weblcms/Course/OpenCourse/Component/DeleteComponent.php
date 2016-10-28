@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
+use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Component to remove open access to an existing course
@@ -14,8 +15,37 @@ class DeleteComponent extends Manager
     /**
      * Runs this component and returns it's output
      */
-    function run()
+    public function run()
     {
-        // TODO: Implement run() method.
+        $this->checkAuthorization(Manager::context(), 'manage_open_courses');
+        
+        $courseIds = $this->getCourseIdsFromRequest();
+
+        try
+        {
+            $this->getOpenCourseService()->removeCoursesAsOpenCourse($courseIds);
+            $success = true;
+            $redirectMessageVariable = 'CoursesRemovedFromOpenCourseList';
+        }
+        catch (\Exception $ex)
+        {
+            $success = false;
+            $redirectMessageVariable = 'CoursesNotRemovedFromOpenCourseList';
+        }
+
+        $this->redirect(
+            Translation::getInstance()->getTranslation($redirectMessageVariable, null, Manager::context()), !$success,
+            array(self::PARAM_ACTION => self::ACTION_BROWSE)
+        );
+    }
+
+    /**
+     * Returns the list of additional parameters that need to be registered
+     *
+     * @return string[]
+     */
+    public function get_additional_parameters()
+    {
+        return array(self::PARAM_COURSE_ID);
     }
 }

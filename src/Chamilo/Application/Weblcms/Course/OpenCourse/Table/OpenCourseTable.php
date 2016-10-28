@@ -31,7 +31,7 @@ class OpenCourseTable extends CourseTable implements TableFormActionsSupport
                 new TableFormAction(
                     $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
                     Translation::getInstance()->getTranslation(
-                        'MarkSelectedCoursesAsNoLongerOpen', null, Utilities::COMMON_LIBRARIES
+                        'MarkSelectedCoursesAsNoLongerOpen', null, Manager::context()
                     )
                 )
             );

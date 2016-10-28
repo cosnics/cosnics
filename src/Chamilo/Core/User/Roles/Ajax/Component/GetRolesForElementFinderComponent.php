@@ -1,24 +1,23 @@
 <?php
 
-namespace Chamilo\Application\Weblcms\Course\Ajax\Component;
+namespace Chamilo\Core\User\Roles\Ajax\Component;
 
-use Chamilo\Application\Weblcms\Course\Ajax\Manager;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Core\User\Roles\Ajax\Manager;
+use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
+use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultDataProviderInterface;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Returns the courses formatted for the element finder
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class GetCoursesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
+class GetRolesForElementFinderComponent extends Manager implements AjaxResultDataProviderInterface
 {
     const PARAM_SEARCH_QUERY = 'query';
     const PARAM_OFFSET = 'offset';
@@ -47,21 +46,18 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
      */
     public function generateElements(AdvancedElementFinderElements $advancedElementFinderElements)
     {
-        $courses = $this->getCourses();
-        if ($courses)
+        $roles = $this->getRoles();
+
+        foreach($roles as $role)
         {
-            /** @var Course $course */
-            while ($course = $courses->next_result())
-            {
-                $advancedElementFinderElements->add_element(
-                    new AdvancedElementFinderElement(
-                        'course_' . $course->getId(),
-                        'type type_course',
-                        $course->get_title(),
-                        $course->get_visual_code()
-                    )
-                );
-            }
+            $advancedElementFinderElements->add_element(
+                new AdvancedElementFinderElement(
+                    'role_' . $role->getId(),
+                    'type type_role',
+                    $role->getRole(),
+                    $role->getRole()
+                )
+            );
         }
     }
 
@@ -72,26 +68,22 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
      */
     public function getTotalNumberOfElements()
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class_name(), $this->getCondition()
-        );
+        return $this->getRoleService()->countRoles($this->getCondition());
     }
 
     /**
      * Retrieves the courses for the current request
      *
-     * @return ResultSet
+     * @return Role[]
      */
-    protected function getCourses()
+    protected function getRoles()
     {
-        $parameters = new DataClassRetrievesParameters(
+        return $this->getRoleService()->getRoles(
             $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
             array(
-                new OrderBy(new PropertyConditionVariable(Course:: class_name(), Course :: PROPERTY_TITLE)),
+                new OrderBy(new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE)),
             )
         );
-
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(Course::class_name(), $parameters);
     }
 
     /**
@@ -101,9 +93,16 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     {
         return $this->ajaxResultGenerator->getSearchCondition(
             array(
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
-                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE),
+                new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE)
             )
         );
+    }
+
+    /**
+     * @return RoleServiceInterface
+     */
+    protected function getRoleService()
+    {
+        return $this->getService('chamilo.core.user.roles.service.role_service');
     }
 }
