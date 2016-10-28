@@ -4,6 +4,8 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Table\OpenCourseTable;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
@@ -12,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Component to browse the open courses
@@ -54,7 +57,7 @@ class BrowseComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
-            if($this->isAuthorized(Manager::context(), 'manage_open_courses'))
+            if($this->isAuthorized(Manager::context(), 'ManageOpenCourses'))
             {
                 $buttonToolbar->addItem(
                     new Button(
@@ -81,5 +84,12 @@ class BrowseComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
+        return $this->buttonToolbarRenderer->getConditions(
+            array(
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
+                new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE),
+                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE)
+            )
+        );
     }
 }

@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -38,7 +39,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
                 $this->validateCaptcha($this->getRequest()->get(AnonymousUserForm::CAPTCHA_RESPONS_VALUE));
                 $anonymousUser = $this->createAnonymousUser();
                 $this->addAnonymousRoleToUser($anonymousUser);
-                $this->setAuthenticationCookie($anonymousUser);
+                $this->setAuthenticationCookieAndRedirect($anonymousUser);
             }
             catch(\Exception $ex)
             {
@@ -131,11 +132,27 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
     /**
      * Sets the anonymous authentication cookie
      */
-    protected function setAuthenticationCookie(User $user)
+    protected function setAuthenticationCookieAndRedirect(User $user)
     {
         $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
 
-        $redirect = new Redirect();
+        $parameters = Session::get('requested_url_parameters');
+
+        if( empty($parameters) ||
+            (
+                $parameters[self::PARAM_CONTEXT] == self::context() &&
+                $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY
+            )
+        )
+        {
+            $parameters = array(
+                self::PARAM_CONTEXT => Configuration::get_instance()->get_setting(
+                    array('Chamilo\Core\Admin', 'page_after_anonymous_access')
+                )
+            );
+        }
+
+        $redirect = new Redirect($parameters);
 
         $response = new RedirectResponse($redirect->getUrl());
         $response->headers->setCookie($cookie);

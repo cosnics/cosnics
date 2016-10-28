@@ -1,0 +1,3 @@
+Chamilo\Application\Weblcms:
+  - ViewPersonalCourses: ROLE_DEFAULT_USER
+  - ManagePersonalCourses: ROLE_DEFAULT_USER

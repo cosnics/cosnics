@@ -18,7 +18,7 @@ class CreateComponent extends Manager
      */
     function run()
     {
-        $this->checkAuthorization(Manager::context(), 'manage_open_courses');
+        $this->checkAuthorization(Manager::context(), 'ManageOpenCourses');
         
         $form = new OpenCourseForm(OpenCourseForm::FORM_TYPE_ADD, $this->get_url(), Translation::getInstance());
 
