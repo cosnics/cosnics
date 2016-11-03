@@ -100,7 +100,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
             )
         );
 
-        if($this->get_component()->isAuthorized(Manager::context(), 'manage_open_courses'))
+        if($this->get_component()->isAuthorized(Manager::context(), 'ManageOpenCourses'))
         {
             $toolbar->add_item(
                 new ToolbarItem(

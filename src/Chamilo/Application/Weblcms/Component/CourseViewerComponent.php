@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Component;
 
+use Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
@@ -124,7 +125,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     /**
      * Returns the course
      *
-     * @return \application\weblcms\course\Course
+     * @return Course
+     * 
+     * @throws \Exception
      */
     public function get_course()
     {
@@ -316,32 +319,28 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $open_course_access_type = $course_settings_controller->get_course_setting(
-                    $this->get_course(),
-                    CourseSettingsConnector :: OPEN_COURSE_ACCESS_TYPE);
-
                 $is_subscribed = CourseDataManager :: is_subscribed($this->get_course(), $this->get_user());
 
-                if ($is_subscribed || $open_course_access_type == CourseSettingsConnector :: OPEN_COURSE_ACCESS_WORLD)
+                if ($is_subscribed)
                 {
                     $allowed = true;
                 }
                 else
                 {
-                    if ($open_course_access_type == CourseSettingsConnector :: OPEN_COURSE_ACCESS_PLATFORM &&
-                         ! $this->get_user()->is_anonymous_user())
-                    {
-                        $allowed = true;
-                    }
-                    else
-                    {
-                        $allowed = false;
-                    }
+                    $allowed = $this->getOpenCourseService()->isCourseOpenForUser($this->get_course(), $this->getUser());
                 }
             }
         }
 
         return $allowed;
+    }
+
+    /**
+     * @return OpenCourseService
+     */
+    protected function getOpenCourseService()
+    {
+        return $this->getService('chamilo.application.weblcms.course.open_course.service.open_course_service');
     }
 
     /**

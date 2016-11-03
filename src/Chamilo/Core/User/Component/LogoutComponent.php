@@ -18,7 +18,7 @@ class LogoutComponent extends Manager
      */
     public function run()
     {
-        $this->checkAuthorization(Manager::context(), 'Logout');
+//        $this->checkAuthorization(Manager::context(), 'Logout');
 
         $authenticationHandler = new AuthenticationValidator($this->getRequest(), Configuration :: get_instance());
         $authenticationHandler->logout($this->getUser());

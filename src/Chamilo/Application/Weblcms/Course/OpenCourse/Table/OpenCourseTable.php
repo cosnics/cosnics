@@ -25,7 +25,7 @@ class OpenCourseTable extends CourseTable implements TableFormActionsSupport
     {
         $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
 
-        if($this->get_component()->isAuthorized(Manager::context(), 'manage_open_courses'))
+        if($this->get_component()->isAuthorized(Manager::context(), 'ManageOpenCourses'))
         {
             $actions->add_form_action(
                 new TableFormAction(
