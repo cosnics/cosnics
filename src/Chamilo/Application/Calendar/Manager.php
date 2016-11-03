@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Calendar;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Calendar\Renderer\Type\ViewRenderer;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 
@@ -37,6 +38,17 @@ abstract class Manager extends Application
      * @var integer
      */
     private $currentTime;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 
     /**
      *

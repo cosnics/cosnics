@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Portfolio;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * Portfolio Application
@@ -21,6 +22,17 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_HOME;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 
     /**
      * Get the "current" user id, which is either the user of whom we are viewing the portfolio or the currently
