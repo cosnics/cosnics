@@ -5,6 +5,7 @@ use Chamilo\Core\Menu\Renderer\Item\Bar\Item\CategoryItem;
 use Chamilo\Core\Menu\Renderer\Item\Renderer;
 use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -27,6 +28,11 @@ class RepositoryImplementationCategoryItem extends CategoryItem
 
     public function render()
     {
+        if(!$this->canViewMenuItem($this->getMenuRenderer()->get_user()))
+        {
+            return '';
+        }
+        
         $html = array();
         $sub_html = array();
         $instances = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
@@ -98,5 +104,18 @@ class RepositoryImplementationCategoryItem extends CategoryItem
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns whether or not the given user can view this menu item
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function canViewMenuItem(User $user)
+    {
+        $authorizationChecker = $this->getAuthorizationChecker();
+        return $authorizationChecker->isAuthorized($this->getMenuRenderer()->get_user(), 'Chamilo\Core\Repository');
     }
 }

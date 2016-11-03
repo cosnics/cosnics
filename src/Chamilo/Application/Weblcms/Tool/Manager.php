@@ -349,25 +349,25 @@ abstract class Manager extends Application
             $this->get_course(),
             $this->get_user());
 
-        if (! $is_subscribed)
-        {
-            $params = array();
-            $params[Application::PARAM_ACTION] = Manager::ACTION_CREATE_BOOKMARK;
-
-            $bookmark_url = $this->get_parent()->get_url($params);
-
-            // $onclick = '" onclick="javascript:openPopup(\'' . $bookmark_url . '\'); return false;';
-
-            $buttonToolbar->addItem(
-                new Button(
-                    Translation::get('MakeBookmark'),
-                    null,
-                    $bookmark_url,
-                    Button::DISPLAY_ICON_AND_LABEL,
-                    false,
-                    null,
-                    '_blank'));
-        }
+//        if (! $is_subscribed)
+//        {
+//            $params = array();
+//            $params[Application::PARAM_ACTION] = Manager::ACTION_CREATE_BOOKMARK;
+//
+//            $bookmark_url = $this->get_parent()->get_url($params);
+//
+//            // $onclick = '" onclick="javascript:openPopup(\'' . $bookmark_url . '\'); return false;';
+//
+//            $buttonToolbar->addItem(
+//                new Button(
+//                    Translation::get('MakeBookmark'),
+//                    null,
+//                    $bookmark_url,
+//                    Button::DISPLAY_ICON_AND_LABEL,
+//                    false,
+//                    null,
+//                    '_blank'));
+//        }
 
         if ($introductionTextAllowed)
         {
