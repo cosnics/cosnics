@@ -6,7 +6,7 @@
     <services>
         <service
             id="chamilo.libraries.hashing.hashing_utilities"
-            class="Chamilo\Libraries\Hashing\Hashing">
+            class="Chamilo\Libraries\Hashing\HashingUtilities">
             <factory
                 service="chamilo.libraries.hashing.hashing_factory"
                 method="getHashingUtilities" />
