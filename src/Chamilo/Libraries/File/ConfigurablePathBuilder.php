@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\File;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-
 /**
  *
  * @package Chamilo\Libraries\File
@@ -27,18 +25,85 @@ class ConfigurablePathBuilder
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var string
      */
-    protected $configurationConsulter;
+    private $configuredArchivePath;
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @var string
      */
-    public function __construct(ConfigurationConsulter $configurationConsulter)
+    private $configuredCachePath;
+
+    /**
+     *
+     * @var string
+     */
+    private $configuredGarbagePath;
+
+    /**
+     *
+     * @var string
+     */
+    private $configuredHotpotatoesPath;
+
+    /**
+     *
+     * @var string
+     */
+    private $configuredLogsPath;
+
+    /**
+     *
+     * @var string
+     */
+    private $configuredRepositoryPath;
+
+    /**
+     *
+     * @var string
+     */
+    private $configuredScormPath;
+
+    /**
+     *
+     * @var string
+     */
+    private $configuredTempPath;
+
+    /**
+     *
+     * @var string
+     */
+    private $configuredUserPicturesPath;
+
+    /**
+     *
+     * @param string $configuredArchivePath
+     * @param string $configuredCachePath
+     * @param string $configuredGarbagePath
+     * @param string $configuredHotpotatoesPath
+     * @param string $configuredLogsPath
+     * @param string $configuredRepositoryPath
+     * @param string $configuredScormPath
+     * @param string $configuredTempPath
+     * @param string $configuredUserPicturesPath
+     */
+    public function __construct($configuredArchivePath, $configuredCachePath, $configuredGarbagePath,
+        $configuredHotpotatoesPath, $configuredLogsPath, $configuredRepositoryPath, $configuredScormPath,
+        $configuredTempPath, $configuredUserPicturesPath)
     {
         $this->cache = array();
-        $this->configurationConsulter = $configurationConsulter;
+
+        $this->configuredArchivePath = $configuredArchivePath;
+        $this->configuredCachePath = $configuredCachePath;
+        $this->configuredGarbagePath = $configuredGarbagePath;
+        $this->configuredHotpotatoesPath = $configuredHotpotatoesPath;
+        $this->configuredLogsPath = $configuredLogsPath;
+        $this->configuredRepositoryPath = $configuredRepositoryPath;
+        $this->configuredScormPath = $configuredScormPath;
+        $this->configuredTempPath = $configuredTempPath;
+        $this->configuredUserPicturesPath = $configuredUserPicturesPath;
     }
 
     /**
@@ -61,57 +126,197 @@ class ConfigurablePathBuilder
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return string
      */
-    public function getConfigurationConsulter()
+    public function getConfiguredArchivePath()
     {
-        return $this->configurationConsulter;
+        return $this->configuredArchivePath;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param string $configuredArchivePath
      */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
+    public function setConfiguredArchivePath($configuredArchivePath)
     {
-        $this->configurationConsulter = $configurationConsulter;
+        $this->configuredArchivePath = $configuredArchivePath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredCachePath()
+    {
+        return $this->configuredCachePath;
+    }
+
+    /**
+     *
+     * @param string $configuredCachePath
+     */
+    public function setConfiguredCachePath($configuredCachePath)
+    {
+        $this->configuredCachePath = $configuredCachePath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredGarbagePath()
+    {
+        return $this->configuredGarbagePath;
+    }
+
+    /**
+     *
+     * @param string $configuredGarbagePath
+     */
+    public function setConfiguredGarbagePath($configuredGarbagePath)
+    {
+        $this->configuredGarbagePath = $configuredGarbagePath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredHotpotatoesPath()
+    {
+        return $this->configuredHotpotatoesPath;
+    }
+
+    /**
+     *
+     * @param string $configuredHotpotatoesPath
+     */
+    public function setConfiguredHotpotatoesPath($configuredHotpotatoesPath)
+    {
+        $this->configuredHotpotatoesPath = $configuredHotpotatoesPath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredLogsPath()
+    {
+        return $this->configuredLogsPath;
+    }
+
+    /**
+     *
+     * @param string $configuredLogsPath
+     */
+    public function setConfiguredLogsPath($configuredLogsPath)
+    {
+        $this->configuredLogsPath = $configuredLogsPath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredRepositoryPath()
+    {
+        return $this->configuredRepositoryPath;
+    }
+
+    /**
+     *
+     * @param string $configuredRepositoryPath
+     */
+    public function setConfiguredRepositoryPath($configuredRepositoryPath)
+    {
+        $this->configuredRepositoryPath = $configuredRepositoryPath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredScormPath()
+    {
+        return $this->configuredScormPath;
+    }
+
+    /**
+     *
+     * @param string $configuredScormPath
+     */
+    public function setConfiguredScormPath($configuredScormPath)
+    {
+        $this->configuredScormPath = $configuredScormPath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredTempPath()
+    {
+        return $this->configuredTempPath;
+    }
+
+    /**
+     *
+     * @param string $configuredTempPath
+     */
+    public function setConfiguredTempPath($configuredTempPath)
+    {
+        $this->configuredTempPath = $configuredTempPath;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getConfiguredUserPicturesPath()
+    {
+        return $this->configuredUserPicturesPath;
+    }
+
+    /**
+     *
+     * @param string $configuredUserPicturesPath
+     */
+    public function setConfiguredUserPicturesPath($configuredUserPicturesPath)
+    {
+        $this->configuredUserPicturesPath = $configuredUserPicturesPath;
     }
 
     /**
      *
      * @param string $namespace
-     * @param boolean $web
      * @return string
      */
     public function getTemporaryPath($namespace = null)
     {
         $completeNamespace = ($namespace ? 'temp\\' . $namespace : 'temp');
-        return $this->cache[self::TEMPORARY][(string) $completeNamespace] = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Configuration', 'storage', 'temp_path')) . md5($namespace) . DIRECTORY_SEPARATOR;
+        return $this->cache[self::TEMPORARY][(string) $completeNamespace] = $this->getConfiguredTempPath() .
+             md5($namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
      *
      * @param string $namespace
-     * @param boolean $web
      * @return string
      */
     public function getCachePath($namespace = null)
     {
         $completeNamespace = ($namespace ? 'cache\\' . $namespace : 'cache');
-        return $this->cache[self::CACHE][(string) $completeNamespace] = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Configuration', 'storage', 'cache_path')) . md5($namespace) . DIRECTORY_SEPARATOR;
+        return $this->cache[self::CACHE][(string) $completeNamespace] = $this->getConfiguredCachePath() . md5(
+            $namespace) . DIRECTORY_SEPARATOR;
     }
 
     /**
      *
-     * @param boolean $web
      * @return string
      */
     public function getLogPath()
     {
-        return $this->cache[self::LOG] = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Configuration', 'storage', 'logs_path'));
+        return $this->cache[self::LOG] = $this->getConfiguredLogsPath();
     }
 
     /**
@@ -120,29 +325,24 @@ class ConfigurablePathBuilder
      */
     public function getArchivePath()
     {
-        return $this->cache[self::ARCHIVE] = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Configuration', 'storage', 'archive_path'));
+        return $this->cache[self::ARCHIVE] = $this->getConfiguredArchivePath();
     }
 
     /**
      *
-     * @param boolean $web
      * @return string
      */
     public function getRepositoryPath()
     {
-        return $this->cache[self::REPOSITORY] = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Configuration', 'storage', 'repository_path'));
+        return $this->cache[self::REPOSITORY] = $this->getConfiguredRepositoryPath();
     }
 
     /**
      *
-     * @param boolean $web
      * @return string
      */
     public function getProfilePicturePath()
     {
-        return $this->cache[self::PROFILE_PICTURE] = $this->getConfigurationConsulter()->getSetting(
-            array('Chamilo\Configuration', 'storage', 'userpictures_path'));
+        return $this->cache[self::PROFILE_PICTURE] = $this->getConfiguredUserPicturesPath();
     }
 }

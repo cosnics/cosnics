@@ -101,10 +101,17 @@ class Kernel
      */
     private $user;
 
+    /**
+     *
+     * @var boolean
+     */
+    private $showErrors;
+
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, SessionUtilities $sessionUtilities,
         Translation $translationUtilities, FileConfigurationLoader $fileConfigurationLoader,
         ConfigurationConsulter $configurationConsulter, ConnectionFactory $connectionFactory,
-        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, User $user = null)
+        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, $showErrors = false,
+        User $user = null)
     {
         $this->request = $request;
 
@@ -119,6 +126,7 @@ class Kernel
 
         $this->exceptionLogger = $exceptionLogger;
 
+        $this->showErrors = $showErrors;
         $this->user = $user;
     }
 
@@ -320,6 +328,24 @@ class Kernel
         $this->application = $application;
     }
 
+    /**
+     *
+     * @return boolean
+     */
+    public function getShowErrors()
+    {
+        return $this->showErrors;
+    }
+
+    /**
+     *
+     * @param boolean $showErrors
+     */
+    public function setShowErrors($showErrors)
+    {
+        $this->showErrors = $showErrors;
+    }
+
     public function launch()
     {
         try
@@ -517,7 +543,7 @@ class Kernel
      */
     protected function registerErrorHandlers()
     {
-        if (! $this->getConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'debug', 'show_errors')))
+        if (! $this->getShowErrors())
         {
             $errorHandler = new ErrorHandler($this->getExceptionLogger(), $this->getTranslationUtilities());
             $errorHandler->registerErrorHandlers();

@@ -23,28 +23,28 @@ abstract class Hashing
 
     public static function get_instance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            $type = \Chamilo\Configuration\Configuration :: get('Chamilo\Configuration', 'general', 'hashing_algorithm');
-            $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize();
+            $type = \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'general', 'hashing_algorithm');
+            $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize();
 
             if (class_exists($class))
             {
-                self :: $instance = new $class();
+                self::$instance = new $class();
             }
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     public static function hash($value)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
         return $instance->create_hash($value);
     }
 
     public static function hash_file($file)
     {
-        $instance = self :: get_instance();
+        $instance = self::get_instance();
         return $instance->create_file_hash($file);
     }
 

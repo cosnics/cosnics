@@ -10,14 +10,11 @@
             <argument
                 type="service"
                 id="chamilo.configuration.service.file_configuration_loader" />
-
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
-
-            <argument
-                type="service"
-                id="chamilo.configuration.service.file_configuration_consulter" />
+            <argument>%chamilo.configuration.session.session_handler%</argument>
+            <argument>%chamilo.configuration.general.security_key%</argument>
         </service>
 
         <service
@@ -27,7 +24,7 @@
                 class="Chamilo\Libraries\Platform\Translation"
                 method="getInstance" />
         </service>
-        
+
         <service
             id="chamilo.libraries.platform.translator"
             class="Chamilo\Libraries\Platform\Translation">
