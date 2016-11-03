@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Integration\Chamilo\Core\Menu\Renderer\Item\Bar\Item
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Menu\Renderer\Item\Bar\Bar;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
@@ -79,6 +80,11 @@ class WidgetItem extends Bar
      */
     public function render()
     {
+        if(!$this->canViewMenuItem($this->getMenuRenderer()->get_user()))
+        {
+            return '';
+        }
+        
         $html = array();
 
         $title = htmlentities($this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()));
@@ -206,5 +212,20 @@ class WidgetItem extends Bar
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns whether or not the given user can view this menu item
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function canViewMenuItem(User $user)
+    {
+        $authorizationChecker = $this->getAuthorizationChecker();
+        return $authorizationChecker->isAuthorized(
+            $this->getMenuRenderer()->get_user(), 'Chamilo\Core\User', 'ManageAccount'
+        );
     }
 }

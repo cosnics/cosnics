@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
@@ -37,6 +38,11 @@ class WorkspaceCategoryItem extends CategoryItem
 
     public function render()
     {
+        if(!$this->canViewMenuItem($this->getMenuRenderer()->get_user()))
+        {
+            return '';
+        }
+        
         $html = array();
         $sub_html = array();
 
@@ -104,5 +110,18 @@ class WorkspaceCategoryItem extends CategoryItem
         $html[] = '</li>';
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Returns whether or not the given user can view this menu item
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function canViewMenuItem(User $user)
+    {
+        $authorizationChecker = $this->getAuthorizationChecker();
+        return $authorizationChecker->isAuthorized($this->getMenuRenderer()->get_user(), 'Chamilo\Core\Repository');
     }
 }

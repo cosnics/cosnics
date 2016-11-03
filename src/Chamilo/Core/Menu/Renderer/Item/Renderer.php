@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Menu\Renderer\Item;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -13,6 +14,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 abstract class Renderer
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      *
@@ -36,13 +38,15 @@ abstract class Renderer
      *
      * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
-     * @param Renderer $parentRenderer
+     * @param \Chamilo\Core\Menu\Renderer\Menu\Renderer $parentRenderer
      */
     public function __construct($menuRenderer, $item, Renderer $parentRenderer = null)
     {
         $this->item = $item;
         $this->menuRenderer = $menuRenderer;
         $this->parentRenderer = $parentRenderer;
+        
+        $this->initializeContainer();
     }
 
     /**

@@ -117,35 +117,35 @@ class CacheDirectorBuilder
         $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
         $configurationConsulter = new ConfigurationConsulter(
             new FileConfigurationLoader(new PathBuilder($classnameUtilities)));
-        $dataSourceNameFactory = new DataSourceNameFactory($configurationConsulter);
-        $connectionFactory = new ConnectionFactory($dataSourceNameFactory->getDataSourceName());
+//        $dataSourceNameFactory = new DataSourceNameFactory($configurationConsulter);
+//        $connectionFactory = new ConnectionFactory($dataSourceNameFactory->getDataSourceName());
 
-        $dataClassRepository = new DataClassRepository(
-            $configurationConsulter,
-            new DataClassRepositoryCache(),
-            new DataClassDatabase(
-                $connectionFactory->getConnection(),
-                new StorageAliasGenerator($classnameUtilities),
-                $exceptionLoggerFactory->createExceptionLogger(),
-                new ConditionPartTranslatorService(
-                    $configurationConsulter,
-                    new ConditionPartTranslatorFactory($classnameUtilities),
-                    new ConditionPartCache()),
-                new RecordProcessor()),
-            new DataClassFactory());
+//        $dataClassRepository = new DataClassRepository(
+//            $configurationConsulter,
+//            new DataClassRepositoryCache(),
+//            new DataClassDatabase(
+//                $connectionFactory->getConnection(),
+//                new StorageAliasGenerator($classnameUtilities),
+//                $exceptionLoggerFactory->createExceptionLogger(),
+//                new ConditionPartTranslatorService(
+//                    $configurationConsulter,
+//                    new ConditionPartTranslatorFactory($classnameUtilities),
+//                    new ConditionPartCache()),
+//                new RecordProcessor()),
+//            new DataClassFactory());
 
-        $cacheDirector->addCacheService(
-            'chamilo_configuration',
-            new DataCacheLoader(new StorageConfigurationLoader(new ConfigurationRepository($dataClassRepository))));
-
-        $cacheDirector->addCacheService(
-            'chamilo_registration',
-            new DataCacheLoader(
-                new RegistrationLoader($stringUtilities, new RegistrationRepository($dataClassRepository))));
-
-        $cacheDirector->addCacheService(
-            'chamilo_language',
-            new DataCacheLoader(new LanguageLoader(new LanguageRepository($dataClassRepository))));
+//        $cacheDirector->addCacheService(
+//            'chamilo_configuration',
+//            new DataCacheLoader(new StorageConfigurationLoader(new ConfigurationRepository($dataClassRepository))));
+//
+//        $cacheDirector->addCacheService(
+//            'chamilo_registration',
+//            new DataCacheLoader(
+//                new RegistrationLoader($stringUtilities, new RegistrationRepository($dataClassRepository))));
+//
+//        $cacheDirector->addCacheService(
+//            'chamilo_language',
+//            new DataCacheLoader(new LanguageLoader(new LanguageRepository($dataClassRepository))));
 
         $cacheDirector->addCacheService(
             'chamilo_repository_configuration',
