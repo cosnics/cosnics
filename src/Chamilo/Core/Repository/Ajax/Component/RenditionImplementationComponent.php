@@ -22,7 +22,8 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
             self :: PARAM_CONTENT_OBJECT_ID,
             self :: PARAM_FORMAT,
             self :: PARAM_VIEW,
-            self :: PARAM_PARAMETERS);
+            self :: PARAM_PARAMETERS
+        );
     }
 
     /*
@@ -30,19 +31,29 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
      */
     public function run()
     {
-        $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
-            $this->getPostDataValue(self :: PARAM_CONTENT_OBJECT_ID));
-        $display = ContentObjectRenditionImplementation :: factory(
-            $object,
-            $this->getPostDataValue(self :: PARAM_FORMAT),
-            $this->getPostDataValue(self :: PARAM_VIEW),
-            $this);
+        try
+        {
+            $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
+                ContentObject:: class_name(),
+                $this->getPostDataValue(self :: PARAM_CONTENT_OBJECT_ID)
+            );
+
+            $display = ContentObjectRenditionImplementation:: factory(
+                $object,
+                $this->getPostDataValue(self :: PARAM_FORMAT),
+                $this->getPostDataValue(self :: PARAM_VIEW),
+                $this
+            );
+
+            $rendition = $display->render($this->getPostDataValue(self :: PARAM_PARAMETERS));
+        }
+        catch( \Exception $ex)
+        {
+            $rendition = '';
+        }
 
         $result = new JsonAjaxResult(200);
-        $result->set_property(
-            self :: PROPERTY_RENDITION,
-            $display->render($this->getPostDataValue(self :: PARAM_PARAMETERS)));
+        $result->set_property(self :: PROPERTY_RENDITION, $rendition);
         $result->display();
     }
 }
