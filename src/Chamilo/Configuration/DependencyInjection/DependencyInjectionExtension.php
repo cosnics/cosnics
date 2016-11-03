@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Configuration\DependencyInjection;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -27,17 +29,17 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function load(array $config, ContainerBuilder $container)
     {
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+
         $xmlFileLoader = new XmlFileLoader(
             $container,
-            new FileLocator(Path::getInstance()->getConfigurationPath('Chamilo\Configuration') . 'DependencyInjection'));
+            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Configuration') . 'DependencyInjection'));
 
         $xmlFileLoader->load('configuration.xml');
         $xmlFileLoader->load('registration.xml');
         $xmlFileLoader->load('language.xml');
 
-        $xmlFileLoader = new XmlFileLoader(
-            $container,
-            new FileLocator(Path::getInstance()->getStoragePath() . 'configuration'));
+        $xmlFileLoader = new XmlFileLoader($container, new FileLocator($pathBuilder->getStoragePath() . 'configuration'));
         $xmlFileLoader->load('configuration.xml');
     }
 

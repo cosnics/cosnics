@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -32,9 +34,11 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function load(array $configuration, ContainerBuilder $container)
     {
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+
         $xmlFileLoader = new XmlFileLoader(
             $container,
-            new FileLocator(Path::getInstance()->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection'));
+            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection'));
 
         $xmlFileLoader->load('architecture.xml');
         $xmlFileLoader->load('cache.xml');

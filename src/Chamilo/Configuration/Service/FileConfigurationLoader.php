@@ -98,7 +98,7 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
      */
     protected function getConfigurationFileName()
     {
-        return 'configuration.ini';
+        return 'configuration.xml';
     }
 
     /**
@@ -112,7 +112,6 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
 
     protected function getDefaultSettings()
     {
-
         $settings = array();
 
         $settings['Chamilo\Core\Admin']['show_administrator_data'] = false;

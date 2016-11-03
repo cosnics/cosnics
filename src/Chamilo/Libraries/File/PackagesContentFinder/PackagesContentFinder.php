@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File\PackagesContentFinder;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  * Abstract class that can be used to loop through a set of given packages and list content in an array based on
@@ -33,18 +33,18 @@ abstract class PackagesContentFinder
     /**
      * The path generator class
      *
-     * @var Path
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
     private $pathGenerator;
 
     /**
      * Constructor
      *
-     * @param Path $pathGenerator
+     * @param \Chamilo\Libraries\File\PathBuilder $pathGenerator
      * @param array $packages
      * @param string $cacheFile
      */
-    public function __construct(Path $pathGenerator, array $packages = array(), $cacheFile = null)
+    public function __construct(PathBuilder $pathGenerator, array $packages = array(), $cacheFile = null)
     {
         $this->packages = $packages;
         $this->cacheFile = $cacheFile;
