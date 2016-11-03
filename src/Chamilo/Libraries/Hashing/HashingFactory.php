@@ -71,8 +71,9 @@ class HashingFactory
      */
     public function getHashingUtilities()
     {
-        $className = __NAMESPACE__ . '\\' .
-             $this->getStringUtilities()->createString($this->getConfiguredHashingAlgorithm())->upperCamelize();
+        $className = __NAMESPACE__ . '\Type\\' .
+             $this->getStringUtilities()->createString($this->getConfiguredHashingAlgorithm())->upperCamelize() .
+             'Utilities';
 
         if (class_exists($className))
         {

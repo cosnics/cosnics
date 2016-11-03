@@ -2,23 +2,28 @@
 namespace Chamilo\Libraries\Hashing;
 
 /**
- * $Id: md5_hashing.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
- * @package common.hashing.md5
- */
-/**
- * Class that defines md5 hashing
- * 
+ *
+ * @package Chamilo\Libraries\Hashing
+ * @author Samumon
  * @author vanpouckesven
+ * @deprecated Use HashingUtilities now
  */
 class Md5 extends Hashing
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Hashing\Hashing::create_hash()
+     */
     public function create_hash($value)
     {
         return md5($value);
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Hashing\Hashing::create_file_hash()
+     */
     public function create_file_hash($file)
     {
         return md5_file($file);
