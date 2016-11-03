@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Core\DependencyConta
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Interfaces\RequestSupport;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
+use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataManager\Implementation\DoctrineExtension;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Assignment\AssignmentRequestTable;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -50,10 +51,24 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
     {
         if ($this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
         {
+            $request = $this->getRequest();
+
             $factory = new ApplicationFactory(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager:: context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+                new ApplicationConfiguration($request, $this->get_user(), $this)
             );
+
+            $requestAction = $request->get(
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION
+            );
+
+            if(!isset($requestAction))
+            {
+                $request->query->set(
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION,
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CHANGE_INDEX_VISIBILITY
+                );
+            }
 
             return $factory->run();
         }
@@ -128,8 +143,9 @@ class IndexVisibilityChangerComponent extends Manager implements RequestSupport
         );
 
         $data_manager_class = $this->get_data_manager_class();
+        $doctrineExtension = new DoctrineExtension($data_manager_class::get_instance());
 
-        $requests = $data_manager_class::get_instance()->retrieve_results_by_assignment(
+        $requests = $doctrineExtension->retrieve_results_by_assignment(
             new DataClassRetrievesParameters($condition)
         );
 
