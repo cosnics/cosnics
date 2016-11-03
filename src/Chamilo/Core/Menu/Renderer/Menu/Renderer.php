@@ -150,7 +150,8 @@ abstract class Renderer
 
         $html = array();
 
-        $html[] = $this->display_menu_header();
+        $numberOfItems = 0;
+        $itemRenditions = array();
 
         if ($user)
         {
@@ -162,12 +163,19 @@ abstract class Renderer
                 {
                     if (! $item->is_hidden())
                     {
-                        $html[] = \Chamilo\Core\Menu\Renderer\Item\Renderer :: toHtml($this, $item);
+                        $itemRendition = \Chamilo\Core\Menu\Renderer\Item\Renderer :: toHtml($this, $item);
+                        if(!empty($itemRendition))
+                        {
+                            $numberOfItems++;
+                            $itemRenditions[] = $itemRendition;
+                        }
                     }
                 }
             }
         }
 
+        $html[] = $this->display_menu_header($numberOfItems);
+        $html[] = implode(PHP_EOL, $itemRenditions);
         $html[] = $this->display_menu_footer();
 
         return implode(PHP_EOL, $html);
@@ -181,7 +189,7 @@ abstract class Renderer
         return false;
     }
 
-    abstract public function display_menu_header();
+    abstract public function display_menu_header($numberOfItems = 0);
 
     abstract public function display_menu_footer();
 }
