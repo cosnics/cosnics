@@ -1,0 +1,28 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_sections
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Kursabschnitte"
+DragAndDrop = "Ziehen und ablegen"
+RemoveSelected = "Den ausgewählten Abschnitt entfernen"
+Disabled = "Deaktiviert"
+CourseAdministration = "Kursverwaltung"
+Links = "Links"
+Tools = "Tools"
+SelectTools = "Gewünschtes Tool auswählen"
+SelectToolsNA = "Ausgewählte Tools nicht verfügbar"
+ChangeVisible = "Sichtbarkeit ändern"
+NoCourseSectionsSelected = "Es wurden keine Kursabschnitte ausgewählt"
+NoCourseSectionSelected = "Kein Kursabschnitt wurde ausgewählt"
+CourseSectionMoved = "Der Kursabschnitt wurde verschoben"
+CourseSectionNotMoved = "Der Kursabschnitt wurde nicht verschoben"
+CourseSectionUpdated = "Der Kursabschnitt wird aktualisiert"
+CourseSectionNotUpdated = "Der Kursabschnitt wird nicht aktualisiert"
+Name = "Name"
+Visible = "Sichtbar"
+ChangeSectionComponent = "Kursabschnitt ändern"
+CreatorComponent = "Einen Kursabschnitt erzeugen"
+ViewerComponent = "Kursabschnitt ansehen"
+UpdaterComponent = "Kursabschnitt bearbeiten"
+SelectedCourseSectionDeleted = "Ausgewälter Kursabschnitt gelöscht"

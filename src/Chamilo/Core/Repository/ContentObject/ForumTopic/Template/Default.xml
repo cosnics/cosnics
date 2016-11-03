@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\ForumTopic">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Forum topic</translation>
+			<translation language="nl">Forum topic</translation>
+			<translation language="fr">Sujet de forum</translation>
+			<translation language="de">Forumthema</translation>
+		</variable>
+	</translations>
+</template>

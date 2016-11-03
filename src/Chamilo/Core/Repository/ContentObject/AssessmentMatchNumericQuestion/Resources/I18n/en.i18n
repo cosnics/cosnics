@@ -1,0 +1,29 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_numeric_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Numeric matching question"
+TypeCategory = "Content Objects"
+PossibleAnswer = "Possible answer"
+Tolerance = "Tolerance"
+Options = "Options"
+ToleranceType = "Tolerance type"
+AddItem = "Add an item"
+Feedback = "Feedback"
+Score = "Score"
+Answer = "Answer"
+Comment = "Comment"
+Weight = "Weight"
+Absolute = "Absolute"
+Relative = "Relative"
+Title = "Question"
+Description = "Extra instructions"
+Properties = "Properties"
+Hint = "Hint"
+RecalculateWeight = "Recalculate weight"
+FeedbackAnswer = "Only show feedback for wrong answers"
+InstructionsText = ""
+AddHint = "Configure hint"
+ConfirmOptionDelete = "Are you certain you want to delete this answer?"
+AddMatchNumericOption = "Add an option"

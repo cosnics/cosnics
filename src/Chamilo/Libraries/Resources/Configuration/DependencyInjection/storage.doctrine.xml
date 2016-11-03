@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository"
+            class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_consulter" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.data_class_repository_cache" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_class.data_class_factory" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.storage_unit_repository"
+            class="Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.database.storage_unit_database" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.data_source_name"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName">
+            <argument>%chamilo.configuration.database.driver%</argument>
+            <argument>%chamilo.configuration.database.username%</argument>
+            <argument>%chamilo.configuration.database.host%</argument>
+            <argument>%chamilo.configuration.database.name%</argument>
+            <argument>%chamilo.configuration.database.password%</argument>
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.database.data_class_database"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase">
+            <argument
+                type="service"
+                id="doctrine.dbal.connection" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.database.storage_unit_database"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\StorageUnitDatabase">
+            <argument
+                type="service"
+                id="doctrine.dbal.connection" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.storage_alias_generator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.factory.condition_part_translator_factory"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.classname_utilities" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.data_source_name" />
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.processor.record_processor"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor">
+        </service>
+
+        <service
+            id="chamilo.libraries.storage.data_manager.doctrine.service.condition_part_translator_service"
+            class="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_consulter" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.factory.condition_part_translator_factory" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.condition_part_cache" />
+        </service>
+    </services>
+</container>

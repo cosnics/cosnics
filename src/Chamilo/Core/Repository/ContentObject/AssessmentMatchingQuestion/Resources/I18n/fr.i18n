@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matching_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Correspondants question"
+Options = "Options"
+AddMatchingQuestionOption = "Ajouter une option"
+Answer = "Réponse"
+Matches = "Correspondances"
+Feedback = "Feedback"
+Score = "Score"
+Comment = "Commentaire"
+Weight = "Poids"
+AddMatch = "Ajouter une correspondance"
+Match = "Correspondance"
+Title = "Titre"
+Description = "Description"
