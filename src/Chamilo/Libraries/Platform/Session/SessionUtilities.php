@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 
@@ -28,20 +27,23 @@ class SessionUtilities
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var string
      */
-    private $configurationConsulter;
+    private $sessionHandler;
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @var string
      */
+    private $securityKey;
+
     public function __construct(FileConfigurationLoader $fileConfigurationLoader, ConnectionFactory $connectionFactory,
-        ConfigurationConsulter $configurationConsulter)
+        $sessionHandler, $securityKey = null)
     {
         $this->fileConfigurationLoader = $fileConfigurationLoader;
         $this->connectionFactory = $connectionFactory;
-        $this->configurationConsulter = $configurationConsulter;
+        $this->sessionHandler = $sessionHandler;
+        $this->securityKey = $securityKey;
     }
 
     /**
@@ -82,20 +84,38 @@ class SessionUtilities
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @return string
      */
-    public function getConfigurationConsulter()
+    public function getSessionHandler()
     {
-        return $this->configurationConsulter;
+        return $this->sessionHandler;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param string $sessionHandler
      */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
+    public function setSessionHandler($sessionHandler)
     {
-        $this->configurationConsulter = $configurationConsulter;
+        $this->sessionHandler = $sessionHandler;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getSecurityKey()
+    {
+        return $this->securityKey;
+    }
+
+    /**
+     *
+     * @param string $securityKey
+     */
+    public function setSecurityKey($securityKey)
+    {
+        $this->securityKey = $securityKey;
     }
 
     public function start()
@@ -110,12 +130,11 @@ class SessionUtilities
             try
             {
                 $this->getConnectionFactory()->getConnection();
-                $configurationConsulter = $this->getConfigurationConsulter();
 
-                if ($configurationConsulter->getSetting(array('Chamilo\Configuration', 'session', 'session_handler')) ==
-                     'chamilo')
+                if ($this->getSessionHandler() == 'chamilo')
                 {
                     $sessionHandler = new SessionHandler();
+
                     session_set_save_handler(
                         array($sessionHandler, 'open'),
                         array($sessionHandler, 'close'),
@@ -125,8 +144,7 @@ class SessionUtilities
                         array($sessionHandler, 'garbage'));
                 }
 
-                $sessionKey = $configurationConsulter->getSetting(
-                    array('Chamilo\Configuration', 'general', 'security_key'));
+                $sessionKey = $this->getSecurityKey();
 
                 if (is_null($sessionKey))
                 {
