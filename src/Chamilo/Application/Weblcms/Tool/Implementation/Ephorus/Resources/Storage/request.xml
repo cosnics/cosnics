@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="request">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="course_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="content_object_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="author_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="request_user_id" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="request_time" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="status" type="integer" unsigned="1" notnull="1" default="0" />
+		<property name="process_type" type="integer" unsigned="1" default="0" />
+		<property name="percentage" type="integer" unsigned="1" default="0" />
+		<property name="status_description" type="text" length="50" />
+		<property name="guid" type="text" length="50" notnull="1" />
+		<property name="duplicate_original_guid" type="text" length="50" />
+		<property name="duplicate_student_name" type="text" length="50" />
+		<property name="duplicate_student_number" type="text" length="50" />
+		<property name="summary" type="text" />
+		<property name="visible_in_index" type="boolean" notnull="1" default="0" />
+	</properties>
+	<index name="course_id">
+		<indexproperty name="course_id" />
+	</index>
+	<index name="content_object_id">
+		<indexproperty name="content_object_id" />
+	</index>
+	<index name="status">
+		<indexproperty name="status" />
+	</index>
+	<index name="guid">
+		<indexproperty name="guid" />
+	</index>
+</object>

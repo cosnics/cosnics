@@ -1,0 +1,28 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_sections
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Sections de cours"
+DragAndDrop = "Glisser et déposer"
+RemoveSelected = "Supprimer la section sélectionnée"
+Disabled = "Désactivé"
+CourseAdministration = "Administration du cours"
+Links = "Liens"
+Tools = "Outils"
+SelectTools = "Sélectionnez les outils souhaités"
+SelectToolsNA = "Impossible de sélectionner les outils souhaités"
+ChangeVisible = "Changer la visibilité"
+NoCourseSectionsSelected = "Pas de sections de cours sélectionnées"
+NoCourseSectionSelected = "Pas de section de cours sélectionnée"
+CourseSectionMoved = "La section de cours a été déplacée"
+CourseSectionNotMoved = "La section de cours n'a pas été déplacée"
+CourseSectionUpdated = "La section de cours a été mise à jour"
+CourseSectionNotUpdated = "La section de cours n'a pas été mise à jour"
+Name = "Nom"
+Visible = "Visible"
+ChangeSectionComponent = "Changer la section de cours"
+CreatorComponent = "Créer une section de cours"
+ViewerComponent = "Voir sections de cours"
+UpdaterComponent = "Modifier section de cours"
+SelectedCourseSectionDeleted = "La section de cours a été supprimée"

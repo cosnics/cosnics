@@ -1,0 +1,30 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_select_question
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Selectie vraag"
+SelectAtLeastOneCorrectAnswer = "Selecteer minstens één correct antwoord"
+SelectACorrectAnswer = "Selecteer het juiste antwoord"
+SwitchToMultipleSelect = "Sta meerdere antwoorden toe"
+SwitchToSingleSelect = "Sta één antwoord toe"
+AddSelectOption = "Voeg optie toe"
+Answer = "Antwoord"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Correct"
+Weight = "Gewicht"
+Title = "Vraag"
+Description = "Extra instructies"
+Options = "Opties"
+Hint = "Hint"
+InstructionsText = "Een selectievraag is een variante op de meerkeuzevraag, maar nu moet de gebruiker de correcte antwoorden selecteren uit een lijstje in een uitrolmenu.<br />Ook hier is weer de mogelijkheid aanwezig om slechts één antwoord of <strong>meerdere antwoorden</strong> toe te staan.<ol><li>Geef een titel aan de vraag.</li><li>Bepaal de Categorie waarin je de vraag (het object) gaat opslaan.</li><li>Geef bij Beschrijving  de vraag/opdracht in, b.v. 'Hoe heet de opvolger van koning Boudewijn?'</li><li>Geef mogelijke antwoorden op.</li><li>Geef mogelijke feedback in.</li><li>Bepaal de score per juist/verkeerd antwoord.</li><li>Geef indien gewenst een hint in.</li><li>Klik op Maak.</li></ol>"
+RecalculateWeight = "Herbereken gewicht"
+RandomizeOptions = "Randomiseer opties"
+FeedbackOptions = "Toon feedback voor"
+FeedbackOptionsAll = "Alle antwoorden"
+FeedbackOptionsSelected = "Geselecteerde antwoorden"
+FeedbackAnswer = "Enkel feedback bij fout antwoord"
+AddHint = "Stel hint in"
+ConfirmOptionDelete = "Ben je zeker dat je dit antwoord wil verwijderen?"
+MakeASelection = "Maak je selectie"

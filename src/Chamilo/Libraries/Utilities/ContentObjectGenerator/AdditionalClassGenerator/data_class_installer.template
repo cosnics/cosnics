@@ -1,0 +1,14 @@
+/**
+ * {DESCRIPTION}
+ *
+ * @package repository.lib.content_object.{TYPE}
+ * @author {AUTHOR}
+ */
+ 
+class {OBJECT_CLASS}ContentObjectInstaller extends ContentObjectInstaller
+{
+    function get_path()
+    {
+        return dirname(__FILE__);
+    }
+}

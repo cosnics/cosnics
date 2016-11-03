@@ -1,0 +1,32 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\hotspot_question
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Hotspot vraag"
+Weight = "Gewicht"
+HotspotTableTitle = "Hotspots"
+AddAttachments = "Voeg bijlage toe"
+HotspotJavascriptWarning = "Javascript vereist te werken met de Hotspot vraag"
+HotspotJavascriptRequired = "Wegens haar interactieve aard, vereist het management van de Hotspotvragen een browser o.b.v. JavaScript.<br />Als dit formulier niet werkt, overweeg dan om één van volgende browsers te gebruiken:<ul><li>Internet Explorer 6.0+</li><li>Firefox 2+</li><li>Safari 3.0+</li><li>Opera 9.0+</li><li>Chrome</li></ul>"
+Hotspots = "Hotspots"
+UploadImage = "Upload een afbeelding"
+SelectImage = "Select een afbeelding"
+ImageObject = "Afbeelding"
+Properties = "Eigenschappen"
+HotspotImage = "Hotspot afbeelding"
+CurrentlyMarking = "Aan het afbakenen"
+SelectAnotherImage = "Selecteer een andere afbeelding"
+AddHotspotOption = "Voeg een optie toe"
+HotspotDescription = "Beschrijving"
+Feedback = "Feedback"
+Score = "Score"
+Answer = "Antwoord"
+Comment = "Opmerking"
+Title = "Titel"
+Description = "Beschrijving"
+Image = "Afbeelding"
+InstructionsText = "Met deze vraag kun je nagaan of een deelnemer aan het assessment weet op welke plek zich iets moet bevinden, b.v. een land op een kaart van Europa, de plek waar je het beste een injectie geeft, enz.<ol><li>Vul Titel, Categorie en Beschrijving in.</li><li>Laad via de knop UPLOAD de afbeelding op waarop je de student de marker of markers moet zetten.</li><li>Klik op het de afbeelding die je wilt gebruiken in de cursus. Er wordt standaard één optie toegevoegd (rood vierkantje).</li><li>Klik op de editeericoon (potloodje) om te starten met afbakenen.</li><li>Markeer de plaats waar de student/gebruiker moet klikken om correct te antwoorden. Het markeren doe je door de denkbeeldige hoeken van b.v. een rechthoek aan te klikken.</li><li>Bepaal de score.</li><li>Geef indien gewenst feedback in.</li></ol>"
+RecalculateWeight = "Herbereken gewicht"
+RandomizeAnswers = "Randomiseer hotspots"
+FeedbackAnswer = "Enkel feedback bij fout antwoord"

@@ -1,0 +1,268 @@
+/*****************************************************
+ *  TREEMENU STYLES                                  *
+ *****************************************************/
+ul.tree-menu, ul.tree-menu ul {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+}
+
+ul.tree-menu ul {
+	background-repeat: repeat-y;
+	background-image: url(../../Images/Aqua/Treemenu/TreeBranch.png);
+	padding-left: 18px;
+	clear: both;
+}
+
+ul.tree-menu li {
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+}
+
+ul.tree-menu li div, ul.tree-menu li div.last, ul.tree-menu li div.collapse,
+	ul.tree-menu li div.lastCollapse, ul.tree-menu li div.expand, ul.tree-menu li div.lastExpand
+	{
+	padding-left: 18px;
+	background-repeat: no-repeat;
+	clear: both;
+}
+
+ul.tree-menu li div {
+	background: url(../../Images/Aqua/Treemenu/TreeLeaf.png) top left
+		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
+		repeat-y;
+}
+
+ul.tree-menu li div.last {
+	background-image: url(../../Images/Aqua/Treemenu/TreeLeafEnd.png);
+}
+
+ul.tree-menu li div.collapse {
+	background: url(../../Images/Aqua/Treemenu/TreeNodeOpen.png) top left
+		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
+		repeat-y;
+}
+
+ul.tree-menu li div.lastCollapse {
+	background-image: url(../../Images/Aqua/Treemenu/TreeNodeOpenEnd.png);
+}
+
+ul.tree-menu li div.expand {
+	background: url(../../Images/Aqua/Treemenu/TreeNode.png) top left
+		no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left
+		repeat-y;
+}
+
+ul.tree-menu li div.lastExpand {
+	background-image: url(../../Images/Aqua/Treemenu/TreeNodeEnd.png);
+}
+
+ul.tree-menu li div a {
+	clear: both;
+	display: block;
+	padding-left: 21px;
+	background-repeat: no-repeat;
+	background-position: left top;
+	background-image: url(../../Images/Aqua/Treemenu/TreeDocument.png);
+	font-weight: bold;
+}
+
+ul.tree-menu li div a.selected {
+	background-color: #ddecf7;
+}
+
+ul.tree-menu li div a.selected:focus {
+	text-decoration: none;
+}
+
+ul.tree-menu li div a.lastSelected {
+	border: 1px dotted #d4d4d4;
+	margin-left: -1px;
+}
+
+ul.tree-menu li div a.disabled {
+	color: #9f9f9f;
+	cursor: default;
+}
+
+ul.tree-menu li div img {
+	height: 16px;
+	margin-left: 2px;
+	position: relative;
+	margin-top: -1px;
+	vertical-align: middle;
+}
+
+/*
+ * Special treemenu icons
+ */
+ul.tree-menu li div a.home {
+	background-image: url(../../Images/Aqua/Treemenu/Home.png);
+}
+
+ul.tree-menu li div a.user {
+	background-image: url(../../Images/Aqua/Treemenu/User.png);
+}
+
+ul.tree-menu li div a.feed {
+	background-image: url(../../Images/Aqua/Treemenu/Feed.png);
+}
+
+ul.tree-menu li div a.streaming {
+	background-image: url(../../Images/Aqua/Treemenu/Streaming.png);
+}
+
+ul.tree-menu li div a.trash {
+	background-image: url(../../Images/Aqua/Treemenu/Trash.png);
+}
+
+ul.tree-menu li div a.trash_full {
+	background-image: url(../../Images/Aqua/Treemenu/TrashFull.png);
+}
+
+ul.tree-menu li div a.quota {
+	background-image: url(../../Images/Aqua/Treemenu/Quota.png);
+}
+
+ul.tree-menu li div a.userview {
+	background-image: url(../../Images/Aqua/Treemenu/Userview.png);
+}
+
+ul.tree-menu li div a.publication {
+	background-image: url(../../Images/Aqua/Treemenu/Publication.png);
+}
+
+ul.tree-menu li div a.create {
+	background-image: url(../../Images/Aqua/Treemenu/Create.png);
+}
+
+ul.tree-menu li div a.add {
+	background-image: url(../../Images/Aqua/Treemenu/Add.png);
+}
+
+ul.tree-menu li div a.manage {
+	background-image: url(../../Images/Aqua/Treemenu/Manage.png);
+}
+
+ul.tree-menu li div a.rights {
+	background-image: url(../../Images/Aqua/Treemenu/Rights.png);
+}
+
+ul.tree-menu li div a.import {
+	background-image: url(../../Images/Aqua/Treemenu/Import.png);
+}
+
+ul.tree-menu li div a.external_instance {
+	background-image: url(../../Images/Aqua/Treemenu/ExternalInstance.png);
+}
+
+ul.tree-menu li div a.search_results {
+	background-image: url(../../Images/Aqua/Treemenu/Search.png);
+}
+
+ul.tree-menu li div a.shared_objects {
+	background-image: url(../../Images/Aqua/Treemenu/SharedObjects.png);
+}
+
+ul.tree-menu li div a.template {
+	background-image: url(../../Images/Aqua/Treemenu/Template.png);
+}
+
+ul.tree-menu li div a.hidden {
+	background-image: url(../../Images/Aqua/Treemenu/Hidden.png);
+}
+
+ul.tree-menu li div a.survey {
+	background-image: url(../../Images/Aqua/Treemenu/Survey.png);
+}
+
+ul.tree-menu li div a.survey_finished {
+	background-image: url(../../Images/Aqua/Treemenu/SurveyFinished.png);
+}
+
+ul.tree-menu li div a.divider {
+	background-repeat: repeat-x;
+	background-image: url(../../Images/Aqua/Treemenu/TreeDivider.png);
+	margin-left: 0px;
+	margin-right: 0px;
+	cursor: default;
+}
+
+ul.tree-menu li div a.type_category,
+ul.tree-menu li div a.category {
+	background: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png) top left no-repeat;
+}
+
+ul.tree-menu li div.collapse a.category,
+ul.tree-menu li div.collapse a.type_category  {
+	background: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png) 0 0 no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) 0 -1px repeat-y;
+}
+
+ul.tree-menu li.current_path>div a.category, ul.tree-menu li.current>div a.category,
+ul.tree-menu li.current_path>div a.type_category, ul.tree-menu li.current>div a.type_category
+{
+	background: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+}
+
+ul.tree-menu li div a.new_category {
+	background-image:
+	url(../../Images/Aqua/Treemenu/TreeFolderClosedNew.png);
+}
+
+ul.tree-menu li.current_path>div a.new_category, ul.tree-menu li.current>div a.new_category  {
+	background: url(../../Images/Aqua/Treemenu/TreeFolderOpenNew.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+}
+
+ul.tree-menu li div a.invisible_category {
+	color: #666;
+	background-image:
+	url(../../Images/Aqua/Treemenu/TreeFolderClosedInvisible.png);
+}
+
+ul.tree-menu li.current_path>div a.invisible_category, ul.tree-menu li.current>div a.invisible_category
+{
+	color: #666;
+	background: url(../../Images/Aqua/Treemenu/TreeFolderOpenInvisible.png) top left no-repeat, url(../../Images/Aqua/Treemenu/TreeBranch.png) top left repeat-y;
+}
+
+ul.tree-menu li.current>div a {
+	text-decoration: underline;
+}
+
+ul.tree-menu li div.collapse {
+	display: block;
+}
+
+/*
+ul.tree-menu li.current_path ul li div a.category
+{
+	background-image: url(../../Images/Aqua/Treemenu/TreeFolderClosed.png);
+}
+
+ul.tree-menu li.current_path ul li.current_path div a.category
+{
+	background-image: url(../../Images/Aqua/Treemenu/TreeFolderOpen.png);
+}
+*/
+ul.tree-menu li div a.end_node {
+	background-image: url(../../Images/Aqua/Treemenu/EndNode.png);
+}
+
+ul.tree-menu li div a.no_link {
+	color: #797268;
+	cursor: default;
+}
+
+ul.tree-menu li div a.type_user {
+	background-image: url(../../Images/Aqua/Treemenu/User.png);
+}
+
+ul.tree-menu li div a.type_user_platform {
+	background-image: url(../../Images/Aqua/Treemenu/UserPlatform.png);
+}
+
+ul.tree-menu li div a.type_group {
+	background-image: url(../../Images/Aqua/Treemenu/Group.png);
+}

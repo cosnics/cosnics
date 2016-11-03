@@ -1,0 +1,56 @@
+@charset 'utf-8';
+
+ul.tree-menu li div a.peer_assessment, ul.tree-menu li div a.type_peer_assessment,
+	.treeview .list-group .list-group-item .icon.node-icon.type_peer_assessment, .treeview .list-group .list-group-item .icon.node-icon.type_peer_assessment_default,
+	ul.tree-menu li div a.type_peer_assessment_default {
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}
+
+div.peer_assessment_attempt {
+	background-position: 10px 10px;
+	background-repeat: no-repeat;
+	border-bottom-right-radius: 15px;
+	border-top-left-radius: 15px;
+	overflow: auto;
+	padding: 10px 10px 10px 44px;
+}
+
+div.wizard {
+	background-color: #F6F6F6;
+	padding: 10px;
+	margin: 10px auto;
+	width: 25%;
+	border-style: dotted;
+	border-width: 1px;
+	border-color: #ccc;
+}
+
+div.context_info {
+	background-position: 10px 50%;
+	background-repeat: no-repeat;
+	border-bottom-style: dotted;
+	border-bottom-width: 1px;
+	border-left-style-ltr-source: physical;
+	border-left-style-rtl-source: physical;
+	border-left-style-value: dotted;
+	border-left-width-ltr-source: physical;
+	border-left-width-rtl-source: physical;
+	border-left-width-value: 1px;
+	border-right-style-ltr-source: physical;
+	border-right-style-rtl-source: physical;
+	border-right-style-value: dotted;
+	border-right-width-ltr-source: physical;
+	border-right-width-rtl-source: physical;
+	border-right-width-value: 1px;
+	border-top-style: dotted;
+	border-top-width: 1px;
+	margin-bottom: 10px;
+	margin: 10px auto;
+	padding-bottom: 10px;
+	padding-left: 36px;
+	padding-right: 36px;
+	padding-top: 10px;
+	position: relative;
+	text-align: justify;
+	width: 25%;
+}
