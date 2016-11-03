@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Ajax\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Format\Theme;
 
 class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Manager
 {
@@ -49,7 +50,7 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
         }
         catch( \Exception $ex)
         {
-            $rendition = '';
+            $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
         }
 
         $result = new JsonAjaxResult(200);
