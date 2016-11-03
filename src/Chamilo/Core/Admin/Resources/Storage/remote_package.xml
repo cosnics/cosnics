@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="remote_package">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="code" type="text" length="255" />
+		<property name="context" type="text" length="255" />
+		<property name="name" type="text" length="255" />
+		<property name="section" type="text" length="255" />
+		<property name="category" type="text" length="255" />
+		<property name="authors" type="text" />
+		<property name="version" type="text" length="255" />
+		<property name="cycle" type="text" />
+		<property name="filename" type="text" length="255" />
+		<property name="size" type="integer" notnull="0" default="0" />
+		<property name="md5" type="text" length="32" />
+		<property name="sha1" type="text" length="40" />
+		<property name="sha256" type="text" length="64" />
+		<property name="sha512" type="text" length="128" />
+		<property name="tagline" type="text" length="255" />
+		<property name="description" type="text" />
+		<property name="homepage" type="text" length="255" />
+		<property name="dependencies" type="text" length="255" />
+		<property name="extra" type="text" length="255" />
+	</properties>
+	<index name="code" type="unique">
+		<indexproperty name="code" />
+	</index>
+	<index name="section">
+		<indexproperty name="section" />
+	</index>
+	<index name="category">
+		<indexproperty name="category" />
+	</index>
+</object>

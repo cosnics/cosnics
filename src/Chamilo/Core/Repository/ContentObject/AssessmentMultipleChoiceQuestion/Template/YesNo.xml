@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion">
+	<properties>
+		<name>YesNo</name>
+		<answer_type>1</answer_type>
+		<options>
+			<option correct="1" score="1" feedback="YesFeedback">YesAnswer</option>
+			<option correct="0" score="0" feedback="NoFeedback">NoAnswer</option>
+		</options>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Yes/No question</translation>
+			<translation language="nl">Ja/Nee vraag</translation>
+		</variable>
+		<variable value="YesAnswer">
+			<translation language="en">Yes</translation>
+			<translation language="nl">Ja</translation>
+		</variable>
+		<variable value="NoAnswer">
+			<translation language="en">No</translation>
+			<translation language="nl">Nee</translation>
+		</variable>
+	</translations>
+</template>

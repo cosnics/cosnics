@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="repository_category">
+	<properties>
+		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+		<property name="name" type="text" length="200" notnull="1" default="" />
+		<property name="parent_id" type="integer" notnull="1" default="0" />
+		<property name="display_order" type="integer" unsigned="1" notnull="1" />
+		<property name="type_id" type="integer" unsigned="1" notnull="1" />
+		<property name="type" type="integer" length="3" unsigned="1" notnull="1" />
+	</properties>
+	<index name="parent_id">
+		<indexproperty name="parent_id" />
+	</index>
+	<index name="display_order">
+		<indexproperty name="display_order" />
+	</index>
+	<index name="type_id">
+		<indexproperty name="type_id" />
+	</index>
+	<index name="type">
+		<indexproperty name="type" />
+	</index>
+</object>

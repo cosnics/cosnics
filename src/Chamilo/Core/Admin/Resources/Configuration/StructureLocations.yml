@@ -1,0 +1,2 @@
+Chamilo\Core\Admin:
+  - Package: ROLE_ADMINISTRATOR

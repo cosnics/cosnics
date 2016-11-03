@@ -1,0 +1,27 @@
+<?php
+
+namespace {NAMESPACE};
+
+/**
+ *	This is an interface for a data manager for the {APPLICATION_NAME} Application.
+ *	Data managers must implement this class and its abstract methods.
+ *
+ *  @author Sven Vanpoucke
+ *  @author {AUTHOR}
+ */
+interface {APPLICATION_NAME}DataManagerInterface
+{
+
+    function initialize();
+
+    <!-- BEGIN OBJECTS -->
+    function get_next_{OBJECTS.L_OBJECT_CLASS}_id();
+    function create_{OBJECTS.L_OBJECT_CLASS}(${OBJECTS.L_OBJECT_CLASS});
+    function update_{OBJECTS.L_OBJECT_CLASS}(${OBJECTS.L_OBJECT_CLASS});
+    function delete_{OBJECTS.L_OBJECT_CLASS}(${OBJECTS.L_OBJECT_CLASS});
+    function count_{OBJECTS.L_OBJECT_CLASSES}($conditions = null);
+    function retrieve_{OBJECTS.L_OBJECT_CLASS}($id);
+    function retrieve_{OBJECTS.L_OBJECT_CLASSES}($condition = null, $offset = null, $count = null, $order_property = null);
+    <!-- END OBJECTS -->
+}
+?>

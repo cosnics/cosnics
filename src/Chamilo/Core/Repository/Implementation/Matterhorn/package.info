@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Opencast Matterhorn</name>
+		<code>Matterhorn</code>
+		<type>Chamilo\Core\Repository\Implementation</type>
+		<context>Chamilo\Core\Repository\Implementation\Matterhorn</context>
+		<category>Streaming</category>
+		<authors>
+			<author>
+				<name>Magali Gillard</name>
+				<email>magali.gillard@ehb.be</email>
+				<company>Erasmushogeschool Brussel</company>
+			</author>
+		</authors>
+		<version>5.0.0</version>
+		<description>The Matterhorn project stems from the Opencast Community
+			in that 13 institutions from North America and
+			Europe initiated a
+			cooperation to build an Open Source software to produce, manage and
+			distribute academic audio and
+			video content, especially lecture
+			recordings. Matterhorn is supposed to bring about an easy-to-use
+			chain of software
+			components to automatise the related process.</description>
+		<pre-depends>
+			<dependency type="registration">
+				<id>Chamilo\Core\Repository</id>
+				<version operator="4">5.0.0</version>
+			</dependency>
+		</pre-depends>
+		<extra>
+			<multiple>1</multiple>
+		</extra>
+	</package>
+</packages>

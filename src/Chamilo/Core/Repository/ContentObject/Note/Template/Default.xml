@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Note">
+	<properties>
+		<name>Default</name>
+	</properties>
+	<translations>
+		<variable value="TypeName">
+			<translation language="en">Note</translation>
+			<translation language="nl">Notitie</translation>
+			<translation language="fr">Note</translation>
+			<translation language="de">Hinweis</translation>
+		</variable>
+	</translations>
+</template>

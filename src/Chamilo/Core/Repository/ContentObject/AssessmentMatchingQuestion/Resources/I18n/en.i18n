@@ -1,0 +1,27 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matching_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Matching question"
+TypeCategory = "Content Objects"
+Options = "Options"
+AddMatchingQuestionOption = "Add an option"
+Answer = "Answer"
+Matches = "Matches"
+Feedback = "Feedback"
+Score = "Score"
+Comment = "Comment"
+Weight = "Weight"
+AddMatch = "Add a match"
+Match = "Match"
+Title = "Title"
+Description = "Description"
+RecalculateWeight = "Recalculate weight"
+RandomizeOptions = "Randomize options"
+FeedbackAnswer = "Only show feedback for wrong answers"
+Display = "Matches display mode"
+DisplaySelect = "Selection box"
+DisplayList = "List"
+MakeASelection = "Make your selection"
+SelectAnswer = "Select your answer"

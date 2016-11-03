@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\search
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Zoeken"
+ResultsFoundFor = "{COUNT} resultaten gevonden voor: <mark>{QUERY}</mark>"
+ResultFoundFor = "{COUNT} resultaat gevonden voor: <mark>{QUERY}</mark>"
+SearcherComponent = "Zoekopdracht"
+SearchResult = "{COUNT} resultaat"
+SearchResults = "{COUNT} resultaten"
+SearchFor = "Zoek naar"

@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\dynamic_form_manager
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+AddElement = ""
+UpdateElement = ""
+Textbox = ""
+HtmlEditor = ""
+Checkbox = ""
+RadioButtons = ""
+SelectBox = ""
+Name = ""
+Options = ""
+OptionName = ""
+TypeName = "Dynamic Form Manager"
