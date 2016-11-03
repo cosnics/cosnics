@@ -9,9 +9,6 @@
             class="Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository">
             <argument
                 type="service"
-                id="chamilo.configuration.service.file_configuration_consulter" />
-            <argument
-                type="service"
                 id="chamilo.libraries.storage.cache.data_class_repository_cache" />
             <argument
                 type="service"
@@ -19,6 +16,7 @@
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_class.data_class_factory" />
+            <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
 
         <service
@@ -99,13 +97,11 @@
             class="Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService">
             <argument
                 type="service"
-                id="chamilo.configuration.service.file_configuration_consulter" />
-            <argument
-                type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.factory.condition_part_translator_factory" />
             <argument
                 type="service"
                 id="chamilo.libraries.storage.cache.condition_part_cache" />
+            <argument>%chamilo.configuration.debug.enable_query_cache%</argument>
         </service>
     </services>
 </container>

@@ -2,23 +2,28 @@
 namespace Chamilo\Libraries\Hashing;
 
 /**
- * $Id: haval256_hashing.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- * 
- * @package common.hashing.haval256
- */
-/**
- * Class that defines Haval256 hashing with 5 passes
- * 
+ *
+ * @package Chamilo\Libraries\Hashing
  * @author Samumon
+ * @author vanpouckesven
+ * @deprecated Use HashingUtilities now
  */
 class Haval256 extends Hashing
 {
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Hashing\Hashing::create_hash()
+     */
     public function create_hash($value)
     {
         return hash('haval256,5', $value);
     }
 
+    /**
+     *
+     * @see \Chamilo\Libraries\Hashing\Hashing::create_file_hash()
+     */
     public function create_file_hash($file)
     {
         return hash_file('haval256,5', $file);

@@ -2,13 +2,16 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
+use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
+use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -52,6 +55,12 @@ class DependencyInjectionContainerBuilder
     private $cacheClass;
 
     /**
+     *
+     * @var \Chamilo\Libraries\File\PathBuilder
+     */
+    private $pathBuilder;
+
+    /**
      * Cache the container over requests due to issues with the container not being available everywhere
      *
      * @var ContainerInterface
@@ -92,6 +101,20 @@ class DependencyInjectionContainerBuilder
 
     /**
      *
+     * @return \Chamilo\Libraries\File\PathBuilder
+     */
+    public function getPathBuilder()
+    {
+        if (! isset($this->pathBuilder))
+        {
+            $this->pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+        }
+
+        return $this->pathBuilder;
+    }
+
+    /**
+     *
      * @param ContainerExtensionFinderInterface $containerExtensionFinder
      */
     public function setContainerExtensionFinder(ContainerExtensionFinderInterface $containerExtensionFinder = null)
@@ -101,7 +124,7 @@ class DependencyInjectionContainerBuilder
             $packageNamespaces = Configuration::get_instance()->get_registration_contexts();
 
             $containerExtensionFinder = new PackagesContainerExtensionFinder(
-                new PackagesClassFinder(Path::getInstance(), $packageNamespaces));
+                new PackagesClassFinder($this->getPathBuilder(), $packageNamespaces));
         }
 
         $this->containerExtensionFinder = $containerExtensionFinder;

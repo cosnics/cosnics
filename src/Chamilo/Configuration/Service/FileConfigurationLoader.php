@@ -98,7 +98,7 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
      */
     protected function getConfigurationFileName()
     {
-        return 'configuration.ini';
+        return 'configuration.xml';
     }
 
     /**
