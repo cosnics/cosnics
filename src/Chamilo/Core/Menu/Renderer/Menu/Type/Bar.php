@@ -18,13 +18,13 @@ class Bar extends Renderer
 {
     const TYPE = 'Bar';
 
-    public function display_menu_header()
+    public function display_menu_header($numberOfItems = 0)
     {
         $html = array();
 
         $class = 'navbar navbar-chamilo navbar-default';
 
-        if (! $this->get_user() instanceof User)
+        if ($numberOfItems == 0)
         {
             $class .= ' navbar-no-items';
         }

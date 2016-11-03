@@ -173,6 +173,11 @@ class DataManager
             $className = static::determineCompositeDataClassType($className, $parameters);
         }
 
+        if(!$className)
+        {
+            throw new \Exception('Could not determine the composite data class type');
+        }
+
         $parameters = static::setCompositeDataClassParameters($parentClassName, $className, $parameters);
 
         return static::retrieveClass($parentClassName, $className, CompositeDataClass::class_name(), $parameters);

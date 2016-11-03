@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
+use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
