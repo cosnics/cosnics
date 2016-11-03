@@ -638,16 +638,27 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 {
                     if (Filesystem :: move_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
                     {
+
                         $save_success = true;
                     }
                     else
                     {
+                        $this->add_error('File move failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save);
+
                         if (Filesystem :: copy_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
                         {
                             if (Filesystem :: remove($this->temporary_file_path))
                             {
                                 $save_success = true;
                             }
+                            else
+                            {
+                                $this->add_error('File delete failed: ' . $this->temporary_file_path);
+                            }
+                        }
+                        else
+                        {
+                            $this->add_error('File copy failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save);
                         }
                     }
                 }

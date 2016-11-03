@@ -85,7 +85,11 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
         }
         else
         {
-            JsonAjaxResult:: general_error(Translation:: get('ObjectNotImported'));
+            $jsonAjaxResult = new JsonAjaxResult();
+            $jsonAjaxResult->set_result_code(500);
+            $jsonAjaxResult->set_result_message(Translation:: get('ObjectNotImported'));
+            $jsonAjaxResult->set_properties(array('object' => serialize($document)));
+            $jsonAjaxResult->display();
         }
     }
 
