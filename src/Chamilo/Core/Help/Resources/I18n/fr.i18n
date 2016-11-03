@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = help
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Aide"
+HelpItemsInstalled = "Rubriques d'aide installées"
+Url = "Url"
+UpdateItem = "Mettre à jour"
+NoHelpItemSelected = "Aucun élément d'aide sélectionné"
+List = "Liste"
+ListDescription = "Voir la liste des rubriques d'aide disponibles sur la plate-forme avec la possibilité de créer un lien vers vos propres pages d'aide par sujet"
+Help = "Aide"
+HelpItemUpdated = "Elément d'aide mis à jour"
+HelpItemNotUpdated = "Elément d'aide non mis à jour"
+HelpManagerBrowserComponent = "Navigateur"
+HelpManagerUpdaterComponent = "Mettre à jour"
+Context = "Contexte"
+Identifier = "ID"
+Language = "Langue"

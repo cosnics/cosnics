@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = admin\language
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Translation Tools"
+Package = "Package"
+Language = "Language"
+LocalVariableCount = "Local number of variables"
+ImportVariableCount = "Number of variables in the imported file"
+LocalExtraCount = "Extra variables in the local file"
+LocalNonEmptyCount = "Non empty values in the local file"
+ImporterComponent = "Import a CSV"
+ExporterComponent = "Export a CSV"
+SourceFile = "Source file"
+General = "General"
+BaseLanguage = "Base language"
+SourceLanguage = "Source language"
+TargetLanguages = "Target languages"

@@ -1,0 +1,25 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_match_text_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Short answer question"
+TypeCategory = "Content Objects"
+PossibleAnswer = "Possible answer"
+Options = "Options"
+UseWildcards = "Use wildcards"
+IgnoreCase = "Case insensitive"
+AddItem = "Add an item"
+Feedback = "Feedback"
+Score = "Score"
+Answer = "Answer"
+Comment = "Comment"
+Weight = "Weight"
+Title = "Question"
+Description = "Extra instructions"
+Hint = "Hint"
+RecalculateWeight = "Recalculate weight"
+FeedbackAnswer = "Only show feedback for wrong answers"
+AddHint = "Configure hint"
+ConfirmOptionDelete = "Are you certain you want to delete this answer?"
+AddMatchTextOption = "Add an option"

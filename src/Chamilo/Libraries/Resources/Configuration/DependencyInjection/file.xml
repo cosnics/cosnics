@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.libraries.file.path"
+            class="Chamilo\Libraries\File\Path">
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.classname_utilities" />
+        </service>
+
+        <service
+            id="chamilo.libraries.file.path_builder"
+            class="Chamilo\Libraries\File\PathBuilder">
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.classname_utilities" />
+        </service>
+
+        <service
+            id="chamilo.libraries.file.configurable_path_builder"
+            class="Chamilo\Libraries\File\ConfigurablePathBuilder">
+            <argument>%chamilo.configuration.storage.archive_path%</argument>
+            <argument>%chamilo.configuration.storage.cache_path%</argument>
+            <argument>%chamilo.configuration.storage.garbage_path%</argument>
+            <argument>%chamilo.configuration.storage.hotpotatoes_path%</argument>
+            <argument>%chamilo.configuration.storage.logs_path%</argument>
+            <argument>%chamilo.configuration.storage.repository_path%</argument>
+            <argument>%chamilo.configuration.storage.scorm_path%</argument>
+            <argument>%chamilo.configuration.storage.temp_path%</argument>
+            <argument>%chamilo.configuration.storage.userpictures_path%</argument>
+        </service>
+    </services>
+</container>

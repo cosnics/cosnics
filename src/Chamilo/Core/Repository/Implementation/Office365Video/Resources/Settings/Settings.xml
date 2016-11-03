@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Repository\Implementation\Office365Video">
+	<settings>
+		<category name="credentials">
+			<setting name="client_id" field="text">
+				<validations>
+					<validation rule="required" message="ThisFieldIsRequired" />
+				</validations>
+			</setting>
+			<setting name="client_secret" field="text">
+				<validations>
+					<validation rule="required" message="ThisFieldIsRequired" />
+				</validations>
+			</setting>
+			<setting name="root_site" field="text">
+				<validations>
+					<validation rule="required" message="ThisFieldIsRequired" />
+				</validations>
+			</setting>
+			<setting name="tenant" field="text" default="common">
+			</setting>
+		</category>
+	</settings>
+</package>

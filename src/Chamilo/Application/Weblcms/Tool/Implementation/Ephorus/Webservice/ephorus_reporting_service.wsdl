@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://reporting.ephorus.org/"
+                  xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://reporting.ephorus.org/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:types>
+        <s:schema elementFormDefault="qualified" targetNamespace="http://reporting.ephorus.org/">
+            <s:element name="report">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element minOccurs="0" maxOccurs="1" name="document_guid" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="student_number" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="student_name" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="document_subject" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="document_comment" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="document_date" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="document_percentage" type="s:int"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="duplicate_original_guid" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="duplicate_student_name" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="duplicate_student_number" type="s:string"/>
+                        <s:element minOccurs="1" maxOccurs="1" name="status" type="s:int"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="status_description" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="profile" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="summary">
+                            <s:complexType mixed="true">
+                                <s:sequence>
+                                    <s:any/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                        <s:element minOccurs="0" maxOccurs="1" name="results" type="tns:ArrayOfResult"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:complexType name="ArrayOfResult">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="unbounded" name="result" nillable="true" type="tns:result"/>
+                </s:sequence>
+            </s:complexType>
+            <s:complexType name="result">
+                <s:sequence>
+                    <s:element minOccurs="0" maxOccurs="1" name="result_guid" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="mimetype" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="type" type="s:string"/>
+                    <s:element minOccurs="1" maxOccurs="1" name="percent" type="s:int"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="diff">
+                        <s:complexType mixed="true">
+                            <s:sequence>
+                                <s:any/>
+                            </s:sequence>
+                        </s:complexType>
+                    </s:element>
+                    <s:element minOccurs="0" maxOccurs="1" name="original_guid" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="student_number" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="student_name" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:element name="reportResponse">
+                <s:complexType/>
+            </s:element>
+        </s:schema>
+    </wsdl:types>
+    <wsdl:message name="reportSoapIn">
+        <wsdl:part name="parameters" element="tns:report"/>
+    </wsdl:message>
+    <wsdl:message name="reportSoapOut">
+        <wsdl:part name="parameters" element="tns:reportResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="Reportingv4Soap">
+        <wsdl:operation name="report">
+            <wsdl:input message="tns:reportSoapIn"/>
+            <wsdl:output message="tns:reportSoapOut"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="Reportingv4Soap" type="tns:Reportingv4Soap">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="report">
+            <soap:operation soapAction="http://reporting.ephorus.org/" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="Reportingv4Soap1" type="tns:Reportingv4Soap">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="report">
+            <soap12:operation soapAction="http://reporting.ephorus.org/" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ReportbackServiceV4">
+        <wsdl:port name="Reportingv4Soap" binding="tns:Reportingv4Soap">
+            <soap:address
+                    location="https://chamilo.hogent.be/application/weblcms/tool/ephorus/php/webservice/ephorus_reporting_service.php"/>
+        </wsdl:port>
+        <wsdl:port name="Reportingv4Soap1" binding="tns:Reportingv4Soap1">
+            <soap12:address
+                    location="https://chamilo.hogent.be/application/weblcms/tool/ephorus/php/webservice/ephorus_reporting_service.php"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

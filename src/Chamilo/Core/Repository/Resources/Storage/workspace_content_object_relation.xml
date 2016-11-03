@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="workspace_content_object_relation">
+	<properties>
+		<property name="id" type="integer" notnull="1" autoincrement="true" />
+		<property name="workspace_id" type="integer" notnull="1" default="0" />
+		<property name="category_id" type="integer" notnull="1" default="0" />
+		<property name="content_object_id" type="text" notnull="1" length="36" />
+	</properties>
+	<index name="relation" type="unique">
+		<indexproperty name="workspace_id" />
+		<indexproperty name="category_id" />
+		<indexproperty name="content_object_id" />
+	</index>
+</object>

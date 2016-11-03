@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+	<package>
+		<name>Vimeo</name>
+		<code>Vimeo</code>
+		<type>Chamilo\Core\Repository\Implementation</type>
+		<context>Chamilo\Core\Repository\Implementation\Vimeo</context>
+		<category>Streaming</category>
+		<authors>
+			<author>
+				<name>Magali Gillard</name>
+				<email>magali.gillard@ehb.be</email>
+				<company>Erasmushogeschool Brussel</company>
+			</author>
+		</authors>
+		<version>5.0.0</version>
+		<description>Vimeo is a U.S.-based video-sharing website on which users can upload, share and view videos. It was
+			founded by Jake Lodwick and Zach Klein in November 2004. They left the company in 2007 and 2008 respectively. The
+			name Vimeo was created by co-founder Jake Lodwick and is a play on the word video, inserting the word "me" as a
+			reference to the site's dedication to user-made video and is also an anagram of the word "movie".</description>
+		<pre-depends>
+			<dependency type="registration">
+				<id>Chamilo\Core\Repository</id>
+				<version operator="4">5.0.0</version>
+			</dependency>
+		</pre-depends>
+	</package>
+</packages>

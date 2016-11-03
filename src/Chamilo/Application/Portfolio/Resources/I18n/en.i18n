@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\portfolio
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Portfolio"
+TypeCategory = "Applications"
+GoBackHome = "Go back to my portfolio"
+NoInstructionYetDescription = "Start using your portfolio by adding an introduction. Afterwards start by adding folders and/or other content to fill your portfolio.<br />"
+BookmarkTitle = "Portfolio-bookmark {NAME}"
+BookmarkDescription = "Bookmark for the portfolio-homepage of {NAME}"
+BrowserComponent = "Search portfolios"
+FavouritesComponent = "Browse favourite users"
+ShowPortfolio = "View the portfolio of {USER}"
+ShowPortfolioNotAllowed = "You're not allowed to view the portfolio of {USER}"
+ViewRight = "View"
+EditRight = "Edit"
+ViewFeedbackRight = "View feedback" 
+GiveFeedbackRight = "Give feedback"
+FavouriteUsers = "Favourite portfolio users"

@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\rss_feed
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "RSS feed"
+Description = "Beschrijving"
+Properties = "Eigenschappen"
+URL = "URL"
+NoFeedsFound = "Geen feeds gevonden"
+Feeder = "RSS"
+Title = "Titel"
+Newsfeed = "News feed"
+NumberOfEntries = "Aantal nieuws items"
