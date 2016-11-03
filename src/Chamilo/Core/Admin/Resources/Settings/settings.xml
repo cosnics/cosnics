@@ -178,6 +178,9 @@
 			<setting name="anonymous_authentication_url" field="text" default="" />
 			<setting name="recaptcha_site_key" field="text" default="" />
 			<setting name="recaptcha_secret_key" field="text" default="" />
+			<setting name="page_after_anonymous_access" field="select" default="Chamilo\Application\Weblcms">
+				<options type="dynamic" source="get_active_applications" />
+			</setting>
 		</category>
 
 		<category name="external_authentication">

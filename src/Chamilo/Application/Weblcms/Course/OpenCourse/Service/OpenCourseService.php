@@ -67,7 +67,7 @@ class OpenCourseService
         User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array()
     )
     {
-        if($this->authorizationChecker->isAuthorized($user, Manager::context(), 'manage_open_courses'))
+        if($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
         {
             return $this->openCourseRepository->findAllOpenCourses($condition, $offset, $count, $orderBy);
         }
@@ -101,7 +101,7 @@ class OpenCourseService
      */
     public function countOpenCourses(User $user, Condition $condition = null)
     {
-        if($this->authorizationChecker->isAuthorized($user, Manager::context(), 'manage_open_courses'))
+        if($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
         {
             $this->openCourseRepository->countAllOpenCourses($condition);
         }
@@ -195,6 +195,20 @@ class OpenCourseService
         {
             throw new \Exception('Could not remove the courses as open course with ids ' . implode(', ', $courseIds));
         }
+    }
+
+    /**
+     * Returns whether or not the course is open for the current user, based on his roles
+     *
+     * @param Course $course
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isCourseOpenForUser(Course $course, User $user)
+    {
+        $courseRoles = $this->getRolesForOpenCourse($course);
+        return $this->userRoleService->doesUserHasAtLeastOneRole($user, $courseRoles->as_array());
     }
 
 }

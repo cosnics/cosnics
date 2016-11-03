@@ -199,15 +199,39 @@ class UserImportForm extends FormValidator
                 $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_user_by_username(
                     $csvuser[User :: PROPERTY_USERNAME]
                 );
-                $user->set_firstname($csvuser[User :: PROPERTY_FIRSTNAME]);
-                $user->set_lastname($csvuser[User :: PROPERTY_LASTNAME]);
 
-                $user->set_email($csvuser[User :: PROPERTY_EMAIL]);
+                if(array_key_exists(User::PROPERTY_FIRSTNAME, $csvuser))
+                {
+                    $user->set_firstname($csvuser[User :: PROPERTY_FIRSTNAME]);
+                }
+
+                if(array_key_exists(User::PROPERTY_LASTNAME, $csvuser))
+                {
+                    $user->set_lastname($csvuser[User :: PROPERTY_LASTNAME]);
+                }
+
+                if(array_key_exists(User::PROPERTY_EMAIL, $csvuser))
+                {
+                    $user->set_email($csvuser[User :: PROPERTY_EMAIL]);
+                }
+
                 $user->set_status($csvuser[User :: PROPERTY_STATUS]);
                 $user->set_active($csvuser[User :: PROPERTY_ACTIVE]);
-                $user->set_official_code($csvuser[User :: PROPERTY_OFFICIAL_CODE]);
-                $user->set_phone($csvuser[User :: PROPERTY_PHONE]);
-                $user->set_auth_source($csvuser[User :: PROPERTY_AUTH_SOURCE]);
+
+                if(array_key_exists(User::PROPERTY_OFFICIAL_CODE, $csvuser))
+                {
+                    $user->set_official_code($csvuser[User :: PROPERTY_OFFICIAL_CODE]);
+                }
+
+                if(array_key_exists(User::PROPERTY_PHONE, $csvuser))
+                {
+                    $user->set_phone($csvuser[User :: PROPERTY_PHONE]);
+                }
+
+                if(array_key_exists(User::PROPERTY_AUTH_SOURCE, $csvuser))
+                {
+                    $user->set_auth_source($csvuser[User :: PROPERTY_AUTH_SOURCE]);
+                }
 
                 $act_date = $csvuser[User :: PROPERTY_ACTIVATION_DATE];
                 if ($act_date != 0)
@@ -336,7 +360,7 @@ class UserImportForm extends FormValidator
             $csvuser[User :: PROPERTY_PHONE] = $csvuser['phone_number'];
         }
 
-        if (!$csvuser[User :: PROPERTY_ACTIVE])
+        if (!isset($csvuser[User :: PROPERTY_ACTIVE]))
         {
             $csvuser[User :: PROPERTY_ACTIVE] = 1;
         }
@@ -361,7 +385,7 @@ class UserImportForm extends FormValidator
             $csvuser['language'] = PlatformSetting:: get('platform_language');
         }
 
-        if (PlatformSetting:: get('require_email', Manager:: context()) && (!$email || $email == ''))
+        if ($action == 'C' && PlatformSetting:: get('require_email', Manager:: context()) && (!$email || $email == ''))
         {
             $failures ++;
         }

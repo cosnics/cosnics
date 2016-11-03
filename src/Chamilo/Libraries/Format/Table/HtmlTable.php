@@ -407,11 +407,13 @@ abstract class HtmlTable extends \HTML_Table
     public function getActionsButtonToolbar()
     {
         $formActions = $this->getTableFormActions()->get_form_actions();
+        $formActionsCount = count($formActions);
+
         $firstAction = array_shift($formActions);
 
         $buttonToolBar = new ButtonToolBar();
 
-        if (count($formActions) > 1)
+        if ($formActionsCount > 1)
         {
             $button = new SplitDropdownButton(
                 $firstAction->get_title(),
