@@ -5,6 +5,7 @@ use Chamilo\Application\Survey\Repository\PublicationRepository;
 use Chamilo\Application\Survey\Service\PublicationService;
 use Chamilo\Application\Survey\Storage\DataClass\Publication;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -40,6 +41,17 @@ abstract class Manager extends Application
 
     // Default action
     const DEFAULT_ACTION = self :: ACTION_FAVOURITE;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 
     /**
      *

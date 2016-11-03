@@ -2,6 +2,7 @@
 namespace Chamilo\Application\CasStorage;
 
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  *
@@ -23,6 +24,17 @@ abstract class Manager extends Application
     const ACTION_SERVICE = 'Service';
     const ACTION_RIGHTS = 'Rights';
     const DEFAULT_ACTION = self :: ACTION_BROWSE;
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     */
+    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    {
+        parent::__construct($applicationConfiguration);
+
+        $this->checkAuthorization(Manager::context());
+    }
 
     public function get_update_account_request_url($account_request)
     {
