@@ -50,11 +50,17 @@ class EphorusRequestComponent extends Manager implements RequestSupport, Delegat
         {
             $request = $this->getRequest();
             
-            //Commenting out following lines because the code hard wires every component to the create action
-            /*$request->query->set(
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION,
-                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE
-            );*/
+            $requestAction = $request->get(
+                \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION
+            );
+
+            if(!isset($requestAction))
+            {
+                $request->query->set(
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::PARAM_ACTION,
+                    \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager::ACTION_CREATE
+                );
+            }
 
             $factory = new ApplicationFactory(
                 \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request\Manager:: context(),

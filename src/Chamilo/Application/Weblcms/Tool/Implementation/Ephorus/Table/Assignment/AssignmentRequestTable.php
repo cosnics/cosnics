@@ -31,7 +31,8 @@ class AssignmentRequestTable extends DataClassTable implements TableFormActionsS
                             Manager :: PARAM_ACTION => Manager :: ACTION_INDEX_VISIBILITY_CHANGER
                         )
                     ),
-                    Translation:: get('ToggleIndexVisibility')
+                    Translation:: get('ToggleIndexVisibility'),
+                    false
                 )
             );
 
@@ -42,7 +43,8 @@ class AssignmentRequestTable extends DataClassTable implements TableFormActionsS
                             Manager :: PARAM_ACTION => Manager :: ACTION_ASSIGNMENT_EPHORUS_REQUEST
                         )
                     ),
-                    Translation:: get('AddDocuments')
+                    Translation:: get('AddDocuments'),
+                    false
                 )
             );
         }
