@@ -5,7 +5,6 @@ use Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService;
 use Chamilo\Application\Weblcms\Course\Table\CourseTable\CourseTableDataProvider;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * DataProvider for open courses
@@ -14,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  */
 class OpenCourseTableDataProvider extends CourseTableDataProvider
 {
+
     /**
      * Returns the data as a resultset
      *
@@ -28,8 +28,11 @@ class OpenCourseTableDataProvider extends CourseTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return $this->getOpenCourseService()->getOpenCourses(
-            $this->get_component()->getUser(), $condition, $offset, $count, $order_property
-        );
+            $this->get_component()->getUser(),
+            $condition,
+            $offset,
+            $count,
+            $order_property);
     }
 
     /**
@@ -45,6 +48,7 @@ class OpenCourseTableDataProvider extends CourseTableDataProvider
     }
 
     /**
+     *
      * @return OpenCourseService
      */
     public function getOpenCourseService()

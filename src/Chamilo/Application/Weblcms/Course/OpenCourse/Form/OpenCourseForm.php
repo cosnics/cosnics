@@ -1,9 +1,7 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Form;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
-use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType;
@@ -21,16 +19,17 @@ class OpenCourseForm extends FormValidator
 {
     const FORM_TYPE_ADD = 1;
     const FORM_TYPE_EDIT = 2;
-
     const ELEMENT_COURSES = 'courses';
     const ELEMENT_ROLES = 'roles';
 
     /**
+     *
      * @var Translation
      */
     protected $translator;
 
     /**
+     *
      * @var int
      */
     protected $formType;
@@ -59,16 +58,14 @@ class OpenCourseForm extends FormValidator
     public function setDefaultRoles($defaultRoles = array())
     {
         $defaultRoleElements = new AdvancedElementFinderElements();
-        foreach($defaultRoles as $defaultRole)
+        foreach ($defaultRoles as $defaultRole)
         {
             $defaultRoleElements->add_element(
                 new AdvancedElementFinderElement(
                     'role_' . $defaultRole->getId(),
                     'type type_role',
                     $defaultRole->getRole(),
-                    $defaultRole->getRole()
-                )
-            );
+                    $defaultRole->getRole()));
         }
 
         $element = $this->getElement(self::ELEMENT_ROLES);
@@ -80,7 +77,7 @@ class OpenCourseForm extends FormValidator
      */
     protected function buildForm()
     {
-        if($this->formType == self::FORM_TYPE_ADD)
+        if ($this->formType == self::FORM_TYPE_ADD)
         {
             $this->addCoursesSelector();
         }
@@ -100,15 +97,13 @@ class OpenCourseForm extends FormValidator
                 'courses',
                 $this->translator->getTranslation('Courses', null, Manager::context()),
                 'Chamilo\Application\Weblcms\Course\OpenCourse\Ajax',
-                'GetCoursesForElementFinder'
-            )
-        );
+                'GetCoursesForElementFinder'));
 
         $this->addElement(
-            'advanced_element_finder', self::ELEMENT_COURSES,
+            'advanced_element_finder',
+            self::ELEMENT_COURSES,
             $this->translator->getTranslation('SelectCourses', null, Manager::context()),
-            $advancedElementFinderTypes
-        );
+            $advancedElementFinderTypes);
     }
 
     /**
@@ -122,15 +117,13 @@ class OpenCourseForm extends FormValidator
                 'roles',
                 $this->translator->getTranslation('Roles', null, Manager::context()),
                 'Chamilo\Core\User\Roles\Ajax',
-                'GetRolesForElementFinder'
-            )
-        );
+                'GetRolesForElementFinder'));
 
         $this->addElement(
-            'advanced_element_finder', self::ELEMENT_ROLES,
+            'advanced_element_finder',
+            self::ELEMENT_ROLES,
             $this->translator->getTranslation('SelectRoles', null, Manager::context()),
-            $advancedElementFinderTypes
-        );
+            $advancedElementFinderTypes);
     }
 
     /**
@@ -143,16 +136,13 @@ class OpenCourseForm extends FormValidator
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
-            $this->translator->getTranslation('Save', null, Utilities::COMMON_LIBRARIES)
-        );
+            $this->translator->getTranslation('Save', null, Utilities::COMMON_LIBRARIES));
 
         $buttons[] = $this->createElement(
             'style_reset_button',
             'reset',
-            $this->translator->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES)
-        );
+            $this->translator->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES));
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
-
 }

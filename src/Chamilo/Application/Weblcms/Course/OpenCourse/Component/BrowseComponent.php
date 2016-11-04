@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Component;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
@@ -12,7 +11,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -23,7 +21,9 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  */
 class BrowseComponent extends Manager implements TableSupport
 {
+
     /**
+     *
      * @var ButtonToolBarRenderer
      */
     protected $buttonToolbarRenderer;
@@ -49,24 +49,23 @@ class BrowseComponent extends Manager implements TableSupport
     }
 
     /**
+     *
      * @return ButtonToolBarRenderer
      */
     protected function getButtonToolbarRenderer()
     {
-        if (!isset($this->buttonToolbarRenderer))
+        if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
-            if($this->isAuthorized(Manager::context(), 'ManageOpenCourses'))
+            if ($this->isAuthorized(Manager::context(), 'ManageOpenCourses'))
             {
                 $buttonToolbar->addItem(
                     new Button(
                         Translation::getInstance()->getTranslation('AddOpenCourses', null, Manager::context()),
                         new BootstrapGlyph('plus'),
                         $this->getCreateOpenCourseUrl(),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL
-                    )
-                );
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
             }
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -88,8 +87,6 @@ class BrowseComponent extends Manager implements TableSupport
             array(
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_TITLE),
                 new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_VISUAL_CODE),
-                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE)
-            )
-        );
+                new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_TITLE)));
     }
 }

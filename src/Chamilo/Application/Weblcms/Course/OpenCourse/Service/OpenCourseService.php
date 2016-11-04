@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Service;
 
 use Chamilo\Application\Weblcms\Course\OpenCourse\Manager;
@@ -11,7 +10,6 @@ use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Service to manage open courses
@@ -20,17 +18,21 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  */
 class OpenCourseService
 {
+
     /**
+     *
      * @var OpenCourseRepository
      */
     protected $openCourseRepository;
 
     /**
+     *
      * @var AuthorizationCheckerInterface
      */
     protected $authorizationChecker;
 
     /**
+     *
      * @var UserRoleServiceInterface
      */
     protected $userRoleService;
@@ -42,10 +44,8 @@ class OpenCourseService
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param UserRoleServiceInterface $userRoleService
      */
-    public function __construct(
-        OpenCourseRepository $openCourseRepository, AuthorizationCheckerInterface $authorizationChecker,
-        UserRoleServiceInterface $userRoleService
-    )
+    public function __construct(OpenCourseRepository $openCourseRepository,
+        AuthorizationCheckerInterface $authorizationChecker, UserRoleServiceInterface $userRoleService)
     {
         $this->openCourseRepository = $openCourseRepository;
         $this->authorizationChecker = $authorizationChecker;
@@ -63,11 +63,9 @@ class OpenCourseService
      *
      * @return RecordIterator
      */
-    public function getOpenCourses(
-        User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array()
-    )
+    public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array())
     {
-        if($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
+        if ($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
         {
             return $this->openCourseRepository->findAllOpenCourses($condition, $offset, $count, $orderBy);
         }
@@ -101,7 +99,7 @@ class OpenCourseService
      */
     public function countOpenCourses(User $user, Condition $condition = null)
     {
-        if($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
+        if ($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
         {
             $this->openCourseRepository->countAllOpenCourses($condition);
         }
@@ -144,25 +142,24 @@ class OpenCourseService
      */
     public function attachRolesToCoursesByIds($roleIds = array(), $courseIds = array())
     {
-        if(empty($roleIds) || empty($courseIds))
+        if (empty($roleIds) || empty($courseIds))
         {
             return;
         }
 
-        foreach($courseIds as $courseId)
+        foreach ($courseIds as $courseId)
         {
-            foreach($roleIds as $roleId)
+            foreach ($roleIds as $roleId)
             {
                 $courseEntityRelation = new CourseEntityRelation();
                 $courseEntityRelation->set_course_id($courseId);
                 $courseEntityRelation->setEntityType(CourseEntityRelation::ENTITY_TYPE_ROLE);
                 $courseEntityRelation->setEntityId($roleId);
 
-                if(!$courseEntityRelation->create())
+                if (! $courseEntityRelation->create())
                 {
                     throw new \Exception(
-                        sprintf('Could not attach the role with id %s to the course with id %s', $roleId, $courseId)
-                    );
+                        sprintf('Could not attach the role with id %s to the course with id %s', $roleId, $courseId));
                 }
             }
         }
@@ -191,7 +188,7 @@ class OpenCourseService
      */
     public function removeCoursesAsOpenCourse($courseIds)
     {
-        if(!$this->openCourseRepository->removeCoursesAsOpenCourse($courseIds))
+        if (! $this->openCourseRepository->removeCoursesAsOpenCourse($courseIds))
         {
             throw new \Exception('Could not remove the courses as open course with ids ' . implode(', ', $courseIds));
         }
@@ -210,5 +207,4 @@ class OpenCourseService
         $courseRoles = $this->getRolesForOpenCourse($course);
         return $this->userRoleService->doesUserHasAtLeastOneRole($user, $courseRoles->as_array());
     }
-
 }
