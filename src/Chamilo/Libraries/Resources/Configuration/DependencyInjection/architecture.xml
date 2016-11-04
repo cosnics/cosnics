@@ -60,6 +60,9 @@
             class="Chamilo\Libraries\Architecture\Factory\ApplicationFactory">
             <argument
                 type="service"
+                id="symfony.component.http_foundation.request" />
+            <argument
+                type="service"
                 id="chamilo.libraries.utilities.string_utilities" />
             <argument
                 type="service"
