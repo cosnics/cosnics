@@ -18,6 +18,12 @@ class ApplicationFactory
 
     /**
      *
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Utilities\StringUtilities
      */
     private $stringUtilities;
@@ -30,12 +36,34 @@ class ApplicationFactory
 
     /**
      *
-     * @param StringUtilities $stringUtilities
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
+     * @param \Chamilo\Libraries\Platform\Translation $translation
      */
-    public function __construct(StringUtilities $stringUtilities, Translation $translation)
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, StringUtilities $stringUtilities,
+        Translation $translation)
     {
+        $this->request = $request;
         $this->stringUtilities = $stringUtilities;
         $this->translation = $translation;
+    }
+
+    /**
+     *
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function setRequest(\Symfony\Component\HttpFoundation\Request $request)
+    {
+        $this->request = $request;
     }
 
     /**
@@ -129,7 +157,7 @@ class ApplicationFactory
 
         foreach ($parameters as $parameter)
         {
-            $application->set_parameter($parameter, $applicationConfiguration->getRequest()->get($parameter));
+            $application->set_parameter($parameter, $this->getRequest()->get($parameter));
         }
 
         return $application;
@@ -145,7 +173,7 @@ class ApplicationFactory
         $actionParameter = $this->getActionParameter($context);
         $managerClass = $this->getManagerClass($context);
         $level = $this->determineLevel($applicationConfiguration->getApplication());
-        $actions = $this->getRequestedAction($applicationConfiguration->getRequest(), $actionParameter, $context);
+        $actions = $this->getRequestedAction($actionParameter, $context);
 
         if (is_array($actions))
         {
@@ -223,13 +251,14 @@ class ApplicationFactory
 
     /**
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param string $actionParameter
      * @param string $context
      * @return string
      */
-    protected function getRequestedAction(\Symfony\Component\HttpFoundation\Request $request, $actionParameter, $context)
+    protected function getRequestedAction($actionParameter, $context)
     {
+        $request = $this->getRequest();
+
         $getAction = $request->query->get($actionParameter);
 
         if (! $getAction)
