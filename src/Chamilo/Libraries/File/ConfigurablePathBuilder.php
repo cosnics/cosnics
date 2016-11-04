@@ -25,6 +25,12 @@ class ConfigurablePathBuilder
 
     /**
      *
+     * @var string[]
+     */
+    private $configuredPaths;
+
+    /**
+     *
      * @var string
      */
     private $configuredArchivePath;
@@ -79,31 +85,12 @@ class ConfigurablePathBuilder
 
     /**
      *
-     * @param string $configuredArchivePath
-     * @param string $configuredCachePath
-     * @param string $configuredGarbagePath
-     * @param string $configuredHotpotatoesPath
-     * @param string $configuredLogsPath
-     * @param string $configuredRepositoryPath
-     * @param string $configuredScormPath
-     * @param string $configuredTempPath
-     * @param string $configuredUserPicturesPath
+     * @param string[] $configuredPaths
      */
-    public function __construct($configuredArchivePath, $configuredCachePath, $configuredGarbagePath,
-        $configuredHotpotatoesPath, $configuredLogsPath, $configuredRepositoryPath, $configuredScormPath,
-        $configuredTempPath, $configuredUserPicturesPath)
+    public function __construct($configuredPaths)
     {
         $this->cache = array();
-
-        $this->configuredArchivePath = $configuredArchivePath;
-        $this->configuredCachePath = $configuredCachePath;
-        $this->configuredGarbagePath = $configuredGarbagePath;
-        $this->configuredHotpotatoesPath = $configuredHotpotatoesPath;
-        $this->configuredLogsPath = $configuredLogsPath;
-        $this->configuredRepositoryPath = $configuredRepositoryPath;
-        $this->configuredScormPath = $configuredScormPath;
-        $this->configuredTempPath = $configuredTempPath;
-        $this->configuredUserPicturesPath = $configuredUserPicturesPath;
+        $this->configuredPaths = $configuredPaths;
     }
 
     /**
@@ -126,20 +113,26 @@ class ConfigurablePathBuilder
 
     /**
      *
-     * @return string
+     * @return string[]
      */
-    public function getConfiguredArchivePath()
+    public function getConfiguredPaths()
     {
-        return $this->configuredArchivePath;
+        return $this->configuredPaths;
     }
 
     /**
      *
-     * @param string $configuredArchivePath
+     * @return string
      */
-    public function setConfiguredArchivePath($configuredArchivePath)
+    public function getConfiguredArchivePath()
     {
-        $this->configuredArchivePath = $configuredArchivePath;
+        if (! isset($this->configuredArchivePath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredArchivePath = $configuredPaths['archive_path'];
+        }
+
+        return $this->configuredArchivePath;
     }
 
     /**
@@ -148,16 +141,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredCachePath()
     {
-        return $this->configuredCachePath;
-    }
+        if (! isset($this->configuredCachePath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredCachePath = $configuredPaths['cache_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredCachePath
-     */
-    public function setConfiguredCachePath($configuredCachePath)
-    {
-        $this->configuredCachePath = $configuredCachePath;
+        return $this->configuredCachePath;
     }
 
     /**
@@ -166,16 +156,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredGarbagePath()
     {
-        return $this->configuredGarbagePath;
-    }
+        if (! isset($this->configuredGarbagePath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredGarbagePath = $configuredPaths['garbage_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredGarbagePath
-     */
-    public function setConfiguredGarbagePath($configuredGarbagePath)
-    {
-        $this->configuredGarbagePath = $configuredGarbagePath;
+        return $this->configuredGarbagePath;
     }
 
     /**
@@ -184,16 +171,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredHotpotatoesPath()
     {
-        return $this->configuredHotpotatoesPath;
-    }
+        if (! isset($this->configuredHotpotatoesPath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredHotpotatoesPath = $configuredPaths['hotpotatoes_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredHotpotatoesPath
-     */
-    public function setConfiguredHotpotatoesPath($configuredHotpotatoesPath)
-    {
-        $this->configuredHotpotatoesPath = $configuredHotpotatoesPath;
+        return $this->configuredHotpotatoesPath;
     }
 
     /**
@@ -202,16 +186,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredLogsPath()
     {
-        return $this->configuredLogsPath;
-    }
+        if (! isset($this->configuredLogsPath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredLogsPath = $configuredPaths['logs_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredLogsPath
-     */
-    public function setConfiguredLogsPath($configuredLogsPath)
-    {
-        $this->configuredLogsPath = $configuredLogsPath;
+        return $this->configuredLogsPath;
     }
 
     /**
@@ -220,16 +201,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredRepositoryPath()
     {
-        return $this->configuredRepositoryPath;
-    }
+        if (! isset($this->configuredRepositoryPath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredRepositoryPath = $configuredPaths['repository_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredRepositoryPath
-     */
-    public function setConfiguredRepositoryPath($configuredRepositoryPath)
-    {
-        $this->configuredRepositoryPath = $configuredRepositoryPath;
+        return $this->configuredRepositoryPath;
     }
 
     /**
@@ -238,16 +216,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredScormPath()
     {
-        return $this->configuredScormPath;
-    }
+        if (! isset($this->configuredScormPath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredScormPath = $configuredPaths['scorm_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredScormPath
-     */
-    public function setConfiguredScormPath($configuredScormPath)
-    {
-        $this->configuredScormPath = $configuredScormPath;
+        return $this->configuredScormPath;
     }
 
     /**
@@ -256,16 +231,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredTempPath()
     {
-        return $this->configuredTempPath;
-    }
+        if (! isset($this->configuredTempPath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredTempPath = $configuredPaths['temp_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredTempPath
-     */
-    public function setConfiguredTempPath($configuredTempPath)
-    {
-        $this->configuredTempPath = $configuredTempPath;
+        return $this->configuredTempPath;
     }
 
     /**
@@ -274,16 +246,13 @@ class ConfigurablePathBuilder
      */
     public function getConfiguredUserPicturesPath()
     {
-        return $this->configuredUserPicturesPath;
-    }
+        if (! isset($this->configuredUserPicturesPath))
+        {
+            $configuredPaths = $this->getConfiguredPaths();
+            $this->configuredUserPicturesPath = $configuredPaths['userpictures_path'];
+        }
 
-    /**
-     *
-     * @param string $configuredUserPicturesPath
-     */
-    public function setConfiguredUserPicturesPath($configuredUserPicturesPath)
-    {
-        $this->configuredUserPicturesPath = $configuredUserPicturesPath;
+        return $this->configuredUserPicturesPath;
     }
 
     /**

@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -37,9 +37,9 @@ class Kernel
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
      */
-    private $fileConfigurationLoader;
+    private $fileConfigurationLocator;
 
     /**
      *
@@ -108,7 +108,7 @@ class Kernel
     private $showErrors;
 
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, SessionUtilities $sessionUtilities,
-        Translation $translationUtilities, FileConfigurationLoader $fileConfigurationLoader,
+        Translation $translationUtilities, FileConfigurationLocator $fileConfigurationLocator,
         ConfigurationConsulter $configurationConsulter, ConnectionFactory $connectionFactory,
         ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, $showErrors = false,
         User $user = null)
@@ -118,7 +118,7 @@ class Kernel
         $this->sessionUtilities = $sessionUtilities;
         $this->translationUtilities = $translationUtilities;
 
-        $this->fileConfigurationLoader = $fileConfigurationLoader;
+        $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->configurationConsulter = $configurationConsulter;
 
         $this->connectionFactory = $connectionFactory;
@@ -132,20 +132,20 @@ class Kernel
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
      */
-    public function getFileConfigurationLoader()
+    public function getFileConfigurationLocator()
     {
-        return $this->fileConfigurationLoader;
+        return $this->fileConfigurationLocator;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLoader $fileConfigurationLoader
+     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      */
-    public function setFileConfigurationLoader(FileConfigurationLoader $fileConfigurationLoader)
+    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
     {
-        $this->fileConfigurationLoader = $fileConfigurationLoader;
+        $this->fileConfigurationLocator = $fileConfigurationLocator;
     }
 
     /**
@@ -352,7 +352,7 @@ class Kernel
         {
             // $this->checkInstallation()->startSession();
 
-            if (! $this->getFileConfigurationLoader()->isAvailable())
+            if (! $this->getFileConfigurationLocator()->isAvailable())
             {
                 $this->configureContext()->buildApplication()->runApplication();
             }
@@ -382,7 +382,7 @@ class Kernel
      */
     protected function checkInstallation()
     {
-        if (! $this->getFileConfigurationLoader()->isAvailable())
+        if (! $this->getFileConfigurationLocator()->isAvailable())
         {
             $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
             // TODO: This is old code to make sure those instances still accessing the parameter the old way keep on
