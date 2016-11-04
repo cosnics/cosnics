@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Architecture;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -15,6 +17,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
@@ -30,6 +33,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -355,7 +359,13 @@ class Kernel
     {
         if (! isset($this->exceptionLogger))
         {
-            $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
+            $stringUtilities = new StringUtilities();
+            $classnameUtilities = new ClassnameUtilities($stringUtilities);
+
+            $configurationConsulter = new ConfigurationConsulter(
+                new FileConfigurationLoader(new PathBuilder($classnameUtilities)));
+
+            $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
             $this->exceptionLogger = $exceptionLoggerFactory->createExceptionLogger();
         }
 

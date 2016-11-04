@@ -9,7 +9,7 @@
             class="Chamilo\Libraries\Platform\Session\SessionUtilities">
             <argument
                 type="service"
-                id="chamilo.configuration.service.file_configuration_loader" />
+                id="chamilo.configuration.service.file_configuration_locator" />
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />

@@ -93,20 +93,20 @@ class Configuration
      */
     public static function get_instance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new static(new ConfigurationCacheService());
+            self::$instance = new static(new ConfigurationCacheService());
 
-            if (self :: $instance->is_available() && self :: $instance->is_connectable())
+            if (self::$instance->is_available() && self::$instance->is_connectable())
             {
-                self :: $instance->loadFromStorage();
+                self::$instance->loadFromStorage();
             }
             else
             {
-                self :: $instance->loadDefault();
+                self::$instance->loadDefault();
             }
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -185,7 +185,7 @@ class Configuration
      */
     public static function get()
     {
-        return self :: get_instance()->get_setting(func_get_args());
+        return self::get_instance()->get_setting(func_get_args());
     }
 
     private function initialize()
@@ -228,13 +228,14 @@ class Configuration
     {
         $configuration = new \Doctrine\DBAL\Configuration();
 
-        $data_source_name = DataSourceName :: factory(
+        $data_source_name = DataSourceName::factory(
             'Doctrine',
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'driver')),
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'username')),
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'host')),
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'name')),
-            $this->get_setting(array('Chamilo\Configuration', 'database', 'password')));
+            array(
+                'driver' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'driver'),
+                'username' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'username'),
+                'host' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'host'),
+                'name' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'name'),
+                'password' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'password')));
 
         $connection_parameters = array(
             'user' => $data_source_name->get_username(),
@@ -244,7 +245,7 @@ class Configuration
 
         try
         {
-            DriverManager :: getConnection($connection_parameters, $configuration)->connect();
+            DriverManager::getConnection($connection_parameters, $configuration)->connect();
             return true;
         }
         catch (\Exception $exception)
@@ -259,7 +260,7 @@ class Configuration
      */
     public static function available()
     {
-        return self :: get_instance()->is_available();
+        return self::get_instance()->is_available();
     }
 
     /**
@@ -303,7 +304,7 @@ class Configuration
      */
     public function get_registration($context)
     {
-        return $this->registrations[self :: REGISTRATION_CONTEXT][$context];
+        return $this->registrations[self::REGISTRATION_CONTEXT][$context];
     }
 
     /**
@@ -313,7 +314,7 @@ class Configuration
      */
     public static function registration($context)
     {
-        return self :: get_instance()->get_registration($context);
+        return self::get_instance()->get_registration($context);
     }
 
     /**
@@ -344,7 +345,7 @@ class Configuration
     public function get_registrations_by_type($type)
     {
         $registrations = $this->registrations;
-        return $registrations[self :: REGISTRATION_TYPE][$type];
+        return $registrations[self::REGISTRATION_TYPE][$type];
     }
 
     /**
@@ -354,7 +355,7 @@ class Configuration
      */
     public static function registrations_by_type($type)
     {
-        return self :: get_instance()->get_registrations_by_type($type);
+        return self::get_instance()->get_registrations_by_type($type);
     }
 
     /**
@@ -363,7 +364,7 @@ class Configuration
      */
     public static function registrations()
     {
-        return self :: get_instance()->get_registrations();
+        return self::get_instance()->get_registrations();
     }
 
     /**
@@ -373,7 +374,7 @@ class Configuration
      */
     public static function is_registered($context)
     {
-        return self :: get_instance()->isRegistered($context);
+        return self::get_instance()->isRegistered($context);
     }
 
     /**
@@ -396,7 +397,7 @@ class Configuration
     {
         $registration = $this->get_registration($context);
         return $this->isRegistered($context) &&
-             $registration[Registration :: PROPERTY_STATUS] == Registration :: STATUS_ACTIVE;
+             $registration[Registration::PROPERTY_STATUS] == Registration::STATUS_ACTIVE;
     }
 
     /**
@@ -407,7 +408,7 @@ class Configuration
      */
     public function getIntegrationRegistrations($integration, $root = null)
     {
-        $integrationRegistrations = $this->registrations[self :: REGISTRATION_INTEGRATION][$integration];
+        $integrationRegistrations = $this->registrations[self::REGISTRATION_INTEGRATION][$integration];
 
         if ($root)
         {
@@ -415,7 +416,7 @@ class Configuration
 
             foreach ($integrationRegistrations as $rootContext => $registration)
             {
-                $rootContextStringUtilities = StringUtilities :: getInstance()->createString($rootContext);
+                $rootContextStringUtilities = StringUtilities::getInstance()->createString($rootContext);
                 if ($rootContextStringUtilities->startsWith($root))
                 {
                     $rootIntegrationRegistrations[$rootContext] = $registration;
@@ -495,33 +496,27 @@ class Configuration
         $this->set(array('Chamilo\Configuration', 'debug', 'enable_query_cache'), true);
         $this->set(array('Chamilo\Configuration', 'session', 'session_handler'), 'chamilo');
 
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'archive'),
-            Path :: getInstance()->getStoragePath('archive'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'archive'), Path::getInstance()->getStoragePath('archive'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'cache_path'),
-            Path :: getInstance()->getStoragePath('cache'));
+            Path::getInstance()->getStoragePath('cache'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'garbage'),
-            Path :: getInstance()->getStoragePath('garbage_path'));
+            Path::getInstance()->getStoragePath('garbage_path'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'hotpotatoes_path'),
-            Path :: getInstance()->getStoragePath('hotpotatoes'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'logs_path'),
-            Path :: getInstance()->getStoragePath('logs'));
+            Path::getInstance()->getStoragePath('hotpotatoes'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'logs_path'), Path::getInstance()->getStoragePath('logs'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'repository_path'),
-            Path :: getInstance()->getStoragePath('repository'));
+            Path::getInstance()->getStoragePath('repository'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'scorm_path'),
-            Path :: getInstance()->getStoragePath('scorm'));
-        $this->set(
-            array('Chamilo\Configuration', 'storage', 'temp_path'),
-            Path :: getInstance()->getStoragePath('temp'));
+            Path::getInstance()->getStoragePath('scorm'));
+        $this->set(array('Chamilo\Configuration', 'storage', 'temp_path'), Path::getInstance()->getStoragePath('temp'));
         $this->set(
             array('Chamilo\Configuration', 'storage', 'userpictures'),
-            Path :: getInstance()->getStoragePath('userpictures_path'));
+            Path::getInstance()->getStoragePath('userpictures_path'));
     }
 
     /**
@@ -529,9 +524,9 @@ class Configuration
      */
     public static function reset()
     {
-        RecordResultSetCache :: truncates(array(Registration :: class_name(), Setting :: class_name()));
-        self :: get_instance()->getConfigurationCacheService()->clear();
-        self :: get_instance()->loadFromStorage();
+        RecordResultSetCache::truncates(array(Registration::class_name(), Setting::class_name()));
+        self::get_instance()->getConfigurationCacheService()->clear();
+        self::get_instance()->loadFromStorage();
     }
 
     /**

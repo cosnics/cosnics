@@ -1,25 +1,23 @@
 <?php
-
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
-use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\File\Path;
 
 /*
  * Builds the FileExceptionLogger class
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
 {
 
     /**
-     * ExceptionLoggerBuilderInterface constructor.
      *
-     * @param Configuration $configuration
+     * @see \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerBuilderInterface::__construct()
      */
-    public function __construct(Configuration $configuration)
+    public function __construct(ConfigurationConsulter $configurationConsulter)
     {
+        // TODO Auto-generated method stub
     }
 
     /**
