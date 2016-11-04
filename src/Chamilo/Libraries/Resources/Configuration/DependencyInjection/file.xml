@@ -23,15 +23,7 @@
         <service
             id="chamilo.libraries.file.configurable_path_builder"
             class="Chamilo\Libraries\File\ConfigurablePathBuilder">
-            <argument>%chamilo.configuration.storage.archive_path%</argument>
-            <argument>%chamilo.configuration.storage.cache_path%</argument>
-            <argument>%chamilo.configuration.storage.garbage_path%</argument>
-            <argument>%chamilo.configuration.storage.hotpotatoes_path%</argument>
-            <argument>%chamilo.configuration.storage.logs_path%</argument>
-            <argument>%chamilo.configuration.storage.repository_path%</argument>
-            <argument>%chamilo.configuration.storage.scorm_path%</argument>
-            <argument>%chamilo.configuration.storage.temp_path%</argument>
-            <argument>%chamilo.configuration.storage.userpictures_path%</argument>
+            <argument>%chamilo.configuration.storage%</argument>
         </service>
     </services>
 </container>

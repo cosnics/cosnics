@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 
 /*
  * Builds the SentryExceptionLogger class
@@ -14,16 +15,15 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
      *
      * @var Configuration
      */
-    protected $configuration;
+    protected $configurationConsulter;
 
     /**
-     * ExceptionLoggerBuilderInterface constructor.
      *
-     * @param Configuration $configuration
+     * @see \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerBuilderInterface::__construct()
      */
-    public function __construct(Configuration $configuration)
+    public function __construct(ConfigurationConsulter $configurationConsulter)
     {
-        $this->configuration = $configuration;
+        $this->configurationConsulter = $configurationConsulter;
     }
 
     /**
@@ -35,7 +35,8 @@ class SentryExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
      */
     public function createExceptionLogger()
     {
-        $clientDSNKey = $this->configuration->get_setting(array('Chamilo\Configuration', 'sentry_error_logger', 'DSN'));
+        $clientDSNKey = $this->configurationConsulter->getSetting(
+            array('Chamilo\Configuration', 'error_handling', 'sentry_error_logger', 'DSN'));
 
         if (empty($clientDSNKey))
         {
