@@ -71,6 +71,7 @@ class Display extends QuestionDisplay
                 {
                     $answer_name = $question_id . '_' . $i;
                     $group[] = $formvalidator->createElement('radio', $answer_name, null, null, $j);
+                    $defaults[$answer_name] = -1;
                 }
                 elseif ($type == AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX)
                 {
@@ -90,6 +91,8 @@ class Display extends QuestionDisplay
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
         $formvalidator->addElement('html', implode(PHP_EOL, $table_footer));
+
+        $formvalidator->setDefaults($defaults);
     }
 
     public function add_border()

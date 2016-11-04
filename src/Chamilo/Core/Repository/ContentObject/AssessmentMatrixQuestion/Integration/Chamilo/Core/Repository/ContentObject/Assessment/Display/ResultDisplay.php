@@ -92,7 +92,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                         {
                             if ($option->get_matches() == $j)
                             {
-                                $result = '<img src="' . Theme :: getInstance()->getImagePath('AnswerCorrect') .
+                                $result = '<img src="' . Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') .
                                      '" alt="' . Translation :: get('Correct') . '" title="' .
                                      Translation :: get('Correct') . '" />';
                             }
