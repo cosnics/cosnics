@@ -22,17 +22,12 @@ class CourseTypeManagerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        if ($this->get_user()->is_platform_admin())
-        {
-            $factory = new ApplicationFactory(
-                \Chamilo\Application\Weblcms\CourseType\Manager :: context(),
-               new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-            return $factory->run();
-        }
-        else
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+
+        $factory = new ApplicationFactory(
+            \Chamilo\Application\Weblcms\CourseType\Manager :: context(),
+           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        return $factory->run();
     }
 
     /**

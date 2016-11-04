@@ -16,15 +16,15 @@ abstract class BrowseSubscriptionCoursesComponent extends BrowseComponent
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Checkes whether or not the current user can view this component
-     * 
+     *
      * @return boolean
      */
-    protected function can_view_component()
+    protected function checkComponentAuthorization()
     {
-        return true;
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManagePersonalCourses');
     }
 
 //    /**

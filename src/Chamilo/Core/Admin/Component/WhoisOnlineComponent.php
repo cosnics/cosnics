@@ -35,6 +35,8 @@ class WhoisOnlineComponent extends Manager implements TableSupport
 
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ViewWhoisOnline');
+
         $world = PlatformSetting :: get('whoisonlineaccess');
 
         if ($world == "1" || ($this->get_user_id() && $world == "2"))

@@ -38,10 +38,7 @@ class ImporterComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        if ($this->get_user()->is_anonymous_user())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(\Chamilo\Core\Repository\Manager::context());
 
         $type = Request :: get(self :: PARAM_IMPORT_TYPE);
 

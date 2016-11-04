@@ -53,20 +53,15 @@ class BrowseComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        if ($this->can_view_component())
-        {
-            $html = array();
-            
-            $html[] = $this->render_header();
-            $html[] = $this->get_html();
-            $html[] = $this->render_footer();
-            
-            return implode(PHP_EOL, $html);
-        }
-        else
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkComponentAutorization();
+
+        $html = array();
+
+        $html[] = $this->render_header();
+        $html[] = $this->get_html();
+        $html[] = $this->render_footer();
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -162,9 +157,9 @@ class BrowseComponent extends Manager implements TableSupport
      * 
      * @return boolean
      */
-    protected function can_view_component()
+    protected function checkComponentAuthorization()
     {
-        return $this->get_user()->is_platform_admin();
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
     }
 
     protected function getButtonToolbarRenderer()

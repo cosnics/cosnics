@@ -19,10 +19,7 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->getUser()->is_platform_admin())
-        {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageCourses');
 
         $requestIds = $this->getRequest()->get(Manager::PARAM_REQUEST);
 

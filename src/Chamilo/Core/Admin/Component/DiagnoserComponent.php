@@ -23,10 +23,7 @@ class DiagnoserComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $html = array();
         $diagnoser = new Diagnoser($this);

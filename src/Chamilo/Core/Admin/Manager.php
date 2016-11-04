@@ -25,15 +25,4 @@ abstract class Manager extends Application
     const ACTION_IMPORTER = 'Importer';
     const ACTION_SYSTEM_ANNOUNCEMENTS = 'Announcer';
     const DEFAULT_ACTION = self :: ACTION_ADMIN_BROWSER;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
-     */
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
-    {
-        parent::__construct($applicationConfiguration);
-
-        $this->checkAuthorization(Manager::context());
-    }
 }

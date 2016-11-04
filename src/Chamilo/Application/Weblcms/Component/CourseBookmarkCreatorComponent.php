@@ -28,6 +28,8 @@ class CourseBookmarkCreatorComponent extends Manager
      */
     function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManagePersonalCourses');
+
         $course_id = Request :: get(self :: PARAM_COURSE);
 
         $content_object = new Bookmark();

@@ -27,10 +27,7 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $breadcrumbtrail = BreadcrumbTrail :: get_instance();
         $breadcrumbtrail->add_help('administration general');

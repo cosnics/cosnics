@@ -14,10 +14,7 @@ class LanguageComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $factory = new ApplicationFactory(
             \Chamilo\Core\Admin\Language\Manager :: context(),

@@ -20,13 +20,6 @@
 			<setting name="administrator_telephone" field="text" default="000/1234567" />
 		</category>
 		<category name="whoisonline">
-			<setting name="whoisonlineaccess" field="radio" default="2">
-				<options type="static">
-					<option name="disabled" value="0" />
-					<option name="world" value="1" />
-					<option name="registered" value="2" />
-				</options>
-			</setting>
 			<setting name="timelimit" field="text" default="30">
 				<validations>
 					<validation rule="numeric" message="MustBeNumeric" />

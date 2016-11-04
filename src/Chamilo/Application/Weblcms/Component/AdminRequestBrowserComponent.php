@@ -60,6 +60,8 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+
         $this->request_type = Request :: get(self :: PARAM_REQUEST_TYPE);
         $this->request_view = Request :: get(self :: PARAM_REQUEST_VIEW);
         
@@ -70,11 +72,6 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         if (is_null($this->request_view))
         {
             $this->request_view = self :: PENDING_REQUEST_VIEW;
-        }
-        
-        if (! $this->get_user()->is_platform_admin())
-        {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
         
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();

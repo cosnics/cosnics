@@ -1,8 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Format\Structure;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Chamilo\Configuration\Configuration;
@@ -16,6 +19,7 @@ use Chamilo\Configuration\Configuration;
  */
 class Footer
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      *
@@ -43,6 +47,8 @@ class Footer
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
+
+        $this->initializeContainer();
     }
 
     /**
@@ -112,7 +118,6 @@ class Footer
         {
             $showAdministratorData = Configuration :: get('Chamilo\Core\Admin', 'show_administrator_data');
             $showVersionData = Configuration :: get('Chamilo\Core\Admin', 'show_version_data');
-            $whoHasAccess = Configuration :: get('Chamilo\Core\Admin', 'whoisonlineaccess');
 
             $institutionUrl = Configuration :: get('Chamilo\Core\Admin', 'institution_url');
             $institution = Configuration :: get('Chamilo\Core\Admin', 'institution');
@@ -167,15 +172,27 @@ class Footer
                      Configuration :: get('Chamilo\Core\Admin', 'version');
             }
 
-            if ($whoHasAccess == "1" || (key_exists('_uid', $_SESSION) && $whoHasAccess == "2"))
+            if(key_exists('_uid', $_SESSION))
             {
-                $redirect = new Redirect(
-                    array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                        Application :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_WHOIS_ONLINE));
+                $user = new User();
+                $user->setId(Session::get_user_id());
+                $whoisOnlineAuthorized = $this->getAuthorizationChecker()->isAuthorized(
+                    $user, 'Chamilo\Core\Admin', 'ViewWhoisOnline'
+                );
 
-                $links[] = '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation :: get(
-                    'WhoisOnline') . '?</a>';
+                if ($whoisOnlineAuthorized)
+                {
+                    $redirect = new Redirect(
+                        array(
+                            Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager:: context(),
+                            Application :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_WHOIS_ONLINE
+                        )
+                    );
+
+                    $links[] = '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation:: get(
+                            'WhoisOnline'
+                        ) . '?</a>';
+                }
             }
 
             $html[] = implode(' | ', $links);

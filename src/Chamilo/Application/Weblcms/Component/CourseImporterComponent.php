@@ -28,10 +28,7 @@ class CourseImporterComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
-        {
-            throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageCourses');
 
         $form = new CourseImportForm(CourseImportForm :: TYPE_IMPORT, $this->get_url());
 

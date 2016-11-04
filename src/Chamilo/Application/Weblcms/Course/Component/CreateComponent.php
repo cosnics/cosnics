@@ -20,24 +20,6 @@ class CreateComponent extends CourseFormActionComponent
 {
 
     /**
-     * **************************************************************************************************************
-     * Implemented Functionality *
-     * **************************************************************************************************************
-     */
-    /**
-     * Runs this component and display's it's output
-     */
-    public function run()
-    {
-        if (! $this->get_user()->is_platform_admin())
-        {
-            throw new NotAllowedException();
-        }
-
-        return parent :: run();
-    }
-
-    /**
      * Returns the course for this form action
      *
      * @return Course

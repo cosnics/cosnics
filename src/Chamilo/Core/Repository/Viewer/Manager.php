@@ -279,7 +279,8 @@ abstract class Manager extends Application
      */
     public function areTabsDisabled()
     {
-        return $this->getApplicationConfiguration()->get(self :: SETTING_TABS_DISABLED) === true;
+        return $this->getApplicationConfiguration()->get(self :: SETTING_TABS_DISABLED) === true ||
+            !$this->isAuthorized(\Chamilo\Core\Repository\Manager::context());
     }
 
     /**

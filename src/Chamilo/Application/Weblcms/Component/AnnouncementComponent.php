@@ -37,6 +37,8 @@ class AnnouncementComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ViewPersonalCourses');
+
         $html = array();
 
         $html[] = $this->render_header();

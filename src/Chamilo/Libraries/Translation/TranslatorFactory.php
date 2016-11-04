@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Translation;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\Translation;
 use Symfony\Component\Translation\Loader\IniFileLoader;
 use Symfony\Component\Translation\Loader\XliffFileLoader;
@@ -29,7 +31,7 @@ class TranslatorFactory
      */
     public function createTranslator($locale = null)
     {
-        if (! $locale)
+        if (!$locale)
         {
             $isoCode = Translation::getInstance()->getLanguageIsocode();
             $locale = $isoCode . '_' . strtoupper($isoCode);
@@ -54,7 +56,7 @@ class TranslatorFactory
     {
         $translationCachePath = Path::getInstance()->getCachePath(__NAMESPACE__);
 
-        if (! is_dir($translationCachePath))
+        if (!is_dir($translationCachePath))
         {
             Filesystem::create_dir($translationCachePath);
         }
@@ -63,8 +65,15 @@ class TranslatorFactory
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
             array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),
-            new PackagesTranslationResourcesFinder(new PackagesFilesFinder(Path::getInstance(), $packageNamespaces)),
-            $translationCachePath);
+            new PackagesTranslationResourcesFinder(
+                new PackagesFilesFinder(
+                    new PathBuilder(
+                        ClassnameUtilities::getInstance()
+                    ), $packageNamespaces
+                )
+            ),
+            $translationCachePath
+        );
 
         $resources = $translationResourcesOptimizer->getOptimizedTranslationResources();
 

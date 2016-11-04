@@ -29,6 +29,8 @@ class UnsubscribeComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManagePersonalCourses');
+        
         $failures = 0;
 
         $course_management_rights = CourseManagementRights :: get_instance();

@@ -1,3 +1,5 @@
 Chamilo\Application\Weblcms:
   - ViewPersonalCourses: ROLE_DEFAULT_USER
   - ManagePersonalCourses: ROLE_DEFAULT_USER
+  - ManageCourses: ROLE_ADMINISTRATOR
+  - RequestCourses : ROLE_DEFAULT_USER

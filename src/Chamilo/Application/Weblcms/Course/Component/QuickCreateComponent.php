@@ -27,6 +27,8 @@ class QuickCreateComponent extends CreateComponent
      */
     public function run()
     {
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
+        
         return CourseFormActionComponent :: run();
     }
 

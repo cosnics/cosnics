@@ -31,10 +31,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
      */
     public function run()
     {
-        if (! $this->get_user()->is_platform_admin())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageCourses');
 
         $factory = new ApplicationFactory(
             \Chamilo\Configuration\Category\Manager :: context(),

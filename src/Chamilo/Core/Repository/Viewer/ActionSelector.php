@@ -26,7 +26,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
  */
 class ActionSelector
 {
-
     /**
      *
      * @var \Chamilo\Libraries\Architecture\Application\Application
@@ -229,15 +228,19 @@ class ActionSelector
 
         $dropdownButton->addSubButton(new SubButtonHeader(Translation:: get('CreatorTitle')));
         $dropdownButton->addSubButtons($this->getCreationOptions());
-        $dropdownButton->addSubButton(new SubButtonDivider());
 
         // Browser + Shared objects
-        $dropdownButton->addSubButtons($this->getExistingOptions());
-        $dropdownButton->addSubButton(new SubButtonDivider());
+        if($this->getApplication()->isAuthorized(\Chamilo\Core\Repository\Manager::context()))
+        {
+            $dropdownButton->addSubButton(new SubButtonDivider());
 
-        // Import options
-        $dropdownButton->addSubButton(new SubButtonHeader(Translation:: get('ImporterTitle')));
-        $dropdownButton->addSubButtons($this->getImportOptions());
+            $dropdownButton->addSubButtons($this->getExistingOptions());
+            $dropdownButton->addSubButton(new SubButtonDivider());
+
+            // Import options
+            $dropdownButton->addSubButton(new SubButtonHeader(Translation:: get('ImporterTitle')));
+            $dropdownButton->addSubButtons($this->getImportOptions());
+        }
 
         return $dropdownButton;
     }

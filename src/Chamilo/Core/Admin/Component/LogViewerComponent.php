@@ -30,10 +30,7 @@ class LogViewerComponent extends Manager
      */
     public function run()
     {
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $form = $this->build_form();
 

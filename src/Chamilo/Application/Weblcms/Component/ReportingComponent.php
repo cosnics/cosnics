@@ -20,6 +20,8 @@ class ReportingComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManageCourses');
+
         $template_id = Request :: get(self :: PARAM_TEMPLATE_ID);
 
         if (! isset($template_id))

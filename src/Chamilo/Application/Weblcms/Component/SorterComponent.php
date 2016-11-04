@@ -53,6 +53,8 @@ class SorterComponent extends Manager
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ManagePersonalCourses');
+        
         $this->set_parameter(
             CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE,
             Request::get(CourseTypeCourseListRenderer::PARAM_SELECTED_COURSE_TYPE));

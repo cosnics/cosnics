@@ -36,10 +36,7 @@ class ConfigurerComponent extends Manager
 
         $context = $this->get_context();
 
-        if (! $this->get_user()->get_platformadmin())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
         $form = new ConfigurationForm(
             $this->get_context(),

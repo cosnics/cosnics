@@ -68,6 +68,8 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
+        $this->checkAuthorization(\Chamilo\Core\Repository\Manager::context());
+
         $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
         $this->setupFilterData();
 

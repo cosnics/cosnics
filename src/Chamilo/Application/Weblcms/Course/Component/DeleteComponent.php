@@ -31,10 +31,7 @@ class DeleteComponent extends Manager
      */
     public function run()
     {
-        if(!$this->getUser()->is_platform_admin())
-        {
-            throw new NotAllowedException();
-        }
+        $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
 
         $course_ids = $this->get_selected_course_ids();
         $this->set_parameter(self :: PARAM_COURSE_ID, $course_ids);

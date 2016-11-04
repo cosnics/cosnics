@@ -31,6 +31,8 @@ class CourseListComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
+        $this->checkAuthorization(Manager::context(), 'ViewPersonalCourses');
+
         $html = array();
 
         $html[] = $this->render_header();
