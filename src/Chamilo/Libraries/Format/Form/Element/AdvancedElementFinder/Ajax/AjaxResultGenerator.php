@@ -1,11 +1,9 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax;
 
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -19,16 +17,19 @@ class AjaxResultGenerator
     const PROPERTY_TOTAL_ELEMENTS = 'total_elements';
 
     /**
+     *
      * @var AjaxResultDataProviderInterface
      */
     protected $ajaxResultDataProvider;
 
     /**
+     *
      * @var string
      */
     protected $searchQuery;
 
     /**
+     *
      * @var int
      */
     protected $offset;
@@ -40,13 +41,9 @@ class AjaxResultGenerator
      * @param string $searchQuery
      * @param int $offset
      */
-    public function __construct(
-        AjaxResultDataProviderInterface $ajaxResultDataProvider, $searchQuery = null, $offset = 0
-    )
+    public function __construct(AjaxResultDataProviderInterface $ajaxResultDataProvider, $searchQuery = null, $offset = 0)
     {
-        $this->setSearchQuery($searchQuery)
-            ->setOffset($offset)
-            ->setAjaxResultDataProvider($ajaxResultDataProvider);
+        $this->setSearchQuery($searchQuery)->setOffset($offset)->setAjaxResultDataProvider($ajaxResultDataProvider);
     }
 
     /**
@@ -67,6 +64,7 @@ class AjaxResultGenerator
     }
 
     /**
+     *
      * @param PropertyConditionVariable[] $searchProperties
      *
      * @return Condition
@@ -75,7 +73,7 @@ class AjaxResultGenerator
     {
         $condition = null;
 
-        if (!empty($this->searchQuery))
+        if (! empty($this->searchQuery))
         {
             $condition = Utilities::query_to_condition($this->searchQuery, $searchProperties);
         }
@@ -84,6 +82,7 @@ class AjaxResultGenerator
     }
 
     /**
+     *
      * @param int $offset
      *
      * @return $this
@@ -101,6 +100,7 @@ class AjaxResultGenerator
     }
 
     /**
+     *
      * @return int
      */
     public function getOffset()
@@ -109,6 +109,7 @@ class AjaxResultGenerator
     }
 
     /**
+     *
      * @param string $searchQuery
      *
      * @return $this
@@ -121,6 +122,7 @@ class AjaxResultGenerator
     }
 
     /**
+     *
      * @return string
      */
     public function getSearchQuery()
@@ -129,6 +131,7 @@ class AjaxResultGenerator
     }
 
     /**
+     *
      * @return AjaxResultDataProviderInterface
      */
     public function getAjaxResultDataProvider()
@@ -137,6 +140,7 @@ class AjaxResultGenerator
     }
 
     /**
+     *
      * @param AjaxResultDataProviderInterface $ajaxResultDataProvider
      */
     public function setAjaxResultDataProvider($ajaxResultDataProvider)

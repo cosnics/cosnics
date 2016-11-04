@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Menu\Renderer\Menu\Type;
 
 use Chamilo\Core\Menu\Renderer\Menu\Renderer;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
@@ -60,8 +59,8 @@ class Bar extends Renderer
 
     public function renderBrand()
     {
-        $siteName = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
-        $brandImage = PlatformSetting :: get('brand_image', 'Chamilo\Core\Menu');
+        $siteName = PlatformSetting::get('site_name', 'Chamilo\Core\Admin');
+        $brandImage = PlatformSetting::get('brand_image', 'Chamilo\Core\Menu');
 
         if ($brandImage)
         {
@@ -69,10 +68,10 @@ class Bar extends Renderer
         }
         else
         {
-            $brandSource = Theme :: getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
+            $brandSource = Theme::getInstance()->getImagePath('Chamilo\Configuration', 'LogoHeader');
         }
 
-        return '<a class="navbar-brand" href="' . Path :: getInstance()->getBasePath(true) . '">' . '<img alt="' .
+        return '<a class="navbar-brand" href="' . Path::getInstance()->getBasePath(true) . '">' . '<img alt="' .
              $siteName . '" src="' . $brandSource . '"></a>';
     }
 

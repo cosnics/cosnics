@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -19,7 +18,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -32,6 +30,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class OpenCourseRepository
 {
+
     /**
      * Retrieves the open courses for the given user roles
      *
@@ -43,13 +42,13 @@ class OpenCourseRepository
      *
      * @return RecordIterator
      */
-    public function findOpenCoursesByRoles(
-        $roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array()
-    )
+    public function findOpenCoursesByRoles($roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array())
     {
         return $this->findOpenCourses(
-            $this->getOpenCoursesCondition($condition, $this->getConditionForRoles($roles)), $offset, $count, $orderBy
-        );
+            $this->getOpenCoursesCondition($condition, $this->getConditionForRoles($roles)),
+            $offset,
+            $count,
+            $orderBy);
     }
 
     /**
@@ -86,18 +85,19 @@ class OpenCourseRepository
             new FixedPropertyConditionVariable(
                 CourseType::class_name(),
                 CourseType::PROPERTY_TITLE,
-                Course::PROPERTY_COURSE_TYPE_TITLE
-            )
-        );
+                Course::PROPERTY_COURSE_TYPE_TITLE));
 
         $recordsParameters = new RecordRetrievesParameters(
-            $properties, $condition,
-            $count, $offset, $orderBy, $this->getOpenCoursesJoins()
-        );
+            $properties,
+            $condition,
+            $count,
+            $offset,
+            $orderBy,
+            $this->getOpenCoursesJoins());
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::records(
-            Course::class_name(), $recordsParameters
-        );
+            Course::class_name(),
+            $recordsParameters);
     }
 
     /**
@@ -114,8 +114,7 @@ class OpenCourseRepository
     {
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Course::class_name(),
-            new DataClassRetrievesParameters($this->getClosedCoursesCondition($condition), $count, $offset, $orderBy)
-        );
+            new DataClassRetrievesParameters($this->getClosedCoursesCondition($condition), $count, $offset, $orderBy));
     }
 
     /**
@@ -167,8 +166,8 @@ class OpenCourseRepository
     public function countClosedCourses(Condition $condition = null)
     {
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count(
-            Course::class_name(), new DataClassCountParameters($this->getClosedCoursesCondition($condition))
-        );
+            Course::class_name(),
+            new DataClassCountParameters($this->getClosedCoursesCondition($condition)));
     }
 
     /**
@@ -181,11 +180,8 @@ class OpenCourseRepository
     public function getRolesForOpenCourse(Course $course)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID
-            ),
-            new StaticConditionVariable($course->getId())
-        );
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
+            new StaticConditionVariable($course->getId()));
 
         $joins = new Joins();
 
@@ -196,24 +192,18 @@ class OpenCourseRepository
                     array(
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID
-                            ),
-                            new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ID)
-                        ),
+                                CourseEntityRelation::class_name(),
+                                CourseEntityRelation::PROPERTY_ENTITY_ID),
+                            new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ID)),
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
-                            ),
-                            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE)
-                        )
-                    )
-                )
-            )
-        );
+                                CourseEntityRelation::class_name(),
+                                CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+                            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE))))));
 
         return \Chamilo\Core\User\Roles\Storage\DataManager::retrieves(
-            Role::class_name(), new DataClassRetrievesParameters($condition, null, null, array(), $joins)
-        );
+            Role::class_name(),
+            new DataClassRetrievesParameters($condition, null, null, array(), $joins));
     }
 
     /**
@@ -229,22 +219,18 @@ class OpenCourseRepository
             array(
                 new InCondition(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID
-                    ),
-                    $courseIds
-                ),
+                        CourseEntityRelation::class_name(),
+                        CourseEntityRelation::PROPERTY_COURSE_ID),
+                    $courseIds),
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
-                    ),
-                    new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE)
-                )
-            )
-        );
+                        CourseEntityRelation::class_name(),
+                        CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+                    new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE))));
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::deletes(
-            CourseEntityRelation::class_name(), $condition
-        );
+            CourseEntityRelation::class_name(),
+            $condition);
     }
 
     /**
@@ -261,11 +247,8 @@ class OpenCourseRepository
                 CourseType::class_name(),
                 new EqualityCondition(
                     new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_COURSE_TYPE_ID),
-                    new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID)
-                ),
-                Join::TYPE_LEFT
-            )
-        );
+                    new PropertyConditionVariable(CourseType::class_name(), CourseType::PROPERTY_ID)),
+                Join::TYPE_LEFT));
 
         return $joins;
     }
@@ -274,20 +257,17 @@ class OpenCourseRepository
      * Returns the condition for open courses
      *
      * @param Condition $condition
-     * @param Condition $courseEntityRelationCondition - Limit the open courses by a condition for the course entity table
-     *
+     * @param Condition $courseEntityRelationCondition - Limit the open courses by a condition for the course entity
+     *            table
      * @return AndCondition
      */
-    protected function getOpenCoursesCondition(
-        Condition $condition = null, Condition $courseEntityRelationCondition = null
-    )
+    protected function getOpenCoursesCondition(Condition $condition = null, Condition $courseEntityRelationCondition = null)
     {
         $conditions = array();
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Course::class_name(), Course::PROPERTY_ID),
-            $this->getCourseIdsWithRolesAttached($courseEntityRelationCondition)
-        );
+            $this->getCourseIdsWithRolesAttached($courseEntityRelationCondition));
 
         if ($condition instanceof Condition)
         {
@@ -299,15 +279,14 @@ class OpenCourseRepository
 
     /**
      * Returns the condition for the closed courses
-     * 
+     *
      * @param Condition $condition
      * @param Condition $courseEntityRelationCondition
-     * 
+     *
      * @return Condition
      */
-    protected function getClosedCoursesCondition(
-        Condition $condition = null, Condition $courseEntityRelationCondition = null
-    )
+    protected function getClosedCoursesCondition(Condition $condition = null,
+        Condition $courseEntityRelationCondition = null)
     {
         return new NotCondition($this->getOpenCoursesCondition($condition, $courseEntityRelationCondition));
     }
@@ -324,11 +303,8 @@ class OpenCourseRepository
         $conditions = array();
 
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE
-            ),
-            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE)
-        );
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_ROLE));
 
         if ($condition instanceof Condition)
         {
@@ -340,8 +316,8 @@ class OpenCourseRepository
         $distinctParameters = new DataClassDistinctParameters($condition, CourseEntityRelation::PROPERTY_COURSE_ID);
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
-            CourseEntityRelation::class_name(), $distinctParameters
-        );
+            CourseEntityRelation::class_name(),
+            $distinctParameters);
     }
 
     /**
@@ -361,8 +337,7 @@ class OpenCourseRepository
 
         $courseEntityRelationCondition = new InCondition(
             new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
-            $roleIds
-        );
+            $roleIds);
 
         return $courseEntityRelationCondition;
     }
