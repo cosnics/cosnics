@@ -4,11 +4,7 @@ namespace Chamilo\Libraries\Cache;
 use Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService;
 use Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService;
 use Chamilo\Application\Calendar\Extension\Office365\Service\RequestCacheService;
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
-use Chamilo\Configuration\Storage\Repository\LanguageRepository;
-use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Configuration\Service\ConfigurationCacheService;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\DataCacheLoader;
@@ -16,6 +12,9 @@ use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\LanguageLoader;
 use Chamilo\Configuration\Service\RegistrationLoader;
 use Chamilo\Configuration\Service\StorageConfigurationLoader;
+use Chamilo\Configuration\Storage\Repository\ConfigurationRepository;
+use Chamilo\Configuration\Storage\Repository\LanguageRepository;
+use Chamilo\Configuration\Storage\Repository\RegistrationRepository;
 use Chamilo\Core\Menu\Repository\ItemRepository;
 use Chamilo\Core\Menu\Service\ItemsCacheService;
 use Chamilo\Core\Menu\Service\ItemService;
@@ -39,9 +38,9 @@ use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\DataSourceNameFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
@@ -114,38 +113,40 @@ class CacheDirectorBuilder
 
         $stringUtilities = new StringUtilities();
         $classnameUtilities = new ClassnameUtilities($stringUtilities);
-        $exceptionLoggerFactory = new ExceptionLoggerFactory(Configuration::get_instance());
+
         $configurationConsulter = new ConfigurationConsulter(
             new FileConfigurationLoader(new PathBuilder($classnameUtilities)));
-//        $dataSourceNameFactory = new DataSourceNameFactory($configurationConsulter);
-//        $connectionFactory = new ConnectionFactory($dataSourceNameFactory->getDataSourceName());
+        $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
+        $dataSourceName = new DataSourceName(
+            $configurationConsulter->getSetting(array('Chamilo\Configuration', 'database')));
+        $connectionFactory = new ConnectionFactory($dataSourceName);
 
-//        $dataClassRepository = new DataClassRepository(
-//            $configurationConsulter,
-//            new DataClassRepositoryCache(),
-//            new DataClassDatabase(
-//                $connectionFactory->getConnection(),
-//                new StorageAliasGenerator($classnameUtilities),
-//                $exceptionLoggerFactory->createExceptionLogger(),
-//                new ConditionPartTranslatorService(
-//                    $configurationConsulter,
-//                    new ConditionPartTranslatorFactory($classnameUtilities),
-//                    new ConditionPartCache()),
-//                new RecordProcessor()),
-//            new DataClassFactory());
+        $dataClassRepository = new DataClassRepository(
+            $configurationConsulter,
+            new DataClassRepositoryCache(),
+            new DataClassDatabase(
+                $connectionFactory->getConnection(),
+                new StorageAliasGenerator($classnameUtilities),
+                $exceptionLoggerFactory->createExceptionLogger(),
+                new ConditionPartTranslatorService(
+                    $configurationConsulter,
+                    new ConditionPartTranslatorFactory($classnameUtilities),
+                    new ConditionPartCache()),
+                new RecordProcessor()),
+            new DataClassFactory());
 
-//        $cacheDirector->addCacheService(
-//            'chamilo_configuration',
-//            new DataCacheLoader(new StorageConfigurationLoader(new ConfigurationRepository($dataClassRepository))));
-//
-//        $cacheDirector->addCacheService(
-//            'chamilo_registration',
-//            new DataCacheLoader(
-//                new RegistrationLoader($stringUtilities, new RegistrationRepository($dataClassRepository))));
-//
-//        $cacheDirector->addCacheService(
-//            'chamilo_language',
-//            new DataCacheLoader(new LanguageLoader(new LanguageRepository($dataClassRepository))));
+        $cacheDirector->addCacheService(
+            'chamilo_configuration',
+            new DataCacheLoader(new StorageConfigurationLoader(new ConfigurationRepository($dataClassRepository))));
+
+        $cacheDirector->addCacheService(
+            'chamilo_registration',
+            new DataCacheLoader(
+                new RegistrationLoader($stringUtilities, new RegistrationRepository($dataClassRepository))));
+
+        $cacheDirector->addCacheService(
+            'chamilo_language',
+            new DataCacheLoader(new LanguageLoader(new LanguageRepository($dataClassRepository))));
 
         $cacheDirector->addCacheService(
             'chamilo_repository_configuration',

@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 
 /**
@@ -15,9 +15,9 @@ class SessionUtilities
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
      */
-    private $fileConfigurationLoader;
+    private $fileConfigurationLocator;
 
     /**
      *
@@ -37,10 +37,10 @@ class SessionUtilities
      */
     private $securityKey;
 
-    public function __construct(FileConfigurationLoader $fileConfigurationLoader, ConnectionFactory $connectionFactory,
+    public function __construct(FileConfigurationLocator $fileConfigurationLocator, ConnectionFactory $connectionFactory,
         $sessionHandler, $securityKey = null)
     {
-        $this->fileConfigurationLoader = $fileConfigurationLoader;
+        $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->connectionFactory = $connectionFactory;
         $this->sessionHandler = $sessionHandler;
         $this->securityKey = $securityKey;
@@ -48,20 +48,20 @@ class SessionUtilities
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
      */
-    public function getFileConfigurationLoader()
+    public function getFileConfigurationLocator()
     {
-        return $this->fileConfigurationLoader;
+        return $this->fileConfigurationLocator;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLoader $fileConfigurationLoader
+     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      */
-    public function setFileConfigurationLoader(FileConfigurationLoader $fileConfigurationLoader)
+    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
     {
-        $this->fileConfigurationLoader = $fileConfigurationLoader;
+        $this->fileConfigurationLocator = $fileConfigurationLocator;
     }
 
     /**
@@ -125,7 +125,7 @@ class SessionUtilities
          */
         session_cache_limiter('');
 
-        if ($this->getFileConfigurationLoader()->isAvailable())
+        if ($this->getFileConfigurationLocator()->isAvailable())
         {
             try
             {

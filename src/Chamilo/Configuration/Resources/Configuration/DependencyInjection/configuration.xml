@@ -52,6 +52,14 @@
             class="Chamilo\Configuration\Service\FileConfigurationLoader">
             <argument
                 type="service"
+                id="chamilo.configuration.service.file_configuration_locator" />
+        </service>
+        
+        <service
+            id="chamilo.configuration.service.file_configuration_locator"
+            class="Chamilo\Configuration\Service\FileConfigurationLocator">
+            <argument
+                type="service"
                 id="chamilo.libraries.file.path_builder" />
         </service>
 

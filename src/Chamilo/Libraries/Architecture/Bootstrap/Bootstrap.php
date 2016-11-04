@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
-use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
@@ -24,9 +24,9 @@ class Bootstrap
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
      */
-    private $fileConfigurationLoader;
+    private $fileConfigurationLocator;
 
     /**
      *
@@ -43,16 +43,16 @@ class Bootstrap
     /**
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Chamilo\Configuration\Service\FileConfigurationLoader $fileConfigurationLoader
+     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory $connectionFactory
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request,
-        FileConfigurationLoader $fileConfigurationLoader, ConnectionFactory $connectionFactory,
+        FileConfigurationLocator $fileConfigurationLocator, ConnectionFactory $connectionFactory,
         SessionUtilities $sessionUtilities)
     {
         $this->request = $request;
-        $this->fileConfigurationLoader = $fileConfigurationLoader;
+        $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->connectionFactory = $connectionFactory;
         $this->sessionUtilities = $sessionUtilities;
     }
@@ -77,20 +77,20 @@ class Bootstrap
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
      */
-    public function getFileConfigurationLoader()
+    public function getFileConfigurationLocator()
     {
-        return $this->fileConfigurationLoader;
+        return $this->fileConfigurationLocator;
     }
 
     /**
      *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLoader $fileConfigurationLoader
+     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      */
-    public function setFileConfigurationLoader(FileConfigurationLoader $fileConfigurationLoader)
+    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
     {
-        $this->fileConfigurationLoader = $fileConfigurationLoader;
+        $this->fileConfigurationLocator = $fileConfigurationLocator;
     }
 
     /**
@@ -136,7 +136,7 @@ class Bootstrap
      */
     private function checkInstallation()
     {
-        if (! $this->getFileConfigurationLoader()->isAvailable())
+        if (! $this->getFileConfigurationLocator()->isAvailable())
         {
             $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
             // TODO: This is old code to make sure those instances still accessing the parameter the old way keep on

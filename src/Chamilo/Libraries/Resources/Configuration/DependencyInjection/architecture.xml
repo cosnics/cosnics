@@ -12,7 +12,7 @@
                 id="symfony.component.http_foundation.request" />
             <argument
                 type="service"
-                id="chamilo.configuration.service.file_configuration_loader" />
+                id="chamilo.configuration.service.file_configuration_locator" />
             <argument
                 type="service"
                 id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
@@ -36,7 +36,7 @@
                 id="chamilo.libraries.platform.translator" />
             <argument
                 type="service"
-                id="chamilo.configuration.service.file_configuration_loader" />
+                id="chamilo.configuration.service.file_configuration_locator" />
             <argument
                 type="service"
                 id="chamilo.configuration.service.configuration_consulter" />
@@ -87,7 +87,7 @@
             class="Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerFactory">
             <argument
                 type="service"
-                id="chamilo.configuration.service.configuration" />
+                id="chamilo.configuration.service.file_configuration_consulter" />
         </service>
     </services>
 </container>
