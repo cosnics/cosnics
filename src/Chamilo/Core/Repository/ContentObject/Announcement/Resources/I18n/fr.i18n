@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\announcement
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Annonce"
+Title = "Sujet"
+Description = "Message"
+AnnouncementToolBrowserComponent = "Parcourir les annonces"
+AnnouncementToolIntroductionPublisherComponent = "Publier une introduction"
+AnnouncementToolPublisherComponent = "Publier une annonce"
+AnnouncementToolUpdaterComponent = "Modifier une annonce"
+AnnouncementToolViewerComponent = "Voir une annonce"

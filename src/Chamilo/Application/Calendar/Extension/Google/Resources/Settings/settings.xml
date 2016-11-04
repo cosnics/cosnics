@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Application\Calendar\Extension\Google">
+	<settings>
+		<category name="general">
+			<setting name="developer_key" field="text" default="" />
+			<setting name="client_id" field="text" default="" />
+			<setting name="client_secret" field="text" default="" />
+			<setting name="token" field="text" default="" user_setting="1" />
+		</category>
+	</settings>
+</package>

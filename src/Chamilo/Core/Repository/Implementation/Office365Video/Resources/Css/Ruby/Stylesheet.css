@@ -1,0 +1,9 @@
+@import url('../Aqua/Stylesheet.css');
+
+ul.tree-menu li div a.office365_video {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
+
+ul.tree-menu li div a.type_office365_video {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}

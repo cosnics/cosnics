@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\category_manager
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Categories = "Catégories"
+Category = "Catégorie"
+BrowserComponent = "Catégorie Browser"
+CategoryManagerCreatorComponent = "Créateur"
+CategoryManagerDeleterComponent = "Deleter"
+CategoryManagerMoverComponent = "Déplacement"
+CategoryManagerParentChangerComponent = "Changer"
+CategoryManagerUpdaterComponent = "Mise à jour"
+CategoryName = "Nom de la catégorie"
+CopyGeneralCategories = "Copiez les catégories générales"
+Name = "Nom"
+NoObjectSelected = "Aucun objet choisi"
+NotAllowed = "Exclu"
+Root = "Root"
+Subcategories = "Les sous-catégories"
+ThisFieldIsRequired = "Ce champ est obligatoire"
+TypeName = "Category Manager"

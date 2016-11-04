@@ -1,0 +1,10 @@
+/**
+ * @package repository.lib.content_object.{TYPE}
+ * @author {AUTHOR}
+ */
+ 
+require_once dirname(__FILE__) . '/complex_announcement.class.php';
+ 
+class Complex{OBJECT_CLASS}Form extends ComplexContentObjectItemForm
+{
+}

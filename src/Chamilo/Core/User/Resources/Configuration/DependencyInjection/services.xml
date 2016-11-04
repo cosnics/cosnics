@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.core.user.user"
+            class="Chamilo\Core\User\Storage\DataClass\User">
+            <factory
+                service="chamilo.core.user.factory.user_factory"
+                method="getUser" />
+        </service>
+
+        <service
+            id="chamilo.core.user.factory.user_factory"
+            class="Chamilo\Core\User\Factory\UserFactory">
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.session.session_utilities" />
+            <argument
+                type="service"
+                id="chamilo.core.user.service.user_service" />
+            <argument
+                type="service"
+                id="chamilo.configuration.service.configuration_consulter" />
+            <argument
+                type="service"
+                id="chamilo.libraries.format.theme" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.translation" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.configuration.local_setting" />
+        </service>
+
+        <service
+            id="chamilo.core.user.service.user_service"
+            class="Chamilo\Core\User\Service\UserService">
+            <argument
+                type="service"
+                id="chamilo.core.user.storage.repository.user_repository" />
+        </service>
+
+        <service
+            id="chamilo.core.user.storage.repository.user_repository"
+            class="Chamilo\Core\User\Storage\Repository\UserRepository">
+        </service>
+
+    </services>
+</container>

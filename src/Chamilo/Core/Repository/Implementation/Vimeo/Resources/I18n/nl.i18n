@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\vimeo
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Vimeo"
+Public = "Openbaar"
+Description = "Beschrijving"
+Properties = "Eigenschappen"
+Title = "Titel"
+URL = "URL"
+Credentials = "Toegewezen rechten"
+OauthToken = "OauthToken"
+OauthTokenSecret = "OauthTokenSecret"
+UploaderComponent = "Upload"
+Edit = "Bewerk {OBJECT}"

@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Libraries\Calendar
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Kalender"
+TypeCategory = "Libraries"
+WorkingHours = "Working hours"
+WorkingHoursStart = "Start"
+WorkingHoursEnd = "End"
+HideNoneWorkingHours = "Hide other hours"
+FirstDayOfWeek = "First day of the week"
+PlatformTimezone = "Timezone"
+Caching = "Caching"
+RefreshExternal = "Refresh every (in minutes)"
+DefaultView = "Default view"
+MonthView = "Month"
+WeekView = "Week"
+DayView = "Day"
+ListView = "Agenda"
+YearView = "Year"
+NoUpcomingEvents = "No upcoming events"

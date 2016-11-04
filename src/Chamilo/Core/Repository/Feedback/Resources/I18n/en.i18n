@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Core\Repository\Feedback
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Feedback"
+BrowserComponent = "Feedback"
+AddFeedback = "Voeg feedback toe"
+Feedback = "Existing feedback"
+Comment = "Comment"
+NoFeedbackYet = "No feedback available yet"
+StopReceivingNotifications = "Stop receiving feedback notifications by email"
+ReceiveNotifications = "Receive feedback notifications by email"

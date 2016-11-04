@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.libraries.platform.session.session_utilities"
+            class="Chamilo\Libraries\Platform\Session\SessionUtilities">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_locator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
+            <argument>%chamilo.configuration.session.session_handler%</argument>
+            <argument>%chamilo.configuration.general.security_key%</argument>
+        </service>
+
+        <service
+            id="chamilo.libraries.platform.translation"
+            class="Chamilo\Libraries\Platform\Translation">
+            <factory
+                class="Chamilo\Libraries\Platform\Translation"
+                method="getInstance" />
+        </service>
+
+        <service
+            id="chamilo.libraries.platform.translator"
+            class="Chamilo\Libraries\Platform\Translation">
+            <factory
+                class="Chamilo\Libraries\Platform\Translation"
+                method="getInstance" />
+        </service>
+
+        <service
+            id="chamilo.libraries.platform.configuration.local_setting"
+            class="Chamilo\Libraries\Platform\Configuration\LocalSetting">
+            <factory
+                class="Chamilo\Libraries\Platform\Configuration\LocalSetting"
+                method="getInstance" />
+        </service>
+    </services>
+</container>
