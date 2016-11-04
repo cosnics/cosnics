@@ -62,26 +62,14 @@ class Display extends QuestionDisplay
                 $answer_name = $question_id . '_0';
                 $group[] = $formvalidator->createElement('radio', $answer_name, null, null, $i);
                 $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
+
+                $defaults[$answer_name] = -1;
             }
             elseif ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX)
             {
                 $answer_name = $question_id . '_' . ($i + 1);
                 $group[] = $formvalidator->createElement('checkbox', $answer_name);
                 $group[] = $formvalidator->createElement('static', null, null, $object_renderer->run());
-            }
-
-            if ($this->get_answers())
-            {
-                $answers = $this->get_answers();
-                // dump($this->get_answers());
-                if ($type == AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO)
-                {
-                    $defaults[$answer_name] = $answers[0];
-                }
-                else
-                {
-                    $defaults[$answer_name] = $answers[$i + 1];
-                }
             }
 
             // $formvalidator->addGroup($group, 'option_' . $i, null, '', false);
@@ -95,6 +83,7 @@ class Display extends QuestionDisplay
                 '<tr class="' . ($i % 2 == 0 ? 'row_even' : 'row_odd') . '">{element}</tr>',
                 'option_' . $question_id . '_' . $i);
             $renderer->setGroupElementTemplate('<td>{element}</td>', 'option_' . $question_id . '_' . $i);
+
         }
 
         $table_footer[] = '</tbody>';
