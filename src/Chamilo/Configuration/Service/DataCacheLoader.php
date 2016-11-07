@@ -26,7 +26,6 @@ class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderI
      */
     public function __construct(CacheableDataLoaderInterface $cacheableDataLoader)
     {
-        parent :: __construct();
         $this->cacheableDataLoader = $cacheableDataLoader;
     }
 
@@ -54,14 +53,14 @@ class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderI
      */
     public function warmUpForIdentifier($identifier)
     {
-        return $this->loadSettings();
+        return $this->loadData();
     }
 
     /**
      *
      * @return boolean
      */
-    public function loadSettings()
+    public function loadData()
     {
         return $this->getCacheProvider()->save(
             $this->getCacheableDataLoader()->getIdentifier(),

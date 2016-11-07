@@ -28,7 +28,6 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
      */
     public function __construct(CalendarRepository $calendarRepository)
     {
-        parent :: __construct();
         $this->calendarRepository = $calendarRepository;
     }
 

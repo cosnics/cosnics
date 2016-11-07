@@ -27,7 +27,6 @@ class ItemsCacheService extends DoctrineFilesystemCacheService
      */
     public function __construct(ItemRepository $itemRepository)
     {
-        parent :: __construct();
         $this->itemRepository = $itemRepository;
     }
 
