@@ -31,6 +31,7 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
      */
     public function __construct(TypeSelectorFactory $typeSelectorFactory)
     {
+        parent :: __construct();
         $this->typeSelectorFactory = $typeSelectorFactory;
     }
 
