@@ -29,6 +29,7 @@ class RequestCacheService extends DoctrineFilesystemCacheService implements User
      */
     public function __construct(CalendarRepository $calendarRepository)
     {
+        parent :: __construct();
         $this->calendarRepository = $calendarRepository;
     }
 

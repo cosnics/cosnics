@@ -526,6 +526,15 @@ abstract class Application
 
     /**
      *
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getRequest()
+    {
+        return $this->getApplicationConfiguration()->getRequest();
+    }
+
+    /**
+     *
      * @return string
      */
     public function get_action()

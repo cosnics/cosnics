@@ -32,6 +32,7 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
      */
     public function __construct(CalendarRepository $calendarRepository)
     {
+        parent :: __construct();
         $this->calendarRepository = $calendarRepository;
     }
 
