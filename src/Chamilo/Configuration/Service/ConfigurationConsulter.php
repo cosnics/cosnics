@@ -18,11 +18,6 @@ class ConfigurationConsulter extends DataConsulter
      */
     public function getSettings()
     {
-        if (! isset($this->settings))
-        {
-            $this->settings = $this->getDataLoader()->getData();
-        }
-
         return $this->getData();
     }
 

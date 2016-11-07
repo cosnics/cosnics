@@ -32,6 +32,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Chamilo\Configuration\Service\DataCacheLoader;
 
 /**
  * Builds the default dependency injection container for Chamilo
@@ -79,6 +80,12 @@ class DependencyInjectionContainerBuilder
     private static $container;
 
     /**
+     *
+     * @var \Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder
+     */
+    private static $instance;
+
+    /**
      * Constructor
      *
      * @param ContainerBuilder $builder
@@ -99,6 +106,20 @@ class DependencyInjectionContainerBuilder
 
         $this->cacheFile = $cacheFile;
         $this->cacheClass = $cacheClass;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder
+     */
+    public static function getInstance()
+    {
+        if (! isset(self::$instance))
+        {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -361,21 +382,22 @@ class DependencyInjectionContainerBuilder
 
             $this->registrationConsulter = new RegistrationConsulter(
                 $this->getStringUtilities(),
-                new RegistrationLoader(
-                    $this->getStringUtilities(),
-                    new RegistrationRepository(
-                        new DataClassRepository(
-                            new DataClassRepositoryCache(),
-                            new DataClassDatabase(
-                                $connectionFactory->getConnection(),
-                                new StorageAliasGenerator($this->getClassnameUtilities()),
-                                $exceptionLoggerFactory->createExceptionLogger(),
-                                new ConditionPartTranslatorService(
-                                    new ConditionPartTranslatorFactory($this->getClassnameUtilities()),
-                                    new ConditionPartCache(),
-                                    $this->getFileConfigurationConsulter()->getSetting(
-                                        array('Chamilo\Configuration', 'debug', 'enable_query_cache')))),
-                            new DataClassFactory()))));
+                new DataCacheLoader(
+                    new RegistrationLoader(
+                        $this->getStringUtilities(),
+                        new RegistrationRepository(
+                            new DataClassRepository(
+                                new DataClassRepositoryCache(),
+                                new DataClassDatabase(
+                                    $connectionFactory->getConnection(),
+                                    new StorageAliasGenerator($this->getClassnameUtilities()),
+                                    $exceptionLoggerFactory->createExceptionLogger(),
+                                    new ConditionPartTranslatorService(
+                                        new ConditionPartTranslatorFactory($this->getClassnameUtilities()),
+                                        new ConditionPartCache(),
+                                        $this->getFileConfigurationConsulter()->getSetting(
+                                            array('Chamilo\Configuration', 'debug', 'enable_query_cache')))),
+                                new DataClassFactory())))));
         }
 
         return $this->registrationConsulter;
