@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\DependencyInjection;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Libraries\Cache\FileBasedCacheService;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
 /**
  * Manages the cache for the symfony dependency injection
@@ -15,13 +16,45 @@ class DependencyInjectionCacheService extends FileBasedCacheService
 {
 
     /**
+     *
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    private $fileConfigurationConsulter;
+
+    /**
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $fileConfigurationConsulter
+     */
+    public function __construct(ConfigurationConsulter $fileConfigurationConsulter)
+    {
+        $this->fileConfigurationConsulter = $fileConfigurationConsulter;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    public function getFileConfigurationConsulter()
+    {
+        return $this->fileConfigurationConsulter;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $fileConfigurationConsulter
+     */
+    public function setFileConfigurationConsulter(ConfigurationConsulter $fileConfigurationConsulter)
+    {
+        $this->fileConfigurationConsulter = $fileConfigurationConsulter;
+    }
+
+    /**
      * Warms up the cache.
      */
     public function warmUp()
     {
-        $dependencyInjectionContainerBuilder = new DependencyInjectionContainerBuilder();
+        $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $dependencyInjectionContainerBuilder->clearContainerInstance();
-
         $dependencyInjectionContainerBuilder->createContainer();
 
         return $this;
@@ -34,6 +67,9 @@ class DependencyInjectionCacheService extends FileBasedCacheService
      */
     function getCachePath()
     {
-        return Path::getInstance()->getCachePath(__NAMESPACE__);
+        $configurablePathBuilder = new ConfigurablePathBuilder(
+            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage')));
+
+        return $configurablePathBuilder->getCachePath($this->getCachePathNamespace());
     }
 }

@@ -12,7 +12,6 @@ use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\File\Properties\FileProperties;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;

@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Google\Service\EventsCacheService;
 use Chamilo\Application\Calendar\Extension\Google\Service\OwnedCalendarsCacheService;
 use Chamilo\Application\Calendar\Extension\Office365\Service\RequestCacheService;
 use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
-use Chamilo\Configuration\Service\ConfigurationCacheService;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\DataCacheLoader;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
@@ -107,10 +106,6 @@ class CacheDirectorBuilder
      */
     protected function addGeneralCacheServices(CacheDirector $cacheDirector)
     {
-        $cacheDirector->addCacheService('chamilo_dependency_injection', new DependencyInjectionCacheService());
-        $cacheDirector->addCacheService('chamilo_configuration', new ConfigurationCacheService());
-        $cacheDirector->addCacheService('chamilo_translations', new TranslationCacheService());
-
         $stringUtilities = new StringUtilities();
         $classnameUtilities = new ClassnameUtilities($stringUtilities);
 
@@ -134,6 +129,11 @@ class CacheDirectorBuilder
                     new ConditionPartCache()),
                 new RecordProcessor()),
             new DataClassFactory());
+
+        $cacheDirector->addCacheService(
+            'chamilo_dependency_injection',
+            new DependencyInjectionCacheService($configurationConsulter));
+        $cacheDirector->addCacheService('chamilo_translations', new TranslationCacheService());
 
         $cacheDirector->addCacheService(
             'chamilo_configuration',
