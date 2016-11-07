@@ -2,7 +2,6 @@
 namespace Chamilo\Core\Admin;
 
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
 /**
  * The admin allows the platform admin to configure certain aspects of his platform

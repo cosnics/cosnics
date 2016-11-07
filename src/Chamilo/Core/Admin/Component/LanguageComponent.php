@@ -4,7 +4,6 @@ namespace Chamilo\Core\Admin\Component;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationFactory;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 class LanguageComponent extends Manager
 {

@@ -28,8 +28,7 @@ trait DependencyInjectionContainerTrait
     {
         if (! isset($this->container))
         {
-            $containerBuilder = new DependencyInjectionContainerBuilder();
-            $this->container = $containerBuilder->createContainer();
+            $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
         }
     }
 
