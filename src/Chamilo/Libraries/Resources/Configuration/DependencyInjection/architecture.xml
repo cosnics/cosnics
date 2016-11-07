@@ -15,11 +15,11 @@
                 id="chamilo.configuration.service.file_configuration_locator" />
             <argument
                 type="service"
-                id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
-
+                id="chamilo.libraries.platform.session.session_utilities" />
             <argument
                 type="service"
-                id="chamilo.libraries.platform.session.session_utilities" />
+                id="chamilo.libraries.architecture.error_handler.error_handler" />
+            <argument>%chamilo.configuration.debug.show_errors%</argument>
         </service>
 
         <service
@@ -31,9 +31,6 @@
             <argument
                 type="service"
                 id="chamilo.libraries.platform.session.session_utilities" />
-            <argument
-                type="service"
-                id="chamilo.libraries.platform.translator" />
             <argument
                 type="service"
                 id="chamilo.configuration.service.file_configuration_locator" />
@@ -49,7 +46,6 @@
             <argument
                 type="service"
                 id="chamilo.libraries.architecture.error_handler.exception_logger" />
-            <argument>%chamilo.configuration.debug.show_errors%</argument>
             <argument
                 type="service"
                 id="chamilo.core.user.user" />
@@ -75,6 +71,17 @@
             <argument
                 type="service"
                 id="chamilo.libraries.utilities.string_utilities" />
+        </service>
+
+        <service
+            id="chamilo.libraries.architecture.error_handler.error_handler"
+            class="Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler">
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.translator" />
         </service>
 
         <service

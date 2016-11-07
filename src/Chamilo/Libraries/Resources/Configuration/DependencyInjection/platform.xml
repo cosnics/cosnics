@@ -28,9 +28,21 @@
         <service
             id="chamilo.libraries.platform.translator"
             class="Chamilo\Libraries\Platform\Translation">
-            <factory
-                class="Chamilo\Libraries\Platform\Translation"
-                method="getInstance" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.classname_utilities" />
+            <argument
+                type="service"
+                id="chamilo.libraries.file.path_builder" />
+            <argument
+                type="service"
+                id="chamilo.libraries.platform.translation_cache_service" />
+            <argument>%chamilo.configuration.general.language%</argument>
+        </service>
+
+        <service
+            id="chamilo.libraries.platform.translation_cache_service"
+            class="Chamilo\Libraries\Platform\TranslationCacheService">
         </service>
 
         <service

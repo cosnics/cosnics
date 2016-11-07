@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\DataCacheLoader;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Service\RegistrationConsulter;
@@ -28,11 +29,11 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
+use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use Chamilo\Configuration\Service\DataCacheLoader;
 
 /**
  * Builds the default dependency injection container for Chamilo
@@ -170,15 +171,34 @@ class DependencyInjectionContainerBuilder
     {
         $fileConfigurationLocator = $this->getFileConfigurationLocator();
 
-        if ($fileConfigurationLocator->isAvailable())
-        {
-            return $this->getRegistrationConsulter()->getRegistrationContexts();
-        }
-        else
-        {
-            $platformPackageBundles = new PlatformPackageBundles();
-            return array_keys($platformPackageBundles->get_packages());
-        }
+//         if ($fileConfigurationLocator->isAvailable())
+//         {
+//             try
+//             {
+//                 return $this->getRegistrationConsulter()->getRegistrationContexts();
+//             }
+//             catch (ConnectionException $exception)
+//             {
+//                 return $this->getPackageNamespacesFromFilesystem();
+//             }
+//         }
+//         else
+//         {
+            return $this->getPackageNamespacesFromFilesystem();
+//         }
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    protected function getPackageNamespacesFromFilesystem()
+    {
+        var_dump('test');
+        var_dump(xdebug_get_function_stack());
+        flush();
+        $platformPackageBundles = new PlatformPackageBundles();
+        return array_keys($platformPackageBundles->get_packages());
     }
 
     /**

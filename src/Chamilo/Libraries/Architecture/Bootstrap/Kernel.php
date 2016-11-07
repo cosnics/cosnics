@@ -100,22 +100,14 @@ class Kernel
      */
     private $user;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $showErrors;
-
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, SessionUtilities $sessionUtilities,
-        Translation $translationUtilities, FileConfigurationLocator $fileConfigurationLocator,
-        ConfigurationConsulter $configurationConsulter, ConnectionFactory $connectionFactory,
-        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, $showErrors = false,
-        User $user = null)
+        FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter,
+        ConnectionFactory $connectionFactory, ApplicationFactory $applicationFactory,
+        ExceptionLoggerInterface $exceptionLogger, User $user = null)
     {
         $this->request = $request;
 
         $this->sessionUtilities = $sessionUtilities;
-        $this->translationUtilities = $translationUtilities;
 
         $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->configurationConsulter = $configurationConsulter;
@@ -125,7 +117,6 @@ class Kernel
 
         $this->exceptionLogger = $exceptionLogger;
 
-        $this->showErrors = $showErrors;
         $this->user = $user;
     }
 
@@ -199,24 +190,6 @@ class Kernel
     public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
     {
         $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\Translation
-     */
-    public function getTranslationUtilities()
-    {
-        return $this->translationUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\Translation $translationUtilities
-     */
-    public function setTranslationUtilities(Translation $translationUtilities)
-    {
-        $this->translationUtilities = $translationUtilities;
     }
 
     /**
@@ -327,30 +300,10 @@ class Kernel
         $this->application = $application;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function getShowErrors()
-    {
-        return $this->showErrors;
-    }
-
-    /**
-     *
-     * @param boolean $showErrors
-     */
-    public function setShowErrors($showErrors)
-    {
-        $this->showErrors = $showErrors;
-    }
-
     public function launch()
     {
         try
         {
-            // $this->checkInstallation()->startSession();
-
             if (! $this->getFileConfigurationLocator()->isAvailable())
             {
                 $this->configureContext()->buildApplication()->runApplication();
@@ -531,22 +484,6 @@ class Kernel
     {
         date_default_timezone_set(
             $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'platform_timezone')));
-
-        return $this;
-    }
-
-    /**
-     * Registers the error handler by using the error handler manager
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     */
-    protected function registerErrorHandlers()
-    {
-        if (! $this->getShowErrors())
-        {
-            $errorHandler = new ErrorHandler($this->getExceptionLogger(), $this->getTranslationUtilities());
-            $errorHandler->registerErrorHandlers();
-        }
 
         return $this;
     }
