@@ -2,7 +2,12 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /*
  * Builds the FileExceptionLogger class
@@ -27,6 +32,13 @@ class FileExceptionLoggerBuilder implements ExceptionLoggerBuilderInterface
      */
     public function createExceptionLogger()
     {
-        return new FileExceptionLogger(Path::getInstance()->getLogPath());
+        $fileConfigurationConsulter = new ConfigurationConsulter(
+            new FileConfigurationLoader(
+                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
+
+        $configurablePathBuilder = new ConfigurablePathBuilder(
+            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
+
+        return new FileExceptionLogger($configurablePathBuilder->getLogPath());
     }
 }

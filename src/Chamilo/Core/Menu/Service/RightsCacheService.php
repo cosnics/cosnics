@@ -32,6 +32,7 @@ class RightsCacheService extends DoctrinePhpFileCacheService implements UserBase
      */
     public function __construct(ItemService $itemService)
     {
+        parent :: __construct();
         $this->itemService = $itemService;
     }
 

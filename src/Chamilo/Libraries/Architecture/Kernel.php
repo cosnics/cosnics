@@ -45,6 +45,9 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class Kernel
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+
+    // Parameters
     const PARAM_CODE = 'code';
     const PARAM_STATE = 'state';
     const PARAM_SESSION_STATE = 'session_state';
@@ -272,7 +275,9 @@ class Kernel
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
 
-        $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfiguration());
+        $authenticationValidator = new AuthenticationValidator(
+            $this->getRequest(),
+            $this->getService('chamilo.configuration.service.configuration_consulter'));
 
         if ($applicationRequiresAuthentication)
         {

@@ -1,6 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Utilities\StringUtilities;
+
 /**
  * Describes a generic database-backed storage layer connection string
  *
@@ -229,14 +236,21 @@ abstract class DataSourceName
      */
     public static function get_from_config($type)
     {
+        $fileConfigurationConsulter = new ConfigurationConsulter(
+            new FileConfigurationLoader(
+                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
+
         return self::factory(
             $type,
             array(
-                'driver' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'driver'),
-                'username' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'username'),
-                'host' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'host'),
-                'name' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'name'),
-                'password' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'password')));
+                'driver' => $fileConfigurationConsulter->getSetting(
+                    array('Chamilo\Configuration', 'database', 'driver')),
+                'username' => $fileConfigurationConsulter->getSetting(
+                    array('Chamilo\Configuration', 'database', 'username')),
+                'host' => $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'database', 'host')),
+                'name' => $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'database', 'name')),
+                'password' => $fileConfigurationConsulter->getSetting(
+                    array('Chamilo\Configuration', 'database', 'password'))));
     }
 
     /**

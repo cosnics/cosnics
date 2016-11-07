@@ -26,6 +26,7 @@ class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderI
      */
     public function __construct(CacheableDataLoaderInterface $cacheableDataLoader)
     {
+        parent :: __construct();
         $this->cacheableDataLoader = $cacheableDataLoader;
     }
 

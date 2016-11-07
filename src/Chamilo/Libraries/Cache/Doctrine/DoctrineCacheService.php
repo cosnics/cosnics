@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Cache\Doctrine;
 
 use Chamilo\Libraries\Cache\IdentifiableCacheService;
-use Chamilo\Libraries\File\Path;
 
 /**
  *
@@ -13,12 +12,18 @@ use Chamilo\Libraries\File\Path;
  */
 abstract class DoctrineCacheService extends IdentifiableCacheService
 {
+    use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 
     /**
      *
      * @var \Doctrine\Common\Cache\CacheProvider
      */
     private $cacheProvider;
+
+    public function __construct()
+    {
+        $this->initializeContainer();
+    }
 
     /**
      *
@@ -32,7 +37,8 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
      */
     protected function getCachePath()
     {
-        return Path :: getInstance()->getCachePath($this->getCachePathNamespace());
+        $configurablePathBuilder = $this->getService('chamilo.libraries.file.configurable_path_builder');
+        return $configurablePathBuilder->getCachePath($this->getCachePathNamespace());
     }
 
     /**
