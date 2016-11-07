@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function
@@ -113,7 +115,8 @@ class ErrorHandler
      */
     protected function displayGeneralErrorPage()
     {
-        $path = Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/Templates/Error.html.tpl';
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+        $path = $pathBuilder->namespaceToFullPath('Chamilo\Configuration') . 'Resources/Templates/Error.html.tpl';
         $template = file_get_contents($path);
 
         $variables = array(

@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Factory;
 
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Doctrine\DBAL\DriverManager;
 
 /**
@@ -72,7 +73,7 @@ class ConnectionFactory
         }
         catch (\Exception $exception)
         {
-            throw new \Exception('Could not connect to the database. Please contact your system administrator.');
+            throw new ConnectionException('Could not connect to the database. Please contact your system administrator.');
         }
     }
 }

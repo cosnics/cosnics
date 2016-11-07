@@ -100,7 +100,9 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
                     'security_key' => $fileContainer->getParameter('chamilo.configuration.general.security_key'),
                     'hashing_algorithm' => $fileContainer->getParameter(
                         'chamilo.configuration.general.hashing_algorithm'),
-                    'install_date' => $fileContainer->getParameter('chamilo.configuration.general.install_date')),
+                    'install_date' => $fileContainer->getParameter('chamilo.configuration.general.install_date'),
+                    'language' => $fileContainer->getParameter('chamilo.configuration.general.language'),
+                    'theme' => $fileContainer->getParameter('chamilo.configuration.general.theme')),
                 'database' => $fileContainer->getParameter('chamilo.configuration.database'),
                 'debug' => array(
                     'show_errors' => $fileContainer->getParameter('chamilo.configuration.debug.show_errors'),

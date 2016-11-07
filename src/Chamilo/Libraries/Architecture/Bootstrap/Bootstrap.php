@@ -3,9 +3,9 @@ namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 
 /**
  *
@@ -30,31 +30,37 @@ class Bootstrap
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    private $connectionFactory;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     private $sessionUtilities;
 
     /**
      *
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler
+     */
+    private $errorHandler;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $showErrors;
+
+    /**
+     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory $connectionFactory
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request,
-        FileConfigurationLocator $fileConfigurationLocator, ConnectionFactory $connectionFactory,
-        SessionUtilities $sessionUtilities)
+        FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
+        ErrorHandler $errorHandler, $showErrors = false)
     {
         $this->request = $request;
         $this->fileConfigurationLocator = $fileConfigurationLocator;
-        $this->connectionFactory = $connectionFactory;
         $this->sessionUtilities = $sessionUtilities;
+        $this->errorHandler = $errorHandler;
+        $this->showErrors = $showErrors;
     }
 
     /**
@@ -95,24 +101,6 @@ class Bootstrap
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    public function getConnectionFactory()
-    {
-        return $this->connectionFactory;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory $connectionFactory
-     */
-    public function setConnectionFactory(ConnectionFactory $connectionFactory)
-    {
-        $this->connectionFactory = $connectionFactory;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     public function getSessionUtilities()
@@ -130,11 +118,47 @@ class Bootstrap
     }
 
     /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler
+     */
+    public function getErrorHandler()
+    {
+        return $this->errorHandler;
+    }
+
+    /**
+     *
+     * @param ErrorHandler $errorHandler
+     */
+    public function setExceptionLogger(ErrorHandler $errorHandler)
+    {
+        $this->errorHandler = $errorHandler;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getShowErrors()
+    {
+        return $this->showErrors;
+    }
+
+    /**
+     *
+     * @param boolean $showErrors
+     */
+    public function setShowErrors($showErrors)
+    {
+        $this->showErrors = $showErrors;
+    }
+
+    /**
      * Check if the system has been installed, if not display message accordingly
      *
      * @return \Chamilo\Libraries\Architecture\Bootstrapper
      */
-    private function checkInstallation()
+    protected function checkInstallation()
     {
         if (! $this->getFileConfigurationLocator()->isAvailable())
         {
@@ -145,14 +169,27 @@ class Bootstrap
             return $this;
         }
 
-        $this->getConnectionFactory()->getConnection();
+        return $this;
+    }
+
+    protected function startSession()
+    {
+        $this->getSessionUtilities()->start();
 
         return $this;
     }
 
-    private function startSession()
+    /**
+     * Registers the error handler by using the error handler manager
+     *
+     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     */
+    protected function registerErrorHandlers()
     {
-        $this->getSessionUtilities()->start();
+        if (! $this->getShowErrors())
+        {
+            $this->getErrorHandler()->registerErrorHandlers();
+        }
 
         return $this;
     }
@@ -163,6 +200,6 @@ class Bootstrap
      */
     public function setup()
     {
-        return $this->checkInstallation()->startSession();
+        return $this->registerErrorHandlers()->checkInstallation()->startSession();
     }
 }
