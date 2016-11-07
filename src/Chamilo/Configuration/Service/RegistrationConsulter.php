@@ -61,7 +61,7 @@ class RegistrationConsulter extends DataConsulter
     /**
      *
      * @param string $context
-     * @return Registration
+     * @return string[]
      */
     public function getRegistrationForContext($context)
     {
@@ -82,7 +82,7 @@ class RegistrationConsulter extends DataConsulter
     /**
      *
      * @param string $type
-     * @return \configuration\Registration[]
+     * @return \string[]
      */
     public function getRegistrationsByType($type)
     {
@@ -97,7 +97,7 @@ class RegistrationConsulter extends DataConsulter
      */
     public function isContextRegistered($context)
     {
-        $registration = $this->getRegistration($context);
+        $registration = $this->getRegistrationForContext($context);
         return ! empty($registration);
     }
 
@@ -108,7 +108,7 @@ class RegistrationConsulter extends DataConsulter
      */
     public function isContextRegisteredAndActive($context)
     {
-        $registration = $this->getRegistration($context);
+        $registration = $this->getRegistrationForContext($context);
         return $this->isContextRegistered($context) &&
              $registration[Registration::PROPERTY_STATUS] == Registration::STATUS_ACTIVE;
     }

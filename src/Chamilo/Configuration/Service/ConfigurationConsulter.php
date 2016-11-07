@@ -47,7 +47,7 @@ class ConfigurationConsulter extends DataConsulter
         {
             $key = array_shift($variables);
 
-            if (! isset($values[$key]))
+            if (! array_key_exists($key, $values))
             {
                 throw new UserException(
                     'The requested variable is not available in an unconfigured environment (' . implode(' > ', $keys) .

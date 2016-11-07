@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
@@ -596,7 +595,7 @@ class Kernel
             $applicationClassName,
             'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
 
-        $authenticationValidator = new AuthenticationValidator($this->getRequest(), Configuration::get_instance());
+        $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfigurationConsulter());
 
         if ($applicationRequiresAuthentication)
         {

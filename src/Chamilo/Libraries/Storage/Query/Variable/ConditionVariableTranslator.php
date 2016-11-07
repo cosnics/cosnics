@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query\Variable;
 
-use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\Cache\ConditionVariableCache;
 
@@ -54,7 +53,7 @@ abstract class ConditionVariableTranslator
     public static function factory($type, ConditionVariable $condition_variable)
     {
         $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Variable\\' .
-             ClassnameUtilities :: getInstance()->getClassnameFromObject($condition_variable) . 'Translator';
+             ClassnameUtilities::getInstance()->getClassnameFromObject($condition_variable) . 'Translator';
 
         return new $class($condition_variable);
     }
@@ -66,23 +65,13 @@ abstract class ConditionVariableTranslator
      */
     public static function render(ConditionVariable $conditionVariable)
     {
-        $queryCacheEnabled = Configuration :: get_instance()->get_setting(
-            array('Chamilo\Configuration', 'debug', 'enable_query_cache'));
+        $conditionVariableCache = ConditionVariableCache::getInstance();
 
-        if ($queryCacheEnabled)
+        if (! $conditionVariableCache->exists($conditionVariable))
         {
-            $conditionVariableCache = ConditionVariableCache :: getInstance();
-
-            if (! $conditionVariableCache->exists($conditionVariable))
-            {
-                $conditionVariableCache->set($conditionVariable, static :: runTranslator($conditionVariable));
-            }
-
-            return $conditionVariableCache->get($conditionVariable);
+            $conditionVariableCache->set($conditionVariable, static::runTranslator($conditionVariable));
         }
-        else
-        {
-            return static :: runTranslator($conditionVariable);
-        }
+
+        return $conditionVariableCache->get($conditionVariable);
     }
 }

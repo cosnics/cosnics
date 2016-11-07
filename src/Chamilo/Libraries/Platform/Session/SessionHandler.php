@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Platform\Session;
 
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\Cache\DataClassCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -23,7 +22,7 @@ class SessionHandler implements \SessionHandlerInterface
 
     private $name;
 
-    private $lifetime = 9999999999999;
+    private $lifetime = 43200;
 
     public function __construct()
     {
@@ -35,7 +34,6 @@ class SessionHandler implements \SessionHandlerInterface
     {
         $this->save_path = $save_path;
         $this->name = $name;
-        $this->lifetime = PlatformSetting::get('session_timeout') * 60;
 
         return true;
     }
