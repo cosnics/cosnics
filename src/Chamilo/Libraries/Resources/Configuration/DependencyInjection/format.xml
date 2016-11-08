@@ -7,9 +7,13 @@
         <service
             id="chamilo.libraries.format.theme"
             class="Chamilo\Libraries\Format\Theme">
-            <factory
-                class="Chamilo\Libraries\Format\Theme"
-                method="getInstance" />
+            <argument>%chamilo.configuration.general.theme%</argument>
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.classname_utilities" />
+            <argument
+                type="service"
+                id="chamilo.libraries.file.path_builder" />
         </service>
     </services>
 </container>

@@ -39,9 +39,6 @@
                 id="chamilo.configuration.service.configuration_consulter" />
             <argument
                 type="service"
-                id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
-            <argument
-                type="service"
                 id="chamilo.libraries.architecture.factory.application_factory" />
             <argument
                 type="service"
@@ -82,6 +79,9 @@
             <argument
                 type="service"
                 id="chamilo.libraries.platform.translator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.format.theme" />
         </service>
 
         <service

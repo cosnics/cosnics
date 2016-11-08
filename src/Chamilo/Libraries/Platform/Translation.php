@@ -79,7 +79,7 @@ class Translation
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param string $languageIsoCode
      */
-    private function __construct(ClassnameUtilities $classnameUtilities, PathBuilder $pathBuilder,
+    public function __construct(ClassnameUtilities $classnameUtilities, PathBuilder $pathBuilder,
         TranslationCacheService $translationCacheService, $languageIsoCode)
     {
         $this->classnameUtilities = $classnameUtilities;
