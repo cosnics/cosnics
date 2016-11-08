@@ -1,16 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Architecture\ErrorHandler;
 
-use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Manages the error handler, the exception handler and the shutdown function
  *
  * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class ErrorHandler
 {
@@ -18,26 +17,89 @@ class ErrorHandler
     /**
      * The Exception Logger
      *
-     * @var ExceptionLoggerInterface
+     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
     protected $exceptionLogger;
 
     /**
      *
-     * @var Translation
+     * @var \Chamilo\Libraries\Platform\Translation
      */
     protected $translator;
 
     /**
+     *
+     * @var \Chamilo\Libraries\Format\Theme
+     */
+    protected $themeUtilities;
+
+    /**
      * ErrorHandlerManager constructor.
      *
-     * @param ExceptionLoggerInterface $exceptionLogger
-     * @param Translation $translator
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param \Chamilo\Libraries\Platform\Translation $translator
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
-    public function __construct(ExceptionLoggerInterface $exceptionLogger, Translation $translator)
+    public function __construct(ExceptionLoggerInterface $exceptionLogger, Translation $translator,
+        Theme $themeUtilities)
     {
         $this->exceptionLogger = $exceptionLogger;
         $this->translator = $translator;
+        $this->themeUtilities = $themeUtilities;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
+     */
+    public function getExceptionLogger()
+    {
+        return $this->exceptionLogger;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     */
+    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
+    {
+        $this->exceptionLogger = $exceptionLogger;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Platform\Translation
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Platform\Translation $translator
+     */
+    public function setTranslator(Translation $translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\Format\Theme
+     */
+    public function getThemeUtilities()
+    {
+        return $this->themeUtilities;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Theme $themeUtilities
+     */
+    public function setThemeUtilities(Theme $themeUtilities)
+    {
+        $this->themeUtilities = $themeUtilities;
     }
 
     /**
@@ -49,7 +111,7 @@ class ErrorHandler
 
         if (! is_null($error) && $error['type'] == E_ERROR)
         {
-            $this->exceptionLogger->logException(
+            $this->getExceptionLogger()->logException(
                 new \Exception($error['message']),
                 ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR,
                 $error['file'],
@@ -83,7 +145,7 @@ class ErrorHandler
 
         $exceptionLevel = $exceptionTypes[$errorNumber];
 
-        $this->exceptionLogger->logException(new \Exception($errorString), $exceptionLevel, $file, $line);
+        $this->getExceptionLogger()->logException(new \Exception($errorString), $exceptionLevel, $file, $line);
 
         return true;
     }
@@ -95,7 +157,7 @@ class ErrorHandler
      */
     public function handleException($exception)
     {
-        $this->exceptionLogger->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
+        $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_FATAL_ERROR);
         $this->displayGeneralErrorPage();
     }
 
@@ -115,8 +177,8 @@ class ErrorHandler
      */
     protected function displayGeneralErrorPage()
     {
-        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-        $path = $pathBuilder->namespaceToFullPath('Chamilo\Configuration') . 'Resources/Templates/Error.html.tpl';
+        $path = $this->getThemeUtilities()->getTemplatePath('Chamilo\Configuration') . 'Error.html.tpl';
+
         $template = file_get_contents($path);
 
         $variables = array(
@@ -144,6 +206,6 @@ class ErrorHandler
      */
     protected function getTranslation($variable, $parameters = array(), $context = 'Chamilo\Configuration')
     {
-        return $this->translator->getTranslation($variable, $parameters, $context);
+        return $this->getTranslator()->getTranslation($variable, $parameters, $context);
     }
 }

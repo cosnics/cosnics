@@ -171,21 +171,21 @@ class DependencyInjectionContainerBuilder
     {
         $fileConfigurationLocator = $this->getFileConfigurationLocator();
 
-//         if ($fileConfigurationLocator->isAvailable())
-//         {
-//             try
-//             {
-//                 return $this->getRegistrationConsulter()->getRegistrationContexts();
-//             }
-//             catch (ConnectionException $exception)
-//             {
-//                 return $this->getPackageNamespacesFromFilesystem();
-//             }
-//         }
-//         else
-//         {
+        if ($fileConfigurationLocator->isAvailable())
+        {
+            try
+            {
+                return $this->getRegistrationConsulter()->getRegistrationContexts();
+            }
+            catch (ConnectionException $exception)
+            {
+                return $this->getPackageNamespacesFromFilesystem();
+            }
+        }
+        else
+        {
             return $this->getPackageNamespacesFromFilesystem();
-//         }
+        }
     }
 
     /**
@@ -194,9 +194,6 @@ class DependencyInjectionContainerBuilder
      */
     protected function getPackageNamespacesFromFilesystem()
     {
-        var_dump('test');
-        var_dump(xdebug_get_function_stack());
-        flush();
         $platformPackageBundles = new PlatformPackageBundles();
         return array_keys($platformPackageBundles->get_packages());
     }

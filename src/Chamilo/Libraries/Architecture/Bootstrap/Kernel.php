@@ -7,7 +7,6 @@ use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\ErrorHandler\ErrorHandler;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
@@ -17,9 +16,6 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\Response;
-use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
@@ -72,12 +68,6 @@ class Kernel
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    private $connectionFactory;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     private $sessionUtilities;
@@ -102,8 +92,7 @@ class Kernel
 
     public function __construct(\Symfony\Component\HttpFoundation\Request $request, SessionUtilities $sessionUtilities,
         FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter,
-        ConnectionFactory $connectionFactory, ApplicationFactory $applicationFactory,
-        ExceptionLoggerInterface $exceptionLogger, User $user = null)
+        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, User $user = null)
     {
         $this->request = $request;
 
@@ -112,7 +101,6 @@ class Kernel
         $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->configurationConsulter = $configurationConsulter;
 
-        $this->connectionFactory = $connectionFactory;
         $this->applicationFactory = $applicationFactory;
 
         $this->exceptionLogger = $exceptionLogger;
@@ -212,24 +200,6 @@ class Kernel
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    public function getConnectionFactory()
-    {
-        return $this->connectionFactory;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory $connectionFactory
-     */
-    public function setConnectionFactory(ConnectionFactory $connectionFactory)
-    {
-        $this->connectionFactory = $connectionFactory;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
      */
     public function getSessionUtilities()
@@ -310,7 +280,7 @@ class Kernel
             }
             else
             {
-                $this->registerErrorHandlers()->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
+                $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
             }
         }
         catch (NotAuthenticatedException $exception)
@@ -325,38 +295,6 @@ class Kernel
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }
-    }
-
-    /**
-     * Check if the system has been installed, if not display message accordingly
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     */
-    protected function checkInstallation()
-    {
-        if (! $this->getFileConfigurationLocator()->isAvailable())
-        {
-            $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
-            // TODO: This is old code to make sure those instances still accessing the parameter the old way keep on
-            // working for now
-            Request::set_get(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
-            return $this;
-        }
-
-        $this->getConnectionFactory()->getConnection();
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     */
-    protected function startSession()
-    {
-        $this->getSessionUtilities()->start();
-
-        return $this;
     }
 
     /**
