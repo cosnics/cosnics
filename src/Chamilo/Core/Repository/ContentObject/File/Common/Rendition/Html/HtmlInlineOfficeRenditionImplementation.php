@@ -32,7 +32,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function getViewerType()
     {
-        $viewerType = Configuration :: get_instance()->get_setting(array(File :: package(), 'office_viewer_type'));
+        $viewerType = Configuration :: getInstance()->get_setting(array(File :: package(), 'office_viewer_type'));
 
         if (is_null($viewerType))
         {
@@ -104,9 +104,9 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
 
             $html[] = '</div>';
 
-            $html[] = ResourceManager :: get_instance()->get_resource_html(
+            $html[] = ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(File :: package(), true) . 'OfficeViewer.js');
-            $html[] = ResourceManager :: get_instance()->get_resource_html(
+            $html[] = ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
                      'Plugin/Jquery/jquery.fullscreen.min.js');
         }

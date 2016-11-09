@@ -240,7 +240,7 @@ class AssignmentForm extends ContentObjectForm
 
         $this->addElement(
             'html',
-            ResourceManager:: get_instance()->get_resource_html(
+            ResourceManager:: getInstance()->get_resource_html(
                 Path:: getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager::context(), true) .
                 'Plugin/jquery.file.upload.import.js'
             )
@@ -248,7 +248,7 @@ class AssignmentForm extends ContentObjectForm
 
         $this->addElement(
             'html',
-            ResourceManager:: get_instance()->get_resource_html(
+            ResourceManager:: getInstance()->get_resource_html(
                 Path:: getInstance()->getJavascriptPath(Assignment:: package(), true) . 'UploadifyFeedback.js'
             )
         );
@@ -374,7 +374,7 @@ class AssignmentForm extends ContentObjectForm
 
     public function get_allowed_content_object_types()
     {
-        $configuration = Configuration:: get_instance();
+        $configuration = Configuration:: getInstance();
 
         $types = array();
 
@@ -397,7 +397,7 @@ class AssignmentForm extends ContentObjectForm
             $typeName = ClassnameUtilities:: getInstance()->getPackageNameFromNamespace($type);
             $typeClass = $type . '\Storage\DataClass\\' . $typeName;
 
-            if (!\Chamilo\Configuration\Configuration:: get_instance()->isRegisteredAndActive($type))
+            if (!\Chamilo\Configuration\Configuration:: getInstance()->isRegisteredAndActive($type))
             {
                 unset($types[$index]);
                 continue;

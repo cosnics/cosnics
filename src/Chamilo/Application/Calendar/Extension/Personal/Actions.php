@@ -47,7 +47,7 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
      */
     public function getAllowedContentObjectTypes()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             Manager :: package(),
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();

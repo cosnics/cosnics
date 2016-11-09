@@ -135,7 +135,7 @@ class PackageDisplay
             new PropertyConditionVariable(Package :: class_name(), Package :: PROPERTY_CONTEXT), 
             new StaticConditionVariable($this->get_registration()->get_context()));
         
-        $admin = \Chamilo\Core\Admin\Storage\DataManager :: get_instance();
+        $admin = \Chamilo\Core\Admin\Storage\DataManager :: getInstance();
         $order_by = new OrderBy(new PropertyConditionVariable(Package :: class_name(), Package :: PROPERTY_VERSION));
         
         $package_remote = $admin->retrieve_remote_packages($condition, $order_by, null, 1);

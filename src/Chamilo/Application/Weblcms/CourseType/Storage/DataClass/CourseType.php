@@ -95,7 +95,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         
         $parent_id = $this->get_parent_rights_location()->get_id();
         
-        if (! CourseManagementRights :: get_instance()->create_location_in_courses_subtree(
+        if (! CourseManagementRights :: getInstance()->create_location_in_courses_subtree(
             CourseManagementRights :: TYPE_COURSE_TYPE, 
             $this->get_id(), 
             $parent_id, 
@@ -142,7 +142,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_rights_location()
     {
-        return CourseManagementRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        return CourseManagementRights :: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             CourseManagementRights :: TYPE_COURSE_TYPE, 
             $this->get_id(), 
             0);
@@ -155,7 +155,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_parent_rights_location()
     {
-        return CourseManagementRights :: get_instance()->get_courses_subtree_root(0);
+        return CourseManagementRights :: getInstance()->get_courses_subtree_root(0);
     }
 
     /**
@@ -165,7 +165,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_available_course_management_rights()
     {
-        return CourseManagementRights :: get_instance()->get_all_course_management_rights();
+        return CourseManagementRights :: getInstance()->get_all_course_management_rights();
     }
 
     /**
@@ -188,7 +188,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function force_rights_to_courses()
     {
-        return CourseManagementRights :: get_instance()->copy_rights_to_child_locations($this->get_rights_location());
+        return CourseManagementRights :: getInstance()->copy_rights_to_child_locations($this->get_rights_location());
     }
 
     /**
@@ -207,7 +207,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_course_setting($setting_name, $tool_id = 0)
     {
-        return CourseSettingsController :: get_instance()->get_course_type_setting(
+        return CourseSettingsController :: getInstance()->get_course_type_setting(
             $this->get_id(), 
             $setting_name, 
             $tool_id);
@@ -223,7 +223,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_default_course_setting($setting_name, $tool_id)
     {
-        return CourseSettingsController :: get_instance()->get_default_setting($setting_name, $tool_id);
+        return CourseSettingsController :: getInstance()->get_default_setting($setting_name, $tool_id);
     }
 
     /**
@@ -235,7 +235,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function create_course_settings_from_values($values)
     {
-        return CourseSettingsController :: get_instance()->handle_settings_for_object_with_given_values($this, $values);
+        return CourseSettingsController :: getInstance()->handle_settings_for_object_with_given_values($this, $values);
     }
 
     /**
@@ -247,7 +247,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function update_course_settings_from_values($values)
     {
-        return CourseSettingsController :: get_instance()->handle_settings_for_object_with_given_values(
+        return CourseSettingsController :: getInstance()->handle_settings_for_object_with_given_values(
             $this, 
             $values, 
             CourseSettingsController :: SETTING_ACTION_UPDATE);
@@ -372,7 +372,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function force_course_settings_to_courses()
     {
-        CourseSettingsController :: get_instance()->clear_cache_for_type_and_object(
+        CourseSettingsController :: getInstance()->clear_cache_for_type_and_object(
             CourseSettingsController :: SETTING_TYPE_COURSE_TYPE, 
             $this->get_id());
         

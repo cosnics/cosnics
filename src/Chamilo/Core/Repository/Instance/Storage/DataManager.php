@@ -89,7 +89,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_active_instances($types = array())
     {
-        $configuration = Configuration::get_instance();
+        $configuration = Configuration::getInstance();
         $stringUtilities = StringUtilities::getInstance();
 
         $packages = $configuration->get_registrations_by_type(

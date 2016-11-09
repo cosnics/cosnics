@@ -49,7 +49,7 @@ class DummyNotification extends Notification
      */
     public function update()
     {
-        return PreviewStorage :: get_instance()->update_notification($this);
+        return PreviewStorage :: getInstance()->update_notification($this);
     }
 
     /**
@@ -59,7 +59,7 @@ class DummyNotification extends Notification
     public function create()
     {
         $this->set_id(UUID :: v4());
-        return PreviewStorage :: get_instance()->create_notification($this);
+        return PreviewStorage :: getInstance()->create_notification($this);
     }
 
     /**
@@ -68,6 +68,6 @@ class DummyNotification extends Notification
      */
     public function delete()
     {
-        return PreviewStorage :: get_instance()->delete_notification($this);
+        return PreviewStorage :: getInstance()->delete_notification($this);
     }
 }

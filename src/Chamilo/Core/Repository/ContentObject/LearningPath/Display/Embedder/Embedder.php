@@ -99,7 +99,7 @@ abstract class Embedder
         $html[] = '    var trackerContext = ' . json_encode($namespace) . ';';
         $html[] = '</script>';
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\LearningPath\Display', true) .
                  'LearningPathItem.js');
 

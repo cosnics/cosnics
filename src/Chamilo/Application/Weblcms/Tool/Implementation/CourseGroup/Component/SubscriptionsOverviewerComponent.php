@@ -67,7 +67,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 
         $html[] = $this->render_header();
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
 
         if ($course_settings_controller->get_course_setting(
             $this->get_course(),

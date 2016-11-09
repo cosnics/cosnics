@@ -91,7 +91,7 @@ class HTML_QuickForm_timepicker extends HTML_QuickForm_date
      */
     public function getElementJS()
     {
-        return ResourceManager :: get_instance()->get_resource_html(
+        return ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js');
     }
 

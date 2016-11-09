@@ -148,7 +148,7 @@ class Display extends QuestionDisplay
 
         $formvalidator->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(
                     ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 7),
                     true) . 'GiveHint.js'));

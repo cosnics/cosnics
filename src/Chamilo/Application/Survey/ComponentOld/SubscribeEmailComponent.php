@@ -18,7 +18,7 @@ class SubscribeEmailComponent extends Manager
     {
         $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
         
-        if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $publication_id))
+        if (! Rights :: getInstance()->is_right_granted(Rights :: INVITE_RIGHT, $publication_id))
         {
             $this->not_allowed(false);
         }

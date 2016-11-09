@@ -32,7 +32,7 @@ class PublicationSelectorForm
     public function render()
     {
         $html = array();
-        $resourceManager = ResourceManager::get_instance();
+        $resourceManager = ResourceManager::getInstance();
         $path = Path::getInstance();
         $translator = Translation::getInstance();
 

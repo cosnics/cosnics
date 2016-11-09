@@ -49,7 +49,7 @@ class CreatorComponent extends TabComponent implements \Chamilo\Core\Repository\
 //        {
 //            $variable = 'CreatorComponent';
 //        }
-//        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
+//        BreadcrumbTrail :: getInstance()->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {

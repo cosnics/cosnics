@@ -61,7 +61,7 @@ abstract class LocationEntityTableCellRenderer extends DataClassTableCellRendere
 
         $context = $this->get_component()->get_context();
 
-        $rights_util = RightsUtil :: get_instance();
+        $rights_util = RightsUtil :: getInstance();
 
         $html = array();
 

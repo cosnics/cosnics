@@ -49,7 +49,7 @@ class SortableTable extends HtmlTable
      */
     public function getTableActionsJavascript()
     {
-        return ResourceManager::get_instance()->get_resource_html(
+        return ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'SortableTable.js');
     }
 

@@ -45,7 +45,7 @@ class CreatorComponent extends Manager
             if ($success)
             {
                 $authorized_users =
-                    \Chamilo\Application\Weblcms\Request\Rights\Rights:: get_instance()->get_authorized_users(
+                    \Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->get_authorized_users(
                         $this->get_user()
                     );
 
@@ -56,7 +56,7 @@ class CreatorComponent extends Manager
                     array('PLATFORM' => PlatformSetting:: get('site_name'))
                 );
 
-                $mailerFactory = new MailerFactory(Configuration::get_instance());
+                $mailerFactory = new MailerFactory(Configuration::getInstance());
                 $mailer = $mailerFactory->getActiveMailer();
 
                 foreach ($authorized_users as $authorized_user)

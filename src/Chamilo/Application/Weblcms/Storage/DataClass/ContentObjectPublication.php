@@ -438,7 +438,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
         if ($this->get_category_id())
         {
-            $parent = WeblcmsRights::get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+            $parent = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                 WeblcmsRights::TYPE_COURSE_CATEGORY,
                 $this->get_category_id(),
                 $this->get_course_id());
@@ -447,9 +447,9 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         {
             if ($this->get_tool() == 'Home')
             {
-                $parent_id = WeblcmsRights::get_instance()->get_courses_subtree_root_id($this->get_course_id());
+                $parent_id = WeblcmsRights::getInstance()->get_courses_subtree_root_id($this->get_course_id());
 
-                return WeblcmsRights::get_instance()->create_location_in_courses_subtree(
+                return WeblcmsRights::getInstance()->create_location_in_courses_subtree(
                     WeblcmsRights::TYPE_PUBLICATION,
                     $this->get_id(),
                     $parent_id,
@@ -461,14 +461,14 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
                 $course_tool = DataManager::retrieve_course_tool_by_name($this->get_tool());
                 $course_tool_id = $course_tool->get_id();
 
-                $parent = WeblcmsRights::get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+                $parent = WeblcmsRights::getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                     WeblcmsRights::TYPE_COURSE_MODULE,
                     $course_tool_id,
                     $this->get_course_id());
             }
         }
 
-        return WeblcmsRights::get_instance()->create_location_in_courses_subtree(
+        return WeblcmsRights::getInstance()->create_location_in_courses_subtree(
             WeblcmsRights::TYPE_PUBLICATION,
             $this->get_id(),
             $parent,
@@ -492,7 +492,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
     public function delete()
     {
-        $location = WeblcmsRights::get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights::TYPE_PUBLICATION,
             $this->get_id(),
             $this->get_course_id());
@@ -520,7 +520,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
     {
         try
         {
-            return WeblcmsRights::get_instance()->get_target_entities(
+            return WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $this->get_id(),
@@ -538,7 +538,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
 
     public function render_target_entities_as_string()
     {
-        return WeblcmsRights::get_instance()->render_target_entities_as_string($this->get_target_entities());
+        return WeblcmsRights::getInstance()->render_target_entities_as_string($this->get_target_entities());
     }
 
     /**
@@ -685,7 +685,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             null,
             $mailFiles);
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

@@ -57,7 +57,7 @@ class SendMailComponent extends Manager
         $this->publication_id = Request:: get(Manager :: PARAM_PUBLICATION_ID);
         $this->type = Request:: get(Manager :: PARAM_TYPE);
 
-//         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
+//         if (! Rights :: getInstance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
 //         {
 //             throw new NotAllowedException();
 //         }
@@ -65,7 +65,7 @@ class SendMailComponent extends Manager
         switch ($this->type)
         {
             case Mail :: PARTICIPANT_TYPE :
-                $target_entities = RightsService:: get_instance();
+                $target_entities = RightsService:: getInstance();
 
                 if (is_array(($target_entities[UserEntity :: ENTITY_TYPE])))
                 {
@@ -139,7 +139,7 @@ class SendMailComponent extends Manager
                 $users[Participant :: STATUS_FINISHED] = $finished_count;
                 break;
             case Mail :: EXPORT_TYPE :
-                $target_entities = RightsService:: get_instance();
+                $target_entities = RightsService:: getInstance();
                 $group_ids = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
                 $group_user_ids = array();
                 foreach ($group_ids as $group_id)
@@ -155,7 +155,7 @@ class SendMailComponent extends Manager
                 //
                 break;
             case Mail :: REPORTING_TYPE :
-                $target_entities = RightsService:: get_instance();
+                $target_entities = RightsService:: getInstance();
                 $group_ids = $target_entities[PlatformGroupEntity :: ENTITY_TYPE];
                 $group_user_ids = array();
                 foreach ($group_ids as $group_id)
@@ -443,7 +443,7 @@ class SendMailComponent extends Manager
                 $email->get_reply_address()
             );
 
-            $mailerFactory = new MailerFactory(Configuration::get_instance());
+            $mailerFactory = new MailerFactory(Configuration::getInstance());
             $mailer = $mailerFactory->getActiveMailer();
 
             try

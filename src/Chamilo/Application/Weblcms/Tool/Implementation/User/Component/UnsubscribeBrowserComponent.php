@@ -503,7 +503,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             {
                 case self :: TAB_ALL :
                 case self :: TAB_USERS :
-                    $storage_unit = \Chamilo\Core\User\Storage\DataManager :: get_instance()->get_alias(
+                    $storage_unit = \Chamilo\Core\User\Storage\DataManager :: getInstance()->get_alias(
                         User :: get_table_name());
                     $conditions[] = $this->buttonToolbarRenderer->getConditions(
                         array(

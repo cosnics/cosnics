@@ -66,12 +66,12 @@ class BrowserComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $trail = BreadcrumbTrail::get_instance();
+        $trail = BreadcrumbTrail::getInstance();
 
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
-            $filterData = FilterData::get_instance($this->getWorkspace());
+            $filterData = FilterData::getInstance($this->getWorkspace());
             $filterData->set_filter_property(FilterData::FILTER_TEXT, $query);
 
             $trail->add(
@@ -82,7 +82,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
         }
 
-        $filterData = FilterData::get_instance($this->getWorkspace());
+        $filterData = FilterData::getInstance($this->getWorkspace());
         if(is_null($filterData->get_category()))
         {
             $filterData->set_filter_property(FilterData::FILTER_CATEGORY, 0);
@@ -182,7 +182,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $this->get_url(
                         array(
                             Application::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
-                            FilterData::FILTER_CATEGORY => FilterData::get_instance($this->getWorkspace())
+                            FilterData::FILTER_CATEGORY => FilterData::getInstance($this->getWorkspace())
                                 ->get_filter_property(
                                     FilterData::FILTER_CATEGORY
                                 )
@@ -238,7 +238,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer(
                 $buttonToolbar,
-                new FilterDataButtonSearchForm($this->get_url(), FilterData::get_instance($this->getWorkspace()))
+                new FilterDataButtonSearchForm($this->get_url(), FilterData::getInstance($this->getWorkspace()))
             );
         }
 
@@ -271,7 +271,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $filter_condition_renderer = ConditionFilterRenderer::factory(
-            FilterData::get_instance($this->getWorkspace()),
+            FilterData::getInstance($this->getWorkspace()),
             $this->getWorkspace()
         );
 
@@ -287,7 +287,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     private function get_parent_id()
     {
-        return FilterData::get_instance($this->getWorkspace())->get_filter_property(FilterData::FILTER_CATEGORY);
+        return FilterData::getInstance($this->getWorkspace())->get_filter_property(FilterData::FILTER_CATEGORY);
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)

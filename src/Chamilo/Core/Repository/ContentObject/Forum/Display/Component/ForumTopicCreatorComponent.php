@@ -25,7 +25,7 @@ class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Reposi
     {
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(
                         array(
@@ -46,7 +46,7 @@ class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Reposi
                     foreach ($forums_with_key_cloi as $key => $value)
                     {
 
-                        BreadcrumbTrail :: get_instance()->add(
+                        BreadcrumbTrail :: getInstance()->add(
                             new Breadcrumb(
                                 $this->get_url(
                                     array(

@@ -39,7 +39,7 @@ class Executer
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add_help('dynamic form general');
 
         $form = new ExecuteForm(

@@ -220,7 +220,7 @@ class Renderer extends CourseListRenderer
 
         if ($size > 0)
         {
-            $course_settings_controller = CourseSettingsController :: get_instance();
+            $course_settings_controller = CourseSettingsController :: getInstance();
 
             $html[] = '<ul>';
             $count = 0;

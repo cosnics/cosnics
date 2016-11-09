@@ -58,7 +58,7 @@ class TagsFormBuilder
      */
     protected function add_dependencies()
     {
-        $resource_manager = ResourceManager :: get_instance();
+        $resource_manager = ResourceManager :: getInstance();
         $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) .
              'Plugin/Bootstrap/Tagsinput/';
 

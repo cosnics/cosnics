@@ -90,7 +90,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     {
         $buttonToolbar = new ButtonToolBar();
 
-        $courseManagementRights = CourseManagementRights::get_instance();
+        $courseManagementRights = CourseManagementRights::getInstance();
 
         $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
             CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,

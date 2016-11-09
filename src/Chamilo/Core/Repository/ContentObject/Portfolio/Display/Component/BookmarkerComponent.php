@@ -36,7 +36,7 @@ class BookmarkerComponent extends ItemComponent
             return implode(PHP_EOL, $html);
         }
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb($this->get_url(), Translation :: get('BookmarkerComponent')));
 
         $form = ContentObjectForm :: factory(

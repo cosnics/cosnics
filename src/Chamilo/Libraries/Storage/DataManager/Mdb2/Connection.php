@@ -73,7 +73,7 @@ class Connection
      *
      * @return \Chamilo\Libraries\Storage\DataManager\Mdb2\Connection
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {

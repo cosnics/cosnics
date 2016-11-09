@@ -44,7 +44,7 @@ class Dependencies
         $this->set_operator($operator);
         $this->set_dependencies($dependencies);
         
-        $this->logger = MessageLogger :: get_instance($this);
+        $this->logger = MessageLogger :: getInstance($this);
     }
 
     /**

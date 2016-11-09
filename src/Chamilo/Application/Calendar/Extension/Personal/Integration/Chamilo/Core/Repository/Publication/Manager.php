@@ -295,7 +295,7 @@ class Manager implements PublicationInterface
 
     public static function get_allowed_content_object_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             \Chamilo\Application\Calendar\Extension\Personal\Manager :: package(), 
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();

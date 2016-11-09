@@ -106,7 +106,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function get_allowed_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             self :: package(), 
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();

@@ -68,7 +68,7 @@ class Registration extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager :: getInstance();
     }
 
     /**
@@ -306,7 +306,7 @@ class Registration extends DataClass
             return $success;
         }
 
-        \Chamilo\Configuration\Configuration :: get_instance()->reset();
+        \Chamilo\Configuration\Configuration :: getInstance()->reset();
         return $success;
     }
 

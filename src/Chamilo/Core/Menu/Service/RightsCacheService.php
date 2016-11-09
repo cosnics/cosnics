@@ -68,7 +68,7 @@ class RightsCacheService extends DoctrinePhpFileCacheService implements UserBase
 
         foreach ($items as $item)
         {
-            if (Rights :: get_instance()->is_allowed(
+            if (Rights :: getInstance()->is_allowed(
                 Rights :: VIEW_RIGHT,
                 Manager :: context(),
                 null,

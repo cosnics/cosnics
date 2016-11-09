@@ -31,7 +31,7 @@ class AnonymousAuthentication extends QueryAuthentication
      */
     public function login()
     {
-        $allowedAnonymousAuthenticationUrl = Configuration::get_instance()->get_setting(
+        $allowedAnonymousAuthenticationUrl = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'anonymous_authentication_url')
         );
 

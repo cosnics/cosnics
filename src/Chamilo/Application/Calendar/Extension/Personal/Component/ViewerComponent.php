@@ -118,7 +118,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     {
         $content_object = $this->getPublication()->get_publication_object();
         $content_object_properties = $content_object->get_properties();
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(null, $content_object_properties['default_properties']['title']));
 
         $html = array();

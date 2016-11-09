@@ -29,7 +29,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
      */
     public function getIdentifiers()
     {
-        return array_keys(Configuration :: get_instance()->getLanguages());
+        return array_keys(Configuration :: getInstance()->getLanguages());
     }
 
     /**

@@ -158,7 +158,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function renderIntroduction()
     {
-        $course_settings_controller = CourseSettingsController:: get_instance();
+        $course_settings_controller = CourseSettingsController:: getInstance();
 
         if ($course_settings_controller->get_course_setting(
             $this->get_course(),
@@ -477,7 +477,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     )
                 );
 
-                $courseSettingsController = CourseSettingsController:: get_instance();
+                $courseSettingsController = CourseSettingsController:: getInstance();
 
                 if (!$this->getIntroductionText() && $this->isCourseAdmin() &&
                     $courseSettingsController->get_course_setting(

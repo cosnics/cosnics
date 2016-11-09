@@ -24,7 +24,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function extra()
     {
-        $rights_utilities = Rights :: get_instance();
+        $rights_utilities = Rights :: getInstance();
         $location = $rights_utilities->create_subtree_root_location(
             static :: package(),
             0,

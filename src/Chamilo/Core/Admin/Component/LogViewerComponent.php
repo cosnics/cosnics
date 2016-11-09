@@ -120,7 +120,7 @@ class LogViewerComponent extends Manager
             array('class' => 'positive finish'));
         $form->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'));
 
         return $form;
@@ -208,6 +208,6 @@ class LogViewerComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
     }
 }

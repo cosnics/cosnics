@@ -44,7 +44,7 @@ class UnsubscribeComponent extends Manager
             {
                 $failures = 0;
 
-                $course_management_rights = CourseManagementRights :: get_instance();
+                $course_management_rights = CourseManagementRights :: getInstance();
 
                 foreach ($users as $user_id)
                 {

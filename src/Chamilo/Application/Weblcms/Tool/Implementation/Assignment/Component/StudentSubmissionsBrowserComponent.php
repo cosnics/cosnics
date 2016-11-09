@@ -85,7 +85,7 @@ class StudentSubmissionsBrowserComponent extends SubmissionsManager implements T
      */
     private function modify_last_breadcrumb()
     {
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail :: getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
             $this->get_url(

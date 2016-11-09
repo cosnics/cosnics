@@ -38,7 +38,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $trail = BreadcrumbTrail:: get_instance();
+        $trail = BreadcrumbTrail:: getInstance();
         $trail->add(new Breadcrumb($this->get_url(), Translation:: get('RecycleBin')));
         $trail->add_help('repository recyclebin');
 

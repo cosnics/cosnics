@@ -43,7 +43,7 @@ class Configuration
      *
      * @return Configuration The instance.
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {
@@ -73,7 +73,7 @@ class Configuration
      */
     public static function registration_by_id($id)
     {
-        return self :: get_instance()->get_registration_by_id($id);
+        return self :: getInstance()->get_registration_by_id($id);
     }
 
     /**
@@ -91,7 +91,7 @@ class Configuration
      */
     public static function registration_default_by_type($type)
     {
-        return self :: get_instance()->get_registration_default_by_type($type);
+        return self :: getInstance()->get_registration_default_by_type($type);
     }
 
     /**
@@ -142,7 +142,7 @@ class Configuration
      */
     public static function registrations_by_types($types, $user_id = null)
     {
-        return self :: get_instance()->get_registrations_by_types($types, $user_id);
+        return self :: getInstance()->get_registrations_by_types($types, $user_id);
     }
 
     /**
@@ -160,6 +160,6 @@ class Configuration
     public static function reset()
     {
         DataClassResultSetCache :: truncates(array(TemplateRegistration :: class_name()));
-        self :: get_instance()->initialize();
+        self :: getInstance()->initialize();
     }
 }

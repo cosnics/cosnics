@@ -120,7 +120,7 @@ class CalendarEventDataProvider extends MixedCalendar
     {
         $publications = array();
 
-        $registrations = Configuration::get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             \Chamilo\Application\Calendar\Extension\Personal\Manager::package());
 
         $publicationRepository = new PublicationRepository();

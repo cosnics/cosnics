@@ -50,7 +50,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
 
         $html = array();
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Plugin/Projekktor/projekktor.js');
 
         if ($is_thumbnail)
@@ -181,7 +181,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
             {
                 $audio = array();
 
-                $audio[] = ResourceManager :: get_instance()->get_resource_html(
+                $audio[] = ResourceManager :: getInstance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath(__NAMESPACE__, true) . 'Plugin/jquery.jplayer.js');
                 $audio[] = '<script type="text/javascript">
 //<![CDATA[

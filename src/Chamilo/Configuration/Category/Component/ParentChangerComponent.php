@@ -85,7 +85,7 @@ class ParentChangerComponent extends Manager
                 }
             }
             $form = $this->get_move_form($categories, $parent);
-            $trail = BreadcrumbTrail:: get_instance();
+            $trail = BreadcrumbTrail:: getInstance();
             $trail->add_help('category_manager_parent_changer');
             $this->set_parameter(self :: PARAM_CATEGORY_ID, Request:: get(self :: PARAM_CATEGORY_ID));
 

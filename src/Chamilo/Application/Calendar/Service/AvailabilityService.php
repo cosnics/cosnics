@@ -261,7 +261,7 @@ class AvailabilityService
     {
         $availableCalendars = array();
         
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             \Chamilo\Application\Calendar\Manager :: package());
         
         foreach ($registrations as $registration)

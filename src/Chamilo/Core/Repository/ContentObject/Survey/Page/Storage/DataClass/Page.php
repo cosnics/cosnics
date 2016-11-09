@@ -63,7 +63,7 @@ class Page extends ContentObject implements ComplexContentObjectSupport, Complex
 
     function get_allowed_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Survey', 
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();

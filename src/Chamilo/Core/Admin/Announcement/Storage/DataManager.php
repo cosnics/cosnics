@@ -38,8 +38,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function count_publications_for_me($condition, $user_id = null)
     {
         $entities = array();
-        $entities[UserEntity :: ENTITY_TYPE] = UserEntity :: get_instance();
-        $entities[PlatformGroupEntity :: ENTITY_TYPE] = PlatformGroupEntity :: get_instance();
+        $entities[UserEntity :: ENTITY_TYPE] = UserEntity :: getInstance();
+        $entities[PlatformGroupEntity :: ENTITY_TYPE] = PlatformGroupEntity :: getInstance();
 
         $condition = self :: get_publications_with_view_right_granted_location_condition(
             $entities,
@@ -76,8 +76,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $user_id = null)
     {
         $entities = array();
-        $entities[UserEntity :: ENTITY_TYPE] = UserEntity :: get_instance();
-        $entities[PlatformGroupEntity :: ENTITY_TYPE] = PlatformGroupEntity :: get_instance();
+        $entities[UserEntity :: ENTITY_TYPE] = UserEntity :: getInstance();
+        $entities[PlatformGroupEntity :: ENTITY_TYPE] = PlatformGroupEntity :: getInstance();
 
         $condition = self :: get_publications_with_view_right_granted_location_condition(
             $entities,
@@ -173,10 +173,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
 
-        $granted_location_ids = Rights :: get_instance()->get_identifiers_with_right_granted(
+        $granted_location_ids = Rights :: getInstance()->get_identifiers_with_right_granted(
             $right,
             Manager :: context(),
-            Rights :: get_instance()->get_root(Manager :: context()),
+            Rights :: getInstance()->get_root(Manager :: context()),
             Rights :: TYPE_PUBLICATION,
             $user_id,
             $entities);

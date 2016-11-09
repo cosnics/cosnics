@@ -236,7 +236,7 @@ class PeerAssessmentGroupForm extends FormValidator
                     }
                     elseif ($type == self :: PARAM_PLATFORM_GROUP)
                     {
-                        $context_group = \Chamilo\Core\Group\Storage\DataManager :: get_instance()->retrieve_group($id);
+                        $context_group = \Chamilo\Core\Group\Storage\DataManager :: getInstance()->retrieve_group($id);
 
                         if ($context_group)
                         {

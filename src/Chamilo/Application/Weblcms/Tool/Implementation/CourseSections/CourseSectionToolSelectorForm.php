@@ -81,7 +81,7 @@ class CourseSectionToolSelectorForm extends FormValidator
 
         while ($tool = $tools->next_result())
         {
-            $course_settings_controller = CourseSettingsController :: get_instance();
+            $course_settings_controller = CourseSettingsController :: getInstance();
             $course = DataManager :: retrieve_by_id(Course :: class_name(), Request :: get('course'));
 
             if ($course_settings_controller->get_course_setting(

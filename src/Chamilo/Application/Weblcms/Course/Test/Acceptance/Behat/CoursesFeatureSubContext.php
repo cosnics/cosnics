@@ -86,7 +86,7 @@ class CoursesFeatureSubContext implements Context
 
         $course->create_course_settings_from_values($setting_values, true);
 
-        CourseManagementRights :: get_instance()->create_rights_from_values($course, array());
+        CourseManagementRights :: getInstance()->create_rights_from_values($course, array());
 
         return $course;
     }

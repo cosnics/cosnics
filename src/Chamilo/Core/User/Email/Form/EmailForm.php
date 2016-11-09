@@ -76,7 +76,7 @@ class EmailForm extends FormValidator
 
         $mail = new Mail($title, $message, $targets, false, array($this->user->get_email()));
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

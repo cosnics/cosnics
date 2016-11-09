@@ -17,7 +17,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
             Instance :: class_name(), 
             $this->get_external_repository_id());
-        return DataConnector :: get_instance($external_repository)->download_external_repository_object(
+        return DataConnector :: getInstance($external_repository)->download_external_repository_object(
             $external_object);
     }
 }

@@ -39,7 +39,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
                     Utilities :: COMMON_LIBRARIES));
         }
 
-        $rights_utilities = Rights :: get_instance();
+        $rights_utilities = Rights :: getInstance();
         $location = $rights_utilities->create_subtree_root_location(__NAMESPACE__, 0, Rights :: TREE_TYPE_ROOT, true);
 
         if (! $location instanceof RightsLocation)

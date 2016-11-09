@@ -41,7 +41,7 @@ class EntityRightLocationClassComponent extends \Chamilo\Core\Rights\Editor\Ajax
         $entity_type = $rights['3'];
         $entity_item_id = $rights['4'];
         
-        $rights_util = RightsUtil :: get_instance();
+        $rights_util = RightsUtil :: getInstance();
         
         if (isset($context) && isset($right_id) && isset($entity_type) && isset($entity_item_id) && isset($locations) &&
              count($locations) > 0)

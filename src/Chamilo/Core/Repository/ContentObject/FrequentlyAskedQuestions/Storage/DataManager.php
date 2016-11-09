@@ -24,7 +24,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function update_node_ids($old_node_ids, $new_node_ids)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             FrequentlyAskedQuestions :: package());
 
         foreach ($registrations as $registration)
@@ -49,7 +49,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function delete_node_ids($node_ids)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             FrequentlyAskedQuestions :: package());
 
         foreach ($registrations as $registration)

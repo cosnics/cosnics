@@ -21,7 +21,7 @@ class EditorComponent extends Manager
             $this);
 
         $object = $this->retrieve_external_repository_object($id);
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(null, Translation :: get('Edit', array('TITLE' => $object->get_title()))));
 
         $form->set_external_repository_object($object);

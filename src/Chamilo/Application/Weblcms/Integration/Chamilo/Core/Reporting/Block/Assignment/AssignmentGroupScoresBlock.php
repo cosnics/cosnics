@@ -250,7 +250,7 @@ abstract class AssignmentGroupScoresBlock extends AssignmentReportingManager
 
     private function is_publication_target_group($group_id, $pub_id)
     {
-        $target_entities = WeblcmsRights :: get_instance()->get_target_entities(
+        $target_entities = WeblcmsRights :: getInstance()->get_target_entities(
             WeblcmsRights :: VIEW_RIGHT,
             \Chamilo\Application\Weblcms\Manager :: context(),
             $pub_id,

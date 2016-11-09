@@ -24,7 +24,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         if ($id)
         {
             $object = $this->retrieve_external_repository_object($id);
-            BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $object->get_title()));
+            BreadcrumbTrail :: getInstance()->add(new Breadcrumb(null, $object->get_title()));
 
             $display = ExternalObjectDisplay :: factory($object);
 

@@ -33,7 +33,7 @@ class UnsubscribeComponent extends Manager
         
         $failures = 0;
 
-        $course_management_rights = CourseManagementRights :: get_instance();
+        $course_management_rights = CourseManagementRights :: getInstance();
         $courses = $this->get_selected_courses();
         $this->set_parameter(self :: PARAM_COURSE_ID, $courses);
 

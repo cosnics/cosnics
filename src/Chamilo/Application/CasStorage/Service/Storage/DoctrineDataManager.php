@@ -12,7 +12,7 @@ class DoctrineDataManager extends Database
      */
     public function initialize()
     {
-        $this->set_connection(DoctrineConnection :: get_instance()->get_connection());
+        $this->set_connection(DoctrineConnection :: getInstance()->get_connection());
         $this->get_connection()->setCharset('utf8');
         $this->set_prefix('');
     }

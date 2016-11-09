@@ -11,7 +11,7 @@ class UpgraderComponent extends Manager
 
     public function run()
     {
-        $quota_step = (int) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'step'));
+        $quota_step = (int) Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'step'));
 
         $calculator = new Calculator($this->get_user());
 

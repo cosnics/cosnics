@@ -705,7 +705,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 return false;
             }
             $children = array();
-            // $children = self :: get_instance()->get_children_ids($object);
+            // $children = self :: getInstance()->get_children_ids($object);
             $versions = array();
             $versions = Datamanager::get_version_ids($object);
             $forbidden = array_merge($children, $versions);
@@ -1078,7 +1078,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function delete_category_recursive($category, $fix_display_order = true)
     {
-        $repository_data_manager = self::get_instance();
+        $repository_data_manager = self::getInstance();
         $succes = true;
 
         // Retrieve the objects and unlink them

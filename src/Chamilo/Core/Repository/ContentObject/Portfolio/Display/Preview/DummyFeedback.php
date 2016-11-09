@@ -49,7 +49,7 @@ class DummyFeedback extends Feedback
      */
     public function update()
     {
-        return PreviewStorage :: get_instance()->update_feedback($this);
+        return PreviewStorage :: getInstance()->update_feedback($this);
     }
 
     /**
@@ -59,7 +59,7 @@ class DummyFeedback extends Feedback
     public function create()
     {
         $this->set_id(UUID :: v4());
-        return PreviewStorage :: get_instance()->create_feedback($this);
+        return PreviewStorage :: getInstance()->create_feedback($this);
     }
 
     /**
@@ -68,6 +68,6 @@ class DummyFeedback extends Feedback
      */
     public function delete()
     {
-        return PreviewStorage :: get_instance()->delete_feedback($this);
+        return PreviewStorage :: getInstance()->delete_feedback($this);
     }
 }

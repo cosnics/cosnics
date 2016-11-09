@@ -122,9 +122,9 @@ class Calculator
     {
         if (is_null($this->maximumUserDiskQuota))
         {
-            $policy = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
-            $fallback = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
-            $fallbackUser = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback_user'));
+            $policy = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
+            $fallback = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
+            $fallbackUser = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback_user'));
 
             switch ($policy)
             {
@@ -248,7 +248,7 @@ class Calculator
 
     public function isEnabled()
     {
-        return (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
+        return (boolean) Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
     }
 
     /**
@@ -463,16 +463,16 @@ class Calculator
             return false;
         }
 
-        $quotaStep = (int) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'step'));
-        $allowUpgrade = (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
-        $maximumUserDiskSpace = (int) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
+        $quotaStep = (int) Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'step'));
+        $allowUpgrade = (boolean) Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+        $maximumUserDiskSpace = (int) Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
 
         if (! $this->usesUserDiskQuota())
         {
             return false;
         }
 
-        if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed() &&
+        if (\Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed() &&
              $this->getAvailableAllocatedDiskSpace() > $quotaStep)
         {
             return true;
@@ -513,15 +513,15 @@ class Calculator
             return false;
         }
 
-        $quotaStep = (int) Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'step'));
-        $allowRequest = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
+        $quotaStep = (int) Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'step'));
+        $allowRequest = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
 
         if (! $this->usesUserDiskQuota())
         {
             return false;
         }
 
-        if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed() &&
+        if (\Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed() &&
              $this->getAvailableAllocatedDiskSpace() > $quotaStep)
         {
             return true;
@@ -544,9 +544,9 @@ class Calculator
      */
     public function usesUserDiskQuota()
     {
-        $policy = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
-        $fallback = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
-        $fallbackUser = Configuration::get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback_user'));
+        $policy = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
+        $fallback = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
+        $fallbackUser = Configuration::getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback_user'));
 
         switch ($policy)
         {
@@ -666,7 +666,7 @@ class Calculator
      */
     public function addUploadWarningToForm(FormValidator $form)
     {
-        $enableQuota = (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
+        $enableQuota = (boolean) Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
 
         $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
         $uploadMaxFilesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));
@@ -685,8 +685,8 @@ class Calculator
                     \Chamilo\Core\Repository\Quota\Manager :: PARAM_ACTION => null));
             $url = $redirect->getUrl();
 
-            $allowUpgrade = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
-            $allowRequest = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
+            $allowUpgrade = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+            $allowRequest = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_request'));
 
             $translation = ($allowUpgrade || $allowRequest) ? 'MaximumFileSizeUser' : 'MaximumFileSizeUserNoUpgrade';
 
@@ -722,7 +722,7 @@ class Calculator
      */
     public function getMaximumUploadSize()
     {
-        $enableQuota = (boolean) Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
+        $enableQuota = (boolean) Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'enable_quota'));
 
         $postMaxSize = Filesystem :: interpret_file_size(ini_get('post_max_size'));
         $uploadMaxFilesize = Filesystem :: interpret_file_size(ini_get('upload_max_filesize'));

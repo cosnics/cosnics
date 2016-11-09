@@ -207,7 +207,7 @@ abstract class Application
      */
     public function get_parameters()
     {
-        return Parameters::get_instance()->get_parameters($this);
+        return Parameters::getInstance()->get_parameters($this);
     }
 
     /**
@@ -218,7 +218,7 @@ abstract class Application
      */
     public function get_parameter($name)
     {
-        return Parameters::get_instance()->get_parameter($this, $name);
+        return Parameters::getInstance()->get_parameter($this, $name);
     }
 
     /**
@@ -229,7 +229,7 @@ abstract class Application
      */
     public function set_parameter($name, $value)
     {
-        Parameters::get_instance()->set_parameter($this, $name, $value);
+        Parameters::getInstance()->set_parameter($this, $name, $value);
     }
 
     /**
@@ -251,7 +251,7 @@ abstract class Application
             return $this->get_application()->render_header($pageTitle);
         }
 
-        $breadcrumbtrail = BreadcrumbTrail::get_instance();
+        $breadcrumbtrail = BreadcrumbTrail::getInstance();
 
         $page = Page::getInstance();
         $page->setApplication($this);
@@ -330,11 +330,11 @@ abstract class Application
      */
     protected function renderPageTitle()
     {
-        $breadcrumbTrail = BreadcrumbTrail::get_instance();
+        $breadcrumbTrail = BreadcrumbTrail::getInstance();
 
         if ($breadcrumbTrail->size() > 0)
         {
-            $pageTitle = BreadcrumbTrail::get_instance()->get_last()->get_name();
+            $pageTitle = BreadcrumbTrail::getInstance()->get_last()->get_name();
 
             return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
         }
@@ -680,7 +680,7 @@ abstract class Application
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::get_instance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
     /**
@@ -709,7 +709,7 @@ abstract class Application
     {
         if (self::exists($context))
         {
-            if (\Chamilo\Configuration\Configuration::get_instance()->isRegisteredAndActive($context))
+            if (\Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($context))
             {
                 return true;
             }

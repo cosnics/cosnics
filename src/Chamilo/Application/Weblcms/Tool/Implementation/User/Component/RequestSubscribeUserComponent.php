@@ -27,7 +27,7 @@ class RequestSubscribeUserComponent extends Manager
         $course = $this->get_course();
         $request = new CourseRequest();
 
-        $course_management_rights = CourseManagementRights :: get_instance();
+        $course_management_rights = CourseManagementRights :: getInstance();
 
         if (! $this->get_user()->is_platform_admin() && ! $course_management_rights->is_allowed(
             CourseManagementRights :: TEACHER_REQUEST_SUBSCRIBE_RIGHT,

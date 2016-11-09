@@ -120,14 +120,14 @@ class RepositoryFilterForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js'));
     }
 
     public function get_filter_conditions()
     {
         $filter_condition_renderer = ConditionFilterRenderer :: factory(
-            FilterData :: get_instance(),
+            FilterData :: getInstance(),
             $this->get_user_id(),
             $this->get_allowed_content_object_types());
         $filter_condition = $filter_condition_renderer->render();

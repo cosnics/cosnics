@@ -25,7 +25,7 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add_help('external_instance general');
 
         if (! $this->get_user()->is_platform_admin())

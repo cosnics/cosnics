@@ -22,7 +22,7 @@ class EditorComponent extends Manager implements DelegateComponent
             $this);
 
         $object = $this->retrieve_external_repository_object($id);
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(null, Translation :: get('EditorComponent', array('TITLE' => $object->get_title()))));
 
         $form->set_external_repository_object($object);

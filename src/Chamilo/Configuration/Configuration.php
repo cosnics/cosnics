@@ -85,7 +85,7 @@ class Configuration
      *
      * @return \Chamilo\Configuration\Configuration The instance.
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self::$instance))
         {
@@ -138,7 +138,7 @@ class Configuration
      */
     public static function get()
     {
-        return self::get_instance()->get_setting(func_get_args());
+        return self::getInstance()->get_setting(func_get_args());
     }
 
     /**
@@ -186,7 +186,7 @@ class Configuration
      */
     public static function available()
     {
-        return self::get_instance()->is_available();
+        return self::getInstance()->is_available();
     }
 
     /**
@@ -206,7 +206,7 @@ class Configuration
      */
     public static function registration($context)
     {
-        return self::get_instance()->get_registration($context);
+        return self::getInstance()->get_registration($context);
     }
 
     /**
@@ -244,7 +244,7 @@ class Configuration
      */
     public static function registrations_by_type($type)
     {
-        return self::get_instance()->get_registrations_by_type($type);
+        return self::getInstance()->get_registrations_by_type($type);
     }
 
     /**
@@ -253,7 +253,7 @@ class Configuration
      */
     public static function registrations()
     {
-        return self::get_instance()->get_registrations();
+        return self::getInstance()->get_registrations();
     }
 
     /**
@@ -263,7 +263,7 @@ class Configuration
      */
     public static function is_registered($context)
     {
-        return self::get_instance()->isRegistered($context);
+        return self::getInstance()->isRegistered($context);
     }
 
     /**
@@ -324,8 +324,8 @@ class Configuration
     {
         $this->getDataClassRepositoryCache()->truncates(
             array(Registration::class_name(), Setting::class_name(), Language::class_name()));
-        self::get_instance()->getConfigurationCacheService()->clear();
-        self::get_instance()->loadFromStorage();
+        self::getInstance()->getConfigurationCacheService()->clear();
+        self::getInstance()->loadFromStorage();
     }
 
     /**

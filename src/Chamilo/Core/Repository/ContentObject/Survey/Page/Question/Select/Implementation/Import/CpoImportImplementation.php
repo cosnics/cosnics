@@ -58,7 +58,7 @@ class CpoImportImplementation extends ImportImplementation
                 SelectOption :: PROPERTY_ID, 
                 $option_node->getAttribute('id'));
             
-            $dm = DataManager :: get_instance();
+            $dm = DataManager :: getInstance();
             $conditions = array();
             $conditions[] = new EqualityCondition(SelectOption :: PROPERTY_QUESTION_ID, $content_object->get_id());
             $conditions[] = new EqualityCondition(SelectOption :: PROPERTY_DISPLAY_ORDER, $display_order);

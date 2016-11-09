@@ -93,7 +93,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             }
         }
 
-        // BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        // BreadcrumbTrail :: getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $context = $this->get_root_content_object()->package() . '\Display';
         $factory = new ApplicationFactory(

@@ -46,14 +46,14 @@ class ResultToHtmlConverter
         $request = DataManager:: retrieve_by_id(Request:: class_name(), $request_id);
 
         $html = array();
-        $html[] = ResourceManager:: get_instance()->get_resource_html(
+        $html[] = ResourceManager:: getInstance()->get_resource_html(
             Path:: getInstance()->getResourcesPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
                 true
             ) . 'Css/' . Theme::getInstance()->getTheme() . '/Report.css'
         );
 
-        $html[] = ResourceManager:: get_instance()->get_resource_html(
+        $html[] = ResourceManager:: getInstance()->get_resource_html(
             Path:: getInstance()->getJavascriptPath(
                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Request',
                 true
@@ -251,7 +251,7 @@ class ResultToHtmlConverter
      */
     private function get_chamilo_hits($guids)
     {
-        $doctrineExtension = new DoctrineExtension(DataManager:: get_instance());
+        $doctrineExtension = new DoctrineExtension(DataManager:: getInstance());
         $hits_rs = $doctrineExtension->retrieve_results_content_objects($guids);
 
         /**

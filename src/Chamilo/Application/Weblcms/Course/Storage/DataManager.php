@@ -1469,7 +1469,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     public static function copy_course_settings_from_course_type($course_type_id, $course_setting_id = null)
     {
-        $course_settings_controller = CourseSettingsController::get_instance();
+        $course_settings_controller = CourseSettingsController::getInstance();
 
         $course_setting_relations = self::retrieve_course_setting_relations_from_course_type(
             $course_type_id,
@@ -1609,7 +1609,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     public static function set_tool_visibility_by_tool_id($course_id, $tool_id, $visible = 1)
     {
-        $course_settings_controller = CourseSettingsController::get_instance();
+        $course_settings_controller = CourseSettingsController::getInstance();
 
         $course_setting = $course_settings_controller->get_course_setting_object_from_name_and_tool(
             CourseSetting::COURSE_SETTING_TOOL_VISIBLE,
@@ -1645,7 +1645,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function retrieve_all_course_users($course_id, $condition = null, $offset = null, $count = null,
         $order_property = null)
     {
-        $extension = new DoctrineExtension(self::get_instance());
+        $extension = new DoctrineExtension(self::getInstance());
 
         return $extension->retrieve_all_course_users($course_id, $condition, $offset, $count, $order_property);
     }
@@ -1662,7 +1662,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     public static function count_all_course_users($course_id, $condition = null)
     {
-        $extension = new DoctrineExtension(self::get_instance());
+        $extension = new DoctrineExtension(self::getInstance());
 
         return $extension->count_all_course_users($course_id, $condition);
     }

@@ -215,7 +215,7 @@ class InvitationRegistrationForm extends FormValidator
 
         $mail = new Mail($subject, $body, $user->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

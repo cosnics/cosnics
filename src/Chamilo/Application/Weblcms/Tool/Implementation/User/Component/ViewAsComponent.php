@@ -20,7 +20,7 @@ class ViewAsComponent extends Manager
 
     public function run()
     {
-        $userViewAllowed = Configuration :: get_instance()->get_setting(
+        $userViewAllowed = Configuration :: getInstance()->get_setting(
             array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
 
         if (! $userViewAllowed)
@@ -28,7 +28,7 @@ class ViewAsComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $course_access = $course_settings_controller->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: COURSE_ACCESS);

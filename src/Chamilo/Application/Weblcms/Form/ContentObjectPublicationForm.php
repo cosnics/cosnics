@@ -250,7 +250,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $right_defaults = array();
 
-        $location = WeblcmsRights:: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        $location = WeblcmsRights:: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights :: TYPE_PUBLICATION,
             $publication->get_id(),
             $publication->get_course_id()
@@ -390,7 +390,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->namespaceToFullPath(
                     Manager::context(), true
                 ) . 'Resources/Javascript/ContentObjectPublicationForm.js'
@@ -480,7 +480,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $tool = DataManager:: retrieve_course_tool_by_name($this->get_tool());
 
-        if ($this->is_course_admin || WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
+        if ($this->is_course_admin || WeblcmsRights:: getInstance()->is_allowed_in_courses_subtree(
                 WeblcmsRights :: ADD_RIGHT,
                 $tool->get_id(),
                 WeblcmsRights :: TYPE_COURSE_MODULE,
@@ -587,7 +587,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         while ($cat = $cats->next_result())
         {
-            if ($this->is_course_admin || WeblcmsRights:: get_instance()->is_allowed_in_courses_subtree(
+            if ($this->is_course_admin || WeblcmsRights:: getInstance()->is_allowed_in_courses_subtree(
                     WeblcmsRights :: ADD_RIGHT,
                     $cat->get_id(),
                     WeblcmsRights :: TYPE_COURSE_CATEGORY,
@@ -747,7 +747,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->addElement(
             'html',
-            ResourceManager:: get_instance()->get_resource_html(
+            ResourceManager:: getInstance()->get_resource_html(
                 Path:: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'
             )
         );
@@ -869,7 +869,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
     {
         $values = $this->exportValues();
 
-        $location = WeblcmsRights:: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        $location = WeblcmsRights:: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights :: TYPE_PUBLICATION,
             $publication->get_id(),
             $publication->get_course_id()
@@ -882,7 +882,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         if ($category_changed)
         {
-            $new_parent_id = WeblcmsRights:: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+            $new_parent_id = WeblcmsRights:: getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                 WeblcmsRights :: TYPE_COURSE_CATEGORY,
                 $publication->get_category_id(),
                 $publication->get_course_id()
@@ -920,7 +920,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $option = $values[self :: PROPERTY_RIGHTS_SELECTOR];
             $location_id = $location->get_id();
 
-            $weblcms_rights = WeblcmsRights:: get_instance();
+            $weblcms_rights = WeblcmsRights:: getInstance();
 
             switch ($option)
             {
@@ -1073,7 +1073,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             null, $mailFiles
         );
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

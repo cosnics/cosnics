@@ -46,7 +46,7 @@ class UserFeedbackReportingBlock extends ReportingBlock
 
     public function get_data_manager()
     {
-        return \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
+        return \Chamilo\Core\Repository\Storage\DataManager :: getInstance();
     }
 
     public function get_application()

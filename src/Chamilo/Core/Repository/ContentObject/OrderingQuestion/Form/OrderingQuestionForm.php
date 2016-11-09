@@ -24,7 +24,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $this->addElement('category', Translation :: get('Items'));
         $this->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
                      'OrderingQuestion.js'));
         $this->add_options();
@@ -57,7 +57,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $this->addElement('category', Translation :: get('Items'));
         $this->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\OrderingQuestion', true) .
                      'OrderingQuestion.js'));
         $this->add_options();

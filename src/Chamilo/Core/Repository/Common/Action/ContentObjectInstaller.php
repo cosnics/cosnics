@@ -28,7 +28,7 @@ abstract class ContentObjectInstaller extends \Chamilo\Configuration\Package\Act
 
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager :: getInstance();
     }
 
     /**

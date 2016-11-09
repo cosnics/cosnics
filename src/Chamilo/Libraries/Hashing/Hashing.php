@@ -22,7 +22,7 @@ abstract class Hashing
      *
      * @return \Chamilo\Libraries\Hashing\Hashing
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self::$instance))
         {
@@ -44,7 +44,7 @@ abstract class Hashing
      */
     public static function hash($value)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         return $instance->create_hash($value);
     }
 
@@ -55,7 +55,7 @@ abstract class Hashing
      */
     public static function hash_file($file)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         return $instance->create_file_hash($file);
     }
 

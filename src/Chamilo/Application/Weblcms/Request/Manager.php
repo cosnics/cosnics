@@ -27,7 +27,7 @@ abstract class Manager extends Application
         $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
         while ($course_type = $course_types->next_result())
         {
-            if (CourseManagementRights :: get_instance()->is_allowed(
+            if (CourseManagementRights :: getInstance()->is_allowed(
                 CourseManagementRights :: REQUEST_COURSE_RIGHT,
                 $course_type->get_id(),
                 CourseManagementRights :: TYPE_COURSE_TYPE))

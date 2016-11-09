@@ -2011,7 +2011,7 @@ class ContentObject extends CompositeDataClass
             2);
 
         // Type should be registered to be available
-        if (! \Chamilo\Configuration\Configuration::get_instance()->isRegisteredAndActive($namespace))
+        if (! \Chamilo\Configuration\Configuration::getInstance()->isRegisteredAndActive($namespace))
         {
             return false;
         }

@@ -96,7 +96,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->allowed = $this->is_allowed(WeblcmsRights::DELETE_RIGHT) || $this->is_allowed(
             WeblcmsRights::EDIT_RIGHT);
 
-        $intro_text_allowed = CourseSettingsController::get_instance()->get_course_setting(
+        $intro_text_allowed = CourseSettingsController::getInstance()->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT);
 
@@ -769,7 +769,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         'btn-primary'));
             }
 
-            $intro_text_allowed = CourseSettingsController::get_instance()->get_course_setting(
+            $intro_text_allowed = CourseSettingsController::getInstance()->get_course_setting(
                 $this->get_course(),
                 CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT);
 

@@ -104,7 +104,7 @@ abstract class ReportingTemplate
      */
     public function set_custom_breadcrumb_trail($custom_breadcrumbs)
     {
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail :: getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
         $breadcrumbs[$breadcrumb_trail->size() - 1] = $custom_breadcrumbs[0];
 

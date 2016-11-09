@@ -66,7 +66,7 @@ class Publication extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager :: getInstance();
     }
 
     public function get_content_object_id()
@@ -202,9 +202,9 @@ class Publication extends DataClass
             return false;
         }
 
-        $parent = Rights :: get_instance()->get_root_id(self :: package());
+        $parent = Rights :: getInstance()->get_root_id(self :: package());
 
-        return Rights :: get_instance()->create_location(
+        return Rights :: getInstance()->create_location(
             self :: package(),
             Rights :: TYPE_PUBLICATION,
             $this->get_id(),
@@ -214,7 +214,7 @@ class Publication extends DataClass
 
     public function delete()
     {
-        $location = Rights :: get_instance()->get_location_by_identifier(
+        $location = Rights :: getInstance()->get_location_by_identifier(
             self :: package(),
             Rights :: TYPE_PUBLICATION,
             $this->get_id());

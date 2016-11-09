@@ -23,7 +23,7 @@ class AddElementComponent extends Manager
         $type = Request :: get(self :: PARAM_DYNAMIC_FORM_ELEMENT_TYPE);
         $parameters = array(self :: PARAM_DYNAMIC_FORM_ELEMENT_TYPE => $type);
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add(new Breadcrumb($this->get_url($parameters), Translation :: get('AddElement')));
         $trail->add_help('dynamic form general');
 

@@ -22,7 +22,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
     {
         $portfolio = $this->get_parent()->get_root_content_object();
 
-        $trail = BreadcrumbTrail:: get_instance();
+        $trail = BreadcrumbTrail:: getInstance();
 
         if (!$portfolio)
         {
@@ -41,7 +41,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
         {
             $parameters = $this->get_parameters();
             $parameters[self :: PARAM_STEP] = $node_parent->get_id();
-            BreadcrumbTrail:: get_instance()->add(
+            BreadcrumbTrail:: getInstance()->add(
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title())
             );
         }
@@ -141,7 +141,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
      */
     public function get_notification_handlers()
     {
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
 
         return array(
             new MailNotificationHandler(

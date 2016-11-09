@@ -131,7 +131,7 @@ class UpdaterComponent extends TabComponent
                     $title = Translation :: get('EditQuestion');
                 }
 
-                $trail = BreadcrumbTrail :: get_instance();
+                $trail = BreadcrumbTrail :: getInstance();
                 $trail->add(
                     new Breadcrumb($this->get_url(array(self :: PARAM_STEP => $this->get_current_step())), $title));
 

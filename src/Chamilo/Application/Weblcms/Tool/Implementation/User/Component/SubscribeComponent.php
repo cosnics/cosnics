@@ -53,7 +53,7 @@ class SubscribeComponent extends Manager
                 $failures = 0;
                 $usersStatus = array();
 
-                $course_management_rights = CourseManagementRights::get_instance();
+                $course_management_rights = CourseManagementRights::getInstance();
 
                 $users = $this->findUsersByIds($userIds);
 

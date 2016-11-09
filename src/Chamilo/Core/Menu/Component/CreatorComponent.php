@@ -33,7 +33,7 @@ class CreatorComponent extends Manager implements DelegateComponent
         $type = Request :: get(Manager :: PARAM_TYPE);
         if ($type)
         {
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     null,
                     Translation :: get('Add' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($type))));

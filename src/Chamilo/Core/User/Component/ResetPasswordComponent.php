@@ -203,7 +203,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
         $mail = new Mail($mail_subject, $mail_body, $user->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try
@@ -252,7 +252,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
         $mail = new Mail($mail_subject, $mail_body, $user->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try
@@ -293,6 +293,6 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail:: get_instance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail:: getInstance());
     }
 }

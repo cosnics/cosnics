@@ -44,7 +44,7 @@ class ViewerComponent extends Manager
                     $content_object->get_additional_property('reference_id'));
             }
 
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail :: getInstance();
             $this->get_complex_content_object_breadcrumbs();
             $parameters = array(
                 \Chamilo\Core\Repository\Builder\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_parent()->get_complex_content_object_item_id(),

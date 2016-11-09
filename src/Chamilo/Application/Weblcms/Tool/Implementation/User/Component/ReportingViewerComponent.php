@@ -19,7 +19,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb($this->get_url(), Translation :: get('ReportingViewerComponent')));
 
         $factory = new ApplicationFactory(

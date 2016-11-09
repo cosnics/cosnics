@@ -534,7 +534,7 @@ class AssessmentResultsViewerComponent extends Manager implements TableSupport
      */
     protected function modify_last_breadcrumb()
     {
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail :: getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(

@@ -84,7 +84,7 @@ class CalendarRepository
     {
         if (is_null(static :: $instance))
         {
-            $configuration = Configuration :: get_instance();
+            $configuration = Configuration :: getInstance();
             $configurationContext = \Chamilo\Application\Calendar\Extension\Google\Manager :: context();
 
             $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));

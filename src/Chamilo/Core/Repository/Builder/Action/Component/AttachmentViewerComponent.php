@@ -60,7 +60,7 @@ class AttachmentViewerComponent extends Manager
         /*
          * Render the attachment
          */
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(

@@ -18,7 +18,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     public function extra()
     {
         // Create a root rights location for the quota requests
-        if (! Rights :: get_instance()->create_quota_root())
+        if (! Rights :: getInstance()->create_quota_root())
         {
             return false;
         }

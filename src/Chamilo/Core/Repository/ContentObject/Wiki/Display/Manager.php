@@ -108,7 +108,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     public function get_breadcrumbtrail()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT)), 

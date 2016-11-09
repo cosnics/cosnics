@@ -63,7 +63,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function getPlatformBlocks()
     {
-        $homeIntegrations = Configuration :: get_instance()->getIntegrationRegistrations(Manager :: package());
+        $homeIntegrations = Configuration :: getInstance()->getIntegrationRegistrations(Manager :: package());
         $blocks = array();
 
         foreach ($homeIntegrations as $homeIntegration)

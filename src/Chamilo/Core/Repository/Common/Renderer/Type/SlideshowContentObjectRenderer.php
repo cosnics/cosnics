@@ -32,7 +32,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
         $slideshowIndex = $application->getRequest()->query->get(SlideshowRenderer :: PARAM_INDEX, 0);
         $slideshowAutoPlay = $application->getRequest()->query->get(SlideshowRenderer :: PARAM_AUTOPLAY, 0);
 
-        $filterData = FilterData:: get_instance($workspace);
+        $filterData = FilterData:: getInstance($workspace);
 
         $contentObject = $contentObjectService->getContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(),

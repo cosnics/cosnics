@@ -39,7 +39,7 @@ class TakerComponent extends Manager implements DelegateComponent
     {
         $this->publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
 
-        if (! Rights :: get_instance()->is_right_granted(Rights :: PARTICIPATE_RIGHT, $this->publication_id))
+        if (! Rights :: getInstance()->is_right_granted(Rights :: PARTICIPATE_RIGHT, $this->publication_id))
         {
             throw new NotAllowedException(false);
         }

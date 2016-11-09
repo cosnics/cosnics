@@ -36,7 +36,7 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
     {
         if (!$configuration instanceof Configuration)
         {
-            $configuration = Configuration::get_instance();
+            $configuration = Configuration::getInstance();
         }
 
         $extensionPackages = $configuration->get_registrations_by_type('Chamilo\Application\Weblcms\Admin\Extension');

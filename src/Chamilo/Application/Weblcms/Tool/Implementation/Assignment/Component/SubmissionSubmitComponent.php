@@ -199,7 +199,7 @@ class SubmissionSubmitComponent extends SubmissionSubmitWizardComponent
     {
         $choices = array();
 
-        $target_entities = WeblcmsRights:: get_instance()->get_target_entities(
+        $target_entities = WeblcmsRights:: getInstance()->get_target_entities(
             WeblcmsRights :: VIEW_RIGHT,
             \Chamilo\Application\Weblcms\Manager:: context(),
             $this->publication_id,
@@ -650,7 +650,7 @@ class SubmissionSubmitComponent extends SubmissionSubmitWizardComponent
 
         $mail = new Mail($title, $content, $userEmail);
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         $mailer->sendMail($mail);

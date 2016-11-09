@@ -38,7 +38,7 @@ class Bootstrap
         $this->initialize();
 
         $this->request = \Symfony\Component\HttpFoundation\Request :: createFromGlobals();
-        $this->configuration = \Chamilo\Configuration\Configuration :: get_instance();
+        $this->configuration = \Chamilo\Configuration\Configuration :: getInstance();
     }
 
     /**

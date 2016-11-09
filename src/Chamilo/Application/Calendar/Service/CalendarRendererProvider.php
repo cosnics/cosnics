@@ -232,7 +232,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      */
     public function getSources($requestedSourceType)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             \Chamilo\Application\Calendar\Manager :: package());
         
         $sources = array();

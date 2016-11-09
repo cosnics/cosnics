@@ -100,7 +100,7 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
         $html = array();
         $html[] = '<div style="margin-bottom: 20px;">';
         $html[] = $renderer->toHTML();
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Postback.js');
         $html[] = '</div>';
 

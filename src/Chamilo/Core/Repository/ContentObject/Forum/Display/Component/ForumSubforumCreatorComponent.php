@@ -41,7 +41,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
 
                 $exclude[] = $this->get_root_content_object()->get_id();
 
-                BreadcrumbTrail :: get_instance()->add(
+                BreadcrumbTrail :: getInstance()->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
@@ -63,7 +63,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                         foreach ($forums_with_key_cloi as $key => $value)
                         {
 
-                            BreadcrumbTrail :: get_instance()->add(
+                            BreadcrumbTrail :: getInstance()->add(
                                 new Breadcrumb(
                                     $this->get_url(
                                         array(

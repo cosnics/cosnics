@@ -431,7 +431,7 @@ abstract class ExternalObject
         $external_instance = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
             Instance :: class_name(),
             $this->get_external_repository_id());
-        return DataConnector :: get_instance($external_instance);
+        return DataConnector :: getInstance($external_instance);
     }
 
     /**

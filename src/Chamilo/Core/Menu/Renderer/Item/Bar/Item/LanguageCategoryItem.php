@@ -40,7 +40,7 @@ class LanguageCategoryItem extends CategoryItem
 
         $sub_html = array();
 
-        $languages = \Chamilo\Configuration\Configuration:: get_instance()->getLanguages();
+        $languages = \Chamilo\Configuration\Configuration:: getInstance()->getLanguages();
 
         if (count($languages) > 1)
         {

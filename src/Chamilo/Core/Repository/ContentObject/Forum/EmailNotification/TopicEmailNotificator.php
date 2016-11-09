@@ -87,7 +87,7 @@ class TopicEmailNotificator extends EmailNotificator
 
         $mail = new Mail($subject, $message, $targetUsers);
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

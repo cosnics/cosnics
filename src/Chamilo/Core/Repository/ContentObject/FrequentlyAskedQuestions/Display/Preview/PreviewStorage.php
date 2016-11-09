@@ -23,7 +23,7 @@ class PreviewStorage
      *
      * @return \core\repository\content_object\portfolio\display\PreviewStorage
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {

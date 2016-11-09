@@ -295,7 +295,7 @@ class EntityFormService
      */
     private function addDependencies()
     {
-        $resource_manager = ResourceManager :: get_instance();
+        $resource_manager = ResourceManager :: getInstance();
         $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) .
              'Plugin/Bootstrap/Tagsinput/';
 

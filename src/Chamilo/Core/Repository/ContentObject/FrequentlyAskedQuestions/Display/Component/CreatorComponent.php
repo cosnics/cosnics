@@ -36,7 +36,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
         $selected_template_id = TypeSelector :: get_selection();
 
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('Add')));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb($this->get_url(), Translation :: get('Add')));
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {

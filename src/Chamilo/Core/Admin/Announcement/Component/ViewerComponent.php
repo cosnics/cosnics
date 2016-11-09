@@ -32,7 +32,7 @@ class ViewerComponent extends Manager implements NoContextComponent
         $id = Request :: get(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID);
         $this->set_parameter(self :: PARAM_SYSTEM_ANNOUNCEMENT_ID, $id);
         
-        if (! Rights :: get_instance()->is_allowed_in_publciation($id, $this->get_user()->get_id()))
+        if (! Rights :: getInstance()->is_allowed_in_publciation($id, $this->get_user()->get_id()))
         {
             throw new NotAllowedException();
         }

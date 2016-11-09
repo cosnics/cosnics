@@ -94,6 +94,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
     }
 }

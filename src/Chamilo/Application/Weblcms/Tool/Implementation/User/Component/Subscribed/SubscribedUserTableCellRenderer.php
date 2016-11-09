@@ -125,7 +125,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
             $group_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP);
             if ($user_id != $this->get_component()->get_user()->get_id() && ! isset($group_id))
             {
-                if ($this->get_component()->get_user()->is_platform_admin() || CourseManagementRights :: get_instance()->is_allowed(
+                if ($this->get_component()->get_user()->is_platform_admin() || CourseManagementRights :: getInstance()->is_allowed(
                     CourseManagementRights :: TEACHER_UNSUBSCRIBE_RIGHT,
                     $this->get_component()->get_course_id(),
                     CourseManagementRights :: TYPE_COURSE,
@@ -215,7 +215,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         }
 
         // add action for view as user
-        $userViewAllowed = Configuration :: get_instance()->get_setting(
+        $userViewAllowed = Configuration :: getInstance()->get_setting(
             array('Chamilo\Application\Weblcms', 'allow_view_as_user'));
 
         if ($userViewAllowed || $this->get_component()->get_user()->is_platform_admin())
@@ -224,7 +224,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
             {
                 if ($user_id != $this->get_component()->get_user()->get_id())
                 {
-                    $course_settings_controller = CourseSettingsController :: get_instance();
+                    $course_settings_controller = CourseSettingsController :: getInstance();
                     $course_access = $course_settings_controller->get_course_setting(
                         $this->get_component()->get_course(),
                         CourseSettingsConnector :: COURSE_ACCESS);

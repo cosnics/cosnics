@@ -91,7 +91,7 @@ abstract class CourseTypeFormActionComponent extends Manager
      */
     protected function create_rights_from_form_values(CourseType $course_type, $form_values)
     {
-        return CourseManagementRights :: get_instance()->create_rights_from_values($course_type, $form_values);
+        return CourseManagementRights :: getInstance()->create_rights_from_values($course_type, $form_values);
     }
 
     /**

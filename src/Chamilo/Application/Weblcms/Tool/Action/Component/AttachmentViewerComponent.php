@@ -26,7 +26,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add_help('courses general');
 
         $failed = false;

@@ -49,7 +49,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
                     ToolbarItem :: DISPLAY_ICON));
         }
 
-        if (CourseManagementRights :: get_instance()->is_allowed(
+        if (CourseManagementRights :: getInstance()->is_allowed(
             CourseManagementRights :: DIRECT_SUBSCRIBE_RIGHT,
             $course[Course :: PROPERTY_ID]))
         {
@@ -108,7 +108,7 @@ class UnsubscribedCourseTableCellRenderer extends CourseTableCellRenderer
         }
         else
         {
-            $course_settings_controller = CourseSettingsController :: get_instance();
+            $course_settings_controller = CourseSettingsController :: getInstance();
             $course_access = $course_settings_controller->get_course_setting(
                 $courseObject,
                 CourseSettingsConnector :: COURSE_ACCESS);

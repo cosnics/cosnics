@@ -32,7 +32,7 @@ class DataClassCache
      *
      * @return \Chamilo\Libraries\Storage\Cache\DataClassCache
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self::$instance))
         {
@@ -50,7 +50,7 @@ class DataClassCache
      */
     public static function get($class, DataClassParameters $parameters)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
 
         if (self::exists($class, $parameters))
         {
@@ -72,7 +72,7 @@ class DataClassCache
      */
     public static function exists($class, DataClassParameters $parameters)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $hash = $parameters->hash();
 
         if (isset($instance->cache[$class][$hash]))
@@ -93,7 +93,7 @@ class DataClassCache
      */
     public static function truncate($class)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
 
         if (isset($instance->cache[$class]))
         {
@@ -131,13 +131,13 @@ class DataClassCache
      */
     public static function set_cache($class, $hash, $value)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $instance->cache[$class][$hash] = $value;
     }
 
     public static function reset()
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $instance->cache = array();
     }
 }

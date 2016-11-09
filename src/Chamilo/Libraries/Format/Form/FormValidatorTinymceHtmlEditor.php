@@ -38,11 +38,11 @@ class FormValidatorTinymceHtmlEditor extends FormValidatorHtmlEditor
     public function get_includes()
     {
         $scripts = array();
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
+        $scripts[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce/tiny_mce.js');
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
+        $scripts[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce/jquery.tinymce.js');
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
+        $scripts[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'HtmlEditor/Tinymce.js');
 
         return $scripts;

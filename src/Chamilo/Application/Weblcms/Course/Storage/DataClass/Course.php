@@ -291,7 +291,7 @@ class Course extends DataClass
         $id = $this->get_id();
 
         // Remove subtree location
-        $location = CourseManagementRights :: get_instance()->get_courses_subtree_root($id);
+        $location = CourseManagementRights :: getInstance()->get_courses_subtree_root($id);
         if ($location)
         {
             if (! $location->delete())
@@ -327,7 +327,7 @@ class Course extends DataClass
      */
     public function get_rights_location()
     {
-        return CourseManagementRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        return CourseManagementRights :: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             CourseManagementRights :: TYPE_COURSE,
             $this->get_id(),
             0);
@@ -340,7 +340,7 @@ class Course extends DataClass
      */
     public function get_parent_rights_location()
     {
-        $parent = CourseManagementRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        $parent = CourseManagementRights :: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             CourseManagementRights :: TYPE_COURSE_TYPE,
             $this->get_course_type_id(),
             0);
@@ -360,7 +360,7 @@ class Course extends DataClass
      */
     public function get_available_course_management_rights()
     {
-        return CourseManagementRights :: get_instance()->get_base_course_management_rights();
+        return CourseManagementRights :: getInstance()->get_base_course_management_rights();
     }
 
     /**
@@ -384,7 +384,7 @@ class Course extends DataClass
             return true;
         }
 
-        return ! CourseManagementRights :: get_instance()->is_right_locked_for_base_object($course_type, $right_id);
+        return ! CourseManagementRights :: getInstance()->is_right_locked_for_base_object($course_type, $right_id);
     }
 
     /**
@@ -403,7 +403,7 @@ class Course extends DataClass
      */
     public function get_course_setting($setting_name, $tool_id = 0)
     {
-        return CourseSettingsController :: get_instance()->get_course_setting($this, $setting_name, $tool_id);
+        return CourseSettingsController :: getInstance()->get_course_setting($this, $setting_name, $tool_id);
     }
 
     /**
@@ -416,7 +416,7 @@ class Course extends DataClass
      */
     public function get_default_course_setting($setting_name, $tool_id)
     {
-        return CourseSettingsController :: get_instance()->get_course_type_setting(
+        return CourseSettingsController :: getInstance()->get_course_type_setting(
             $this->get_course_type_id(),
             $setting_name,
             $tool_id);
@@ -431,7 +431,7 @@ class Course extends DataClass
      */
     public function create_course_settings_from_values($values, $force = false)
     {
-        return CourseSettingsController :: get_instance()->handle_settings_for_object_with_given_values(
+        return CourseSettingsController :: getInstance()->handle_settings_for_object_with_given_values(
             $this,
             $values,
             CourseSettingsController :: SETTING_ACTION_CREATE,
@@ -447,7 +447,7 @@ class Course extends DataClass
      */
     public function update_course_settings_from_values($values)
     {
-        return CourseSettingsController :: get_instance()->handle_settings_for_object_with_given_values(
+        return CourseSettingsController :: getInstance()->handle_settings_for_object_with_given_values(
             $this,
             $values,
             CourseSettingsController :: SETTING_ACTION_UPDATE);
@@ -568,7 +568,7 @@ class Course extends DataClass
         // Create location in the course subtree
         $parent_id = $this->get_parent_rights_location()->get_id();
 
-        if (! CourseManagementRights :: get_instance()->create_location_in_courses_subtree(
+        if (! CourseManagementRights :: getInstance()->create_location_in_courses_subtree(
             CourseManagementRights :: TYPE_COURSE,
             $this->get_id(),
             $parent_id,
@@ -580,7 +580,7 @@ class Course extends DataClass
         }
 
         // Create course subtree root location
-        $course_subtree_root_location = CourseManagementRights :: get_instance()->create_subtree_root_location(
+        $course_subtree_root_location = CourseManagementRights :: getInstance()->create_subtree_root_location(
             $this->get_id(),
             CourseManagementRights :: TREE_TYPE_COURSE,
             true);
@@ -593,11 +593,11 @@ class Course extends DataClass
         $course_subtree_root_location_id = $course_subtree_root_location->get_id();
 
         // Set view right for everyone on root location
-        if (! CourseManagementRights :: get_instance()->invert_location_entity_right(
+        if (! CourseManagementRights :: getInstance()->invert_location_entity_right(
             CourseManagementRights :: VIEW_RIGHT,
             0,
             0,
-            CourseManagementRights :: get_instance()->get_courses_subtree_root_id($this->get_id())))
+            CourseManagementRights :: getInstance()->get_courses_subtree_root_id($this->get_id())))
         {
             return false;
         }
@@ -606,7 +606,7 @@ class Course extends DataClass
         $tools = DataManager :: retrieves(CourseTool :: class_name(), new DataClassRetrievesParameters());
         while ($tool = $tools->next_result())
         {
-            if (! CourseManagementRights :: get_instance()->create_location_in_courses_subtree(
+            if (! CourseManagementRights :: getInstance()->create_location_in_courses_subtree(
                 CourseManagementRights :: TYPE_COURSE_MODULE,
                 $tool->get_id(),
                 $course_subtree_root_location_id,

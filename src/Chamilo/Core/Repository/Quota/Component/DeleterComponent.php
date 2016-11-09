@@ -26,7 +26,7 @@ class DeleterComponent extends Manager
             {
                 $request = DataManager :: retrieve_by_id(Request :: class_name(), (int) $id);
 
-                if (/*(\core\repository\quota\rights\Rights :: get_instance()->quota_is_allowed() && \core\repository\quota\rights\Rights :: get_instance()->is_target_user(
+                if (/*(\core\repository\quota\rights\Rights :: getInstance()->quota_is_allowed() && \core\repository\quota\rights\Rights :: getInstance()->is_target_user(
                         $this->get_user(), $request->get_user_id())) || */$this->get_user()->is_platform_admin() ||
                      ($this->get_user_id() == $request->get_user_id() && $request->is_pending()))
                 {

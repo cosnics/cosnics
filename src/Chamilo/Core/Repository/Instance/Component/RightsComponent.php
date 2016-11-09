@@ -27,7 +27,7 @@ class RightsComponent extends Manager
 
         if (! $identifiers)
         {
-            $locations[] = Rights :: get_instance()->get_external_instances_subtree_root();
+            $locations[] = Rights :: getInstance()->get_external_instances_subtree_root();
         }
 
         if ($identifiers && ! is_array($identifiers))
@@ -37,7 +37,7 @@ class RightsComponent extends Manager
 
         foreach ($identifiers as $identifier)
         {
-            $locations[] = Rights :: get_instance()->get_location_by_identifier_from_external_instances_subtree(
+            $locations[] = Rights :: getInstance()->get_location_by_identifier_from_external_instances_subtree(
                 $identifier);
         }
 
@@ -56,6 +56,6 @@ class RightsComponent extends Manager
 
     public function get_available_rights()
     {
-        return Rights :: get_instance()->get_available_rights_for_external_instances_substree();
+        return Rights :: getInstance()->get_available_rights_for_external_instances_substree();
     }
 }

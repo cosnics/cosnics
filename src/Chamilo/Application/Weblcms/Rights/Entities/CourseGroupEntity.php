@@ -38,7 +38,7 @@ class CourseGroupEntity implements NestedRightsEntity
         $this->course_id = $course_id;
     }
 
-    public static function get_instance($course_id)
+    public static function getInstance($course_id)
     {
         if (! isset(self :: $instance))
         {

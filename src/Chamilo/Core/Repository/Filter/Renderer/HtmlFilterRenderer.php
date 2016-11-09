@@ -262,7 +262,7 @@ class HtmlFilterRenderer extends FilterRenderer
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath(Manager :: context(), true) . 'Search.js');
 
         return implode(PHP_EOL, $html);

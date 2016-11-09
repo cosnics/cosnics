@@ -276,7 +276,7 @@ abstract class Manager extends Application
 
         $edit_right = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
 
-        $course_settings_controller = CourseSettingsController::get_instance();
+        $course_settings_controller = CourseSettingsController::getInstance();
 
         while ($tool = $course_tools->next_result())
         {
@@ -318,7 +318,7 @@ abstract class Manager extends Application
      */
     public function renderShortcuts($tools)
     {
-        $courseSettingsController = CourseSettingsController::get_instance();
+        $courseSettingsController = CourseSettingsController::getInstance();
 
         $toolShortcut = $courseSettingsController->get_course_setting(
             $this->get_course(),
@@ -345,7 +345,7 @@ abstract class Manager extends Application
      */
     public function renderHomeActions()
     {
-        $courseSettingsController = CourseSettingsController::get_instance();
+        $courseSettingsController = CourseSettingsController::getInstance();
         $introductionTextAllowed = $courseSettingsController->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
@@ -530,7 +530,7 @@ abstract class Manager extends Application
 
             if ($hidden && $right == WeblcmsRights::VIEW_RIGHT)
             {
-                return WeblcmsRights::get_instance()->is_allowed_in_courses_subtree(
+                return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                     WeblcmsRights::EDIT_RIGHT,
                     $publication_id,
                     WeblcmsRights::TYPE_PUBLICATION,
@@ -539,7 +539,7 @@ abstract class Manager extends Application
                 );
             }
 
-            return WeblcmsRights::get_instance()->is_allowed_in_courses_subtree(
+            return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                 $right,
                 $publication_id,
                 WeblcmsRights::TYPE_PUBLICATION,
@@ -570,7 +570,7 @@ abstract class Manager extends Application
 
                 if ($category->is_recursive_visible())
                 {
-                    return WeblcmsRights::get_instance()->is_allowed_in_courses_subtree(
+                    return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                         $right,
                         $category_id,
                         WeblcmsRights::TYPE_COURSE_CATEGORY,
@@ -586,7 +586,7 @@ abstract class Manager extends Application
 
             if ($this->get_tool_id() == 'home')
             {
-                return WeblcmsRights::get_instance()->is_allowed_in_courses_subtree(
+                return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                     $right,
                     0,
                     RightsUtil::TYPE_ROOT,
@@ -596,7 +596,7 @@ abstract class Manager extends Application
             }
 
             $tool_registration = $this->get_tool_registration();
-            $course_settings_controller = CourseSettingsController::get_instance();
+            $course_settings_controller = CourseSettingsController::getInstance();
 
             $module_visible = $course_settings_controller->get_course_setting(
                 $this->get_course(),
@@ -609,7 +609,7 @@ abstract class Manager extends Application
                 return false;
             }
 
-            return WeblcmsRights::get_instance()->is_allowed_in_courses_subtree(
+            return WeblcmsRights::getInstance()->is_allowed_in_courses_subtree(
                 $right,
                 $tool_registration->get_id(),
                 WeblcmsRights::TYPE_COURSE_MODULE,
@@ -885,9 +885,9 @@ abstract class Manager extends Application
     public function get_entities()
     {
         $entities = array();
-        $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::get_instance($this->get_course_id());
-        $entities[CourseUserEntity::ENTITY_TYPE] = CourseUserEntity::get_instance();
-        $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::get_instance();
+        $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance($this->get_course_id());
+        $entities[CourseUserEntity::ENTITY_TYPE] = CourseUserEntity::getInstance();
+        $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance();
 
         return $entities;
     }
@@ -924,7 +924,7 @@ abstract class Manager extends Application
 
         $publications = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
 
-        $rights_util = WeblcmsRights::get_instance();
+        $rights_util = WeblcmsRights::getInstance();
 
         if ($publications)
         {

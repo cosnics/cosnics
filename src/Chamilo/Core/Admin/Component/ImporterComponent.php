@@ -28,7 +28,7 @@ class ImporterComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
-        $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+        $breadcrumbtrail = BreadcrumbTrail :: getInstance();
         $breadcrumbtrail->add_help('administration general');
 
         $this->tab = Request :: get(self :: PARAM_TAB);
@@ -52,7 +52,7 @@ class ImporterComponent extends Manager
         $html[] = '<div style="float: right; width: 89%;">';
         $html[] = $this->get_tabs();
         $html[] = '</div>';
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin') . 'AdminBrowser.js');
         $html[] = $this->render_footer();
 

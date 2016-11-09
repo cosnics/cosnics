@@ -235,7 +235,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->add_dumb_table_in_db();
         $this->installer_config->set_db_overwrite(true);
         $this->installer->perform_install();
-        $table_list = Connection :: get_instance()->get_connection()->listTables();
+        $table_list = Connection :: getInstance()->get_connection()->listTables();
         $this->assertNotContains("dumb", $table_list);
     }
 
@@ -254,7 +254,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->add_dumb_table_in_db();
         $this->installer_config->set_db_overwrite(false);
         $this->installer->perform_install();
-        $table_list = Connection :: get_instance()->get_connection()->listTables();
+        $table_list = Connection :: getInstance()->get_connection()->listTables();
         $this->assertContains("dumb", $table_list);
     }
 }

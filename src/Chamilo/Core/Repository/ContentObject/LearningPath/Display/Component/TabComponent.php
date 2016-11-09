@@ -56,7 +56,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
     {
         $learning_path = $this->get_parent()->get_root_content_object();
 
-        $trail = BreadcrumbTrail::get_instance();
+        $trail = BreadcrumbTrail::getInstance();
 
         if (! $learning_path)
         {
@@ -79,7 +79,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
             $parameters = $this->get_parameters();
             $parameters[self::PARAM_STEP] = $node_parent->get_id();
             $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-            BreadcrumbTrail::get_instance()->add(
+            BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title()));
         }
 
@@ -165,9 +165,9 @@ abstract class TabComponent extends Manager implements DelegateComponent
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
 
-        $html[] = ResourceManager::get_instance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'LearningPathMenu.js');
-        $html[] = ResourceManager::get_instance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/Jquery/jquery.fullscreen.min.js');
 

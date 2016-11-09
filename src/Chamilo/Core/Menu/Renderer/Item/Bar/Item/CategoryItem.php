@@ -73,7 +73,7 @@ class CategoryItem extends Bar
 
             foreach ($this->getChildren() as $child)
             {
-                if (($child->get_id() && Rights :: get_instance()->is_allowed(
+                if (($child->get_id() && Rights :: getInstance()->is_allowed(
                     Rights :: VIEW_RIGHT,
                     Manager :: context(),
                     null,

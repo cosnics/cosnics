@@ -59,7 +59,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
     function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
     {
-        return PreviewStorage::get_instance()->retrieve_feedbacks(
+        return PreviewStorage::getInstance()->retrieve_feedbacks(
             $this->get_root_content_object()->get_id(),
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }
@@ -72,7 +72,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     {
         try
         {
-            return PreviewStorage::get_instance()->retrieve_feedback($feedback_id);
+            return PreviewStorage::getInstance()->retrieve_feedback($feedback_id);
         }
         catch (\Exception $exception)
         {
@@ -147,7 +147,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
     function retrieve_portfolio_notification(ComplexContentObjectPathNode $node)
     {
-        return PreviewStorage::get_instance()->retrieve_notification(
+        return PreviewStorage::getInstance()->retrieve_notification(
             $this->get_root_content_object()->get_id(),
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }
@@ -160,7 +160,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      */
     public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
     {
-        return PreviewStorage::get_instance()->retrieve_notifications(
+        return PreviewStorage::getInstance()->retrieve_notifications(
             $this->get_root_content_object()->get_id(),
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }

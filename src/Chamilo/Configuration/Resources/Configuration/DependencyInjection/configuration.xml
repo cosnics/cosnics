@@ -5,14 +5,6 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service
-            id="chamilo.configuration.service.configuration"
-            class="Chamilo\Configuration\Configuration">
-            <factory
-                class="Chamilo\Configuration\Configuration"
-                method="get_instance" />
-        </service>
-
-        <service
             id="chamilo.configuration.service.configuration_consulter"
             class="Chamilo\Configuration\Service\ConfigurationConsulter">
             <argument
@@ -54,7 +46,7 @@
                 type="service"
                 id="chamilo.configuration.service.file_configuration_locator" />
         </service>
-        
+
         <service
             id="chamilo.configuration.service.file_configuration_locator"
             class="Chamilo\Configuration\Service\FileConfigurationLocator">

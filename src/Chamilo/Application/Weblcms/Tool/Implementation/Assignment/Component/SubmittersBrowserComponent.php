@@ -101,7 +101,7 @@ class SubmittersBrowserComponent extends SubmissionsManager implements DelegateC
         
         $this->assignment = $publication->get_content_object();
         
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail :: getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
             $this->get_url(

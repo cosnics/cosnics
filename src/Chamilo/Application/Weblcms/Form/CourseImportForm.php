@@ -129,7 +129,7 @@ class CourseImportForm extends FormValidator
                     $setting_values[CourseSettingsController :: SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector :: TITULAR] = $course->get_titular_id();
 
                     $course->create_course_settings_from_values($setting_values);
-                    CourseManagementRights :: get_instance()->create_rights_from_values($course, array());
+                    CourseManagementRights :: getInstance()->create_rights_from_values($course, array());
 
                     if (! \Chamilo\Application\Weblcms\Course\Storage\DataManager :: subscribe_user_to_course(
                         $course->get_id(),
@@ -323,7 +323,7 @@ class CourseImportForm extends FormValidator
 
     private function determine_default_course_language($course)
     {
-        return CourseSettingsController :: get_instance()->get_course_type_setting(
+        return CourseSettingsController :: getInstance()->get_course_type_setting(
             $course->get_course_type_id(),
             Course :: PROPERTY_LANGUAGE);
     }

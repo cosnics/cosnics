@@ -61,7 +61,7 @@ class TranslatorFactory
             Filesystem::create_dir($translationCachePath);
         }
 
-        $packageNamespaces = Configuration::get_instance()->get_registration_contexts();
+        $packageNamespaces = Configuration::getInstance()->get_registration_contexts();
 
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
             array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),

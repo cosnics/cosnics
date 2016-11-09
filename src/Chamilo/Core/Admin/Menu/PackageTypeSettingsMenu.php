@@ -56,7 +56,7 @@ class PackageTypeSettingsMenu extends HtmlMenu
         $packages = $package_list->get_packages();
         foreach ($packages as $package)
         {
-            if (\Chamilo\Configuration\Configuration :: get_instance()->has_settings($package->get_context()))
+            if (\Chamilo\Configuration\Configuration :: getInstance()->has_settings($package->get_context()))
             {
                 $has_settings = true;
                 break;

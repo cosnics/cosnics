@@ -38,7 +38,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
     public function run()
     {
         $id = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         $html = array();
 

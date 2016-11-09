@@ -267,7 +267,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
         $html[] = '<h4>' . $section->getDisplayName() . '</h4>';
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
 
         $html[] = '<ul class="list-group list-group-course-tool">';
 
@@ -329,7 +329,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
     public function getCourseSectionByTool(CourseTool $tool)
     {
-        $courseSettingsController = CourseSettingsController :: get_instance();
+        $courseSettingsController = CourseSettingsController :: getInstance();
         $sectionTypes = $this->getSectionTypes();
 
         $isToolVisible = $courseSettingsController->get_course_setting(

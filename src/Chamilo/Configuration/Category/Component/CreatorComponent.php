@@ -31,7 +31,7 @@ class CreatorComponent extends Manager
         }
 
         $this->set_parameter(self :: PARAM_CATEGORY_ID, $category_id);
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add_help('category_manager_creator');
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('CreatorComponent')));
 

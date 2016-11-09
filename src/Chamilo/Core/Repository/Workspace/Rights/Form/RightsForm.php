@@ -69,7 +69,7 @@ class RightsForm extends FormValidator
         {
             if ($this->entityRelation->get_entity_type() == UserEntity :: ENTITY_TYPE)
             {
-                $entityType = UserEntity:: get_instance()->get_entity_translated_name();
+                $entityType = UserEntity:: getInstance()->get_entity_translated_name();
                 $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager:: retrieve_by_id(
                     User:: class_name(),
                     $this->entityRelation->get_entity_id()
@@ -77,7 +77,7 @@ class RightsForm extends FormValidator
             }
             else
             {
-                $entityType = PlatformGroupEntity:: get_instance()->get_entity_translated_name();
+                $entityType = PlatformGroupEntity:: getInstance()->get_entity_translated_name();
                 $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager:: retrieve_by_id(
                     Group:: class_name(),
                     $this->entityRelation->get_entity_id()
@@ -165,7 +165,7 @@ class RightsForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager:: get_instance()->get_resource_html(
+            ResourceManager:: getInstance()->get_resource_html(
                 Path:: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Workspace\Rights', true) .
                 'RightsForm.js'
             )

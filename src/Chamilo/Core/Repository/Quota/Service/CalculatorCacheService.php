@@ -30,8 +30,8 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
      */
     public function warmUpForIdentifier($identifier)
     {
-        $policy = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
-        $fallback = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
+        $policy = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_policy'));
+        $fallback = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'quota_fallback'));
 
         if ($policy == Calculator :: POLICY_USER && ! $fallback)
         {

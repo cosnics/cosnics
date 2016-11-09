@@ -34,7 +34,7 @@ class FrequentlyAskedQuestions extends ContentObject implements ComplexContentOb
     public function get_allowed_types()
     {
         $classNameUtilities = ClassnameUtilities :: getInstance();
-        $configuration = Configuration :: get_instance();
+        $configuration = Configuration :: getInstance();
 
         $registrations = $configuration->getIntegrationRegistrations(self :: package());
         $types = array();

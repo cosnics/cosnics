@@ -16,7 +16,7 @@ class Session
          */
         session_cache_limiter('');
 
-        $configuration = \Chamilo\Configuration\Configuration::get_instance();
+        $configuration = \Chamilo\Configuration\Configuration::getInstance();
 
         if ($configuration->is_available() && $configuration->is_connectable())
         {

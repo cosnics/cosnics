@@ -47,7 +47,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         $this->table_type = Request :: get(self :: PARAM_TABLE_TYPE, self :: TAB_MAILS_TO_PARTICIPANTS);
         $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
         
-        // if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
+        // if (! Rights :: getInstance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
         // {
         // throw new NotAllowedException();
         // }

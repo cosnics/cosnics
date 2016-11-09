@@ -66,7 +66,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
             return false;
         }
 
-        if (! CourseSettingsController :: get_instance()->install_course_settings(
+        if (! CourseSettingsController :: getInstance()->install_course_settings(
             $this,
             $this->tool_registration->get_id()))
         {
@@ -239,7 +239,7 @@ abstract class ToolInstaller extends \Chamilo\Configuration\Package\Action\Insta
      */
     protected function install_tool_for_existing_courses()
     {
-        $course_management_rights = CourseManagementRights :: get_instance();
+        $course_management_rights = CourseManagementRights :: getInstance();
 
         $courses = CourseDataManager :: retrieves(Course :: class_name(), new DataClassRetrievesParameters());
         while ($course = $courses->next_result())

@@ -103,7 +103,7 @@ class CalendarRepository
     {
         if (is_null(static :: $instance))
         {
-            $configuration = Configuration :: get_instance();
+            $configuration = Configuration :: getInstance();
             $configurationContext = \Chamilo\Application\Calendar\Extension\Office365\Manager :: context();
 
             $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
@@ -456,7 +456,7 @@ class CalendarRepository
      */
     private function executeRequest(\GuzzleHttp\Message\Request $request)
     {
-        $lifetimeInMinutes = Configuration :: get_instance()->get_setting(
+        $lifetimeInMinutes = Configuration :: getInstance()->get_setting(
             array('Chamilo\Libraries\Calendar', 'refresh_external'));
 
         $parameterBag = new ParameterBag(

@@ -49,7 +49,7 @@ class ViewerComponent extends TabComponent
         $show_progress = Request::get(self::PARAM_SHOW_PROGRESS);
         $learning_path = $this->get_parent()->get_root_content_object();
 
-        $trail = BreadcrumbTrail::get_instance();
+        $trail = BreadcrumbTrail::getInstance();
 
         if (! $learning_path)
         {
@@ -112,7 +112,7 @@ class ViewerComponent extends TabComponent
         $html[] = $this->renderMovePanel();
         $html[] = $embedder->run();
 
-        $html[] = ResourceManager::get_instance()->get_resource_html(
+        $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath(Manager::package(), true) . 'KeyboardNavigation.js');
 
         $html[] = $this->render_footer();

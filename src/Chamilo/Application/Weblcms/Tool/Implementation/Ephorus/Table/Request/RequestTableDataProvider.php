@@ -56,7 +56,7 @@ class RequestTableDataProvider extends DataClassTableDataProvider
     {
         if (! isset($this->extension))
         {
-            $this->extension = new DoctrineExtension(DataManager :: get_instance());
+            $this->extension = new DoctrineExtension(DataManager :: getInstance());
         }
 
         return $this->extension;

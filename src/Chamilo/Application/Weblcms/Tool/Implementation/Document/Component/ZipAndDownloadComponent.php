@@ -140,7 +140,7 @@ class ZipAndDownloadComponent extends Manager
                 {
                     $course_module_id = $this->get_tool_registration()->get_id();
                     $location_id =
-                        WeblcmsRights:: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+                        WeblcmsRights:: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
                             WeblcmsRights :: TYPE_COURSE_MODULE,
                             $course_module_id,
                             $this->get_course_id()
@@ -149,7 +149,7 @@ class ZipAndDownloadComponent extends Manager
                 else
                 {
                     $location_id =
-                        WeblcmsRights:: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+                        WeblcmsRights:: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
                             WeblcmsRights :: TYPE_COURSE_CATEGORY,
                             $category_id,
                             $this->get_course_id()

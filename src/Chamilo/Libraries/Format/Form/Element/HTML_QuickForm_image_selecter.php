@@ -166,7 +166,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
         $html[] = $this->addFileDropzone('attachments_importer', $dropZoneParameters, true);
 
         $html[] =
-            ResourceManager:: get_instance()->get_resource_html(
+            ResourceManager:: getInstance()->get_resource_html(
                 Path:: getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager:: context(), true) .
                 'Plugin/jquery.file.upload.import.js'
             );
@@ -289,7 +289,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
 
         $html[] = '</div>';
 
-        $html[] = ResourceManager:: get_instance()->get_resource_html(
+        $html[] = ResourceManager:: getInstance()->get_resource_html(
             Path:: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.imageselecter.js'
         );
         $html[] = '<script type="text/javascript">';
@@ -403,7 +403,7 @@ class HTML_QuickForm_image_selecter extends \HTML_QuickForm_group
             $dropzoneOptionsString[] = $optionKey . ': \'' . $optionValue . '\'';
         }
 
-        $dropzoneHtml[] = ResourceManager::get_instance()->get_resource_html(
+        $dropzoneHtml[] = ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                 'Plugin/Jquery/jquery.file.upload.js'
         );

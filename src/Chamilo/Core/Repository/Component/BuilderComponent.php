@@ -65,7 +65,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
                 throw new NotAllowedException();
             }
 
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BUILD_COMPLEX_CONTENT_OBJECT)),
                     Translation :: get(

@@ -67,7 +67,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
             $content_object_type_image = 'Logo/Template/' . $template_registration->get_name() . '/16';
 
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
                     Translation :: get(
@@ -92,7 +92,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
             $object->set_owner_id($this->get_user_id());
 
-            $category = FilterData :: get_instance($this->getWorkspace())->get_filter_property(
+            $category = FilterData :: getInstance($this->getWorkspace())->get_filter_property(
                 FilterData :: FILTER_CATEGORY);
             $object->set_parent_id($category);
 
@@ -208,7 +208,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
             $namespace = $classnameUtilities->getNamespaceFromClassname($type);
 
             $context = $classnameUtilities->getNamespaceParent($namespace, 2);
-            if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive($context))
+            if (! \Chamilo\Configuration\Configuration :: getInstance()->isRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }

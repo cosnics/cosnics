@@ -122,7 +122,7 @@ class Manager implements PublicationInterface
 
         $excludedCourseTypes = explode(
             ',',
-            (string) Configuration::get_instance()->get_setting(
+            (string) Configuration::getInstance()->get_setting(
                 array('Chamilo\Application\Weblcms', 'excluded_course_types')));
 
         $condition = new NotCondition(
@@ -144,8 +144,8 @@ class Manager implements PublicationInterface
             }
         }
 
-        $course_settings_controller = CourseSettingsController::get_instance();
-        $course_management_rights = CourseManagementRights::get_instance();
+        $course_settings_controller = CourseSettingsController::getInstance();
+        $course_management_rights = CourseManagementRights::getInstance();
 
         $tools = DataManager::retrieves(CourseTool::class_name(), new DataClassRetrievesParameters());
 
@@ -265,7 +265,7 @@ class Manager implements PublicationInterface
 
         if ($options[ContentObjectPublication::PROPERTY_EMAIL_SENT])
         {
-            $mailerFactory = new MailerFactory(Configuration::get_instance());
+            $mailerFactory = new MailerFactory(Configuration::getInstance());
 
             $contentObjectPublicationMailer = new ContentObjectPublicationMailer(
                 $mailerFactory->getActiveMailer(),

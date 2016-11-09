@@ -30,7 +30,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         
         $complex_content_object_item_id = Request :: get(
             \Chamilo\Core\Repository\Builder\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
@@ -132,10 +132,10 @@ class UpdaterComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail :: getInstance();
             $trail->add_help('repository builder');
             
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     null, 
                     Translation :: get(

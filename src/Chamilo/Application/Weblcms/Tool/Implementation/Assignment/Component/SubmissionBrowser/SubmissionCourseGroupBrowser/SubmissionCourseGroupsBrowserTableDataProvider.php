@@ -36,7 +36,7 @@ class SubmissionCourseGroupsBrowserTableDataProvider extends SubmissionBrowserTa
         $order_properties[] = new OrderBy(
             new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME), 
             SORT_ASC, 
-            \Chamilo\Application\Weblcms\Storage\DataManager :: get_instance()->get_alias(
+            \Chamilo\Application\Weblcms\Storage\DataManager :: getInstance()->get_alias(
                 CourseGroup :: get_table_name()));
         
         return $order_properties;

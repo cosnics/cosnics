@@ -27,7 +27,7 @@ abstract class Dependency
 
     public function __construct()
     {
-        $this->logger = MessageLogger :: get_instance($this);
+        $this->logger = MessageLogger :: getInstance($this);
     }
 
     public function get_id()

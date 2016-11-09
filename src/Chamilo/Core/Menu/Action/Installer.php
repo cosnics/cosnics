@@ -144,7 +144,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             else
             {
 
-                $languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
+                $languages = \Chamilo\Configuration\Configuration :: getInstance()->getLanguages();
                 $category = new CategoryItem();
                 $category->set_parent(0);
                 $category->set_display(CategoryItem :: DISPLAY_BOTH);
@@ -214,7 +214,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function setDefaultRights(Item $item)
     {
-        $rightsUtilities = Rights :: get_instance();
+        $rightsUtilities = Rights :: getInstance();
         $rightsLocation = $rightsUtilities->get_location_by_identifier(
             'Chamilo\Core\Menu',
             Rights :: TYPE_ITEM,

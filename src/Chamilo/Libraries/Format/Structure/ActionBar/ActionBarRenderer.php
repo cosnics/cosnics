@@ -276,7 +276,7 @@ class ActionBarRenderer
         $html[] = '</div>';
         $html[] = '</div>';
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ActionBarVertical.js');
 
         $html[] = '<div class="clear"></div>';

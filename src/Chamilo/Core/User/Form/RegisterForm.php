@@ -42,7 +42,7 @@ class RegisterForm extends FormValidator
     {
         parent :: __construct('user_settings', 'post', $action);
 
-        $this->adminDM = \Chamilo\Core\Admin\Storage\DataManager :: get_instance();
+        $this->adminDM = \Chamilo\Core\Admin\Storage\DataManager :: getInstance();
         $this->user = $user;
         $this->build_creation_form();
         $this->setDefaults();
@@ -335,7 +335,7 @@ class RegisterForm extends FormValidator
             $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
         );
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

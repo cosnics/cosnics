@@ -172,7 +172,7 @@ class PlatformInstaller
 
         $html[] = $this->observers->before_preprod();
 
-        $configuration = \Chamilo\Configuration\Configuration :: get_instance();
+        $configuration = \Chamilo\Configuration\Configuration :: getInstance();
 
         $configuration->set(array('Chamilo\Configuration', 'general', 'data_manager'), 'mdb2');
         $configuration->set(
@@ -264,7 +264,7 @@ class PlatformInstaller
             throw new \Exception(Translation :: get('ConfigWriteFailed'));
         }
 
-        \Chamilo\Configuration\Configuration :: get_instance()->reset();
+        \Chamilo\Configuration\Configuration :: getInstance()->reset();
 
         return new StepResult(true, Translation :: get('ConfigWriteSuccess'));
     }

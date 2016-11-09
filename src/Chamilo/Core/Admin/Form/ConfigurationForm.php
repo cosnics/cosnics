@@ -536,7 +536,7 @@ class ConfigurationForm extends FormValidator
     public function update_user_settings()
     {
         $values = $this->exportValues();
-        $adm = DataManager :: get_instance();
+        $adm = DataManager :: getInstance();
         $problems = 0;
 
         foreach ($this->configuration['settings'] as $category_name => $settings)

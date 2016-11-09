@@ -271,7 +271,7 @@ class FormFilterRenderer extends FilterRenderer
     {
         $this->form_validator->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(Manager :: context(), true) . 'Search.js'));
         $this->form_validator->addElement(
             'style_button',

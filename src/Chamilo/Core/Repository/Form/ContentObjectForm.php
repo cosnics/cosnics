@@ -430,7 +430,7 @@ abstract class ContentObjectForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectUpdate.js'));
 
         if (! $in_tab)
@@ -614,7 +614,7 @@ EOT;
         // separated uplaod and check behaviour into independent javascript files
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'));
         // added platform option 'omit_content_object_title_check'
         // when NULL (platform option not set) or FALSE (platform option set to false)
@@ -624,7 +624,7 @@ EOT;
         {
             $this->addElement(
                 'html',
-                ResourceManager::get_instance()->get_resource_html(
+                ResourceManager::getInstance()->get_resource_html(
                     Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormCheck.js'));
         }
 
@@ -735,7 +735,7 @@ EOT;
 
             $this->addElement(
                 'html',
-                ResourceManager::get_instance()->get_resource_html(
+                ResourceManager::getInstance()->get_resource_html(
                     Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
 
             $this->addElement(
@@ -747,7 +747,7 @@ EOT;
 
             $this->addElement(
                 'html',
-                ResourceManager:: get_instance()->get_resource_html(
+                ResourceManager:: getInstance()->get_resource_html(
                     Path:: getInstance()->getJavascriptPath(Manager:: context(), true) .
                     'Plugin/jquery.file.upload.import.js'
                 )
@@ -1161,7 +1161,7 @@ EOT;
     {
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
 
         $this->addElement(

@@ -28,7 +28,7 @@ class UserPictureProviderFactory
     {
         if (is_null($configuration) || !$configuration instanceof Configuration)
         {
-            $configuration = Configuration::get_instance();
+            $configuration = Configuration::getInstance();
         }
 
         $this->configuration = $configuration;

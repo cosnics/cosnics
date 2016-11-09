@@ -41,7 +41,7 @@ class ViewerComponent extends Manager
         $html[] = $this->render_header();
 
         $html[] = $this->show_child_node($this->path->get_root());
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath(self :: package(), true) . 'Faq.js');
         $html[] = $this->render_footer();
 

@@ -39,7 +39,7 @@ class DependencyVerifier
     public function __construct($package)
     {
         $this->package = $package;
-        $this->logger = MessageLogger :: get_instance($this);
+        $this->logger = MessageLogger :: getInstance($this);
     }
 
     /**

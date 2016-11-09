@@ -74,7 +74,7 @@ class CourseSettingsConnector
     public static function get_languages()
     {
         return array_merge(
-            \Chamilo\Configuration\Configuration :: get_instance()->getLanguages(),
+            \Chamilo\Configuration\Configuration :: getInstance()->getLanguages(),
             array('platform_language' => Translation :: get('PlatformLanguage', null, 'Chamilo\Core\Admin')));
     }
 
@@ -159,7 +159,7 @@ class CourseSettingsConnector
      */
     public static function get_breadcrumb_title_for_course(Course $course)
     {
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $breadcrumb_setting = $course_settings_controller->get_course_setting($course, self :: BREADCRUMB_LAYOUT);
 
         switch ($breadcrumb_setting)

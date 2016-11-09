@@ -30,7 +30,7 @@ class DenierComponent extends Manager
 
     public function run()
     {
-        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
+        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed())
         {
             throw new NotAllowedException();
         }
@@ -101,7 +101,7 @@ class DenierComponent extends Manager
     {
         $request = DataManager :: retrieve_by_id(Request :: class_name(), (int) $id);
         
-        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->is_target_user(
+        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->is_target_user(
             $this->get_user(), 
             $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
         {
@@ -158,7 +158,7 @@ class DenierComponent extends Manager
         {
             $request = DataManager :: retrieve(Request :: class_name(), (int) $id);
             
-            if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->is_target_user(
+            if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->is_target_user(
                 $this->get_user(), 
                 $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
             {
@@ -199,7 +199,7 @@ class DenierComponent extends Manager
         $title = Translation :: get(
             'RequestDeniedMailTitle', 
             array(
-                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
+                'PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'QUOTA' => Filesystem :: format_file_size($request->get_quota())));
         
         if (strlen($request->get_decision_motivation()) > 0)
@@ -215,13 +215,13 @@ class DenierComponent extends Manager
             $variable, 
             array(
                 'USER' => $recipient->get_fullname(), 
-                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
+                'PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'QUOTA' => Filesystem :: format_file_size($request->get_quota()), 
                 'MOTIVATION' => $request->get_decision_motivation()));
 
         $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try
@@ -242,8 +242,8 @@ class DenierComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
-            $allow_upgrade = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
-            $maximum_user_disk_space = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
+            $allow_upgrade = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+            $maximum_user_disk_space = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
             
             if ($calculator->upgradeAllowed())
             {

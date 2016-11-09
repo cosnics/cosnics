@@ -50,7 +50,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<script type="text/javascript" src="' . htmlspecialchars(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'Plugin/jquery.draw.js') . '"></script>';
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                  'HotspotQuestionResultDisplay.js');
         $html[] = '<div class="clear"></div></div>';

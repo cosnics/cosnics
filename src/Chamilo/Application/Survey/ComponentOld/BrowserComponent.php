@@ -50,7 +50,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $tabs = new DynamicVisualTabsRenderer(self :: class_name());
         
-        if (Rights :: get_instance()->publication_is_allowed())
+        if (Rights :: getInstance()->publication_is_allowed())
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
@@ -85,7 +85,7 @@ class BrowserComponent extends Manager implements TableSupport
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
-            if (Rights :: get_instance()->publication_is_allowed())
+            if (Rights :: getInstance()->publication_is_allowed())
             {
                 $commonActions->addButton(
                     new Button(
@@ -138,7 +138,7 @@ class BrowserComponent extends Manager implements TableSupport
         // $entities[UserEntity :: ENTITY_TYPE] = new UserEntity();
         // $entities[PlatformGroupEntity :: ENTITY_TYPE] = new PlatformGroupEntity();
         
-        // $publication_ids = Rights :: get_instance()->get_publication_ids_for_granted_right($right, $entities);
+        // $publication_ids = Rights :: getInstance()->get_publication_ids_for_granted_right($right, $entities);
         
         // $conditions[] = new InCondition(
         // new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID),

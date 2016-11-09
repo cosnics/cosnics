@@ -22,7 +22,7 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
     {
         $class_name = $this->get_condition_variable()->get_class();
 
-        $table_alias = \Chamilo\Libraries\Storage\DataManager\DataManager::get_instance()->get_alias(
+        $table_alias = \Chamilo\Libraries\Storage\DataManager\DataManager::getInstance()->get_alias(
             $class_name::get_table_name());
 
         return Database::escape_column_name($this->get_condition_variable()->get_property(), $table_alias) . ' AS ' .

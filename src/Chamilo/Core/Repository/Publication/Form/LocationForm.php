@@ -184,7 +184,7 @@ class LocationForm extends FormValidator
 
         $this->add_selected_content_objects();
 
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
 
         $this->applications = array();
 

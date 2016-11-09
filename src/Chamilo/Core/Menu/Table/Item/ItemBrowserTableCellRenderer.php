@@ -75,7 +75,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
                 $this->get_component()->get_item_editing_url($menu),
                 ToolbarItem :: DISPLAY_ICON));
 
-        $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+        $setting = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
 
         if ($setting == 1)
         {

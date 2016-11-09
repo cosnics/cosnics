@@ -27,7 +27,7 @@ class PreviewStorage
      *
      * @return \core\repository\content_object\portfolio\display\PreviewStorage
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {
@@ -42,7 +42,7 @@ class PreviewStorage
     public function __construct()
     {
         $storage = $this->get_storage();
-        
+
         if (! isset($storage))
         {
             $this->set_storage(array());
@@ -51,7 +51,7 @@ class PreviewStorage
 
     /**
      * Empty the storage
-     * 
+     *
      * @return boolean
      */
     public function reset()
@@ -109,13 +109,13 @@ class PreviewStorage
     public function get_feedbacks()
     {
         $feedbacks = $this->get_property(self :: PROPERTY_FEEDBACK);
-        
+
         if (! isset($feedbacks))
         {
             $feedbacks = array();
             $this->set_property(self :: PROPERTY_FEEDBACK, $feedbacks);
         }
-        
+
         return $feedbacks;
     }
 
@@ -186,7 +186,7 @@ class PreviewStorage
     public function retrieve_feedbacks($content_object_id, $complex_content_object_item_id)
     {
         $feedbacks = $this->get_feedbacks();
-        
+
         return new ArrayResultSet(
             array_reverse(array_values($feedbacks[$content_object_id][$complex_content_object_item_id])));
     }
@@ -198,13 +198,13 @@ class PreviewStorage
     public function get_notifications()
     {
         $notifications = $this->get_property(self :: PROPERTY_NOTIFICATION);
-        
+
         if (! isset($notifications))
         {
             $notifications = array();
             $this->set_property(self :: PROPERTY_NOTIFICATION, $notifications);
         }
-        
+
         return $notifications;
     }
 

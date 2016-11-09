@@ -76,8 +76,8 @@ class RightsGroupForm extends FormValidator
     {
         /*
          * $default_elements = new AdvancedElementFinderElements(); $targets_entities = Rights ::
-         * get_instance()->get_request_targets_entities(); $user_entity = UserEntity :: get_instance(); $group_entity =
-         * PlatformGroupEntity :: get_instance(); foreach ($targets_entities[UserEntity :: ENTITY_TYPE] as $entity) {
+         * get_instance()->get_request_targets_entities(); $user_entity = UserEntity :: getInstance(); $group_entity =
+         * PlatformGroupEntity :: getInstance(); foreach ($targets_entities[UserEntity :: ENTITY_TYPE] as $entity) {
          * $default_elements->add_element($user_entity->get_element_finder_element($entity)); } foreach
          * ($targets_entities[PlatformGroupEntity :: ENTITY_TYPE] as $entity) {
          * $default_elements->add_element($group_entity->get_element_finder_element($entity)); } $this->getElement(self
@@ -90,10 +90,10 @@ class RightsGroupForm extends FormValidator
     {
         $values = $this->exportValues();
 
-        $rights_util = Rights :: get_instance();
+        $rights_util = Rights :: getInstance();
         $location = $rights_util->get_request_root();
 
-        $targets_entities = Rights :: get_instance()->get_request_targets_entities();
+        $targets_entities = Rights :: getInstance()->get_request_targets_entities();
         $location_id = $location->get_id();
 
         foreach ($values[self :: PROPERTY_ACCESS] as $entity_type => $target_ids)
@@ -114,7 +114,7 @@ class RightsGroupForm extends FormValidator
 
             foreach ($target_ids as $target_id)
             {
-                $location_entity_right = Rights :: get_instance()->get_request_location_entity_right(
+                $location_entity_right = Rights :: getInstance()->get_request_location_entity_right(
                     $target_id,
                     $entity_type);
 

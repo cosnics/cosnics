@@ -47,7 +47,7 @@ class AccountForm extends FormValidator
         parent :: __construct('user_account', 'post', $action);
 
         $this->user = $user;
-        $this->adm = \Chamilo\Core\Admin\Storage\DataManager :: get_instance();
+        $this->adm = \Chamilo\Core\Admin\Storage\DataManager :: getInstance();
 
         $this->form_type = $form_type;
         if ($this->form_type == self :: TYPE_EDIT)
@@ -228,12 +228,12 @@ class AccountForm extends FormValidator
 
             $this->addElement(
                 'html',
-                ResourceManager :: get_instance()->get_resource_html(
+                ResourceManager :: getInstance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                          'Plugin/Jquery/jquery.jpassword.js'));
             $this->addElement(
                 'html',
-                ResourceManager :: get_instance()->get_resource_html(
+                ResourceManager :: getInstance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Password.js'));
             $this->addElement('category');
         }
@@ -279,7 +279,7 @@ class AccountForm extends FormValidator
      */
     protected function canUserChangeAnything()
     {
-        $configuration = Configuration::get_instance();
+        $configuration = Configuration::getInstance();
 
         $settings = array(
             'allow_change_firstname', 'allow_change_lastname', 'allow_change_official_code',

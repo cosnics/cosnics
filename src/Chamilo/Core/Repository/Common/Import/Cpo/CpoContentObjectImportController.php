@@ -682,7 +682,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
      */
     public function determine_content_object_type($xpath_value)
     {
-        $configuration = Configuration::get_instance();
+        $configuration = Configuration::getInstance();
 
         /** Backwards Compatibility */
         if(strpos($xpath_value, '\\') === false)

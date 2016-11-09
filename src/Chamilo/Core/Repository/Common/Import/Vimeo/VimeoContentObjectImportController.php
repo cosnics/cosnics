@@ -66,7 +66,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
                     new DataClassRetrievesParameters($condition));
 
                 $external_repository = $external_repositories->next_result();
-                $vimeo_connector = DataConnector :: get_instance($external_repository);
+                $vimeo_connector = DataConnector :: getInstance($external_repository);
                 $external_object = $vimeo_connector->retrieve_external_repository_object($external_id);
 
                 $vimeo = ContentObject :: factory(Vimeo :: get_type_name());

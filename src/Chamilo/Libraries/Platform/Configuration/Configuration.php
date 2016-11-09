@@ -41,7 +41,7 @@ class Configuration
      *
      * @return Configuration The instance.
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {

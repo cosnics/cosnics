@@ -97,7 +97,7 @@ abstract class Manager extends Application
             throw new NotAllowedException();
         }
 
-        $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+        $setting = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
 
         if ($setting != 1)
         {
@@ -112,6 +112,6 @@ abstract class Manager extends Application
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
     }
 }

@@ -38,7 +38,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $this->context = Request :: get(self :: PARAM_CONTEXT);
         $this->registration = \Chamilo\Configuration\Configuration :: registration($this->context);
         
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 null, 
                 Translation :: get(

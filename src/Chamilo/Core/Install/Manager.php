@@ -212,7 +212,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     protected function checkInstallationAllowed()
     {
-        $configuration = Configuration::get_instance();
+        $configuration = Configuration::getInstance();
 
         if(!$configuration->is_available())
         {

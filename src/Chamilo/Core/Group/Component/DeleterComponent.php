@@ -37,7 +37,7 @@ class DeleterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         $redirect = new Redirect(
             array(

@@ -63,7 +63,7 @@ class ItemForm extends FormValidator
         $this->addElement('category');
 
         $this->addElement('category', Translation:: get('Titles'));
-        $active_languages = \Chamilo\Configuration\Configuration:: get_instance()->getLanguages();
+        $active_languages = \Chamilo\Configuration\Configuration:: getInstance()->getLanguages();
         $platform_language = PlatformSetting:: get('platform_language');
         foreach ($active_languages as $isocode => $language)
         {
@@ -170,7 +170,7 @@ class ItemForm extends FormValidator
     public function setDefaults($defaults = array())
     {
         $item = $this->item;
-        $active_languages = \Chamilo\Configuration\Configuration:: get_instance()->getLanguages();
+        $active_languages = \Chamilo\Configuration\Configuration:: getInstance()->getLanguages();
         $platform_language = PlatformSetting:: get('platform_language');
         foreach ($active_languages as $isocode => $language)
         {

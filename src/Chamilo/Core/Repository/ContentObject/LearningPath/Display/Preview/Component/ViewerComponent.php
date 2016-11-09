@@ -157,13 +157,13 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     function get_assessment_question_attempts()
     {
-        return PreviewStorage :: get_instance()->retrieve_learning_path_question_attempts(
+        return PreviewStorage :: getInstance()->retrieve_learning_path_question_attempts(
             $this->get_current_node()->get_current_attempt());
     }
 
     function get_assessment_question_attempt($complex_question_id)
     {
-        return PreviewStorage :: get_instance()->retrieve_learning_path_question_attempt(
+        return PreviewStorage :: getInstance()->retrieve_learning_path_question_attempt(
             $this->get_current_node()->get_current_attempt(),
             $complex_question_id);
     }
@@ -216,7 +216,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function retrieve_learning_path_tracker()
     {
-        $attempt = PreviewStorage :: get_instance()->retrieve_learning_path_attempt(
+        $attempt = PreviewStorage :: getInstance()->retrieve_learning_path_attempt(
             $this->get_parent()->get_root_content_object()->get_id());
 
         if (! $attempt instanceof AbstractAttempt)
@@ -236,7 +236,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function retrieve_learning_path_tracker_items($learning_path_tracker)
     {
-        return PreviewStorage :: get_instance()->retrieve_learning_path_item_attempts($learning_path_tracker);
+        return PreviewStorage :: getInstance()->retrieve_learning_path_item_attempts($learning_path_tracker);
     }
 
     /**
@@ -245,7 +245,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function retrieve_learning_path_item_attempt($learning_path_item_attempt_id)
     {
-        return PreviewStorage :: get_instance()->retrieve_learning_path_item_attempt($learning_path_item_attempt_id);
+        return PreviewStorage :: getInstance()->retrieve_learning_path_item_attempt($learning_path_item_attempt_id);
     }
 
     /**

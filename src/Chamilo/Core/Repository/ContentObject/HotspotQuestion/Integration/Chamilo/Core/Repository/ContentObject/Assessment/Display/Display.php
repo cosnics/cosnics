@@ -53,12 +53,12 @@ class Display extends QuestionDisplay
         
         $formvalidator->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                      'Plugin/jquery.draw.js'));
         $formvalidator->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\HotspotQuestion', true) .
                      'HotspotQuestionDisplay.js'));
         

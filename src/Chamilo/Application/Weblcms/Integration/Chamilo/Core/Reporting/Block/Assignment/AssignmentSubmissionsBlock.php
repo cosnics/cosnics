@@ -45,7 +45,7 @@ abstract class AssignmentSubmissionsBlock extends AssignmentReportingManager
      * @return \application\weblcms\WeblcmsAssignmentSubmissionsGroupReportingBlock |
      *         \application\weblcms\WeblcmsAssignmentSubmissionsUserReportingBlock
      */
-    public static function get_instance($parent, $vertical)
+    public static function getInstance($parent, $vertical)
     {
         if (\Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(),

@@ -31,7 +31,7 @@ class OpenForm extends ContentObjectForm
     {
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(
                     'Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Open',
                     true) . 'Form.js'));

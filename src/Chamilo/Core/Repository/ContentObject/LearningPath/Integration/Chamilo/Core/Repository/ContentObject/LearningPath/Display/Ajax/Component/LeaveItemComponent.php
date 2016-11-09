@@ -32,7 +32,7 @@ class LeaveItemComponent extends \Chamilo\Core\Repository\ContentObject\Learning
      */
     public function run()
     {
-        $attempt = PreviewStorage :: get_instance()->retrieve_learning_path_item_attempt(
+        $attempt = PreviewStorage :: getInstance()->retrieve_learning_path_item_attempt(
             $this->getPostDataValue(self :: PARAM_TRACKER_ID));
 
         if ($attempt instanceof DummyItemAttempt)

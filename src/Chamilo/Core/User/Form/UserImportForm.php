@@ -504,7 +504,7 @@ class UserImportForm extends FormValidator
             $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
         );
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

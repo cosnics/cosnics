@@ -42,7 +42,7 @@ class UpdaterComponent extends Manager
                 new StaticConditionVariable($category_id)));
         $category = $categories->next_result();
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add_help('category_manager_updater');
         $this->set_parameter(self :: PARAM_CATEGORY_ID, Request :: get(self :: PARAM_CATEGORY_ID));
         $trail->add(

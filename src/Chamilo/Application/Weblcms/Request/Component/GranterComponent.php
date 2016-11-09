@@ -21,7 +21,7 @@ class GranterComponent extends Manager
 
     function run()
     {
-        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed())
+        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed())
         {
             throw new NotAllowedException();
         }
@@ -40,7 +40,7 @@ class GranterComponent extends Manager
             {
                 $request = DataManager :: retrieve_by_id(Request :: class_name(), (int) $id);
 
-                if (! \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->is_target_user(
+                if (! \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->is_target_user(
                     $this->get_user(),
                     $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
                 {
@@ -70,7 +70,7 @@ class GranterComponent extends Manager
 
                             if ($course->create_course_settings_from_values($course_settings, true))
                             {
-                                if (CourseManagementRights :: get_instance()->create_rights_from_values(
+                                if (CourseManagementRights :: getInstance()->create_rights_from_values(
                                     $course,
                                     array()))
                                 {
@@ -181,7 +181,7 @@ class GranterComponent extends Manager
 
         $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

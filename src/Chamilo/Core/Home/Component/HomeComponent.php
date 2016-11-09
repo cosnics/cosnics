@@ -28,7 +28,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
             $this->getService('chamilo.configuration.service.configuration_consulter'));
         $authenticationValidator->validate();
 
-        BreadcrumbTrail::get_instance()->truncate();
+        BreadcrumbTrail::getInstance()->truncate();
 
         $type = $this->getRequest()->query->get(self::PARAM_RENDERER_TYPE, Renderer::TYPE_BASIC);
         $rendererFactory = new Factory($type, $this);

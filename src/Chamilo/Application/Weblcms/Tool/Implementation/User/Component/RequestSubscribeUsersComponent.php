@@ -236,7 +236,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
      */
     protected function check_student_allowed_to_subscribe($user_id)
     {
-        return ($this->get_user()->is_platform_admin() || CourseManagementRights:: get_instance()->is_allowed(
+        return ($this->get_user()->is_platform_admin() || CourseManagementRights:: getInstance()->is_allowed(
                 CourseManagementRights :: TEACHER_REQUEST_SUBSCRIBE_RIGHT,
                 $this->get_course_id(),
                 CourseManagementRights :: TYPE_COURSE,

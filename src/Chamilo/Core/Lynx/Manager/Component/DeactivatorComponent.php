@@ -26,7 +26,7 @@ class DeactivatorComponent extends Manager implements DelegateComponent
         $deactivator = new PackageDeactivator($context);
         $deactivator->run();
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 null,
                 Translation :: get(

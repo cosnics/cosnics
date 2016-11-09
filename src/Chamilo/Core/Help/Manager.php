@@ -104,7 +104,7 @@ abstract class Manager extends Application
         {
             if ($autocomplete_languages)
             {
-                $installed_languages = \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
+                $installed_languages = \Chamilo\Configuration\Configuration :: getInstance()->getLanguages();
 
                 foreach ($installed_languages as $iso_code => $installed_language)
                 {
@@ -152,6 +152,6 @@ abstract class Manager extends Application
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
     }
 }

@@ -30,7 +30,7 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
         $html = array();
 
         $html[] = parent :: toHtml();
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'Toggle.js');
 
         return implode(PHP_EOL, $html);

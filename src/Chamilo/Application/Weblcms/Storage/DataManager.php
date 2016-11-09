@@ -882,7 +882,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
 
-        $granted_location_ids = WeblcmsRights::get_instance()->get_identifiers_with_right_granted(
+        $granted_location_ids = WeblcmsRights::getInstance()->get_identifiers_with_right_granted(
             $right,
             Manager::context(),
             $parent_location,
@@ -1026,7 +1026,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
              * This piece of code has been optimized and replaced by fill_new_publications_cache. We keep it for a while
              * for debugging
              * purposes. (02-07-2015).
-             * $weblcms_rights = WeblcmsRights::get_instance();
+             * $weblcms_rights = WeblcmsRights::getInstance();
              * if ($course->is_course_admin($user))
              * {
              * $tools_with_new_publications = DataManager::retrieve_new_publication_icon_ids(
@@ -1102,7 +1102,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function fill_new_publications_cache($user, $courses)
     {
-        $weblcms_rights = WeblcmsRights::get_instance();
+        $weblcms_rights = WeblcmsRights::getInstance();
 
         foreach (array_keys($courses) as $course_id)
         {
@@ -1140,9 +1140,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         $entities = array();
-        $entities[] = CourseUserEntity::get_instance();
-        $entities[] = CourseGroupEntity::get_instance(null);
-        $entities[] = CoursePlatformGroupEntity::get_instance(null);
+        $entities[] = CourseUserEntity::getInstance();
+        $entities[] = CourseGroupEntity::getInstance(null);
+        $entities[] = CoursePlatformGroupEntity::getInstance(null);
 
         $publication_ids_with_right_view = $weblcms_rights->filter_location_identifiers_by_granted_right(
             Manager::context(),
@@ -1384,7 +1384,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         else
         {
-            $weblcms_rights = WeblcmsRights::get_instance();
+            $weblcms_rights = WeblcmsRights::getInstance();
 
             $publications = DataManager::retrieve_new_publication_icon_ids(
                 $course->get_id(),
@@ -2130,7 +2130,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         try
         {
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,
@@ -2161,7 +2161,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         try
         {
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,
@@ -2192,7 +2192,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         try
         {
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,
@@ -2234,7 +2234,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         try
         {
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,
@@ -2361,7 +2361,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         try
         {
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,
@@ -2472,7 +2472,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         try
         {
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,
@@ -2548,7 +2548,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         try
         {
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,
@@ -2623,7 +2623,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         try
         {
             // get the entities
-            $target_entities = WeblcmsRights::get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights::getInstance()->get_target_entities(
                 WeblcmsRights::VIEW_RIGHT,
                 Manager::context(),
                 $publication_id,

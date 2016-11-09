@@ -47,7 +47,7 @@ class ImporterComponent extends Manager
             }
             else
             {
-                BreadcrumbTrail :: get_instance()->add(
+                BreadcrumbTrail :: getInstance()->add(
                     new Breadcrumb(
                         $this->get_url(), 
                         Translation :: get(
@@ -67,7 +67,7 @@ class ImporterComponent extends Manager
         }
         else
         {
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb($this->get_url(), Translation :: get('ChooseImportFormat')));
             
             $importTypeSelector = new ImportTypeSelector($this->get_parameters(), $this->getImportTypes());
@@ -88,7 +88,7 @@ class ImporterComponent extends Manager
      */
     public function getImportTypes()
     {
-        $registrations = Configuration :: get_instance()->get_registrations_by_type(
+        $registrations = Configuration :: getInstance()->get_registrations_by_type(
             'Chamilo\Core\Repository\ContentObject');
         
         $types = array();

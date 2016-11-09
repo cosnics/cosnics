@@ -78,7 +78,7 @@ class DeleterComponent extends Manager
         }
         else
         {
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail :: getInstance();
             $trail->add_help('category_manager_deleter');
             $trail->add(
                 new Breadcrumb(

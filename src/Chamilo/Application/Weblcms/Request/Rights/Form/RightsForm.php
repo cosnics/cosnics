@@ -55,9 +55,9 @@ class RightsForm extends FormValidator
     function setDefaults()
     {
         $default_elements = new AdvancedElementFinderElements();
-        $targets_entities = Rights :: get_instance()->get_request_targets_entities();
-        $user_entity = UserEntity :: get_instance();
-        $group_entity = PlatformGroupEntity :: get_instance();
+        $targets_entities = Rights :: getInstance()->get_request_targets_entities();
+        $user_entity = UserEntity :: getInstance();
+        $group_entity = PlatformGroupEntity :: getInstance();
 
         foreach ($targets_entities[UserEntity :: ENTITY_TYPE] as $entity)
         {
@@ -78,10 +78,10 @@ class RightsForm extends FormValidator
     {
         $values = $this->exportValues();
 
-        $rights_util = Rights :: get_instance();
+        $rights_util = Rights :: getInstance();
         $location = $rights_util->get_request_root();
 
-        $targets_entities = Rights :: get_instance()->get_request_targets_entities();
+        $targets_entities = Rights :: getInstance()->get_request_targets_entities();
 
         $location_id = $location->get_id();
 
@@ -114,7 +114,7 @@ class RightsForm extends FormValidator
 
             foreach ($to_delete as $target_id)
             {
-                $location_entity_right = Rights :: get_instance()->get_request_location_entity_right(
+                $location_entity_right = Rights :: getInstance()->get_request_location_entity_right(
                     $target_id,
                     $entity_type);
                 $condition = new EqualityCondition(
