@@ -100,14 +100,14 @@ class LocalSetting
      */
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
             $localSettingCacheService = new LocalSettingCacheService();
-            $userIdentifier = Session :: get_user_id();
-            self :: $instance = new self($localSettingCacheService, $userIdentifier);
+            $userIdentifier = Session::get_user_id();
+            self::$instance = new self($localSettingCacheService, $userIdentifier);
         }
 
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -142,7 +142,7 @@ class LocalSetting
 
         if (! $localSettings)
         {
-            return PlatformSetting :: get($variable, $application);
+            return Configuration::getInstance()->get_setting(array($application, $variable));
         }
 
         if (isset($localSettings[$application]) && isset($localSettings[$application][$variable]))
@@ -151,13 +151,13 @@ class LocalSetting
         }
         else
         {
-            return PlatformSetting :: get($variable, $application);
+            return Configuration::getInstance()->get_setting(array($application, $variable));
         }
     }
 
     public function create($variable, $value, $application = 'Chamilo\Core\Admin')
     {
-        $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
+        $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
             $variable,
             $application);
 
@@ -165,15 +165,15 @@ class LocalSetting
         {
             $conditions = array();
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_USER_ID),
+                new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID),
                 new StaticConditionVariable($this->getUserIdentifier()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_SETTING_ID),
+                new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID),
                 new StaticConditionVariable($setting->get_id()));
             $condition = new AndCondition($conditions);
 
-            $user_setting = \Chamilo\Core\User\Storage\DataManager :: retrieve(
-                UserSetting :: class_name(),
+            $user_setting = \Chamilo\Core\User\Storage\DataManager::retrieve(
+                UserSetting::class_name(),
                 new DataClassRetrieveParameters($condition));
 
             if ($user_setting)

@@ -2,9 +2,9 @@
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  * A tabular representation of a week calendar
@@ -142,7 +142,7 @@ class WeekCalendar extends Calendar
      */
     public function getStartTime()
     {
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
         if ($setting == 'sunday')
         {
@@ -160,7 +160,7 @@ class WeekCalendar extends Calendar
      */
     public function getEndTime()
     {
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
         if ($setting == 'sunday')
         {

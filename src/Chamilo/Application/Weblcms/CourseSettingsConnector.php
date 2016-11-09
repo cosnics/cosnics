@@ -4,9 +4,9 @@ namespace Chamilo\Application\Weblcms;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -74,8 +74,8 @@ class CourseSettingsConnector
     public static function get_languages()
     {
         return array_merge(
-            \Chamilo\Configuration\Configuration :: getInstance()->getLanguages(),
-            array('platform_language' => Translation :: get('PlatformLanguage', null, 'Chamilo\Core\Admin')));
+            \Chamilo\Configuration\Configuration::getInstance()->getLanguages(),
+            array('platform_language' => Translation::get('PlatformLanguage', null, 'Chamilo\Core\Admin')));
     }
 
     /**
@@ -85,7 +85,7 @@ class CourseSettingsConnector
      */
     public static function get_themes()
     {
-        return Theme :: getInstance()->getAvailableThemes();
+        return Theme::getInstance()->getAvailableThemes();
     }
 
     /**
@@ -97,7 +97,7 @@ class CourseSettingsConnector
     {
         $categories = array();
 
-        $categories_result_set = DataManager :: retrieve_course_categories_ordered_by_name();
+        $categories_result_set = DataManager::retrieve_course_categories_ordered_by_name();
         while ($category = $categories_result_set->next_result())
         {
             $categories[$category->get_id()] = $category->get_name();
@@ -114,23 +114,23 @@ class CourseSettingsConnector
     public static function get_titulars()
     {
         $users = array();
-        $users[0] = Translation :: get('TitularUnknown', null, 'Chamilo\Application\Weblcms\Course');
+        $users[0] = Translation::get('TitularUnknown', null, 'Chamilo\Application\Weblcms\Course');
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_STATUS),
-            new StaticConditionVariable(User :: STATUS_TEACHER));
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS),
+            new StaticConditionVariable(User::STATUS_TEACHER));
 
         $order = array(
-            new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME)),
-            new OrderBy(new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME)));
+            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)),
+            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)));
 
-        $format = PlatformSetting :: get('fullname_format', User :: CONTEXT);
-        if ($format == User :: NAME_FORMAT_LAST)
+        $format = Configuration::getInstance()->get_setting(array(User::CONTEXT, 'fullname_format'));
+        if ($format == User::NAME_FORMAT_LAST)
         {
             $order = array_reverse($order);
         }
 
-        $users_result_set = \Chamilo\Core\User\Storage\DataManager :: retrieve_active_users(
+        $users_result_set = \Chamilo\Core\User\Storage\DataManager::retrieve_active_users(
             $condition,
             null,
             null,
@@ -159,14 +159,14 @@ class CourseSettingsConnector
      */
     public static function get_breadcrumb_title_for_course(Course $course)
     {
-        $course_settings_controller = CourseSettingsController :: getInstance();
-        $breadcrumb_setting = $course_settings_controller->get_course_setting($course, self :: BREADCRUMB_LAYOUT);
+        $course_settings_controller = CourseSettingsController::getInstance();
+        $breadcrumb_setting = $course_settings_controller->get_course_setting($course, self::BREADCRUMB_LAYOUT);
 
         switch ($breadcrumb_setting)
         {
-            case self :: BREADCRUMB_LAYOUT_COURSE_HOME :
-                return Translation :: get('CourseHome');
-            case self :: BREADCRUMB_LAYOUT_VISUAL_CODE :
+            case self::BREADCRUMB_LAYOUT_COURSE_HOME :
+                return Translation::get('CourseHome');
+            case self::BREADCRUMB_LAYOUT_VISUAL_CODE :
                 return $course->get_visual_code();
             default :
                 return $course->get_title();
@@ -187,9 +187,9 @@ class CourseSettingsConnector
     public static function get_copied_settings_for_course()
     {
         return array(
-            self :: LANGUAGE => Course :: PROPERTY_LANGUAGE,
-            self :: CATEGORY => Course :: PROPERTY_CATEGORY_ID,
-            self :: TITULAR => Course :: PROPERTY_TITULAR_ID);
+            self::LANGUAGE => Course::PROPERTY_LANGUAGE,
+            self::CATEGORY => Course::PROPERTY_CATEGORY_ID,
+            self::TITULAR => Course::PROPERTY_TITULAR_ID);
     }
 
     /**
@@ -201,7 +201,7 @@ class CourseSettingsConnector
      */
     public static function get_course_property_for_setting(CourseSetting $course_setting)
     {
-        $copied_settings = self :: get_copied_settings_for_course();
+        $copied_settings = self::get_copied_settings_for_course();
 
         if (array_key_exists($course_setting->get_name(), $copied_settings))
         {

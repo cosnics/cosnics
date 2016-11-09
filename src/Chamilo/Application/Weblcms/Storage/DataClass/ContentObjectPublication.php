@@ -19,7 +19,6 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -589,9 +588,8 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $link = $this->get_course_viewer_link();
         $course = CourseDataManager::retrieve_course($this->get_course_id());
 
-        $body = Translation::get('NewPublicationMailDescription') .
-             ' ' . $course->get_title() . ' : <a href="' . $link . '" target="_blank">' .
-             utf8_decode($content_object->get_title()) . '</a><br />--<br />';
+        $body = Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' . $link .
+             '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $course->get_visual_code() . ' - ' . $course->get_title() . ' - ' .
@@ -613,7 +611,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         // safety check: filter any dubbles
         $unique_email = array_unique($target_email);
 
-        $site_name = PlatformSetting::get('site_name');
+        $site_name = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
 
         $doc = new DOMDocument();
         $doc->loadHTML($body);
@@ -669,7 +667,8 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $log .= $course->get_title();
         $log .= " to: \n";
 
-        $subject = Translation::get('NewPublicationMailSubject',
+        $subject = Translation::get(
+            'NewPublicationMailSubject',
             array('COURSE' => $course->get_title(), 'CONTENTOBJECT' => $content_object->get_title()));
 
         $mail = new Mail(
@@ -699,7 +698,9 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
             $log .= " (unsuccessfull)\n";
         }
 
-        if (PlatformSetting::get('log_mails', __NAMESPACE__))
+        $logMails = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'log_mails'));
+
+        if ($logMails)
         {
             $dir = Path::getInstance()->getLogPath() . 'mail';
 
@@ -722,7 +723,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
     {
         $params = array();
 
-        $params[Manager::PARAM_CONTEXT] = Manager:: package();
+        $params[Manager::PARAM_CONTEXT] = Manager::package();
         $params[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $params[Manager::PARAM_COURSE] = $this->get_course_id();
         $params[Manager::PARAM_TOOL] = $this->get_tool();

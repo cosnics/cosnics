@@ -32,7 +32,10 @@ class ImporterComponent extends Manager
             $document = ContentObject::factory(File::class_name());
             $document->set_title($external_object->get_title());
 
-            if (PlatformSetting::get('description_required', \Chamilo\Core\Repository\Manager::context()) && StringUtilities::getInstance()->isNullOrEmpty(
+            $descriptionRequired = Configuration::getInstance()->get_setting(
+                array(\Chamilo\Core\Repository\Manager::context(), 'description_required'));
+
+            if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty(
                 $external_object->get_description()))
             {
                 $document->set_description('-');

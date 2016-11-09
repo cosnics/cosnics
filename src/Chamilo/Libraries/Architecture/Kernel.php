@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Architecture;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
-use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -24,15 +23,8 @@ use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\Response;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Cache\DataClassCountCache;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
-use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -200,68 +192,6 @@ class Kernel
     public function setRequest($request)
     {
         $this->request = $request;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Kernel
-     */
-    protected function checkUpgrade()
-    {
-        $package_info = \Chamilo\Configuration\Package\Storage\DataClass\Package::get('Chamilo\Configuration');
-        $registration = \Chamilo\Configuration\Configuration::registration('Chamilo\Configuration');
-
-        if ($package_info->get_version() != $registration[Registration::PROPERTY_VERSION])
-        {
-            $theme = \Chamilo\Libraries\Platform\Session\Request::get('theme');
-            $server_type = \Chamilo\Libraries\Platform\Session\Request::get('server_type');
-            $time = \Chamilo\Libraries\Platform\Session\Request::get('time');
-
-            if (! $theme && ! $server_type && ! $time)
-            {
-                Request::set_get(Application::PARAM_CONTEXT, \Chamilo\Core\Lynx\Manager::context());
-                Request::set_get(Application::PARAM_ACTION, \Chamilo\Core\Lynx\Manager::ACTION_UPGRADE);
-            }
-
-            $settings = array(
-                'platform_language',
-                'platform_timezone',
-                'institution',
-                'site_name',
-                'server_type',
-                'theme',
-                'hide_dcda_markup',
-                'session_timeout');
-
-            foreach ($settings as $setting)
-            {
-                $old_setting = \Chamilo\Libraries\Platform\Configuration\PlatformSetting::get(
-                    $setting,
-                    'Chamilo\Core\Admin');
-                \Chamilo\Libraries\Platform\Configuration\PlatformSetting::set($setting, $old_setting);
-            }
-
-            $language_interface = $platform_language = \Chamilo\Libraries\Platform\Configuration\PlatformSetting::get(
-                'platform_language');
-            $conditions = array();
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    \Chamilo\Configuration\Storage\DataClass\Language::class_name(),
-                    \Chamilo\Configuration\Storage\DataClass\Language::PROPERTY_ISOCODE),
-                new StaticConditionVariable($platform_language));
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    \Chamilo\Configuration\Storage\DataClass\Language::class_name(),
-                    \Chamilo\Configuration\Storage\DataClass\Language::PROPERTY_AVAILABLE),
-                new StaticConditionVariable(1));
-            $parameters = new DataClassCountParameters(new AndCondition($conditions));
-            DataClassCountCache::set_cache(
-                \Chamilo\Configuration\Storage\DataClass\Language::class_name(),
-                $parameters->hash(),
-                1);
-        }
-
-        return $this;
     }
 
     /**
@@ -559,7 +489,7 @@ class Kernel
             }
             else
             {
-                $this->checkUpgrade()->setup()->handleOAuth2()->checkAuthentication()->loadUser()->buildApplication()->traceVisit()->runApplication();
+                $this->setup()->handleOAuth2()->checkAuthentication()->loadUser()->buildApplication()->traceVisit()->runApplication();
             }
         }
         catch (NotAuthenticatedException $exception)
