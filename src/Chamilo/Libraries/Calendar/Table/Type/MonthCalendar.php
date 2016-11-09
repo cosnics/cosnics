@@ -2,9 +2,9 @@
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
 use Chamilo\Libraries\Calendar\Table\Calendar;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  * A tabular representation of a month calendar
@@ -56,7 +56,7 @@ class MonthCalendar extends Calendar
     public function getStartTime()
     {
         $firstDay = mktime(0, 0, 0, date('m', $this->getDisplayTime()), 1, date('Y', $this->getDisplayTime()));
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
         if ($setting == 'sunday')
         {
@@ -87,7 +87,7 @@ class MonthCalendar extends Calendar
 
     protected function getFirstTableDate($firstDay)
     {
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
         if ($setting == 'sunday')
         {
@@ -103,7 +103,7 @@ class MonthCalendar extends Calendar
     {
         $header = $this->getHeader();
 
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
         if ($setting == 'sunday')
         {
@@ -165,7 +165,7 @@ class MonthCalendar extends Calendar
             }
             while ($cell % 7 != 0);
         }
-        
+
         $this->setHeader();
     }
 
@@ -233,7 +233,7 @@ class MonthCalendar extends Calendar
             $row = $this->cellMapping[$cellMappingKey][0];
             $column = $this->cellMapping[$cellMappingKey][1];
 
-            if(is_null($row) || is_null($column))
+            if (is_null($row) || is_null($column))
             {
                 continue;
             }

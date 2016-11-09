@@ -13,8 +13,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -101,89 +101,69 @@ class CourseListComponent extends Manager implements DelegateComponent
 
         $buttonGroup->addButton(
             new Button(
-                Translation:: get('CourseCreate'),
+                Translation::get('CourseCreate'),
                 new BootstrapGlyph('plus'),
                 $this->get_url(
                     array(
-                        Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                        \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE
-                    )
-                )
-            )
-        );
+                        Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
+                        \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE))));
 
         $buttonGroup->addButton(
             new Button(
-                Translation:: get('CourseOverviewCourseList'),
+                Translation::get('CourseOverviewCourseList'),
                 new BootstrapGlyph('list'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER))
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER))));
 
         $manageDropDownButton = new DropdownButton(
-            Translation:: get('CourseOverviewManagement'),
-            new BootstrapGlyph('list-alt')
-        );
+            Translation::get('CourseOverviewManagement'),
+            new BootstrapGlyph('list-alt'));
         $buttonGroup->addButton($manageDropDownButton);
 
         $manageDropDownButton->addSubButton(
             new SubButton(
-                Translation:: get('RequestList'),
+                Translation::get('RequestList'),
                 new BootstrapGlyph('list-alt'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST)),
-                Button :: DISPLAY_LABEL
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_REQUEST)),
+                Button::DISPLAY_LABEL));
 
         $manageDropDownButton->addSubButton(
             new SubButton(
-                Translation:: get('UserRequestList'),
+                Translation::get('UserRequestList'),
                 new BootstrapGlyph('list'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_ADMIN_REQUEST_BROWSER)),
-                Button :: DISPLAY_LABEL
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER)),
+                Button::DISPLAY_LABEL));
 
         $manageDropDownButton->addSubButton(
             new SubButton(
-                Translation:: get('CourseCategoryManagement'),
+                Translation::get('CourseCategoryManagement'),
                 new BootstrapGlyph('move'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_COURSE_CATEGORY_MANAGER)),
-                Button :: DISPLAY_LABEL
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER)),
+                Button::DISPLAY_LABEL));
 
         $importDropDownButton = new DropdownButton(
-            Translation:: get('CourseOverviewImport'),
-            new BootstrapGlyph('import')
-        );
+            Translation::get('CourseOverviewImport'),
+            new BootstrapGlyph('import'));
         $buttonGroup->addButton($importDropDownButton);
 
         $importDropDownButton->addSubButton(
             new SubButton(
-                Translation:: get('ImportCourseCSV'),
+                Translation::get('ImportCourseCSV'),
                 new BootstrapGlyph('import'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSES)),
-                Button :: DISPLAY_LABEL
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_IMPORT_COURSES)),
+                Button::DISPLAY_LABEL));
 
         $importDropDownButton->addSubButton(
             new SubButton(
-                Translation:: get('ImportUsersForCourseCSV'),
+                Translation::get('ImportUsersForCourseCSV'),
                 new BootstrapGlyph('import'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_IMPORT_COURSE_USERS)),
-                Button :: DISPLAY_LABEL
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_IMPORT_COURSE_USERS)),
+                Button::DISPLAY_LABEL));
 
         $buttonGroup->addButton(
             new Button(
-                Translation:: get('Reporting'),
+                Translation::get('Reporting'),
                 new BootstrapGlyph('stats'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REPORTING))
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_REPORTING))));
 
         return $buttonGroup;
     }
@@ -196,35 +176,34 @@ class CourseListComponent extends Manager implements DelegateComponent
     {
         $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
 
-        $courseManagementRights = CourseManagementRights:: getInstance();
+        $courseManagementRights = CourseManagementRights::getInstance();
 
         $countDirect = $countRequest = 0;
 
-        $courseTypes = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager:: retrieve_active_course_types();
+        $courseTypes = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
 
         while ($courseType = $courseTypes->next_result())
         {
             if ($courseManagementRights->is_allowed(
-                CourseManagementRights :: CREATE_COURSE_RIGHT,
+                CourseManagementRights::CREATE_COURSE_RIGHT,
                 $courseType->get_id(),
-                CourseManagementRights :: TYPE_COURSE_TYPE
-            )
-            )
+                CourseManagementRights::TYPE_COURSE_TYPE))
             {
                 $countDirect ++;
             }
             elseif ($courseManagementRights->is_allowed(
-                CourseManagementRights :: REQUEST_COURSE_RIGHT,
+                CourseManagementRights::REQUEST_COURSE_RIGHT,
                 $courseType->get_id(),
-                CourseManagementRights :: TYPE_COURSE_TYPE
-            )
-            )
+                CourseManagementRights::TYPE_COURSE_TYPE))
             {
                 $countRequest ++;
             }
         }
 
-        if (PlatformSetting:: get('allow_course_creation_without_coursetype', 'Chamilo\Application\Weblcms'))
+        $allowCourseCreationWithoutCoursetype = Configuration::getInstance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype'));
+
+        if ($allowCourseCreationWithoutCoursetype)
         {
             $countDirect ++;
         }
@@ -233,67 +212,48 @@ class CourseListComponent extends Manager implements DelegateComponent
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation:: get('CourseCreate'),
+                    Translation::get('CourseCreate'),
                     new BootstrapGlyph('plus'),
                     $this->get_url(
                         array(
-                            Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE
-                        )
-                    )
-                )
-            );
+                            Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
+                            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE))));
         }
 
         if ($countRequest)
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation:: get('CourseRequest'),
+                    Translation::get('CourseRequest'),
                     new BootstrapGlyph('plus'),
                     $this->get_url(
                         array(
-                            Application :: PARAM_ACTION => self :: ACTION_REQUEST,
-                            \Chamilo\Application\Weblcms\Request\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager :: ACTION_CREATE
-                        )
-                    )
-                )
-            );
+                            Application::PARAM_ACTION => self::ACTION_REQUEST,
+                            \Chamilo\Application\Weblcms\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager::ACTION_CREATE))));
         }
 
-        if (\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->request_is_allowed())
+        if (\Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed())
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation:: get('RequestList'),
+                    Translation::get('RequestList'),
                     new BootstrapGlyph('list-alt'),
-                    $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_REQUEST))
-                )
-            );
+                    $this->get_url(array(Application::PARAM_ACTION => self::ACTION_REQUEST))));
         }
 
-        if (\Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager:: user_is_admin(
-            $this->get_user()
-        )
-        )
+        if (\Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataManager::user_is_admin($this->get_user()))
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation:: get(
+                    Translation::get(
                         'TypeName',
                         null,
-                        \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager:: package()
-                    ),
+                        \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager::package()),
                     new BootstrapGlyph('search'),
                     $this->get_url(
                         array(
-                            Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager:: package(
-                            ),
-                            Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager :: ACTION_BROWSE
-                        )
-                    )
-                )
-            );
+                            Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager::package(),
+                            Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager::ACTION_BROWSE))));
         }
 
         return $buttonGroup;
@@ -311,45 +271,36 @@ class CourseListComponent extends Manager implements DelegateComponent
             new Button(
                 Translation::get('BrowseOpenCourses'),
                 new BootstrapGlyph('list'),
-                $this->get_url(array(Application :: PARAM_ACTION => self::ACTION_BROWSE_OPEN_COURSES))
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_OPEN_COURSES))));
 
         $buttonGroup->addButton(
             new Button(
-                Translation:: get('SortMyCourses'),
+                Translation::get('SortMyCourses'),
                 new BootstrapGlyph('refresh'),
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_MANAGER_SORT))
-            )
-        );
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_MANAGER_SORT))));
 
-        if (PlatformSetting:: get('show_subscribe_button_on_course_home', self:: package()))
+        $showSubscribeButtonOnCourseHome = Configuration::getInstance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'show_subscribe_button_on_course_home'));
+
+        if ($showSubscribeButtonOnCourseHome)
         {
             $buttonGroup->addButton(
                 new Button(
-                    Translation:: get('CourseSubscribe'),
+                    Translation::get('CourseSubscribe'),
                     new BootstrapGlyph('log-in'),
                     $this->get_url(
                         array(
-                            Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_UNSUBSCRIBED_COURSES
-                        )
-                    )
-                )
-            );
+                            Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
+                            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_UNSUBSCRIBED_COURSES))));
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation:: get('CourseUnsubscribe'),
+                    Translation::get('CourseUnsubscribe'),
                     new BootstrapGlyph('log-out'),
                     $this->get_url(
                         array(
-                            Application :: PARAM_ACTION => self :: ACTION_COURSE_MANAGER,
-                            \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_SUBSCRIBED_COURSES
-                        )
-                    )
-                )
-            );
+                            Application::PARAM_ACTION => self::ACTION_COURSE_MANAGER,
+                            \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_SUBSCRIBED_COURSES))));
         }
 
         return $buttonGroup;

@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Calendar\Table\Type;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Calendar\Table\Calendar;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
@@ -65,7 +65,7 @@ class MiniWeekCalendar extends Calendar
      */
     public function getStartTime()
     {
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
         if ($setting == 'sunday')
         {
@@ -83,7 +83,7 @@ class MiniWeekCalendar extends Calendar
      */
     public function getEndTime()
     {
-        $setting = PlatformSetting::get('first_day_of_week', 'Chamilo\Libraries\Calendar');
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Libraries\Calendar', 'first_day_of_week'));
 
         if ($setting == 'sunday')
         {

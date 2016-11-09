@@ -6,10 +6,10 @@ use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Form\CommonCourseForm;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -42,24 +42,24 @@ class CourseForm extends CommonCourseForm
      */
     public function __construct($action, DataClass $base_object)
     {
-        $change_course_type_request = Request :: post(self :: PROPERTY_SELECT_COURSE_TYPE);
+        $change_course_type_request = Request::post(self::PROPERTY_SELECT_COURSE_TYPE);
         if (! is_null($change_course_type_request))
         {
-            unset($_REQUEST['_qf__' . ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__CLASS__, true)]);
+            unset($_REQUEST['_qf__' . ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true)]);
         }
 
-        parent :: __construct($action, $base_object);
+        parent::__construct($action, $base_object);
 
         $this->addElement(
             'submit',
-            self :: PROPERTY_SELECT_COURSE_TYPE,
+            self::PROPERTY_SELECT_COURSE_TYPE,
             'SelectCourseType',
             array('class' => 'select_course_type', 'style' => 'display: none;'));
 
         $this->addElement(
             'html',
-            ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Course', true) . 'CourseForm.js'));
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Course', true) . 'CourseForm.js'));
     }
 
     /**
@@ -69,22 +69,25 @@ class CourseForm extends CommonCourseForm
     {
         $course_type_options = array();
 
-        $course_type_options[- 1] = '-- ' . Translation :: get('SelectCourseType') . ' --';
+        $course_type_options[- 1] = '-- ' . Translation::get('SelectCourseType') . ' --';
 
-        if (PlatformSetting :: get('allow_course_creation_without_coursetype', 'Chamilo\Application\Weblcms'))
+        $allowCourseCreationWithoutCoursetype = Configuration::getInstance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype'));
+
+        if ($allowCourseCreationWithoutCoursetype)
         {
-            $course_type_options[0] = Translation :: get('NoCourseType');
+            $course_type_options[0] = Translation::get('NoCourseType');
         }
 
-        $course_management_rights = CourseManagementRights :: getInstance();
+        $course_management_rights = CourseManagementRights::getInstance();
 
-        $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
+        $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
         while ($course_type = $course_types->next_result())
         {
             if ($this->get_base_object()->get_course_type_id() == $course_type->get_id() || $course_management_rights->is_allowed(
-                CourseManagementRights :: CREATE_COURSE_RIGHT,
+                CourseManagementRights::CREATE_COURSE_RIGHT,
                 $course_type->get_id(),
-                CourseManagementRights :: TYPE_COURSE_TYPE))
+                CourseManagementRights::TYPE_COURSE_TYPE))
             {
                 $course_type_options[$course_type->get_id()] = $course_type->get_title();
             }
@@ -92,8 +95,8 @@ class CourseForm extends CommonCourseForm
 
         $course_type_element = $this->addElement(
             'select',
-            Course :: PROPERTY_COURSE_TYPE_ID,
-            Translation :: get('CourseType'),
+            Course::PROPERTY_COURSE_TYPE_ID,
+            Translation::get('CourseType'),
             $course_type_options,
             array('class' => 'course_type_selector'));
 
@@ -103,26 +106,22 @@ class CourseForm extends CommonCourseForm
             'HTML_QuickForm_Rule_Course_Type',
             __DIR__ . '/Rule/HTML_QuickForm_Rule_Course_Type.php');
 
-        $this->addRule(Course :: PROPERTY_COURSE_TYPE_ID, Translation :: get('SelectAValidCourseType'), 'course_type');
-        $this->addRule(Course :: PROPERTY_COURSE_TYPE_ID, Translation :: get('ThisFieldIsRequired'), 'required');
+        $this->addRule(Course::PROPERTY_COURSE_TYPE_ID, Translation::get('SelectAValidCourseType'), 'course_type');
+        $this->addRule(Course::PROPERTY_COURSE_TYPE_ID, Translation::get('ThisFieldIsRequired'), 'required');
 
-        $course_title_element = $this->add_textfield(Course :: PROPERTY_TITLE, Translation :: get('Title'));
+        $course_title_element = $this->add_textfield(Course::PROPERTY_TITLE, Translation::get('Title'));
 
-        $course_visual_code_element = $this->add_textfield(
-            Course :: PROPERTY_VISUAL_CODE,
-            Translation :: get('VisualCode'));
+        $course_visual_code_element = $this->add_textfield(Course::PROPERTY_VISUAL_CODE, Translation::get('VisualCode'));
 
         if ($this->get_base_object()->is_identified())
         {
-            $this->validate_element_change($course_type_element, CourseManagementRights :: CAN_CHANGE_COURSE_TYPE_RIGHT);
+            $this->validate_element_change($course_type_element, CourseManagementRights::CAN_CHANGE_COURSE_TYPE_RIGHT);
 
-            $this->validate_element_change(
-                $course_title_element,
-                CourseManagementRights :: CAN_CHANGE_COURSE_TITLE_RIGHT);
+            $this->validate_element_change($course_title_element, CourseManagementRights::CAN_CHANGE_COURSE_TITLE_RIGHT);
 
             $this->validate_element_change(
                 $course_visual_code_element,
-                CourseManagementRights :: CAN_CHANGE_COURSE_VISUAL_CODE_RIGHT);
+                CourseManagementRights::CAN_CHANGE_COURSE_VISUAL_CODE_RIGHT);
         }
     }
 
@@ -137,9 +136,9 @@ class CourseForm extends CommonCourseForm
     {
         $default_values = array();
 
-        $default_values[Course :: PROPERTY_TITLE] = $base_object->get_title();
-        $default_values[Course :: PROPERTY_VISUAL_CODE] = $base_object->get_visual_code();
-        $default_values[Course :: PROPERTY_COURSE_TYPE_ID] = $base_object->get_course_type_id();
+        $default_values[Course::PROPERTY_TITLE] = $base_object->get_title();
+        $default_values[Course::PROPERTY_VISUAL_CODE] = $base_object->get_visual_code();
+        $default_values[Course::PROPERTY_COURSE_TYPE_ID] = $base_object->get_course_type_id();
 
         return $default_values;
     }
@@ -150,12 +149,12 @@ class CourseForm extends CommonCourseForm
      */
     public function set_default_values()
     {
-        parent :: set_default_values();
+        parent::set_default_values();
 
         if (! $this->get_base_object()->is_identified())
         {
-            $default_values[CourseSettingsController :: SETTING_PARAM_COURSE_SETTINGS . '[' .
-                 CourseSettingsConnector :: TITULAR . ']'] = \Chamilo\Libraries\Platform\Session\Session :: get_user_id();
+            $default_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS . '[' .
+                 CourseSettingsConnector::TITULAR . ']'] = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
 
             $this->setDefaults($default_values);
         }
@@ -175,7 +174,7 @@ class CourseForm extends CommonCourseForm
      */
     private function validate_element_change($element, $right_id)
     {
-        $course_management_rights = CourseManagementRights :: getInstance();
+        $course_management_rights = CourseManagementRights::getInstance();
 
         if (! $course_management_rights->is_allowed($right_id, $this->get_base_object()->get_id()))
         {

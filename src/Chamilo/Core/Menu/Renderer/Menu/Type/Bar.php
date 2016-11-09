@@ -4,7 +4,7 @@ namespace Chamilo\Core\Menu\Renderer\Menu\Type;
 use Chamilo\Core\Menu\Renderer\Menu\Renderer;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -59,8 +59,8 @@ class Bar extends Renderer
 
     public function renderBrand()
     {
-        $siteName = PlatformSetting::get('site_name', 'Chamilo\Core\Admin');
-        $brandImage = PlatformSetting::get('brand_image', 'Chamilo\Core\Menu');
+        $siteName = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+        $brandImage = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'brand_image'));
 
         if ($brandImage)
         {

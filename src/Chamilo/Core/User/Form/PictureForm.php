@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Form;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
@@ -8,7 +9,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -64,7 +64,9 @@ class PictureForm extends FormValidator
                  '" />');
 
         // Picture
-        if (PlatformSetting::get('allow_change_user_picture', Manager::context()) == 1)
+        $allowChangeUserPicture = Configuration::getInstance()->get_setting(
+            array(Manager::context(), 'allow_change_user_picture'));
+        if ($allowChangeUserPicture == 1)
         {
             $this->addElement(
                 'file',
@@ -104,7 +106,9 @@ class PictureForm extends FormValidator
         $user = $this->user;
         $values = $this->exportValues();
 
-        if (PlatformSetting::get('allow_change_user_picture', Manager::context()))
+        $allowChangeUserPicture = Configuration::getInstance()->get_setting(
+            array(Manager::context(), 'allow_change_user_picture'));
+        if ($allowChangeUserPicture == 1)
         {
 
             if (isset($_FILES['picture_uri']) && strlen($_FILES['picture_uri']['name']) > 0)

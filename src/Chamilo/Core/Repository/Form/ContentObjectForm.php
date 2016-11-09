@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Form;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Metadata\Relation\Service\RelationService;
 use Chamilo\Core\Metadata\Service\EntityFormService;
@@ -37,7 +38,6 @@ use Chamilo\Libraries\Format\Tabs\DynamicFormTab;
 use Chamilo\Libraries\Format\Tabs\DynamicFormTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -568,7 +568,7 @@ EOT;
             $this->addGroup($group);
         }
 
-        $value = PlatformSetting::get('description_required', Manager::context());
+        $value = Configuration::getInstance()->get_setting(array(Manager::context(), 'description_required'));
         $required = ($value == 1) ? true : false;
         $name = Translation::get('Description', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
@@ -620,7 +620,11 @@ EOT;
         // when NULL (platform option not set) or FALSE (platform option set to false)
         // check title duplicates of content objects; when it is both set and true,
         // omit this check. (this way, the platform setting is unobtrusive).
-        if (PlatformSetting::get('omit_content_object_title_check', __NAMESPACE__) != 1)
+
+        $omitContentObjectTitleCheck = Configuration::getInstance()->get_setting(
+            array(__NAMESPACE__, 'omit_content_object_title_check'));
+
+        if ($omitContentObjectTitleCheck != 1)
         {
             $this->addElement(
                 'html',
@@ -692,19 +696,14 @@ EOT;
         if ($object instanceof AttachmentSupport)
         {
             $calculator = new Calculator(
-                \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
-                    \Chamilo\Core\User\Storage\DataClass\User:: class_name(),
-                    (int) $this->get_owner_id()
-                )
-            );
+                \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                    \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                    (int) $this->get_owner_id()));
 
             $uploadUrl = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager:: context(),
-                    \Chamilo\Core\Repository\Ajax\Manager :: PARAM_ACTION =>
-                        \Chamilo\Core\Repository\Ajax\Manager :: ACTION_IMPORT_FILE
-                )
-            );
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Ajax\Manager::context(),
+                    \Chamilo\Core\Repository\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Ajax\Manager::ACTION_IMPORT_FILE));
 
             $dropZoneParameters = array(
                 'name' => 'attachments_importer',
@@ -712,8 +711,7 @@ EOT;
                 'uploadUrl' => $uploadUrl->getUrl(),
                 'successCallbackFunction' => 'chamilo.core.repository.importAttachment.processUploadedFile',
                 'sendingCallbackFunction' => 'chamilo.core.repository.importAttachment.prepareRequest',
-                'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile'
-            );
+                'removedfileCallbackFunction' => 'chamilo.core.repository.importAttachment.deleteUploadedFile');
 
             if ($this->form_type != self::TYPE_REPLY)
             {
@@ -747,11 +745,9 @@ EOT;
 
             $this->addElement(
                 'html',
-                ResourceManager:: getInstance()->get_resource_html(
-                    Path:: getInstance()->getJavascriptPath(Manager:: context(), true) .
-                    'Plugin/jquery.file.upload.import.js'
-                )
-            );
+                ResourceManager::getInstance()->get_resource_html(
+                    Path::getInstance()->getJavascriptPath(Manager::context(), true) .
+                         'Plugin/jquery.file.upload.import.js'));
 
             $elem = $this->addElement(
                 'element_finder',

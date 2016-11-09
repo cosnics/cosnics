@@ -16,11 +16,11 @@ use Chamilo\Libraries\Format\NotificationMessage\NotificationMessageRenderer;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -281,7 +281,9 @@ abstract class Application
             $html[] = '<div class="clearfix"></div>';
         }
 
-        if (PlatformSetting::get('maintenance_mode'))
+        $maintenanceMode = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'maintenance_mode'));
+
+        if ($maintenanceMode)
         {
             $html[] = Display::error_message(Translation::get('MaintenanceModeMessage'));
         }

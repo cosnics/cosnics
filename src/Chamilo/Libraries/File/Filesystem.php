@@ -49,10 +49,6 @@ class Filesystem
         if (! $mode)
         {
             $mode = 06770;
-            /*
-             * if(class_exists('PlatformSetting')) { $ad = PlatformSetting :: get('permissions_new_directories'); if($ad
-             * && $ad != '') $mode = $ad; }
-             */
         }
         // If the given path is a file, return false
         if (is_file($path))
