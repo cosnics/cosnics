@@ -29,7 +29,7 @@ class PreviewStorage
      *
      * @return \core\repository\content_object\learning_path\display\PreviewStorage
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {
@@ -44,7 +44,7 @@ class PreviewStorage
     public function __construct()
     {
         $storage = $this->get_storage();
-        
+
         if (! isset($storage))
         {
             $this->set_storage(array());
@@ -53,7 +53,7 @@ class PreviewStorage
 
     /**
      * Empty the storage
-     * 
+     *
      * @return boolean
      */
     public function reset()

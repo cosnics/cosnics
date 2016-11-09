@@ -44,7 +44,7 @@ class RightsUtil
     /*
      * Use get_instance to make use of caching
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {

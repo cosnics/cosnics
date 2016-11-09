@@ -51,7 +51,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             throw new ObjectNotExistException(Translation :: get('CourseGroup'), $course_group_id);
 
         $this->course_group = $course_group;
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
                 Translation :: get('UnsubscribeBrowserComponent', array('GROUPNAME' => $course_group->get_name()))));

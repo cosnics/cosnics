@@ -24,7 +24,7 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
 
         while ($course = $courses->next_result())
         {
-            $lang = CourseSettingsController :: get_instance()->get_course_setting(
+            $lang = CourseSettingsController :: getInstance()->get_course_setting(
                 $course,
                 CourseSettingsConnector :: LANGUAGE);
 

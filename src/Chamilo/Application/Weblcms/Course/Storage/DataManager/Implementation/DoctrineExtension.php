@@ -181,7 +181,7 @@ class DoctrineExtension
 
         $sql .= '(' .
              ($sql_subscribed_groups ? $sql_subscribed_users . ' UNION ' . $sql_subscribed_groups : $sql_subscribed_users) .
-             ') AS ' . \Chamilo\Core\User\Storage\DataManager :: get_instance()->get_alias(User :: get_table_name()) .
+             ') AS ' . \Chamilo\Core\User\Storage\DataManager :: getInstance()->get_alias(User :: get_table_name()) .
              ' ';
 
         return $sql;
@@ -382,7 +382,7 @@ class DoctrineExtension
 
             $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
-            return \Chamilo\Core\Group\Storage\DataManager :: get_instance()->build_records_sql(
+            return \Chamilo\Core\Group\Storage\DataManager :: getInstance()->build_records_sql(
                 Group :: class_name(),
                 $parameters);
         }

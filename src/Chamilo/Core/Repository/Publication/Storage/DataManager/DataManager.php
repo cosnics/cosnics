@@ -30,7 +30,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function get_content_object_publication_attributes($identifier, $attributes_type = null, $condition = null, 
         $count = null, $offset = null, $order_property = null)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
         $publication_attributes = array();
         
         foreach ($registrations as $registration)
@@ -116,7 +116,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_publication_attributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
         $info = 0;
         
         foreach ($registrations as $registration)
@@ -137,7 +137,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function delete_content_object_publications($object)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
         
         foreach ($registrations as $registration)
         {
@@ -161,7 +161,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function content_object_is_published($id)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
         
         foreach ($registrations as $registration)
         {
@@ -179,7 +179,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function any_content_object_is_published($ids)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
         
         foreach ($registrations as $registration)
         {
@@ -197,7 +197,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function is_content_object_editable($id)
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations('Chamilo\Core\Repository');
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
         
         foreach ($registrations as $registration)
         {

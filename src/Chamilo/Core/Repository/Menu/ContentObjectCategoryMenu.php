@@ -202,7 +202,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
      */
     public function get_breadcrumbs()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $this->render($this->array_renderer, 'urhere');
         $breadcrumbs = $this->array_renderer->toArray();
         foreach ($breadcrumbs as $crumb)

@@ -103,9 +103,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 ContentObjectRendition :: FORMAT_HTML,
                 ContentObjectRendition :: VIEW_FULL,
                 $this);
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail :: getInstance();
 
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     null,
                     Translation :: get(
@@ -139,7 +139,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                 $version_tab_content = array();
                 $version_tab_content[] = $version_browser->as_html();
-                $version_tab_content[] = ResourceManager :: get_instance()->get_resource_html(
+                $version_tab_content[] = ResourceManager :: getInstance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
                 $this->tabs->add_tab(
                     new DynamicContentTab(

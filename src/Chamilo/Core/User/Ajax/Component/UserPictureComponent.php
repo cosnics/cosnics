@@ -25,7 +25,7 @@ class UserPictureComponent extends \Chamilo\Core\User\Ajax\Manager
     {
         $user = $this->getUserFromRequest();
 
-        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::get_instance());
+        $userPictureProviderFactory = new UserPictureProviderFactory(Configuration::getInstance());
         $userPictureProvider = $userPictureProviderFactory->getActivePictureProvider();
 
         return $userPictureProvider->downloadUserPicture($user, $this->getUser());

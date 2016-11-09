@@ -61,7 +61,7 @@ class BrowserComponent extends Manager implements TableSupport
             new StaticConditionVariable($this->get_user_id()));
         $user_requests = DataManager :: count(Request :: class_name(), $condition);
 
-        if ($user_requests > 0 || \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
+        if ($user_requests > 0 || \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed())
         {
             $tabs = new DynamicTabsRenderer('quota');
 
@@ -87,7 +87,7 @@ class BrowserComponent extends Manager implements TableSupport
                 }
             }
 
-            if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
+            if (\Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed())
             {
                 if($this->getUser()->is_platform_admin())
                 {
@@ -134,7 +134,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                 if ($this->calculator->isEnabled())
                 {
-                    $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
+                    $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->get_target_users(
                         $this->get_user());
 
                     if (count($target_users) > 0)
@@ -231,7 +231,7 @@ class BrowserComponent extends Manager implements TableSupport
             }
         }
 
-        if ($user_requests > 0 || \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
+        if ($user_requests > 0 || \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed())
         {
             $html[] = $tabs->render();
         }
@@ -377,10 +377,10 @@ class BrowserComponent extends Manager implements TableSupport
         }
 
         if (! $this->get_user()->is_platform_admin() &&
-            \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed() &&
+            \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed() &&
             $this->table_type != RequestTable :: TYPE_PERSONAL)
         {
-            $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->get_target_users(
+            $target_users = \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->get_target_users(
                 $this->get_user());
 
             if (count($target_users) > 0)

@@ -291,7 +291,7 @@ class ApplicationFactory
 
             if (! class_exists($classname))
             {
-                $trail = BreadcrumbTrail :: get_instance();
+                $trail = BreadcrumbTrail :: getInstance();
                 $trail->add(new Breadcrumb('#', Translation :: get($classname)));
 
                 throw new ClassNotExistException($classname);

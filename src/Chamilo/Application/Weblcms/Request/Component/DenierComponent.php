@@ -18,7 +18,7 @@ class DenierComponent extends Manager
 
     function run()
     {
-        if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: get_instance()->request_is_allowed())
+        if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->request_is_allowed())
         {
             throw new NotAllowedException();
         }
@@ -52,7 +52,7 @@ class DenierComponent extends Manager
     {
         $request = DataManager:: retrieve_by_id(Request:: class_name(), (int) $id);
 
-        if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: get_instance()->is_target_user(
+        if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->is_target_user(
                 $this->get_user(),
                 $request->get_user_id()
             ) && !$this->get_user()->is_platform_admin()
@@ -116,7 +116,7 @@ class DenierComponent extends Manager
         {
             $request = DataManager:: retrieve_by_id(Request:: class_name(), (int) $id);
 
-            if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: get_instance()->is_target_user(
+            if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->is_target_user(
                     $this->get_user(),
                     $request->get_user_id()
                 ) && !$this->get_user()->is_platform_admin()
@@ -190,7 +190,7 @@ class DenierComponent extends Manager
 
         $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

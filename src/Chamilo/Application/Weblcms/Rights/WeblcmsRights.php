@@ -48,7 +48,7 @@ class WeblcmsRights extends RightsUtil
      *
      * @return WeblcmsRights
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (!isset(self:: $instance))
         {
@@ -159,9 +159,9 @@ class WeblcmsRights extends RightsUtil
         $course_id = Request:: get(Manager :: PARAM_COURSE);
 
         $entities = array();
-        $entities[] = CourseGroupEntity:: get_instance($course_id);
-        $entities[] = CourseUserEntity:: get_instance();
-        $entities[] = CoursePlatformGroupEntity:: get_instance($course_id);
+        $entities[] = CourseGroupEntity:: getInstance($course_id);
+        $entities[] = CourseUserEntity:: getInstance();
+        $entities[] = CoursePlatformGroupEntity:: getInstance($course_id);
 
         try
         {
@@ -306,9 +306,9 @@ class WeblcmsRights extends RightsUtil
     )
     {
         $entities = array();
-        $entities[] = CourseGroupEntity::get_instance($course->getId());
-        $entities[] = CourseUserEntity::get_instance();
-        $entities[] = CoursePlatformGroupEntity::get_instance($course->getId());
+        $entities[] = CourseGroupEntity::getInstance($course->getId());
+        $entities[] = CourseUserEntity::getInstance();
+        $entities[] = CoursePlatformGroupEntity::getInstance($course->getId());
 
         return $this->get_identifiers_with_right_granted(
             $right, \Chamilo\Application\Weblcms\Manager::context(), $parent_location,

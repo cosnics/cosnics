@@ -21,7 +21,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
 
     public function toHtml()
     {
-        $html = ResourceManager :: get_instance()->get_resource_html(
+        $html = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'OptionOrderer.js');
         $html .= $this->getFrozenHtml();
         return $html;

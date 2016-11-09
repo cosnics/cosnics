@@ -31,7 +31,7 @@ class Rights extends RightsUtil
      *
      * @return \application\weblcms\request\rights\Rights
      */
-    static function get_instance()
+    static function getInstance()
     {
         if (! isset(self :: $instance))
         {
@@ -259,7 +259,7 @@ class Rights extends RightsUtil
                             }
                             break;
                         case PlatformGroupEntity :: ENTITY_TYPE :
-                            $group = DataManager :: get_instance()->retrieve_group(
+                            $group = DataManager :: getInstance()->retrieve_group(
                                 $location_entity_right->get_entity_id());
 
                             if ($group instanceof Group)

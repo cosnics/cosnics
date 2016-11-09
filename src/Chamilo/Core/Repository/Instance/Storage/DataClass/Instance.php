@@ -142,9 +142,9 @@ class Instance extends CompositeDataClass
             }
         }
 
-        $succes = Rights :: get_instance()->create_location_in_external_instances_subtree(
+        $succes = Rights :: getInstance()->create_location_in_external_instances_subtree(
             $this->get_id(),
-            Rights :: get_instance()->get_external_instances_subtree_root_id());
+            Rights :: getInstance()->get_external_instances_subtree_root_id());
         if (! $succes)
         {
             return false;
@@ -175,7 +175,7 @@ class Instance extends CompositeDataClass
             }
         }
 
-        $location = Rights :: get_instance()->get_location_by_identifier_from_external_instances_subtree(
+        $location = Rights :: getInstance()->get_location_by_identifier_from_external_instances_subtree(
             $this->get_id());
         if ($location)
         {

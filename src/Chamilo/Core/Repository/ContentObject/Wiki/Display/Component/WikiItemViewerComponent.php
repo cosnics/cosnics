@@ -32,7 +32,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $complex_wiki_page_id = Request :: get(self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
 
@@ -44,7 +44,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
                 $complex_wiki_page_id);
             $wiki_page = $complex_wiki_page->get_ref_object();
 
-            BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $wiki_page->get_title()));
+            BreadcrumbTrail :: getInstance()->add(new Breadcrumb(null, $wiki_page->get_title()));
 
             if ($version_object_id)
             {

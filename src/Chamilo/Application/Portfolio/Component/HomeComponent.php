@@ -237,7 +237,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager
     {
         $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
 
-        $has_right = Rights::get_instance()->is_allowed(
+        $has_right = Rights::getInstance()->is_allowed(
             Rights::GIVE_FEEDBACK_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id()
@@ -254,7 +254,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager
     {
         $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
 
-        $has_right = Rights::get_instance()->is_allowed(
+        $has_right = Rights::getInstance()->is_allowed(
             Rights::VIEW_FEEDBACK_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id()
@@ -271,7 +271,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager
     {
         $isPublisher = $this->get_publication()->get_publisher_id() == $this->get_rights_user_id();
 
-        $contextEditRight = Rights::get_instance()->is_allowed(
+        $contextEditRight = Rights::getInstance()->is_allowed(
             Rights::EDIT_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id()
@@ -305,7 +305,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager
     {
         $is_publisher = $this->get_rights_user_id() == $this->get_publication()->get_publisher_id();
 
-        $has_right = Rights::get_instance()->is_allowed(
+        $has_right = Rights::getInstance()->is_allowed(
             Rights::VIEW_RIGHT,
             $this->get_location($node),
             $this->get_rights_user_id()
@@ -387,7 +387,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager
      */
     public function get_location(ComplexContentObjectPathNode $node = null)
     {
-        return Rights::get_instance()->get_location($node, $this->get_publication()->get_id());
+        return Rights::getInstance()->get_location($node, $this->get_publication()->get_id());
     }
 
     /**
@@ -433,7 +433,7 @@ class HomeComponent extends \Chamilo\Application\Portfolio\Manager
      */
     public function invert_location_entity_right($right_id, $entity_id, $entity_type, $location_id)
     {
-        return Rights::get_instance()->invert_location_entity_right(
+        return Rights::getInstance()->invert_location_entity_right(
             $right_id,
             $entity_id,
             $entity_type,

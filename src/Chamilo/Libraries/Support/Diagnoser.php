@@ -423,7 +423,7 @@ class Diagnoser
         // $proto_info = mysql_get_proto_info();
         // $client_info = mysql_get_client_info();
         // due to abstraction of storage we can not rely on the mysql settings anymore
-        $connection = Connection :: get_instance()->get_connection()->connection;
+        $connection = Connection :: getInstance()->get_connection()->connection;
 
         $host_info = $connection->host_info;
         $server_info = $connection->server_info;

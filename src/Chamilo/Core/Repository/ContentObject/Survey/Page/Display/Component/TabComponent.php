@@ -34,7 +34,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
     {
         $page = $this->get_parent()->get_root_content_object();
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         if (! $page)
         {
@@ -51,7 +51,7 @@ abstract class TabComponent extends Manager implements DelegateComponent
         {
             $parameters = $this->get_parameters();
             $parameters[self :: PARAM_STEP] = $node_parent->get_id();
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb($this->get_url($parameters), $node_parent->get_content_object()->get_title()));
         }
 

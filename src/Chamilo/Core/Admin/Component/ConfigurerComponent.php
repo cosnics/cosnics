@@ -59,7 +59,7 @@ class ConfigurerComponent extends Manager
         }
         else
         {
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(array(DynamicVisualTabsRenderer :: PARAM_SELECTED_TAB => $this->get_context())),
                     Translation :: get('TypeName', null, $this->get_context())));
@@ -76,7 +76,7 @@ class ConfigurerComponent extends Manager
 
             foreach ($packages[$this->get_tab()] as $package)
             {
-                if (\Chamilo\Configuration\Configuration :: get_instance()->has_settings($package->get_context()))
+                if (\Chamilo\Configuration\Configuration :: getInstance()->has_settings($package->get_context()))
                 {
                     $package_names[$package->get_context()] = Translation :: get(
                         'TypeName',
@@ -90,7 +90,7 @@ class ConfigurerComponent extends Manager
             $tabs = new DynamicVisualTabsRenderer('settings', $form->toHtml());
             foreach ($package_names as $package => $package_name)
             {
-                if (\Chamilo\Configuration\Configuration :: get_instance()->has_settings($package))
+                if (\Chamilo\Configuration\Configuration :: getInstance()->has_settings($package))
                 {
                     $tabs->add_tab(
                         new DynamicVisualTab(
@@ -129,7 +129,7 @@ class ConfigurerComponent extends Manager
 
             foreach ($packages[$this->get_tab()] as $package)
             {
-                if (\Chamilo\Configuration\Configuration :: get_instance()->has_settings($package->get_context()))
+                if (\Chamilo\Configuration\Configuration :: getInstance()->has_settings($package->get_context()))
                 {
                     $package_names[$package->get_context()] = Translation :: get(
                         'TypeName',

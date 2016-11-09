@@ -31,7 +31,7 @@ class ComplexBuilderComponent extends Manager implements DelegateComponent
 
         $content_object = $publication->get_content_object();
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
                 Translation :: get('ToolComplexBuilderComponent', array('TITLE' => $content_object->get_title()))));

@@ -935,7 +935,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         {
             $html[] = '<input type="submit" name="Submit" value="Submit" class="hidden" />';
             $html[] = '</form>';
-            $html[] = ResourceManager::get_instance()->get_resource_html(
+            $html[] = ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(Manager::context(), true) . 'list.view.selector.js');
         }
 

@@ -69,7 +69,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
                     if ($publication->get_category_id())
                     {
-                        $new_parent_id = WeblcmsRights :: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+                        $new_parent_id = WeblcmsRights :: getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                             WeblcmsRights :: TYPE_COURSE_CATEGORY,
                             $publication->get_category_id(),
                             $publication->get_course_id());
@@ -84,13 +84,13 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                             new DataClassRetrievesParameters($condition))->as_array();
 
                         $course_module_id = $course_modules[0]->get_id();
-                        $new_parent_id = WeblcmsRights :: get_instance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
+                        $new_parent_id = WeblcmsRights :: getInstance()->get_weblcms_location_id_by_identifier_from_courses_subtree(
                             WeblcmsRights :: TYPE_COURSE_MODULE,
                             $course_module_id,
                             $publication->get_course_id());
                     }
 
-                    $location = WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+                    $location = WeblcmsRights :: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
                         WeblcmsRights :: TYPE_PUBLICATION,
                         $publication->get_id(),
                         $publication->get_course_id());
@@ -124,7 +124,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
             else
             {
                 // $message = $form->toHtml();
-                $trail = BreadcrumbTrail :: get_instance();
+                $trail = BreadcrumbTrail :: getInstance();
 
                 if (count($publication_ids) > 1)
                 {
@@ -181,7 +181,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                     $module = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_course_tool_by_name(
                         $this->get_tool_id());
 
-                    if ($is_course_admin || WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+                    if ($is_course_admin || WeblcmsRights :: getInstance()->is_allowed_in_courses_subtree(
                         WeblcmsRights :: ADD_RIGHT,
                         $module->get_id(),
                         WeblcmsRights :: TYPE_COURSE_MODULE,
@@ -294,7 +294,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
         while ($cat = $categories->next_result())
         {
-            if ($is_course_admin || WeblcmsRights :: get_instance()->is_allowed_in_courses_subtree(
+            if ($is_course_admin || WeblcmsRights :: getInstance()->is_allowed_in_courses_subtree(
                 WeblcmsRights :: ADD_RIGHT,
                 $cat->get_id(),
                 WeblcmsRights :: TYPE_COURSE_CATEGORY,

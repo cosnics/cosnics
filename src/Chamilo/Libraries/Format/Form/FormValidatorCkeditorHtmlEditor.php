@@ -60,10 +60,10 @@ class FormValidatorCkeditorHtmlEditor extends FormValidatorHtmlEditor
     public function get_includes()
     {
         $scripts = array();
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
+        $scripts[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                  'HtmlEditor/Ckeditor/release/ckeditor/ckeditor.js');
-        $scripts[] = ResourceManager :: get_instance()->get_resource_html(
+        $scripts[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                  'HtmlEditor/Ckeditor/release/ckeditor/adapters/jquery.js');
 

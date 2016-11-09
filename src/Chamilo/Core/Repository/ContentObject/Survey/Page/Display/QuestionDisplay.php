@@ -53,7 +53,7 @@ abstract class QuestionDisplay extends \Chamilo\Core\Repository\ContentObject\Su
     private function addJavascript()
     {
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($this);
-        return ResourceManager :: get_instance()->get_resource_html(
+        return ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath($namespace, true) .
                  'ProcessAnswer.js');
     }

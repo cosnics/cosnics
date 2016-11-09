@@ -20,7 +20,7 @@ class Rights extends RightsUtil
      *
      * @return Rights
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {
@@ -40,26 +40,26 @@ class Rights extends RightsUtil
         {
             $user_id = Session :: get_user_id();
         }
-        
+
         $entities = array();
-        $entities[] = UserEntity :: get_instance();
-        $entities[] = PlatformGroupEntity :: get_instance();
-        
+        $entities[] = UserEntity :: getInstance();
+        $entities[] = PlatformGroupEntity :: getInstance();
+
         return parent :: is_allowed(
-            self :: VIEW_RIGHT, 
-            Manager :: context(), 
-            $user_id, 
-            $entities, 
-            $identifier, 
+            self :: VIEW_RIGHT,
+            Manager :: context(),
+            $user_id,
+            $entities,
+            $identifier,
             self :: TYPE_PUBLICATION);
     }
 
     public function render_target_entities_as_string($entities)
     {
-        $rdm = \Chamilo\Core\Rights\Storage\DataManager :: get_instance();
-        
+        $rdm = \Chamilo\Core\Rights\Storage\DataManager :: getInstance();
+
         $target_list = array();
-        
+
         // don't display each individual user if it is published for
         // everybody...
         // if a name is alfabetically before "everybody" this would be the
@@ -73,7 +73,7 @@ class Rights extends RightsUtil
         else
         {
             $target_list[] = '<select>';
-            
+
             foreach ($entities as $entity_type => $entity_ids)
             {
                 switch ($entity_type)
@@ -82,7 +82,7 @@ class Rights extends RightsUtil
                         foreach ($entity_ids as $group_id)
                         {
                             $group = \Chamilo\Core\Group\Storage\DataManager :: retrieve_by_id(
-                                \Chamilo\Core\Group\Storage\DataClass\Group :: class_name(), 
+                                \Chamilo\Core\Group\Storage\DataClass\Group :: class_name(),
                                 $group_id);
                             if ($group)
                             {
@@ -103,10 +103,10 @@ class Rights extends RightsUtil
                         break;
                 }
             }
-            
+
             $target_list[] = '</select>';
         }
-        
+
         return implode(PHP_EOL, $target_list);
     }
 }

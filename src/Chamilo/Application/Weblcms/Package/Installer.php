@@ -53,7 +53,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             return false;
         }
 
-        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->create_request_root())
+        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->create_request_root())
         {
             return false;
         }
@@ -79,7 +79,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     private function create_courses_subtree()
     {
-        $rights_utilities = CourseManagementRights :: get_instance();
+        $rights_utilities = CourseManagementRights :: getInstance();
 
         $location = $rights_utilities->create_subtree_root_location(0, WeblcmsRights :: TREE_TYPE_COURSE, true);
 

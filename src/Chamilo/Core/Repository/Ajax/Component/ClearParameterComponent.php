@@ -43,7 +43,7 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\Ajax\Manager
                     $currentWorkspaceIdentifier);
 
                 ParameterFilterRenderer :: factory(
-                    FilterData :: get_instance($currentWorkspace),
+                    FilterData :: getInstance($currentWorkspace),
                     $currentWorkspace,
                     $parameter[1])->render();
                 $url = FilterData :: clean_url($currentWorkspace, $this->getPostDataValue(self :: PARAM_URL));

@@ -32,7 +32,7 @@ class EditorComponent extends Manager implements DelegateComponent
         $this->check_allowed();
         $item = DataManager :: retrieve_by_id(Item :: class_name(), (int) Request :: get(Manager :: PARAM_ITEM));
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 null,
                 Translation :: get('ManagerEditor', array('NAME' => $item->get_titles()->get_current_translation()))));

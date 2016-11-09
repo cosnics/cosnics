@@ -97,7 +97,7 @@ class HomeRepository
 
     public function findBlockTypes()
     {
-        $homeIntegrations = Configuration:: get_instance()->getIntegrationRegistrations('Chamilo\Core\Home');
+        $homeIntegrations = Configuration:: getInstance()->getIntegrationRegistrations('Chamilo\Core\Home');
         $blockTypes = array();
 
         foreach ($homeIntegrations as $homeIntegration)

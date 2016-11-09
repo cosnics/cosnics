@@ -24,7 +24,7 @@ class MessageLogger
         return self :: $instances[$instance_name];
     }
 
-    public static function get_instance($object)
+    public static function getInstance($object)
     {
         return self :: get_instance_by_name(ClassnameUtilities :: getInstance()->getClassnameFromObject($object, true));
     }

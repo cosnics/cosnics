@@ -98,7 +98,7 @@ class SelectComponent extends \Chamilo\Core\Metadata\Vocabulary\Ajax\Manager imp
                 $vocabularyItemValues[] = $item;
             }
             
-            $resource_manager = ResourceManager :: get_instance();
+            $resource_manager = ResourceManager :: getInstance();
             $plugin_path = Path :: getInstance()->getJavascriptPath('Chamilo\Core\Metadata', true) .
                  'Plugin/Bootstrap/Tagsinput/';
             

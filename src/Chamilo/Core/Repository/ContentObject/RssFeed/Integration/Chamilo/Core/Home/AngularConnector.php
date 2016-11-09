@@ -21,7 +21,7 @@ class AngularConnector implements AngularConnectorInterface
      */
     public function loadAngularModules()
     {
-        return ResourceManager:: get_instance()->get_resource_html(
+        return ResourceManager:: getInstance()->get_resource_html(
             Path:: getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .
             'Resources/Javascript/RssFeedRenderer/rssFeedRenderer.js'
         );

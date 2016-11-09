@@ -62,7 +62,7 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
             ContentObjectPublication :: class_name(), 
             $this->publication_id)->get_content_object();
         
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         
         $trail->add(
             new Breadcrumb(

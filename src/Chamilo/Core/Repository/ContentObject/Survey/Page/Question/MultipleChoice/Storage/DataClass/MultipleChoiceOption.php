@@ -40,7 +40,7 @@ class MultipleChoiceOption extends DataClass implements DisplayOrderDataClassLis
 
     function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager :: getInstance();
     }
 
     /**

@@ -27,7 +27,7 @@ class ActivatorComponent extends Manager implements DelegateComponent
         $activator = new PackageActivator($context);
         $activator->run();
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 null,
                 Translation :: get(

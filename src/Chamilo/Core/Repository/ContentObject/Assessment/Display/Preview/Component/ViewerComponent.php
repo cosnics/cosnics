@@ -36,7 +36,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
 
     public function run()
     {
-        $this->attempt = PreviewStorage :: get_instance()->retrieve_assessment_attempt(
+        $this->attempt = PreviewStorage :: getInstance()->retrieve_assessment_attempt(
             $this->get_root_content_object()->get_id());
 
         if (! $this->attempt instanceof AbstractAttempt)
@@ -203,7 +203,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
     {
         if (is_null($this->question_attempts))
         {
-            $this->question_attempts = PreviewStorage :: get_instance()->retrieve_assessment_question_attempts(
+            $this->question_attempts = PreviewStorage :: getInstance()->retrieve_assessment_question_attempts(
                 $this->attempt);
         }
 
@@ -265,6 +265,6 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
      */
     public function reset()
     {
-        return PreviewStorage :: get_instance()->reset($this->get_root_content_object()->get_id());
+        return PreviewStorage :: getInstance()->reset($this->get_root_content_object()->get_id());
     }
 }

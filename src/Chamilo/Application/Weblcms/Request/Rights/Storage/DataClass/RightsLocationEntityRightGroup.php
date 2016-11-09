@@ -52,7 +52,7 @@ class RightsLocationEntityRightGroup extends DataClass
      */
     function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager :: getInstance();
     }
 
     function get_location_entity_right_id()

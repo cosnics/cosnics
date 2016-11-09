@@ -24,7 +24,7 @@ abstract class AbstractMailer implements MailerInterface
     {
         if(!$configuration instanceof Configuration)
         {
-            $configuration = Configuration::get_instance();
+            $configuration = Configuration::getInstance();
         }
 
         $this->configuration = $configuration;

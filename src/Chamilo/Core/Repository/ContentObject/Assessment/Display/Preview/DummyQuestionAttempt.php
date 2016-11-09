@@ -50,7 +50,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function update()
     {
-        return PreviewStorage :: get_instance()->update_assessment_question_attempt($this);
+        return PreviewStorage :: getInstance()->update_assessment_question_attempt($this);
     }
 
     /**
@@ -60,7 +60,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     public function create()
     {
         $this->set_id(UUID :: v4());
-        return PreviewStorage :: get_instance()->create_assessment_question_attempt($this);
+        return PreviewStorage :: getInstance()->create_assessment_question_attempt($this);
     }
 
     /**
@@ -69,6 +69,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function delete()
     {
-        return PreviewStorage :: get_instance()->delete_assessment_question_attempt($this);
+        return PreviewStorage :: getInstance()->delete_assessment_question_attempt($this);
     }
 }

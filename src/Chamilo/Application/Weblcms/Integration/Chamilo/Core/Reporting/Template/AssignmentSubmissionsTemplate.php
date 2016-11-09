@@ -29,7 +29,7 @@ class AssignmentSubmissionsTemplate extends ReportingTemplate
         
         $this->init_parameters();
         $this->add_reporting_block(new AssignmentInformationBlock($this));
-        $this->add_reporting_block(AssignmentSubmissionsBlock :: get_instance($this));
+        $this->add_reporting_block(AssignmentSubmissionsBlock :: getInstance($this));
         
         $custom_breadcrumbs = array();
         

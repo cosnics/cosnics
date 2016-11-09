@@ -73,7 +73,7 @@ abstract class TabComponent extends Manager
 
         $html[] = $this->render_header();
 
-        $intro_text_allowed = CourseSettingsController :: get_instance()->get_course_setting(
+        $intro_text_allowed = CourseSettingsController :: getInstance()->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
 

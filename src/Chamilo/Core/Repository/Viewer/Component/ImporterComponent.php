@@ -157,7 +157,7 @@ class ImporterComponent extends Manager implements DelegateComponent
             }
             else
             {
-                BreadcrumbTrail :: get_instance()->add(
+                BreadcrumbTrail :: getInstance()->add(
                     new Breadcrumb(
                         $this->get_url(),
                         Translation :: get(
@@ -180,7 +180,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         }
         else
         {
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb($this->get_url(), Translation :: get('ChooseImportFormat')));
 
             $html = array();
@@ -228,7 +228,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
         $importForm->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(self :: package(), true) . 'ImporterComponent.js'));
     }
 

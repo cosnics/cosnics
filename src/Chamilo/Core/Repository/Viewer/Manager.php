@@ -299,6 +299,6 @@ abstract class Manager extends Application
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail::get_instance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

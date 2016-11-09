@@ -12,7 +12,7 @@ class BrowserComponent extends Manager
     {
         $courseTools = $this->get_visible_tools();
 
-        $introductionAllowed = CourseSettingsController :: get_instance()->get_course_setting(
+        $introductionAllowed = CourseSettingsController :: getInstance()->get_course_setting(
             $this->get_course(),
             \Chamilo\Application\Weblcms\CourseSettingsConnector :: ALLOW_INTRODUCTION_TEXT);
 

@@ -33,7 +33,7 @@ class PublicationUpdaterComponent extends Manager
 
             $content_object = $publication->get_content_object();
 
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(),
                     Translation :: get(

@@ -42,7 +42,7 @@ class GroupSubscribeComponent extends Manager
             {
                 $failures = 0;
 
-                $course_management_rights = CourseManagementRights :: get_instance();
+                $course_management_rights = CourseManagementRights :: getInstance();
 
                 $parent_group_id = null;
 

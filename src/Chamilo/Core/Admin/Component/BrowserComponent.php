@@ -31,7 +31,7 @@ class BrowserComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
-        $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+        $breadcrumbtrail = BreadcrumbTrail :: getInstance();
         $breadcrumbtrail->truncate(true);
         $breadcrumbtrail->add(new Breadcrumb($this->get_url(), Translation :: get('Administration')));
         $breadcrumbtrail->add_help('administration general');
@@ -62,7 +62,7 @@ class BrowserComponent extends Manager
         $html[] = $this->get_tabs();
         $html[] = '</div>';
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'AdminBrowser.js');
         $html[] = $this->render_footer();
 

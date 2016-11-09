@@ -61,7 +61,7 @@ abstract class NewBlock extends Block
         // All user courses for active course types
         $excludedCourseTypes = explode(
             ',',
-            Configuration :: get_instance()->get_setting(array('Chamilo\Application\Weblcms', 'excluded_course_types')));
+            Configuration :: getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'excluded_course_types')));
         $archiveCondition = new NotCondition(
             new InCondition(
                 new PropertyConditionVariable(Course :: class_name(), Course :: PROPERTY_COURSE_TYPE_ID),
@@ -72,7 +72,7 @@ abstract class NewBlock extends Block
 
         $this->courses = array();
 
-        $course_settings_controller = \Chamilo\Application\Weblcms\CourseSettingsController :: get_instance();
+        $course_settings_controller = \Chamilo\Application\Weblcms\CourseSettingsController :: getInstance();
         $unique_publications = array();
 
         while ($course = $user_courses->next_result())
@@ -85,16 +85,16 @@ abstract class NewBlock extends Block
             {
                 $condition = $this->getPublicationConditions($course, $tool);
                 $course_module_id = WeblcmsDataManager :: retrieve_course_tool_by_name($tool)->get_id();
-                $location = \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+                $location = \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
                     \Chamilo\Application\Weblcms\Rights\WeblcmsRights :: TYPE_COURSE_MODULE,
                     $course_module_id,
                     $course->get_id());
 
                 $entities = array();
-                $entities[\Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity :: get_instance(
+                $entities[\Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CourseGroupEntity :: getInstance(
                     $course->get_id());
-                $entities[\Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity :: get_instance();
-                $entities[\Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity :: get_instance();
+                $entities[\Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CourseUserEntity :: getInstance();
+                $entities[\Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity :: ENTITY_TYPE] = \Chamilo\Application\Weblcms\Rights\Entities\CoursePlatformGroupEntity :: getInstance();
 
                 $publications = WeblcmsDataManager :: retrieve_content_object_publications_with_view_right_granted_in_category_location(
                     $location,

@@ -35,7 +35,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
      */
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add_help('cas_user general');
         
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();

@@ -239,7 +239,7 @@ class Basic extends Renderer
      */
     public function renderContent()
     {
-        $angularConnectorService = new AngularConnectorService(Configuration :: get_instance());
+        $angularConnectorService = new AngularConnectorService(Configuration :: getInstance());
         $modules = $angularConnectorService->getAngularModules();
         $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 

@@ -65,7 +65,7 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
                     new DataClassRetrievesParameters($condition));
 
                 $external_repository = $external_repositories->next_result();
-                $youtube_connector = DataConnector :: get_instance($external_repository);
+                $youtube_connector = DataConnector :: getInstance($external_repository);
                 $external_object = $youtube_connector->retrieve_external_repository_object($external_id);
 
                 $youtube = ContentObject :: factory(Youtube :: class_name());

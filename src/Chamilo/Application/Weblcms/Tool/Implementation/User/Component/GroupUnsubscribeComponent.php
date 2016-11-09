@@ -42,7 +42,7 @@ class GroupUnsubscribeComponent extends Manager
             {
                 $failures = 0;
 
-                $course_management_rights = CourseManagementRights :: get_instance();
+                $course_management_rights = CourseManagementRights :: getInstance();
 
                 foreach ($group_ids as $group_id)
                 {

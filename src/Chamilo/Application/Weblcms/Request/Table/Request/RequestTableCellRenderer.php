@@ -48,7 +48,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         $toolbar = new Toolbar();
 
-        if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed())
+        if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed())
         {
             if (! $object->was_granted())
             {

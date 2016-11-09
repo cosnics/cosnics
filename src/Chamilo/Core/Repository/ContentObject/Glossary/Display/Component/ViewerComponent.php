@@ -40,7 +40,7 @@ class ViewerComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
         $html = array();
 
         $html[] = $this->render_header();
@@ -62,7 +62,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
         $object = $this->get_parent()->get_root_content_object($this);
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         if (! is_array($object))
         {

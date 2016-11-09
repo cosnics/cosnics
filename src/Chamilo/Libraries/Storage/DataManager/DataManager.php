@@ -74,7 +74,7 @@ class DataManager
      *
      * @return \libraries\storage\DoctrineDatabase
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         $type = static::get_type();
 
@@ -115,7 +115,7 @@ class DataManager
      */
     public static function create(DataClass $object)
     {
-        if (! static::get_instance()->create($object))
+        if (! static::getInstance()->create($object))
         {
             return false;
         }
@@ -125,7 +125,7 @@ class DataManager
 
     public static function create_record($class_name, $record)
     {
-        return static::get_instance()->create_record($class_name, $record);
+        return static::getInstance()->create_record($class_name, $record);
     }
 
     /**
@@ -216,7 +216,7 @@ class DataManager
 
     private static function __retrieveClass($objectClass, $factoryClass, $parameters)
     {
-        $record = static::process_record(static::get_instance()->retrieve($objectClass, $parameters));
+        $record = static::process_record(static::getInstance()->retrieve($objectClass, $parameters));
         return $factoryClass::factory($objectClass, $record);
     }
 
@@ -267,7 +267,7 @@ class DataManager
 
     private static function __record($class, $parameters)
     {
-        return static::process_record(static::get_instance()->record($class, $parameters));
+        return static::process_record(static::getInstance()->record($class, $parameters));
     }
 
     public static function record($class, RecordRetrieveParameters $parameters = null)
@@ -445,7 +445,7 @@ class DataManager
 
     private static function __retrievesClass($objectClass, $parameters)
     {
-        return static::get_instance()->retrieves($objectClass, $parameters);
+        return static::getInstance()->retrieves($objectClass, $parameters);
     }
 
     private static function retrievesClass($cacheClass, $objectClass, $parameters = null)
@@ -463,7 +463,7 @@ class DataManager
 
     private static function __records($class, $parameters)
     {
-        return static::get_instance()->records($class, $parameters);
+        return static::getInstance()->records($class, $parameters);
     }
 
     public static function records($class, $parameters = null)
@@ -486,7 +486,7 @@ class DataManager
 
     private static function __distinct($class, $parameters)
     {
-        return static::get_instance()->distinct($class, $parameters);
+        return static::getInstance()->distinct($class, $parameters);
     }
 
     /**
@@ -523,7 +523,7 @@ class DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
             new StaticConditionVariable($object->get_id()));
-        return static::get_instance()->update($object, $condition);
+        return static::getInstance()->update($object, $condition);
     }
 
     /**
@@ -548,7 +548,7 @@ class DataManager
             $properties_class = new DataClassProperties($properties);
         }
 
-        if (! static::get_instance()->updates($class, $properties_class, $condition, $offset, $count, $order_by))
+        if (! static::getInstance()->updates($class, $properties_class, $condition, $offset, $count, $order_by))
         {
             return false;
         }
@@ -570,7 +570,7 @@ class DataManager
             new PropertyConditionVariable($class_name, $class_name::PROPERTY_ID),
             new StaticConditionVariable($object->get_id()));
 
-        if (! static::get_instance()->delete($class_name, $condition))
+        if (! static::getInstance()->delete($class_name, $condition))
         {
             return false;
         }
@@ -580,7 +580,7 @@ class DataManager
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($object::class_name(), $object::PROPERTY_ID),
                 new StaticConditionVariable($object->get_id()));
-            if (! static::get_instance()->delete($object::class_name(), $condition))
+            if (! static::getInstance()->delete($object::class_name(), $condition))
             {
                 return false;
             }
@@ -598,7 +598,7 @@ class DataManager
      */
     public static function deletes($class, Condition $condition)
     {
-        if (! static::get_instance()->delete($class, $condition))
+        if (! static::getInstance()->delete($class, $condition))
         {
             return false;
         }
@@ -640,7 +640,7 @@ class DataManager
 
     private static function __countClass($objectClass, $parameters)
     {
-        return static::get_instance()->count($objectClass, $parameters);
+        return static::getInstance()->count($objectClass, $parameters);
     }
 
     private static function countClass($cacheClass, $objectClass, $parameters)
@@ -655,7 +655,7 @@ class DataManager
 
     private static function __countGrouped($class, $parameters)
     {
-        return static::get_instance()->count_grouped($class, $parameters);
+        return static::getInstance()->count_grouped($class, $parameters);
     }
 
     /**
@@ -686,7 +686,7 @@ class DataManager
      */
     public static function retrieve_maximum_value($class, $property, Condition $condition = null)
     {
-        return static::get_instance()->retrieve_maximum_value($class, $property, $condition);
+        return static::getInstance()->retrieve_maximum_value($class, $property, $condition);
     }
 
     /**
@@ -712,7 +712,7 @@ class DataManager
      */
     public static function create_storage_unit($name, $properties, $indexes)
     {
-        return static::get_instance()->create_storage_unit($name, $properties, $indexes);
+        return static::getInstance()->create_storage_unit($name, $properties, $indexes);
     }
 
     /**
@@ -723,7 +723,7 @@ class DataManager
      */
     public static function storage_unit_exists($name)
     {
-        return static::get_instance()->storage_unit_exists($name);
+        return static::getInstance()->storage_unit_exists($name);
     }
 
     /**
@@ -734,7 +734,7 @@ class DataManager
      */
     public static function drop_storage_unit($name)
     {
-        return static::get_instance()->drop_storage_unit($name);
+        return static::getInstance()->drop_storage_unit($name);
     }
 
     /**
@@ -745,7 +745,7 @@ class DataManager
      */
     public static function rename_storage_unit($old_name, $new_name)
     {
-        return static::get_instance()->rename_storage_unit($old_name, $new_name);
+        return static::getInstance()->rename_storage_unit($old_name, $new_name);
     }
 
     /**
@@ -758,7 +758,7 @@ class DataManager
      */
     public static function alter_storage_unit($type, $table_name, $property, $attributes = array())
     {
-        return static::get_instance()->alter_storage_unit($type, $table_name, $property, $attributes);
+        return static::getInstance()->alter_storage_unit($type, $table_name, $property, $attributes);
     }
 
     /**
@@ -771,7 +771,7 @@ class DataManager
      */
     public static function alter_storage_unit_index($type, $table_name, $name = null, $columns = array())
     {
-        return static::get_instance()->alter_storage_unit_index($type, $table_name, $name, $columns);
+        return static::getInstance()->alter_storage_unit_index($type, $table_name, $name, $columns);
     }
 
     /**
@@ -783,7 +783,7 @@ class DataManager
      */
     public static function truncate_storage_unit($name, $optimize = true)
     {
-        if (! static::get_instance()->truncate_storage_unit($name))
+        if (! static::getInstance()->truncate_storage_unit($name))
         {
             return false;
         }
@@ -804,7 +804,7 @@ class DataManager
      */
     public static function optimize_storage_unit($name)
     {
-        return static::get_instance()->optimize_storage_unit($name);
+        return static::getInstance()->optimize_storage_unit($name);
     }
 
     /**
@@ -815,7 +815,7 @@ class DataManager
      */
     public static function get_alias($storage_unit_name)
     {
-        return static::get_instance()->get_alias($storage_unit_name);
+        return static::getInstance()->get_alias($storage_unit_name);
     }
 
     /**
@@ -826,7 +826,7 @@ class DataManager
      */
     public static function retrieve_composite_data_class_additional_properties(CompositeDataClass $object)
     {
-        return static::get_instance()->retrieve_composite_data_class_additional_properties($object);
+        return static::getInstance()->retrieve_composite_data_class_additional_properties($object);
     }
 
     /**
@@ -834,7 +834,7 @@ class DataManager
      */
     public static function transactional($function)
     {
-        return static::get_instance()->transactional($function);
+        return static::getInstance()->transactional($function);
     }
 
     /**
@@ -983,6 +983,6 @@ class DataManager
      */
     public static function translateCondition(Condition $condition = null)
     {
-        return static::get_instance()->translateCondition($condition);
+        return static::getInstance()->translateCondition($condition);
     }
 }

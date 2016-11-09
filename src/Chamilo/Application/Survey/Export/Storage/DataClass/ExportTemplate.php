@@ -32,7 +32,7 @@ class ExportTemplate extends DataClass
 
     function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager :: getInstance();
     }
 
     /**

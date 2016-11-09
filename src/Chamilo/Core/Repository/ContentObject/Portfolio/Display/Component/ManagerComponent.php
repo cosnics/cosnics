@@ -28,7 +28,7 @@ class ManagerComponent extends ItemComponent implements TableSupport
             throw new NotAllowedException();
         }
 
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('ManagerComponent')));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb($this->get_url(), Translation :: get('ManagerComponent')));
 
         $table = new ItemTable($this);
 

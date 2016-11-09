@@ -83,7 +83,7 @@ class CourseMenu extends Block
 
         $result = array();
 
-        $course_management_rights = \Chamilo\Application\Weblcms\Rights\CourseManagementRights :: get_instance();
+        $course_management_rights = \Chamilo\Application\Weblcms\Rights\CourseManagementRights :: getInstance();
 
         $count_direct = $count_request = 0;
 

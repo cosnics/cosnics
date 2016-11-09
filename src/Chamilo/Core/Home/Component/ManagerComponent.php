@@ -34,6 +34,6 @@ class ManagerComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: get_instance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
     }
 }

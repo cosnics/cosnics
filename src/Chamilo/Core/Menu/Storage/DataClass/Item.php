@@ -73,7 +73,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_data_manager()
     {
-        return DataManager :: get_instance();
+        return DataManager :: getInstance();
     }
 
     public function get_parent()
@@ -173,24 +173,24 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
 
         if (! $parent)
         {
-            $parent_id = Rights :: get_instance()->get_root_id(\Chamilo\Core\Menu\Manager :: context());
+            $parent_id = Rights :: getInstance()->get_root_id(\Chamilo\Core\Menu\Manager :: context());
         }
         else
         {
-            $parent_id = Rights :: get_instance()->get_location_id_by_identifier(
+            $parent_id = Rights :: getInstance()->get_location_id_by_identifier(
                 \Chamilo\Core\Menu\Manager :: context(),
                 Rights :: TYPE_ITEM,
                 $this->get_parent());
         }
 
-        $new_location = Rights :: get_instance()->create_menu_location($this->get_id(), $parent_id);
+        $new_location = Rights :: getInstance()->create_menu_location($this->get_id(), $parent_id);
 
         if (! $new_location)
         {
             return false;
         }
 
-        return Rights :: get_instance()->set_location_entity_right(Rights :: VIEW_RIGHT, 0, 0, $new_location->get_id());
+        return Rights :: getInstance()->set_location_entity_right(Rights :: VIEW_RIGHT, 0, 0, $new_location->get_id());
     }
 
     public function update()
@@ -205,11 +205,11 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
 
         if ($parent == 0)
         {
-            $parent_id = Rights :: get_instance()->get_root_id(\Chamilo\Core\Menu\Manager :: context());
+            $parent_id = Rights :: getInstance()->get_root_id(\Chamilo\Core\Menu\Manager :: context());
         }
         else
         {
-            $parent_id = Rights :: get_instance()->get_location_id_by_identifier(
+            $parent_id = Rights :: getInstance()->get_location_id_by_identifier(
                 \Chamilo\Core\Menu\Manager :: context(),
                 Rights :: TYPE_ITEM,
                 $parent);
@@ -233,7 +233,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
             }
         }
 
-        $location = Rights :: get_instance()->get_location_by_identifier(
+        $location = Rights :: getInstance()->get_location_by_identifier(
             \Chamilo\Core\Menu\Manager :: context(),
             Rights :: TYPE_ITEM,
             $this->get_id());
@@ -252,7 +252,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
 
     public function delete()
     {
-        $location = Rights :: get_instance()->get_location_by_identifier(
+        $location = Rights :: getInstance()->get_location_by_identifier(
             \Chamilo\Core\Menu\Manager :: context(),
             Rights :: TYPE_ITEM,
             $this->get_id());

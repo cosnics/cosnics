@@ -45,9 +45,9 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
     {
         $toolbar = new Toolbar();
 
-        if (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
+        if (\Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed())
         {
-            if (! $object->was_granted() && (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->is_target_user(
+            if (! $object->was_granted() && (\Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->is_target_user(
                 $this->get_component()->get_user(),
                 $object->get_user_id()) || $this->get_component()->get_user()->is_platform_admin()))
             {
@@ -62,7 +62,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                         ToolbarItem :: DISPLAY_ICON));
             }
 
-            if ($object->is_pending() && (\Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->is_target_user(
+            if ($object->is_pending() && (\Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->is_target_user(
                 $this->get_component()->get_user(),
                 $object->get_user_id()) || $this->get_component()->get_user()->is_platform_admin()))
             {

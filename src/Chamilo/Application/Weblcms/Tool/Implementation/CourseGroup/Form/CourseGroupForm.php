@@ -302,7 +302,7 @@ class CourseGroupForm extends FormValidator
      */
     public function update_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance(), new CourseGroupRepository());
+        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
 
         $values = $this->exportValues();
         $course_group = $this->course_group;
@@ -779,7 +779,7 @@ class CourseGroupForm extends FormValidator
         $counter = 0; // Index 0 is the 'parent' course group.
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup',
                     true) . 'CourseGroupEditForm.js'));
@@ -845,7 +845,7 @@ class CourseGroupForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup',
                     true) . 'CourseGroupForm.js'));
@@ -899,7 +899,7 @@ class CourseGroupForm extends FormValidator
             array("title" => Translation::get('AddGroupExplained')));
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath(
                     'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup',
                     true) . 'CourseGroupForm.js'));
@@ -986,7 +986,7 @@ class CourseGroupForm extends FormValidator
      */
     public function create_course_group()
     {
-        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance(), new CourseGroupRepository());
+        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
 
         $this->rights = array();
         $this->rights[] = WeblcmsRights::VIEW_RIGHT;

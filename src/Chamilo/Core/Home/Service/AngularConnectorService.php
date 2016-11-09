@@ -28,7 +28,7 @@ class AngularConnectorService
     {
         if (! $configuration)
         {
-            $configuration = Configuration::get_instance();
+            $configuration = Configuration::getInstance();
         }
 
         $this->angularConnectors = array();

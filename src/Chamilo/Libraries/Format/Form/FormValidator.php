@@ -68,7 +68,7 @@ class FormValidator extends HTML_QuickForm
 
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Reset.js'));
 
         $this->setDefaultTemplates();
@@ -464,7 +464,7 @@ EOT;
 
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'FormTabs.js'));
     }
 
@@ -1258,7 +1258,7 @@ EOT;
 
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'ImageUploader.js'));
     }
 
@@ -1287,7 +1287,7 @@ EOT;
 
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                      'Plugin/Jquery/jquery.file.upload.single.js'));
     }
@@ -1383,7 +1383,7 @@ EOT;
 
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'Plugin/Jquery/jquery.file.upload.js'));
 
         $javascriptHtml = array();

@@ -27,7 +27,7 @@ class UpdateElementComponent extends Manager
         $element_id = Request :: get(self :: PARAM_DYNAMIC_FORM_ELEMENT_ID);
         $parameters = array(self :: PARAM_DYNAMIC_FORM_ELEMENT_ID => $element_id);
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add(new Breadcrumb($this->get_url($parameters), Translation :: get('UpdateElement')));
         $trail->add_help('dynamic form general');
 

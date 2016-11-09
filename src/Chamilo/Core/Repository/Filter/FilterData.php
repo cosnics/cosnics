@@ -359,7 +359,7 @@ class FilterData
      *
      * @return FilterData
      */
-    public static function get_instance(WorkspaceInterface $workspaceImplementation)
+    public static function getInstance(WorkspaceInterface $workspaceImplementation)
     {
         if (! isset(self :: $instance))
         {
@@ -384,7 +384,7 @@ class FilterData
 
     public static function clean_url(WorkspaceInterface $workspaceImplementation, $url)
     {
-        $filter_data = self :: get_instance($workspaceImplementation);
+        $filter_data = self :: getInstance($workspaceImplementation);
         $url_parts = parse_url(urldecode($url));
 
         parse_str($url_parts['query'], $query);

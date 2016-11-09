@@ -95,7 +95,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $join_condition = new OrCondition($join_conditions);
 
-        $course_type_user_order_alias = self :: get_instance()->get_alias(CourseTypeUserOrder :: get_table_name());
+        $course_type_user_order_alias = self :: getInstance()->get_alias(CourseTypeUserOrder :: get_table_name());
 
         $order = array();
 

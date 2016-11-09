@@ -51,7 +51,7 @@ class StorageAliasGenerator
      *
      * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self::$instance))
         {

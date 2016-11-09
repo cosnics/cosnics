@@ -36,7 +36,7 @@ class PictureForm extends FormValidator
         parent::__construct('user_account', 'post', $action);
 
         $this->user = $user;
-        $this->adm = \Chamilo\Core\Admin\Storage\DataManager::get_instance();
+        $this->adm = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
 
         $this->build_form();
 

@@ -164,7 +164,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     public function setBreadcrumbs()
     {
-        $trail = BreadcrumbTrail::get_instance();
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(

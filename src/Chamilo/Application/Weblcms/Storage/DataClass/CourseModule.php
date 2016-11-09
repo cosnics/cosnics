@@ -177,17 +177,17 @@ class CourseModule extends DataClass
             return false;
         }
 
-        return WeblcmsRights :: get_instance()->create_location_in_courses_subtree(
+        return WeblcmsRights :: getInstance()->create_location_in_courses_subtree(
             WeblcmsRights :: TYPE_COURSE_MODULE,
             $this->get_id(),
-            WeblcmsRights :: get_instance()->get_courses_subtree_root_id($this->get_course_code()),
+            WeblcmsRights :: getInstance()->get_courses_subtree_root_id($this->get_course_code()),
             $this->get_course_code(),
             $create_in_batch);
     }
 
     public function delete()
     {
-        $location = WeblcmsRights :: get_instance()->get_weblcms_location_by_identifier_from_courses_subtree(
+        $location = WeblcmsRights :: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights :: TYPE_COURSE_MODULE,
             $this->get_id(),
             $this->get_course_code());

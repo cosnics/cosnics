@@ -57,7 +57,7 @@ class CreatorComponent extends Manager
             // If the request was successfully created, send an e-mail to the people who can actually grant or deny it.
             if ($success)
             {
-                $authorized_users = \Chamilo\Core\Repository\Quota\Rights\Rights:: get_instance()->get_authorized_users(
+                $authorized_users = \Chamilo\Core\Repository\Quota\Rights\Rights:: getInstance()->get_authorized_users(
                     $this->get_user()
                 );
 
@@ -65,10 +65,10 @@ class CreatorComponent extends Manager
 
                 $title = Translation:: get(
                     'QuotaCreatedMailTitle',
-                    array('PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')))
+                    array('PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')))
                 );
 
-                $mailerFactory = new MailerFactory(Configuration::get_instance());
+                $mailerFactory = new MailerFactory(Configuration::getInstance());
                 $mailer = $mailerFactory->getActiveMailer();
 
                 foreach ($authorized_users as $authorized_user)
@@ -78,7 +78,7 @@ class CreatorComponent extends Manager
                         'QuotaCreatedMailBody',
                         array(
                             'USER' => $authorized_user->get_fullname(),
-                            'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name'))
+                            'PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'))
                         )
                     ), $authorized_user->get_email()
                     );
@@ -127,8 +127,8 @@ class CreatorComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
 
-            $allow_upgrade = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
-            $maximum_user_disk_space = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
+            $allow_upgrade = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
+            $maximum_user_disk_space = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
 
             if ($this->calculator->upgradeAllowed())
             {

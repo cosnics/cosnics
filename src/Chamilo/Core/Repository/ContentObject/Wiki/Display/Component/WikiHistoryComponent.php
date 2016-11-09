@@ -78,7 +78,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
                      $this->get_root_content_object()->get_title() . '</div>';
                 $html[] = '<div class="wiki-pane-content-history">';
                 $html[] = $version_browser->as_html();
-                $html[] = ResourceManager :: get_instance()->get_resource_html(
+                $html[] = ResourceManager :: getInstance()->get_resource_html(
                     Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'Repository.js');
                 $html[] = '<div class="clear"></div>';
                 $html[] = '</div>';

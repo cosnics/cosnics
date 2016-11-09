@@ -47,7 +47,7 @@ class CoursePlatformGroupEntity extends PlatformGroupEntity
 
     private $platform_group_cache;
 
-    public static function get_instance($course_id)
+    public static function getInstance($course_id)
     {
         if (! isset(self :: $instance))
         {

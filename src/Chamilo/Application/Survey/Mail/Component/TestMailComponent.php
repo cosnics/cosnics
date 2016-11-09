@@ -29,7 +29,7 @@ class TestMailComponent extends Manager
     {
         $this->publication_id = Request:: get(Manager :: PARAM_PUBLICATION_ID);
 
-//         if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
+//         if (! Rights :: getInstance()->is_right_granted(Rights :: INVITE_RIGHT, $this->publication_id))
 //         {
 //             throw new NotAllowedException();
 //         }
@@ -89,7 +89,7 @@ class TestMailComponent extends Manager
                 $email_from_address, $email_reply_address_name, $email_reply_address
             );
 
-            $mailerFactory = new MailerFactory(Configuration::get_instance());
+            $mailerFactory = new MailerFactory(Configuration::getInstance());
             $mailer = $mailerFactory->getActiveMailer();
 
             try

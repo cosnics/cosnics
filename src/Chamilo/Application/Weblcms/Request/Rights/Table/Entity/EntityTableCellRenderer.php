@@ -49,7 +49,7 @@ class EntityTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                             \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
                             (int) $location_entity_right->get_entity_id())->get_fullname();
                     case PlatformGroupEntity :: ENTITY_TYPE :
-                        return \Chamilo\Core\Group\Storage\DataManager :: get_instance()->retrieve_group(
+                        return \Chamilo\Core\Group\Storage\DataManager :: getInstance()->retrieve_group(
                             (int) $location_entity_right->get_entity_id())->get_name();
                 }
             case Translation :: get('Group') :

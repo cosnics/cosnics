@@ -55,7 +55,7 @@ class AnonymousUserForm extends FormValidator
      */
     protected function addCaptchaElement()
     {
-        $recaptchaSiteKey = Configuration::get_instance()->get_setting(
+        $recaptchaSiteKey = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'recaptcha_site_key')
         );
 

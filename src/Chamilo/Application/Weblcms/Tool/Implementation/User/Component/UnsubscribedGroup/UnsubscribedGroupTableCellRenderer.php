@@ -60,7 +60,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
         if ($this->get_component()->get_user()->is_platform_admin() || ($this->get_component()->is_allowed(
-            WeblcmsRights :: EDIT_RIGHT) && CourseManagementRights :: get_instance()->is_allowed_for_platform_group(
+            WeblcmsRights :: EDIT_RIGHT) && CourseManagementRights :: getInstance()->is_allowed_for_platform_group(
             CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,
             $group_with_subscription_status->get_id(),
             $this->get_component()->get_course_id())))

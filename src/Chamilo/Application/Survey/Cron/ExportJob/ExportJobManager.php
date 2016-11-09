@@ -241,7 +241,7 @@ class ExportJobManager
 
         $mail = new Mail($header, $message, $to_email, true, array(), array(), $name, $email, $name, $email);
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

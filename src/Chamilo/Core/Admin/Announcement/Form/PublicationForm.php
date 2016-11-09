@@ -194,7 +194,7 @@ class PublicationForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin\Announcement', true) . 'RightsForm.js'));
     }
 
@@ -299,7 +299,7 @@ class PublicationForm extends FormValidator
     {
         $values = $this->exportValues();
 
-        $location = Rights :: get_instance()->get_location_by_identifier(
+        $location = Rights :: getInstance()->get_location_by_identifier(
             Manager :: context(),
             Rights :: TYPE_PUBLICATION,
             $publication->get_id());
@@ -321,7 +321,7 @@ class PublicationForm extends FormValidator
         $option = $values[self :: PROPERTY_RIGHT_OPTION];
         $location_id = $location->get_id();
 
-        $rights = Rights :: get_instance();
+        $rights = Rights :: getInstance();
 
         switch ($option)
         {

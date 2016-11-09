@@ -23,7 +23,7 @@ class RightsComponent extends ItemComponent
      */
     public function build()
     {
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('RightsComponent')));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb($this->get_url(), Translation :: get('RightsComponent')));
 
         if ($this->get_parent() instanceof PortfolioComplexRights &&
              $this->get_parent()->is_allowed_to_set_content_object_rights())

@@ -37,7 +37,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $tabs = new DynamicTabsRenderer('request');
 
         if ($user_requests > 0 ||
-             \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed())
+             \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed())
         {
 
             if ($user_requests > 0)
@@ -54,9 +54,9 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                         $table->as_html()));
             }
 
-            if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed())
+            if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed())
             {
-                $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->get_target_users(
+                $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->get_target_users(
                     $this->get_user());
 
                 if (count($target_users) > 0)
@@ -146,7 +146,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             }
         }
 
-        if ($user_requests > 0 || (\Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed() &&
+        if ($user_requests > 0 || (\Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed() &&
              $tabs->size() > 0) || $this->get_user()->is_platform_admin())
         {
             $html = array();
@@ -201,10 +201,10 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         }
 
         if (! $this->get_user()->is_platform_admin() &&
-             \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->request_is_allowed() &&
+             \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed() &&
              $this->table_type != RequestTable :: TYPE_PERSONAL)
         {
-            $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights :: get_instance()->get_target_users(
+            $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->get_target_users(
                 $this->get_user());
 
             if (count($target_users) > 0)

@@ -235,7 +235,7 @@ class ManageForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Rights\Editor', true) . 'RightsForm.js'));
     }
 
@@ -280,7 +280,7 @@ class ManageForm extends FormValidator
     private function handle_rights($location)
     {
         $values = $this->exportValues();
-        $rights_util = RightsUtil :: get_instance();
+        $rights_util = RightsUtil :: getInstance();
 
         $location_id = $location->get_id();
 

@@ -66,7 +66,7 @@ class UserDetailComponent extends Manager
             $html[] = $this->display_groups($user);
             $html[] = '<br />';
 
-            $registrations = Configuration :: get_instance()->getIntegrationRegistrations(self :: package());
+            $registrations = Configuration :: getInstance()->getIntegrationRegistrations(self :: package());
 
             foreach ($registrations as $registration)
             {

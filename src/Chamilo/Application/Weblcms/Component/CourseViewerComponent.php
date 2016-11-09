@@ -61,7 +61,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         $this->set_parameter(self :: PARAM_COURSE, $this->get_course()->get_id());
         $this->set_parameter(self :: PARAM_TOOL, $tool);
 
-        $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+        $breadcrumbtrail = BreadcrumbTrail :: getInstance();
 
         $breadcrumb_title = CourseSettingsConnector :: get_breadcrumb_title_for_course($this->get_course());
 
@@ -215,7 +215,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             }
         }
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseVisit.js');
 
         return implode(PHP_EOL, $html);
@@ -239,7 +239,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function load_course_theme()
     {
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $theme_setting = $course_settings_controller->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: THEME);
@@ -255,7 +255,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function load_course_language()
     {
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $language = $course_settings_controller->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: LANGUAGE);
@@ -304,7 +304,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $course_settings_controller = CourseSettingsController :: get_instance();
+            $course_settings_controller = CourseSettingsController :: getInstance();
             $course_access = $course_settings_controller->get_course_setting(
                 $this->get_course(),
                 CourseSettingsConnector :: COURSE_ACCESS);
@@ -360,7 +360,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      */
     public function is_tool_accessible()
     {
-        return CourseSettingsController :: get_instance()->get_course_setting(
+        return CourseSettingsController :: getInstance()->get_course_setting(
             $this->get_course(),
             CourseSetting :: COURSE_SETTING_TOOL_ACTIVE,
             $this->get_tool_registration()->get_id());

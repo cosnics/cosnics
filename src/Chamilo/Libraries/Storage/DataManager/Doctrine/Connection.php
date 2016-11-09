@@ -66,7 +66,7 @@ class Connection
      *
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Connection
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {

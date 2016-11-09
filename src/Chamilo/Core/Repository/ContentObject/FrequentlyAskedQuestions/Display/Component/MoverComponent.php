@@ -167,7 +167,7 @@ class MoverComponent extends Manager
         {
             $variable = $this->get_current_content_object() instanceof FrequentlyAskedQuestions ? 'MoveFolder' : 'MoverComponent';
 
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail :: getInstance();
             $trail->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
 
             $html = array();

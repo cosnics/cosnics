@@ -143,7 +143,7 @@ class Banner
             $request = $this->getApplication()->getRequest();
         }
 
-        $menuRenderer = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
+        $menuRenderer = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
 
         $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer :: toHtml(
             $menuRenderer,
@@ -155,7 +155,7 @@ class Banner
         {
             if ($this->getViewMode() == Page :: VIEW_MODE_FULL)
             {
-                $breadcrumbtrail = BreadcrumbTrail :: get_instance();
+                $breadcrumbtrail = BreadcrumbTrail :: getInstance();
                 $breadcrumbtrail->setContainerMode($this->getContainerMode());
 
                 if ($breadcrumbtrail->size() > 0)

@@ -6,7 +6,7 @@ namespace Chamilo\Libraries\Utilities\String;
  * Mostly used to replace {$variables} in strings.
  * @TODO: remove that when we move to a templating system
  * @TODO: could be more efficient to do an include or eval
- * 
+ *
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author lopprecht
@@ -20,7 +20,7 @@ class SimpleTemplate
      *
      * @return SimpleTemplate
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (empty(self :: $instance))
         {
@@ -31,21 +31,21 @@ class SimpleTemplate
 
     /**
      * Replaces $name=>$value pairs comming from $vars from $template.
-     * 
+     *
      * @param string|array $template
      * @param array $vars
      * @return string
      */
     public static function ex($template, $vars)
     {
-        $instance = self :: get_instance();
+        $instance = self :: getInstance();
         return $instance->process_one($template, $vars);
     }
 
     /**
      * Process $template once for each entries in $vars.
      * Join result with $glue.
-     * 
+     *
      * @param string|array $template
      * @param array $vars
      * @param string $glue
@@ -53,7 +53,7 @@ class SimpleTemplate
      */
     public static function all($template, $vars, $glue = null)
     {
-        $instance = self :: get_instance();
+        $instance = self :: getInstance();
         return $instance->process_all($template, $vars, $glue);
     }
 
@@ -72,7 +72,7 @@ class SimpleTemplate
         {
             $template = implode($this->glue, $template);
         }
-        
+
         $pattern = '/\{\$[a-zA-Z_][a-zA-Z0-9_]*\}/';
         $this->template_callback_context = $vars;
         $result = preg_replace_callback($pattern, array($this, 'process_template_callback'), $template);

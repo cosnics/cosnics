@@ -138,7 +138,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $this->setDefaults(
             $this->multi_dimensional_array_to_single_dimensional_array(
-                CourseSettingsController::get_instance()->convert_course_settings_to_values_array($this->base_object)));
+                CourseSettingsController::getInstance()->convert_course_settings_to_values_array($this->base_object)));
     }
 
     /**
@@ -162,7 +162,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             return;
         }
 
-        $selected_entities = CourseManagementRights::get_instance()->retrieve_rights_location_rights_for_location(
+        $selected_entities = CourseManagementRights::getInstance()->retrieve_rights_location_rights_for_location(
             $location,
             $available_rights);
 
@@ -387,7 +387,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $this->addElement('html', '</div>');
         $this->addElement(
             'html',
-            ResourceManager::get_instance()->get_resource_html(
+            ResourceManager::getInstance()->get_resource_html(
                 Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'RightsForm.js'));
     }
 
@@ -645,7 +645,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         {
             $this->addElement('checkbox', $locked_name, Translation::get('Locked'));
 
-            if (CourseManagementRights::get_instance()->is_right_locked_for_base_object($this->base_object, $right_id))
+            if (CourseManagementRights::getInstance()->is_right_locked_for_base_object($this->base_object, $right_id))
             {
                 $defaults[$locked_name] = 1;
             }
@@ -672,7 +672,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
      */
     public function can_change_course_setting($name, $tool_id = 0)
     {
-        $course_settings_controller = CourseSettingsController::get_instance();
+        $course_settings_controller = CourseSettingsController::getInstance();
 
         $course_setting = $course_settings_controller->get_course_setting_object_from_name_and_tool($name, $tool_id);
 

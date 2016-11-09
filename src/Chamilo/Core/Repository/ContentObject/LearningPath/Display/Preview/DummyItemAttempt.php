@@ -20,7 +20,7 @@ class DummyItemAttempt extends AbstractItemAttempt
      */
     public function update()
     {
-        return PreviewStorage :: get_instance()->update_learning_path_item_attempt($this);
+        return PreviewStorage :: getInstance()->update_learning_path_item_attempt($this);
     }
 
     /**
@@ -30,7 +30,7 @@ class DummyItemAttempt extends AbstractItemAttempt
     public function create()
     {
         $this->set_id(UUID :: v4());
-        return PreviewStorage :: get_instance()->create_learning_path_item_attempt($this);
+        return PreviewStorage :: getInstance()->create_learning_path_item_attempt($this);
     }
 
     /**
@@ -39,6 +39,6 @@ class DummyItemAttempt extends AbstractItemAttempt
      */
     public function delete()
     {
-        return PreviewStorage :: get_instance()->delete_learning_path_item_attempt($this);
+        return PreviewStorage :: getInstance()->delete_learning_path_item_attempt($this);
     }
 }

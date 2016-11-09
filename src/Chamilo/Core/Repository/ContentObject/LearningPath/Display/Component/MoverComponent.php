@@ -176,7 +176,7 @@ class MoverComponent extends TabComponent
         {
             $variable = $this->get_current_content_object() instanceof LearningPath ? 'MoveFolder' : 'MoverComponent';
 
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail :: getInstance();
             $trail->add(new Breadcrumb($this->get_url(), Translation :: get($variable)));
 
             $html = array();

@@ -378,7 +378,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             $courseIdentifiers[] = $course[Course :: PROPERTY_ID];
         }
 
-        $courseSettingsController = CourseSettingsController :: get_instance();
+        $courseSettingsController = CourseSettingsController :: getInstance();
         $courseSettingsController->loadSettingsForCoursesByIdentifiers($courseIdentifiers);
     }
 
@@ -412,7 +412,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
             // cache.
             DataManager :: fill_new_publications_cache($this->get_user(), $course_instances);
 
-            $course_settings_controller = CourseSettingsController :: get_instance();
+            $course_settings_controller = CourseSettingsController :: getInstance();
 
             $count = 0;
             foreach ($courses as $course_properties)
@@ -503,7 +503,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                         if ($language != 'platform_language')
                         {
-                            $languageName = \Chamilo\Configuration\Configuration :: get_instance()->getLanguageNameFromIsocode(
+                            $languageName = \Chamilo\Configuration\Configuration :: getInstance()->getLanguageNameFromIsocode(
                                 $language);
 
                             $text[] = $languageName;

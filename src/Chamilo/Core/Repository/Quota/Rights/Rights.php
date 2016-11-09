@@ -30,7 +30,7 @@ class Rights extends RightsUtil
      *
      * @return \core\repository\quota\rights\Rights
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {
@@ -251,7 +251,7 @@ class Rights extends RightsUtil
                             }
                             break;
                         case PlatformGroupEntity :: ENTITY_TYPE :
-                            $group = \Chamilo\Core\Group\Storage\DataManager :: get_instance()->retrieve_group(
+                            $group = \Chamilo\Core\Group\Storage\DataManager :: getInstance()->retrieve_group(
                                 $location_entity_right->get_entity_id());
 
                             if ($group instanceof \Chamilo\Core\Group\Storage\DataClass\Group)

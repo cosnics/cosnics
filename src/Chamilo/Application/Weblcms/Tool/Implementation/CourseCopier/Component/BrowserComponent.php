@@ -34,9 +34,9 @@ class BrowserComponent extends Manager
     {
         $course_id = $this->get_course_id();
 
-        $courseGroupService = new CourseGroupService(WeblcmsRights::get_instance(), new CourseGroupRepository());
+        $courseGroupService = new CourseGroupService(WeblcmsRights::getInstance(), new CourseGroupRepository());
 
-        // $trail = BreadcrumbTrail :: get_instance();
+        // $trail = BreadcrumbTrail :: getInstance();
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();

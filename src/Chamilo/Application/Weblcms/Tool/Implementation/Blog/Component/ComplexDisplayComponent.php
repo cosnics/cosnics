@@ -47,7 +47,7 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID));
         }
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
 
         $context = $this->publication->get_content_object()->package() . '\Display';
         $factory = new ApplicationFactory(

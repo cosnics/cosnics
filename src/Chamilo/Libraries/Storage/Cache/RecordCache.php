@@ -33,7 +33,7 @@ class RecordCache
      *
      * @return \Chamilo\Libraries\Storage\Cache\RecordCache
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self::$instance))
         {
@@ -51,7 +51,7 @@ class RecordCache
      */
     public static function get($class, DataClassParameters $parameters)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
 
         if (self::exists($class, $parameters))
         {
@@ -73,7 +73,7 @@ class RecordCache
      */
     public static function exists($class, DataClassParameters $parameters)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $hash = $parameters->hash();
 
         if (isset($instance->cache[$class][$hash]))
@@ -94,7 +94,7 @@ class RecordCache
      */
     public static function truncate($class)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
 
         if (isset($instance->cache[$class]))
         {
@@ -132,13 +132,13 @@ class RecordCache
      */
     public static function set_cache($class, $hash, $value)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $instance->cache[$class][$hash] = $value;
     }
 
     public static function reset()
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $instance->cache = array();
     }
 }

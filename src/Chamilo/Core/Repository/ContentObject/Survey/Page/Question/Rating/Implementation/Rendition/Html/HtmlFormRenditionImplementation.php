@@ -83,7 +83,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 3);
         $formValidator->addElement(
             'html', 
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath($namespace, true) . 'Form.js'));
         return $formValidator;
     }

@@ -32,7 +32,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         $blog = $this->get_root_content_object();
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $blog_layout = BlogLayout :: factory($this, $blog);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html = array();

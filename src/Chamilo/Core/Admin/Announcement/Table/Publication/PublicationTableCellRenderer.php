@@ -160,7 +160,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
      */
     public function render_publication_targets($publication)
     {
-        $target_entities = Rights :: get_instance()->get_target_entities(
+        $target_entities = Rights :: getInstance()->get_target_entities(
             Rights :: VIEW_RIGHT,
             Manager :: context(),
             $publication[Publication :: PROPERTY_ID],

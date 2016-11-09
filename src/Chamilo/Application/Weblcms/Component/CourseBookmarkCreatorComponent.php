@@ -35,7 +35,7 @@ class CourseBookmarkCreatorComponent extends Manager
         $content_object = new Bookmark();
 
         // set title
-        $wdm = WeblcmsDataManager :: get_instance();
+        $wdm = WeblcmsDataManager :: getInstance();
         $course = CourseDataManager :: retrieve_course($course_id);
         $title = $course->get_title();
         $content_object->set_title($title);

@@ -124,7 +124,7 @@ class UpdaterComponent extends TabComponent
                         array('CONTENT_OBJECT' => $this->get_current_node()->get_content_object()->get_title()));
                 }
 
-                $trail = BreadcrumbTrail::get_instance();
+                $trail = BreadcrumbTrail::getInstance();
                 $trail->add(
                     new Breadcrumb($this->get_url(array(self::PARAM_STEP => $this->get_current_step())), $title));
 

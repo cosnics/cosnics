@@ -218,7 +218,7 @@ abstract class Manager extends Application
         );
 
         $filter_form = FormFilterRenderer:: factory(
-            FilterData:: get_instance($this->getWorkspace()),
+            FilterData:: getInstance($this->getWorkspace()),
             $this->getWorkspace(),
             $this->get_user_id(),
             $this->get_allowed_content_object_types(),
@@ -241,8 +241,8 @@ abstract class Manager extends Application
             )
         );
 
-        $selected_type = FilterData:: get_instance($this->getWorkspace())->get_type();
-        $selected_category = FilterData:: get_instance($this->getWorkspace())->get_type_category();
+        $selected_type = FilterData:: getInstance($this->getWorkspace())->get_type();
+        $selected_category = FilterData:: getInstance($this->getWorkspace())->get_type_category();
 
         $object_type = new ObjectTypeMenu(
             $this,
@@ -278,7 +278,7 @@ abstract class Manager extends Application
             )
         );
 
-        $current_user_view_id = FilterData:: get_instance($this->getWorkspace())->get_user_view();
+        $current_user_view_id = FilterData:: getInstance($this->getWorkspace())->get_user_view();
         $user_view = new UserViewMenu(
             $this,
             $current_user_view_id,
@@ -304,7 +304,7 @@ abstract class Manager extends Application
         $html[] = '</div>';
 
         $html_filter_renderer = HtmlFilterRenderer:: factory(
-            FilterData:: get_instance($this->getWorkspace()),
+            FilterData:: getInstance($this->getWorkspace()),
             $this->getWorkspace()
         );
 
@@ -533,7 +533,7 @@ abstract class Manager extends Application
         {
             $context = ClassnameUtilities:: getInstance()->getNamespaceParent($type, 3);
 
-            if (!\Chamilo\Configuration\Configuration:: get_instance()->isRegisteredAndActive($context))
+            if (!\Chamilo\Configuration\Configuration:: getInstance()->isRegisteredAndActive($context))
             {
                 unset($types[$index]);
             }
@@ -798,7 +798,7 @@ abstract class Manager extends Application
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail:: get_instance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail:: getInstance());
     }
 
     public function render_header()

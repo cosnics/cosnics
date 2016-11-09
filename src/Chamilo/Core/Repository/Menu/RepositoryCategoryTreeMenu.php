@@ -86,7 +86,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_current_node_id()
     {
-        return FilterData :: get_instance($this->workspaceImplementation)->get_filter_property(
+        return FilterData :: getInstance($this->workspaceImplementation)->get_filter_property(
             FilterData :: FILTER_CATEGORY);
     }
 

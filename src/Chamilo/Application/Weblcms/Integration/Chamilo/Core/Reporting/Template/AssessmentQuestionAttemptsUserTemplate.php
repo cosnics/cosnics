@@ -54,7 +54,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
             ComplexContentObjectItem :: class_name(),
             $this->get_parameter(\Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager :: PARAM_QUESTION));
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         $trail->add(
             new Breadcrumb(

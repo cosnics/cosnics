@@ -118,7 +118,7 @@ class ViewerComponent extends TabComponent
 
     private function addJavascript()
     {
-        return ResourceManager :: get_instance()->get_resource_html(
+        return ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Ajax', true) .
                  'ProcessVisibility.js');
     }

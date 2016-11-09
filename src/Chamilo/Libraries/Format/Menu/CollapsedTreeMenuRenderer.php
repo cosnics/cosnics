@@ -16,7 +16,7 @@ class CollapsedTreeMenuRenderer extends TreeMenuRenderer
 
     protected function get_javascript()
     {
-        return ResourceManager :: get_instance()->get_resource_html(
+        return ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) .
                  'Plugin/Jquery/jquery.simple_tree_menu.js');
     }

@@ -32,7 +32,7 @@ class EntityRightsSetterComponent extends Manager
         $context = $this->get_context();
         $locations = $this->get_locations();
 
-        $rights_util = RightsUtil :: get_instance();
+        $rights_util = RightsUtil :: getInstance();
 
         if (isset($entity_item_id) && isset($entity_type) && isset($right_id) && isset($locations) &&
              count($locations) > 0)

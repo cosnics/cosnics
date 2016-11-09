@@ -77,7 +77,7 @@ class CasAuthentication extends ExternalAuthentication
                     Translation::get(
                         'CasAuthenticationError',
                         array(
-                            'PLATFORM' => Configuration::get_instance()->get_setting(
+                            'PLATFORM' => Configuration::getInstance()->get_setting(
                                 'Chamilo\Core\Admin',
                                 'platform_name'))));
             }
@@ -101,7 +101,7 @@ class CasAuthentication extends ExternalAuthentication
                     Translation::get(
                         'CasAuthenticationError',
                         array(
-                            'PLATFORM' => Configuration::get_instance()->get_setting(
+                            'PLATFORM' => Configuration::getInstance()->get_setting(
                                 'Chamilo\Core\Admin',
                                 'platform_name'))));
             }

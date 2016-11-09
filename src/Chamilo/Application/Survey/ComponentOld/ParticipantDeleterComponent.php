@@ -24,7 +24,7 @@ class ParticipantDeleterComponent extends Manager
     {
         $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
         
-        if (! Rights :: get_instance()->is_right_granted(Rights :: INVITE_RIGHT, $publication_id))
+        if (! Rights :: getInstance()->is_right_granted(Rights :: INVITE_RIGHT, $publication_id))
         {
             throw new NotAllowedException(false);
         }

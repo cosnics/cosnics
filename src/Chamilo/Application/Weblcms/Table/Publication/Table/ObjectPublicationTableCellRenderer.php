@@ -181,7 +181,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
     {
         try
         {
-            $target_entities = WeblcmsRights :: get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights :: getInstance()->get_target_entities(
                 WeblcmsRights :: VIEW_RIGHT,
                 Manager :: context(),
                 $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -195,7 +195,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
             $target_entities = array();
         }
 
-        $rdm = \Chamilo\Core\Rights\Storage\DataManager :: get_instance();
+        $rdm = \Chamilo\Core\Rights\Storage\DataManager :: getInstance();
 
         $target_list = array();
 

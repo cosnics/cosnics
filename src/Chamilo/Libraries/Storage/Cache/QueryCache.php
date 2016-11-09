@@ -33,7 +33,7 @@ class QueryCache
      *
      * @return \Chamilo\Libraries\Storage\Cache\QueryCache
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self::$instance))
         {
@@ -49,7 +49,7 @@ class QueryCache
      */
     public static function get($hash)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
 
         if (self::exists($hash))
         {
@@ -68,7 +68,7 @@ class QueryCache
      */
     public static function exists($hash)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
 
         if (isset($instance->cache[$hash]))
         {
@@ -87,7 +87,7 @@ class QueryCache
      */
     public static function truncate()
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
 
         if (isset($instance->cache))
         {
@@ -104,13 +104,13 @@ class QueryCache
      */
     public static function set_cache($hash, $value)
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $instance->cache[$hash] = $value;
     }
 
     public static function reset()
     {
-        $instance = self::get_instance();
+        $instance = self::getInstance();
         $instance->cache = array();
     }
 

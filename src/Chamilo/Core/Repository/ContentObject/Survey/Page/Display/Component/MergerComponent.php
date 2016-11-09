@@ -36,7 +36,7 @@ class MergerComponent extends TabComponent implements \Chamilo\Core\Repository\V
         $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
             ClassnameUtilities :: getInstance()->getNamespaceParent(Page :: context(), 2));
 
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb($this->get_url(), Translation :: get('CreatorComponent')));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb($this->get_url(), Translation :: get('CreatorComponent')));
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {

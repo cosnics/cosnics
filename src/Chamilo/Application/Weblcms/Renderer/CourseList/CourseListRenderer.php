@@ -144,7 +144,7 @@ class CourseListRenderer
             $courseIdentifiers[] = $course->getId();
         }
 
-        $courseSettingsController = CourseSettingsController :: get_instance();
+        $courseSettingsController = CourseSettingsController :: getInstance();
         $courseSettingsController->loadSettingsForCoursesByIdentifiers($courseIdentifiers);
     }
 
@@ -164,7 +164,7 @@ class CourseListRenderer
         {
             $html[] = '<ul class="list-group">';
 
-            $course_settings_controller = CourseSettingsController :: get_instance();
+            $course_settings_controller = CourseSettingsController :: getInstance();
 
             if ($this->get_new_publication_icons())
             {
@@ -241,7 +241,7 @@ class CourseListRenderer
         $html = array();
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
 
         foreach ($this->getTools() as $tool)
         {

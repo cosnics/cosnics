@@ -19,7 +19,7 @@ abstract class ContentObjectRemover extends \Chamilo\Configuration\Package\Actio
      */
     public function __construct($values)
     {
-        parent :: __construct($values, DataManager :: get_instance());
+        parent :: __construct($values, DataManager :: getInstance());
     }
 
     /**

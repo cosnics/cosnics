@@ -22,7 +22,7 @@ class EditorComponent extends Manager
             Publication :: class_name(), 
             Request :: get(self :: PARAM_PUBLICATION_ID));
         
-        if (! Rights :: get_instance()->is_right_granted(
+        if (! Rights :: getInstance()->is_right_granted(
             Rights :: RIGHT_EDIT, 
             $publication->getId()))
         

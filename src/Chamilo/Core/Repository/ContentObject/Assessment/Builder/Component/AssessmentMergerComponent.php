@@ -41,7 +41,7 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         $trail->add(
             new Breadcrumb(
                 $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)), 

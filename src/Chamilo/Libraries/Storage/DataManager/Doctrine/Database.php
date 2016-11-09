@@ -72,7 +72,7 @@ class Database
     {
         if (is_null($connection))
         {
-            $this->connection = Connection::get_instance()->get_connection();
+            $this->connection = Connection::getInstance()->get_connection();
         }
         else
         {
@@ -196,7 +196,7 @@ class Database
 
                 if ($options['autoincrement'] == true)
                 {
-                    $name = StorageAliasGenerator::get_instance()->get_constraint_name(
+                    $name = StorageAliasGenerator::getInstance()->get_constraint_name(
                         $table_name,
                         $name,
                         StorageAliasGenerator::TYPE_CONSTRAINT);
@@ -206,7 +206,7 @@ class Database
 
             foreach ($indexes as $index => $attributes)
             {
-                $name = StorageAliasGenerator::get_instance()->get_constraint_name(
+                $name = StorageAliasGenerator::getInstance()->get_constraint_name(
                     $table_name,
                     $index,
                     StorageAliasGenerator::TYPE_CONSTRAINT);
@@ -893,7 +893,7 @@ class Database
                         $data_manager = ClassnameUtilities::getInstance()->getNamespaceParent($join_class::context(), 1) .
                              '\DataManager';
 
-                        $alias = $data_manager::get_instance()->get_alias($join_class::get_table_name());
+                        $alias = $data_manager::getInstance()->get_alias($join_class::get_table_name());
 
                         $query_builder->addSelect($alias . '.*');
                     }
@@ -1278,7 +1278,7 @@ class Database
      */
     public function get_alias($table_name)
     {
-        return StorageAliasGenerator::get_instance()->get_table_alias($table_name);
+        return StorageAliasGenerator::getInstance()->get_table_alias($table_name);
     }
 
     /**
@@ -1309,7 +1309,7 @@ class Database
      */
     public static function quote($value, $type = null, $quote = true, $escape_wildcards = false)
     {
-        return Connection::get_instance()->get_connection()->quote($value, $type, $quote, $escape_wildcards);
+        return Connection::getInstance()->get_connection()->quote($value, $type, $quote, $escape_wildcards);
     }
 
     /**

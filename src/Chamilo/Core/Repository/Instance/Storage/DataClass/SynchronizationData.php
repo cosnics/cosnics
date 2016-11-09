@@ -309,7 +309,7 @@ class SynchronizationData extends DataClass
                 throw new \Exception(Translation :: get('NoExternalnstanceFound'));
             }
 
-            $this->external_object = \Chamilo\Core\Repository\External\DataConnector :: get_instance(
+            $this->external_object = \Chamilo\Core\Repository\External\DataConnector :: getInstance(
                 $this->get_external())->retrieve_external_object($this);
         }
         return $this->external_object;

@@ -58,7 +58,7 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
             $html[] = $this->upgrade_successfull();
         }
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Lynx', true) . 'LynxProcess.js');
 
         $html[] = Display :: footer($this);

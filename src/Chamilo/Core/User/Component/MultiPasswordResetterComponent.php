@@ -67,7 +67,7 @@ class MultiPasswordResetterComponent extends Manager
 
                     $mail = new Mail($mail_subject, $mail_body, $user->get_email());
 
-                    $mailerFactory = new MailerFactory(Configuration::get_instance());
+                    $mailerFactory = new MailerFactory(Configuration::getInstance());
                     $mailer = $mailerFactory->getActiveMailer();
 
                     try

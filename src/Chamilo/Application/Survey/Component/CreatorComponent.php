@@ -24,7 +24,7 @@ class CreatorComponent extends TabComponent
 
     public function build()
     {
-        // if (! Rights :: get_instance()->publication_is_allowed())
+        // if (! Rights :: getInstance()->publication_is_allowed())
         // {
         // throw new NotAllowedException();
         // }

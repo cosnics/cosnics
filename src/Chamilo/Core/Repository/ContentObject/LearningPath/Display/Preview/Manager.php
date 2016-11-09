@@ -168,6 +168,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
      */
     public function reset()
     {
-        return PreviewStorage :: get_instance()->reset();
+        return PreviewStorage :: getInstance()->reset();
     }
 }

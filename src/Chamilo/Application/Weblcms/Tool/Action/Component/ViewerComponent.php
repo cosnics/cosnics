@@ -67,7 +67,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         $object = $this->publication->get_content_object();
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
                 Translation :: get('ToolViewerComponent', array('TITLE' => $object->get_title()))));
@@ -76,7 +76,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         $renderer = new ContentObjectPublicationDetailsRenderer($this);
         $this->html = $renderer->as_html();
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $this->feedback_allowed = $course_settings_controller->get_course_setting(
             $this->get_course(),
             CourseSettingsConnector :: ALLOW_FEEDBACK);

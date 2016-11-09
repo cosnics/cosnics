@@ -28,7 +28,7 @@ class ComparerComponent extends Manager
      */
     public function run()
     {
-        // $trail = BreadcrumbTrail :: get_instance();
+        // $trail = BreadcrumbTrail :: getInstance();
         $object_ids = $this->getRequest()->get(self :: PARAM_CONTENT_OBJECT_ID);
 
         if ($object_ids)

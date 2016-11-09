@@ -32,7 +32,7 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
      */
     public function get_allowed_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Portfolio', 
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();

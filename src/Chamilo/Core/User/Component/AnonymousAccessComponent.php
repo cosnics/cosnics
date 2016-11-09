@@ -82,7 +82,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
      */
     protected function validateCaptcha($captchaResponseValue)
     {
-        $recaptchaSecretKey = Configuration::get_instance()->get_setting(
+        $recaptchaSecretKey = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'recaptcha_secret_key')
         );
 
@@ -146,7 +146,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         )
         {
             $parameters = array(
-                self::PARAM_CONTEXT => Configuration::get_instance()->get_setting(
+                self::PARAM_CONTEXT => Configuration::getInstance()->get_setting(
                     array('Chamilo\Core\Admin', 'page_after_anonymous_access')
                 )
             );
@@ -174,7 +174,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             return false;
         }
 
-        $anonymousAuthentication = Configuration::get_instance()->get_setting(
+        $anonymousAuthentication = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'enableAnonymousAuthentication')
         );
 
@@ -183,7 +183,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
             return false;
         }
 
-        $allowedAnonymousAuthenticationUrl = Configuration::get_instance()->get_setting(
+        $allowedAnonymousAuthenticationUrl = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'anonymous_authentication_url')
         );
 

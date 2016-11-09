@@ -40,7 +40,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                 ContentObject :: class_name(), 
                 $selected_complex_content_object_item->get_ref());
             
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(
                         array(
@@ -62,7 +62,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     foreach ($forums_with_key_cloi as $key => $value)
                     {
                         
-                        BreadcrumbTrail :: get_instance()->add(
+                        BreadcrumbTrail :: getInstance()->add(
                             new Breadcrumb(
                                 $this->get_url(
                                     array(
@@ -76,7 +76,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     throw new \Exception('The forum you requested has not been found');
                 }
             }
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(), 
                     Translation :: get('SubforumEditor', array('SUBFORUM' => $forum_object->get_title()))));

@@ -24,7 +24,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
      */
     function run()
     {
-        if (! Rights :: get_instance()->publication_is_allowed())
+        if (! Rights :: getInstance()->publication_is_allowed())
         {
             throw new NotAllowedException();
         }

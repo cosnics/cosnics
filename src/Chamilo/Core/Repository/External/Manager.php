@@ -88,7 +88,7 @@ abstract class Manager extends Application implements NoContextComponent
         {
             $this->set_parameter(self :: PARAM_ACTION, $external_repository_manager_action);
         }
-        BreadcrumbTrail :: get_instance()->add(new Breadcrumb(null, $this->external_repository->get_title()));
+        BreadcrumbTrail :: getInstance()->add(new Breadcrumb(null, $this->external_repository->get_title()));
 
         $this->set_optional_parameters();
         if ($this->validate_settings($this->external_repository))
@@ -121,7 +121,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function get_external_repository_manager_connector()
     {
-        return DataConnector :: get_instance($this->get_external_repository());
+        return DataConnector :: getInstance($this->get_external_repository());
     }
 
     public function set_optional_parameters()

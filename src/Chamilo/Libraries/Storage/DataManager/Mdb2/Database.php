@@ -71,7 +71,7 @@ class Database
      */
     public function __construct($aliases = array())
     {
-        $this->connection = Connection :: get_instance()->get_connection();
+        $this->connection = Connection :: getInstance()->get_connection();
         $this->connection->setOption('debug_handler', array(get_class($this), 'debug'));
 
         $initializer = 'initialize_' . $this->connection->phptype;
@@ -208,7 +208,7 @@ class Database
                     $index_info['primary'] = 1;
                     $primary_result = $manager->createConstraint(
                         $name,
-                        StorageAliasGenerator :: get_instance()->get_constraint_name(
+                        StorageAliasGenerator :: getInstance()->get_constraint_name(
                             $name,
                             $index_name,
                             StorageAliasGenerator :: TYPE_CONSTRAINT),
@@ -224,7 +224,7 @@ class Database
                     $index_info['unique'] = 1;
                     $unique_result = $manager->createConstraint(
                         $name,
-                        StorageAliasGenerator :: get_instance()->get_constraint_name(
+                        StorageAliasGenerator :: getInstance()->get_constraint_name(
                             $name,
                             $index_name,
                             StorageAliasGenerator :: TYPE_CONSTRAINT),
@@ -239,7 +239,7 @@ class Database
                 {
                     $index_result = $manager->createIndex(
                         $name,
-                        StorageAliasGenerator :: get_instance()->get_constraint_name(
+                        StorageAliasGenerator :: getInstance()->get_constraint_name(
                             $name,
                             $index_name,
                             StorageAliasGenerator :: TYPE_CONSTRAINT),
@@ -1112,7 +1112,7 @@ class Database
      */
     public function get_alias($table_name)
     {
-        return StorageAliasGenerator :: get_instance()->get_table_alias($table_name);
+        return StorageAliasGenerator :: getInstance()->get_table_alias($table_name);
     }
 
     public function get_constraint_name($name)
@@ -1129,7 +1129,7 @@ class Database
 
     public static function quote($value, $type = null, $quote = true, $escape_wildcards = false)
     {
-        return Connection :: get_instance()->get_connection()->quote($value, $type, $quote, $escape_wildcards);
+        return Connection :: getInstance()->get_connection()->quote($value, $type, $quote, $escape_wildcards);
     }
 
     public function escape($text, $escape_wildcards = false)

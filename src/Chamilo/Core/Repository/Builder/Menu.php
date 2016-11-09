@@ -213,7 +213,7 @@ class Menu extends HtmlMenu
         $this->render($this->array_renderer, 'urhere');
         $breadcrumbs = $this->array_renderer->toArray();
         array_shift($breadcrumbs);
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
         foreach ($breadcrumbs as $crumb)
         {
             $trail->add(new Breadcrumb($crumb['url'], $crumb['title']));

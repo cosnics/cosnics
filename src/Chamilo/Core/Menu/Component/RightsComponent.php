@@ -28,12 +28,12 @@ class RightsComponent extends Manager implements DelegateComponent
         $this->set_parameter(self :: PARAM_ITEM, $item_id);
         if (! $item_id)
         {
-            $location = array(Rights :: get_instance()->get_root(self :: package()));
+            $location = array(Rights :: getInstance()->get_root(self :: package()));
         }
         else
         {
             $location = array(
-                Rights :: get_instance()->get_location_by_identifier(self :: package(), Rights :: TYPE_ITEM, $item_id));
+                Rights :: getInstance()->get_location_by_identifier(self :: package(), Rights :: TYPE_ITEM, $item_id));
         }
 
         $entities = array();
@@ -54,6 +54,6 @@ class RightsComponent extends Manager implements DelegateComponent
 
     public function get_available_rights($location)
     {
-        return Rights :: get_instance()->get_available_rights();
+        return Rights :: getInstance()->get_available_rights();
     }
 }

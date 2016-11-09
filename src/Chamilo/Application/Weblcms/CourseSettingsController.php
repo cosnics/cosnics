@@ -95,7 +95,7 @@ class CourseSettingsController
      *
      * @return CourseSettingsController
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! self :: $instance)
         {

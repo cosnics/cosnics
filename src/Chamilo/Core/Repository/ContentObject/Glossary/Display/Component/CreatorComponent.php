@@ -30,7 +30,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
 
         if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
         {
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(
                         array(

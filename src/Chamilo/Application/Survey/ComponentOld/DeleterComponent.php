@@ -31,7 +31,7 @@ class DeleterComponent extends Manager
                 
                 $survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $id);
                 
-                if (! Rights :: get_instance()->is_right_granted(
+                if (! Rights :: getInstance()->is_right_granted(
                     Rights :: RIGHT_DELETE,
                     $survey_publication->getId()))
                 {

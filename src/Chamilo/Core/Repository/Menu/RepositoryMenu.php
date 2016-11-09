@@ -113,7 +113,7 @@ class RepositoryMenu
 
                                 \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_WORKSPACE,
                                 \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_PUBLISH,
-                                FilterData :: FILTER_CATEGORY => FilterData::get_instance($repositoryManager->getWorkspace())->get_category()
+                                FilterData :: FILTER_CATEGORY => FilterData::getInstance($repositoryManager->getWorkspace())->get_category()
                             )
                         ),
                         Button :: DISPLAY_ICON_AND_LABEL
@@ -192,7 +192,7 @@ class RepositoryMenu
      */
     public function getImportTypes()
     {
-        $registrations = Configuration:: get_instance()->get_registrations_by_type(
+        $registrations = Configuration:: getInstance()->get_registrations_by_type(
             'Chamilo\Core\Repository\ContentObject'
         );
 

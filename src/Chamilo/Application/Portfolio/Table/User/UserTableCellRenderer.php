@@ -156,7 +156,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
         $location->set_parent_id(null);
 
         $is_publisher = $this->get_table()->get_component()->get_user_id() == $result->get_id();
-        $has_right = Rights:: get_instance()->is_allowed(
+        $has_right = Rights:: getInstance()->is_allowed(
             Rights :: VIEW_RIGHT,
             $location,
             $this->get_table()->get_component()->get_user_id()

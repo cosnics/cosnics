@@ -50,7 +50,7 @@ class BreadcrumbTrail
      *
      * @return BreadcrumbTrail
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (self :: $instance == null)
         {

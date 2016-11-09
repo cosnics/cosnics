@@ -75,7 +75,7 @@ class MailJobManager
                 $publication_mail->get_reply_address()
             );
 
-            $mailerFactory = new MailerFactory(Configuration::get_instance());
+            $mailerFactory = new MailerFactory(Configuration::getInstance());
             $mailer = $mailerFactory->getActiveMailer();
 
             $user_publication_ids[$publication_mail->get_sender_user_id()][] = $publication_mail->get_publication_id();
@@ -155,7 +155,7 @@ class MailJobManager
             Translation:: get('MailHeader'), $message, $to_email, true, array(), array(), $name, $email, $name, $email
         );
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

@@ -98,7 +98,7 @@ class Basic extends Html
 
                 $context_parameters = $this->get_context()->get_parameters();
 
-                $trail = BreadcrumbTrail:: get_instance();
+                $trail = BreadcrumbTrail:: getInstance();
 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {

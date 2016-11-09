@@ -44,7 +44,7 @@ class StatisticsViewerComponent extends Manager
 
     public function run()
     {
-        $trail = BreadcrumbTrail:: get_instance();
+        $trail = BreadcrumbTrail:: getInstance();
 
         $pid = Request:: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
 
@@ -159,7 +159,7 @@ class StatisticsViewerComponent extends Manager
 
                     if (!$this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
                     {
-                        $breadcrumb_trail = BreadcrumbTrail:: get_instance();
+                        $breadcrumb_trail = BreadcrumbTrail:: getInstance();
                         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
 
                         $params = array();
@@ -177,7 +177,7 @@ class StatisticsViewerComponent extends Manager
                     }
                     else
                     {
-                        $breadcrumb_trail = BreadcrumbTrail:: get_instance();
+                        $breadcrumb_trail = BreadcrumbTrail:: getInstance();
                         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
 
                         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(

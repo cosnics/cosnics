@@ -73,7 +73,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $course = $parent->get_course();
         $this->course = $course;
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
             $this->course,
             CourseSettingsConnector :: TOOL_LAYOUT);
@@ -89,7 +89,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         $tools = array();
         $html = array();
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
             $this->course,
             CourseSettingsConnector :: TOOL_LAYOUT);
@@ -278,7 +278,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
      */
     protected function get_course_section_for_tool(CourseTool $tool, $section_types_map)
     {
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
             $this->course,
             CourseSettingsConnector :: TOOL_LAYOUT);
@@ -498,7 +498,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $html = array();
 
-        $course_settings_controller = CourseSettingsController :: get_instance();
+        $course_settings_controller = CourseSettingsController :: getInstance();
 
         $html[] = '<div class="row">';
 

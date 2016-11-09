@@ -344,7 +344,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function add_admin_breadcrumb()
     {
-        $breadcrumb_trail = BreadcrumbTrail :: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail :: getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
         
         $redirect = new Redirect(array(Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context()));

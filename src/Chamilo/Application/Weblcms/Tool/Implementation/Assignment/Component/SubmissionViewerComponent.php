@@ -1046,7 +1046,7 @@ class SubmissionViewerComponent extends SubmissionsManager
      */
     private function change_last_breadcrumb()
     {
-        $breadcrumb_trail = BreadcrumbTrail:: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail:: getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
 
         $title = $this->submission ? $this->submission->get_title() : Translation:: get('UnknownContentObject');

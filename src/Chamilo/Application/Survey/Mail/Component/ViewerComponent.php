@@ -54,7 +54,7 @@ class ViewerComponent extends Manager implements TableSupport
         $this->mail_id = Request :: get(Manager :: PARAM_PUBLICATION_MAIL_ID);
         $this->selected_tab = Request :: get(DynamicTabsRenderer :: PARAM_SELECTED_TAB);
         
-        // if (! Rights :: get_instance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
+        // if (! Rights :: getInstance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
         // {
         // throw new NotAllowedException();
         // }

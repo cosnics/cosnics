@@ -50,7 +50,7 @@ class QuestionSelecterComponent extends Manager
 
         if (count($question_ids) == 0)
         {
-            $trail = BreadcrumbTrail :: get_instance();
+            $trail = BreadcrumbTrail :: getInstance();
             $trail->add(
                 new Breadcrumb(
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)),

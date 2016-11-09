@@ -26,7 +26,7 @@ class PreviewStorage
      *
      * @return \core\repository\content_object\assessment\display\PreviewStorage
      */
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {
@@ -41,7 +41,7 @@ class PreviewStorage
     public function __construct()
     {
         $storage = $this->get_storage();
-        
+
         if (! isset($storage))
         {
             $this->set_storage(array());
@@ -50,7 +50,7 @@ class PreviewStorage
 
     /**
      * Empty the storage
-     * 
+     *
      * @param int $content_object_id
      * @return boolean
      */
@@ -63,11 +63,11 @@ class PreviewStorage
         else
         {
             $attempt = $this->retrieve_assessment_attempt($content_object_id);
-            
+
             if ($attempt instanceof AbstractAttempt)
             {
                 $question_attempts = $this->retrieve_assessment_question_attempts($attempt);
-                
+
                 foreach ($question_attempts as $question_attempt)
                 {
                     if (! $question_attempt->delete())
@@ -75,7 +75,7 @@ class PreviewStorage
                         return false;
                     }
                 }
-                
+
                 return $attempt->delete();
             }
             else

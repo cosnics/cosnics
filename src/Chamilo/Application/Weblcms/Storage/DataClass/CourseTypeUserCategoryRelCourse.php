@@ -86,7 +86,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
     public function update()
     {
         $this->notify(DataClassListener :: BEFORE_UPDATE);
-        $success = DataManager :: get_instance()->update($this, $this->get_primary_key_conditions());
+        $success = DataManager :: getInstance()->update($this, $this->get_primary_key_conditions());
         $this->notify(DataClassListener :: AFTER_UPDATE, array($success));
 
         return $success;

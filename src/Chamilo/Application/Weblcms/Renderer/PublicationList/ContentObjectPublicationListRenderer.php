@@ -163,7 +163,7 @@ abstract class ContentObjectPublicationListRenderer
     {
         try
         {
-            $target_entities = WeblcmsRights:: get_instance()->get_target_entities(
+            $target_entities = WeblcmsRights:: getInstance()->get_target_entities(
                 WeblcmsRights :: VIEW_RIGHT,
                 Manager:: context(),
                 $publication[ContentObjectPublication :: PROPERTY_ID],
@@ -178,7 +178,7 @@ abstract class ContentObjectPublicationListRenderer
             $target_entities = array();
         }
 
-        return WeblcmsRights:: get_instance()->render_target_entities_as_string($target_entities);
+        return WeblcmsRights:: getInstance()->render_target_entities_as_string($target_entities);
     }
 
     /**

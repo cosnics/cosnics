@@ -196,7 +196,7 @@ class CourseListComponent extends Manager implements DelegateComponent
     {
         $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
 
-        $courseManagementRights = CourseManagementRights:: get_instance();
+        $courseManagementRights = CourseManagementRights:: getInstance();
 
         $countDirect = $countRequest = 0;
 
@@ -261,7 +261,7 @@ class CourseListComponent extends Manager implements DelegateComponent
             );
         }
 
-        if (\Chamilo\Application\Weblcms\Request\Rights\Rights:: get_instance()->request_is_allowed())
+        if (\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->request_is_allowed())
         {
             $buttonGroup->addButton(
                 new Button(

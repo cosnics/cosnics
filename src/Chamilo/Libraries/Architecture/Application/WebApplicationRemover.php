@@ -24,7 +24,7 @@ class WebApplicationRemover extends \Chamilo\Configuration\Package\Action\Remove
     {
         $context = $this->context();
 
-        if (! \Chamilo\Configuration\Configuration :: get_instance()->isRegisteredAndActive('Chamilo\Core\Menu'))
+        if (! \Chamilo\Configuration\Configuration :: getInstance()->isRegisteredAndActive('Chamilo\Core\Menu'))
         {
             return true;
         }

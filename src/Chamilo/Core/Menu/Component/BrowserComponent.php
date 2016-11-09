@@ -109,7 +109,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
                             self :: PARAM_TYPE => LinkItem :: class_name())), 
                     ToolbarItem :: DISPLAY_ICON_AND_LABEL));
             
-            $setting = Configuration :: get_instance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+            $setting = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
             
             if ($setting == 1)
             {

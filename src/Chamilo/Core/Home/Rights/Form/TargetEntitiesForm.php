@@ -45,8 +45,8 @@ abstract class TargetEntitiesForm extends FormValidator
         $this->formName = $formName;
 
         $this->entities = array(
-            UserEntity::ENTITY_TYPE => UserEntity::get_instance(),
-            PlatformGroupEntity::ENTITY_TYPE => PlatformGroupEntity::get_instance());
+            UserEntity::ENTITY_TYPE => UserEntity::getInstance(),
+            PlatformGroupEntity::ENTITY_TYPE => PlatformGroupEntity::getInstance());
 
         $this->buildForm();
         $this->setDefaults();

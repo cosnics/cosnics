@@ -74,7 +74,7 @@ class CalendarPopupComponent extends \Chamilo\Libraries\Ajax\Manager implements 
 
         $html[] = $this->render_header();
 
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js');
 
         $html[] = '<script type="text/javascript">';

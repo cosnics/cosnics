@@ -104,7 +104,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
         $content_object_type_image = 'Logo/template/' . $template_registration->get_name() . '/16';
 
-        BreadcrumbTrail::get_instance()->add(
+        BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 $this->get_url(),
                 Translation::get(
@@ -148,7 +148,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             ContentObject::class_name(),
             $content_object_id);
 
-        BreadcrumbTrail::get_instance()->add(
+        BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null,
                 Translation::get(

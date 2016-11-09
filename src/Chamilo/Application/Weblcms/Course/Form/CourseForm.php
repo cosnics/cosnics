@@ -58,7 +58,7 @@ class CourseForm extends CommonCourseForm
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Application\Weblcms\Course', true) . 'CourseForm.js'));
     }
 
@@ -76,7 +76,7 @@ class CourseForm extends CommonCourseForm
             $course_type_options[0] = Translation :: get('NoCourseType');
         }
 
-        $course_management_rights = CourseManagementRights :: get_instance();
+        $course_management_rights = CourseManagementRights :: getInstance();
 
         $course_types = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
         while ($course_type = $course_types->next_result())
@@ -175,7 +175,7 @@ class CourseForm extends CommonCourseForm
      */
     private function validate_element_change($element, $right_id)
     {
-        $course_management_rights = CourseManagementRights :: get_instance();
+        $course_management_rights = CourseManagementRights :: getInstance();
 
         if (! $course_management_rights->is_allowed($right_id, $this->get_base_object()->get_id()))
         {

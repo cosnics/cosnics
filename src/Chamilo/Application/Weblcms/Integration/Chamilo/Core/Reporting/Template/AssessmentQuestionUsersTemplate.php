@@ -74,7 +74,7 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
             ComplexContentObjectItem :: class_name(),
             $this->question_id);
 
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         $trail->add(
             new Breadcrumb(

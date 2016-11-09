@@ -43,7 +43,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      * @param $instance_id int
      * @return DataConnector:
      */
-    // static function get_instance($instance_id)
+    // static function getInstance($instance_id)
     // {
     // if (! isset(self :: $instance[$instance_id]))
     // {

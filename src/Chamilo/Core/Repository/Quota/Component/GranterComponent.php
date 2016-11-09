@@ -18,7 +18,7 @@ class GranterComponent extends Manager
 
     public function run()
     {
-        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->quota_is_allowed())
+        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed())
         {
             throw new NotAllowedException();
         }
@@ -37,7 +37,7 @@ class GranterComponent extends Manager
             {
                 $request = DataManager :: retrieve_by_id(Request :: class_name(), (int) $id);
 
-                if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: get_instance()->is_target_user(
+                if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->is_target_user(
                     $this->get_user(),
                     $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
                 {
@@ -143,20 +143,20 @@ class GranterComponent extends Manager
         $title = Translation :: get(
             'RequestGrantedMailTitle',
             array(
-                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
+                'PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'ADDED_QUOTA' => Filesystem :: format_file_size($request->get_quota())));
 
         $body = Translation :: get(
             'RequestGrantedMailBody',
             array(
                 'USER' => $recipient->get_fullname(),
-                'PLATFORM' => Configuration :: get_instance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
+                'PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
                 'ADDED_QUOTA' => Filesystem :: format_file_size($request->get_quota()),
                 'QUOTA' => Filesystem :: format_file_size($calculator->getMaximumUserDiskQuota())));
 
         $mail = new Mail($title, $body, $recipient->get_email());
 
-        $mailerFactory = new MailerFactory(Configuration::get_instance());
+        $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
 
         try

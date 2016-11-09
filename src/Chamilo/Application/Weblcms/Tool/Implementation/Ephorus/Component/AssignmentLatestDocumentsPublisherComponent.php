@@ -46,7 +46,7 @@ class AssignmentLatestDocumentsPublisherComponent extends Manager
                 AssignmentSubmission :: PROPERTY_PUBLICATION_ID),
             new StaticConditionVariable($this->get_publication_id()));
 
-        $doctrineExtension = new DoctrineExtension(DataManager :: get_instance());
+        $doctrineExtension = new DoctrineExtension(DataManager :: getInstance());
         $trackers = $doctrineExtension->retrieve_results_by_assignment(new DataClassRetrievesParameters($condition));
 
         $ids = array();

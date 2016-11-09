@@ -27,6 +27,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new EqualityCondition(
             new PropertyConditionVariable(RemotePackage :: class_name(), RemotePackage :: PROPERTY_CONTEXT), 
             new StaticConditionVariable($context));
-        return self :: get_instance()->retrieve_remote_packages($condition)->next_result();
+        return self :: getInstance()->retrieve_remote_packages($condition)->next_result();
     }
 }

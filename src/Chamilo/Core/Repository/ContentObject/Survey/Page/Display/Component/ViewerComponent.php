@@ -20,7 +20,7 @@ class ViewerComponent extends TabComponent
         
         $html[] = $this->get_hidden_fields();
         $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(__NAMESPACE__, 1);
-        $html[] = ResourceManager :: get_instance()->get_resource_html(
+        $html[] = ResourceManager :: getInstance()->get_resource_html(
             Path :: getInstance()->getJavascriptPath($namespace, true) . 'PageDisplay.js');
         $html[] = $this->render_footer();
         

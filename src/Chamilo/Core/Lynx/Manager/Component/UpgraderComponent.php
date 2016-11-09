@@ -24,7 +24,7 @@ class UpgraderComponent extends Manager implements DelegateComponent
         $upgrader = new PackageUpgrader($context);
         $upgrader->run();
 
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb(
                 null,
                 Translation :: get(

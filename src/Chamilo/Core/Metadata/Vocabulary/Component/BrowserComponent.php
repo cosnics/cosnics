@@ -81,7 +81,7 @@ class BrowserComponent extends Manager implements TableSupport
             $breadcrumbTitle = Translation :: get('ValueTypePredefined', null, 'Chamilo\Core\Metadata\Element');
         }
         
-        BreadcrumbTrail :: get_instance()->add(
+        BreadcrumbTrail :: getInstance()->add(
             new Breadcrumb($this->get_url(array(Manager :: PARAM_USER_ID => $userId)), $breadcrumbTitle));
         
         $html = array();

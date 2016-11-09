@@ -10,7 +10,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static $instance;
 
-    public static function get_instance()
+    public static function getInstance()
     {
         if (! isset(self :: $instance))
         {

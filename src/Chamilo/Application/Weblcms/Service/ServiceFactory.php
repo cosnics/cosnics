@@ -91,7 +91,7 @@ class ServiceFactory
     {
         if (!isset($this->services[self::SERVICE_RIGHTS]))
         {
-            $rightsService = new RightsService(WeblcmsRights::get_instance(), $this->getCourseSettingsService());
+            $rightsService = new RightsService(WeblcmsRights::getInstance(), $this->getCourseSettingsService());
             $this->services[self::SERVICE_RIGHTS] = $rightsService;
 
             $rightsService->setCourseService($this->getCourseService());
@@ -129,7 +129,7 @@ class ServiceFactory
     {
         if (!isset($this->services[self::SERVICE_COURSE_SETTINGS]))
         {
-            $courseSettingsService = new CourseSettingsService(CourseSettingsController::get_instance());
+            $courseSettingsService = new CourseSettingsService(CourseSettingsController::getInstance());
             $this->services[self::SERVICE_COURSE_SETTINGS] = $courseSettingsService;
         }
 

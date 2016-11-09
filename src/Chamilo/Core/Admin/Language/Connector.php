@@ -18,7 +18,7 @@ class SettingsConnector
 
     public static function get_languages()
     {
-        return \Chamilo\Configuration\Configuration :: get_instance()->getLanguages();
+        return \Chamilo\Configuration\Configuration :: getInstance()->getLanguages();
     }
 
     public static function get_themes()

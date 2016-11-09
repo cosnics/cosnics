@@ -193,7 +193,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
      */
     protected function add_assessment_title_breadcrumb($assessment)
     {
-        $breadcrumb_trail = BreadcrumbTrail:: get_instance();
+        $breadcrumb_trail = BreadcrumbTrail:: getInstance();
         $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
 
         $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(

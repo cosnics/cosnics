@@ -31,7 +31,7 @@ class Matterhorn extends ContentObject implements Versionable, Includeable
     {
         if (! isset($this->matterhorn_media_package))
         {
-            $this->matterhorn_media_package = DataManager :: get_instance()->retrieve_media_package_by_object_id(
+            $this->matterhorn_media_package = DataManager :: getInstance()->retrieve_media_package_by_object_id(
                 $this->get_id());
         }
         return $this->matterhorn_media_package;

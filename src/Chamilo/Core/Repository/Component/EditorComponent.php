@@ -58,7 +58,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
             $content_object_type_image = 'Logo/Template/' . $template_registration->get_name() . '/16';
 
-            BreadcrumbTrail :: get_instance()->add(
+            BreadcrumbTrail :: getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
                     Translation :: get('EditContentObject', array('CONTENT_OBJECT' => $object->get_title()))));

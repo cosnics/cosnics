@@ -171,7 +171,7 @@ class ForumPostForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'CollapseHorizontal.js'));
         $this->addElement(
             'category',
@@ -182,7 +182,7 @@ class ForumPostForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager:: get_instance()->get_resource_html(
+            ResourceManager:: getInstance()->get_resource_html(
                 Path:: getInstance()->getJavascriptPath(\Chamilo\Core\Repository\Manager:: context(), true) .
                 'Plugin/jquery.file.upload.import.js'
             )
@@ -261,7 +261,7 @@ class ForumPostForm extends FormValidator
 
         $this->addElement(
             'html',
-            ResourceManager :: get_instance()->get_resource_html(
+            ResourceManager :: getInstance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) . 'ContentObjectFormUpload.js'));
     }
 }

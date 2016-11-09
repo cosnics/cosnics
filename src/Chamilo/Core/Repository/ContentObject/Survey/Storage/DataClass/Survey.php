@@ -78,7 +78,7 @@ class Survey extends \Chamilo\Core\Repository\Storage\DataClass\ContentObject im
 
     function get_allowed_types()
     {
-        $registrations = Configuration :: get_instance()->getIntegrationRegistrations(
+        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Survey', 
             \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
         $types = array();

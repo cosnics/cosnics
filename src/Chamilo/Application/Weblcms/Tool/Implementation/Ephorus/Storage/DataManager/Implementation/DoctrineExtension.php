@@ -116,9 +116,9 @@ class DoctrineExtension
 
     private function create_by_assignment_base_query($condition)
     {
-        $rdm = \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
-        $udm = \Chamilo\Core\User\Storage\DataManager :: get_instance();
-        $tdm = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager :: get_instance();
+        $rdm = \Chamilo\Core\Repository\Storage\DataManager :: getInstance();
+        $udm = \Chamilo\Core\User\Storage\DataManager :: getInstance();
+        $tdm = \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager :: getInstance();
 
         // ephorus_request (application\weblcms\tool\ephorus\Request)
         $er_table = Request :: get_table_name();
@@ -158,8 +158,8 @@ class DoctrineExtension
 
     private function create_by_params_base_query($condition)
     {
-        $rdm = \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
-        $udm = \Chamilo\Core\User\Storage\DataManager :: get_instance();
+        $rdm = \Chamilo\Core\Repository\Storage\DataManager :: getInstance();
+        $udm = \Chamilo\Core\User\Storage\DataManager :: getInstance();
 
         // ephorus_request (application\weblcms\tool\ephorus\Request)
         $er_table = Request :: get_table_name();
@@ -268,8 +268,8 @@ class DoctrineExtension
          * @var \libraries\Mdb2Database $rdm
          * @var \libraries\storage\DoctrineDatabase $udm
          */
-        $rdm = \Chamilo\Core\Repository\Storage\DataManager :: get_instance();
-        $udm = \Chamilo\Core\User\Storage\DataManager :: get_instance();
+        $rdm = \Chamilo\Core\Repository\Storage\DataManager :: getInstance();
+        $udm = \Chamilo\Core\User\Storage\DataManager :: getInstance();
 
         // Dynamic variable constants (requires the following variables for each table 'x': x_ref = 'x', x_table,
         // x_alias).

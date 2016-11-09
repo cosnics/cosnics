@@ -29,7 +29,7 @@ class PrerequisitesBuilderComponent extends TabComponent
         $complex_content_object_item = $this->get_current_complex_content_object_item();
 
         $menu_trail = $this->get_complex_content_object_breadcrumbs();
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         $trail->add(new Breadcrumb($this->get_url(), Translation :: get('BuildPrerequisites')));
 

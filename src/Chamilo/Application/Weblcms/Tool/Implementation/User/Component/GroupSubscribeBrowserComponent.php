@@ -266,7 +266,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     {
         $buttonToolbar = new ButtonToolBar();
 
-        $courseManagementRights = CourseManagementRights::get_instance();
+        $courseManagementRights = CourseManagementRights::getInstance();
 
         $isAllowed = $courseManagementRights->is_allowed_for_platform_group(
             CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,

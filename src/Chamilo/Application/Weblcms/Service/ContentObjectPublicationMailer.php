@@ -260,7 +260,7 @@ class ContentObjectPublicationMailer
      */
     protected function logMailProgress($logMessage)
     {
-        if (Configuration::get_instance()->get_setting(array('Chamilo\Application\Weblcms', 'log_mails')))
+        if (Configuration::getInstance()->get_setting(array('Chamilo\Application\Weblcms', 'log_mails')))
         {
             $dir = Path::getInstance()->getLogPath() . 'mail';
 

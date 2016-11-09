@@ -23,7 +23,7 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $trail = BreadcrumbTrail :: get_instance();
+        $trail = BreadcrumbTrail :: getInstance();
 
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
