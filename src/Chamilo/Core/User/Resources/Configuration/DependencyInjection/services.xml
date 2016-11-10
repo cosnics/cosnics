@@ -48,5 +48,36 @@
             class="Chamilo\Core\User\Storage\Repository\UserRepository">
         </service>
 
+        <service
+            id="chamilo.core.user.service.session_handler"
+            class="Chamilo\Core\User\Service\SessionHandler">
+            <factory
+                service="chamilo.core.user.factory.session_handler_factory"
+                method="getSessionHandler" />
+        </service>
+
+        <service
+            id="chamilo.core.user.storage.repository.session_repository"
+            class="Chamilo\Core\User\Storage\Repository\SessionRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.cache.data_class_repository_cache" />
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+
+        <service
+            id="chamilo.core.user.factory.session_handler_factory"
+            class="Chamilo\Core\User\Factory\SessionHandlerFactory">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.file_configuration_locator" />
+            <argument>%chamilo.configuration.session.session_handler%</argument>
+            <argument
+                type="service"
+                id="chamilo.core.user.storage.repository.session_repository" />
+        </service>
+
     </services>
 </container>
