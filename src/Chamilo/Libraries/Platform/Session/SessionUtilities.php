@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Platform\Session;
 
 use Chamilo\Configuration\Service\FileConfigurationLocator;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
+use Chamilo\Core\User\Service\SessionHandler;
 
 /**
  *
@@ -21,13 +21,7 @@ class SessionUtilities
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    private $connectionFactory;
-
-    /**
-     *
-     * @var string
+     * @var \Chamilo\Core\User\Service\SessionHandler|NULL
      */
     private $sessionHandler;
 
@@ -37,11 +31,16 @@ class SessionUtilities
      */
     private $securityKey;
 
-    public function __construct(FileConfigurationLocator $fileConfigurationLocator, ConnectionFactory $connectionFactory,
-        $sessionHandler, $securityKey = null)
+    /**
+     *
+     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
+     * @param \Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
+     * @param string $securityKey
+     */
+    public function __construct(FileConfigurationLocator $fileConfigurationLocator,
+        SessionHandler $sessionHandler = null, $securityKey = null)
     {
         $this->fileConfigurationLocator = $fileConfigurationLocator;
-        $this->connectionFactory = $connectionFactory;
         $this->sessionHandler = $sessionHandler;
         $this->securityKey = $securityKey;
     }
@@ -66,25 +65,7 @@ class SessionUtilities
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory
-     */
-    public function getConnectionFactory()
-    {
-        return $this->connectionFactory;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory $connectionFactory
-     */
-    public function setConnectionFactory(ConnectionFactory $connectionFactory)
-    {
-        $this->connectionFactory = $connectionFactory;
-    }
-
-    /**
-     *
-     * @return string
+     * @return \Chamilo\Core\User\Service\SessionHandler|NULL
      */
     public function getSessionHandler()
     {
@@ -93,9 +74,9 @@ class SessionUtilities
 
     /**
      *
-     * @param string $sessionHandler
+     * @param Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
      */
-    public function setSessionHandler($sessionHandler)
+    public function setSessionHandler(SessionHandler $sessionHandler = null)
     {
         $this->sessionHandler = $sessionHandler;
     }
@@ -129,19 +110,15 @@ class SessionUtilities
         {
             try
             {
-                $this->getConnectionFactory()->getConnection();
-
-                if ($this->getSessionHandler() == 'chamilo')
+                if ($this->getSessionHandler() instanceof SessionHandler)
                 {
-                    $sessionHandler = new SessionHandler();
-
                     session_set_save_handler(
-                        array($sessionHandler, 'open'),
-                        array($sessionHandler, 'close'),
-                        array($sessionHandler, 'read'),
-                        array($sessionHandler, 'write'),
-                        array($sessionHandler, 'destroy'),
-                        array($sessionHandler, 'garbage'));
+                        array($this->getSessionHandler(), 'open'),
+                        array($this->getSessionHandler(), 'close'),
+                        array($this->getSessionHandler(), 'read'),
+                        array($this->getSessionHandler(), 'write'),
+                        array($this->getSessionHandler(), 'destroy'),
+                        array($this->getSessionHandler(), 'garbage'));
                 }
 
                 $sessionKey = $this->getSecurityKey();

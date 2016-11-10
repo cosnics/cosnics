@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
 use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\Exception\ConnectionException;
 
 /**
  *
@@ -35,7 +36,7 @@ class Connection
     {
         if (is_null($connection))
         {
-            $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName :: get_from_config('Doctrine');
+            $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName::get_from_config('Doctrine');
             $configuration = new \Doctrine\DBAL\Configuration();
             $connection_parameters = array(
                 'dbname' => $data_source_name->get_database(),
@@ -44,7 +45,7 @@ class Connection
                 'host' => $data_source_name->get_host(),
                 'driverClass' => $data_source_name->get_driver(true),
                 'charset' => 'UTF8');
-            $this->connection = DriverManager :: getConnection($connection_parameters, $configuration);
+            $this->connection = DriverManager::getConnection($connection_parameters, $configuration);
 
             try
             {
@@ -52,7 +53,8 @@ class Connection
             }
             catch (\Exception $ex)
             {
-                throw new \Exception('Could not connect to the database. Please contact your system administrator.');
+                throw new ConnectionException(
+                    'Could not connect to the database. Please contact your system administrator.');
             }
         }
         else
@@ -68,11 +70,11 @@ class Connection
      */
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -81,7 +83,7 @@ class Connection
      */
     public static function set_instance($connection)
     {
-        self :: $instance = new self($connection);
+        self::$instance = new self($connection);
     }
 
     /**

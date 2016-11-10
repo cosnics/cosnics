@@ -98,7 +98,6 @@ class DependencyInjectionContainerBuilder
         ContainerExtensionFinderInterface $containerExtensionFinder = null, $cacheFile = null, $cacheClass = 'ChamiloContainer')
     {
         $this->setBuilder($builder);
-        $this->setContainerExtensionFinder($containerExtensionFinder);
 
         if (is_null($cacheFile))
         {
@@ -152,15 +151,20 @@ class DependencyInjectionContainerBuilder
      */
     public function setContainerExtensionFinder(ContainerExtensionFinderInterface $containerExtensionFinder = null)
     {
-        if (is_null($containerExtensionFinder))
+        $this->containerExtensionFinder = $containerExtensionFinder;
+    }
+
+    public function getContainerExtensionFinder()
+    {
+        if (! isset($this->containerExtensionFinder))
         {
             $packageNamespaces = $this->getPackageNamespaces();
 
-            $containerExtensionFinder = new PackagesContainerExtensionFinder(
+            $this->containerExtensionFinder = new PackagesContainerExtensionFinder(
                 new PackagesClassFinder($this->getPathBuilder(), $packageNamespaces));
         }
 
-        $this->containerExtensionFinder = $containerExtensionFinder;
+        return $this->containerExtensionFinder;
     }
 
     /**
@@ -236,7 +240,7 @@ class DependencyInjectionContainerBuilder
      */
     protected function loadContainerExtensions(ContainerBuilder $container)
     {
-        $extensionClasses = $this->containerExtensionFinder->findContainerExtensions();
+        $extensionClasses = $this->getContainerExtensionFinder()->findContainerExtensions();
         $extensions = array();
 
         foreach ($extensionClasses as $extensionClass)

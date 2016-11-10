@@ -12,8 +12,7 @@
                 id="chamilo.configuration.service.file_configuration_locator" />
             <argument
                 type="service"
-                id="chamilo.libraries.storage.data_manager.doctrine.factory.connection_factory" />
-            <argument>%chamilo.configuration.session.session_handler%</argument>
+                id="chamilo.core.user.service.session_handler" />
             <argument>%chamilo.configuration.general.security_key%</argument>
         </service>
 
