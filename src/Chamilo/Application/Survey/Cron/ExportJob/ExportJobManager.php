@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Survey\Cron\ExportJob;
 
+use Chamilo\Application\Survey\Cron\Storage\DataManager;
 use Chamilo\Application\Survey\Storage\DataClass\Answer;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Matching\Storage\DataClass\Matching;
@@ -9,17 +10,15 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\St
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Open\Storage\DataClass\Open;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Rating\Storage\DataClass\Rating;
 use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\Select\Storage\DataClass\Select;
+use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Application\Survey\Cron\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
@@ -223,20 +222,22 @@ class ExportJobManager
 
     static function send_mail($user_id, $message, $export_template)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($user_id);
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user($user_id);
         $to_email = $user->get_email();
 
-        $name = PlatformSetting :: get('administrator_firstname', 'admin') . ' ' .
-             PlatformSetting :: get('administrator_surname', 'admin');
-        $email = PlatformSetting :: get('administrator_email', 'admin');
+        $configuration = Configuration::getInstance();
+
+        $name = $configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_firstname')) . ' ' .
+             $configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_surname'));
+        $email = $configuration->get_setting(array('Chamilo\Core\Admin', 'administrator_email'));
 
         if ($export_template)
         {
-            $header = Translation :: get('ExportHeader') . ' ' . $export_template->get_name();
+            $header = Translation::get('ExportHeader') . ' ' . $export_template->get_name();
         }
         else
         {
-            $header = Translation :: get('AnswerSynchronizationHeader');
+            $header = Translation::get('AnswerSynchronizationHeader');
         }
 
         $mail = new Mail($header, $message, $to_email, true, array(), array(), $name, $email, $name, $email);
@@ -247,11 +248,11 @@ class ExportJobManager
         try
         {
             $mailer->sendMail($mail);
-            
+
             echo 'Mail send to: ' . $name . ' ' . $email . "\n";
             echo '     Message: ' . $message . "\n";
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             echo 'Mail not send to: ' . $name . ' ' . $email . "\n";
             echo '     Message: ' . $message . "\n";
@@ -264,56 +265,56 @@ class ExportJobManager
 
         switch ($type)
         {
-            case self :: TYPE_DOCUMENT_NOT_AVAILABLE :
-                $message[] = Translation :: get("ExportDocumentNotAvailable");
-                $click_message = Translation :: get('ClickToGoToSurveyTool');
+            case self::TYPE_DOCUMENT_NOT_AVAILABLE :
+                $message[] = Translation::get("ExportDocumentNotAvailable");
+                $click_message = Translation::get('ClickToGoToSurveyTool');
                 $parameters = array();
-                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
-                $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_BROWSE;
+                $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager::package();
+                $parameters[\Chamilo\Application\Survey\Manager::PARAM_ACTION] = \Chamilo\Application\Survey\Manager::ACTION_BROWSE;
 
                 $redirect = new Redirect($parameters);
                 $url = $redirect->getUrl();
                 break;
-            case self :: TYPE_EXPORT_FINISHED :
-                $message[] = Translation :: get("ExportAvailable");
-                $click_message = Translation :: get('ClickTGoToExport');
+            case self::TYPE_EXPORT_FINISHED :
+                $message[] = Translation::get("ExportAvailable");
+                $click_message = Translation::get('ClickTGoToExport');
                 $parameters = array();
-                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager :: package();
-                $parameters[\Chamilo\Core\Repository\Manager :: PARAM_ACTION] = \Chamilo\Core\Repository\Manager :: ACTION_VIEW_CONTENT_OBJECTS;
-                $parameters[\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID] = $document_id;
+                $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager::package();
+                $parameters[\Chamilo\Core\Repository\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS;
+                $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $document_id;
 
                 $redirect = new Redirect($parameters);
                 $url = $redirect->getUrl();
                 break;
-            case self :: TYPE_EXPORT_NOT_FINISHED :
-                $message[] = Translation :: get("ExportNotAvailable");
-                $click_message = Translation :: get('ClickToGoToExportTool');
+            case self::TYPE_EXPORT_NOT_FINISHED :
+                $message[] = Translation::get("ExportNotAvailable");
+                $click_message = Translation::get('ClickToGoToExportTool');
                 $parameters = array();
-                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
-                $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_EXPORT;
-                $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $publication_id;
+                $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager::package();
+                $parameters[\Chamilo\Application\Survey\Manager::PARAM_ACTION] = \Chamilo\Application\Survey\Manager::ACTION_EXPORT;
+                $parameters[\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID] = $publication_id;
 
                 $redirect = new Redirect($parameters);
                 $url = $redirect->getUrl();
                 break;
-            case self :: TYPE_SYNCHRONIZATION_FINISHED :
-                $message[] = Translation :: get("AnswerSynchronizationFinished");
-                $click_message = Translation :: get('ClickToGoToExportTool');
+            case self::TYPE_SYNCHRONIZATION_FINISHED :
+                $message[] = Translation::get("AnswerSynchronizationFinished");
+                $click_message = Translation::get('ClickToGoToExportTool');
                 $parameters = array();
-                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
-                $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_EXPORT;
-                $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $publication_id;
+                $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager::package();
+                $parameters[\Chamilo\Application\Survey\Manager::PARAM_ACTION] = \Chamilo\Application\Survey\Manager::ACTION_EXPORT;
+                $parameters[\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID] = $publication_id;
 
                 $redirect = new Redirect($parameters);
                 $url = $redirect->getUrl();
                 break;
-            case self :: TYPE_SYNCHRONIZATION_NOT_FINISHED :
-                $message[] = Translation :: get("AnswerSynchronizationNotFinished");
-                $click_message = Translation :: get('ClickToGoToExportTool');
+            case self::TYPE_SYNCHRONIZATION_NOT_FINISHED :
+                $message[] = Translation::get("AnswerSynchronizationNotFinished");
+                $click_message = Translation::get('ClickToGoToExportTool');
                 $parameters = array();
-                $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager :: package();
-                $parameters[\Chamilo\Application\Survey\Manager :: PARAM_ACTION] = \Chamilo\Application\Survey\Manager :: ACTION_EXPORT;
-                $parameters[\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID] = $publication_id;
+                $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Survey\Manager::package();
+                $parameters[\Chamilo\Application\Survey\Manager::PARAM_ACTION] = \Chamilo\Application\Survey\Manager::ACTION_EXPORT;
+                $parameters[\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID] = $publication_id;
 
                 $redirect = new Redirect($parameters);
                 $url = $redirect->getUrl();
@@ -323,7 +324,7 @@ class ExportJobManager
         $message[] = '<br/><br/>';
         $message[] = '<a href=' . $url . '>' . $click_message . '</a>';
 
-        $message[] = '<br/><br/>' . Translation :: get('OrCopyAndPasteThisText') . ':';
+        $message[] = '<br/><br/>' . Translation::get('OrCopyAndPasteThisText') . ':';
         $message[] = '<br/><a href=' . $url . '>' . $url . '</a>';
         $message[] = '</p>';
 
@@ -333,20 +334,20 @@ class ExportJobManager
     static public function update_tracker_data($publication_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Answer :: class_name(), Answer :: PROPERTY_PUBLICATION_ID),
+            new PropertyConditionVariable(Answer::class_name(), Answer::PROPERTY_PUBLICATION_ID),
             $publication_id);
-        $answers = DataManager :: retrieves(Answer :: class_name(), new DataClassRetrievesParameters($condition));
+        $answers = DataManager::retrieves(Answer::class_name(), new DataClassRetrievesParameters($condition));
 
         while ($raw_answer = $answers->next_result())
         {
             $complex_question_id = $raw_answer->get_question_cid();
-            $object = ExportJobManager :: get_question($complex_question_id);
+            $object = ExportJobManager::get_question($complex_question_id);
 
             $type = $object->get_type();
 
             switch ($type)
             {
-                case MultipleChoice :: get_type_name() :
+                case MultipleChoice::get_type_name() :
                     $answer = $raw_answer->get_answer();
 
                     foreach ($answer as $option_id)
@@ -373,7 +374,7 @@ class ExportJobManager
                     }
                     break;
 
-                case Matrix :: get_type_name() :
+                case Matrix::get_type_name() :
                     $answer = $raw_answer->get_answer();
 
                     foreach ($answer as $ids => $match_id)
@@ -402,7 +403,7 @@ class ExportJobManager
                     }
                     break;
 
-                case Select :: get_type_name() :
+                case Select::get_type_name() :
                     $answer = $raw_answer->get_answer();
 
                     foreach ($answer as $option_id)
@@ -427,7 +428,7 @@ class ExportJobManager
                     }
                     break;
 
-                case Matching :: get_type_name() :
+                case Matching::get_type_name() :
                     $answer = $raw_answer->get_answer();
 
                     foreach ($answer as $ids => $match_id)
@@ -457,10 +458,10 @@ class ExportJobManager
                     }
                     break;
 
-                case Open :: get_type_name() :
+                case Open::get_type_name() :
                     $answer = $raw_answer->get_answer();
 
-                    $text = ExportJobManager :: transcode_string(array_pop($answer));
+                    $text = ExportJobManager::transcode_string(array_pop($answer));
                     if (strlen(strip_tags($text)) > 0)
                     {
                         // $text = strip_tags($text);
@@ -484,7 +485,7 @@ class ExportJobManager
                     }
                     break;
 
-                case Rating :: get_type_name() :
+                case Rating::get_type_name() :
 
                     $answer = $raw_answer->get_answer();
 
@@ -573,14 +574,14 @@ class ExportJobManager
 
     static function get_question($complex_id)
     {
-        if (! isset(ExportJobManager :: $questions_cache) || ! isset(ExportJobManager :: $questions_cache[$complex_id]))
+        if (! isset(ExportJobManager::$questions_cache) || ! isset(ExportJobManager::$questions_cache[$complex_id]))
         {
-            $complex_question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ComplexContentObjectItem :: class_name(),
+            $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ComplexContentObjectItem::class_name(),
                 $complex_id);
-            ExportJobManager :: $questions_cache[$complex_id] = $complex_question->get_ref_object();
+            ExportJobManager::$questions_cache[$complex_id] = $complex_question->get_ref_object();
         }
-        return ExportJobManager :: $questions_cache[$complex_id];
+        return ExportJobManager::$questions_cache[$complex_id];
     }
 
     static function transcode_string($string)
