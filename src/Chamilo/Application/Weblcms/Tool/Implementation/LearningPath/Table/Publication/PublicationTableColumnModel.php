@@ -24,9 +24,9 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
      */
     public function initialize_columns()
     {
-        parent :: initialize_columns(false);
+        parent::initialize_columns(false);
         
-        $this->add_column(new StaticTableColumn(self :: COLUMN_PROGRESS));
+        $this->add_column(new StaticTableColumn(self::COLUMN_PROGRESS));
         $this->addActionsColumn();
     }
 }

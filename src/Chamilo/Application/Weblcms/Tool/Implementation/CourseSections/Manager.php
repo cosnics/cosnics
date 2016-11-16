@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseSections;
 
 /**
  * $Id: course_sections_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_sections
  */
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
@@ -23,23 +23,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     const ACTION_CHANGE_COURSE_SECTION_VISIBILITY = 'VisibilityChanger';
     const ACTION_SELECT_TOOLS_COURSE_SECTION = 'ToolSelector';
     const ACTION_CHANGE_SECTION = 'ChangeSection';
-    const DEFAULT_ACTION = self :: ACTION_VIEW_COURSE_SECTIONS;
+    const DEFAULT_ACTION = self::ACTION_VIEW_COURSE_SECTIONS;
     const PARAM_COURSE_SECTION_ID = 'course_section_id';
     const PARAM_DIRECTION = 'direction';
     const PARAM_REMOVE_SELECTED = 'remove_selected';
 
     /**
      * Adds a breadcrumb to the browser component
-     *
+     * 
      * @param BreadcrumbTrail $breadcrumbTrail
      */
     protected function addBrowserBreadcrumb(BreadcrumbTrail $breadcrumbTrail)
     {
         $breadcrumbTrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)),
-                Translation::getInstance()->getTranslation('ViewerComponent', array(), $this->context())
-            )
-        );
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)), 
+                Translation::getInstance()->getTranslation('ViewerComponent', array(), $this->context())));
     }
 }

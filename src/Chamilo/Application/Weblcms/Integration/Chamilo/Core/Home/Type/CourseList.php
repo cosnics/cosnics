@@ -28,10 +28,10 @@ class CourseList extends Block
     public function displayContent()
     {
         $renderer = new \Chamilo\Application\Weblcms\Renderer\CourseList\CourseListRenderer(
-            $this,
+            $this, 
             $this->getLinkTarget());
         $renderer->show_new_publication_icons();
-
+        
         return $renderer->as_html();
     }
 }

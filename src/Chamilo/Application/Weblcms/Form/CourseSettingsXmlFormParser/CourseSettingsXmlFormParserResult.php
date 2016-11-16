@@ -38,7 +38,7 @@ class CourseSettingsXmlFormParserResult extends XmlFormParserResult
      */
     public function __construct(CourseSettingsXmlFormParser $course_settings_xml_form_parser)
     {
-        parent :: __construct();
+        parent::__construct();
         
         $this->course_settings_xml_form_parser = $course_settings_xml_form_parser;
     }
@@ -51,21 +51,21 @@ class CourseSettingsXmlFormParserResult extends XmlFormParserResult
      */
     protected function add_element_fo_form(FormValidator $form, $element)
     {
-        parent :: add_element_fo_form($form, $element);
+        parent::add_element_fo_form($form, $element);
         
         $element_name = $element->getName();
         
-        if ($form instanceof FormLockedSettingsSupport && $element->_type != XmlFormParser :: ELEMENT_TYPE_HTML &&
+        if ($form instanceof FormLockedSettingsSupport && $element->_type != XmlFormParser::ELEMENT_TYPE_HTML &&
              $element_name != 'course_settings[category]' && $element_name != 'course_settings[titular]')
         {
             $element_label = $element->getLabel();
             
             $form->addElement(
-                XmlFormParser :: ELEMENT_TYPE_CHECKBOX,
-                CourseSettingsController :: SETTING_PARAM_LOCKED_PREFIX . $element_name, 
-                Translation :: get('SettingLocked', array('SETTING' => $element_label)), 
+                XmlFormParser::ELEMENT_TYPE_CHECKBOX, 
+                CourseSettingsController::SETTING_PARAM_LOCKED_PREFIX . $element_name, 
+                Translation::get('SettingLocked', array('SETTING' => $element_label)), 
                 '', 
-                array(),
+                array(), 
                 '1', 
                 '0');
         }

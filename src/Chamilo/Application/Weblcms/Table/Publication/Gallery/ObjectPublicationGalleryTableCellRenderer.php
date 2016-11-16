@@ -9,11 +9,11 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 
 /**
  * Cell renderer for the content object publications gallery table
- *
+ * 
  * @author Author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring to record gallery table
  */
-class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRenderer implements
+class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRenderer implements 
     TableCellRendererActionsColumnSupport
 {
 
@@ -24,18 +24,18 @@ class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRe
     public function renderContent($publication)
     {
         $object = $this->get_component()->get_content_object_from_publication($publication);
-
+        
         $details_url = $this->get_component()->get_url(
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication[ContentObjectPublication :: PROPERTY_ID],
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW));
-
-        $thumbnail = ContentObjectRenditionImplementation :: launch(
-            $object,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_THUMBNAIL,
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID], 
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW));
+        
+        $thumbnail = ContentObjectRenditionImplementation::launch(
+            $object, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_THUMBNAIL, 
             $this);
-
+        
         return '<a href="' . $details_url . '">' . $thumbnail . '</a>';
     }
 
@@ -50,7 +50,7 @@ class ObjectPublicationGalleryTableCellRenderer extends RecordGalleryTableCellRe
 
     /**
      * Returns the actions toolbar
-     *
+     * 
      * @param mixed $publication
      *
      * @return String

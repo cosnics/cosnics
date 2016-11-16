@@ -11,7 +11,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * This component provides the data for the table.
- *
+ * 
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class AssessmentResultsTableDataProvider extends DataClassTableDataProvider
@@ -23,17 +23,17 @@ class AssessmentResultsTableDataProvider extends DataClassTableDataProvider
         {
             $order_property = new OrderBy(
                 new PropertyConditionVariable(
-                    LearningPathItemAttempt :: class_name(),
-                    LearningPathItemAttempt :: PROPERTY_START_TIME));
+                    LearningPathItemAttempt::class_name(), 
+                    LearningPathItemAttempt::PROPERTY_START_TIME));
         }
-
-        return DataManager :: retrieves(
-            LearningPathItemAttempt :: class_name(),
+        
+        return DataManager::retrieves(
+            LearningPathItemAttempt::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function count_data($condition)
     {
-        return DataManager :: count(LearningPathItemAttempt :: class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(LearningPathItemAttempt::class_name(), new DataClassCountParameters($condition));
     }
 }

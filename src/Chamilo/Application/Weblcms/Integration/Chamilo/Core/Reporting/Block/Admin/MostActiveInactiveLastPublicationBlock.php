@@ -19,71 +19,71 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $courses = CourseDataManager :: retrieves(Course :: class_name(), new DataClassRetrievesParameters());
-
-        $arr[Translation :: get('Past24hr')] = 0;
-        $arr[Translation :: get('PastWeek')] = 0;
-        $arr[Translation :: get('PastMonth')] = 0;
-        $arr[Translation :: get('PastYear')] = 0;
-        $arr[Translation :: get('NothingPublished')] = 0;
-        $arr[Translation :: get('MoreThenOneYear')] = 0;
-
+        $courses = CourseDataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters());
+        
+        $arr[Translation::get('Past24hr')] = 0;
+        $arr[Translation::get('PastWeek')] = 0;
+        $arr[Translation::get('PastMonth')] = 0;
+        $arr[Translation::get('PastYear')] = 0;
+        $arr[Translation::get('NothingPublished')] = 0;
+        $arr[Translation::get('MoreThenOneYear')] = 0;
+        
         while ($course = $courses->next_result())
         {
             $lastpublication = 0;
-
+            
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
-                    ContentObjectPublication :: PROPERTY_COURSE_ID),
+                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::PROPERTY_COURSE_ID), 
                 new StaticConditionVariable($course->get_id()));
             $order_by = new OrderBy(
                 new PropertyConditionVariable(
-                    ContentObjectPublication :: class_name(),
-                    ContentObjectPublication :: PROPERTY_MODIFIED_DATE));
-            $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications(
-                $condition,
-                $order_by,
-                0,
+                    ContentObjectPublication::class_name(), 
+                    ContentObjectPublication::PROPERTY_MODIFIED_DATE));
+            $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+                $condition, 
+                $order_by, 
+                0, 
                 1);
-
+            
             if ($publications->size() > 0)
             {
                 $publication = $publications->next_result();
-                $lastpublication = $publication[ContentObjectPublication :: PROPERTY_MODIFIED_DATE];
+                $lastpublication = $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE];
             }
-
+            
             if ($lastpublication == 0)
             {
-                $arr[Translation :: get('NothingPublished')] ++;
+                $arr[Translation::get('NothingPublished')] ++;
             }
             else
             {
                 if ($lastpublication > time() - 86400)
                 {
-                    $arr[Translation :: get('Past24hr')] ++;
+                    $arr[Translation::get('Past24hr')] ++;
                 }
                 else
                 {
                     if ($lastpublication > time() - 604800)
                     {
-                        $arr[Translation :: get('PastWeek')] ++;
+                        $arr[Translation::get('PastWeek')] ++;
                     }
                     else
                     {
                         if ($lastpublication > time() - 18144000)
                         {
-                            $arr[Translation :: get('PastMonth')] ++;
+                            $arr[Translation::get('PastMonth')] ++;
                         }
                         else
                         {
                             if ($lastpublication > time() - 31536000)
                             {
-                                $arr[Translation :: get('PastYear')] ++;
+                                $arr[Translation::get('PastYear')] ++;
                             }
                             else
                             {
-                                $arr[Translation :: get('MoreThenOneYear')] ++;
+                                $arr[Translation::get('MoreThenOneYear')] ++;
                             }
                         }
                     }
@@ -92,39 +92,39 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
         }
         $reporting_data->set_categories(
             array(
-                Translation :: get('Past24hr'),
-                Translation :: get('PastWeek'),
-                Translation :: get('PastMonth'),
-                Translation :: get('PastYear'),
-                Translation :: get('MoreThenOneYear'),
-                Translation :: get('NothingPublished')));
-        $reporting_data->set_rows(array(Translation :: get('count')));
-
+                Translation::get('Past24hr'), 
+                Translation::get('PastWeek'), 
+                Translation::get('PastMonth'), 
+                Translation::get('PastYear'), 
+                Translation::get('MoreThenOneYear'), 
+                Translation::get('NothingPublished')));
+        $reporting_data->set_rows(array(Translation::get('count')));
+        
         $reporting_data->add_data_category_row(
-            Translation :: get('Past24hr'),
-            Translation :: get('count'),
-            $arr[Translation :: get('Past24hr')]);
+            Translation::get('Past24hr'), 
+            Translation::get('count'), 
+            $arr[Translation::get('Past24hr')]);
         $reporting_data->add_data_category_row(
-            Translation :: get('PastWeek'),
-            Translation :: get('count'),
-            $arr[Translation :: get('PastWeek')]);
+            Translation::get('PastWeek'), 
+            Translation::get('count'), 
+            $arr[Translation::get('PastWeek')]);
         $reporting_data->add_data_category_row(
-            Translation :: get('PastMonth'),
-            Translation :: get('count'),
-            $arr[Translation :: get('PastMonth')]);
+            Translation::get('PastMonth'), 
+            Translation::get('count'), 
+            $arr[Translation::get('PastMonth')]);
         $reporting_data->add_data_category_row(
-            Translation :: get('PastYear'),
-            Translation :: get('count'),
-            $arr[Translation :: get('PastYear')]);
+            Translation::get('PastYear'), 
+            Translation::get('count'), 
+            $arr[Translation::get('PastYear')]);
         $reporting_data->add_data_category_row(
-            Translation :: get('NothingPublished'),
-            Translation :: get('count'),
-            $arr[Translation :: get('NothingPublished')]);
+            Translation::get('NothingPublished'), 
+            Translation::get('count'), 
+            $arr[Translation::get('NothingPublished')]);
         $reporting_data->add_data_category_row(
-            Translation :: get('MoreThenOneYear'),
-            Translation :: get('count'),
-            $arr[Translation :: get('MoreThenOneYear')]);
-
+            Translation::get('MoreThenOneYear'), 
+            Translation::get('count'), 
+            $arr[Translation::get('MoreThenOneYear')]);
+        
         return $reporting_data;
     }
 
@@ -136,7 +136,7 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_PIE);
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE);
     }
 }

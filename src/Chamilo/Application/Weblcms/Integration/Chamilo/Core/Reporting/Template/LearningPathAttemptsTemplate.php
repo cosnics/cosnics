@@ -23,14 +23,14 @@ class LearningPathAttemptsTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         
-        $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
-        $this->tool = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL);
+        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+        $this->tool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
         $this->add_reporting_block(new LearningPathAttemptsBlock($this));
         
-        $lp = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $lp = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->publication_id)->get_content_object();
         
         $custom_breadcrumbs = array();

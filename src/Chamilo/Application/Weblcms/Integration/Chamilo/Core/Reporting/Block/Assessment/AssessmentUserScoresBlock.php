@@ -32,33 +32,33 @@ class AssessmentUserScoresBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $course_id = $this->get_course_id();
-
+        
         $users = CourseDataManager::retrieve_all_course_users($course_id)->as_array();
-
+        
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_COURSE_ID),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_TOOL),
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable(
                 ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class_name(), true)));
         $condition = new AndCondition($conditions);
-
+        
         $order_by = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class_name(),
+                    ContentObjectPublication::class_name(), 
                     ContentObjectPublication::PROPERTY_MODIFIED_DATE)));
-
+        
         $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
-            ContentObjectPublication::class_name(),
+            ContentObjectPublication::class_name(), 
             new DataClassRetrievesParameters($condition, null, null, $order_by));
-
+        
         $publications = array();
         $headings = array();
         $headings[] = Translation::get('Name');
@@ -66,9 +66,9 @@ class AssessmentUserScoresBlock extends ToolBlock
         while ($publication = $publication_resultset->next_result())
         {
             $publications[] = $publication;
-
+            
             $content_object = $publication->get_content_object();
-
+            
             if ($publication_resultset->size() > 5)
             {
                 $headings[] = substr($content_object->get_title(), 0, 14);
@@ -78,31 +78,31 @@ class AssessmentUserScoresBlock extends ToolBlock
                 $headings[] = $content_object->get_title();
             }
         }
-
+        
         $passingPercentage = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'passing_percentage'));
-
+        
         $reporting_data->set_rows($headings);
-
+        
         foreach ($users as $key => $user)
         {
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row(
-                $key,
-                Translation::get('Name'),
+                $key, 
+                Translation::get('Name'), 
                 \Chamilo\Core\User\Storage\DataClass\User::fullname(
-                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME],
+                    $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_FIRSTNAME], 
                     $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_LASTNAME]));
-
+            
             $reporting_data->add_data_category_row(
-                $key,
-                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()),
+                $key, 
+                Translation::get('OfficialCode', null, \Chamilo\Core\User\Manager::context()), 
                 $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_OFFICIAL_CODE]);
-
+            
             foreach ($publications as $publication)
             {
                 $content_object = $publication->get_content_object();
-
+                
                 if ($publication_resultset->size() > 5)
                 {
                     $title = substr($content_object->get_title(), 0, 14);
@@ -111,41 +111,41 @@ class AssessmentUserScoresBlock extends ToolBlock
                 {
                     $title = $content_object->get_title();
                 }
-
+                
                 $conditions = array();
-
+                
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssessmentAttempt::class_name(),
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
+                        AssessmentAttempt::class_name(), 
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_ASSESSMENT_ID), 
                     new StaticConditionVariable($publication->get_id()));
-
+                
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(),
-                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_USER_ID),
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::class_name(), 
+                        \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt::PROPERTY_USER_ID), 
                     new StaticConditionVariable($user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID]));
                 $condition = new AndCondition($conditions);
-
+                
                 $attempts_by_user = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-                    AssessmentAttempt::class_name(),
+                    AssessmentAttempt::class_name(), 
                     new DataClassRetrievesParameters($condition));
-
+                
                 if ($attempts_by_user->size() == 0)
                 {
                     if (\Chamilo\Application\Weblcms\Storage\DataManager::is_publication_target_user(
-                        $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID],
-                        $publication->get_id(),
+                        $user[\Chamilo\Core\User\Storage\DataClass\User::PROPERTY_ID], 
+                        $publication->get_id(), 
                         $course_id))
                     {
                         $reporting_data->add_data_category_row($key, $title, null);
                         continue;
                     }
-
+                    
                     $reporting_data->add_data_category_row($key, $title, 'X');
                     continue;
                 }
-
+                
                 $score = $this->get_score($attempts_by_user);
                 if ($score < $passingPercentage)
                 {
@@ -170,7 +170,7 @@ class AssessmentUserScoresBlock extends ToolBlock
             $score_type = Request::get('sel');
         }
         $score = null;
-
+        
         switch ($score_type)
         {
             case self::SCORE_TYPE_AVG :

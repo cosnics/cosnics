@@ -18,36 +18,36 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         $arr = array();
-        $courses = CourseDataManager :: retrieves(Course :: class_name(),  new DataClassRetrievesParameters());
-
+        $courses = CourseDataManager::retrieves(Course::class_name(), new DataClassRetrievesParameters());
+        
         $categories = array();
-
+        
         while ($course = $courses->next_result())
         {
-            $lang = CourseSettingsController :: getInstance()->get_course_setting(
-                $course,
-                CourseSettingsConnector :: LANGUAGE);
-
-            $categories[$lang] = Translation :: get($lang, null, Utilities :: COMMON_LIBRARIES);
-
+            $lang = CourseSettingsController::getInstance()->get_course_setting(
+                $course, 
+                CourseSettingsConnector::LANGUAGE);
+            
+            $categories[$lang] = Translation::get($lang, null, Utilities::COMMON_LIBRARIES);
+            
             if ($arr[$lang])
             {
                 $arr[$lang] = $arr[$lang] + 1;
             }
             else
             {
-
+                
                 $arr[$lang] = 1;
             }
         }
         $reporting_data->set_categories($categories);
-        $reporting_data->set_rows(array(Translation :: get('count')));
-
+        $reporting_data->set_rows(array(Translation::get('count')));
+        
         foreach ($categories as $key => $name)
         {
-            $reporting_data->add_data_category_row($key, Translation :: get('count'), ($arr[$key]));
+            $reporting_data->add_data_category_row($key, Translation::get('count'), ($arr[$key]));
         }
-
+        
         return $reporting_data;
     }
 
@@ -59,7 +59,7 @@ class NoOfCoursesByLanguageBlock extends CourseBlock
     public function get_views()
     {
         return array(
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE,
-            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_PIE);
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE, 
+            \Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_PIE);
     }
 }

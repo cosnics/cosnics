@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Class that describes the platform groups for the rights editor
- *
+ * 
  * @author Sven Vanpoucke
  */
 class CourseCategoryEntity implements NestedRightsEntity
@@ -29,16 +29,16 @@ class CourseCategoryEntity implements NestedRightsEntity
 
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new static();
+            self::$instance = new static();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
      * Retrieves the items for this entity
-     *
+     * 
      * @param $condition Condition
      * @param $offset int
      * @param $count int
@@ -48,21 +48,21 @@ class CourseCategoryEntity implements NestedRightsEntity
     public function retrieve_entity_items($condition = null, $offset = null, $count = null, $order_property = null)
     {
         $condition = $this->get_condition($condition);
-
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieves(
-            CourseCategory :: class_name(),
+        
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
+            CourseCategory::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     /**
      * Retrieves the entity item ids relevant for a given user (direct subscribed platformgroups and their parents)
-     *
+     * 
      * @param $user_id integer
      * @return array
      */
     /**
      * Retrieves the entity item ids relevant for a given user
-     *
+     * 
      * @param $user_id integer
      *
      * @return array
@@ -71,71 +71,71 @@ class CourseCategoryEntity implements NestedRightsEntity
     {
         if (is_null($this->course_category_cache[$user_id]))
         {
-
+            
             $this->course_category_cache[$user_id] = array($user_id);
         }
-
+        
         return $this->course_category_cache[$user_id];
     }
 
     /**
      * Counts the items for this entity
-     *
+     * 
      * @param $condition Condition
      * @return int
      */
     public function count_entity_items($condition = null)
     {
         $condition = $this->get_condition($condition);
-        return \Chamilo\Application\Weblcms\Storage\DataManager :: count(
-            CourseCategory :: class_name(),
+        return \Chamilo\Application\Weblcms\Storage\DataManager::count(
+            CourseCategory::class_name(), 
             new DataClassCountParameters($condition));
     }
 
     /**
      * Returns the name of this entity
-     *
+     * 
      * @return String
      */
     public function get_entity_name()
     {
-        return self :: ENTITY_NAME;
+        return self::ENTITY_NAME;
     }
 
     /**
      * Returns the translated name of this entiry for displaying purposes only!
-     *
+     * 
      * @return String Translated name of the entity
      */
     public function get_entity_translated_name()
     {
-        return Translation :: get(
-            StringUtilities :: getInstance()->createString(self :: ENTITY_NAME)->upperCamelize()->__toString());
+        return Translation::get(
+            StringUtilities::getInstance()->createString(self::ENTITY_NAME)->upperCamelize()->__toString());
     }
 
     /**
      * Returns the type of this entity
-     *
+     * 
      * @return int
      */
     public function get_entity_type()
     {
-        return self :: ENTITY_TYPE;
+        return self::ENTITY_TYPE;
     }
 
     /**
      * Returns the path to the icon of the entity
-     *
+     * 
      * @return String
      */
     public function get_entity_icon()
     {
-        return Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Place/CourseCategory');
+        return Theme::getInstance()->getImagePath(__NAMESPACE__, 'Place/CourseCategory');
     }
 
     /**
      * Returns the cell renderer of this entity
-     *
+     * 
      * @param $browser Application
      * @return LocationPlatformGroupBrowserTableCellRenderer
      */
@@ -146,7 +146,7 @@ class CourseCategoryEntity implements NestedRightsEntity
 
     /**
      * Returns the column model of this entity
-     *
+     * 
      * @param $browser Application
      * @return LocationPlatformGroupBrowserTableColumnModel
      */
@@ -157,52 +157,52 @@ class CourseCategoryEntity implements NestedRightsEntity
 
     /**
      * Returns the property for the ID column of this entity
-     *
+     * 
      * @return String
      */
     public function get_id_property()
     {
-        return CourseCategory :: PROPERTY_ID;
+        return CourseCategory::PROPERTY_ID;
     }
 
     /**
      * Returns the property for the PARENT column of this entity
-     *
+     * 
      * @return String
      */
     public function get_parent_property()
     {
-        return CourseCategory :: PROPERTY_PARENT;
+        return CourseCategory::PROPERTY_PARENT;
     }
 
     /**
      * Returns the property for the TITLE column of this entity
-     *
+     * 
      * @return String
      */
     public function get_title_property()
     {
-        return CourseCategory :: PROPERTY_NAME;
+        return CourseCategory::PROPERTY_NAME;
     }
 
     /**
      * Returns the root ids for this entity
-     *
+     * 
      * @return Array<int>
      */
     public function get_root_ids()
     {
-        return array(\Chamilo\Application\Weblcms\Storage\DataManager :: get_root_group()->get_id());
+        return array(\Chamilo\Application\Weblcms\Storage\DataManager::get_root_group()->get_id());
     }
 
     /**
      * Returns the properties on which can be searched
-     *
+     * 
      * @return Array
      */
     public function get_search_properties()
     {
-        return array(CourseCategory :: PROPERTY_NAME, CourseCategory :: PROPERTY_CODE);
+        return array(CourseCategory::PROPERTY_NAME, CourseCategory::PROPERTY_CODE);
     }
 
     /**
@@ -212,15 +212,15 @@ class CourseCategoryEntity implements NestedRightsEntity
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Manager :: package(),
-                \Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Manager :: PARAM_ACTION => 'course_category'));
-
+                Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Manager::package(), 
+                \Chamilo\Application\Weblcms\Admin\Extension\Platform\Ajax\Manager::PARAM_ACTION => 'course_category'));
+        
         return $redirect->getUrl();
     }
 
     /**
      * Function that can be filled in extensions of this class to limit the platform groups
-     *
+     * 
      * @return Condition
      */
     public function get_condition($condition)
@@ -234,10 +234,10 @@ class CourseCategoryEntity implements NestedRightsEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'course_categories',
-            Translation :: get('CourseCategories'),
-            __NAMESPACE__,
-            'course_category_feed',
+            'course_categories', 
+            Translation::get('CourseCategories'), 
+            __NAMESPACE__, 
+            'course_category_feed', 
             array());
     }
 
@@ -246,34 +246,34 @@ class CourseCategoryEntity implements NestedRightsEntity
      */
     public function get_element_finder_element($id)
     {
-        $course_category = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            CourseCategory :: class_name(),
+        $course_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            CourseCategory::class_name(), 
             $id);
         if (! $course_category)
         {
             return null;
         }
-
+        
         return new AdvancedElementFinderElement(
-            self :: ENTITY_TYPE . '_' . $id,
-            'type type_course_category',
-            $course_category->get_name(),
+            self::ENTITY_TYPE . '_' . $id, 
+            'type type_course_category', 
+            $course_category->get_name(), 
             strip_tags($course_category->get_fully_qualified_name()));
     }
 
     /**
      * Returns the class name of the data class that is used for this entity
-     *
+     * 
      * @return string
      */
     public static function data_class_class_name()
     {
-        return CourseCategory :: class_name();
+        return CourseCategory::class_name();
     }
 
     /**
      * Get the fully qualified class name of the object
-     *
+     * 
      * @return string
      */
     public static function class_name()

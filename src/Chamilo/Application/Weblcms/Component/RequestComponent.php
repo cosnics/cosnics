@@ -13,9 +13,9 @@ class RequestComponent extends Manager /* implements DelegateComponent */
         $this->checkAuthorization(Manager::context(), 'RequestCourses');
         
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Weblcms\Request\Manager :: context(),
+            \Chamilo\Application\Weblcms\Request\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
+        
         return $factory->run();
     }
 }

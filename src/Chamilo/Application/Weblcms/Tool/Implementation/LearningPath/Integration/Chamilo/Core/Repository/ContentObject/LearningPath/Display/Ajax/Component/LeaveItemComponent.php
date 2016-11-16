@@ -22,7 +22,7 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_TRACKER_ID);
+        return array(self::PARAM_TRACKER_ID);
     }
 
     /**
@@ -31,9 +31,9 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
      */
     public function run()
     {
-        $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-            LearningPathItemAttempt :: class_name(), 
-            $this->getPostDataValue(self :: PARAM_TRACKER_ID));
+        $attempt = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+            LearningPathItemAttempt::class_name(), 
+            $this->getPostDataValue(self::PARAM_TRACKER_ID));
         
         if ($attempt instanceof LearningPathItemAttempt)
         {
@@ -41,16 +41,16 @@ class LeaveItemComponent extends \Chamilo\Application\Weblcms\Tool\Implementatio
             
             if ($attempt->update())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: bad_request();
+                JsonAjaxResult::bad_request();
             }
         }
         else
         {
-            JsonAjaxResult :: bad_request();
+            JsonAjaxResult::bad_request();
         }
     }
 }

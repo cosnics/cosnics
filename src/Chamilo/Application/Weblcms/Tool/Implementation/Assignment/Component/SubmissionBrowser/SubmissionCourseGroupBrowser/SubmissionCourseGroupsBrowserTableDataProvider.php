@@ -34,10 +34,9 @@ class SubmissionCourseGroupsBrowserTableDataProvider extends SubmissionBrowserTa
     public function get_order_properties($order_properties = array())
     {
         $order_properties[] = new OrderBy(
-            new PropertyConditionVariable(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME), 
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME), 
             SORT_ASC, 
-            \Chamilo\Application\Weblcms\Storage\DataManager :: getInstance()->get_alias(
-                CourseGroup :: get_table_name()));
+            \Chamilo\Application\Weblcms\Storage\DataManager::getInstance()->get_alias(CourseGroup::get_table_name()));
         
         return $order_properties;
     }
@@ -57,7 +56,7 @@ class SubmissionCourseGroupsBrowserTableDataProvider extends SubmissionBrowserTa
     public function retrieve_from_data_manager($publication_id, $course_id, $offset, $count, $order_properties, 
         $condition)
     {
-        return DataManager :: retrieve_assignment_publication_target_course_groups(
+        return DataManager::retrieve_assignment_publication_target_course_groups(
             $publication_id, 
             $course_id, 
             $offset, 

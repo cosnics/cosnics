@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Builds the open course form
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class OpenCourseForm extends FormValidator
@@ -36,7 +36,7 @@ class OpenCourseForm extends FormValidator
 
     /**
      * OpenCourseForm constructor.
-     *
+     * 
      * @param int $formType
      * @param string $action
      * @param Translation $translator
@@ -44,7 +44,7 @@ class OpenCourseForm extends FormValidator
     public function __construct($formType, $action, Translation $translator)
     {
         parent::__construct('open_course_form', 'POST', $action);
-
+        
         $this->formType = $formType;
         $this->translator = $translator;
         $this->buildForm();
@@ -52,7 +52,7 @@ class OpenCourseForm extends FormValidator
 
     /**
      * Sets the default roles
-     *
+     * 
      * @param Role[] $defaultRoles
      */
     public function setDefaultRoles($defaultRoles = array())
@@ -62,12 +62,12 @@ class OpenCourseForm extends FormValidator
         {
             $defaultRoleElements->add_element(
                 new AdvancedElementFinderElement(
-                    'role_' . $defaultRole->getId(),
-                    'type type_role',
-                    $defaultRole->getRole(),
+                    'role_' . $defaultRole->getId(), 
+                    'type type_role', 
+                    $defaultRole->getRole(), 
                     $defaultRole->getRole()));
         }
-
+        
         $element = $this->getElement(self::ELEMENT_ROLES);
         $element->setDefaultValues($defaultRoleElements);
     }
@@ -81,7 +81,7 @@ class OpenCourseForm extends FormValidator
         {
             $this->addCoursesSelector();
         }
-
+        
         $this->addRolesSelector();
         $this->addButtons();
     }
@@ -94,15 +94,15 @@ class OpenCourseForm extends FormValidator
         $advancedElementFinderTypes = new AdvancedElementFinderElementTypes();
         $advancedElementFinderTypes->add_element_type(
             new AdvancedElementFinderElementType(
-                'courses',
-                $this->translator->getTranslation('Courses', null, Manager::context()),
-                'Chamilo\Application\Weblcms\Course\OpenCourse\Ajax',
+                'courses', 
+                $this->translator->getTranslation('Courses', null, Manager::context()), 
+                'Chamilo\Application\Weblcms\Course\OpenCourse\Ajax', 
                 'GetCoursesForElementFinder'));
-
+        
         $this->addElement(
-            'advanced_element_finder',
-            self::ELEMENT_COURSES,
-            $this->translator->getTranslation('SelectCourses', null, Manager::context()),
+            'advanced_element_finder', 
+            self::ELEMENT_COURSES, 
+            $this->translator->getTranslation('SelectCourses', null, Manager::context()), 
             $advancedElementFinderTypes);
     }
 
@@ -114,15 +114,15 @@ class OpenCourseForm extends FormValidator
         $advancedElementFinderTypes = new AdvancedElementFinderElementTypes();
         $advancedElementFinderTypes->add_element_type(
             new AdvancedElementFinderElementType(
-                'roles',
-                $this->translator->getTranslation('Roles', null, Manager::context()),
-                'Chamilo\Core\User\Roles\Ajax',
+                'roles', 
+                $this->translator->getTranslation('Roles', null, Manager::context()), 
+                'Chamilo\Core\User\Roles\Ajax', 
                 'GetRolesForElementFinder'));
-
+        
         $this->addElement(
-            'advanced_element_finder',
-            self::ELEMENT_ROLES,
-            $this->translator->getTranslation('SelectRoles', null, Manager::context()),
+            'advanced_element_finder', 
+            self::ELEMENT_ROLES, 
+            $this->translator->getTranslation('SelectRoles', null, Manager::context()), 
             $advancedElementFinderTypes);
     }
 
@@ -132,17 +132,17 @@ class OpenCourseForm extends FormValidator
     protected function addButtons()
     {
         $buttons = array();
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
+            'style_submit_button', 
+            'submit', 
             $this->translator->getTranslation('Save', null, Utilities::COMMON_LIBRARIES));
-
+        
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
+            'style_reset_button', 
+            'reset', 
             $this->translator->getTranslation('Reset', null, Utilities::COMMON_LIBRARIES));
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 }

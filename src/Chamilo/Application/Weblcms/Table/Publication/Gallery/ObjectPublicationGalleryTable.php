@@ -6,7 +6,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
 /**
  * Gallery table for the content object publications
- *
+ * 
  * @author Author Unknown
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring to record gallery table
  */
@@ -15,11 +15,11 @@ class ObjectPublicationGalleryTable extends RecordGalleryTable implements TableF
     /**
      * The identifier for the table (used for table actions)
      */
-    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID;
+    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
 
     /**
      * Returns the implemented form actions
-     *
+     * 
      * @return TableFormActions
      */
     public function get_implemented_form_actions()

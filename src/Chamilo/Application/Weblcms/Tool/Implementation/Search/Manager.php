@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Search;
 
 /**
  * $Id: search_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.search
  */
 
@@ -13,5 +13,5 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Search;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 {
     const ACTION_SEARCH = 'Searcher';
-    const DEFAULT_ACTION = self :: ACTION_SEARCH;
+    const DEFAULT_ACTION = self::ACTION_SEARCH;
 }

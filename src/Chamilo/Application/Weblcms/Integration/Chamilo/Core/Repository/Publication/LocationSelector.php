@@ -21,9 +21,9 @@ class LocationSelector extends \Chamilo\Core\Repository\Publication\Location\Loc
     public function get_header()
     {
         $table_header = array();
-        $table_header[] = '<th>' . Translation :: get('Course', null, \Chamilo\Application\Weblcms\Manager :: context()) .
+        $table_header[] = '<th>' . Translation::get('Course', null, \Chamilo\Application\Weblcms\Manager::context()) .
              '</th>';
-        $table_header[] = '<th>' . Translation :: get('Tool', null, \Chamilo\Application\Weblcms\Manager :: context()) .
+        $table_header[] = '<th>' . Translation::get('Tool', null, \Chamilo\Application\Weblcms\Manager::context()) .
              '</th>';
         return implode(PHP_EOL, $table_header);
     }
@@ -36,14 +36,14 @@ class LocationSelector extends \Chamilo\Core\Repository\Publication\Location\Loc
     {
         $form_validator = $this->get_form_validator();
         $group = array();
-
+        
         $group[] = $form_validator->createElement(
-            'static',
-            null,
-            null,
+            'static', 
+            null, 
+            null, 
             $location->get_course_title() . ' (' . $location->get_visual_code() . ')');
         $group[] = $form_validator->createElement('static', null, null, $location->get_tool_name());
-
+        
         return $group;
     }
 }

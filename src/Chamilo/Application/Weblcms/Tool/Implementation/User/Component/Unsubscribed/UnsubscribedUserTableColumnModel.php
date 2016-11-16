@@ -24,8 +24,8 @@ class UnsubscribedUserTableColumnModel extends DataClassTableColumnModel impleme
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_USERNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_EMAIL));
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_STATUS));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_USERNAME));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_EMAIL));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_STATUS));
     }
 }

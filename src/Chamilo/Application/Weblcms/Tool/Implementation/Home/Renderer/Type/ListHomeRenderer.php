@@ -19,24 +19,24 @@ class ListHomeRenderer extends HomeRenderer
      */
     public function render()
     {
-        $renderer = ToolListRenderer :: factory(
-            ToolListRenderer :: TYPE_FIXED,
-            $this->getHomeTool(),
+        $renderer = ToolListRenderer::factory(
+            ToolListRenderer::TYPE_FIXED, 
+            $this->getHomeTool(), 
             $this->getCourseTools());
-
+        
         $html = array();
-
+        
         $html[] = $this->getHomeTool()->renderHomeActions();
-
+        
         $html[] = '<div class="clearfix"></div>';
-
+        
         if ($this->getIntroductionAllowed())
         {
             $html[] = $this->getHomeTool()->display_introduction_text($this->getIntroduction());
         }
-
+        
         $html[] = $renderer->toHtml();
-
+        
         return implode(PHP_EOL, $html);
     }
 }

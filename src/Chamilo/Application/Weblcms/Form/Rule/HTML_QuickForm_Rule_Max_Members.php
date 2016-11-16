@@ -17,7 +17,7 @@ class HTML_QuickForm_Rule_Max_Members extends HTML_QuickForm_Rule
 
     public function validate($values)
     {
-        if ($values[0][self :: UNLIMITED_MEMBERS] || (is_numeric($values[1]) && $values[1] > 0))
+        if ($values[0][self::UNLIMITED_MEMBERS] || (is_numeric($values[1]) && $values[1] > 0))
         {
             return true;
         }

@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Table column model for the course users table
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring from ObjectTable to RecordTable
  */
 class CourseUsersTableColumnModel extends RecordTableColumnModel
@@ -22,11 +22,11 @@ class CourseUsersTableColumnModel extends RecordTableColumnModel
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_OFFICIAL_CODE));
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_USERNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_LASTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_FIRSTNAME));
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_EMAIL));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_COURSE_GROUPS, Translation :: get('CourseGroups')));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_USERNAME));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_EMAIL));
+        $this->add_column(new StaticTableColumn(self::COLUMN_COURSE_GROUPS, Translation::get('CourseGroups')));
     }
 }

@@ -1,32 +1,36 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Domain\ValueObject;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 
 /**
  * Value object to define an imported course entity relation
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class ImportedCourseEntityRelation
 {
+
     /**
+     *
      * @var int
      */
     protected $action;
 
     /**
+     *
      * @var string
      */
     protected $courseCode;
 
     /**
+     *
      * @var string
      */
     protected $entityStatus;
 
     /**
+     *
      * @param string $action
      * @param string $courseCode
      * @param string $entityStatus
@@ -35,13 +39,14 @@ abstract class ImportedCourseEntityRelation
     {
         $this->validateAction($action);
         $this->validateEntityStatus($entityStatus);
-
+        
         $this->action = $action;
         $this->courseCode = $courseCode;
         $this->entityStatus = $entityStatus;
     }
 
     /**
+     *
      * @return int
      */
     public function getAction()
@@ -50,6 +55,7 @@ abstract class ImportedCourseEntityRelation
     }
 
     /**
+     *
      * @return string
      */
     public function getCourseCode()
@@ -58,6 +64,7 @@ abstract class ImportedCourseEntityRelation
     }
 
     /**
+     *
      * @return string
      */
     public function getEntityStatus()
@@ -67,7 +74,7 @@ abstract class ImportedCourseEntityRelation
 
     /**
      * Returns whether or not the imported course entity relation is due to be created
-     *
+     * 
      * @return bool
      */
     public function isNew()
@@ -77,7 +84,7 @@ abstract class ImportedCourseEntityRelation
 
     /**
      * Returns whether or not the imported course entity relation is due to be updated
-     *
+     * 
      * @return bool
      */
     public function isUpdate()
@@ -87,7 +94,7 @@ abstract class ImportedCourseEntityRelation
 
     /**
      * Returns whether or not the imported course entity relation is due to be removed
-     *
+     * 
      * @return bool
      */
     public function isRemove()
@@ -97,18 +104,17 @@ abstract class ImportedCourseEntityRelation
 
     /**
      * Returns the CourseEntityRelation status value based on the entity status
-     *
+     * 
      * @return int
      */
     public function getStatusInteger()
     {
-        return strtolower($this->getEntityStatus()) == 'teacher' ?
-            CourseEntityRelation::STATUS_TEACHER : CourseEntityRelation::STATUS_STUDENT;
+        return strtolower($this->getEntityStatus()) == 'teacher' ? CourseEntityRelation::STATUS_TEACHER : CourseEntityRelation::STATUS_STUDENT;
     }
 
     /**
      * Validates the action
-     *
+     * 
      * @param string $action
      *
      * @throws \Exception
@@ -116,7 +122,7 @@ abstract class ImportedCourseEntityRelation
     protected function validateAction($action)
     {
         $allowedActions = array('A', 'U', 'D');
-        if(!in_array(strtoupper($action), $allowedActions))
+        if (! in_array(strtoupper($action), $allowedActions))
         {
             throw new \Exception(sprintf('The given action %s is invalid', $action));
         }
@@ -124,7 +130,7 @@ abstract class ImportedCourseEntityRelation
 
     /**
      * Validates the status
-     *
+     * 
      * @param string $entityStatus
      *
      * @throws \Exception
@@ -132,10 +138,9 @@ abstract class ImportedCourseEntityRelation
     protected function validateEntityStatus($entityStatus)
     {
         $allowedStatuses = array('teacher', 'student');
-        if(!in_array(strtolower($entityStatus), $allowedStatuses))
+        if (! in_array(strtolower($entityStatus), $allowedStatuses))
         {
             throw new \Exception(sprintf('The given status %s is invalid', $entityStatus));
         }
     }
-
 }

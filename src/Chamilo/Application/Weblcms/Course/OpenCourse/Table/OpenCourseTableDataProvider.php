@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * DataProvider for open courses
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class OpenCourseTableDataProvider extends CourseTableDataProvider
@@ -16,7 +16,7 @@ class OpenCourseTableDataProvider extends CourseTableDataProvider
 
     /**
      * Returns the data as a resultset
-     *
+     * 
      * @param Condition $condition
      * @param $condition
      * @param int $offset
@@ -28,16 +28,16 @@ class OpenCourseTableDataProvider extends CourseTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return $this->getOpenCourseService()->getOpenCourses(
-            $this->get_component()->getUser(),
-            $condition,
-            $offset,
-            $count,
+            $this->get_component()->getUser(), 
+            $condition, 
+            $offset, 
+            $count, 
             $order_property);
     }
 
     /**
      * Counts the data
-     *
+     * 
      * @param Condition $condition
      *
      * @return int

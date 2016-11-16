@@ -13,26 +13,26 @@ class PeerAssessmentAttempt extends \Chamilo\Core\Tracking\Storage\DataClass\Sim
 
     public function validate_parameters(array $parameters = array())
     {
-        $this->set_publication_id($parameters[self :: PROPERTY_PUBLICATION_ID]);
-        $this->set_title($parameters[self :: PROPERTY_TITLE]);
-        $this->set_description($parameters[self :: PROPERTY_DESCRIPTION]);
-        $this->set_start_date(strtotime($parameters[self :: PROPERTY_START_DATE]));
-        $this->set_end_date(strtotime($parameters[self :: PROPERTY_END_DATE]));
-        $this->set_hidden($parameters[self :: PROPERTY_HIDDEN]);
-        $this->set_weight($parameters[self :: PROPERTY_WEIGHT]);
+        $this->set_publication_id($parameters[self::PROPERTY_PUBLICATION_ID]);
+        $this->set_title($parameters[self::PROPERTY_TITLE]);
+        $this->set_description($parameters[self::PROPERTY_DESCRIPTION]);
+        $this->set_start_date(strtotime($parameters[self::PROPERTY_START_DATE]));
+        $this->set_end_date(strtotime($parameters[self::PROPERTY_END_DATE]));
+        $this->set_hidden($parameters[self::PROPERTY_HIDDEN]);
+        $this->set_weight($parameters[self::PROPERTY_WEIGHT]);
     }
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID,
-                self :: PROPERTY_TITLE,
-                self :: PROPERTY_DESCRIPTION,
-                self :: PROPERTY_START_DATE,
-                self :: PROPERTY_END_DATE,
-                self :: PROPERTY_HIDDEN,
-                self :: PROPERTY_WEIGHT));
+                self::PROPERTY_PUBLICATION_ID, 
+                self::PROPERTY_TITLE, 
+                self::PROPERTY_DESCRIPTION, 
+                self::PROPERTY_START_DATE, 
+                self::PROPERTY_END_DATE, 
+                self::PROPERTY_HIDDEN, 
+                self::PROPERTY_WEIGHT));
     }
 
     public function __call($name, array $arguments)
@@ -45,7 +45,7 @@ class PeerAssessmentAttempt extends \Chamilo\Core\Tracking\Storage\DataClass\Sim
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

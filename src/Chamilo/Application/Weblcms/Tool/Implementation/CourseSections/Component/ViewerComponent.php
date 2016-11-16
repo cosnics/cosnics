@@ -20,7 +20,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: course_sections_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_sections.component
  */
 class ViewerComponent extends Manager implements TableSupport
@@ -38,18 +38,18 @@ class ViewerComponent extends Manager implements TableSupport
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
-
+        
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $table = $this->get_table_html();
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = '<br />';
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table;
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -59,43 +59,43 @@ class ViewerComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
-
+            
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Publish'),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE_COURSE_SECTION)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('Create', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Publish'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE_COURSE_SECTION)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-                    $this->get_url(),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                    $this->get_url(), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $buttonToolbar->addButtonGroup($commonActions);
-
+            
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
+        
         return $this->buttonToolbarRenderer;
     }
 
     public function get_table_html()
     {
         $table = new CourseSectionsTable($this);
-
+        
         $html = array();
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';
-
+        
         return implode($html, "\n");
     }
 
     public function get_condition()
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(CourseSection :: class_name(), CourseSection :: PROPERTY_COURSE_ID),
+            new PropertyConditionVariable(CourseSection::class_name(), CourseSection::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($this->get_course_id()));
     }
 

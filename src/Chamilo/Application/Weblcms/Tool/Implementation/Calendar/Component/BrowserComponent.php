@@ -38,7 +38,7 @@ class BrowserComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_BROWSE_PUBLICATION_TYPE);
+        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
     }
 
     /**
@@ -53,18 +53,18 @@ class BrowserComponent extends Manager
     {
         $defaultComponent = $this->getDefaultComponent();
         $defaultComponent->checkAuthorization();
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $defaultComponent->renderToolHeader();
-
+        
         $html[] = '<div class="row">';
         $html[] = $this->renderCalendar();
         $html[] = '</div>';
-
+        
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -77,11 +77,11 @@ class BrowserComponent extends Manager
         if (! isset($this->defaultComponent))
         {
             $factory = new ApplicationFactory(
-                \Chamilo\Application\Weblcms\Tool\Action\Manager :: context(),
+                \Chamilo\Application\Weblcms\Tool\Action\Manager::context(), 
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $this->defaultComponent = $factory->getComponent();
         }
-
+        
         return $this->defaultComponent;
     }
 
@@ -89,24 +89,24 @@ class BrowserComponent extends Manager
     {
         $dataProvider = $this->getCalendarDataProvider();
         $calendarLegend = new Legend($dataProvider);
-
+        
         $rendererFactory = new ViewRendererFactory(
-            $this->getCurrentRendererType(),
-            $dataProvider,
-            $calendarLegend,
+            $this->getCurrentRendererType(), 
+            $dataProvider, 
+            $calendarLegend, 
             $this->getCurrentRendererTime());
         $renderer = $rendererFactory->getRenderer();
-
-        if ($this->getCurrentRendererType() == ViewRenderer :: TYPE_DAY ||
-             $this->getCurrentRendererType() == ViewRenderer :: TYPE_WEEK)
+        
+        if ($this->getCurrentRendererType() == ViewRenderer::TYPE_DAY ||
+             $this->getCurrentRendererType() == ViewRenderer::TYPE_WEEK)
         {
             $renderer->setStartHour(
-                LocalSetting :: getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar'));
-            $renderer->setEndHour(LocalSetting :: getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
+                LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar'));
+            $renderer->setEndHour(LocalSetting::getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
             $renderer->setHideOtherHours(
-                LocalSetting :: getInstance()->get('hide_non_working_hours', 'Chamilo\Libraries\Calendar'));
+                LocalSetting::getInstance()->get('hide_non_working_hours', 'Chamilo\Libraries\Calendar'));
         }
-
+        
         return $renderer->render();
     }
 
@@ -116,22 +116,22 @@ class BrowserComponent extends Manager
      */
     public function getCurrentRendererType()
     {
-        $rendererType = $this->getRequest()->query->get(ViewRenderer :: PARAM_TYPE);
-
+        $rendererType = $this->getRequest()->query->get(ViewRenderer::PARAM_TYPE);
+        
         if (! $rendererType)
         {
-            $rendererType = LocalSetting :: getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
-
-            if($rendererType == ViewRenderer::TYPE_MONTH)
+            $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
+            
+            if ($rendererType == ViewRenderer::TYPE_MONTH)
             {
                 $detect = new \Mobile_Detect();
-                if($detect->isMobile() && !$detect->isTablet() )
+                if ($detect->isMobile() && ! $detect->isTablet())
                 {
                     $rendererType = ViewRenderer::TYPE_LIST;
                 }
             }
         }
-
+        
         return $rendererType;
     }
 
@@ -143,9 +143,9 @@ class BrowserComponent extends Manager
     {
         if (! isset($this->currentTime))
         {
-            $this->currentTime = $this->getRequest()->query->get(ViewRenderer :: PARAM_TIME, time());
+            $this->currentTime = $this->getRequest()->query->get(ViewRenderer::PARAM_TIME, time());
         }
-
+        
         return $this->currentTime;
     }
 
@@ -154,16 +154,16 @@ class BrowserComponent extends Manager
         if (! isset($this->calendarDataProvider))
         {
             $displayParameters = $this->getDefaultComponent()->get_parameters();
-            $displayParameters[ViewRenderer :: PARAM_TYPE] = $this->getCurrentRendererType();
-            $displayParameters[ViewRenderer :: PARAM_TIME] = $this->getCurrentRendererTime();
-
+            $displayParameters[ViewRenderer::PARAM_TYPE] = $this->getCurrentRendererType();
+            $displayParameters[ViewRenderer::PARAM_TIME] = $this->getCurrentRendererTime();
+            
             $this->calendarDataProvider = new CalendarRendererProvider(
-                $this->getDefaultComponent(),
-                $this->get_user(),
-                $this->get_user(),
+                $this->getDefaultComponent(), 
+                $this->get_user(), 
+                $this->get_user(), 
                 $displayParameters);
         }
-
+        
         return $this->calendarDataProvider;
     }
 }

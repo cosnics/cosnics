@@ -32,51 +32,51 @@ class EndingAssignments extends Block
     {
         // deadline min 1 week (60 * 60 * 24 * 7)
         $deadline = time() + 604800;
-
-        $courses = CourseDataManager :: retrieve_all_courses_from_user($this->getUser());
-
+        
+        $courses = CourseDataManager::retrieve_all_courses_from_user($this->getUser());
+        
         while ($course = $courses->next_result())
         {
             $course_ids[$course->get_id()] = $course->get_id();
         }
-
+        
         $conditions = array();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_COURSE_ID),
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(), 
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_COURSE_ID), 
             $course_ids);
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
-                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_TOOL),
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(), 
+                \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_TOOL), 
             new StaticConditionVariable('assignment'));
-
+        
         $subselect_condition = new EqualityCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE),
-            new StaticConditionVariable(Assignment :: class_name()));
-
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE), 
+            new StaticConditionVariable(Assignment::class_name()));
+        
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(),
-                ContentObjectPublication :: PROPERTY_CONTENT_OBJECT_ID),
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
-            null,
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID), 
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
+            null, 
             $subselect_condition);
         $condition = new AndCondition($conditions);
-
-        $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            ContentObjectPublication :: class_name(),
+        
+        $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+            ContentObjectPublication::class_name(), 
             new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
+                $condition, 
+                null, 
+                null, 
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: class_name(),
-                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication :: PROPERTY_DISPLAY_ORDER_INDEX)))))->as_array();
-
+                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::class_name(), 
+                            \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX)))))->as_array();
+        
         $ending_assignments = array();
         foreach ($publications as $publication)
         {
@@ -84,32 +84,32 @@ class EndingAssignments extends Block
             if ($assignment->get_end_time() > time() && $assignment->get_end_time() < $deadline)
             {
                 $parameters = array(
-                    \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE => $publication->get_course_id(),
-                    Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE,
-                    \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL => NewBlock :: TOOL_ASSIGNMENT,
-                    \Chamilo\Application\Weblcms\Manager :: PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: ACTION_BROWSE_SUBMITTERS,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_BROWSER_TYPE => ContentObjectRenderer :: TYPE_TABLE,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $publication->get_id());
-
+                    \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $publication->get_course_id(), 
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(), 
+                    Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE, 
+                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => NewBlock::TOOL_ASSIGNMENT, 
+                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_BROWSE_SUBMITTERS, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => ContentObjectRenderer::TYPE_TABLE, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id());
+                
                 $redirect = new Redirect($parameters);
                 $link = $redirect->getUrl();
-
+                
                 $ending_assignments[$assignment->get_end_time() . ' ' . $publication->get_id()] = array(
-                    'title' => $assignment->get_title(),
-                    'link' => $link,
+                    'title' => $assignment->get_title(), 
+                    'link' => $link, 
                     'end_time' => $assignment->get_end_time());
             }
         }
-
+        
         ksort($ending_assignments);
         $html = $this->displayNewItems($ending_assignments);
-
+        
         if (count($html) == 0)
         {
-            return Translation :: get('NoAssignmentsEndComingWeek');
+            return Translation::get('NoAssignmentsEndComingWeek');
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -118,14 +118,14 @@ class EndingAssignments extends Block
         $html = array();
         foreach ($items as $item)
         {
-            $end_date = DatetimeUtilities :: format_locale_date(
-                Translation :: get('DateFormatShort', null, Utilities :: COMMON_LIBRARIES) . ', ' . Translation :: get(
-                    'TimeNoSecFormat',
-                    null,
-                    Utilities :: COMMON_LIBRARIES),
+            $end_date = DatetimeUtilities::format_locale_date(
+                Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' . Translation::get(
+                    'TimeNoSecFormat', 
+                    null, 
+                    Utilities::COMMON_LIBRARIES), 
                 $item['end_time']);
-
-            $html[] = '<a href="' . $item['link'] . '">' . $item['title'] . '</a>: ' . Translation :: get('Until') . ' ' .
+            
+            $html[] = '<a href="' . $item['link'] . '">' . $item['title'] . '</a>: ' . Translation::get('Until') . ' ' .
                  $end_date . '<br />';
         }
         return $html;

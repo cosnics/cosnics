@@ -36,7 +36,7 @@ class RequestTest extends DataClassTest
         $mock_object = $this->prepare_mock_object_for_check_before_save_tests(false, true, false);
         
         $this->assertTrue($this->invoke_check_before_save($mock_object));
-        $this->assertTrue($mock_object->get_status() == Request :: STATUS_IN_PROGRESS);
+        $this->assertTrue($mock_object->get_status() == Request::STATUS_IN_PROGRESS);
     }
 
     /**
@@ -48,7 +48,7 @@ class RequestTest extends DataClassTest
         $mock_object = $this->prepare_mock_object_for_check_before_save_tests(true, false, false);
         
         $this->assertTrue($this->invoke_check_before_save($mock_object));
-        $this->assertTrue($mock_object->get_process_type() == Request :: PROCESS_TYPE_CHECK_AND_VISIBLE);
+        $this->assertTrue($mock_object->get_process_type() == Request::PROCESS_TYPE_CHECK_AND_VISIBLE);
     }
 
     /**
@@ -69,7 +69,7 @@ class RequestTest extends DataClassTest
         $request = new Request();
         
         $data_manager_mock = $this->getMock('\application\weblcms\tool\ephorus\DataManager');
-        $data_manager_mock :: staticExpects($this->once())->method('deletes')->will($this->returnValue(true));
+        $data_manager_mock::staticExpects($this->once())->method('deletes')->will($this->returnValue(true));
         
         $request->set_data_manager_class($data_manager_mock);
         $request->set_id(1);
@@ -102,7 +102,7 @@ class RequestTest extends DataClassTest
      */
     public function test_is_status_valid()
     {
-        $this->assertTrue($this->invoke_is_status_valid(Request :: STATUS_OK));
+        $this->assertTrue($this->invoke_is_status_valid(Request::STATUS_OK));
     }
 
     /**
@@ -118,7 +118,7 @@ class RequestTest extends DataClassTest
      */
     public function test_is_process_type_valid()
     {
-        $this->assertTrue($this->invoke_is_process_type_valid(Request :: PROCESS_TYPE_CHECK_AND_VISIBLE));
+        $this->assertTrue($this->invoke_is_process_type_valid(Request::PROCESS_TYPE_CHECK_AND_VISIBLE));
     }
 
     /**
@@ -365,7 +365,7 @@ class RequestTest extends DataClassTest
     protected function get_string_utilities_mock_with_return_value($is_null_or_empty_return)
     {
         $string_utilities_mock = $this->getMock('\libraries\utilities\StringUtilities');
-        $string_utilities_mock :: staticExpects($this->any())->method('is_null_or_empty')->will(
+        $string_utilities_mock::staticExpects($this->any())->method('is_null_or_empty')->will(
             $this->returnValue($is_null_or_empty_return));
         
         return $string_utilities_mock;

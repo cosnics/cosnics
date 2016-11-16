@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Service to manage open courses
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class OpenCourseService
@@ -39,12 +39,12 @@ class OpenCourseService
 
     /**
      * OpenCourseService constructor.
-     *
+     * 
      * @param OpenCourseRepository $openCourseRepository
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param UserRoleServiceInterface $userRoleService
      */
-    public function __construct(OpenCourseRepository $openCourseRepository,
+    public function __construct(OpenCourseRepository $openCourseRepository, 
         AuthorizationCheckerInterface $authorizationChecker, UserRoleServiceInterface $userRoleService)
     {
         $this->openCourseRepository = $openCourseRepository;
@@ -54,7 +54,7 @@ class OpenCourseService
 
     /**
      * Retrieves the open courses for a given user
-     *
+     * 
      * @param User $user
      * @param Condition $condition
      * @param int $offset
@@ -69,14 +69,14 @@ class OpenCourseService
         {
             return $this->openCourseRepository->findAllOpenCourses($condition, $offset, $count, $orderBy);
         }
-
+        
         $roles = $this->userRoleService->getRolesForUser($user);
         return $this->openCourseRepository->findOpenCoursesByRoles($roles, $condition, $offset, $count, $orderBy);
     }
 
     /**
      * Returns the closed courses
-     *
+     * 
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -91,7 +91,7 @@ class OpenCourseService
 
     /**
      * Counts the open courses for the given user
-     *
+     * 
      * @param User $user
      * @param Condition $condition
      *
@@ -103,14 +103,14 @@ class OpenCourseService
         {
             $this->openCourseRepository->countAllOpenCourses($condition);
         }
-
+        
         $roles = $this->userRoleService->getRolesForUser($user);
         return $this->openCourseRepository->countOpenCoursesByRoles($roles, $condition);
     }
 
     /**
      * Counts the closed courses
-     *
+     * 
      * @param Condition $condition
      *
      * @return int
@@ -122,7 +122,7 @@ class OpenCourseService
 
     /**
      * Returns the roles for a given open course
-     *
+     * 
      * @param Course $course
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
@@ -134,7 +134,7 @@ class OpenCourseService
 
     /**
      * Attaches given roles to given courses by ids
-     *
+     * 
      * @param int[] $roleIds
      * @param int[] $courseIds
      *
@@ -146,7 +146,7 @@ class OpenCourseService
         {
             return;
         }
-
+        
         foreach ($courseIds as $courseId)
         {
             foreach ($roleIds as $roleId)
@@ -155,7 +155,7 @@ class OpenCourseService
                 $courseEntityRelation->set_course_id($courseId);
                 $courseEntityRelation->setEntityType(CourseEntityRelation::ENTITY_TYPE_ROLE);
                 $courseEntityRelation->setEntityId($roleId);
-
+                
                 if (! $courseEntityRelation->create())
                 {
                     throw new \Exception(
@@ -167,7 +167,7 @@ class OpenCourseService
 
     /**
      * Updates the roles for the courses
-     *
+     * 
      * @param int[] $roleIds
      * @param int[] $courseIds
      *
@@ -181,7 +181,7 @@ class OpenCourseService
 
     /**
      * Removes a course as open course
-     *
+     * 
      * @param int[] $courseIds
      *
      * @throws \Exception
@@ -196,7 +196,7 @@ class OpenCourseService
 
     /**
      * Returns whether or not the course is open for the current user, based on his roles
-     *
+     * 
      * @param Course $course
      * @param User $user
      *

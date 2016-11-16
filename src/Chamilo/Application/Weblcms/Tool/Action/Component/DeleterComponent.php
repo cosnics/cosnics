@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: delete.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.component
  */
 class DeleterComponent extends Manager implements DelegateComponent
@@ -19,39 +19,38 @@ class DeleterComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $publication_ids = $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
-
-        if (!isset($publication_ids))
+        $publication_ids = $this->getRequest()->get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        
+        if (! isset($publication_ids))
         {
             throw new NoObjectSelectedException(
                 Translation::getInstance()->getTranslation(
-                    'ContentObjectPublication', array(), 'Chamilo\Application\Weblcms'
-                )
-            );
+                    'ContentObjectPublication', 
+                    array(), 
+                    'Chamilo\Application\Weblcms'));
         }
-
-        if (!is_array($publication_ids))
+        
+        if (! is_array($publication_ids))
         {
             $publication_ids = array($publication_ids);
         }
-
+        
         $failures = 0;
-
+        
         foreach ($publication_ids as $pid)
         {
-            $publication = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
-                ContentObjectPublication:: class_name(),
-                $pid
-            );
-
+            $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                ContentObjectPublication::class_name(), 
+                $pid);
+            
             $content_object = $publication->get_content_object();
-
-            if ($content_object->get_type() == Introduction:: class_name())
+            
+            if ($content_object->get_type() == Introduction::class_name())
             {
                 $publication->ignore_display_order();
             }
-
-            if ($this->is_allowed(WeblcmsRights :: DELETE_RIGHT, $publication))
+            
+            if ($this->is_allowed(WeblcmsRights::DELETE_RIGHT, $publication))
             {
                 $publication->delete();
             }
@@ -64,22 +63,21 @@ class DeleterComponent extends Manager implements DelegateComponent
         {
             if (count($publication_ids) > 1)
             {
-                $message = htmlentities(Translation:: get('ContentObjectPublicationsDeleted'));
+                $message = htmlentities(Translation::get('ContentObjectPublicationsDeleted'));
             }
             else
             {
-                $message = htmlentities(Translation:: get('ContentObjectPublicationDeleted'));
+                $message = htmlentities(Translation::get('ContentObjectPublicationDeleted'));
             }
         }
         else
         {
-            $message = htmlentities(Translation:: get('ContentObjectPublicationsNotDeleted'));
+            $message = htmlentities(Translation::get('ContentObjectPublicationsNotDeleted'));
         }
-
+        
         $this->redirect(
-            $message,
-            $failures > 0,
-            array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => null, 'tool_action' => null)
-        );
+            $message, 
+            $failures > 0, 
+            array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => null, 'tool_action' => null));
     }
 }

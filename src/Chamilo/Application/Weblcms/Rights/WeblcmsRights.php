@@ -20,7 +20,7 @@ use Exception;
 
 /**
  * $Id: weblcms_rights.class.php 218 2009-11-13 14:21:26Z kariboe $
- *
+ * 
  * @package application.lib.weblcms
  */
 class WeblcmsRights extends RightsUtil
@@ -31,7 +31,6 @@ class WeblcmsRights extends RightsUtil
     const EDIT_RIGHT = '3';
     const DELETE_RIGHT = '4';
     const MANAGE_CATEGORIES_RIGHT = 5;
-
     const LOCATION_BROWSER = 1;
     const LOCATION_HOME = 2;
     const LOCATION_VIEWER = 3;
@@ -50,137 +49,128 @@ class WeblcmsRights extends RightsUtil
      */
     public static function getInstance()
     {
-        if (!isset(self:: $instance))
+        if (! isset(self::$instance))
         {
-            self:: $instance = new self();
+            self::$instance = new self();
         }
-
-        return self:: $instance;
+        
+        return self::$instance;
     }
 
     public static function get_available_rights($location)
     {
-        if ($location && $location->get_type() == self :: TYPE_PUBLICATION)
+        if ($location && $location->get_type() == self::TYPE_PUBLICATION)
         {
             return array(
-                Translation:: get('ViewRight') => self :: VIEW_RIGHT,
-                Translation:: get('EditRight') => self :: EDIT_RIGHT,
-                Translation:: get('DeleteRight') => self :: DELETE_RIGHT
-            );
+                Translation::get('ViewRight') => self::VIEW_RIGHT, 
+                Translation::get('EditRight') => self::EDIT_RIGHT, 
+                Translation::get('DeleteRight') => self::DELETE_RIGHT);
         }
-
+        
         return array(
-            Translation:: get('ViewRight') => self :: VIEW_RIGHT,
-            Translation:: get('AddRight') => self :: ADD_RIGHT,
-            Translation:: get('EditRight') => self :: EDIT_RIGHT,
-            Translation:: get('DeleteRight') => self :: DELETE_RIGHT,
-            Translation::getInstance()->getTranslation('ManageCategoriesRight', null, Manager::context()) => self::MANAGE_CATEGORIES_RIGHT
-        );
+            Translation::get('ViewRight') => self::VIEW_RIGHT, 
+            Translation::get('AddRight') => self::ADD_RIGHT, 
+            Translation::get('EditRight') => self::EDIT_RIGHT, 
+            Translation::get('DeleteRight') => self::DELETE_RIGHT, 
+            Translation::getInstance()->getTranslation('ManageCategoriesRight', null, Manager::context()) => self::MANAGE_CATEGORIES_RIGHT);
     }
 
     public function get_weblcms_location_by_identifier($type, $identifier)
     {
-
-        return parent:: get_location_by_identifier(Manager:: context(), $type, $identifier);
+        return parent::get_location_by_identifier(Manager::context(), $type, $identifier);
     }
 
     public function get_weblcms_location_id_by_identifier($type, $identifier)
     {
-        return parent:: get_location_id_by_identifier(Manager:: context(), $type, $identifier);
+        return parent::get_location_id_by_identifier(Manager::context(), $type, $identifier);
     }
 
-    public function create_location_in_courses_subtree(
-        $type, $identifier, $parent, $tree_identifier = 0,
-        $create_in_batch = false, $inherit = 1
-    )
+    public function create_location_in_courses_subtree($type, $identifier, $parent, $tree_identifier = 0, 
+        $create_in_batch = false, $inherit = 1)
     {
-        return parent:: create_location(
-            Manager:: context(),
-            $type,
-            $identifier,
-            $inherit,
-            $parent,
-            0,
-            $tree_identifier,
-            WeblcmsRights :: TREE_TYPE_COURSE,
-            true,
-            $create_in_batch
-        );
+        return parent::create_location(
+            Manager::context(), 
+            $type, 
+            $identifier, 
+            $inherit, 
+            $parent, 
+            0, 
+            $tree_identifier, 
+            WeblcmsRights::TREE_TYPE_COURSE, 
+            true, 
+            $create_in_batch);
     }
 
     public function get_weblcms_root_id()
     {
-        return parent:: get_root_id(Manager:: context());
+        return parent::get_root_id(Manager::context());
     }
 
     public function get_weblcms_root()
     {
-        return parent:: get_root(Manager:: context());
+        return parent::get_root(Manager::context());
     }
 
     public function get_courses_subtree_root($tree_identifier = 0)
     {
-        return parent:: get_root(Manager:: context(), WeblcmsRights :: TREE_TYPE_COURSE, $tree_identifier);
+        return parent::get_root(Manager::context(), WeblcmsRights::TREE_TYPE_COURSE, $tree_identifier);
     }
 
     public function get_courses_subtree_root_id($tree_identifier = 0)
     {
-        return parent:: get_root_id(Manager:: context(), WeblcmsRights :: TREE_TYPE_COURSE, $tree_identifier);
+        return parent::get_root_id(Manager::context(), WeblcmsRights::TREE_TYPE_COURSE, $tree_identifier);
     }
 
     public function get_weblcms_location_id_by_identifier_from_courses_subtree($type, $identifier, $course_id = 0)
     {
-        return parent:: get_location_id_by_identifier(
-            Manager:: context(),
-            $type,
-            $identifier,
-            $course_id,
-            WeblcmsRights :: TREE_TYPE_COURSE
-        );
+        return parent::get_location_id_by_identifier(
+            Manager::context(), 
+            $type, 
+            $identifier, 
+            $course_id, 
+            WeblcmsRights::TREE_TYPE_COURSE);
     }
 
     public function get_weblcms_location_by_identifier_from_courses_subtree($type, $identifier, $course_id = 0)
     {
-        return parent:: get_location_by_identifier(
-            Manager:: context(),
-            $type,
-            $identifier,
-            $course_id,
-            WeblcmsRights :: TREE_TYPE_COURSE
-        );
+        return parent::get_location_by_identifier(
+            Manager::context(), 
+            $type, 
+            $identifier, 
+            $course_id, 
+            WeblcmsRights::TREE_TYPE_COURSE);
     }
 
     public function is_allowed_in_courses_subtree($right, $identifier, $type, $tree_identifier = 0, $user_id = null)
     {
         if (is_null($user_id))
         {
-            $user_id = Session:: get_user_id();
+            $user_id = Session::get_user_id();
         }
-        $course_id = Request:: get(Manager :: PARAM_COURSE);
-
+        $course_id = Request::get(Manager::PARAM_COURSE);
+        
         $entities = array();
-        $entities[] = CourseGroupEntity:: getInstance($course_id);
-        $entities[] = CourseUserEntity:: getInstance();
-        $entities[] = CoursePlatformGroupEntity:: getInstance($course_id);
-
+        $entities[] = CourseGroupEntity::getInstance($course_id);
+        $entities[] = CourseUserEntity::getInstance();
+        $entities[] = CoursePlatformGroupEntity::getInstance($course_id);
+        
         try
         {
-            return parent:: is_allowed(
-                $right,
-                Manager:: context(),
-                $user_id,
-                $entities,
-                $identifier,
-                $type,
-                $tree_identifier,
-                WeblcmsRights :: TREE_TYPE_COURSE,
-                true
-            );
+            return parent::is_allowed(
+                $right, 
+                Manager::context(), 
+                $user_id, 
+                $entities, 
+                $identifier, 
+                $type, 
+                $tree_identifier, 
+                WeblcmsRights::TREE_TYPE_COURSE, 
+                true);
         }
         catch (Exception $exception)
         {
             error_log($exception->getMessage());
-
+            
             return false;
         }
     }
@@ -188,7 +178,7 @@ class WeblcmsRights extends RightsUtil
     public function render_target_entities_as_string($entities)
     {
         $target_list = array();
-
+        
         // don't display each individual user if it is published for
         // everybody...
         // if a name is alfabetically before "everybody" this would be the
@@ -197,82 +187,79 @@ class WeblcmsRights extends RightsUtil
         // "everybody"
         if (array_key_exists(0, $entities[0]))
         {
-            $target_list[] = Translation:: get('Everybody', null, Utilities :: COMMON_LIBRARIES);
+            $target_list[] = Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES);
         }
         else
         {
             $target_list[] = '<select>';
-
+            
             foreach ($entities as $entity_type => $entity_ids)
             {
                 switch ($entity_type)
                 {
-                    case CoursePlatformGroupEntity :: ENTITY_TYPE :
+                    case CoursePlatformGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $group_id)
                         {
-                            $group = \Chamilo\Core\Group\Storage\DataManager:: retrieve_by_id(
-                                Group:: class_name(),
-                                $group_id
-                            );
+                            $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(
+                                Group::class_name(), 
+                                $group_id);
                             if ($group)
                             {
                                 $target_list[] = '<option>' . $group->get_name() . '</option>';
                             }
                         }
                         break;
-                    case CourseUserEntity :: ENTITY_TYPE :
+                    case CourseUserEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $user_id)
                         {
                             $target_list[] = '<option>' .
-                                \Chamilo\Core\User\Storage\DataManager:: get_fullname_from_user($user_id) . '</option>';
+                                 \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user($user_id) . '</option>';
                         }
                         break;
-                    case CourseGroupEntity :: ENTITY_TYPE :
+                    case CourseGroupEntity::ENTITY_TYPE :
                         foreach ($entity_ids as $course_group_id)
                         {
-                            $course_group = CourseGroupDataManager:: retrieve_by_id(
-                                CourseGroup:: class_name(),
-                                $course_group_id
-                            );
-
+                            $course_group = CourseGroupDataManager::retrieve_by_id(
+                                CourseGroup::class_name(), 
+                                $course_group_id);
+                            
                             if ($course_group)
                             {
                                 $target_list[] = '<option>' . $course_group->get_name() . '</option>';
                             }
                         }
                         break;
-
+                    
                     case 0 :
-                        $target_list[] = '<option>' .
-                            Translation:: get('Everybody', null, Utilities :: COMMON_LIBRARIES) . '</option>';
+                        $target_list[] = '<option>' . Translation::get('Everybody', null, Utilities::COMMON_LIBRARIES) .
+                             '</option>';
                         break;
                 }
             }
-
+            
             $target_list[] = '</select>';
         }
-
+        
         return implode(PHP_EOL, $target_list);
     }
 
     public function create_subtree_root_location($tree_identifier, $tree_type, $return_location = false)
     {
         return $this->create_location(
-            Manager:: context(),
-            self :: TYPE_ROOT,
-            0,
-            0,
-            0,
-            0,
-            $tree_identifier,
-            $tree_type,
-            $return_location
-        );
+            Manager::context(), 
+            self::TYPE_ROOT, 
+            0, 
+            0, 
+            0, 
+            0, 
+            $tree_identifier, 
+            $tree_type, 
+            $return_location);
     }
 
     /**
      * Inverts the location entity right for a given right, entity, entity type and location
-     *
+     * 
      * @param $right int
      * @param $entity_id int
      * @param $entity_type int
@@ -282,18 +269,12 @@ class WeblcmsRights extends RightsUtil
      */
     public function invert_location_entity_right($right, $entity_id, $entity_type, $location_id)
     {
-        return parent:: invert_location_entity_right(
-            Manager:: context(),
-            $right,
-            $entity_id,
-            $entity_type,
-            $location_id
-        );
+        return parent::invert_location_entity_right(Manager::context(), $right, $entity_id, $entity_type, $location_id);
     }
 
     /**
      * Returns the publication identifiers on which a right has been granted for a given user in a given course
-     *
+     * 
      * @param int $right
      * @param RightsLocation $parent_location
      * @param Course $course
@@ -301,18 +282,20 @@ class WeblcmsRights extends RightsUtil
      *
      * @return mixed
      */
-    public function get_publication_identifiers_with_right_granted(
-        $right, RightsLocation $parent_location, Course $course, User $user
-    )
+    public function get_publication_identifiers_with_right_granted($right, RightsLocation $parent_location, 
+        Course $course, User $user)
     {
         $entities = array();
         $entities[] = CourseGroupEntity::getInstance($course->getId());
         $entities[] = CourseUserEntity::getInstance();
         $entities[] = CoursePlatformGroupEntity::getInstance($course->getId());
-
+        
         return $this->get_identifiers_with_right_granted(
-            $right, \Chamilo\Application\Weblcms\Manager::context(), $parent_location,
-            WeblcmsRights::TYPE_PUBLICATION, $user->getId(), $entities
-        );
+            $right, 
+            \Chamilo\Application\Weblcms\Manager::context(), 
+            $parent_location, 
+            WeblcmsRights::TYPE_PUBLICATION, 
+            $user->getId(), 
+            $entities);
     }
 }

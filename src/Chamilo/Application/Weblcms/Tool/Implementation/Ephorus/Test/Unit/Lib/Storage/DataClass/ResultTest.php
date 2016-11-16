@@ -81,7 +81,7 @@ class ResultTest extends DataClassTest
         $result = $this->prepare_result_object_with_mocked_string_utilities($mocked_string_utilities_result);
         
         $data_manager_mock = $this->getMock('\application\weblcms\tool\ephorus\DataManager');
-        $data_manager_mock :: staticExpects($this->once())->method('retrieve')->will(
+        $data_manager_mock::staticExpects($this->once())->method('retrieve')->will(
             $this->returnValue($mocked_data_manager_result));
         
         $result->set_data_manager_class($data_manager_mock);
@@ -99,7 +99,7 @@ class ResultTest extends DataClassTest
     protected function prepare_result_object_with_mocked_string_utilities($mocked_string_utilities_result)
     {
         $string_utilities_mock = $this->getMock('\libraries\utilities\StringUtilities');
-        $string_utilities_mock :: staticExpects($this->once())->method('is_null_or_empty')->will(
+        $string_utilities_mock::staticExpects($this->once())->method('is_null_or_empty')->will(
             $this->returnValue($mocked_string_utilities_result));
         
         $result = $this->get_data_class_object();

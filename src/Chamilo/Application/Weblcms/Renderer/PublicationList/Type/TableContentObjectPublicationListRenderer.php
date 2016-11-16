@@ -7,7 +7,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 
 /**
  * Renderer to display a sortable table with learning object publications.
- *
+ * 
  * @package application.weblcms
  * @author Hans De Bisschop - EHB
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
@@ -20,17 +20,17 @@ class TableContentObjectPublicationListRenderer extends ContentObjectPublication
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the HTML output of this renderer.
-     *
+     * 
      * @return string The HTML output
      */
     public function as_html()
     {
         $context = $this->get_tool_browser()->get_parent()->package();
         $publication_table_class = $context . '\Table\Publication\PublicationTable';
-
+        
         if (class_exists($publication_table_class))
         {
             $table = new $publication_table_class($this);
@@ -46,13 +46,13 @@ class TableContentObjectPublicationListRenderer extends ContentObjectPublication
                 $table = new ObjectPublicationTable($this);
             }
         }
-
+        
         return $table->as_html();
     }
 
     /**
      * Returns the parameters that the table needs for the url building
-     *
+     * 
      * @return string[]
      */
     public function get_parameters()
@@ -62,7 +62,7 @@ class TableContentObjectPublicationListRenderer extends ContentObjectPublication
 
     /**
      * Returns the condition
-     *
+     * 
      * @param string $table_class_name
      *
      * @return \libraries\storage\Condition

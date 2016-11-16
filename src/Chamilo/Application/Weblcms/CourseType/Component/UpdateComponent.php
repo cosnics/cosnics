@@ -47,7 +47,7 @@ class UpdateComponent extends CourseTypeFormActionComponent
             return false;
         }
         
-        if ($form_values[CourseTypeForm :: PROPERTY_FORCE_UPDATE] == 1)
+        if ($form_values[CourseTypeForm::PROPERTY_FORCE_UPDATE] == 1)
         {
             if (! $course_type->force_course_settings_to_courses())
             {
@@ -69,12 +69,12 @@ class UpdateComponent extends CourseTypeFormActionComponent
      */
     protected function create_rights_from_form_values(CourseType $course_type, $form_values)
     {
-        if (! parent :: create_rights_from_form_values($course_type, $form_values))
+        if (! parent::create_rights_from_form_values($course_type, $form_values))
         {
             return false;
         }
         
-        if ($form_values[CourseTypeForm :: PROPERTY_FORCE_UPDATE] == 1)
+        if ($form_values[CourseTypeForm::PROPERTY_FORCE_UPDATE] == 1)
         {
             return $course_type->force_rights_to_courses();
         }
@@ -99,7 +99,7 @@ class UpdateComponent extends CourseTypeFormActionComponent
     {
         $breadcrumbtrail->add_help('weblcms_course_type_update');
         $breadcrumbtrail->add(
-            new Breadcrumb($this->get_browse_course_type_url(), Translation :: get('CourseTypeManagerBrowseComponent')));
+            new Breadcrumb($this->get_browse_course_type_url(), Translation::get('CourseTypeManagerBrowseComponent')));
     }
 
     /**
@@ -109,6 +109,6 @@ class UpdateComponent extends CourseTypeFormActionComponent
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_COURSE_TYPE_ID);
+        return array(self::PARAM_COURSE_TYPE_ID);
     }
 }

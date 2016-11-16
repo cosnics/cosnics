@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -16,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Wrapper for the weblcms data manager
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class WeblcmsRepository implements WeblcmsRepositoryInterface
@@ -24,7 +23,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
 
     /**
      * Retrieves a user by a username
-     *
+     * 
      * @param string $username
      *
      * @return User
@@ -38,7 +37,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
 
     /**
      * Retrieves a group by a code
-     *
+     * 
      * @param string $groupCode
      *
      * @return Group
@@ -50,7 +49,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
 
     /**
      * Retrieves a course by a code
-     *
+     * 
      * @param string $courseCode
      *
      * @return Course
@@ -61,9 +60,10 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
     }
 
     /**
-     * Retrieves a course entity relation by a given entity and course. The entity is defined by a type
+     * Retrieves a course entity relation by a given entity and course.
+     * The entity is defined by a type
      * and an identifier.
-     *
+     * 
      * @param int $entityType
      * @param int $entityId
      * @param int $courseId
@@ -73,26 +73,23 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
     public function retrieveCourseEntityRelationByEntityAndCourse($entityType, $entityId, $courseId)
     {
         $conditions = array();
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($entityType)
-        );
-
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
+            new StaticConditionVariable($entityType));
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($entityId)
-        );
-
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID), 
+            new StaticConditionVariable($entityId));
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticConditionVariable($courseId)
-        );
-
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_COURSE_ID), 
+            new StaticConditionVariable($courseId));
+        
         $condition = new AndCondition($conditions);
-
+        
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve(
-            CourseEntityRelation::class_name(), new DataClassRetrieveParameters($condition)
-        );
+            CourseEntityRelation::class_name(), 
+            new DataClassRetrieveParameters($condition));
     }
 }

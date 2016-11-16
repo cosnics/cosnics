@@ -16,7 +16,7 @@ class SubscribeAsAdminComponent extends SubscribeComponent
      */
     public function run()
     {
-        Request :: set_get(self :: PARAM_STATUS, 1);
-        parent :: run();
+        Request::set_get(self::PARAM_STATUS, 1);
+        parent::run();
     }
 }

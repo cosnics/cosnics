@@ -9,10 +9,10 @@ use phpFreeChat;
 
 /**
  * $Id: chat_viewer.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.chat.component
  */
-require_once Path :: getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
+require_once Path::getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
 class ViewerComponent extends Manager
 {
 
@@ -20,19 +20,19 @@ class ViewerComponent extends Manager
     {
         $course = $this->get_course();
         $user = $this->get_user();
-
-        $course_rel_user = \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_course_user_relation_by_course_and_user(
-            $course->get_id(),
+        
+        $course_rel_user = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_course_user_relation_by_course_and_user(
+            $course->get_id(), 
             $user->get_id());
-
+        
         $params = array();
-
+        
         if (($course_rel_user && $course_rel_user->get_status() == 1) || $user->is_platform_admin())
             $params["isadmin"] = true;
-
-        $params["data_public_url"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Public' ,true);
-        $params["data_public_path"] = Path :: getInstance()->getPublicStoragePath(self::package().'\Public');
-        $params["data_private_path"] = Path :: getInstance()->getLogPath() . 'phpfreechat';
+        
+        $params["data_public_url"] = Path::getInstance()->getPublicStoragePath(self::package() . '\Public', true);
+        $params["data_public_path"] = Path::getInstance()->getPublicStoragePath(self::package() . '\Public');
+        $params["data_private_path"] = Path::getInstance()->getLogPath() . 'phpfreechat';
         $params["server_script_url"] = $_SERVER['REQUEST_URI'];
         $params["serverid"] = $course->get_id();
         $params["title"] = $course->get_title();
@@ -47,21 +47,21 @@ class ViewerComponent extends Manager
         $params["btn_sh_whosonline"] = false;
         $params["btn_sh_smileys"] = false;
         $params["displaytabimage"] = false;
-
+        
         $chat = new phpFreeChat($params);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-
+        
         if (! function_exists('filemtime'))
         {
-            $html[] = Translation :: get('FileMTimeWarning');
+            $html[] = Translation::get('FileMTimeWarning');
         }
-
+        
         $html[] = $chat->printChat(true);
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -72,6 +72,6 @@ class ViewerComponent extends Manager
 
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID);
+        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
     }
 }

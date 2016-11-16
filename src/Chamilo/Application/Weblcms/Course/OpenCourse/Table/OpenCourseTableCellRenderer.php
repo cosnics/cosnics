@@ -17,14 +17,15 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Cell renderer for the open courses table
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
+
     /**
      * Renders a cell for a given object
-     *
+     * 
      * @param TableColumn $column
      * @param array $courseRecord
      *
@@ -36,50 +37,49 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
         {
             switch ($column->get_class_name())
             {
-                case Course :: class_name() :
-                {
-                    switch ($column->get_name())
+                case Course::class_name() :
                     {
-                        case Course :: PROPERTY_TITLE :
-                            $course_title = parent:: render_cell($column, $courseRecord);
-                            $courseViewerUrl = $this->get_component()->getViewCourseUrl(
-                                $courseRecord[Course::PROPERTY_ID]
-                            );
-
-                            return '<a href="' . $courseViewerUrl . '">' . $course_title . '</a>';
+                        switch ($column->get_name())
+                        {
+                            case Course::PROPERTY_TITLE :
+                                $course_title = parent::render_cell($column, $courseRecord);
+                                $courseViewerUrl = $this->get_component()->getViewCourseUrl(
+                                    $courseRecord[Course::PROPERTY_ID]);
+                                
+                                return '<a href="' . $courseViewerUrl . '">' . $course_title . '</a>';
+                        }
+                        
+                        break;
                     }
-
-                    break;
-                }
                 case Role::class_name() :
-                {
-                    switch ($column->get_name())
                     {
-                        case Role::PROPERTY_ROLE:
-                            $courseObject = new Course($courseRecord);
-                            $roles = $this->getOpenCourseService()->getRolesForOpenCourse($courseObject);
-
-                            $rolesHtml = array();
-
-                            $rolesHtml[] = '<select>';
-                            while ($role = $roles->next_result())
-                            {
-                                $rolesHtml[] = '<option>' . $role->getRole() . '</option>';
-                            }
-                            $rolesHtml[] = '</select>';
-
-                            return implode(PHP_EOL, $rolesHtml);
+                        switch ($column->get_name())
+                        {
+                            case Role::PROPERTY_ROLE :
+                                $courseObject = new Course($courseRecord);
+                                $roles = $this->getOpenCourseService()->getRolesForOpenCourse($courseObject);
+                                
+                                $rolesHtml = array();
+                                
+                                $rolesHtml[] = '<select>';
+                                while ($role = $roles->next_result())
+                                {
+                                    $rolesHtml[] = '<option>' . $role->getRole() . '</option>';
+                                }
+                                $rolesHtml[] = '</select>';
+                                
+                                return implode(PHP_EOL, $rolesHtml);
+                        }
                     }
-                }
             }
         }
-
+        
         return parent::render_cell($column, $courseRecord);
     }
 
     /**
      * Returns the actions toolbar
-     *
+     * 
      * @param mixed $course
      *
      * @return String
@@ -88,44 +88,39 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
     {
         $translator = Translation::getInstance();
         $theme = Theme::getInstance();
-
+        
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->getTranslation('ViewCourseHome', null, Manager::context()),
-                $theme->getCommonImagePath('Action/Home'),
-                $this->get_component()->getViewCourseUrl($course[Course::PROPERTY_ID]),
-                ToolbarItem::DISPLAY_ICON
-            )
-        );
-
-        if($this->get_component()->isAuthorized(Manager::context(), 'ManageOpenCourses'))
+                $translator->getTranslation('ViewCourseHome', null, Manager::context()), 
+                $theme->getCommonImagePath('Action/Home'), 
+                $this->get_component()->getViewCourseUrl($course[Course::PROPERTY_ID]), 
+                ToolbarItem::DISPLAY_ICON));
+        
+        if ($this->get_component()->isAuthorized(Manager::context(), 'ManageOpenCourses'))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->getTranslation('Edit', null, Utilities::COMMON_LIBRARIES),
-                    $theme->getCommonImagePath('Action/Edit'),
-                    $this->get_component()->getUpdateOpenCourseUrl($course[Course::PROPERTY_ID]),
-                    ToolbarItem::DISPLAY_ICON
-                )
-            );
-
+                    $translator->getTranslation('Edit', null, Utilities::COMMON_LIBRARIES), 
+                    $theme->getCommonImagePath('Action/Edit'), 
+                    $this->get_component()->getUpdateOpenCourseUrl($course[Course::PROPERTY_ID]), 
+                    ToolbarItem::DISPLAY_ICON));
+            
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->getTranslation('Delete', null, Utilities::COMMON_LIBRARIES),
-                    $theme->getCommonImagePath('Action/Delete'),
-                    $this->get_component()->getDeleteOpenCourseUrl($course[Course::PROPERTY_ID]),
-                    ToolbarItem::DISPLAY_ICON,
-                    true
-                )
-            );
+                    $translator->getTranslation('Delete', null, Utilities::COMMON_LIBRARIES), 
+                    $theme->getCommonImagePath('Action/Delete'), 
+                    $this->get_component()->getDeleteOpenCourseUrl($course[Course::PROPERTY_ID]), 
+                    ToolbarItem::DISPLAY_ICON, 
+                    true));
         }
-
+        
         return $toolbar->render();
     }
 
     /**
+     *
      * @return OpenCourseService
      */
     public function getOpenCourseService()

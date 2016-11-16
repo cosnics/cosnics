@@ -30,55 +30,55 @@ class CourseUserCategoryForm extends FormValidator
 
     public function __construct($form_type, $course_user_category, $user, $action, $parent)
     {
-        parent :: __construct('course_settings', 'post', $action);
-
+        parent::__construct('course_settings', 'post', $action);
+        
         $this->course_user_category = $course_user_category;
         $this->user = $user;
         $this->parent = $parent;
-
+        
         $this->form_type = $form_type;
-        if ($this->form_type == self :: TYPE_EDIT)
+        if ($this->form_type == self::TYPE_EDIT)
         {
             $this->build_editing_form();
         }
-        elseif ($this->form_type == self :: TYPE_CREATE)
+        elseif ($this->form_type == self::TYPE_CREATE)
         {
             $this->build_creation_form();
         }
-
+        
         $this->setDefaults();
     }
 
     public function build_basic_form()
     {
         $this->addElement(
-            'text',
-            CourseUserCategory :: PROPERTY_TITLE,
-            Translation :: get('Title', null, Utilities :: COMMON_LIBRARIES),
+            'text', 
+            CourseUserCategory::PROPERTY_TITLE, 
+            Translation::get('Title', null, Utilities::COMMON_LIBRARIES), 
             array("maxlength" => 50, "size" => 50));
         $this->addRule(
-            CourseUserCategory :: PROPERTY_TITLE,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            CourseUserCategory::PROPERTY_TITLE, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $attributes = array();
-        $attributes['search_url'] = Path :: getInstance()->getBasePath(true) .
+        $attributes['search_url'] = Path::getInstance()->getBasePath(true) .
              'index.php?go=XmlCourseTypeFeed&application=Chamilo%5CApplication%5CWeblcms%5CCourseType%5CAjax';
         $locale = array();
-        $locale['Display'] = Translation :: get('SelectRecipients');
-        $locale['Searching'] = Translation :: get('Searching', null, Utilities :: COMMON_LIBRARIES);
-        $locale['NoResults'] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
-        $locale['Error'] = Translation :: get('Error', null, Utilities :: COMMON_LIBRARIES);
+        $locale['Display'] = Translation::get('SelectRecipients');
+        $locale['Searching'] = Translation::get('Searching', null, Utilities::COMMON_LIBRARIES);
+        $locale['NoResults'] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
+        $locale['Error'] = Translation::get('Error', null, Utilities::COMMON_LIBRARIES);
         $locale['load_elements'] = true;
         $attributes['locale'] = $locale;
         $attributes['defaults'] = array();
-
+        
         $element_finder = $this->createElement(
-            'user_group_finder',
-            self :: COURSE_TYPE_TARGET_ELEMENTS,
-            Translation :: get('CourseType'),
-            $attributes['search_url'],
-            $attributes['locale'],
+            'user_group_finder', 
+            self::COURSE_TYPE_TARGET_ELEMENTS, 
+            Translation::get('CourseType'), 
+            $attributes['search_url'], 
+            $attributes['locale'], 
             $attributes['defaults']);
         $element_finder->excludeElements($attributes['exclude']);
         $this->addElement($element_finder);
@@ -87,37 +87,37 @@ class CourseUserCategoryForm extends FormValidator
     public function build_editing_form()
     {
         $this->build_basic_form();
-
-        $this->addElement('hidden', CourseUserCategory :: PROPERTY_ID);
-
+        
+        $this->addElement('hidden', CourseUserCategory::PROPERTY_ID);
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Update', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_creation_form()
     {
         $this->build_basic_form();
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -125,27 +125,27 @@ class CourseUserCategoryForm extends FormValidator
     {
         $course_user_category = $this->course_user_category;
         $values = $this->exportValues();
-
+        
         // EDIT TITLE
-        $course_user_category->set_title($values[CourseUserCategory :: PROPERTY_TITLE]);
-
+        $course_user_category->set_title($values[CourseUserCategory::PROPERTY_TITLE]);
+        
         if (! $course_user_category->update())
         {
             return false;
         }
-
+        
         // EDIT COURSE TYPE
         // get the existing course types
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory :: class_name(),
-                CourseTypeUserCategory :: PROPERTY_COURSE_USER_CATEGORY_ID),
+                CourseTypeUserCategory::class_name(), 
+                CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID), 
             new StaticConditionVariable($course_user_category->get_id()));
-
-        $existing_types = DataManager :: retrieves(
-            CourseTypeUserCategory :: class_name(),
+        
+        $existing_types = DataManager::retrieves(
+            CourseTypeUserCategory::class_name(), 
             new DataClassRetrievesParameters($condition));
-
+        
         if ($existing_types)
         {
             $existing_types = $existing_types->as_array();
@@ -154,21 +154,21 @@ class CourseUserCategoryForm extends FormValidator
         {
             $existing_types = array();
         }
-
+        
         // get the selected course types
         $selected_types = $this->get_selected_course_types();
-
+        
         // uses the compare function of CourseTypeUserCategory
         $compare_class = "Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategory";
         $compare_method = "compare";
-
+        
         // create the types that are selected but don't exist, and delete the
         // types that are no longer selected.
         // update is not needed at the moment, but if it ever is: just update
         // all elements that are in both arrays
         $to_be_created = array_udiff($selected_types, $existing_types, array($compare_class, $compare_method));
         $to_be_deleted = array_udiff($existing_types, $selected_types, array($compare_class, $compare_method));
-
+        
         // process changes
         $failures = 0;
         foreach ($to_be_created as $create_this)
@@ -178,7 +178,7 @@ class CourseUserCategoryForm extends FormValidator
                 $failures ++;
             }
         }
-
+        
         $failures += count($to_be_deleted);
         foreach ($to_be_deleted as $delete_this)
         {
@@ -187,7 +187,7 @@ class CourseUserCategoryForm extends FormValidator
                 $failures ++;
             }
         }
-
+        
         return ($failures == 0);
     }
 
@@ -195,30 +195,30 @@ class CourseUserCategoryForm extends FormValidator
     {
         $values = $this->exportValues();
         $course_types = $this->get_selected_course_types();
-
+        
         if (count($course_types) == 0)
         {
             return false;
         }
-
-        $this->course_user_category->set_id($values[CourseUserCategory :: PROPERTY_ID]);
-        $this->course_user_category->set_title($values[CourseUserCategory :: PROPERTY_TITLE]);
-
+        
+        $this->course_user_category->set_id($values[CourseUserCategory::PROPERTY_ID]);
+        $this->course_user_category->set_title($values[CourseUserCategory::PROPERTY_TITLE]);
+        
         if (! $this->course_user_category->create())
         {
             return false;
         }
-
+        
         foreach ($course_types as $course_type)
         {
             $course_type->set_course_user_category_id($this->course_user_category->get_id());
-
+            
             if (! $course_type->create())
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 
@@ -227,8 +227,8 @@ class CourseUserCategoryForm extends FormValidator
         $values = $this->exportValues();
         $course_type_user_category_id = $this->course_user_category->get_id();
         $selected_course_types_array = array();
-
-        foreach ($values[self :: COURSE_TYPE_TARGET_ELEMENTS]['coursetype'] as $value)
+        
+        foreach ($values[self::COURSE_TYPE_TARGET_ELEMENTS]['coursetype'] as $value)
         {
             $selected_course_type_user_category = new CourseTypeUserCategory();
             $selected_course_type_user_category->set_course_type_id($value);
@@ -236,7 +236,7 @@ class CourseUserCategoryForm extends FormValidator
             $selected_course_type_user_category->set_course_user_category_id($course_type_user_category_id);
             $selected_course_types_array[] = $selected_course_type_user_category;
         }
-
+        
         return $selected_course_types_array;
     }
 
@@ -244,40 +244,40 @@ class CourseUserCategoryForm extends FormValidator
      * Sets default values.
      * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
-     *
+     * 
      * @param $defaults array Default values for this form's parameters.
      */
     public function setDefaults($defaults = array())
     {
         $course_user_category = $this->course_user_category;
-        $defaults[CourseUserCategory :: PROPERTY_TITLE] = $course_user_category->get_title();
-
+        $defaults[CourseUserCategory::PROPERTY_TITLE] = $course_user_category->get_title();
+        
         if (! is_null($course_user_category->get_id()))
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseTypeUserCategory :: class_name(),
-                    CourseTypeUserCategory :: PROPERTY_COURSE_USER_CATEGORY_ID),
+                    CourseTypeUserCategory::class_name(), 
+                    CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID), 
                 new StaticConditionVariable($course_user_category->get_id()));
-
-            $course_types = DataManager :: retrieves(
-                CourseTypeUserCategory :: class_name(),
+            
+            $course_types = DataManager::retrieves(
+                CourseTypeUserCategory::class_name(), 
                 new DataClassRetrievesParameters($condition));
-
+            
             while ($type = $course_types->next_result())
             {
                 $selected_course_type = $this->get_course_type_array($type->get_course_type_id());
-                $defaults[self :: COURSE_TYPE_TARGET_ELEMENTS][$selected_course_type['id']] = $selected_course_type;
+                $defaults[self::COURSE_TYPE_TARGET_ELEMENTS][$selected_course_type['id']] = $selected_course_type;
             }
-
-            if (count($defaults[self :: COURSE_TYPE_TARGET_ELEMENTS]) > 0)
+            
+            if (count($defaults[self::COURSE_TYPE_TARGET_ELEMENTS]) > 0)
             {
-                $active = $this->getElement(self :: COURSE_TYPE_TARGET_ELEMENTS);
-                $active->setValue($defaults[self :: COURSE_TYPE_TARGET_ELEMENTS]);
+                $active = $this->getElement(self::COURSE_TYPE_TARGET_ELEMENTS);
+                $active->setValue($defaults[self::COURSE_TYPE_TARGET_ELEMENTS]);
             }
         }
-
-        parent :: setDefaults($defaults);
+        
+        parent::setDefaults($defaults);
     }
 
     public function get_course_type_array($course_type_id)
@@ -286,10 +286,10 @@ class CourseUserCategoryForm extends FormValidator
         $selected_course_type['classes'] = 'type type_course_type';
         if ($course_type_id != 0)
         {
-            $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_by_id(
-                CourseType :: class_name(),
+            $course_type = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_by_id(
+                CourseType::class_name(), 
                 $course_type_id);
-
+            
             $selected_course_type['id'] = 'coursetype_' . $course_type->get_id();
             $selected_course_type['title'] = $course_type->get_title();
             $selected_course_type['description'] = $course_type->get_title();
@@ -297,8 +297,8 @@ class CourseUserCategoryForm extends FormValidator
         else
         {
             $selected_course_type['id'] = 'coursetype_0';
-            $selected_course_type['title'] = Translation :: get('NoCourseType');
-            $selected_course_type['description'] = Translation :: get('NoCourseType');
+            $selected_course_type['title'] = Translation::get('NoCourseType');
+            $selected_course_type['description'] = Translation::get('NoCourseType');
         }
         return $selected_course_type;
     }

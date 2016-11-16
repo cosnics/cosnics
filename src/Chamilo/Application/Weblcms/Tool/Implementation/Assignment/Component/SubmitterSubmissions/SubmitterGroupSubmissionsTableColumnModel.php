@@ -15,8 +15,8 @@ class SubmitterGroupSubmissionsTableColumnModel extends SubmitterUserSubmissions
     {
         $this->add_column(
             new StaticTableColumn(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission :: PROPERTY_SUBMITTER_ID, 
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssignmentSubmission::PROPERTY_SUBMITTER_ID, 
                 false));
-        parent :: initialize_columns();
+        parent::initialize_columns();
     }
 }

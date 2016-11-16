@@ -24,30 +24,30 @@ class GranterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
+        
         $ids = $this->getRequest()->get(self::PARAM_REQUEST_ID);
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
                 $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
-
+                
                 if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->is_target_user(
-                    $this->get_user(),
+                    $this->get_user(), 
                     $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
                 {
                     $failures ++;
                 }
                 else
                 {
-
+                    
                     if ($request->was_granted())
                     {
                         $failures ++;
@@ -55,30 +55,30 @@ class GranterComponent extends Manager
                     else
                     {
                         $course = new Course();
-
+                        
                         $course->set_title($request->get_name());
                         $course->set_course_type_id($request->get_course_type_id());
                         $course->set_visual_code(strtoupper(uniqid()));
                         $course->set_titular_id($request->get_user_id());
                         $course->set_category_id($request->get_category_id());
-
+                        
                         if ($course->create())
                         {
                             $course_settings = array();
                             $course_settings[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] = $course->get_titular_id();
-
+                            
                             if ($course->create_course_settings_from_values($course_settings, true))
                             {
                                 if (CourseManagementRights::getInstance()->create_rights_from_values($course, array()))
                                 {
                                     if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
-                                        $course->get_id(),
-                                        '1',
+                                        $course->get_id(), 
+                                        '1', 
                                         $request->get_user_id()))
                                     {
                                         $request->set_decision(Request::DECISION_GRANTED);
                                         $request->set_decision_date(time());
-
+                                        
                                         if (! $request->update())
                                         {
                                             $failures ++;
@@ -110,7 +110,7 @@ class GranterComponent extends Manager
                     }
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -142,10 +142,10 @@ class GranterComponent extends Manager
                     $parameter = array('OBJECTS' => Translation::get('Requests'));
                 }
             }
-
+            
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES),
-                ($failures ? true : false),
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), 
+                ($failures ? true : false), 
                 array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
@@ -153,8 +153,8 @@ class GranterComponent extends Manager
             return $this->display_error_page(
                 htmlentities(
                     Translation::get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation::get('Request')),
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('Request')), 
                         Utilities::COMMON_LIBRARIES)));
         }
     }
@@ -162,24 +162,24 @@ class GranterComponent extends Manager
     function send_mail(Request $request)
     {
         set_time_limit(3600);
-
+        
         $recipient = $request->get_user();
-
+        
         $siteName = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
-
+        
         $title = Translation::get(
-            'RequestGrantedMailTitle',
+            'RequestGrantedMailTitle', 
             array('PLATFORM' => $siteName, 'NAME' => $request->get_name()));
-
+        
         $body = Translation::get(
-            'RequestGrantedMailBody',
+            'RequestGrantedMailBody', 
             array('USER' => $recipient->get_fullname(), 'PLATFORM' => $siteName, 'NAME' => $request->get_name()));
-
+        
         $mail = new Mail($title, $body, $recipient->get_email());
-
+        
         $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
-
+        
         try
         {
             $mailer->sendMail($mail);

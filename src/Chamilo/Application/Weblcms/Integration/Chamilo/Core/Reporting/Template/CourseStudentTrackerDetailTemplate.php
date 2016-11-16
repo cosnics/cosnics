@@ -25,10 +25,10 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         
-        $user_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS);
-        $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_USERS, $user_id);
+        $user_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
+        $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, $user_id);
         
         $this->add_reporting_block(new UserInformationBlock($this));
         $this->add_reporting_block(new CourseUserAssignmentInformationBlock($this));
@@ -36,14 +36,13 @@ class CourseStudentTrackerDetailTemplate extends ReportingTemplate
         $this->add_reporting_block(new CourseUserLearningPathInformationBlock($this));
         $this->add_reporting_block(new LastAccessToToolsUserBlock($this));
         
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(), 
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
             (int) $user_id);
-
-        if($user)
+        
+        if ($user)
         {
-            BreadcrumbTrail:: getInstance()->add(new Breadcrumb($this->get_url(), $user->get_fullname()));
+            BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), $user->get_fullname()));
         }
     }
-    
 }

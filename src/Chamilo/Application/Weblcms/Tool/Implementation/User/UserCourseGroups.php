@@ -25,7 +25,7 @@ class UserCourseGroups
 
     /**
      * Constructor
-     *
+     * 
      * @param $user_id int
      * @param $border boolean Indicates if a border should be included
      */
@@ -38,7 +38,7 @@ class UserCourseGroups
 
     /**
      * Returns a HTML representation of the user details
-     *
+     * 
      * @return string
      * @todo Implement further details
      */
@@ -53,15 +53,15 @@ class UserCourseGroups
         {
             $html[] = 'class="vertical_space"';
         }
-        $html[] = 'style="clear: both;background-image: url(' . Theme :: getInstance()->getImagePath(
-            \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager :: context(),
+        $html[] = 'style="clear: both;background-image: url(' . Theme::getInstance()->getImagePath(
+            \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::context(), 
             'Logo/22') . ');">';
         $html[] = '<div class="title">';
-        $html[] = Translation :: get('Coursegroups');
+        $html[] = Translation::get('Coursegroups');
         $html[] = '</div>';
         $html[] = '<div class="description">';
         $html[] = '<ul>';
-        $course_groups = CourseGroupDataManager :: retrieve_course_groups_from_user($this->user_id, $this->course_id);
+        $course_groups = CourseGroupDataManager::retrieve_course_groups_from_user($this->user_id, $this->course_id);
         if ($course_groups->size() > 0)
         {
             while ($course_group = $course_groups->next_result())
@@ -73,7 +73,7 @@ class UserCourseGroups
         }
         else
         {
-            $html[] = Translation :: get('NoCourseGroupSubscriptions');
+            $html[] = Translation::get('NoCourseGroupSubscriptions');
         }
         $html[] = '</ul>';
         $html[] = '</div>';

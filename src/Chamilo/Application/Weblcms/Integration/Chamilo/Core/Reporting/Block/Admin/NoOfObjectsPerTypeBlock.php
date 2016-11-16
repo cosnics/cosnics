@@ -21,6 +21,6 @@ class NoOfObjectsPerTypeBlock extends CourseBlock
 
     public function get_views()
     {
-        return array(Html :: VIEW_TABLE, Html :: VIEW_BAR, Html :: VIEW_LINE, Html :: VIEW_STACKED_AREA);
+        return array(Html::VIEW_TABLE, Html::VIEW_BAR, Html::VIEW_LINE, Html::VIEW_STACKED_AREA);
     }
 }

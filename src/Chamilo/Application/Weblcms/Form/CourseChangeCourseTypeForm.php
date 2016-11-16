@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: group_move_form.class.php 224 2010-04-06 14:40:30Z yannick $
- *
+ * 
  * @package applicatie.lib.weblcms.course
  */
 class CourseChangeCourseTypeForm extends FormValidator
@@ -31,32 +31,32 @@ class CourseChangeCourseTypeForm extends FormValidator
         $this->course = $course;
         $this->allow_no_course_type = $user->is_platform_admin() || Configuration::getInstance()->get_setting(
             array('Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype'));
-
+        
         $this->build_form();
     }
 
     public function build_form()
     {
         $this->addElement('hidden', Course::PROPERTY_ID);
-
+        
         $this->addElement(
-            'select',
-            self::SELECT_COURSE_TYPE,
-            Translation::get('NewCourseType'),
+            'select', 
+            self::SELECT_COURSE_TYPE, 
+            Translation::get('NewCourseType'), 
             $this->get_course_types());
         $this->addRule(
-            'CourseType',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+            'CourseType', 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation::get('ChangeCourseType'),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('ChangeCourseType'), 
+            null, 
+            null, 
             'move');
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -68,7 +68,7 @@ class CourseChangeCourseTypeForm extends FormValidator
     public function get_course_types()
     {
         $course_type_objects = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieves(
-            CourseType::class_name(),
+            CourseType::class_name(), 
             new DataClassRetrievesParameters());
         $course_types = array();
         if (empty($this->course_type_id) || $this->allow_no_course_type)
@@ -83,23 +83,23 @@ class CourseChangeCourseTypeForm extends FormValidator
             {
                 $course_types[$course_type->get_id()] = $course_type->get_name();
             }
-
+            
             if (is_null($this->course_type_id) && $count == 0 && ! $this->allow_no_course_type)
             {
                 $parameters = array(
-                    'go' => Manager::ACTION_COURSE_CHANGE_COURSETYPE,
+                    'go' => Manager::ACTION_COURSE_CHANGE_COURSETYPE, 
                     'course' => $this->course->get_id());
                 $this->parent->simple_redirect($parameters);
             }
             $this->addElement(
-                'select',
-                Course::PROPERTY_ID,
-                Translation::get('CourseType'),
-                $course_types,
+                'select', 
+                Course::PROPERTY_ID, 
+                Translation::get('CourseType'), 
+                $course_types, 
                 array('class' => 'course_type_selector'));
             $this->addRule(
-                'CourseType',
-                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                'CourseType', 
+                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
                 'required');
         }
         else

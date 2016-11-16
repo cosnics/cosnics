@@ -31,9 +31,9 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageCourses');
-
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Configuration\Category\Manager :: context(),
+            \Chamilo\Configuration\Category\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
@@ -44,18 +44,18 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
         {
             $redirect = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                    \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER));
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER));
             $breadcrumbtrail->add(
-                new Breadcrumb($redirect->getUrl(), Translation :: get('TypeName', null, 'Chamilo\Core\Admin')));
-
+                new Breadcrumb($redirect->getUrl(), Translation::get('TypeName', null, 'Chamilo\Core\Admin')));
+            
             $redirect = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\Admin\Manager :: context(),
-                    \Chamilo\Core\Admin\Manager :: PARAM_ACTION => \Chamilo\Core\Admin\Manager :: ACTION_ADMIN_BROWSER,
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => ClassnameUtilities :: getInstance()->getNamespaceId(
-                        self :: package())));
-            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation :: get('Courses')));
+                    Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(), 
+                    \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_ADMIN_BROWSER, 
+                    DynamicTabsRenderer::PARAM_SELECTED_TAB => ClassnameUtilities::getInstance()->getNamespaceId(
+                        self::package())));
+            $breadcrumbtrail->add(new Breadcrumb($redirect->getUrl(), Translation::get('Courses')));
         }
     }
 
@@ -76,16 +76,16 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
 
     public function count_categories($condition)
     {
-        return DataManager :: count(CourseCategory :: class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(CourseCategory::class_name(), new DataClassCountParameters($condition));
     }
 
     public function retrieve_categories($condition, $offset, $count, $order_property)
     {
-        return DataManager :: retrieves(
-            CourseCategory :: class_name(),
+        return DataManager::retrieves(
+            CourseCategory::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
-
+    
     // Runs through dataclass
     public function get_next_category_display_order($parent_id)
     {

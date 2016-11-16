@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Note;
 
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
@@ -7,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Note\Storage\DataClass\Note;
 
 /**
  * $Id: note_tool.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.note
  */
 
@@ -20,6 +19,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
 
     public static function get_allowed_types()
     {
-        return array(Note :: class_name());
+        return array(Note::class_name());
     }
 }

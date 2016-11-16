@@ -20,6 +20,6 @@ class SubmissionCourseGroupsBrowserTableColumnModel extends SubmissionGroupsBrow
      */
     protected function add_group_name_column()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
     }
 }

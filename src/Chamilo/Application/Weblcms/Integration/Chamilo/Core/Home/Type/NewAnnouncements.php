@@ -27,24 +27,24 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
      */
     public function displayContent()
     {
-        if (! $this->getBlock()->getSetting(self :: CONFIGURATION_SHOW_CONTENT, false))
+        if (! $this->getBlock()->getSetting(self::CONFIGURATION_SHOW_CONTENT, false))
         {
             $redirect = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: package(),
-                    \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_ANNOUNCEMENT));
-
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::package(), 
+                    \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ANNOUNCEMENT));
+            
             $html = array();
-
+            
             $html[] = '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
                  '">';
-            $html[] = Translation :: get('ClickForAnnouncements', array('URL' => $redirect->getUrl()));
+            $html[] = Translation::get('ClickForAnnouncements', array('URL' => $redirect->getUrl()));
             $html[] = '</div>';
-
+            
             return implode(PHP_EOL, $html);
         }
-
-        return parent :: displayContent();
+        
+        return parent::displayContent();
     }
 
     /**
@@ -53,13 +53,13 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
      */
     public function getCourseViewerLink(Course $course, $publication)
     {
-        $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
-        $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_COURSE;
-        $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE] = $course->get_id();
-        $parameters[\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL] = self :: TOOL_ANNOUNCEMENT;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager :: ACTION_VIEW;
-        $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication :: PROPERTY_ID];
-
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course->get_id();
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_TOOL] = self::TOOL_ANNOUNCEMENT;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;
+        $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $publication[ContentObjectPublication::PROPERTY_ID];
+        
         return $this->getLink($parameters);
     }
 
@@ -69,7 +69,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
      */
     public function getConfigurationVariables()
     {
-        return array(self :: CONFIGURATION_SHOW_CONTENT);
+        return array(self::CONFIGURATION_SHOW_CONTENT);
     }
 
     /**
@@ -78,7 +78,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
      */
     public function getContentObjectTypes()
     {
-        return array(Announcement :: class_name());
+        return array(Announcement::class_name());
     }
 
     /**

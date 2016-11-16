@@ -7,20 +7,22 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Interface class for CourseService
- *
+ * 
  * @package application\weblcms
- *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface CourseServiceInterface
 {
-    /****************************************************************************************************************
-     * Course Functionality                                                                                         *
-     ****************************************************************************************************************/
 
     /**
+     * **************************************************************************************************************
+     * Course Functionality *
+     * **************************************************************************************************************
+     */
+    
+    /**
      * Returns a course by a given id
-     *
+     * 
      * @param int $courseId
      *
      * @return Course
@@ -28,9 +30,10 @@ interface CourseServiceInterface
     public function getCourseById($courseId);
 
     /**
-     * Returns a course for a given user by a given visual code. Checks if the course exists and the user has
+     * Returns a course for a given user by a given visual code.
+     * Checks if the course exists and the user has
      * the correct rights for the course
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $visualCode
      *
@@ -43,7 +46,7 @@ interface CourseServiceInterface
 
     /**
      * Returns the courses by id
-     *
+     * 
      * @param array $courseIds
      *
      * @return Course[]
@@ -52,7 +55,7 @@ interface CourseServiceInterface
 
     /**
      * Returns all the courses for the given user
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -61,7 +64,7 @@ interface CourseServiceInterface
 
     /**
      * Returns every course in which a user is subscribed and that is visible
-     *
+     * 
      * @param User $user
      *
      * @return Course[]
@@ -70,7 +73,7 @@ interface CourseServiceInterface
 
     /**
      * Returns the courses for the given user where the user is a teacher
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -79,20 +82,22 @@ interface CourseServiceInterface
 
     /**
      * Returns the courses for the given user where the user is a student
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
      */
     public function getCoursesWhereUserIsStudent(User $user);
 
-    /****************************************************************************************************************
-     * Course Subscription Functionality                                                                            *
-     ****************************************************************************************************************/
-
+    /**
+     * **************************************************************************************************************
+     * Course Subscription Functionality *
+     * **************************************************************************************************************
+     */
+    
     /**
      * Checks if the user is subscribed to a course
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -102,7 +107,7 @@ interface CourseServiceInterface
 
     /**
      * Checks if the user is subscribed as a teacher in the course
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -112,7 +117,7 @@ interface CourseServiceInterface
 
     /**
      * Checks if the user is subscribed as a student in the course
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
@@ -122,7 +127,7 @@ interface CourseServiceInterface
 
     /**
      * Returns an array of users who are subscribed (directly or through groups) as a teacher in a given course
-     *
+     * 
      * @param Course $course
      *
      * @return User[]
@@ -131,20 +136,22 @@ interface CourseServiceInterface
 
     /**
      * Returns an array of users who are subscribed (directly or through groups) as a student in a given course
-     *
+     * 
      * @param Course $course
      *
      * @return User[]
      */
     public function getStudentsFromCourse(Course $course);
 
-    /****************************************************************************************************************
-     * Tool Functionality                                                                                           *
-     ****************************************************************************************************************/
-
+    /**
+     * **************************************************************************************************************
+     * Tool Functionality *
+     * **************************************************************************************************************
+     */
+    
     /**
      * Returns the tool registration for a given tool
-     *
+     * 
      * @param string $toolName
      *
      * @return CourseTool
@@ -153,7 +160,7 @@ interface CourseServiceInterface
 
     /**
      * Returns the tools that a given user has access to in the course
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *

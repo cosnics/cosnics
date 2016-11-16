@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * Extension on the user entity specific for the course to limit the users
- *
+ * 
  * @author Sven Vanpoucke
  */
 class CourseUserEntity extends UserEntity
@@ -22,21 +22,21 @@ class CourseUserEntity extends UserEntity
 
     /**
      * Limits the users by id
-     *
+     * 
      * @var Array<int>
      */
     private $limited_users;
 
     /**
      * Excludes the users by id
-     *
+     * 
      * @var Array<int>
      */
     private $excluded_users;
 
     /**
      * The current course id
-     *
+     * 
      * @var int
      */
     private $course_id;
@@ -48,11 +48,11 @@ class CourseUserEntity extends UserEntity
 
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new self();
+            self::$instance = new self();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     public function __construct($course_id, $limited_users = array(), $excluded_users = array())
@@ -74,40 +74,40 @@ class CourseUserEntity extends UserEntity
 
     /**
      * Builds the condition with the limited and excluded users
-     *
+     * 
      * @param $condition Condition
      * @return Condition
      */
     public function get_condition(Condition $condition = null)
     {
         $conditions = array();
-
+        
         if ($this->limited_users)
         {
             $conditions[] = new InCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
                 $this->limited_users);
         }
-
+        
         if ($this->excluded_users)
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_ID),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
                     $this->excluded_users));
         }
-
+        
         if ($condition)
         {
             $conditions[] = $condition;
         }
-
+        
         $count = count($conditions);
         if ($count > 1)
         {
             return new AndCondition($conditions);
         }
-
+        
         if ($count == 1)
         {
             return $conditions[0];
@@ -120,10 +120,10 @@ class CourseUserEntity extends UserEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'users',
-            Translation :: get('CourseUsers'),
-            Manager :: package(),
-            'course_users_feed',
+            'users', 
+            Translation::get('CourseUsers'), 
+            Manager::package(), 
+            'course_users_feed', 
             array('course_id' => $this->course_id));
     }
 }

@@ -18,8 +18,8 @@ class SubmissionUsersBrowserTableColumnModel extends SubmissionBrowserTableColum
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(User :: class_name(), User :: PROPERTY_LASTNAME));
+        $this->add_column(new DataClassPropertyTableColumn(User::class_name(), User::PROPERTY_LASTNAME));
         
-        parent :: initialize_columns();
+        parent::initialize_columns();
     }
 }

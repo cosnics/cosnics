@@ -28,81 +28,81 @@ class TargetComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs(self :: ACTION_TARGET, $this->get_target_tabs())->render();
+        $html[] = $this->get_tabs(self::ACTION_TARGET, $this->get_target_tabs())->render();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function get_table_condition($table_class_name)
     {
         $conditions = array();
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable($this->get_selected_entity_type()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
             new StaticConditionVariable($this->get_selected_entity_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_TARGET_TYPE),
+            new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE), 
             new StaticConditionVariable($this->get_selected_target_type()));
-
+        
         $condition = new AndCondition($conditions);
-
+        
         return $condition;
     }
 
     public function get_target_tabs()
     {
         $current_tab = null;
-
+        
         $table = new TargetTable($this);
-
+        
         $tabs = new DynamicVisualTabsRenderer(
-            ClassnameUtilities :: getInstance()->getClassnameFromNamespace(__CLASS__, true),
+            ClassnameUtilities::getInstance()->getClassnameFromNamespace(__CLASS__, true), 
             $table->as_html());
-
+        
         foreach ($this->get_target_types() as $target_type)
         {
             $conditions = array();
-
+            
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_TYPE),
+                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_TYPE), 
                 new StaticConditionVariable($this->get_selected_entity_type()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_ENTITY_ID),
+                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_ENTITY_ID), 
                 new StaticConditionVariable($this->get_selected_entity_id()));
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Admin :: class_name(), Admin :: PROPERTY_TARGET_TYPE),
-                new StaticConditionVariable($target_type :: ENTITY_TYPE));
-
+                new PropertyConditionVariable(Admin::class_name(), Admin::PROPERTY_TARGET_TYPE), 
+                new StaticConditionVariable($target_type::ENTITY_TYPE));
+            
             $condition = new AndCondition($conditions);
-
-            $count = DataManager :: count(Admin :: class_name(), new DataClassCountParameters($condition));
-
+            
+            $count = DataManager::count(Admin::class_name(), new DataClassCountParameters($condition));
+            
             if ($count > 0)
             {
                 $tabs->add_tab(
                     new DynamicVisualTab(
-                        $target_type :: ENTITY_TYPE,
-                        Translation :: get(
-                            StringUtilities :: getInstance()->createString($target_type :: ENTITY_NAME)->upperCamelize()->__toString()),
-                        Theme :: getInstance()->getImagePath(self :: package(), 'Target/' . $target_type :: ENTITY_TYPE),
+                        $target_type::ENTITY_TYPE, 
+                        Translation::get(
+                            StringUtilities::getInstance()->createString($target_type::ENTITY_NAME)->upperCamelize()->__toString()), 
+                        Theme::getInstance()->getImagePath(self::package(), 'Target/' . $target_type::ENTITY_TYPE), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_TARGET,
-                                self :: PARAM_ENTITY_ID => $this->get_selected_entity_id(),
-                                self :: PARAM_ENTITY_TYPE => $this->get_selected_entity_type(),
-                                self :: PARAM_TARGET_TYPE => $target_type :: ENTITY_TYPE)),
-                        ($this->get_selected_target_type() == $target_type :: ENTITY_TYPE ? true : false)));
+                                self::PARAM_ACTION => self::ACTION_TARGET, 
+                                self::PARAM_ENTITY_ID => $this->get_selected_entity_id(), 
+                                self::PARAM_ENTITY_TYPE => $this->get_selected_entity_type(), 
+                                self::PARAM_TARGET_TYPE => $target_type::ENTITY_TYPE)), 
+                        ($this->get_selected_target_type() == $target_type::ENTITY_TYPE ? true : false)));
             }
         }
-
+        
         return $tabs->render();
     }
 }

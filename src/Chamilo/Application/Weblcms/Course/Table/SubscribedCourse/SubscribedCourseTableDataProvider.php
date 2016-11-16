@@ -33,7 +33,7 @@ class SubscribedCourseTableDataProvider extends RecordTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: retrieve_users_courses_with_course_type(
+        return DataManager::retrieve_users_courses_with_course_type(
             $this->get_component()->get_user(), 
             $condition, 
             $offset, 
@@ -50,6 +50,6 @@ class SubscribedCourseTableDataProvider extends RecordTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_user_courses($this->get_component()->get_user(), $condition);
+        return DataManager::count_user_courses($this->get_component()->get_user(), $condition);
     }
 }

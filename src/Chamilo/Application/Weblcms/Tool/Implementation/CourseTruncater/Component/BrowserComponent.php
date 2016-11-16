@@ -24,44 +24,44 @@ class BrowserComponent extends Manager
     public function run()
     {
         $course_id = $this->get_course_id();
-
+        
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
-
-        $count_custom_course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: count_custom_course_sections_from_course(
+        
+        $count_custom_course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::count_custom_course_sections_from_course(
             $course_id);
-
-        if (\Chamilo\Application\Weblcms\Course\Storage\DataManager :: count_course_content_object_publications(
+        
+        if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::count_course_content_object_publications(
             $course_id) == 0 && $count_custom_course_sections == 0)
         {
-            throw new \Exception(Translation :: get('NoPublications'));
+            throw new \Exception(Translation::get('NoPublications'));
         }
-
+        
         $publicationSelectorDataMapper = new PublicationSelectorDataMapper();
-
+        
         $publications = $publicationSelectorDataMapper->getContentObjectPublicationsForPublicationSelector($course_id);
         $categories = $publicationSelectorDataMapper->getContentObjectPublicationCategoriesForPublicationSelector(
             $course_id);
-
+        
         if ($count_custom_course_sections > 0)
         {
-            $course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: retrieve_custom_course_sections_as_array(
+            $course_sections = \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::retrieve_custom_course_sections_as_array(
                 $course_id);
         }
         else
         {
             $course_sections = array();
         }
-
+        
         $this->course_truncater_form = new CourseTruncaterForm($this, $publications, $categories, $course_sections);
         $this->course_truncater_form->buildForm();
-
+        
         if ($this->course_truncater_form->validate())
         {
             $values = $this->course_truncater_form->exportValues();
-
+            
             if (isset($values['publications']) || isset($values["course_sections"]) ||
                  $values['content_object_categories'] == 1)
             {
@@ -69,58 +69,58 @@ class BrowserComponent extends Manager
                 $delete_categories = $values['content_object_categories'];
                 $categories_ids = array_keys($values['categories']);
                 $course_sections_ids = array_keys($values['course_sections']);
-
+                
                 $success = true;
                 if (count($course_sections_ids) > 0)
                 {
-                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: delete_course_sections(
+                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::delete_course_sections(
                         $course_sections_ids);
                 }
                 if ($delete_categories == 1 && count($categories_ids) > 0)
                 {
-                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: delete_publications_and_categories(
-                        $publications_ids,
+                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::delete_publications_and_categories(
+                        $publications_ids, 
                         $categories_ids);
                 }
                 else
                 {
-                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager :: delete_publications(
+                    $success = $success && \Chamilo\Application\Weblcms\Tool\Implementation\CourseTruncater\Storage\DataManager::delete_publications(
                         $publications_ids);
                 }
-
+                
                 if ($success)
                 {
                     $this->redirect(
-                        Translation :: get('AllSelectedObjectsRemoved'),
-                        false,
+                        Translation::get('AllSelectedObjectsRemoved'), 
+                        false, 
                         array(
-                            \Chamilo\Application\Weblcms\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_VIEW_WEBLCMS_HOME));
+                            \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_WEBLCMS_HOME));
                 }
                 else
                 {
-                    throw new \Exception(Translation :: get('NotAllSelectedObjectsRemoved'));
+                    throw new \Exception(Translation::get('NotAllSelectedObjectsRemoved'));
                 }
             }
             else
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
-                $html[] = Display :: error_message(Translation :: get('SelectAItem'));
+                $html[] = Display::error_message(Translation::get('SelectAItem'));
                 $html[] = $this->course_truncater_form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $this->course_truncater_form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

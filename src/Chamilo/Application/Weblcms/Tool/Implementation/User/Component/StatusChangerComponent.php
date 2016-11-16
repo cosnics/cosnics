@@ -19,26 +19,26 @@ abstract class StatusChangerComponent extends Manager
 
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
-
-        $objects = $this->getRequest()->get(self :: PARAM_OBJECTS);
-
+        
+        $objects = $this->getRequest()->get(self::PARAM_OBJECTS);
+        
         if (! $objects /* || !$status*/)
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException(
-                Translation :: get('UserRelation'));
+                Translation::get('UserRelation'));
         }
-
+        
         if (! is_array($objects))
         {
             $objects = array($objects);
         }
-
+        
         $failed = 0;
-
+        
         foreach ($objects as $this->object)
         {
             $relation = $this->get_relation(); // abstract -> implementation
@@ -47,36 +47,36 @@ abstract class StatusChangerComponent extends Manager
             {
                 $failed ++;
             }
-
+            
             // $relation->set_status($status);
             $relation->set_status($this->get_status());
             if (! $relation->update())
             {
                 $failed ++;
             }
-
-            $parameters[UserStatusChange :: PROPERTY_USER_ID] = $this->get_user_id();
-            $parameters[UserStatusChange :: PROPERTY_SUBJECT_ID] = $this->object;
-            $parameters[UserStatusChange :: PROPERTY_NEW_STATUS] = $this->get_status();
-            $parameters[UserStatusChange :: PROPERTY_COURSE_ID] = Request :: get(
-                \Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
-            $parameters[UserStatusChange :: PROPERTY_DATE] = time();
-            Event :: trigger('UserStatusChange', \Chamilo\Application\Weblcms\Manager :: context(), $parameters);
+            
+            $parameters[UserStatusChange::PROPERTY_USER_ID] = $this->get_user_id();
+            $parameters[UserStatusChange::PROPERTY_SUBJECT_ID] = $this->object;
+            $parameters[UserStatusChange::PROPERTY_NEW_STATUS] = $this->get_status();
+            $parameters[UserStatusChange::PROPERTY_COURSE_ID] = Request::get(
+                \Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+            $parameters[UserStatusChange::PROPERTY_DATE] = time();
+            Event::trigger('UserStatusChange', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
         }
-
+        
         $message = $this->get_general_result(
-            $failed,
-            count($objects),
-            Translation :: get('UserStatus'),
-            Translation :: get('UserStatusses'),
-            Application :: RESULT_TYPE_UPDATED);
-
+            $failed, 
+            count($objects), 
+            Translation::get('UserStatus'), 
+            Translation::get('UserStatusses'), 
+            Application::RESULT_TYPE_UPDATED);
+        
         $this->redirect(
-            $message,
-            $failed > 0,
+            $message, 
+            $failed > 0, 
             array(
-                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_BROWSER,
-                self :: PARAM_TAB => Request :: get(self :: PARAM_TAB)));
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER, 
+                self::PARAM_TAB => Request::get(self::PARAM_TAB)));
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -85,18 +85,18 @@ abstract class StatusChangerComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_BROWSER,
-                        self :: PARAM_TAB => Request :: get(self :: PARAM_TAB))),
-                Translation :: get('UserToolUnsubscribeUserBrowserComponent')));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER, 
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB))), 
+                Translation::get('UserToolUnsubscribeUserBrowserComponent')));
     }
 
     public function get_additional_parameters()
     {
         $params = array();
-        $params[] = self :: PARAM_TAB;
-        if (Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_GROUP))
+        $params[] = self::PARAM_TAB;
+        if (Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
         {
-            $params[] = \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP;
+            $params[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
         }
         return $params;
     }
