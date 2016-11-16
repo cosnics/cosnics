@@ -23,7 +23,7 @@ abstract class Manager extends Application
     const ACTION_ACCOUNT = 'Account';
     const ACTION_SERVICE = 'Service';
     const ACTION_RIGHTS = 'Rights';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      *
@@ -32,31 +32,31 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-
+        
         $this->checkAuthorization(Manager::context());
     }
 
     public function get_update_account_request_url($account_request)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_EDIT, self :: PARAM_REQUEST_ID => $account_request->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_EDIT, self::PARAM_REQUEST_ID => $account_request->get_id()));
     }
 
     public function get_delete_account_request_url($account_request)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_DELETE, self :: PARAM_REQUEST_ID => $account_request->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_DELETE, self::PARAM_REQUEST_ID => $account_request->get_id()));
     }
 
     public function get_accept_account_request_url($account_request)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_ACCEPT, self :: PARAM_REQUEST_ID => $account_request->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_ACCEPT, self::PARAM_REQUEST_ID => $account_request->get_id()));
     }
 
     public function get_reject_account_request_url($account_request)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_REJECT, self :: PARAM_REQUEST_ID => $account_request->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_REJECT, self::PARAM_REQUEST_ID => $account_request->get_id()));
     }
 }

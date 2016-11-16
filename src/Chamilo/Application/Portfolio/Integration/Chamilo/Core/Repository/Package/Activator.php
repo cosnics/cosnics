@@ -5,7 +5,7 @@ use Chamilo\Configuration\Package\NotAllowed;
 
 /**
  * Package activator
- *
+ * 
  * @package application\portfolio\integration\repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

@@ -12,10 +12,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new \Chamilo\Application\CasStorage\Account\Storage\Database();
+            self::$instance = new \Chamilo\Application\CasStorage\Account\Storage\Database();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 }

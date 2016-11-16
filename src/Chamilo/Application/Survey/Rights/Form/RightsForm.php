@@ -47,7 +47,7 @@ class RightsForm extends FormValidator
      */
     public function __construct($formUrl, PublicationEntityRelation $entityRelation = null, $rightType)
     {
-        parent :: __construct('rights', 'post', $formUrl);
+        parent::__construct('rights', 'post', $formUrl);
         
         $this->entityRelation = $entityRelation;
         $this->rightType = $rightType;
@@ -59,18 +59,18 @@ class RightsForm extends FormValidator
     {
         if ($this->entityRelation instanceof PublicationEntityRelation)
         {
-            if ($this->entityRelation->getEntityType() == UserEntity :: ENTITY_TYPE)
+            if ($this->entityRelation->getEntityType() == UserEntity::ENTITY_TYPE)
             {
-                $entityType = UserEntity :: getInstance()->get_entity_translated_name();
-                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-                    User :: class_name(), 
+                $entityType = UserEntity::getInstance()->get_entity_translated_name();
+                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                    User::class_name(), 
                     $this->entityRelation->getEntityId())->get_fullname();
             }
             else
             {
-                $entityType = PlatformGroupEntity :: getInstance()->get_entity_translated_name();
-                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieve_by_id(
-                    Group :: class_name(), 
+                $entityType = PlatformGroupEntity::getInstance()->get_entity_translated_name();
+                $entityName = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
+                    Group::class_name(), 
                     $this->entityRelation->getEntityId())->get_name();
             }
             
@@ -79,67 +79,64 @@ class RightsForm extends FormValidator
         else
         {
             $types = new AdvancedElementFinderElementTypes();
-            $types->add_element_type(UserEntity :: get_element_finder_type());
-            $types->add_element_type(PlatformGroupEntity :: get_element_finder_type());
-            $this->addElement(
-                'advanced_element_finder', 
-                self :: PROPERTY_ACCESS, 
-                Translation :: get('UsersGroups'), 
-                $types);
+            $types->add_element_type(UserEntity::get_element_finder_type());
+            $types->add_element_type(PlatformGroupEntity::get_element_finder_type());
+            $this->addElement('advanced_element_finder', self::PROPERTY_ACCESS, Translation::get('UsersGroups'), $types);
         }
         
-        if ($this->rightType == RightsService :: PUBLICATION_RIGHTS)
+        if ($this->rightType == RightsService::PUBLICATION_RIGHTS)
         {
             $this->addElement(
                 'checkbox', 
-                self :: PROPERTY_TAKE, 
-                Translation :: get('TakeRight'), 
+                self::PROPERTY_TAKE, 
+                Translation::get('TakeRight'), 
                 null, 
                 null, 
-                RightsService :: RIGHT_VIEW | RightsService :: RIGHT_TAKE);
+                RightsService::RIGHT_VIEW | RightsService::RIGHT_TAKE);
             
             $this->addElement(
                 'checkbox', 
-                self :: PROPERTY_MAIL, 
-                Translation :: get('MailRight'), 
+                self::PROPERTY_MAIL, 
+                Translation::get('MailRight'), 
                 null, 
                 null, 
-                RightsService :: RIGHT_VIEW | RightsService :: RIGHT_MAIL);
+                RightsService::RIGHT_VIEW | RightsService::RIGHT_MAIL);
             
             $this->addElement(
                 'checkbox', 
-                self :: PROPERTY_REPORT, 
-                Translation :: get('ReportRight'), 
+                self::PROPERTY_REPORT, 
+                Translation::get('ReportRight'), 
                 null, 
                 null, 
-                RightsService :: RIGHT_VIEW | RightsService :: RIGHT_REPORT);
+                RightsService::RIGHT_VIEW | RightsService::RIGHT_REPORT);
             
-            $this->add_warning_message(null, null, Translation :: get('ManageRightWarning'), true);
+            $this->add_warning_message(null, null, Translation::get('ManageRightWarning'), true);
             
             $this->addElement(
                 'checkbox', 
-                self :: PROPERTY_MANAGE, 
-                Translation :: get('ManageRight'), 
+                self::PROPERTY_MANAGE, 
+                Translation::get('ManageRight'), 
                 null, 
                 null, 
-                RightsService :: RIGHT_VIEW | RightsService :: RIGHT_MAIL | RightsService :: RIGHT_REPORT |
-                     RightsService :: RIGHT_MANAGE);
-        }elseif($this->rightType == RightsService::APPLICATION_RIGHTS){
+                RightsService::RIGHT_VIEW | RightsService::RIGHT_MAIL | RightsService::RIGHT_REPORT |
+                     RightsService::RIGHT_MANAGE);
+        }
+        elseif ($this->rightType == RightsService::APPLICATION_RIGHTS)
+        {
             
             $this->addElement(
-                'checkbox',
-                self :: PROPERTY_PUBLISH,
-                Translation :: get('PublishRight'),
-                null,
-                null,
-                RightsService :: RIGHT_PUBLISH);
-            
+                'checkbox', 
+                self::PROPERTY_PUBLISH, 
+                Translation::get('PublishRight'), 
+                null, 
+                null, 
+                RightsService::RIGHT_PUBLISH);
         }
         
         $this->addElement(
             'html', 
-            ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Application\Survey\Rights', true) . 'RightsForm.js'));
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Application\Survey\Rights', true) . 'RightsForm.js'));
         
         $this->addSaveResetButtons();
     }
@@ -150,17 +147,17 @@ class RightsForm extends FormValidator
         {
             $givenRights = $this->entityRelation->getRights();
             
-            $defaults[self :: PROPERTY_TAKE] = $givenRights & RightsService :: RIGHT_TAKE;
-            $defaults[self :: PROPERTY_MAIL] = $givenRights & RightsService :: RIGHT_MAIL;
-            $defaults[self :: PROPERTY_REPORT] = $givenRights & RightsService :: RIGHT_REPORT;
-            $defaults[self :: PROPERTY_MANAGE] = $givenRights & RightsService :: RIGHT_MANAGE;
-            $defaults[self :: PROPERTY_PUBLISH] = $givenRights & RightsService :: RIGHT_PUBLISH;
+            $defaults[self::PROPERTY_TAKE] = $givenRights & RightsService::RIGHT_TAKE;
+            $defaults[self::PROPERTY_MAIL] = $givenRights & RightsService::RIGHT_MAIL;
+            $defaults[self::PROPERTY_REPORT] = $givenRights & RightsService::RIGHT_REPORT;
+            $defaults[self::PROPERTY_MANAGE] = $givenRights & RightsService::RIGHT_MANAGE;
+            $defaults[self::PROPERTY_PUBLISH] = $givenRights & RightsService::RIGHT_PUBLISH;
         }
         else
         {
             // $defaults[self :: PROPERTY_VIEW] = RightsService :: RIGHT_VIEW;
         }
         
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 }

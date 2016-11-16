@@ -16,7 +16,7 @@ class DeleterComponent extends Manager
      */
     function run()
     {
-        $ids = Request :: get(self :: PARAM_PUBLICATION_ID);
+        $ids = Request::get(self::PARAM_PUBLICATION_ID);
         $failures = 0;
         
         if (! empty($ids))
@@ -29,11 +29,9 @@ class DeleterComponent extends Manager
             foreach ($ids as $id)
             {
                 
-                $survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $id);
+                $survey_publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
                 
-                if (! Rights :: getInstance()->is_right_granted(
-                    Rights :: RIGHT_DELETE,
-                    $survey_publication->getId()))
+                if (! Rights::getInstance()->is_right_granted(Rights::RIGHT_DELETE, $survey_publication->getId()))
                 {
                     $failures ++;
                 }
@@ -70,13 +68,13 @@ class DeleterComponent extends Manager
             }
             
             $this->redirect(
-                Translation :: get($message), 
+                Translation::get($message), 
                 ($failures ? true : false), 
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
-            $this->display_error_page(htmlentities(Translation :: get('NoPublicationsSelected')));
+            $this->display_error_page(htmlentities(Translation::get('NoPublicationsSelected')));
         }
     }
 }

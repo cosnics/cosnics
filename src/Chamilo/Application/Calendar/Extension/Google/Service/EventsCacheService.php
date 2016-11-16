@@ -69,16 +69,16 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
     public function warmUpForIdentifier($identifier)
     {
         $lifetimeInMinutes = LocalSetting::getInstance()->get('refresh_external', 'Chamilo\Libraries\Calendar');
-
+        
         $calendarIdentifier = $identifier->get(self::PARAM_CALENDAR_IDENTIFIER);
         $fromDate = $identifier->get(self::PARAM_FROM_DATE);
         $toDate = $identifier->get(self::PARAM_TO_DATE);
-
+        
         $result = $this->getCalendarRepository()->findEventsForCalendarIdentifierAndBetweenDates(
-            $calendarIdentifier,
-            $fromDate,
+            $calendarIdentifier, 
+            $fromDate, 
             $toDate);
-
+        
         return $this->getCacheProvider()->save($identifier, $result, $lifetimeInMinutes * 60);
     }
 
@@ -98,19 +98,19 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
     public function getEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
         $calendarRepository = $this->getCalendarRepository();
-
+        
         $cacheIdentifier = $calendarRepository->getCacheIdentifier(
-            $calendarRepository->getAccessToken(),
-            __METHOD__,
+            $calendarRepository->getAccessToken(), 
+            __METHOD__, 
             array($calendarIdentifier, $fromDate, $toDate));
-
+        
         $identifier = new ParameterBag(
             array(
-                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier,
-                self::PARAM_CALENDAR_IDENTIFIER => $calendarIdentifier,
-                self::PARAM_FROM_DATE => $fromDate,
+                ParameterBag::PARAM_IDENTIFIER => $cacheIdentifier, 
+                self::PARAM_CALENDAR_IDENTIFIER => $calendarIdentifier, 
+                self::PARAM_FROM_DATE => $fromDate, 
                 self::PARAM_TO_DATE => $toDate));
-
+        
         return $this->getForIdentifier($identifier);
     }
 }

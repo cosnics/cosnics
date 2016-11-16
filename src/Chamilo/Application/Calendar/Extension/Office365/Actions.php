@@ -36,38 +36,38 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
     public function getAdditional(Application $application)
     {
         $dropdownButton = new DropdownButton(
-            Translation :: get('TypeName', null, __NAMESPACE__),
+            Translation::get('TypeName', null, __NAMESPACE__), 
             new FontAwesomeGlyph('windows'));
         $dropdownButton->setDropdownClasses('dropdown-menu-right');
-
-        $configurationContext = \Chamilo\Application\Calendar\Extension\Office365\Manager :: context();
-        $accessToken = LocalSetting :: getInstance()->get('token', $configurationContext);
-
+        
+        $configurationContext = \Chamilo\Application\Calendar\Extension\Office365\Manager::context();
+        $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
+        
         if (! $accessToken)
         {
             $parameters = array();
-            $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
-            $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_LOGIN;
-
+            $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
+            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGIN;
+            
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
-
+            
             $dropdownButton->addSubButton(
-                new SubButton(Translation :: get('Office365CalendarLogin'), new BootstrapGlyph('log-in'), $link));
+                new SubButton(Translation::get('Office365CalendarLogin'), new BootstrapGlyph('log-in'), $link));
         }
         else
         {
             $parameters = array();
-            $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
-            $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_LOGOUT;
-
+            $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
+            $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGOUT;
+            
             $redirect = new Redirect($parameters);
             $link = $redirect->getUrl();
-
+            
             $dropdownButton->addSubButton(
-                new SubButton(Translation :: get('Office365CalendarLogout'), new BootstrapGlyph('log-out'), $link));
+                new SubButton(Translation::get('Office365CalendarLogout'), new BootstrapGlyph('log-out'), $link));
         }
-
+        
         return array($dropdownButton);
     }
 }

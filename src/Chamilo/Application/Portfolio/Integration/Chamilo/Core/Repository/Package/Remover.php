@@ -5,7 +5,7 @@ use Chamilo\Configuration\Package\NotAllowed;
 
 /**
  * Package remover
- *
+ * 
  * @package application\portfolio\integration\repository
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */

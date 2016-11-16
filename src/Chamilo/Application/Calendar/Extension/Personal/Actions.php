@@ -26,18 +26,18 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
     public function getPrimary(Application $application)
     {
         $parameters = array();
-        $parameters[Application :: PARAM_CONTEXT] = __NAMESPACE__;
-        $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_CREATE;
-
+        $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
+        $parameters[Manager::PARAM_ACTION] = Manager::ACTION_CREATE;
+        
         $actionSelector = new ActionSelector(
-            $application,
-            $application->getUser()->getId(),
-            $this->getAllowedContentObjectTypes(),
+            $application, 
+            $application->getUser()->getId(), 
+            $this->getAllowedContentObjectTypes(), 
             $parameters);
-
-        $createButton = $actionSelector->getActionButton(Translation :: get('AddEvent'), new BootstrapGlyph('plus'));
+        
+        $createButton = $actionSelector->getActionButton(Translation::get('AddEvent'), new BootstrapGlyph('plus'));
         $createButton->setClasses('btn-primary');
-
+        
         return array($createButton);
     }
 
@@ -47,20 +47,20 @@ class Actions implements \Chamilo\Application\Calendar\ActionsInterface
      */
     public function getAllowedContentObjectTypes()
     {
-        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
-            Manager :: package(),
-            \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+            Manager::package(), 
+            \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
         $types = array();
-
+        
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                $registration[Registration :: PROPERTY_CONTEXT],
+            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                $registration[Registration::PROPERTY_CONTEXT], 
                 6);
             $types[] = $namespace . '\Storage\DataClass\\' .
-                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
         }
-
+        
         return $types;
     }
 

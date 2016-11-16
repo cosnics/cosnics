@@ -49,10 +49,10 @@ class ViewerComponent extends Manager implements TableSupport
      */
     function run()
     {
-        $this->table_type = Request :: get(self :: PARAM_TABLE_TYPE, self :: TAB_MAIL_OVERVIEW);
-        $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-        $this->mail_id = Request :: get(Manager :: PARAM_PUBLICATION_MAIL_ID);
-        $this->selected_tab = Request :: get(DynamicTabsRenderer :: PARAM_SELECTED_TAB);
+        $this->table_type = Request::get(self::PARAM_TABLE_TYPE, self::TAB_MAIL_OVERVIEW);
+        $this->publication_id = Request::get(Manager::PARAM_PUBLICATION_ID);
+        $this->mail_id = Request::get(Manager::PARAM_PUBLICATION_MAIL_ID);
+        $this->selected_tab = Request::get(DynamicTabsRenderer::PARAM_SELECTED_TAB);
         
         // if (! Rights :: getInstance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
         // {
@@ -74,48 +74,48 @@ class ViewerComponent extends Manager implements TableSupport
     {
         $html = array();
         
-        $tabs = new DynamicVisualTabsRenderer(self :: class_name());
+        $tabs = new DynamicVisualTabsRenderer(self::class_name());
         
         $params = $this->get_parameters();
-        $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $params[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MAIL_OVERVIEW;
+        $params[self::PARAM_TABLE_TYPE] = self::TAB_MAIL_OVERVIEW;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_MAIL_OVERVIEW, 
-                Translation :: get('Overview'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Mail'), 
+                self::TAB_MAIL_OVERVIEW, 
+                Translation::get('Overview'), 
+                Theme::getInstance()->getCommonImagePath('Action/Mail'), 
                 $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_MAIL_OVERVIEW));
+                $this->get_table_type() == self::TAB_MAIL_OVERVIEW));
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_RECIPIENTS;
+        $params[self::PARAM_TABLE_TYPE] = self::TAB_RECIPIENTS;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_RECIPIENTS, 
-                Translation :: get('Recipients'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Users'), 
+                self::TAB_RECIPIENTS, 
+                Translation::get('Recipients'), 
+                Theme::getInstance()->getCommonImagePath('Action/Users'), 
                 $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_RECIPIENTS));
+                $this->get_table_type() == self::TAB_RECIPIENTS));
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_QUEUED;
+        $params[self::PARAM_TABLE_TYPE] = self::TAB_QUEUED;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_QUEUED, 
-                Translation :: get('QueuedRecipients'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Users'), 
+                self::TAB_QUEUED, 
+                Translation::get('QueuedRecipients'), 
+                Theme::getInstance()->getCommonImagePath('Action/Users'), 
                 $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_QUEUED));
+                $this->get_table_type() == self::TAB_QUEUED));
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_UNREACHED_RECIPIENTS;
+        $params[self::PARAM_TABLE_TYPE] = self::TAB_UNREACHED_RECIPIENTS;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_UNREACHED_RECIPIENTS, 
-                Translation :: get('UnreachedRecipients'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Users'), 
+                self::TAB_UNREACHED_RECIPIENTS, 
+                Translation::get('UnreachedRecipients'), 
+                Theme::getInstance()->getCommonImagePath('Action/Users'), 
                 $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_UNREACHED_RECIPIENTS));
+                $this->get_table_type() == self::TAB_UNREACHED_RECIPIENTS));
         
-        if ($this->table_type == self :: TAB_MAIL_OVERVIEW)
+        if ($this->table_type == self::TAB_MAIL_OVERVIEW)
         {
             $tabs->set_content($this->get_mail_overview());
         }
@@ -136,7 +136,7 @@ class ViewerComponent extends Manager implements TableSupport
     {
         $html = array();
         
-        $mail = DataManager :: retrieve_by_id(Mail :: class_name(), $this->mail_id);
+        $mail = DataManager::retrieve_by_id(Mail::class_name(), $this->mail_id);
         
         $html[] = '<h3>';
         $html[] = $mail->get_mail_header();
@@ -144,7 +144,7 @@ class ViewerComponent extends Manager implements TableSupport
         
         $html[] = '<p>';
         $html[] = '<b>';
-        $html[] = Translation :: get('From') . ':&nbsp;';
+        $html[] = Translation::get('From') . ':&nbsp;';
         $html[] = '</b>';
         $html[] = $mail->get_from_address_name();
         $html[] = '&nbsp;&lt;<i>';
@@ -154,7 +154,7 @@ class ViewerComponent extends Manager implements TableSupport
         
         $html[] = '<p>';
         $html[] = '<b>';
-        $html[] = Translation :: get('Reply') . ':&nbsp;';
+        $html[] = Translation::get('Reply') . ':&nbsp;';
         $html[] = '</b>';
         $html[] = $mail->get_reply_address_name();
         $html[] = '&nbsp;&lt;<i>';
@@ -164,19 +164,19 @@ class ViewerComponent extends Manager implements TableSupport
         
         $html[] = '<p>';
         $html[] = '<b>';
-        $html[] = Translation :: get('To') . ':&nbsp;';
+        $html[] = Translation::get('To') . ':&nbsp;';
         $html[] = '</b>';
         
         switch ($mail->get_type())
         {
             case 1 :
-                $html[] = Translation :: get("Participants");
+                $html[] = Translation::get("Participants");
                 break;
             case 2 :
-                $html[] = Translation :: get("Exporters");
+                $html[] = Translation::get("Exporters");
                 break;
             case 3 :
-                $html[] = Translation :: get("Reporters");
+                $html[] = Translation::get("Reporters");
                 break;
         }
         
@@ -184,24 +184,24 @@ class ViewerComponent extends Manager implements TableSupport
         
         $html[] = '<p>';
         $html[] = '<b>';
-        $html[] = Translation :: get('Sender') . ':&nbsp;';
+        $html[] = Translation::get('Sender') . ':&nbsp;';
         $html[] = '</b>';
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_user($mail->get_sender_user_id());
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user($mail->get_sender_user_id());
         $html[] = $user->get_fullname();
         $html[] = '</p>';
         
         $html[] = '<p>';
         $html[] = '<b>';
-        $html[] = Translation :: get('SendDate') . ':&nbsp;';
+        $html[] = Translation::get('SendDate') . ':&nbsp;';
         $html[] = '</b>';
         $html[] = date("Y-m-d H:i", $mail->get_send_date());
         $html[] = '</p>';
         
         $html[] = '<p>';
         $html[] = '<b>';
-        $html[] = Translation :: get('Publication') . ':&nbsp;';
+        $html[] = Translation::get('Publication') . ':&nbsp;';
         $html[] = '</b>';
-        $survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $mail->get_publication_id());
+        $survey_publication = DataManager::retrieve_by_id(Publication::class_name(), $mail->get_publication_id());
         $title = $survey_publication->get_title();
         $html[] = $title;
         $html[] = '</p>';
@@ -210,7 +210,7 @@ class ViewerComponent extends Manager implements TableSupport
         
         $html[] = '<p>';
         $html[] = '<b>';
-        $html[] = Translation :: get('Message') . ':&nbsp;';
+        $html[] = Translation::get('Message') . ':&nbsp;';
         $html[] = '</b>';
         $html[] = $mail->get_mail_content();
         $html[] = '</p>';
@@ -240,23 +240,23 @@ class ViewerComponent extends Manager implements TableSupport
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_MAIL_ID), 
+            new PropertyConditionVariable(UserMail::class_name(), UserMail::PROPERTY_MAIL_ID), 
             new StaticConditionVariable($this->mail_id));
         
         switch ($this->get_table_type())
         {
-            case self :: TAB_RECIPIENTS :
-                $type = UserMail :: STATUS_MAIL_SEND;
+            case self::TAB_RECIPIENTS :
+                $type = UserMail::STATUS_MAIL_SEND;
                 break;
-            case self :: TAB_QUEUED :
-                $type = UserMail :: STATUS_MAIL_IN_QUEUE;
+            case self::TAB_QUEUED :
+                $type = UserMail::STATUS_MAIL_IN_QUEUE;
                 break;
-            case self :: TAB_UNREACHED_RECIPIENTS :
-                $type = UserMail :: STATUS_MAIL_NOT_SEND;
+            case self::TAB_UNREACHED_RECIPIENTS :
+                $type = UserMail::STATUS_MAIL_NOT_SEND;
                 break;
         }
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserMail :: class_name(), UserMail :: PROPERTY_STATUS), 
+            new PropertyConditionVariable(UserMail::class_name(), UserMail::PROPERTY_STATUS), 
             new StaticConditionVariable($type));
         $condition = new AndCondition($conditions);
         return $condition;
@@ -267,7 +267,7 @@ class ViewerComponent extends Manager implements TableSupport
         if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar(
-                $this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
+                $this->get_url(array(self::PARAM_TABLE_TYPE => $this->get_table_type())));
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
         return $this->buttonToolbarRenderer;

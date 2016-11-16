@@ -27,8 +27,8 @@ class EventResultSet extends ArrayResultSet
     public function __construct(CalendarProperties $calendarProperties, array $googleCalendarEvents)
     {
         $this->calendarProperties = $calendarProperties;
-
-        parent :: __construct($googleCalendarEvents);
+        
+        parent::__construct($googleCalendarEvents);
     }
 
     /**
@@ -56,6 +56,6 @@ class EventResultSet extends ArrayResultSet
      */
     public function next_result($mapToObject = false)
     {
-        return parent :: next_result($mapToObject);
+        return parent::next_result($mapToObject);
     }
 }

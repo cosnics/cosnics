@@ -20,26 +20,26 @@ class ActivaterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_ACCOUNT_ID);
+        $ids = Request::get(self::PARAM_ACCOUNT_ID);
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
-                $cas_account = DataManager :: retrieve_by_id(Account :: class_name(), (int) $id);
-                $cas_account->set_status(Account :: STATUS_ENABLED);
+                $cas_account = DataManager::retrieve_by_id(Account::class_name(), (int) $id);
+                $cas_account->set_status(Account::STATUS_ENABLED);
                 if (! $cas_account->update())
                 {
                     $failures ++;
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -63,17 +63,17 @@ class ActivaterComponent extends Manager
                 }
             }
             $this->redirect(
-                Translation :: get($message, null, Utilities :: COMMON_LIBRARIES),
-                ($failures ? true : false),
-                array(self :: PARAM_CAS_ACCOUNT_ACTION => self :: ACTION_BROWSE));
+                Translation::get($message, null, Utilities::COMMON_LIBRARIES), 
+                ($failures ? true : false), 
+                array(self::PARAM_CAS_ACCOUNT_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoCasAccountSelected',
-                        Translation :: get($message, null, Utilities :: COMMON_LIBRARIES))));
+                    Translation::get(
+                        'NoCasAccountSelected', 
+                        Translation::get($message, null, Utilities::COMMON_LIBRARIES))));
         }
     }
 }

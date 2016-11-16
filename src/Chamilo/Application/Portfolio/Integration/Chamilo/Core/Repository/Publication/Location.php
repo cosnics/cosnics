@@ -32,7 +32,7 @@ class Location extends \Chamilo\Core\Repository\Publication\Location\Location
      */
     function __construct($context, $name, $userIdentifier, $publicationIdentifier)
     {
-        parent :: __construct($context, $name);
+        parent::__construct($context, $name);
         $this->userIdentifier = $userIdentifier;
         $this->publicationIdentifier = $publicationIdentifier;
     }

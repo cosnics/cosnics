@@ -5,7 +5,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 
 /**
  * Table data provider
- *
+ * 
  * @package application\portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -14,7 +14,7 @@ class UserTableDataProvider extends DataClassTableDataProvider
 
     /**
      * Returns the data as a resultset
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      * @param $condition
      * @param int $offset
@@ -26,15 +26,15 @@ class UserTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return \Chamilo\Core\User\Storage\DataManager::retrieve_active_users(
-            $condition,
-            $count,
-            $offset,
+            $condition, 
+            $count, 
+            $offset, 
             $order_property);
     }
 
     /**
      * Counts the data
-     *
+     * 
      * @param \libraries\storage\Condition $condition
      *
      * @return int

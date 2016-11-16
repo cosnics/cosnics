@@ -15,11 +15,11 @@ class MailComponent extends Manager implements DelegateComponent
     function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Survey\Mail\Manager :: context(),
+            \Chamilo\Application\Survey\Mail\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         
-//         $component = $factory->getComponent();
-//         $component->set_parameter(self :: PARAM_PUBLICATION_ID,  $this->publication_id);
+        // $component = $factory->getComponent();
+        // $component->set_parameter(self :: PARAM_PUBLICATION_ID, $this->publication_id);
         
         return $factory->run();
     }

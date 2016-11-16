@@ -44,8 +44,8 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
      */
     function run()
     {
-        $this->table_type = Request :: get(self :: PARAM_TABLE_TYPE, self :: TAB_MAILS_TO_PARTICIPANTS);
-        $this->publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
+        $this->table_type = Request::get(self::PARAM_TABLE_TYPE, self::TAB_MAILS_TO_PARTICIPANTS);
+        $this->publication_id = Request::get(Manager::PARAM_PUBLICATION_ID);
         
         // if (! Rights :: getInstance()->is_right_granted(Rights :: MAIL_RIGHT, $this->publication_id))
         // {
@@ -68,37 +68,37 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     {
         $html = array();
         
-        $tabs = new DynamicVisualTabsRenderer(self :: class_name());
+        $tabs = new DynamicVisualTabsRenderer(self::class_name());
         
         $params = $this->get_parameters();
-        $params[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $params[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MAILS_TO_PARTICIPANTS;
+        $params[self::PARAM_TABLE_TYPE] = self::TAB_MAILS_TO_PARTICIPANTS;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_MAILS_TO_PARTICIPANTS, 
-                Translation :: get('MailsToParticipants'), 
-                Theme :: getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
+                self::TAB_MAILS_TO_PARTICIPANTS, 
+                Translation::get('MailsToParticipants'), 
+                Theme::getInstance()->getImagePath('Chamilo\Application\Survey', 'Logo/16'), 
                 $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_MAILS_TO_PARTICIPANTS));
+                $this->get_table_type() == self::TAB_MAILS_TO_PARTICIPANTS));
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MAILS_TO_EXPORTERS;
+        $params[self::PARAM_TABLE_TYPE] = self::TAB_MAILS_TO_EXPORTERS;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_MAILS_TO_EXPORTERS, 
-                Translation :: get('MailsToExporters'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Export'), 
+                self::TAB_MAILS_TO_EXPORTERS, 
+                Translation::get('MailsToExporters'), 
+                Theme::getInstance()->getCommonImagePath('Action/Export'), 
                 $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_MAILS_TO_EXPORTERS));
+                $this->get_table_type() == self::TAB_MAILS_TO_EXPORTERS));
         
-        $params[self :: PARAM_TABLE_TYPE] = self :: TAB_MAILS_TO_REPORTERS;
+        $params[self::PARAM_TABLE_TYPE] = self::TAB_MAILS_TO_REPORTERS;
         $tabs->add_tab(
             new DynamicVisualTab(
-                self :: TAB_MAILS_TO_REPORTERS, 
-                Translation :: get('MailsToReporters'), 
-                Theme :: getInstance()->getCommonImagePath('Action/ViewResults'), 
+                self::TAB_MAILS_TO_REPORTERS, 
+                Translation::get('MailsToReporters'), 
+                Theme::getInstance()->getCommonImagePath('Action/ViewResults'), 
                 $this->get_url($params), 
-                $this->get_table_type() == self :: TAB_MAILS_TO_REPORTERS));
+                $this->get_table_type() == self::TAB_MAILS_TO_REPORTERS));
         
         $table = new MailTable($this);
         $tabs->set_content($table->as_html());
@@ -114,25 +114,25 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Mail :: class_name(), Mail :: PROPERTY_PUBLICATION_ID), 
+            new PropertyConditionVariable(Mail::class_name(), Mail::PROPERTY_PUBLICATION_ID), 
             new StaticConditionVariable($this->publication_id));
         
         switch ($this->get_table_type())
         {
-            case self :: TAB_MAILS_TO_EXPORTERS :
-                $type = Mail :: EXPORT_TYPE;
+            case self::TAB_MAILS_TO_EXPORTERS :
+                $type = Mail::EXPORT_TYPE;
                 break;
             
-            case self :: TAB_MAILS_TO_PARTICIPANTS :
-                $type = Mail :: PARTICIPANT_TYPE;
+            case self::TAB_MAILS_TO_PARTICIPANTS :
+                $type = Mail::PARTICIPANT_TYPE;
                 break;
             
-            case self :: TAB_MAILS_TO_REPORTERS :
-                $type = Mail :: REPORTING_TYPE;
+            case self::TAB_MAILS_TO_REPORTERS :
+                $type = Mail::REPORTING_TYPE;
         }
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Mail :: class_name(), Mail :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(Mail::class_name(), Mail::PROPERTY_TYPE), 
             new StaticConditionVariable($type));
         $condition = new AndCondition($conditions);
         return $condition;
@@ -143,40 +143,40 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
         if (! isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar(
-                $this->get_url(array(self :: PARAM_TABLE_TYPE => $this->get_table_type())));
+                $this->get_url(array(self::PARAM_TABLE_TYPE => $this->get_table_type())));
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('SendMailToParticipants'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
-                    $this->get_send_mail_url($this->publication_id, Mail :: PARTICIPANT_TYPE), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('SendMailToParticipants'), 
+                    Theme::getInstance()->getCommonImagePath('Action/InviteUsers'), 
+                    $this->get_send_mail_url($this->publication_id, Mail::PARTICIPANT_TYPE), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('SendMailToExporters'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
-                    $this->get_send_mail_url($this->publication_id, Mail :: EXPORT_TYPE), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('SendMailToExporters'), 
+                    Theme::getInstance()->getCommonImagePath('Action/InviteUsers'), 
+                    $this->get_send_mail_url($this->publication_id, Mail::EXPORT_TYPE), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('SendMailToReporters'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
-                    $this->get_send_mail_url($this->publication_id, Mail :: REPORTING_TYPE), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('SendMailToReporters'), 
+                    Theme::getInstance()->getCommonImagePath('Action/InviteUsers'), 
+                    $this->get_send_mail_url($this->publication_id, Mail::REPORTING_TYPE), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             if ($this->get_user()->is_platform_admin())
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('SendTestMail'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/InviteUsers'), 
+                        Translation::get('SendTestMail'), 
+                        Theme::getInstance()->getCommonImagePath('Action/InviteUsers'), 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => Manager :: ACTION_TEST_MAIL, 
-                                Manager :: PARAM_PUBLICATION_ID => $this->publication_id), 
-                            ToolbarItem :: DISPLAY_ICON_AND_LABEL)));
+                                self::PARAM_ACTION => Manager::ACTION_TEST_MAIL, 
+                                Manager::PARAM_PUBLICATION_ID => $this->publication_id), 
+                            ToolbarItem::DISPLAY_ICON_AND_LABEL)));
             }
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);

@@ -20,8 +20,8 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $default_property_names = parent :: get_default_property_names();
-        $default_property_names[] = self :: PROPERTY_PUBLICATION_ID;
+        $default_property_names = parent::get_default_property_names();
+        $default_property_names[] = self::PROPERTY_PUBLICATION_ID;
         
         return $default_property_names;
     }
@@ -32,7 +32,7 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
      */
     public function get_publication_id()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
@@ -41,7 +41,7 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
      */
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**
@@ -50,6 +50,6 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
      */
     public function get_data_manager()
     {
-        return DataManager :: getInstance();
+        return DataManager::getInstance();
     }
 }

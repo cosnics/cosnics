@@ -12,7 +12,7 @@ use Chamilo\Configuration\Configuration;
  */
 class Service extends DataClass
 {
-
+    
     /**
      * CasAccount properties
      */
@@ -32,22 +32,22 @@ class Service extends DataClass
 
     /**
      * Get the default properties
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
         return parent::get_default_property_names(
             array(
-                self::PROPERTY_NAME,
-                self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_SERVICE_ID,
-                self::PROPERTY_THEME,
-                self::PROPERTY_ALLOWED_TO_PROXY,
-                self::PROPERTY_ANONYMOUS_ACCESS,
-                self::PROPERTY_EVALUATION_ORDER,
-                self::PROPERTY_IGNORE_ATTRIBUTES,
-                self::PROPERTY_SSO_ENABLED,
+                self::PROPERTY_NAME, 
+                self::PROPERTY_DESCRIPTION, 
+                self::PROPERTY_SERVICE_ID, 
+                self::PROPERTY_THEME, 
+                self::PROPERTY_ALLOWED_TO_PROXY, 
+                self::PROPERTY_ANONYMOUS_ACCESS, 
+                self::PROPERTY_EVALUATION_ORDER, 
+                self::PROPERTY_IGNORE_ATTRIBUTES, 
+                self::PROPERTY_SSO_ENABLED, 
                 self::PROPERTY_ENABLED));
     }
 
@@ -172,7 +172,7 @@ class Service extends DataClass
                 $path = Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Enabled/Disabled');
                 break;
         }
-
+        
         return '<img src="' . $path . '" />';
     }
 

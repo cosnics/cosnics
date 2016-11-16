@@ -16,16 +16,16 @@ class SubscribeEmailComponent extends Manager
      */
     function run()
     {
-        $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
+        $publication_id = Request::get(self::PARAM_PUBLICATION_ID);
         
-        if (! Rights :: getInstance()->is_right_granted(Rights :: INVITE_RIGHT, $publication_id))
+        if (! Rights::getInstance()->is_right_granted(Rights::INVITE_RIGHT, $publication_id))
         {
             $this->not_allowed(false);
         }
         
         $form = new SubscribeMailForm(
             $publication_id, 
-            $this->get_url(array(self :: PARAM_PUBLICATION_ID => Request :: get(self :: PARAM_PUBLICATION_ID))));
+            $this->get_url(array(self::PARAM_PUBLICATION_ID => Request::get(self::PARAM_PUBLICATION_ID))));
         
         if ($form->validate())
         {
@@ -33,35 +33,33 @@ class SubscribeEmailComponent extends Manager
             if (count($no_user_emails) == 0)
             {
                 $this->redirect(
-                    Translation :: get('SurveyUsersSubscribed'), 
+                    Translation::get('SurveyUsersSubscribed'), 
                     (false), 
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE_PARTICIPANTS, 
-                        self :: PARAM_PUBLICATION_ID => $publication_id, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => ParticipantBrowserComponent :: TAB_INVITEES));
+                        self::PARAM_ACTION => self::ACTION_BROWSE_PARTICIPANTS, 
+                        self::PARAM_PUBLICATION_ID => $publication_id, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => ParticipantBrowserComponent::TAB_INVITEES));
             }
             else
             {
                 $emails = implode(', ', $no_user_emails);
                 $this->redirect(
-                    Translation :: get('SurveyUsersNotSubscribed: ' . $emails), 
+                    Translation::get('SurveyUsersNotSubscribed: ' . $emails), 
                     (true), 
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE_PARTICIPANTS, 
-                        self :: PARAM_PUBLICATION_ID => $publication_id, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => ParticipantBrowserComponent :: TAB_INVITEES));
+                        self::PARAM_ACTION => self::ACTION_BROWSE_PARTICIPANTS, 
+                        self::PARAM_PUBLICATION_ID => $publication_id, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => ParticipantBrowserComponent::TAB_INVITEES));
             }
         }
         else
         {
             $html = array();
             $html[] = $this->render_header();
-            $html[] =$form->toHtml();
+            $html[] = $form->toHtml();
             $html[] = $this->render_footer();
             return implode(PHP_EOL, $html);
         }
     }
-
-   
 }
 ?>

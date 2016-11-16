@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Portfolio\Favourite\Table\Favourite;
 
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -9,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Column model for the Favourite Table
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FavouriteTableColumnModel extends RecordTableColumnModel implements TableColumnModelActionsColumnSupport

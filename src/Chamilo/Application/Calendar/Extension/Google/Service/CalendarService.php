@@ -88,15 +88,15 @@ class CalendarService
     {
         $eventsCacheService = new EventsCacheService($this->getCalendarRepository());
         $googleCalendarEvents = $eventsCacheService->getEventsForCalendarIdentifierAndBetweenDates(
-            $calendarIdentifier,
-            $fromDate,
+            $calendarIdentifier, 
+            $fromDate, 
             $toDate);
-
+        
         return new EventResultSet(
             $this->getCalendarProperties(
-                $googleCalendarEvents->getSummary(),
-                $googleCalendarEvents->getDescription(),
-                $googleCalendarEvents->getTimeZone()),
+                $googleCalendarEvents->getSummary(), 
+                $googleCalendarEvents->getDescription(), 
+                $googleCalendarEvents->getTimeZone()), 
             $googleCalendarEvents->getItems());
     }
 

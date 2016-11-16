@@ -37,7 +37,7 @@ class PublicationRepository
      */
     public function findPublicationByIdentifier($identifier)
     {
-        return DataManager :: retrieve_by_id(Publication :: class_name(), $identifier);
+        return DataManager::retrieve_by_id(Publication::class_name(), $identifier);
     }
 
     /**
@@ -48,11 +48,11 @@ class PublicationRepository
     public function findPublicationsByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = array())
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID),
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID), 
             $identifiers);
-
-        return DataManager :: retrieves(
-            Publication :: class_name(),
+        
+        return DataManager::retrieves(
+            Publication::class_name(), 
             new DataClassRetrievesParameters($condition, $limit, $offset, $orderProperty));
     }
 
@@ -66,12 +66,12 @@ class PublicationRepository
      */
     public function findPublicationsByCreator(User $user, $limit = null, $offset = null, $orderProperty = array())
     {
-        return DataManager :: retrieves(
-            Publication :: class_name(),
+        return DataManager::retrieves(
+            Publication::class_name(), 
             new DataClassRetrievesParameters(
-                $this->getPublicationsByCreatorCondition($user),
-                $limit,
-                $offset,
+                $this->getPublicationsByCreatorCondition($user), 
+                $limit, 
+                $offset, 
                 $orderProperty));
     }
 
@@ -82,8 +82,8 @@ class PublicationRepository
      */
     public function countPublicationsByCreator(User $user)
     {
-        return DataManager :: count(
-            Publication :: class_name(),
+        return DataManager::count(
+            Publication::class_name(), 
             new DataClassCountParameters($this->getPublicationsByCreatorCondition($user)));
     }
 
@@ -95,7 +95,7 @@ class PublicationRepository
     private function getPublicationsByCreatorCondition(User $user)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_PUBLISHER_ID),
+            new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_PUBLISHER_ID), 
             new StaticConditionVariable($user->getId()));
     }
 
@@ -108,8 +108,8 @@ class PublicationRepository
      */
     public function findAllPublications($limit = null, $offset = null, $orderProperty = array())
     {
-        return DataManager :: retrieves(
-            Publication :: class_name(),
+        return DataManager::retrieves(
+            Publication::class_name(), 
             new DataClassRetrievesParameters(null, $limit, $offset, $orderProperty));
     }
 
@@ -119,7 +119,7 @@ class PublicationRepository
      */
     public function countAllPublications()
     {
-        return DataManager :: count(Publication :: class_name());
+        return DataManager::count(Publication::class_name());
     }
 
     /**
@@ -132,13 +132,13 @@ class PublicationRepository
      */
     public function findSharedPublicationsForEntities($entities, $limit = null, $offset = null, $orderProperty = array())
     {
-        return DataManager :: retrieves(
-            Publication :: class_name(),
+        return DataManager::retrieves(
+            Publication::class_name(), 
             new DataClassRetrievesParameters(
-                $this->getSharedPublicationsForEntitiesWithRightCondition($entities),
-                $limit,
-                $offset,
-                $orderProperty,
+                $this->getSharedPublicationsForEntitiesWithRightCondition($entities), 
+                $limit, 
+                $offset, 
+                $orderProperty, 
                 new Joins(array($this->getSharedPublicationsJoin()))));
     }
 
@@ -149,10 +149,10 @@ class PublicationRepository
      */
     public function countSharedPublicationsForEntities($entities)
     {
-        return DataManager :: count(
-            Publication :: class_name(),
+        return DataManager::count(
+            Publication::class_name(), 
             new DataClassCountParameters(
-                $this->getSharedPublicationsForEntitiesWithRightCondition($entities),
+                $this->getSharedPublicationsForEntitiesWithRightCondition($entities), 
                 new Joins(array($this->getSharedPublicationsJoin()))));
     }
 
@@ -164,36 +164,36 @@ class PublicationRepository
     private function getSharedPublicationsForEntitiesWithRightCondition($entities, $right = RightsService :: RIGHT_VIEW)
     {
         $conditions = array();
-
+        
         foreach ($entities as $entityType => $entityIdentifiers)
         {
             foreach ($entityIdentifiers as $entityIdentifier)
             {
                 $entityConditions = array();
-
+                
                 $entityConditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        PublicationEntityRelation :: class_name(),
-                        PublicationEntityRelation :: PROPERTY_ENTITY_ID),
+                        PublicationEntityRelation::class_name(), 
+                        PublicationEntityRelation::PROPERTY_ENTITY_ID), 
                     new StaticConditionVariable($entityIdentifier));
                 $entityConditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        PublicationEntityRelation :: class_name(),
-                        PublicationEntityRelation :: PROPERTY_ENTITY_TYPE),
+                        PublicationEntityRelation::class_name(), 
+                        PublicationEntityRelation::PROPERTY_ENTITY_TYPE), 
                     new StaticConditionVariable($entityType));
                 $entityConditions[] = new EqualityCondition(
                     new OperationConditionVariable(
                         new PropertyConditionVariable(
-                            PublicationEntityRelation :: class_name(),
-                            PublicationEntityRelation :: PROPERTY_RIGHTS),
-                        OperationConditionVariable :: BITWISE_AND,
-                        new StaticConditionVariable($right)),
+                            PublicationEntityRelation::class_name(), 
+                            PublicationEntityRelation::PROPERTY_RIGHTS), 
+                        OperationConditionVariable::BITWISE_AND, 
+                        new StaticConditionVariable($right)), 
                     new StaticConditionVariable($right));
-
+                
                 $conditions[] = new AndCondition($entityConditions);
             }
         }
-
+        
         return new OrCondition($conditions);
     }
 
@@ -205,12 +205,12 @@ class PublicationRepository
     private function getSharedPublicationsJoin($joinType = Join :: TYPE_NORMAL)
     {
         return new Join(
-            PublicationEntityRelation :: class_name(),
+            PublicationEntityRelation::class_name(), 
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PublicationEntityRelation :: class_name(),
-                    PublicationEntityRelation :: PROPERTY_PUBLICATION_ID),
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID)),
+                    PublicationEntityRelation::class_name(), 
+                    PublicationEntityRelation::PROPERTY_PUBLICATION_ID), 
+                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID)), 
             $joinType);
     }
 
@@ -223,17 +223,17 @@ class PublicationRepository
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function findPublicationFavouritesByUser(User $user, $entities, $limit = null, $offset = null,
+    public function findPublicationFavouritesByUser(User $user, $entities, $limit = null, $offset = null, 
         $orderProperty = array())
     {
-        return DataManager :: retrieves(
-            Publication :: class_name(),
+        return DataManager::retrieves(
+            Publication::class_name(), 
             new DataClassRetrievesParameters(
-                $this->getPublicationFavouritesByUserCondition($user, $entities, RightsService :: RIGHT_VIEW),
-                $limit,
-                $offset,
-                $orderProperty,
-                $this->getPublicationFavouritesByUserJoins(),
+                $this->getPublicationFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW), 
+                $limit, 
+                $offset, 
+                $orderProperty, 
+                $this->getPublicationFavouritesByUserJoins(), 
                 true));
     }
 
@@ -245,14 +245,14 @@ class PublicationRepository
      */
     public function countPublicationFavouritesByUser(User $user, $entities)
     {
-        return DataManager :: count(
-            Publication :: class_name(),
+        return DataManager::count(
+            Publication::class_name(), 
             new DataClassCountParameters(
-                $this->getPublicationFavouritesByUserCondition($user, $entities, RightsService :: RIGHT_VIEW),
-                $this->getPublicationFavouritesByUserJoins(),
+                $this->getPublicationFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW), 
+                $this->getPublicationFavouritesByUserJoins(), 
                 new FunctionConditionVariable(
-                    FunctionConditionVariable :: DISTINCT,
-                    new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID))));
+                    FunctionConditionVariable::DISTINCT, 
+                    new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID))));
     }
 
     /**
@@ -263,12 +263,12 @@ class PublicationRepository
     private function getFavouritesJoin($joinType = Join :: TYPE_NORMAL)
     {
         return new Join(
-            PublicationUserFavourite :: class_name(),
+            PublicationUserFavourite::class_name(), 
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    PublicationUserFavourite :: class_name(),
-                    PublicationUserFavourite :: PROPERTY_PUBLICATION_ID),
-                new PropertyConditionVariable(Publication :: class_name(), Publication :: PROPERTY_ID)),
+                    PublicationUserFavourite::class_name(), 
+                    PublicationUserFavourite::PROPERTY_PUBLICATION_ID), 
+                new PropertyConditionVariable(Publication::class_name(), Publication::PROPERTY_ID)), 
             $joinType);
     }
 
@@ -279,7 +279,7 @@ class PublicationRepository
     private function getPublicationFavouritesByUserJoins()
     {
         $joins = new Joins();
-        $joins->add($this->getSharedPublicationsJoin(Join :: TYPE_LEFT));
+        $joins->add($this->getSharedPublicationsJoin(Join::TYPE_LEFT));
         $joins->add($this->getFavouritesJoin());
         return $joins;
     }
@@ -294,30 +294,30 @@ class PublicationRepository
     {
         $orConditions = array();
         $andConditions = array();
-
+        
         $orConditions[] = $this->getPublicationsByCreatorCondition($user);
         $orConditions[] = $this->getSharedPublicationsForEntitiesWithRightCondition($entities, $right);
-
+        
         $andConditions[] = new OrCondition($orConditions);
         $andConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                PublicationUserFavourite :: class_name(),
-                PublicationUserFavourite :: PROPERTY_USER_ID),
+                PublicationUserFavourite::class_name(), 
+                PublicationUserFavourite::PROPERTY_USER_ID), 
             new StaticConditionVariable($user->getId()));
-
+        
         return new AndCondition($andConditions);
     }
 
     public function findPublicationsForUser(User $user, $entities, $right, $limit, $offset, $orderProperty = null)
     {
-        return DataManager :: retrieves(
-            Publication :: class_name(),
+        return DataManager::retrieves(
+            Publication::class_name(), 
             new DataClassRetrievesParameters(
-                $this->getPublicationFavouritesByUserCondition($user, $entities, $right),
-                $limit,
-                $offset,
-                $orderProperty,
-                new Joins(array($this->getSharedPublicationsJoin(Join :: TYPE_LEFT)))));
+                $this->getPublicationFavouritesByUserCondition($user, $entities, $right), 
+                $limit, 
+                $offset, 
+                $orderProperty, 
+                new Joins(array($this->getSharedPublicationsJoin(Join::TYPE_LEFT)))));
     }
 
     /**
@@ -328,10 +328,10 @@ class PublicationRepository
      */
     public function countPublicationsForUser(User $user, $entities, $right)
     {
-        return DataManager :: count(
-            Publication :: class_name(),
+        return DataManager::count(
+            Publication::class_name(), 
             new DataClassCountParameters(
-                $this->getPublicationFavouritesByUserCondition($user, $entities, $right),
-                new Joins(array($this->getSharedPublicationsJoin(Join :: TYPE_LEFT)))));
+                $this->getPublicationFavouritesByUserCondition($user, $entities, $right), 
+                new Joins(array($this->getSharedPublicationsJoin(Join::TYPE_LEFT)))));
     }
 }

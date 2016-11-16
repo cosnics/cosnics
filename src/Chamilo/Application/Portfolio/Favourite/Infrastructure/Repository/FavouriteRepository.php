@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Wrapper for the Portfolio Favourite DataManager
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class FavouriteRepository
@@ -28,7 +28,7 @@ class FavouriteRepository
 
     /**
      * Finds a user favourite by a given id
-     *
+     * 
      * @param int $userFavouriteId
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
@@ -40,7 +40,7 @@ class FavouriteRepository
 
     /**
      * Finds a user favourite by a given source and favourite user id
-     *
+     * 
      * @param int $sourceUserId
      * @param int $favouriteUserId
      *
@@ -49,25 +49,25 @@ class FavouriteRepository
     public function findUserFavouriteBySourceAndFavouriteUserId($sourceUserId, $favouriteUserId)
     {
         $conditions = array();
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID),
+            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID), 
             new StaticConditionVariable($sourceUserId));
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID),
+            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID), 
             new StaticConditionVariable($favouriteUserId));
-
+        
         $condition = new AndCondition($conditions);
-
+        
         $parameters = new DataClassRetrieveParameters($condition);
-
+        
         return DataManager::retrieve(UserFavourite::class_name(), $parameters);
     }
 
     /**
      * Temporary wrapper for the user datamanager to find a user by an id
-     *
+     * 
      * @param int $userId
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass
@@ -79,7 +79,7 @@ class FavouriteRepository
 
     /**
      * Counts the favourite users for a given user
-     *
+     * 
      * @param User $sourceUser
      * @param Condition $condition
      *
@@ -88,15 +88,15 @@ class FavouriteRepository
     public function countFavouriteUsers(User $sourceUser, $condition = null)
     {
         $parameters = new DataClassCountParameters(
-            $this->getUserFavouriteCondition($sourceUser, $condition),
+            $this->getUserFavouriteCondition($sourceUser, $condition), 
             $this->getFavouriteUsersJoins());
-
+        
         return DataManager::count(User::class_name(), $parameters);
     }
 
     /**
      * Finds the favourite users for a given user
-     *
+     * 
      * @param User $sourceUser
      * @param Condition $condition
      * @param int $offset
@@ -108,31 +108,31 @@ class FavouriteRepository
     public function findFavouriteUsers(User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null)
     {
         $properties = array();
-
+        
         $properties[] = new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_ID);
-
+        
         $properties[] = new FixedPropertyConditionVariable(User::class_name(), User::PROPERTY_ID, self::PROPERTY_USER_ID);
-
+        
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME);
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME);
         $properties[] = new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE);
-
+        
         $dataClassProperties = new DataClassProperties($properties);
-
+        
         $parameters = new RecordRetrievesParameters(
-            $dataClassProperties,
-            $this->getUserFavouriteCondition($sourceUser, $condition),
-            $count,
-            $offset,
-            $orderProperty,
+            $dataClassProperties, 
+            $this->getUserFavouriteCondition($sourceUser, $condition), 
+            $count, 
+            $offset, 
+            $orderProperty, 
             $this->getFavouriteUsersJoins());
-
+        
         return DataManager::records(User::class_name(), $parameters);
     }
 
     /**
      * Builds and merges the conditions for the given source user and condition
-     *
+     * 
      * @param User $sourceUser
      * @param Condition $condition
      *
@@ -141,20 +141,20 @@ class FavouriteRepository
     protected function getUserFavouriteCondition(User $sourceUser, $condition = null)
     {
         $conditions = array();
-
+        
         $conditions[] = $this->getSourceUserCondition($sourceUser);
-
+        
         if ($condition)
         {
             $conditions[] = $condition;
         }
-
+        
         return new AndCondition($conditions);
     }
 
     /**
      * Returns the condition for the source user
-     *
+     * 
      * @param User $sourceUser
      *
      * @return EqualityCondition
@@ -162,13 +162,13 @@ class FavouriteRepository
     protected function getSourceUserCondition(User $sourceUser)
     {
         return new EqualityCondition(
-            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID),
+            new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_SOURCE_USER_ID), 
             new StaticConditionVariable($sourceUser->getId()));
     }
 
     /**
      * Gets the joins between the User and the UserFavourite dataclass
-     *
+     * 
      * @return Joins
      */
     protected function getFavouriteUsersJoins()
@@ -176,11 +176,11 @@ class FavouriteRepository
         $joins = new Joins();
         $joins->add(
             new Join(
-                UserFavourite::class_name(),
+                UserFavourite::class_name(), 
                 new EqualityCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
                     new PropertyConditionVariable(UserFavourite::class_name(), UserFavourite::PROPERTY_FAVOURITE_USER_ID))));
-
+        
         return $joins;
     }
 }

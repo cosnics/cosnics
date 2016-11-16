@@ -11,12 +11,12 @@ class ExportTableColumnModel extends DataClassTableColumnModel implements TableC
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Export :: class_name(), Export :: PROPERTY_TEMPLATE_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Export::class_name(), Export::PROPERTY_TEMPLATE_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(Export :: class_name(), Export :: PROPERTY_TEMPLATE_DESCRIPTION));
-        $this->add_column(new DataClassPropertyTableColumn(Export :: class_name(), Export :: PROPERTY_CREATED));
-        $this->add_column(new DataClassPropertyTableColumn(Export :: class_name(), Export :: PROPERTY_STATUS));
-        $this->add_column(new DataClassPropertyTableColumn(Export :: class_name(), Export :: PROPERTY_FINISHED));
+            new DataClassPropertyTableColumn(Export::class_name(), Export::PROPERTY_TEMPLATE_DESCRIPTION));
+        $this->add_column(new DataClassPropertyTableColumn(Export::class_name(), Export::PROPERTY_CREATED));
+        $this->add_column(new DataClassPropertyTableColumn(Export::class_name(), Export::PROPERTY_STATUS));
+        $this->add_column(new DataClassPropertyTableColumn(Export::class_name(), Export::PROPERTY_FINISHED));
     }
 }
 ?>

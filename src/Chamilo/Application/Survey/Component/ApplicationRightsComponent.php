@@ -17,9 +17,8 @@ class ApplicationRightsComponent extends TabComponent
     public function build()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Application\Survey\Rights\Manager :: context(),
+            \Chamilo\Application\Survey\Rights\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
-
 }

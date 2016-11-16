@@ -65,11 +65,11 @@ class RequestCacheService extends DoctrineFilesystemCacheService implements User
      */
     public function warmUpForIdentifier($identifier)
     {
-        $request = $identifier->get(self :: PARAM_REQUEST);
+        $request = $identifier->get(self::PARAM_REQUEST);
         $calendarRepository = $this->getCalendarRepository();
         $result = $calendarRepository->sendRequest($request);
-
-        return $this->getCacheProvider()->save((string) $identifier, $result, $identifier->get(self :: PARAM_LIFETIME));
+        
+        return $this->getCacheProvider()->save((string) $identifier, $result, $identifier->get(self::PARAM_LIFETIME));
     }
 
     /**
