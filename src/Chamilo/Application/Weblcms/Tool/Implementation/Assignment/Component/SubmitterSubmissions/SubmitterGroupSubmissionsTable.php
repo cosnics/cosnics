@@ -11,13 +11,13 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Description of submitter_group_submissions_browser_table
- *
+ * 
  * @author Anthony Hurst (Hogeschool Gent)
  * @author Bert De Clercq (Hogeschool Gent)
  */
 class SubmitterGroupSubmissionsTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager :: PARAM_SUBMISSION;
+    const TABLE_IDENTIFIER = \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::PARAM_SUBMISSION;
     const DEFAULT_NAME = 'submitter_group_submissions_table';
 
     /*
@@ -25,20 +25,20 @@ class SubmitterGroupSubmissionsTable extends DataClassTable implements TableForm
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
-        if ($this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_component()->get_url(
-                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DOWNLOAD_SUBMISSIONS)),
-                    Translation :: get('DownloadSelected'),
+                        array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD_SUBMISSIONS)), 
+                    Translation::get('DownloadSelected'), 
                     false));
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_component()->get_url(
-                        array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE_SUBMISSION)),
-                    Translation :: get('DeleteSelected')));
+                        array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_SUBMISSION)), 
+                    Translation::get('DeleteSelected')));
         }
         return $actions;
     }

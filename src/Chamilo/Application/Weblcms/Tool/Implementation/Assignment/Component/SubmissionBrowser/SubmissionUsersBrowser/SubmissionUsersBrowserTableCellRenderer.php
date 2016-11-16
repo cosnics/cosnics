@@ -37,28 +37,28 @@ class SubmissionUsersBrowserTableCellRenderer extends SubmissionBrowserTableCell
      */
     public function render_cell($column, $user)
     {
-        $user_submitter_id = $user[AssignmentSubmission :: PROPERTY_SUBMITTER_ID];
+        $user_submitter_id = $user[AssignmentSubmission::PROPERTY_SUBMITTER_ID];
         
         switch ($column->get_name())
         {
-            case User :: PROPERTY_LASTNAME :
+            case User::PROPERTY_LASTNAME :
                 if ($user_submitter_id == $this->get_component()->get_user_id() ||
                      $this->get_component()->get_assignment()->get_visibility_submissions() == 1 ||
-                     $this->get_component()->is_allowed(WeblcmsRights :: EDIT_RIGHT))
+                     $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
                 {
                     $url = $this->get_component()->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_PUBLICATION_ID => $this->get_component()->get_publication_id(), 
-                            Manager :: PARAM_TARGET_ID => $user_submitter_id, 
-                            Manager :: PARAM_SUBMITTER_TYPE => $this->get_submitter_type(), 
-                            \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE_SUBMISSIONS));
-                    return '<a href=\'' . $url . '\'>' . $user[User :: PROPERTY_LASTNAME] . ', ' .
-                         $user[User :: PROPERTY_FIRSTNAME] . '</a>';
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->get_component()->get_publication_id(), 
+                            Manager::PARAM_TARGET_ID => $user_submitter_id, 
+                            Manager::PARAM_SUBMITTER_TYPE => $this->get_submitter_type(), 
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_BROWSE_SUBMISSIONS));
+                    return '<a href=\'' . $url . '\'>' . $user[User::PROPERTY_LASTNAME] . ', ' .
+                         $user[User::PROPERTY_FIRSTNAME] . '</a>';
                 }
-                return $user[User :: PROPERTY_LASTNAME] . ', ' . $user[User :: PROPERTY_FIRSTNAME];
+                return $user[User::PROPERTY_LASTNAME] . ', ' . $user[User::PROPERTY_FIRSTNAME];
         }
         
-        return parent :: render_cell($column, $user);
+        return parent::render_cell($column, $user);
     }
 
     /**
@@ -68,7 +68,7 @@ class SubmissionUsersBrowserTableCellRenderer extends SubmissionBrowserTableCell
      */
     public function get_submitter_type()
     {
-        return AssignmentSubmission :: SUBMITTER_TYPE_USER;
+        return AssignmentSubmission::SUBMITTER_TYPE_USER;
     }
 
     /**

@@ -1,22 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="lpi_attempt_interaction">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="lpi_view_id" type="integer" unsigned="1" notnull="1" />
-		<property name="interaction_id" type="integer" unsigned="1" notnull="1" />
-		<property name="interaction_type" type="text" length="50" notnull="1" />
-		<property name="weight" type="decimal" notnull="1" />
-		<property name="completion_time" type="text" length="16" notnull="1" />
-		<property name="correct_responses" type="text" notnull="1" />
-		<property name="student_responses" type="text" notnull="1" />
-		<property name="result" type="text" length="255" notnull="1" />
-		<property name="latency" type="text" length="16" notnull="1" />
-		<property name="display_order" type="integer" unsigned="1" notnull="1" />
-	</properties>
-	<index name="lpi_view_id">
-		<indexproperty name="lpi_view_id" />
-	</index>
-	<index name="interaction_type">
-		<indexproperty name="interaction_type" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="lpi_view_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="interaction_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="interaction_type"
+            type="text"
+            length="50"
+            notnull="1" />
+        <property
+            name="weight"
+            type="decimal"
+            notnull="1" />
+        <property
+            name="completion_time"
+            type="text"
+            length="16"
+            notnull="1" />
+        <property
+            name="correct_responses"
+            type="text"
+            notnull="1" />
+        <property
+            name="student_responses"
+            type="text"
+            notnull="1" />
+        <property
+            name="result"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="latency"
+            type="text"
+            length="16"
+            notnull="1" />
+        <property
+            name="display_order"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="lpi_view_id">
+        <indexproperty name="lpi_view_id" />
+    </index>
+    <index name="interaction_type">
+        <indexproperty name="interaction_type" />
+    </index>
 </object>

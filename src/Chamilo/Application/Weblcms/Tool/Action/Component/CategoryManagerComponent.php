@@ -20,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: category_manager.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.component
  */
 class CategoryManagerComponent extends Manager implements DelegateComponent, CategorySupport
@@ -30,41 +30,38 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
     public function run()
     {
-        if (!$this->is_allowed(WeblcmsRights :: MANAGE_CATEGORIES_RIGHT))
+        if (! $this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT))
         {
             throw new NotAllowedException();
         }
-
+        
         $request = $this->getRequest();
-
+        
         $selectedCategoryId = $request->get(\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID);
-
-        if(!isset($selectedCategoryId))
+        
+        if (! isset($selectedCategoryId))
         {
             $request->query->set(
-                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID,
-                $request->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
-            );
-
+                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID, 
+                $request->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY));
+            
             Request::set_get(
-                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID,
-                $request->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)
-            );
+                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID, 
+                $request->get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY));
         }
-
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Configuration\Category\Manager:: context(),
-            new ApplicationConfiguration($request, $this->get_user(), $this)
-        );
+            \Chamilo\Configuration\Category\Manager::context(), 
+            new ApplicationConfiguration($request, $this->get_user(), $this));
         $component = $factory->getComponent();
         $component->set_subcategories_allowed(true);
-
+        
         return $component->run();
     }
 
     /**
      * Returns the type
-     *
+     * 
      * @return int
      */
     public function get_type()
@@ -74,7 +71,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
     /**
      * Sets the type
-     *
+     * 
      * @param int $type
      */
     public function set_type($type)
@@ -88,71 +85,69 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         $category->set_tool($this->get_parent()->get_tool_id());
         $category->set_course($this->get_parent()->get_course_id());
         $category->set_allow_change(1);
-
+        
         return $category;
     }
 
     /**
      * Checks if a new category can be added
-     *
+     * 
      * @param int $parent_category_id
      *
      * @return bool
      */
     public function allowed_to_add_category($parent_category_id)
     {
-        return $this->is_allowed(WeblcmsRights :: MANAGE_CATEGORIES_RIGHT, null, $parent_category_id);
+        return $this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $parent_category_id);
     }
 
     public function allowed_to_delete_category($category_id)
     {
-        if (!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
+        if (! $this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
         {
             return false;
         }
-
-        $category = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
-            ContentObjectPublicationCategory:: class_name(),
-            $category_id
-        );
-
+        
+        $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublicationCategory::class_name(), 
+            $category_id);
+        
         if ($category)
         {
-            if ($category->get_tool() == 'document' && !$category->get_allow_change())
+            if ($category->get_tool() == 'document' && ! $category->get_allow_change())
             {
                 return false;
             }
         }
-
+        
         $count = $this->count_category_publications($category_id);
         if ($count > 0)
         {
             return false;
         }
-
-        return !$this->have_subcategories_publications($category_id);
+        
+        return ! $this->have_subcategories_publications($category_id);
     }
 
     public function allowed_to_edit_category($category_id)
     {
-        if (!$this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
+        if (! $this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT, null, $category_id))
         {
             return false;
         }
-
-        $category = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieve_by_id(
-            ContentObjectPublicationCategory:: class_name(),
-            $category_id
-        );
-
+        
+        $category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublicationCategory::class_name(), 
+            $category_id);
+        
         if ($category)
         {
-            if ($category->get_tool() == 'document' && !$category->get_allow_change())
+            if ($category->get_tool() == 'document' && ! $category->get_allow_change())
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 
@@ -162,29 +157,24 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         {
             $conditions[] = $condition;
         }
-
+        
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_COURSE
-            ),
-            new StaticConditionVariable($this->get_parent()->get_course_id())
-        );
-
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_COURSE), 
+            new StaticConditionVariable($this->get_parent()->get_course_id()));
+        
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_TOOL
-            ),
-            new StaticConditionVariable($this->get_parent()->get_tool_id())
-        );
-
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_TOOL), 
+            new StaticConditionVariable($this->get_parent()->get_tool_id()));
+        
         $condition = new AndCondition($conditions);
-
-        return \Chamilo\Application\Weblcms\Storage\DataManager:: count(
-            ContentObjectPublicationCategory:: class_name(),
-            $condition
-        );
+        
+        return \Chamilo\Application\Weblcms\Storage\DataManager::count(
+            ContentObjectPublicationCategory::class_name(), 
+            $condition);
     }
 
     public function retrieve_categories($condition, $offset, $count, $order_property)
@@ -193,28 +183,23 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         {
             $conditions[] = $condition;
         }
-
+        
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_COURSE
-            ),
-            new StaticConditionVariable($this->get_parent()->get_course_id())
-        );
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_COURSE), 
+            new StaticConditionVariable($this->get_parent()->get_course_id()));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_TOOL
-            ),
-            new StaticConditionVariable($this->get_parent()->get_tool_id())
-        );
-
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_TOOL), 
+            new StaticConditionVariable($this->get_parent()->get_tool_id()));
+        
         $condition = new AndCondition($conditions);
-
-        return \Chamilo\Application\Weblcms\Storage\DataManager:: retrieves(
-            ContentObjectPublicationCategory:: class_name(),
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
-        );
+        
+        return \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+            ContentObjectPublicationCategory::class_name(), 
+            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     public function get_next_category_display_order($parent_id)
@@ -227,44 +212,35 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication:: class_name(),
-                ContentObjectPublication :: PROPERTY_COURSE_ID
-            ),
-            new StaticConditionVariable($this->get_parent()->get_course_id())
-        );
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
+            new StaticConditionVariable($this->get_parent()->get_course_id()));
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication:: class_name(),
-                ContentObjectPublication :: PROPERTY_CATEGORY_ID
-            ),
-            $category_id
-        );
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_CATEGORY_ID), 
+            $category_id);
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication:: class_name(),
-                ContentObjectPublication :: PROPERTY_TOOL
-            ),
-            new StaticConditionVariable($this->get_parent()->get_tool_id())
-        );
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
+            new StaticConditionVariable($this->get_parent()->get_tool_id()));
         $condition = new AndCondition($conditions);
-
-        return \Chamilo\Application\Weblcms\Storage\DataManager:: count_content_object_publications($condition);
+        
+        return \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications($condition);
     }
 
     private function have_subcategories_publications($category_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublicationCategory:: class_name(),
-                ContentObjectPublicationCategory :: PROPERTY_PARENT
-            ),
-            new StaticConditionVariable($category_id)
-        );
-        $subcategries = \Chamilo\Application\Weblcms\Storage\DataManager:: retrieves(
-            ContentObjectPublicationCategory:: class_name(),
-            new DataClassRetrievesParameters($condition)
-        );
-
+                ContentObjectPublicationCategory::class_name(), 
+                ContentObjectPublicationCategory::PROPERTY_PARENT), 
+            new StaticConditionVariable($category_id));
+        $subcategries = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+            ContentObjectPublicationCategory::class_name(), 
+            new DataClassRetrievesParameters($condition));
+        
         while ($cat = $subcategries->next_result())
         {
             $count = $this->count_category_publications($cat->get_id());
@@ -273,7 +249,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
                 return true;
             }
         }
-
+        
         return false;
     }
 
@@ -282,8 +258,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
      */
     public function allowed_to_change_category_visibility($category_id)
     {
-        return $this->get_course()->is_course_admin($this->getUser()) ||
-        $this->getUser()->is_platform_admin();
+        return $this->get_course()->is_course_admin($this->getUser()) || $this->getUser()->is_platform_admin();
     }
 
     /*

@@ -37,84 +37,84 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
     {
         $this->courseIdentifier = Request::get('course');
         $this->show_groups = Request::get('show_groups');
-
+        
         if ($this->courseIdentifier)
         {
             $this->course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                Course::class_name(),
+                Course::class_name(), 
                 $this->courseIdentifier);
-
+            
             $query = Request::get('query');
             $exclude = Request::get('exclude');
-
+            
             $user_conditions = array();
             $group_conditions = array();
-
+            
             if ($query)
             {
                 $q = '*' . $query . '*';
-
+                
                 $userCondition = array();
                 $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
                     $q);
                 $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
                     $q);
                 $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
                     $q);
                 $user_conditions[] = new OrCondition($userCondition);
-
+                
                 $group_conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME),
+                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME), 
                     $q);
             }
-
+            
             if ($exclude)
             {
                 if (! is_array($exclude))
                 {
                     $exclude = array($exclude);
                 }
-
+                
                 $exclude_conditions = array();
                 $exclude_conditions['user'] = array();
                 $exclude_conditions['group'] = array();
-
+                
                 foreach ($exclude as $id)
                 {
                     $id = explode('_', $id);
-
+                    
                     if ($id[0] == 'user')
                     {
                         $condition = new NotCondition(
                             new EqualityCondition(
-                                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                                new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
                                 new StaticConditionVariable($id[1])));
                     }
                     elseif ($id[0] == 'group')
                     {
                         $condition = new NotCondition(
                             new EqualityCondition(
-                                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID),
+                                new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID), 
                                 new StaticConditionVariable($id[1])));
                     }
-
+                    
                     $exclude_conditions[$id[0]][] = $condition;
                 }
-
+                
                 if (count($exclude_conditions['user']) > 0)
                 {
                     $user_conditions[] = new AndCondition($exclude_conditions['user']);
                 }
-
+                
                 if (count($exclude_conditions['group']) > 0)
                 {
                     $group_conditions[] = new AndCondition($exclude_conditions['group']);
                 }
             }
-
+            
             // if ($group_conditions)
             if (count($group_conditions) > 0)
             {
@@ -124,51 +124,51 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
             {
                 // $group_condition = null;
                 $group_condition = new EqualityCondition(
-                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+                    new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE), 
                     new StaticConditionVariable($this->course->get_id()));
             }
-
+            
             $userConditions = array();
             $userConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(),
-                    CourseEntityRelation::PROPERTY_COURSE_ID),
+                    CourseEntityRelation::class_name(), 
+                    CourseEntityRelation::PROPERTY_COURSE_ID), 
                 new StaticConditionVariable($this->course->getId()));
             $userConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    CourseEntityRelation::class_name(),
-                    CourseEntityRelation::PROPERTY_ENTITY_TYPE),
+                    CourseEntityRelation::class_name(), 
+                    CourseEntityRelation::PROPERTY_ENTITY_TYPE), 
                 new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER));
-
+            
             $parameters = new DataClassDistinctParameters(
-                new AndCondition($userConditions),
+                new AndCondition($userConditions), 
                 CourseEntityRelation::PROPERTY_ENTITY_ID);
-
+            
             $user_ids = DataManager::distinct(CourseEntityRelation::class_name(), $parameters);
-
+            
             // Add users from subscribed platform groups to user ids array
             $group_relations = $this->course->get_subscribed_groups();
-
+            
             if (count($group_relations) > 0)
             {
                 $this->group_users = array();
-
+                
                 foreach ($group_relations as $group_relation)
                 {
                     $group = DataManager::retrieve_by_id(Group::class_name(), $group_relation->getEntityId());
                     $group_user_ids = $group->get_users(true, true);
-
+                    
                     $this->group_users = array_merge($this->group_users, $group_user_ids);
                 }
-
+                
                 $user_ids = array_merge($user_ids, $this->group_users);
             }
-
+            
             // if ($user_conditions)
             if (count($user_conditions) > 0)
             {
                 $user_conditions[] = new InCondition(
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
                     $user_ids);
                 $user_condition = new AndCondition($user_conditions);
             }
@@ -177,7 +177,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                 if (count($user_ids) > 0)
                 {
                     $user_condition = new InCondition(
-                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+                        new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), 
                         $user_ids);
                 }
                 else
@@ -185,70 +185,70 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                     $user_condition = null;
                 }
             }
-
+            
             // Order the users alphabetically
             $format = Configuration::getInstance()->get_setting(array(User::CONTEXT, 'fullname_format'));
             $order = array(
-                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), SORT_ASC),
+                new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), SORT_ASC), 
                 new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), SORT_ASC));
-
+            
             if ($format == User::NAME_FORMAT_LAST)
             {
                 $order = array_reverse($order);
             }
-
+            
             $user_result_set = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                User::class_name(),
+                User::class_name(), 
                 new DataClassRetrievesParameters($user_condition, null, null, $order));
-
+            
             $users = array();
             while ($user = $user_result_set->next_result())
             {
                 $users[] = $user;
             }
-
+            
             if ($this->show_groups)
             {
                 $groups = array();
-
+                
                 $group_result_set = DataManager::retrieves(
-                    CourseGroup::class_name(),
+                    CourseGroup::class_name(), 
                     new DataClassRetrievesParameters(
-                        $group_condition,
-                        null,
-                        null,
+                        $group_condition, 
+                        null, 
+                        null, 
                         array(
                             new OrderBy(
                                 new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME)))));
-
+                
                 while ($group = $group_result_set->next_result())
                 {
-
+                    
                     $group_parent_id = $group->get_parent_id();
-
+                    
                     if (! is_array($groups[$group_parent_id]))
                     {
                         $groups[$group_parent_id] = array();
                     }
-
+                    
                     if (! isset($groups[$group_parent_id][$group->get_id()]))
                     {
                         $groups[$group_parent_id][$group->get_id()] = $group;
                     }
-
+                    
                     if ($group_parent_id != 0)
                     {
                         $tree_parents = $group->get_parents(false);
-
+                        
                         foreach ($tree_parents as $tree_parent)
                         {
                             $tree_parent_parent_id = $tree_parent->get_parent_id();
-
+                            
                             if (! is_array($groups[$tree_parent_parent_id]))
                             {
                                 $groups[$tree_parent_parent_id] = array();
                             }
-
+                            
                             if (! isset($groups[$tree_parent_parent_id][$tree_parent->get_id()]))
                             {
                                 $groups[$tree_parent_parent_id][$tree_parent->get_id()] = $tree_parent;
@@ -260,7 +260,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                         $top_group_parent_id = $group->get_id();
                     }
                 }
-
+                
                 $groups_tree = $this->get_group_tree($top_group_parent_id, $groups);
             }
             else
@@ -273,12 +273,12 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
             $users = array();
             $groups_tree = array();
         }
-
+        
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>', "\n", '<tree>', "\n";
-
+        
         $this->dump_tree($users, $groups_tree);
-
+        
         echo '</tree>';
     }
 
@@ -300,23 +300,23 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
                     {
                         $class = 'type type_user';
                     }
-
+                    
                     echo '<leaf id="user_' . $user->get_id() . '" classes="' . $class . '" title="';
                     echo htmlspecialchars($user->get_fullname()) . '" description="';
                     echo htmlspecialchars($user->get_username()) . '"/>' . "\n";
                 }
                 echo '</node>', "\n";
             }
-
+            
             if ($this->show_groups)
             {
                 $this->dump_platform_groups_tree();
-
+                
                 if ($this->contains_results($groups_tree))
                 {
                     echo '<node id="group" classes="category unlinked" title="' .
                          htmlspecialchars($this->course->get_title()) . '">', "\n";
-
+                    
                     $this->dump_groups_tree($groups_tree);
                     echo '</node>', "\n";
                 }
@@ -327,20 +327,20 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
     function dump_platform_groups_tree()
     {
         $group_relations = $this->course->get_subscribed_groups();
-
+        
         if (count($group_relations) > 0)
         {
             echo '<node id="platform" classes="category unlinked" title="';
             echo Translation::get('LinkedPlatformGroups') . '">', "\n";
-
+            
             foreach ($group_relations as $group_relation)
             {
                 $group = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(
-                    Group::class_name(),
+                    Group::class_name(), 
                     $group_relation->getEntityId());
                 $this->dump_platform_group($group);
             }
-
+            
             echo '</node>', "\n";
         }
     }
@@ -348,18 +348,18 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
     function dump_platform_group($group)
     {
         $children = $group->get_children(false);
-
+        
         if ($children && count($children) > 0)
         {
             echo '<node id="platform_' . $group->get_id() . '" classes="type type_group" title="';
             echo htmlspecialchars($group->get_name()) . '" description="';
             echo htmlspecialchars($group->get_name()) . '">' . "\n";
-
+            
             foreach ($children as $child)
             {
                 $this->dump_platform_group($child);
             }
-
+            
             echo '</node>';
         }
         else
@@ -398,7 +398,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
         {
             $tree[] = array('group' => $child, 'children' => $this->get_group_tree($child->get_id(), $groups));
         }
-
+        
         return $tree;
     }
 
@@ -408,7 +408,7 @@ class XmlCourseUserGroupFeedComponent extends \Chamilo\Application\Weblcms\Ajax\
         {
             return true;
         }
-
+        
         return false;
     }
 }

@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 
 /**
  * Cell renderer for the course group entity browser
- *
+ * 
  * @author Sven Vanpoucke
  */
 class CourseGroupEntityTableColumnModel extends LocationEntityTableColumnModel
@@ -18,12 +18,12 @@ class CourseGroupEntityTableColumnModel extends LocationEntityTableColumnModel
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(CourseGroup :: class_name(), CourseGroup :: PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(CourseGroup :: class_name(), CourseGroup :: PROPERTY_DESCRIPTION));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_USERS));
-        $this->add_column(new StaticTableColumn(self :: COLUMN_SUBGROUPS));
-
-        parent :: initialize_columns();
+            new DataClassPropertyTableColumn(CourseGroup::class_name(), CourseGroup::PROPERTY_DESCRIPTION));
+        $this->add_column(new StaticTableColumn(self::COLUMN_USERS));
+        $this->add_column(new StaticTableColumn(self::COLUMN_SUBGROUPS));
+        
+        parent::initialize_columns();
     }
 }

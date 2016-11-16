@@ -23,10 +23,10 @@ class RequestForm extends FormValidator
 
     function __construct($request, $action)
     {
-        parent :: __construct('request', 'post', $action);
-
+        parent::__construct('request', 'post', $action);
+        
         $this->request = $request;
-
+        
         $this->build();
         $this->setDefaults();
     }
@@ -36,108 +36,108 @@ class RequestForm extends FormValidator
         if ($this->request->get_id())
         {
             $user_details = new \Chamilo\Core\User\UserDetails($this->request->get_user());
-            $this->addElement('static', null, Translation :: get('User'), $user_details->toHtml());
+            $this->addElement('static', null, Translation::get('User'), $user_details->toHtml());
         }
-
+        
         $this->addElement(
-            'select',
-            Request :: PROPERTY_COURSE_TYPE_ID,
-            Translation :: get('CourseType'),
+            'select', 
+            Request::PROPERTY_COURSE_TYPE_ID, 
+            Translation::get('CourseType'), 
             $this->get_course_types());
         $this->addRule(
-            Request :: PROPERTY_COURSE_TYPE_ID,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Request::PROPERTY_COURSE_TYPE_ID, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $this->addElement(
-            'select',
-            Request :: PROPERTY_CATEGORY_ID,
-            Translation :: get('CategoryId'),
+            'select', 
+            Request::PROPERTY_CATEGORY_ID, 
+            Translation::get('CategoryId'), 
             $this->get_course_categories());
         $this->addRule(
-            Request :: PROPERTY_CATEGORY_ID,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Request::PROPERTY_CATEGORY_ID, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
-        $this->addElement('text', Request :: PROPERTY_NAME, Translation :: get('Name'));
+        
+        $this->addElement('text', Request::PROPERTY_NAME, Translation::get('Name'));
         $this->addRule(
-            Request :: PROPERTY_NAME,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Request::PROPERTY_NAME, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
-        $this->addElement('text', Request :: PROPERTY_SUBJECT, Translation :: get('Subject'));
+        
+        $this->addElement('text', Request::PROPERTY_SUBJECT, Translation::get('Subject'));
         $this->addRule(
-            Request :: PROPERTY_SUBJECT,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Request::PROPERTY_SUBJECT, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $this->addElement(
-            'textarea',
-            Request :: PROPERTY_MOTIVATION,
-            Translation :: get('Motivation'),
+            'textarea', 
+            Request::PROPERTY_MOTIVATION, 
+            Translation::get('Motivation'), 
             array("cols" => 50, "rows" => 6));
         $this->addRule(
-            Request :: PROPERTY_MOTIVATION,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Request::PROPERTY_MOTIVATION, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         if ($this->request->get_id())
         {
             $this->addElement(
-                'textarea',
-                Request :: PROPERTY_DECISION_MOTIVATION,
-                Translation :: get('DecisionMotivation'),
+                'textarea', 
+                Request::PROPERTY_DECISION_MOTIVATION, 
+                Translation::get('DecisionMotivation'), 
                 array("cols" => 50, "rows" => 6));
             $this->addRule(
-                Request :: PROPERTY_DECISION_MOTIVATION,
-                Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+                Request::PROPERTY_DECISION_MOTIVATION, 
+                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
                 'required');
-
+            
             $buttons[] = $this->createElement(
-                'style_submit_button',
-                'submit',
-                Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-                null,
-                null,
+                'style_submit_button', 
+                'submit', 
+                Translation::get('Update', null, Utilities::COMMON_LIBRARIES), 
+                null, 
+                null, 
                 'arrow-right');
         }
         else
         {
             $buttons[] = $this->createElement(
-                'style_submit_button',
-                'submit',
-                Translation :: get('Send', null, Utilities :: COMMON_LIBRARIES),
-                null,
-                null,
+                'style_submit_button', 
+                'submit', 
+                Translation::get('Send', null, Utilities::COMMON_LIBRARIES), 
+                null, 
+                null, 
                 'envelope');
         }
-
+        
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     /**
      * Sets default values.
-     *
+     * 
      * @param $defaults array Default values for this form's parameters.
      */
     function setDefaults($defaults = array ())
     {
-        $defaults[Request :: PROPERTY_COURSE_TYPE_ID] = $this->request->get_course_type_id();
-        $defaults[Request :: PROPERTY_NAME] = $this->request->get_name();
-        $defaults[Request :: PROPERTY_SUBJECT] = $this->request->get_subject();
-        $defaults[Request :: PROPERTY_MOTIVATION] = $this->request->get_motivation();
-
+        $defaults[Request::PROPERTY_COURSE_TYPE_ID] = $this->request->get_course_type_id();
+        $defaults[Request::PROPERTY_NAME] = $this->request->get_name();
+        $defaults[Request::PROPERTY_SUBJECT] = $this->request->get_subject();
+        $defaults[Request::PROPERTY_MOTIVATION] = $this->request->get_motivation();
+        
         if ($this->request->get_id())
         {
-            $defaults[Request :: PROPERTY_DECISION_MOTIVATION] = $this->request->get_decision_motivation();
+            $defaults[Request::PROPERTY_DECISION_MOTIVATION] = $this->request->get_decision_motivation();
         }
-
-        parent :: setDefaults($defaults);
+        
+        parent::setDefaults($defaults);
     }
 
     /**
@@ -148,15 +148,15 @@ class RequestForm extends FormValidator
     {
         if (! isset($this->course_types))
         {
-            $course_type_objects = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager :: retrieve_active_course_types();
-            $course_management_rights = CourseManagementRights :: getInstance();
-
+            $course_type_objects = \Chamilo\Application\Weblcms\CourseType\Storage\DataManager::retrieve_active_course_types();
+            $course_management_rights = CourseManagementRights::getInstance();
+            
             while ($course_type = $course_type_objects->next_result())
             {
                 if ($course_management_rights->is_allowed(
-                    CourseManagementRights :: REQUEST_COURSE_RIGHT,
-                    $course_type->get_id(),
-                    CourseManagementRights :: TYPE_COURSE_TYPE))
+                    CourseManagementRights::REQUEST_COURSE_RIGHT, 
+                    $course_type->get_id(), 
+                    CourseManagementRights::TYPE_COURSE_TYPE))
                 {
                     $this->course_types[$course_type->get_id()] = $course_type->get_title();
                 }
@@ -175,22 +175,22 @@ class RequestForm extends FormValidator
         {
             $condition = new NotCondition(
                 new EqualityCondition(
-                    new PropertyConditionVariable(CourseCategory :: class_name(), CourseCategory :: PROPERTY_STATE),
-                    new StaticConditionVariable(CourseCategory :: STATE_ARCHIVE)));
-
-            $course_categories = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_course_categories_ordered_by_name(
+                    new PropertyConditionVariable(CourseCategory::class_name(), CourseCategory::PROPERTY_STATE), 
+                    new StaticConditionVariable(CourseCategory::STATE_ARCHIVE)));
+            
+            $course_categories = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_categories_ordered_by_name(
                 $condition);
-
+            
             $course_categories_array = array();
-
+            
             while ($category = $course_categories->next_result())
             {
                 $course_categories_array[$category->get_id()] = $category->get_name();
             }
-
+            
             $this->course_categories = $course_categories_array;
         }
-
+        
         return $this->course_categories;
     }
 }

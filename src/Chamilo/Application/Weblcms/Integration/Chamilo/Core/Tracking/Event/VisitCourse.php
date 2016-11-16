@@ -21,7 +21,7 @@ class VisitCourse extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit :: class_name());
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit::class_name());
     }
 
     public function getType()

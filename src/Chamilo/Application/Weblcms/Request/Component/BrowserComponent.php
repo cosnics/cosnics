@@ -30,141 +30,139 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     function run()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
-        $user_requests = DataManager :: count(Request :: class_name(), new DataClassCountParameters($condition));
-
+        $user_requests = DataManager::count(Request::class_name(), new DataClassCountParameters($condition));
+        
         $tabs = new DynamicTabsRenderer('request');
-
+        
         if ($user_requests > 0 ||
-             \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed())
+             \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed())
         {
-
+            
             if ($user_requests > 0)
             {
-                $this->table_type = RequestTable :: TYPE_PERSONAL;
+                $this->table_type = RequestTable::TYPE_PERSONAL;
                 $table = new RequestTable($this);
                 $tabs->add_tab(
                     new DynamicContentTab(
-                        'personal_request',
-                        Translation :: get('YourRequests'),
-                        Theme :: getInstance()->getImagePath(
-                            'Chamilo\Application\Weblcms\Request',
-                            'Tab/PersonalRequest'),
+                        'personal_request', 
+                        Translation::get('YourRequests'), 
+                        Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Tab/PersonalRequest'), 
                         $table->as_html()));
             }
-
-            if (\Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed())
+            
+            if (\Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed())
             {
-                $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->get_target_users(
+                $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->get_target_users(
                     $this->get_user());
-
+                
                 if (count($target_users) > 0)
                 {
                     $target_condition = new InCondition(
-                        new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+                        new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), 
                         $target_users);
                 }
                 else
                 {
                     $target_condition = new EqualityCondition(
-                        new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+                        new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), 
                         new StaticConditionVariable(- 1));
                 }
-
+                
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_PENDING));
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION), 
+                    new StaticConditionVariable(Request::DECISION_PENDING));
                 if (! $this->get_user()->is_platform_admin())
                 {
                     $conditions[] = $target_condition;
                 }
                 $condition = new AndCondition($conditions);
-
-                if (DataManager :: count(Request :: class_name(), $condition) > 0)
+                
+                if (DataManager::count(Request::class_name(), $condition) > 0)
                 {
-                    $this->table_type = RequestTable :: TYPE_PENDING;
+                    $this->table_type = RequestTable::TYPE_PENDING;
                     $table = new RequestTable($this);
                     $tabs->add_tab(
                         new DynamicContentTab(
-                            RequestTable :: TYPE_PENDING,
-                            Translation :: get('PendingRequests'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Application\Weblcms\Request',
-                                'Decision/22/' . Request :: DECISION_PENDING),
+                            RequestTable::TYPE_PENDING, 
+                            Translation::get('PendingRequests'), 
+                            Theme::getInstance()->getImagePath(
+                                'Chamilo\Application\Weblcms\Request', 
+                                'Decision/22/' . Request::DECISION_PENDING), 
                             $table->as_html()));
                 }
-
+                
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_GRANTED));
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION), 
+                    new StaticConditionVariable(Request::DECISION_GRANTED));
                 if (! $this->get_user()->is_platform_admin())
                 {
                     $conditions[] = $target_condition;
                 }
                 $condition = new AndCondition($conditions);
-
-                if (DataManager :: count(Request :: class_name(), $condition) > 0)
+                
+                if (DataManager::count(Request::class_name(), $condition) > 0)
                 {
-                    $this->table_type = RequestTable :: TYPE_GRANTED;
+                    $this->table_type = RequestTable::TYPE_GRANTED;
                     $table = new RequestTable($this);
                     $tabs->add_tab(
                         new DynamicContentTab(
-                            RequestTable :: TYPE_GRANTED,
-                            Translation :: get('GrantedRequests'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Application\Weblcms\Request',
-                                'Decision/22/' . Request :: DECISION_GRANTED),
+                            RequestTable::TYPE_GRANTED, 
+                            Translation::get('GrantedRequests'), 
+                            Theme::getInstance()->getImagePath(
+                                'Chamilo\Application\Weblcms\Request', 
+                                'Decision/22/' . Request::DECISION_GRANTED), 
                             $table->as_html()));
                 }
-
+                
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_DENIED));
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION), 
+                    new StaticConditionVariable(Request::DECISION_DENIED));
                 if (! $this->get_user()->is_platform_admin())
                 {
                     $conditions[] = $target_condition;
                 }
                 $condition = new AndCondition($conditions);
-
-                if (DataManager :: count(Request :: class_name(), $condition) > 0)
+                
+                if (DataManager::count(Request::class_name(), $condition) > 0)
                 {
-                    $this->table_type = RequestTable :: TYPE_DENIED;
+                    $this->table_type = RequestTable::TYPE_DENIED;
                     $table = new RequestTable($this);
                     $tabs->add_tab(
                         new DynamicContentTab(
-                            RequestTable :: TYPE_DENIED,
-                            Translation :: get('DeniedRequests'),
-                            Theme :: getInstance()->getImagePath(
-                                'Chamilo\Application\Weblcms\Request',
-                                'Decision/22/' . Request :: DECISION_DENIED),
+                            RequestTable::TYPE_DENIED, 
+                            Translation::get('DeniedRequests'), 
+                            Theme::getInstance()->getImagePath(
+                                'Chamilo\Application\Weblcms\Request', 
+                                'Decision/22/' . Request::DECISION_DENIED), 
                             $table->as_html()));
                 }
             }
         }
-
-        if ($user_requests > 0 || (\Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed() &&
+        
+        if ($user_requests > 0 || (\Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed() &&
              $tabs->size() > 0) || $this->get_user()->is_platform_admin())
         {
             $html = array();
-
+            
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
             $html[] = $this->render_header();
             $html[] = $this->buttonToolbarRenderer->render();
             $html[] = $tabs->render();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
         else
         {
             $this->redirect(
-                Translation :: get('NoRequestsFormDirectly'),
-                null,
-                array(self :: PARAM_ACTION => self :: ACTION_CREATE));
+                Translation::get('NoRequestsFormDirectly'), 
+                null, 
+                array(self::PARAM_ACTION => self::ACTION_CREATE));
         }
     }
 
@@ -175,52 +173,52 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     public function get_table_condition($object_table_class_name)
     {
         $conditions = array();
-
+        
         switch ($this->table_type)
         {
-            case RequestTable :: TYPE_PENDING :
+            case RequestTable::TYPE_PENDING :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_PENDING));
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION), 
+                    new StaticConditionVariable(Request::DECISION_PENDING));
                 break;
-            case RequestTable :: TYPE_PERSONAL :
+            case RequestTable::TYPE_PERSONAL :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), 
                     new StaticConditionVariable($this->get_user_id()));
                 break;
-            case RequestTable :: TYPE_GRANTED :
+            case RequestTable::TYPE_GRANTED :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_GRANTED));
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION), 
+                    new StaticConditionVariable(Request::DECISION_GRANTED));
                 break;
-            case RequestTable :: TYPE_DENIED :
+            case RequestTable::TYPE_DENIED :
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_DECISION),
-                    new StaticConditionVariable(Request :: DECISION_DENIED));
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_DECISION), 
+                    new StaticConditionVariable(Request::DECISION_DENIED));
                 break;
         }
-
+        
         if (! $this->get_user()->is_platform_admin() &&
-             \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->request_is_allowed() &&
-             $this->table_type != RequestTable :: TYPE_PERSONAL)
+             \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed() &&
+             $this->table_type != RequestTable::TYPE_PERSONAL)
         {
-            $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights :: getInstance()->get_target_users(
+            $target_users = \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->get_target_users(
                 $this->get_user());
-
+            
             if (count($target_users) > 0)
             {
                 $conditions[] = new InCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), 
                     $target_users);
             }
             else
             {
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(Request :: class_name(), Request :: PROPERTY_USER_ID),
+                    new PropertyConditionVariable(Request::class_name(), Request::PROPERTY_USER_ID), 
                     new StaticConditionVariable(- 1));
             }
         }
-
+        
         return new AndCondition($conditions);
     }
 
@@ -235,26 +233,26 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('RequestCourse'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Request'),
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
+                        Translation::get('RequestCourse'), 
+                        Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Request'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))));
             }
-
+            
             if ($this->get_user()->is_platform_admin())
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('ConfigureManagementRights'),
-                        Theme :: getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Rights'),
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS))));
+                        Translation::get('ConfigureManagementRights'), 
+                        Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Request', 'Action/Rights'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))));
             }
-
+            
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
-
+            
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
+        
         return $this->buttonToolbarRenderer;
     }
 

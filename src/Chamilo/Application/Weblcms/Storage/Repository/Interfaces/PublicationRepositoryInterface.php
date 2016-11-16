@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCatego
 
 /**
  * Interface to determine the necessary functions for the publication repository
- *
+ * 
  * @package application\weblcms
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -16,7 +16,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Finds publications for a given course and tool
-     *
+     * 
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $tool
      *
@@ -26,7 +26,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Finds publications for a given course, tool and category
-     *
+     * 
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param string $tool
      * @param int $categoryId
@@ -37,7 +37,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Finds the publications for which the properties are set to visible by a given set of publication ids
-     *
+     * 
      * @param int[] $publicationIds
      *
      * @return mixed
@@ -46,7 +46,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Finds one publication by a given id
-     *
+     * 
      * @param int $publicationId
      *
      * @return ContentObjectPublication
@@ -55,7 +55,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Returns the users for who the content object is published
-     *
+     * 
      * @param ContentObjectPublication $publication
      *
      * @return User[]
@@ -64,7 +64,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Returns the course groups for who the content object is published
-     *
+     * 
      * @param ContentObjectPublication $publication
      *
      * @return CourseGroup[]
@@ -73,7 +73,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Returns the platform groups for who the content object is published
-     *
+     * 
      * @param ContentObjectPublication $publication
      *
      * @return Group[]
@@ -82,7 +82,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Finds publication categories for a given course and tool
-     *
+     * 
      * @param Course $course
      * @param string $tool
      *
@@ -92,7 +92,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Finds publication categories for a given course, tool and category
-     *
+     * 
      * @param Course $course
      * @param string $tool
      * @param int $categoryId
@@ -103,7 +103,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Finds a publication category by a given id
-     *
+     * 
      * @param int $categoryId
      *
      * @return ContentObjectPublicationCategory
@@ -112,7 +112,7 @@ interface PublicationRepositoryInterface
 
     /**
      * Returns the target users of a content object publication
-     *
+     * 
      * @param ContentObjectPublication $contentObjectPublication
      *
      * @return array

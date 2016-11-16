@@ -15,17 +15,17 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $reporting_data->set_rows(
-            array(Translation :: get('MostActiveUser'), Translation :: get('NumberOfContributions')));
-
-        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ComplexContentObjectItem :: class_name(),
-            Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
-
-        $wiki_page = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            ContentObject :: class_name(),
+            array(Translation::get('MostActiveUser'), Translation::get('NumberOfContributions')));
+        
+        $complex_content_object_item = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ComplexContentObjectItem::class_name(), 
+            Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID));
+        
+        $wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            ContentObject::class_name(), 
             $complex_content_object_item->get_ref());
-        $versions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_content_object_versions($wiki_page);
-
+        $versions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_versions($wiki_page);
+        
         $users = array();
         while ($version = $versions->next_result())
         {
@@ -33,18 +33,18 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
         }
         arsort($users);
         $keys = array_keys($users);
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
             (int) $keys[0]);
-
+        
         $reporting_data->add_category(0);
         $reporting_data->add_data_category_row(
-            0,
-            Translation :: get('MostActiveUser'),
+            0, 
+            Translation::get('MostActiveUser'), 
             $user->get_fullname() . ' (' . $user->get_username() . ')');
-        $reporting_data->add_data_category_row(0, Translation :: get('NumberOfContributions'), $users[$user->get_id()]);
+        $reporting_data->add_data_category_row(0, Translation::get('NumberOfContributions'), $users[$user->get_id()]);
         $reporting_data->hide_categories();
-
+        
         return $reporting_data;
     }
 
@@ -55,6 +55,6 @@ class WikiPageMostActiveUsersBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

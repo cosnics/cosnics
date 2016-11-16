@@ -27,12 +27,12 @@ class SurveyInvitation
     public function get_default_property_names()
     {
         return array(
-            self :: PROPERTY_ID, 
-            self :: PROPERTY_USER_ID, 
-            self :: PROPERTY_SURVEY_ID, 
-            self :: PROPERTY_INVITATION_CODE, 
-            self :: PROPERTY_EMAIL, 
-            self :: PROPERTY_VALID);
+            self::PROPERTY_ID, 
+            self::PROPERTY_USER_ID, 
+            self::PROPERTY_SURVEY_ID, 
+            self::PROPERTY_INVITATION_CODE, 
+            self::PROPERTY_EMAIL, 
+            self::PROPERTY_VALID);
     }
 
     public function set_default_property($name, $value)
@@ -57,61 +57,61 @@ class SurveyInvitation
 
     public function get_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ID);
+        return $this->get_default_property(self::PROPERTY_ID);
     }
 
     public function set_id($value)
     {
-        $this->set_default_property(self :: PROPERTY_ID, $value);
+        $this->set_default_property(self::PROPERTY_ID, $value);
     }
 
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     public function set_user_id($value)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $value);
+        $this->set_default_property(self::PROPERTY_USER_ID, $value);
     }
 
     public function get_survey_id()
     {
-        return $this->get_default_property(self :: PROPERTY_SURVEY_ID);
+        return $this->get_default_property(self::PROPERTY_SURVEY_ID);
     }
 
     public function set_survey_id($value)
     {
-        $this->set_default_property(self :: PROPERTY_SURVEY_ID, $value);
+        $this->set_default_property(self::PROPERTY_SURVEY_ID, $value);
     }
 
     public function get_invitation_code()
     {
-        return $this->get_default_property(self :: PROPERTY_INVITATION_CODE);
+        return $this->get_default_property(self::PROPERTY_INVITATION_CODE);
     }
 
     public function set_invitation_code($value)
     {
-        $this->set_default_property(self :: PROPERTY_INVITATION_CODE, $value);
+        $this->set_default_property(self::PROPERTY_INVITATION_CODE, $value);
     }
 
     public function get_valid()
     {
-        return $this->get_default_property(self :: PROPERTY_VALID);
+        return $this->get_default_property(self::PROPERTY_VALID);
     }
 
     public function set_valid($value)
     {
-        $this->set_default_property(self :: PROPERTY_VALID, $value);
+        $this->set_default_property(self::PROPERTY_VALID, $value);
     }
 
     public function get_email()
     {
-        return $this->get_default_property(self :: PROPERTY_EMAIL);
+        return $this->get_default_property(self::PROPERTY_EMAIL);
     }
 
     public function set_email($value)
     {
-        $this->set_default_property(self :: PROPERTY_EMAIL, $value);
+        $this->set_default_property(self::PROPERTY_EMAIL, $value);
     }
 }

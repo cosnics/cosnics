@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * This class describes an action to delete a course
- *
+ * 
  * @package \application\weblcms\course
  * @author Yannick & Tristan
  * @author Sven Vanpoucke - Hogeschool Gent - Refactoring
@@ -24,58 +24,59 @@ class DeleteComponent extends Manager
      * Inherited Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Runs this component and displays its output.
      */
     public function run()
     {
         $this->checkAuthorization(\Chamilo\Application\Weblcms\Manager::context(), 'ManageCourses');
-
+        
         $course_ids = $this->get_selected_course_ids();
-        $this->set_parameter(self :: PARAM_COURSE_ID, $course_ids);
+        $this->set_parameter(self::PARAM_COURSE_ID, $course_ids);
         $failures = 0;
-
+        
         foreach ($course_ids as $course_id)
         {
-            $course = DataManager :: retrieve_by_id(Course :: class_name(), $course_id);
-
+            $course = DataManager::retrieve_by_id(Course::class_name(), $course_id);
+            
             if (! $course)
             {
-                throw new ObjectNotExistException(Translation :: get('Course'), $course_id);
+                throw new ObjectNotExistException(Translation::get('Course'), $course_id);
             }
-
+            
             if (! $course->delete())
             {
                 $failures ++;
             }
         }
-
+        
         $message = $this->get_result(
-            $failures,
-            count($course_ids),
-            'SelectedCourseNotDeleted',
-            'SelectedCourseNotDeleted',
-            'SelectedCourseDeleted',
+            $failures, 
+            count($course_ids), 
+            'SelectedCourseNotDeleted', 
+            'SelectedCourseNotDeleted', 
+            'SelectedCourseDeleted', 
             'SelectedCourseDeleted');
-
+        
         $this->redirect(
-            $message,
-            ($failures > 0),
-            array(self :: PARAM_ACTION => self :: ACTION_BROWSE),
-            array(self :: PARAM_COURSE_ID));
+            $message, 
+            ($failures > 0), 
+            array(self::PARAM_ACTION => self::ACTION_BROWSE), 
+            array(self::PARAM_COURSE_ID));
     }
 
     /**
-     * Breadcrumbs are built semi automatically with the given application, subapplication, component... Use this
+     * Breadcrumbs are built semi automatically with the given application, subapplication, component...
+     * Use this
      * function to add other breadcrumbs between the application / subapplication and the current component
-     *
+     * 
      * @param $breadcrumbtrail \libraries\format\BreadcrumbTrail
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('weblcms_course_deleter');
         $breadcrumbtrail->add(
-            new Breadcrumb($this->get_browse_course_url(), Translation :: get('CourseManagerBrowseComponent')));
+            new Breadcrumb($this->get_browse_course_url(), Translation::get('CourseManagerBrowseComponent')));
     }
 }

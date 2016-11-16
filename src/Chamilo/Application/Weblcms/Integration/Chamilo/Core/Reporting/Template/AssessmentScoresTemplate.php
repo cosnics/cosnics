@@ -28,7 +28,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         
         $this->init_parameters();
         
@@ -38,22 +38,22 @@ class AssessmentScoresTemplate extends ReportingTemplate
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_COURSE_ID), 
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_COURSE_ID), 
             new StaticConditionVariable($this->course_id));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_TOOL), 
-            new StaticConditionVariable(Assessment :: class_name()));
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_TOOL), 
+            new StaticConditionVariable(Assessment::class_name()));
         $condition = new AndCondition($conditions);
         
         $order_by = new OrderBy(
             new PropertyConditionVariable(
-                ContentObjectPublication :: class_name(), 
-                ContentObjectPublication :: PROPERTY_MODIFIED_DATE));
+                ContentObjectPublication::class_name(), 
+                ContentObjectPublication::PROPERTY_MODIFIED_DATE));
         
-        $publications = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_content_object_publications(
+        $publications = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
             $condition, 
             $order_by);
         
@@ -70,12 +70,12 @@ class AssessmentScoresTemplate extends ReportingTemplate
 
     private function init_parameters()
     {
-        $this->course_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE);
+        $this->course_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
         if ($this->course_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_COURSE, $this->course_id);
+            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE, $this->course_id);
         }
-        $sel = (Request :: post('sel')) ? Request :: post('sel') : Request :: get('sel');
+        $sel = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
         if ($sel)
         {
             $this->set_parameter('sel', $sel);
@@ -87,15 +87,15 @@ class AssessmentScoresTemplate extends ReportingTemplate
      */
     protected function add_breadcrumbs()
     {
-        $trail = BreadcrumbTrail :: getInstance();
+        $trail = BreadcrumbTrail::getInstance();
         
         $trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\Reporting\Viewer\Manager :: PARAM_BLOCK_ID => 4), 
-                    array(\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID)), 
-                Translation :: get('LastAccessToToolsBlock')));
+                    array(\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 4), 
+                    array(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID)), 
+                Translation::get('LastAccessToToolsBlock')));
         
-        $trail->add(new Breadcrumb($this->get_url(), Translation :: get('AssessmentScores')));
+        $trail->add(new Breadcrumb($this->get_url(), Translation::get('AssessmentScores')));
     }
 }

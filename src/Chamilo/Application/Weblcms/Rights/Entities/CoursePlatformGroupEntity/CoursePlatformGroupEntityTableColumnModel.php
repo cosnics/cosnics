@@ -10,9 +10,8 @@ class CoursePlatformGroupEntityTableColumnModel extends LocationEntityTableColum
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group :: PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group :: PROPERTY_CODE));
-         parent :: initialize_columns();
-
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_CODE));
+        parent::initialize_columns();
     }
 }

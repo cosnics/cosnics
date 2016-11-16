@@ -15,10 +15,10 @@ class CourseGroupUserTableDataProvider extends RecordTableDataProvider
     // **************************************************************************
     // GENERAL FUNCTIONS
     // **************************************************************************
-
+    
     /**
      * Gets the users.
-     *
+     * 
      * @param int $offset
      * @param int $count
      * @param string $order_property
@@ -28,16 +28,16 @@ class CourseGroupUserTableDataProvider extends RecordTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         return DataManager::retrieve_course_group_users_with_subscription_time(
-            $this->get_component()->get_table_course_group_id(),
-            $condition,
-            $offset,
-            $count,
+            $this->get_component()->get_table_course_group_id(), 
+            $condition, 
+            $offset, 
+            $count, 
             $order_property);
     }
 
     /**
      * Gets the number of users.
-     *
+     * 
      * @return int
      */
     public function count_data($condition)

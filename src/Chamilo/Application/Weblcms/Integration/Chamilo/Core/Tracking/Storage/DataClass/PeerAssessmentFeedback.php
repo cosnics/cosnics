@@ -9,15 +9,15 @@ class PeerAssessmentFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\Si
 
     public function validate_parameters(array $parameters = array())
     {
-        $this->set_attempt_status_id($parameters[self :: PROPERTY_ATTEMPT_STATUS_ID]);
-        $this->set_user_id($parameters[self :: PROPERTY_USER_ID]);
-        $this->set_feedback($parameters[self :: PROPERTY_FEEDBACK]);
+        $this->set_attempt_status_id($parameters[self::PROPERTY_ATTEMPT_STATUS_ID]);
+        $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
+        $this->set_feedback($parameters[self::PROPERTY_FEEDBACK]);
     }
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
-            array(self :: PROPERTY_ATTEMPT_STATUS_ID, self :: PROPERTY_USER_ID, self :: PROPERTY_FEEDBACK));
+        return parent::get_default_property_names(
+            array(self::PROPERTY_ATTEMPT_STATUS_ID, self::PROPERTY_USER_ID, self::PROPERTY_FEEDBACK));
     }
 
     public function __call($name, array $arguments)
@@ -30,7 +30,7 @@ class PeerAssessmentFeedback extends \Chamilo\Core\Tracking\Storage\DataClass\Si
         }
         // determine the method and property to be called
         $method = $matches[1] . '_default_property';
-        $prop = constant($this :: class_name() . '::PROPERTY_' . strtoupper($matches[2]));
+        $prop = constant($this::class_name() . '::PROPERTY_' . strtoupper($matches[2]));
         // prepend the property to the argument list
         array_unshift($arguments, $prop);
         // call get_default_property or set_default_property with the arguments

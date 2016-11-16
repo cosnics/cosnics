@@ -33,42 +33,42 @@ abstract class CalendarEventDataProvider extends InternalCalendar
      *
      * @return array|\Chamilo\Libraries\Calendar\Event\Event[]
      */
-    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate,
+    public function getEvents(CalendarRendererProvider $calendarRendererProvider, $requestedSourceType, $fromDate, 
         $toDate)
     {
         $rightsService = ServiceFactory::getInstance()->getRightsService();
-
+        
         $events = array();
-
+        
         $availabilityService = new AvailabilityService(new AvailabilityRepository());
         $packageContext = $this->getCalendarContext();
         $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageContext);
-
+        
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
-            $calendarRendererProvider->getDataUser(),
-            $packageContext,
+            $calendarRendererProvider->getDataUser(), 
+            $packageContext, 
             $packageName))
         {
             $publications = $this->getPublications($calendarRendererProvider->getDataUser(), $fromDate, $toDate);
-
+            
             foreach ($publications as $publication)
             {
                 $course = new Course();
                 $course->setId($publication->get_course_id());
-
+                
                 if (! $rightsService->canUserViewPublication(
-                    $calendarRendererProvider->getDataUser(),
-                    $publication,
+                    $calendarRendererProvider->getDataUser(), 
+                    $publication, 
                     $course))
                 {
                     continue;
                 }
-
+                
                 $eventParser = new EventParser($publication, $fromDate, $toDate);
                 $events = array_merge($events, $eventParser->getEvents());
             }
         }
-
+        
         return $events;
     }
 
@@ -79,18 +79,18 @@ abstract class CalendarEventDataProvider extends InternalCalendar
     public function getCalendars()
     {
         $package = $this->getCalendarContext();
-
+        
         $calendar = new AvailableCalendar();
         $calendar->setIdentifier(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($package));
         $calendar->setType($package);
         $calendar->setName($this->getCalendarName());
-
+        
         return array($calendar);
     }
 
     /**
      * Retrieves the valid publications for the user
-     *
+     * 
      * @param User $user
      * @param int $fromData
      * @param int $toDate
@@ -101,14 +101,14 @@ abstract class CalendarEventDataProvider extends InternalCalendar
 
     /**
      * Returns the context for the calendar
-     *
+     * 
      * @return string
      */
     abstract protected function getCalendarContext();
 
     /**
      * Returns the name for the calendar
-     *
+     * 
      * @return string
      */
     abstract protected function getCalendarName();

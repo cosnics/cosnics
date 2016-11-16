@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: user_group_subscribe_browser.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.user.component
  */
 class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponent implements TableSupport
@@ -24,14 +24,14 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
 
     /**
      * Renders the content for the tab
-     *
+     * 
      * @return string
      */
     protected function renderTabContent()
     {
         $table = new UnsubscribedGroupTable($this);
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
-
+        
         $html = array();
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
@@ -40,7 +40,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
 
     /**
      * Returns the condition for the table
-     *
+     * 
      * @param string $table_class_name
      *
      * @return Condition
@@ -48,30 +48,30 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
     public function get_table_condition($table_class_name)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
+            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID), 
             new StaticConditionVariable($this->getGroupId()));
-
+        
         // filter already subscribed groups
         if ($this->subscribedGroups)
         {
             $conditions[] = new NotCondition(
                 new InCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
+                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID), 
                     $this->subscribedGroups));
         }
-
+        
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME),
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), 
                 '*' . $query . '*');
             $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION),
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_DESCRIPTION), 
                 '*' . $query . '*');
             $conditions[] = new OrCondition($conditions2);
         }
-
+        
         return new AndCondition($conditions);
     }
 }

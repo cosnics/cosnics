@@ -52,7 +52,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function __construct($default_properties = array(), $optional_properties = array())
     {
-        parent :: __construct($default_properties, $optional_properties);
+        parent::__construct($default_properties, $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
     }
 
@@ -65,12 +65,12 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_TITLE, 
-                self :: PROPERTY_ACTIVE, 
-                self :: PROPERTY_DESCRIPTION, 
-                self :: PROPERTY_DISPLAY_ORDER));
+                self::PROPERTY_TITLE, 
+                self::PROPERTY_ACTIVE, 
+                self::PROPERTY_DESCRIPTION, 
+                self::PROPERTY_DISPLAY_ORDER));
     }
 
     /**
@@ -88,15 +88,15 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function create($create_in_batch = false)
     {
-        if (! parent :: create())
+        if (! parent::create())
         {
             return false;
         }
         
         $parent_id = $this->get_parent_rights_location()->get_id();
         
-        if (! CourseManagementRights :: getInstance()->create_location_in_courses_subtree(
-            CourseManagementRights :: TYPE_COURSE_TYPE, 
+        if (! CourseManagementRights::getInstance()->create_location_in_courses_subtree(
+            CourseManagementRights::TYPE_COURSE_TYPE, 
             $this->get_id(), 
             $parent_id, 
             0, 
@@ -126,7 +126,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
             }
         }
         
-        return parent :: delete();
+        return parent::delete();
     }
 
     /**
@@ -142,8 +142,8 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_rights_location()
     {
-        return CourseManagementRights :: getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
-            CourseManagementRights :: TYPE_COURSE_TYPE, 
+        return CourseManagementRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
+            CourseManagementRights::TYPE_COURSE_TYPE, 
             $this->get_id(), 
             0);
     }
@@ -155,7 +155,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_parent_rights_location()
     {
-        return CourseManagementRights :: getInstance()->get_courses_subtree_root(0);
+        return CourseManagementRights::getInstance()->get_courses_subtree_root(0);
     }
 
     /**
@@ -165,7 +165,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_available_course_management_rights()
     {
-        return CourseManagementRights :: getInstance()->get_all_course_management_rights();
+        return CourseManagementRights::getInstance()->get_all_course_management_rights();
     }
 
     /**
@@ -188,7 +188,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function force_rights_to_courses()
     {
-        return CourseManagementRights :: getInstance()->copy_rights_to_child_locations($this->get_rights_location());
+        return CourseManagementRights::getInstance()->copy_rights_to_child_locations($this->get_rights_location());
     }
 
     /**
@@ -207,7 +207,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_course_setting($setting_name, $tool_id = 0)
     {
-        return CourseSettingsController :: getInstance()->get_course_type_setting(
+        return CourseSettingsController::getInstance()->get_course_type_setting(
             $this->get_id(), 
             $setting_name, 
             $tool_id);
@@ -223,7 +223,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_default_course_setting($setting_name, $tool_id)
     {
-        return CourseSettingsController :: getInstance()->get_default_setting($setting_name, $tool_id);
+        return CourseSettingsController::getInstance()->get_default_setting($setting_name, $tool_id);
     }
 
     /**
@@ -235,7 +235,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function create_course_settings_from_values($values)
     {
-        return CourseSettingsController :: getInstance()->handle_settings_for_object_with_given_values($this, $values);
+        return CourseSettingsController::getInstance()->handle_settings_for_object_with_given_values($this, $values);
     }
 
     /**
@@ -247,10 +247,10 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function update_course_settings_from_values($values)
     {
-        return CourseSettingsController :: getInstance()->handle_settings_for_object_with_given_values(
+        return CourseSettingsController::getInstance()->handle_settings_for_object_with_given_values(
             $this, 
             $values, 
-            CourseSettingsController :: SETTING_ACTION_UPDATE);
+            CourseSettingsController::SETTING_ACTION_UPDATE);
     }
 
     /**
@@ -266,13 +266,13 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     public function create_course_setting_relation($course_setting, $locked)
     {
         $course_type_rel_setting = new CourseTypeRelCourseSetting();
-        $course_type_rel_setting->set_course_setting_id($course_setting[CourseSetting :: PROPERTY_ID]);
+        $course_type_rel_setting->set_course_setting_id($course_setting[CourseSetting::PROPERTY_ID]);
         $course_type_rel_setting->set_course_type($this);
         $course_type_rel_setting->set_locked($locked);
         
         if (! $course_type_rel_setting->create())
         {
-            throw new \Exception(Translation :: get('CouldNotCreateCourseRelCourseTypeSetting'));
+            throw new \Exception(Translation::get('CouldNotCreateCourseRelCourseTypeSetting'));
         }
         
         return $course_type_rel_setting;
@@ -297,7 +297,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
             $course_setting_relation->set_locked($locked);
             if (! $course_setting_relation->update())
             {
-                throw new \Exception(Translation :: get('CouldNotUpdateCourseRelCourseTypeSetting'));
+                throw new \Exception(Translation::get('CouldNotUpdateCourseRelCourseTypeSetting'));
             }
         }
         
@@ -316,19 +316,19 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeRelCourseSetting :: class_name(), 
-                CourseTypeRelCourseSetting :: PROPERTY_COURSE_SETTING_ID), 
-            new StaticConditionVariable($course_setting[CourseSetting :: PROPERTY_ID]));
+                CourseTypeRelCourseSetting::class_name(), 
+                CourseTypeRelCourseSetting::PROPERTY_COURSE_SETTING_ID), 
+            new StaticConditionVariable($course_setting[CourseSetting::PROPERTY_ID]));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeRelCourseSetting :: class_name(), 
-                CourseTypeRelCourseSetting :: PROPERTY_COURSE_TYPE_ID), 
+                CourseTypeRelCourseSetting::class_name(), 
+                CourseTypeRelCourseSetting::PROPERTY_COURSE_TYPE_ID), 
             new StaticConditionVariable($this->get_id()));
         
         $condition = new AndCondition($conditions);
         
-        return DataManager :: retrieve(
-            CourseTypeRelCourseSetting :: class_name(), 
+        return DataManager::retrieve(
+            CourseTypeRelCourseSetting::class_name(), 
             new DataClassRetrieveParameters($condition));
     }
 
@@ -372,11 +372,11 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function force_course_settings_to_courses()
     {
-        CourseSettingsController :: getInstance()->clear_cache_for_type_and_object(
-            CourseSettingsController :: SETTING_TYPE_COURSE_TYPE, 
+        CourseSettingsController::getInstance()->clear_cache_for_type_and_object(
+            CourseSettingsController::SETTING_TYPE_COURSE_TYPE, 
             $this->get_id());
         
-        if (! \Chamilo\Application\Weblcms\Course\Storage\DataManager :: copy_course_settings_from_course_type(
+        if (! \Chamilo\Application\Weblcms\Course\Storage\DataManager::copy_course_settings_from_course_type(
             $this->get_id()))
         {
             return false;
@@ -384,16 +384,16 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         
         $properties = new DataClassProperties();
         
-        $copied_settings = CourseSettingsConnector :: get_copied_settings_for_course();
+        $copied_settings = CourseSettingsConnector::get_copied_settings_for_course();
         foreach ($copied_settings as $setting_name => $property)
         {
             $properties->add(
                 new DataClassProperty(
-                    new PropertyConditionVariable(Course :: class_name(), $property), 
+                    new PropertyConditionVariable(Course::class_name(), $property), 
                     new StaticConditionVariable($this->get_course_setting($setting_name))));
         }
         
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: update_courses_from_course_type_with_properties(
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::update_courses_from_course_type_with_properties(
             $this->get_id(), 
             $properties);
     }
@@ -427,7 +427,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_title()
     {
-        return $this->get_default_property(self :: PROPERTY_TITLE);
+        return $this->get_default_property(self::PROPERTY_TITLE);
     }
 
     /**
@@ -437,7 +437,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function set_title($title)
     {
-        $this->set_default_property(self :: PROPERTY_TITLE, $title);
+        $this->set_default_property(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -447,7 +447,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_description()
     {
-        return $this->get_default_property(self :: PROPERTY_DESCRIPTION);
+        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -457,7 +457,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function set_description($description)
     {
-        $this->set_default_property(self :: PROPERTY_DESCRIPTION, $description);
+        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -467,7 +467,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function is_active()
     {
-        return $this->get_default_property(self :: PROPERTY_ACTIVE);
+        return $this->get_default_property(self::PROPERTY_ACTIVE);
     }
 
     /**
@@ -477,7 +477,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function set_active($active)
     {
-        $this->set_default_property(self :: PROPERTY_ACTIVE, $active);
+        $this->set_default_property(self::PROPERTY_ACTIVE, $active);
     }
 
     /**
@@ -487,7 +487,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_display_order()
     {
-        return $this->get_default_property(self :: PROPERTY_DISPLAY_ORDER);
+        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -497,7 +497,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self :: PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     /**
@@ -513,7 +513,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_display_order_property()
     {
-        return new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_DISPLAY_ORDER);
+        return new PropertyConditionVariable(self::class_name(), self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**

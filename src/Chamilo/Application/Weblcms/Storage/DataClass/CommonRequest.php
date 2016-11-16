@@ -5,7 +5,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * $Id: course_request.class.php 216 2010-02-25 11:06:00Z Yannick & Tristan$
- *
+ * 
  * @package application.lib.weblcms.course
  */
 class CommonRequest extends DataClass
@@ -23,75 +23,75 @@ class CommonRequest extends DataClass
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array_merge(
-                $extended_property_names,
+                $extended_property_names, 
                 array(
-                    self :: PROPERTY_USER_ID,
-                    self :: PROPERTY_SUBJECT,
-                    self :: PROPERTY_MOTIVATION,
-                    self :: PROPERTY_CREATION_DATE,
-                    self :: PROPERTY_DECISION_DATE,
-                    self :: PROPERTY_DECISION)));
+                    self::PROPERTY_USER_ID, 
+                    self::PROPERTY_SUBJECT, 
+                    self::PROPERTY_MOTIVATION, 
+                    self::PROPERTY_CREATION_DATE, 
+                    self::PROPERTY_DECISION_DATE, 
+                    self::PROPERTY_DECISION)));
     }
 
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     public function get_subject()
     {
-        return $this->get_default_property(self :: PROPERTY_SUBJECT);
+        return $this->get_default_property(self::PROPERTY_SUBJECT);
     }
 
     public function get_motivation()
     {
-        return $this->get_default_property(self :: PROPERTY_MOTIVATION);
+        return $this->get_default_property(self::PROPERTY_MOTIVATION);
     }
 
     public function get_creation_date()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATION_DATE);
+        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
     }
 
     public function get_decision_date()
     {
-        return $this->get_default_property(self :: PROPERTY_DECISION_DATE);
+        return $this->get_default_property(self::PROPERTY_DECISION_DATE);
     }
 
     public function get_decision()
     {
-        return $this->get_default_property(self :: PROPERTY_DECISION);
+        return $this->get_default_property(self::PROPERTY_DECISION);
     }
 
     public function set_user_id($user_id)
     {
-        return $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        return $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     public function set_subject($subject)
     {
-        $this->set_default_property(self :: PROPERTY_SUBJECT, $subject);
+        $this->set_default_property(self::PROPERTY_SUBJECT, $subject);
     }
 
     public function set_motivation($motivation)
     {
-        $this->set_default_property(self :: PROPERTY_MOTIVATION, $motivation);
+        $this->set_default_property(self::PROPERTY_MOTIVATION, $motivation);
     }
 
     public function set_creation_date($creation_date)
     {
-        $this->set_default_property(self :: PROPERTY_CREATION_DATE, $creation_date);
+        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creation_date);
     }
 
     public function set_decision_date($decision_date)
     {
-        $this->set_default_property(self :: PROPERTY_DECISION_DATE, $decision_date);
+        $this->set_default_property(self::PROPERTY_DECISION_DATE, $decision_date);
     }
 
     public function set_decision($decision)
     {
-        $this->set_default_property(self :: PROPERTY_DECISION, $decision);
+        $this->set_default_property(self::PROPERTY_DECISION, $decision);
     }
 }

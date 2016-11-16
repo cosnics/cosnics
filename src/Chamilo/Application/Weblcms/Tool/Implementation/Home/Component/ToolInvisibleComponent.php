@@ -8,7 +8,7 @@ class ToolInvisibleComponent extends ToolVisibilityChangerComponent
 
     public function run()
     {
-        Request :: set_get(self :: PARAM_VISIBILITY, 0);
-        parent :: run();
+        Request::set_get(self::PARAM_VISIBILITY, 0);
+        parent::run();
     }
 }

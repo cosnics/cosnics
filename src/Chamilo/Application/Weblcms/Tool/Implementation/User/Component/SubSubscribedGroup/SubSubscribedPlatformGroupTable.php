@@ -13,5 +13,5 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
  */
 class SubSubscribedPlatformGroupTable extends DataClassTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_OBJECT_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_OBJECT_ID;
 }

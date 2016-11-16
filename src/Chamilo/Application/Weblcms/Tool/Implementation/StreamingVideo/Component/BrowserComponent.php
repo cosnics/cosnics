@@ -27,108 +27,108 @@ class BrowserComponent extends Manager
     {
         $showActions = array();
         $filter = $this->getFilter();
-
-        $showActions[] = new SubButtonHeader(Translation :: get('ViewPeriodHeader'));
-
+        
+        $showActions[] = new SubButtonHeader(Translation::get('ViewPeriodHeader'));
+        
         $showActions[] = new SubButton(
-            Translation :: get('PeriodAll', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
-            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null)),
-            Button :: DISPLAY_LABEL,
-            false,
+            Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), 
+            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+            $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)), 
+            Button::DISPLAY_LABEL, 
+            false, 
             $filter == '' ? 'selected' : 'not-selected');
-
+        
         $showActions[] = new SubButton(
-            Translation :: get('PeriodToday', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            Translation::get('PeriodToday', null, Utilities::COMMON_LIBRARIES), 
+            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
             $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                    self :: PARAM_FILTER => self :: FILTER_TODAY)),
-            Button :: DISPLAY_LABEL,
-            false,
-            $filter == self :: FILTER_TODAY ? 'selected' : 'not-selected');
-
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null, 
+                    self::PARAM_FILTER => self::FILTER_TODAY)), 
+            Button::DISPLAY_LABEL, 
+            false, 
+            $filter == self::FILTER_TODAY ? 'selected' : 'not-selected');
+        
         $showActions[] = new SubButton(
-            Translation :: get('PeriodWeek', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            Translation::get('PeriodWeek', null, Utilities::COMMON_LIBRARIES), 
+            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
             $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                    self :: PARAM_FILTER => self :: FILTER_THIS_WEEK)),
-            Button :: DISPLAY_LABEL,
-            false,
-            $filter == self :: FILTER_THIS_WEEK ? 'selected' : 'not-selected');
-
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null, 
+                    self::PARAM_FILTER => self::FILTER_THIS_WEEK)), 
+            Button::DISPLAY_LABEL, 
+            false, 
+            $filter == self::FILTER_THIS_WEEK ? 'selected' : 'not-selected');
+        
         $showActions[] = new SubButton(
-            Translation :: get('PeriodMonth', null, Utilities :: COMMON_LIBRARIES),
-            Theme :: getInstance()->getCommonImagePath('Action/Browser'),
+            Translation::get('PeriodMonth', null, Utilities::COMMON_LIBRARIES), 
+            Theme::getInstance()->getCommonImagePath('Action/Browser'), 
             $this->get_url(
                 array(
-                    \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => null,
-                    self :: PARAM_FILTER => self :: FILTER_THIS_MONTH)),
-            Button :: DISPLAY_LABEL,
-            false,
-            $filter == self :: FILTER_THIS_MONTH ? 'selected' : 'not-selected');
-
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null, 
+                    self::PARAM_FILTER => self::FILTER_THIS_MONTH)), 
+            Button::DISPLAY_LABEL, 
+            false, 
+            $filter == self::FILTER_THIS_MONTH ? 'selected' : 'not-selected');
+        
         $showActions[] = new SubButtonDivider();
-
+        
         return $showActions;
     }
 
     protected function getFilter()
     {
-        return $this->getRequest()->query->get(self :: PARAM_FILTER);
+        return $this->getRequest()->query->get(self::PARAM_FILTER);
     }
 
     public function get_tool_conditions()
     {
         $conditions = array();
-        $filter = Request :: get(self :: PARAM_FILTER);
-
+        $filter = Request::get(self::PARAM_FILTER);
+        
         switch ($filter)
         {
-            case self :: FILTER_TODAY :
+            case self::FILTER_TODAY :
                 $time = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
-
+                
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication :: class_name(),
-                        ContentObjectPublication :: PROPERTY_MODIFIED_DATE),
-                    InequalityCondition :: GREATER_THAN_OR_EQUAL,
+                        ContentObjectPublication::class_name(), 
+                        ContentObjectPublication::PROPERTY_MODIFIED_DATE), 
+                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable($time));
-
+                
                 break;
-            case self :: FILTER_THIS_WEEK :
+            case self::FILTER_THIS_WEEK :
                 $time = strtotime('Next Monday', strtotime('-1 Week', time()));
-
+                
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication :: class_name(),
-                        ContentObjectPublication :: PROPERTY_MODIFIED_DATE),
-                    InequalityCondition :: GREATER_THAN_OR_EQUAL,
+                        ContentObjectPublication::class_name(), 
+                        ContentObjectPublication::PROPERTY_MODIFIED_DATE), 
+                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable($time));
-
+                
                 break;
-            case self :: FILTER_THIS_MONTH :
+            case self::FILTER_THIS_MONTH :
                 $time = mktime(0, 0, 0, date('m', time()), 1, date('Y', time()));
-
+                
                 $conditions[] = new InequalityCondition(
                     new PropertyConditionVariable(
-                        ContentObjectPublication :: class_name(),
-                        ContentObjectPublication :: PROPERTY_MODIFIED_DATE),
-                    InequalityCondition :: GREATER_THAN_OR_EQUAL,
+                        ContentObjectPublication::class_name(), 
+                        ContentObjectPublication::PROPERTY_MODIFIED_DATE), 
+                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable($time));
-
+                
                 break;
         }
-
+        
         return $conditions;
     }
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_BROWSE_PUBLICATION_TYPE);
+        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
     }
 
     /**

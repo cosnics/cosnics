@@ -10,7 +10,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Displays open courses
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class OpenCourseTable extends CourseTable implements TableFormActionsSupport
@@ -23,18 +23,18 @@ class OpenCourseTable extends CourseTable implements TableFormActionsSupport
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(Manager::context(), self::TABLE_IDENTIFIER);
-
+        
         if ($this->get_component()->isAuthorized(Manager::context(), 'ManageOpenCourses'))
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)),
+                    $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
                     Translation::getInstance()->getTranslation(
-                        'MarkSelectedCoursesAsNoLongerOpen',
-                        null,
+                        'MarkSelectedCoursesAsNoLongerOpen', 
+                        null, 
                         Manager::context())));
         }
-
+        
         return $actions;
     }
 }

@@ -1,72 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application name="weblcms">
-	<settings>
-		<category name="general">
-			<setting name="language" field="select" default="0">
-				<options type="dynamic" source="get_languages" fixed_possible="true" />
-			</setting>
-			<setting name="visibility" field="radio" default="1">
-				<options type="static">
-					<option name="confirm_true" value="1" fixed_possible="true" />
-					<option name="confirm_false" value="0" fixed_possible="false" />
-				</options>
-			</setting>
-			<setting name="access" field="radio" default="1">
-				<options type="static">
-					<option name="confirm_true" value="1" fixed_possible="true" />
-					<option name="confirm_false" value="0" fixed_possible="false" />
-				</options>
-			</setting>
-			<setting name="max_number_of_members" field="text" default="1">
-				<options type="static">
-					<option name="max_number_of_members" value="1" fixed_possible="true" />
-					<option name="unlimited" value="0" fixed_possible="true" />
-				</options>
-			</setting>
-		</category>
-		<category name="layout">
-			<setting name="show_introduction_text" field="radio" default="1">
-				<options type="static">
-					<option name="confirm_true" value="1" fixed_possible="true" />
-					<option name="confirm_false" value="0" fixed_possible="true" />
-				</options>
-			</setting>
-			<setting name="feedback" field="radio" default="1">
-				<options type="static">
-					<option name="confirm_true" value="1" fixed_possible="true" />
-					<option name="confirm_false" value="0" fixed_possible="true" />
-				</options>
-			</setting>
-			<setting name="show_course_code" field="radio" default="1">
-				<options type="static">
-					<option name="confirm_true" value="1" fixed_possible="true" />
-					<option name="false" value="0" fixed_possible="true" />
-				</options>
-			</setting>
-			<setting name="display_teacher_name" field="radio" default="1">
-				<options type="static">
-					<option name="confirm_true" value="1" fixed_possible="true" />
-					<option name="confirm_false" value="0" fixed_possible="true" />
-				</options>
-			</setting>
-			<setting name="show_course_languages" field="radio" default="1">
-				<options type="static">
-					<option name="confirm_true" value="1" fixed_possible="true" />
-					<option name="confirm_false" value="0" fixed_possible="true" />
-				</options>
-			</setting>
-			<setting name="course_layout" field="select" default="1">
-				<options type="dynamic" source="get_course_layouts" fixed_possible="true" />
-			</setting>
-			<setting name="course_tool_short_cut_selection" field="select" default="1">
-				<options type="dynamic" source="get_tool_shortcut_options" fixed_possible="true" />
-			</setting>
-			<setting name="course_menu_selection" field="select" default="1">
-				<options type="dynamic" source="get_course_menu_options" fixed_possible="true" />
-			</setting>
-			<setting name="course_breadcrumbs" field="select" default="1">
-				<options type="dynamic" source="get_breadcrumb_options" fixed_possible="true" />
-			</setting>
-		</category>
-	</settings>
+    <settings>
+        <category name="general">
+            <setting
+                name="language"
+                field="select"
+                default="0">
+                <options
+                    type="dynamic"
+                    source="get_languages"
+                    fixed_possible="true" />
+            </setting>
+            <setting
+                name="visibility"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="confirm_true"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="confirm_false"
+                        value="0"
+                        fixed_possible="false" />
+                </options>
+            </setting>
+            <setting
+                name="access"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="confirm_true"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="confirm_false"
+                        value="0"
+                        fixed_possible="false" />
+                </options>
+            </setting>
+            <setting
+                name="max_number_of_members"
+                field="text"
+                default="1">
+                <options type="static">
+                    <option
+                        name="max_number_of_members"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="unlimited"
+                        value="0"
+                        fixed_possible="true" />
+                </options>
+            </setting>
+        </category>
+        <category name="layout">
+            <setting
+                name="show_introduction_text"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="confirm_true"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="confirm_false"
+                        value="0"
+                        fixed_possible="true" />
+                </options>
+            </setting>
+            <setting
+                name="feedback"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="confirm_true"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="confirm_false"
+                        value="0"
+                        fixed_possible="true" />
+                </options>
+            </setting>
+            <setting
+                name="show_course_code"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="confirm_true"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="false"
+                        value="0"
+                        fixed_possible="true" />
+                </options>
+            </setting>
+            <setting
+                name="display_teacher_name"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="confirm_true"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="confirm_false"
+                        value="0"
+                        fixed_possible="true" />
+                </options>
+            </setting>
+            <setting
+                name="show_course_languages"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="confirm_true"
+                        value="1"
+                        fixed_possible="true" />
+                    <option
+                        name="confirm_false"
+                        value="0"
+                        fixed_possible="true" />
+                </options>
+            </setting>
+            <setting
+                name="course_layout"
+                field="select"
+                default="1">
+                <options
+                    type="dynamic"
+                    source="get_course_layouts"
+                    fixed_possible="true" />
+            </setting>
+            <setting
+                name="course_tool_short_cut_selection"
+                field="select"
+                default="1">
+                <options
+                    type="dynamic"
+                    source="get_tool_shortcut_options"
+                    fixed_possible="true" />
+            </setting>
+            <setting
+                name="course_menu_selection"
+                field="select"
+                default="1">
+                <options
+                    type="dynamic"
+                    source="get_course_menu_options"
+                    fixed_possible="true" />
+            </setting>
+            <setting
+                name="course_breadcrumbs"
+                field="select"
+                default="1">
+                <options
+                    type="dynamic"
+                    source="get_breadcrumb_options"
+                    fixed_possible="true" />
+            </setting>
+        </category>
+    </settings>
 </application>

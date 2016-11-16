@@ -15,25 +15,25 @@ class CreatorComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
+        
         $form = new RightsGroupForm($this, $this->get_url());
-
+        
         if ($form->validate())
         {
             $success = $form->set_rights();
-
+            
             $this->redirect(
-                Translation :: get($success ? 'AccessRightsSaved' : 'AccessRightsNotSaved'),
+                Translation::get($success ? 'AccessRightsSaved' : 'AccessRightsNotSaved'), 
                 ($success ? false : true));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
-            $html[] = $this->get_tabs(self :: ACTION_CREATE, $form->toHtml())->render();
+            $html[] = $this->get_tabs(self::ACTION_CREATE, $form->toHtml())->render();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

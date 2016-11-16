@@ -23,12 +23,12 @@ class CourseAssignmentSubmittersTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
+        parent::__construct($parent);
         
-        $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
+        $this->publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
         
-        $assignment = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(), 
+        $assignment = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(), 
             $this->publication_id)->get_content_object();
         
         $this->init_parameters();
@@ -53,7 +53,7 @@ class CourseAssignmentSubmittersTemplate extends ReportingTemplate
     {
         if ($this->publication_id)
         {
-            $this->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION, $this->publication_id);
+            $this->set_parameter(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION, $this->publication_id);
         }
     }
 }

@@ -20,7 +20,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * $Id: announcement_publisher.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.announcement.component
  */
 class PublisherComponent extends Manager implements PublisherSupport, DelegateComponent
@@ -28,14 +28,14 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
 
     /**
      * The publication form
-     *
+     * 
      * @var ContentObjectPublicationForm
      */
     protected $publicationForm;
 
     /**
      * Runs the component
-     *
+     * 
      * @return string
      * @throws NotAllowedException
      */
@@ -45,20 +45,20 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         {
             throw new NotAllowedException();
         }
-
+        
         $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
         $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
-
+        
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(),
+            \Chamilo\Core\Repository\Publication\Publisher\Manager::context(), 
             $applicationConfiguration);
-
+        
         return $factory->run();
     }
 
     /**
      * Returns the publication form
-     *
+     * 
      * @param ContentObject[] $selectedContentObjects
      *
      * @return FormValidator
@@ -66,24 +66,24 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     public function getPublicationForm($selectedContentObjects = array())
     {
         $mode = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE);
-
+        
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE, $mode);
         $publish_type = Configuration::getInstance()->get_setting(
             array('Chamilo\Application\Weblcms', 'display_publication_screen'));
-
+        
         $show_form = (($publish_type == \Chamilo\Application\Weblcms\Tool\Manager::PUBLISH_TYPE_FORM) || ($publish_type ==
              \Chamilo\Application\Weblcms\Tool\Manager::PUBLISH_TYPE_BOTH &&
              $mode != \Chamilo\Application\Weblcms\Tool\Manager::PUBLISH_MODE_QUICK));
-
+        
         if (! $show_form)
         {
             return null;
         }
-
+        
         $course = $this->get_course();
-
+        
         $publications = array();
-
+        
         foreach ($selectedContentObjects as $contentObject)
         {
             $publication = new ContentObjectPublication();
@@ -94,15 +94,15 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
             $publication->set_publication_publisher($this->getUser());
             $publications[] = $publication;
         }
-
+        
         $this->publicationForm = $this->constructPublicationForm($publications, $selectedContentObjects);
-
+        
         return $this->publicationForm;
     }
 
     /**
      * Constructs the publication form
-     *
+     * 
      * @param ContentObjectPublication[]   $publications
      * @param ContentObject[] $selectedContentObjects
      *
@@ -115,24 +115,24 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         {
             return $parentApplication->constructPublicationForm($publications, $selectedContentObjects);
         }
-
+        
         $course = $this->get_course();
         $is_course_admin = $course->is_course_admin($this->getUser());
-
+        
         return new ContentObjectPublicationForm(
-            $this->get_application()->context(),
-            $this->getUser(),
-            ContentObjectPublicationForm::TYPE_CREATE,
-            $publications,
-            $course,
-            $this->get_url(),
-            $is_course_admin,
+            $this->get_application()->context(), 
+            $this->getUser(), 
+            ContentObjectPublicationForm::TYPE_CREATE, 
+            $publications, 
+            $course, 
+            $this->get_url(), 
+            $is_course_admin, 
             $selectedContentObjects);
     }
 
     /**
      * Returns the publication handler
-     *
+     * 
      * @return PublicationHandlerInterface
      */
     public function getPublicationHandler()
@@ -142,12 +142,12 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         {
             return $parentApplication->getPublicationHandler($this->publicationForm);
         }
-
+        
         return new ContentObjectPublicationHandler(
-            $this->get_course_id(),
-            $this->get_tool_id(),
-            $this->getUser(),
-            $this,
+            $this->get_course_id(), 
+            $this->get_tool_id(), 
+            $this->getUser(), 
+            $this, 
             $this->publicationForm);
     }
 }

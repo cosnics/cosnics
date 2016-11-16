@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * this is the component for moving a forum in the list
- *
+ * 
  * @author Mattias De Pauw
  */
 class MoverComponent extends Manager
@@ -20,39 +20,39 @@ class MoverComponent extends Manager
         if ($this->is_allowed(EDIT_RIGHT))
         {
             $move = 0;
-
-            if (Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION))
+            
+            if (Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION))
             {
-                $move = Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION);
+                $move = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION);
             }
-
-            $forum_publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                ContentObjectPublication :: class_name(),
-                Request :: get(self :: PARAM_PUBLICATION_ID));
-
+            
+            $forum_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                ContentObjectPublication::class_name(), 
+                Request::get(self::PARAM_PUBLICATION_ID));
+            
             if ($forum_publication->move($move))
             {
                 $failure = false;
-                $message = Translation :: get(
-                    'ObjectMoved',
-                    array('OBJECT' => Translation :: get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectMoved', 
+                    array('OBJECT' => Translation::get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             else
             {
                 $failure = true;
-                $message = Translation :: get(
-                    'ObjectNotMoved',
-                    array('OBJECT' => Translation :: get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectNotMoved', 
+                    array('OBJECT' => Translation::get('Forum', null, 'Chamilo\Core\Repository\ContentObject\Forum')), 
+                    Utilities::COMMON_LIBRARIES);
             }
-
-            $this->redirect($message, $failure, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $this->redirect($message, $failure, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
     }
 
     public function get_move_direction()
     {
-        return Request :: get(\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_MOVE_DIRECTION);
+        return Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_MOVE_DIRECTION);
     }
 }

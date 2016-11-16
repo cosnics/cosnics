@@ -20,6 +20,6 @@ class ViewForumTopic extends Event
     public function getTrackerClasses()
     {
         return array(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView :: class_name());
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\ForumTopicView::class_name());
     }
 }

@@ -25,11 +25,11 @@ class AssessmentMatchingQuestionOptionsBlock extends AssessmentQuestionOptionsBl
         
         $reporting_data->set_rows(
             array(
-                Translation :: get('Answer'), 
-                Translation :: get('Match'), 
-                Translation :: get('Correct'), 
-                Translation :: get('TimesChosen'), 
-                Translation :: get('DifficultyIndex')));
+                Translation::get('Answer'), 
+                Translation::get('Match'), 
+                Translation::get('Correct'), 
+                Translation::get('TimesChosen'), 
+                Translation::get('DifficultyIndex')));
         
         $question = $this->get_question();
         
@@ -53,7 +53,7 @@ class AssessmentMatchingQuestionOptionsBlock extends AssessmentQuestionOptionsBl
                     $answers_count[$option_index][$match_index], 
                     $total_attempts);
                 
-                $reporting_data->add_data_category_row($row_count, Translation :: get('Match'), $match);
+                $reporting_data->add_data_category_row($row_count, Translation::get('Match'), $match);
                 
                 $row_count ++;
             }

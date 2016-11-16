@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * This form can let the user select the sections and publications of a course for deleting them.
- *
+ * 
  * @author Mattias De Pauw - Hogeschool Gent
  * @author Maarten Volckaert - Hogeschool Gent
  */
@@ -29,7 +29,7 @@ class CourseTruncaterForm extends FormValidator
 
     /**
      * Constructor
-     *
+     * 
      * @param object $parent
      * @param array $publications
      * @param array $categories
@@ -37,8 +37,8 @@ class CourseTruncaterForm extends FormValidator
      */
     public function __construct($parent, $publications, $categories, $course_sections)
     {
-        parent :: __construct('course_truncater');
-
+        parent::__construct('course_truncater');
+        
         $this->parent = $parent;
         $this->publications = $publications;
         $this->categories = $categories;
@@ -52,84 +52,80 @@ class CourseTruncaterForm extends FormValidator
     {
         $defaults = array();
         $translations = array();
-
-        $this->addElement('category', Translation :: get('Publications'));
-
+        
+        $this->addElement('category', Translation::get('Publications'));
+        
         $this->addElement('html', '<div id="categories" style="display: none;">');
         foreach ($this->categories as $category)
         {
-            $tool = $category[ContentObjectPublicationCategory :: PROPERTY_TOOL];
+            $tool = $category[ContentObjectPublicationCategory::PROPERTY_TOOL];
             $label = '';
-            $id = 'categories[' . $category[ContentObjectPublicationCategory :: PROPERTY_ID] . ']';
-
-            $this->addElement('checkbox', $id, $label, $category[ContentObjectPublicationCategory :: PROPERTY_NAME]);
+            $id = 'categories[' . $category[ContentObjectPublicationCategory::PROPERTY_ID] . ']';
+            
+            $this->addElement('checkbox', $id, $label, $category[ContentObjectPublicationCategory::PROPERTY_NAME]);
             $defaults[$id] = true;
             if (! array_key_exists($tool, $translations))
             {
-                $translations[$tool] = Translation :: get(
-                    'TypeName',
-                    null,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool));
+                $translations[$tool] = Translation::get(
+                    'TypeName', 
+                    null, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool));
             }
         }
-
+        
         $this->addElement('html', '</div><div id="publications" style="display: none;">');
         foreach ($this->publications as $publication)
         {
-            $tool = $publication[ContentObjectPublication :: PROPERTY_TOOL];
+            $tool = $publication[ContentObjectPublication::PROPERTY_TOOL];
             $label = "";
-            $id = 'publications[' . $publication[ContentObjectPublication :: PROPERTY_ID] . ']';
-
-            $this->addElement('checkbox', $id, $label, $publication[ContentObject :: PROPERTY_TITLE]);
+            $id = 'publications[' . $publication[ContentObjectPublication::PROPERTY_ID] . ']';
+            
+            $this->addElement('checkbox', $id, $label, $publication[ContentObject::PROPERTY_TITLE]);
             $defaults[$id] = true;
             if (! array_key_exists($tool, $translations))
             {
-                $translations[$tool] = Translation :: get(
-                    'TypeName',
-                    null,
-                    \Chamilo\Application\Weblcms\Tool\Manager :: get_tool_type_namespace($tool));
+                $translations[$tool] = Translation::get(
+                    'TypeName', 
+                    null, 
+                    \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool));
             }
         }
-
-//        $this->addFormRule(array('PublicationSelectionMaintenanceWizardPage', 'count_selected_publications'));
-
+        
+        // $this->addFormRule(array('PublicationSelectionMaintenanceWizardPage', 'count_selected_publications'));
+        
         $this->addElement('html', '</div>');
         $publication_selector_form = new PublicationSelectorForm(
-            $this->publications,
-            $this->categories,
-            $this->parent->get_course()->get_title(),
-            true,
+            $this->publications, 
+            $this->categories, 
+            $this->parent->get_course()->get_title(), 
+            true, 
             $translations);
         $this->addElement('html', $publication_selector_form->render());
-        $this->addElement('checkbox', 'content_object_categories', Translation :: get('PublicationCategories'));
-
+        $this->addElement('checkbox', 'content_object_categories', Translation::get('PublicationCategories'));
+        
         if (count($this->course_sections) > 0)
         {
-            $this->addElement('html', '<h3>' . Translation :: get('CourseSections') . '</h3>');
+            $this->addElement('html', '<h3>' . Translation::get('CourseSections') . '</h3>');
             foreach ($this->course_sections as $course_section)
             {
-                $id = 'course_sections[' . $course_section[CourseSection :: PROPERTY_ID] . ']';
-                $this->addElement('checkbox', $id, $course_section[CourseSection :: PROPERTY_NAME]);
+                $id = 'course_sections[' . $course_section[CourseSection::PROPERTY_ID] . ']';
+                $this->addElement('checkbox', $id, $course_section[CourseSection::PROPERTY_NAME]);
                 $defaults[$id] = true;
             }
         }
-
+        
         $defaults['content_object_categories'] = true;
-
+        
         $this->setDefaults($defaults);
-
-        $this->addElement('category', Translation :: get('EmptyThisCourseInformation'));
-        $this->addElement('checkbox', 'confirm', Translation :: get('Confirm', null, Utilities :: COMMON_LIBRARIES));
+        
+        $this->addElement('category', Translation::get('EmptyThisCourseInformation'));
+        $this->addElement('checkbox', 'confirm', Translation::get('Confirm', null, Utilities::COMMON_LIBRARIES));
         $this->addRule(
-            'confirm',
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            'confirm', 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
         $prevnext = array();
-        $prevnext[] = $this->createElement(
-            'style_submit_button',
-            self :: PARAM_SUBMIT,
-            Translation:: get('Truncate')
-        );
+        $prevnext[] = $this->createElement('style_submit_button', self::PARAM_SUBMIT, Translation::get('Truncate'));
         $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));
     }

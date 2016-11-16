@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class Publication extends DataClass
 {
-
+    
     /**
      * Assessment publication properties
      */
@@ -28,35 +28,35 @@ class Publication extends DataClass
 
     /**
      * Get the default properties
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_PUBLICATION_ID,
-                self :: PROPERTY_ALLOW_HINTS,
-                self :: PROPERTY_SHOW_SCORE,
-                self :: PROPERTY_SHOW_CORRECTION,
-                self :: PROPERTY_SHOW_SOLUTION,
-                self :: PROPERTY_SHOW_ANSWER_FEEDBACK,
-                self :: PROPERTY_FEEDBACK_LOCATION));
+                self::PROPERTY_PUBLICATION_ID, 
+                self::PROPERTY_ALLOW_HINTS, 
+                self::PROPERTY_SHOW_SCORE, 
+                self::PROPERTY_SHOW_CORRECTION, 
+                self::PROPERTY_SHOW_SOLUTION, 
+                self::PROPERTY_SHOW_ANSWER_FEEDBACK, 
+                self::PROPERTY_FEEDBACK_LOCATION));
     }
 
     public function get_data_manager()
     {
-        return DataManager :: getInstance();
+        return DataManager::getInstance();
     }
 
     public function get_publication_id()
     {
-        return $this->get_default_property(self :: PROPERTY_PUBLICATION_ID);
+        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
     }
 
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self :: PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**
@@ -65,7 +65,7 @@ class Publication extends DataClass
      */
     public function get_allow_hints()
     {
-        return $this->get_default_property(self :: PROPERTY_ALLOW_HINTS);
+        return $this->get_default_property(self::PROPERTY_ALLOW_HINTS);
     }
 
     /**
@@ -74,7 +74,7 @@ class Publication extends DataClass
      */
     public function set_allow_hints($allow_hints)
     {
-        $this->set_default_property(self :: PROPERTY_ALLOW_HINTS, $allow_hints);
+        $this->set_default_property(self::PROPERTY_ALLOW_HINTS, $allow_hints);
     }
 
     /**
@@ -83,7 +83,7 @@ class Publication extends DataClass
      */
     public function get_show_score()
     {
-        return $this->get_default_property(self :: PROPERTY_SHOW_SCORE);
+        return $this->get_default_property(self::PROPERTY_SHOW_SCORE);
     }
 
     /**
@@ -92,7 +92,7 @@ class Publication extends DataClass
      */
     public function set_show_score($show_score)
     {
-        $this->set_default_property(self :: PROPERTY_SHOW_SCORE, $show_score);
+        $this->set_default_property(self::PROPERTY_SHOW_SCORE, $show_score);
     }
 
     /**
@@ -101,7 +101,7 @@ class Publication extends DataClass
      */
     public function get_show_correction()
     {
-        return $this->get_default_property(self :: PROPERTY_SHOW_CORRECTION);
+        return $this->get_default_property(self::PROPERTY_SHOW_CORRECTION);
     }
 
     /**
@@ -110,7 +110,7 @@ class Publication extends DataClass
      */
     public function set_show_correction($show_correction)
     {
-        $this->set_default_property(self :: PROPERTY_SHOW_CORRECTION, $show_correction);
+        $this->set_default_property(self::PROPERTY_SHOW_CORRECTION, $show_correction);
     }
 
     /**
@@ -119,7 +119,7 @@ class Publication extends DataClass
      */
     public function get_show_solution()
     {
-        return $this->get_default_property(self :: PROPERTY_SHOW_SOLUTION);
+        return $this->get_default_property(self::PROPERTY_SHOW_SOLUTION);
     }
 
     /**
@@ -128,7 +128,7 @@ class Publication extends DataClass
      */
     public function set_show_solution($show_solution)
     {
-        $this->set_default_property(self :: PROPERTY_SHOW_SOLUTION, $show_solution);
+        $this->set_default_property(self::PROPERTY_SHOW_SOLUTION, $show_solution);
     }
 
     /**
@@ -137,7 +137,7 @@ class Publication extends DataClass
      */
     public function get_show_answer_feedback()
     {
-        return $this->get_default_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return $this->get_default_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -146,7 +146,7 @@ class Publication extends DataClass
      */
     public function set_show_answer_feedback($show_answer_feedback)
     {
-        $this->set_default_property(self :: PROPERTY_SHOW_ANSWER_FEEDBACK, $show_answer_feedback);
+        $this->set_default_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $show_answer_feedback);
     }
 
     /**
@@ -155,7 +155,7 @@ class Publication extends DataClass
      */
     public function get_feedback_location()
     {
-        return $this->get_default_property(self :: PROPERTY_FEEDBACK_LOCATION);
+        return $this->get_default_property(self::PROPERTY_FEEDBACK_LOCATION);
     }
 
     /**
@@ -164,7 +164,7 @@ class Publication extends DataClass
      */
     public function set_feedback_location($feedback_location)
     {
-        $this->set_default_property(self :: PROPERTY_FEEDBACK_LOCATION, $feedback_location);
+        $this->set_default_property(self::PROPERTY_FEEDBACK_LOCATION, $feedback_location);
     }
 
     /**
@@ -174,11 +174,11 @@ class Publication extends DataClass
     public function get_configuration()
     {
         return new Configuration(
-            $this->get_allow_hints(),
-            $this->get_show_score(),
-            $this->get_show_correction(),
-            $this->get_show_solution(),
-            $this->get_show_answer_feedback(),
+            $this->get_allow_hints(), 
+            $this->get_show_score(), 
+            $this->get_show_correction(), 
+            $this->get_show_solution(), 
+            $this->get_show_answer_feedback(), 
             $this->get_feedback_location());
     }
 }

@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: course_sections_updater.class.php 216 2009-11-13 14:08:06Z kariboe $
- *
+ * 
  * @package application.lib.weblcms.tool.course_sections.component
  */
 class UpdaterComponent extends Manager
@@ -23,35 +23,35 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $trail = BreadcrumbTrail :: getInstance();
-
+        $trail = BreadcrumbTrail::getInstance();
+        
         if (! $this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException();
         }
-
-        $id = Request :: get(self :: PARAM_COURSE_SECTION_ID);
+        
+        $id = Request::get(self::PARAM_COURSE_SECTION_ID);
         if (! empty($id))
         {
-            $course_section = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-                CourseSection :: class_name(),
+            $course_section = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                CourseSection::class_name(), 
                 (int) $id);
-
+            
             $form = new CourseSectionForm(
-                CourseSectionForm :: TYPE_EDIT,
-                $course_section,
+                CourseSectionForm::TYPE_EDIT, 
+                $course_section, 
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_UPDATE_COURSE_SECTION,
-                        self :: PARAM_COURSE_SECTION_ID => $id)));
-
+                        self::PARAM_ACTION => self::ACTION_UPDATE_COURSE_SECTION, 
+                        self::PARAM_COURSE_SECTION_ID => $id)));
+            
             if ($form->validate())
             {
                 $success = $form->update_course_section();
                 $this->redirect(
-                    Translation :: get($success ? 'CourseSectionUpdated' : 'CourseSectionNotUpdated'),
-                    ($success ? false : true),
-                    array(self :: PARAM_ACTION => self :: ACTION_VIEW_COURSE_SECTIONS));
+                    Translation::get($success ? 'CourseSectionUpdated' : 'CourseSectionNotUpdated'), 
+                    ($success ? false : true), 
+                    array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
             }
             else
             {
@@ -59,28 +59,28 @@ class UpdaterComponent extends Manager
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_VIEW_COURSE_SECTIONS)),
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS)), 
                         $course_section->get_name()));
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self :: ACTION_UPDATE_COURSE_SECTION,
-                                self :: PARAM_COURSE_SECTION_ID => $id)),
-                        Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES)));
-
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UPDATE_COURSE_SECTION, 
+                                self::PARAM_COURSE_SECTION_ID => $id)), 
+                        Translation::get('Update', null, Utilities::COMMON_LIBRARIES)));
+                
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
         else
         {
-            return $this->display_error_page(Translation :: get('NoCourseSectionSelected'));
+            return $this->display_error_page(Translation::get('NoCourseSectionSelected'));
         }
     }
 }

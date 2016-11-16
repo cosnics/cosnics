@@ -31,10 +31,10 @@ class Event extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calen
      * @param string $context
      * @param integer $courseId
      */
-    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules = null, $url, $title, $content,
+    public function __construct($id, $startDate, $endDate, RecurrenceRules $recurrenceRules = null, $url, $title, $content, 
         $source, $context, $courseId)
     {
-        parent :: __construct($id, $startDate, $endDate, $recurrenceRules, $url, $title, $content, $source, $context);
+        parent::__construct($id, $startDate, $endDate, $recurrenceRules, $url, $title, $content, $source, $context);
         $this->courseId = $courseId;
     }
 

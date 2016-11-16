@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Storage\Repository\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -11,16 +10,16 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Interface to describe the necessary functions needed from the CourseEntityRepository
- *
+ * 
  * @package application\bamaflex;
- *
  * @author Tom Goethals - Hogeschool Gent
  */
 interface CourseRepositoryInterface
 {
+
     /**
      * Returns a course by a given id
-     *
+     * 
      * @param int $courseId
      *
      * @return Course
@@ -29,7 +28,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns a course by a given visual code
-     *
+     * 
      * @param string $visualCode
      *
      * @return Course
@@ -38,7 +37,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns courses with an array of course id's.
-     *
+     * 
      * @param array $courseIds
      *
      * @return Course[]
@@ -47,7 +46,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns Courses with a given set of parameters
-     *
+     * 
      * @param DataClassRetrievesParameters $retrievesParameters
      *
      * @return Course[]
@@ -56,7 +55,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns courses where a user is subscribed
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -65,7 +64,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns courses where a user is subscribed as a teacher
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -74,7 +73,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns courses where a user is subscribed as a student
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return Course[]
@@ -83,7 +82,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns the course user subscriptions by a given course and user
-     *
+     * 
      * @param int $courseId
      * @param int $userId
      *
@@ -93,7 +92,7 @@ interface CourseRepositoryInterface
 
     /**
      * Returns the course group subscriptions by a given course and groups
-     *
+     * 
      * @param int $courseId
      * @param int[] $groupIds
      *
@@ -103,7 +102,7 @@ interface CourseRepositoryInterface
 
     /**
      * Finds a course tool registration by a given tool name
-     *
+     * 
      * @param string $toolName
      *
      * @return CourseTool
@@ -112,37 +111,34 @@ interface CourseRepositoryInterface
 
     /**
      * Finds the tool registrations
-     *
+     * 
      * @return CourseTool[]
      */
     public function findToolRegistrations();
 
     /**
      * Finds courses with his titular and settings with given retrieve parameters
-     *
+     * 
      * @param Condition $condition
      *
      * @return Course[]
      */
     public function findCoursesWithTitularAndCourseSettings(Condition $condition = null);
 
-
     /**
      * Returns all users subscribed to course by status
-     *
+     * 
      * @param $courseId
      * @param $status
-     *
      * @return ResultSet
      */
     public function findUsersByStatus($courseId, $status);
 
     /**
      * Returns all groups directly subscribed to course by status
-     *
+     * 
      * @param $courseId
      * @param $status
-     *
      * @return ResultSet
      */
     public function findDirectSubscribedGroupsByStatus($courseId, $status);

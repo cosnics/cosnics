@@ -1,20 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="course_change">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="user_id" type="integer" unsigned="1" notnull="1" />
-		<property name="reference_id" type="integer" unsigned="1" notnull="1" />
-		<property name="target_reference_id" type="integer" unsigned="1" notnull="1" />
-		<property name="action" type="text" length="50" notnull="1" default="create" />
-		<property name="date" type="integer" unsigned="1" notnull="1" />
-	</properties>
-	<index name="user_id">
-		<indexproperty name="user_id" />
-	</index>
-	<index name="reference_id">
-		<indexproperty name="reference_id" />
-	</index>
-	<index name="target_reference_id">
-		<indexproperty name="target_reference_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="reference_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="target_reference_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="action"
+            type="text"
+            length="50"
+            notnull="1"
+            default="create" />
+        <property
+            name="date"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+    <index name="reference_id">
+        <indexproperty name="reference_id" />
+    </index>
+    <index name="target_reference_id">
+        <indexproperty name="target_reference_id" />
+    </index>
 </object>

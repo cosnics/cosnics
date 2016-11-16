@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Csv based importer for course entities
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Csv implements ImportFormatInterface
@@ -31,7 +31,7 @@ class Csv implements ImportFormatInterface
 
     /**
      * Parses a file and returns CourseEntityRelation classes
-     *
+     * 
      * @param UploadedFile $file
      *
      * @return ImportedCourseEntityRelation[]
@@ -45,35 +45,35 @@ class Csv implements ImportFormatInterface
         {
             throw new \Exception('Could not parse the imported file, not a valid csv file.');
         }
-
+        
         $importedCourseEntityRelations = array();
-
+        
         foreach ($importedRows as $row)
         {
             if (array_key_exists('username', $row))
             {
                 $importedCourseEntityRelations[] = new ImportedCourseUserRelation(
-                    $row['action'],
-                    $row['coursecode'],
-                    $row['status'],
+                    $row['action'], 
+                    $row['coursecode'], 
+                    $row['status'], 
                     $row['username']);
             }
             elseif (array_key_exists('groupcode', $row))
             {
                 $importedCourseEntityRelations[] = new ImportedCourseGroupRelation(
-                    $row['action'],
-                    $row['coursecode'],
-                    $row['status'],
+                    $row['action'], 
+                    $row['coursecode'], 
+                    $row['status'], 
                     $row['groupcode']);
             }
         }
-
+        
         return $importedCourseEntityRelations;
     }
 
     /**
      * Returns the possible import mime types
-     *
+     * 
      * @return string
      */
     public function getImportMimeTypes()

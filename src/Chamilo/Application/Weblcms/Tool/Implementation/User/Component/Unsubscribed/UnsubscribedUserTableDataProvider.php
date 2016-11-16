@@ -25,7 +25,7 @@ class UnsubscribedUserTableDataProvider extends DataClassTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: retrieve_users_not_subscribed_to_course(
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_users_not_subscribed_to_course(
             $this->get_component()->get_course_id(), 
             $condition, 
             $offset, 
@@ -40,7 +40,7 @@ class UnsubscribedUserTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: count_users_not_subscribed_to_course(
+        return \Chamilo\Application\Weblcms\Course\Storage\DataManager::count_users_not_subscribed_to_course(
             $this->get_component()->get_course_id(), 
             $condition);
     }

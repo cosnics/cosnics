@@ -13,13 +13,13 @@ class BrowserComponent extends Manager
     public function run()
     {
         $renderer = new Renderer($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $renderer->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 }
