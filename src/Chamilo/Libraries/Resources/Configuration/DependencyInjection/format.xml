@@ -10,6 +10,9 @@
             <argument>%chamilo.configuration.general.theme%</argument>
             <argument
                 type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
                 id="chamilo.libraries.architecture.classname_utilities" />
             <argument
                 type="service"

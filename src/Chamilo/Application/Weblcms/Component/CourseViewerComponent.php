@@ -26,7 +26,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * $Id: course_viewer.class.php 218 2009-11-13 14:21:26Z kariboe $
- * 
+ *
  * @package application.lib.weblcms.weblcms_manager.component
  */
 /**
@@ -37,14 +37,14 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
     /**
      * The selected course object
-     * 
+     *
      * @var \application\weblcms\course\Course
      */
     private $course;
 
     /**
      * The selected tool registration
-     * 
+     *
      * @var \application\weblcms\CourseTool
      */
     private $course_tool_registration;
@@ -59,74 +59,74 @@ class CourseViewerComponent extends Manager implements DelegateComponent
          */
         $tool = Request::get(self::PARAM_TOOL);
         $tool = StringUtilities::getInstance()->createString($tool)->upperCamelize()->__toString();
-        
+
         $this->set_parameter(self::PARAM_COURSE, $this->get_course()->get_id());
         $this->set_parameter(self::PARAM_TOOL, $tool);
-        
+
         $breadcrumbtrail = BreadcrumbTrail::getInstance();
-        
+
         $breadcrumb_title = CourseSettingsConnector::get_breadcrumb_title_for_course($this->get_course());
-        
+
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self::PARAM_CATEGORY => null, self::PARAM_TOOL => null)), 
+                $this->get_url(array(self::PARAM_CATEGORY => null, self::PARAM_TOOL => null)),
                 $breadcrumb_title));
-        
+
         if (! $this->access_allowed())
         {
             throw new NotAllowedException();
         }
-        
+
         if (is_null($this->get_course()))
         {
             throw new \Exception(Translation::get('SelectedCourseNotValid'));
         }
-        
+
         $this->load_course_theme();
         $this->load_course_language();
-        
+
         if (! $tool)
         {
             $tool = 'Home';
         }
-        
+
         $category = Request::get(self::PARAM_CATEGORY, 0);
-        
+
         $this->course_tool_registration = DataManager::retrieve_course_tool_by_name($tool);
-        
+
         if (! $this->course_tool_registration)
         {
             throw new \Exception(Translation::get('SelectedCourseToolNotValid'));
         }
-        
+
         if ($tool != 'CourseGroup')
         {
             $this->set_parameter('course_group', null);
         }
-        
+
         Event::trigger(
-            'VisitCourse', 
-            Manager::context(), 
+            'VisitCourse',
+            Manager::context(),
             array(
-                CourseVisit::PROPERTY_USER_ID => $this->get_user_id(), 
-                CourseVisit::PROPERTY_COURSE_ID => $this->get_course_id(), 
-                CourseVisit::PROPERTY_TOOL_ID => $this->course_tool_registration->get_id(), 
-                CourseVisit::PROPERTY_CATEGORY_ID => $category, 
+                CourseVisit::PROPERTY_USER_ID => $this->get_user_id(),
+                CourseVisit::PROPERTY_COURSE_ID => $this->get_course_id(),
+                CourseVisit::PROPERTY_TOOL_ID => $this->course_tool_registration->get_id(),
+                CourseVisit::PROPERTY_CATEGORY_ID => $category,
                 CourseVisit::PROPERTY_PUBLICATION_ID => Request::get(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID)));
-        
+
         $result = \Chamilo\Application\Weblcms\Tool\Manager::factory_and_launch(
-            $this->course_tool_registration->getContext(), 
+            $this->course_tool_registration->getContext(),
             $this);
-        
+
         DataManager::log_course_module_access($this->get_course_id(), $this->get_user_id(), $tool, $category);
-        
+
         return $result;
     }
 
     /**
      * Returns the course
-     * 
+     *
      * @return Course
      *
      * @throws \Exception
@@ -136,15 +136,15 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         if (is_null($this->course))
         {
             $course_id = Request::get(self::PARAM_COURSE);
-            
+
             if (! $course_id)
             {
                 throw new \Exception(Translation::get('NoCourseSelected'));
             }
-            
+
             $this->course = CourseDataManager::retrieve_by_id(Course::class_name(), $course_id);
         }
-        
+
         return $this->course;
     }
 
@@ -156,7 +156,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $va_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
-        
+
         if (isset($va_id) && isset($course_id))
         {
             if ($course_id == $this->get_course_id())
@@ -174,7 +174,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $va_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
-        
+
         if (isset($va_id) && isset($course_id))
         {
             if ($course_id == $this->get_course_id())
@@ -187,7 +187,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Add a header when viewing course as another user.
-     * 
+     *
      * @param null $pageTitle
      *
      * @return string
@@ -195,17 +195,17 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     public function render_header($pageTitle = null)
     {
         $html = array();
-        
+
         $html[] = parent::render_header($pageTitle);
         $va_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_ID);
         $course_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
-        
+
         if (isset($va_id) && isset($course_id))
         {
             if ($course_id == $this->get_course_id())
             {
                 $user = $this->get_user_info($va_id);
-                
+
                 $html[] = '<div class="alert alert-warning">' . Translation::get('ViewingAsUser') . ' ' .
                      $user->get_firstname() . ' ' . $user->get_lastname() . ' <a href="' .
                      $this->get_url(
@@ -216,16 +216,16 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                      '">' . Translation::get('Back') . '</a></div>';
             }
         }
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Application\Weblcms', true) . 'CourseVisit.js');
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns the identifier of the course that is being used.
-     * 
+     *
      * @return int
      */
     public function get_course_id()
@@ -243,9 +243,9 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $course_settings_controller = CourseSettingsController::getInstance();
         $theme_setting = $course_settings_controller->get_course_setting(
-            $this->get_course(), 
+            $this->get_course(),
             CourseSettingsConnector::THEME);
-        
+
         if ($theme_setting)
         {
             Theme::getInstance()->setTheme($theme_setting);
@@ -259,15 +259,15 @@ class CourseViewerComponent extends Manager implements DelegateComponent
     {
         $course_settings_controller = CourseSettingsController::getInstance();
         $language = $course_settings_controller->get_course_setting(
-            $this->get_course(), 
+            $this->get_course(),
             CourseSettingsConnector::LANGUAGE);
-        
+
         // set user selected language or general platform language
         if ($language == 'platform_language')
         {
             $language = LocalSetting::getInstance()->get('platform_language');
         }
-        
+
         Translation::getInstance()->setLanguageIsocode($language);
     }
 
@@ -279,10 +279,10 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         {
             $user = $this->get_user();
             $course = $this->get_course();
-            
+
             $this->is_teacher = parent::is_teacher($course, $user);
         }
-        
+
         return $this->is_teacher;
     }
 
@@ -291,14 +291,14 @@ class CourseViewerComponent extends Manager implements DelegateComponent
      * users have access when status is 'open', 'open to platform' or 'open to world' other 'real' platform users have
      * access when status is 'open to platform' or 'open to world' anonymous users have access when status is 'open to
      * world'
-     * 
+     *
      * @return boolean access_allowed
      */
     public function access_allowed()
     {
         $tool = Request::get(self::PARAM_TOOL);
         $tool_action = Request::get(self::PARAM_TOOL_ACTION);
-        
+
         if ($this->is_teacher() || ($tool == 'User' &&
              $tool_action == \Chamilo\Application\Weblcms\Tool\Implementation\User\Manager::ACTION_VIEW_AS))
         {
@@ -308,11 +308,11 @@ class CourseViewerComponent extends Manager implements DelegateComponent
         {
             $course_settings_controller = CourseSettingsController::getInstance();
             $course_access = $course_settings_controller->get_course_setting(
-                $this->get_course(), 
+                $this->get_course(),
                 CourseSettingsConnector::COURSE_ACCESS);
-            
+
             $viewAsCourseId = Session::get('view_as_course_id');
-            
+
             if ($course_access == CourseSettingsConnector::COURSE_ACCESS_CLOSED &&
                  (! isset($viewAsCourseId) || $viewAsCourseId != $this->get_course_id()))
             {
@@ -321,7 +321,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             else
             {
                 $is_subscribed = CourseDataManager::is_subscribed($this->get_course(), $this->get_user());
-                
+
                 if ($is_subscribed)
                 {
                     $allowed = true;
@@ -332,7 +332,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
                 }
             }
         }
-        
+
         return $allowed;
     }
 
@@ -347,7 +347,7 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Returns the CourseTool registration of the selected tool
-     * 
+     *
      * @return CourseTool
      */
     public function get_tool_registration()
@@ -357,14 +357,14 @@ class CourseViewerComponent extends Manager implements DelegateComponent
 
     /**
      * Indicates whether the current tool may be accessed for the current course.
-     * 
+     *
      * @return bool
      */
     public function is_tool_accessible()
     {
         return CourseSettingsController::getInstance()->get_course_setting(
-            $this->get_course(), 
-            CourseSetting::COURSE_SETTING_TOOL_ACTIVE, 
+            $this->get_course(),
+            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
             $this->get_tool_registration()->get_id());
     }
 }
