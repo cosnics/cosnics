@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Simple connector class to facilitate rendering course settings
- * 
+ *
  * @package application\weblcms;
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -41,7 +41,7 @@ class CourseSettingsConnector
     const SHOW_COURSE_CODE = 'show_course_code';
     const SHOW_COURSE_TITULAR = 'show_course_titular';
     const SHOW_COURSE_LANGUAGE = 'show_course_language';
-    
+
     /**
      * **************************************************************************************************************
      * Definition of setting options *
@@ -65,22 +65,22 @@ class CourseSettingsConnector
      * Connector Functions *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the available platform languages
-     * 
+     *
      * @return string[]
      */
     public static function get_languages()
     {
         return array_merge(
-            \Chamilo\Configuration\Configuration::getInstance()->getLanguages(), 
+            \Chamilo\Configuration\Configuration::getInstance()->getLanguages(),
             array('platform_language' => Translation::get('PlatformLanguage', null, 'Chamilo\Core\Admin')));
     }
 
     /**
      * Returns the available themes
-     * 
+     *
      * @return string[]
      */
     public static function get_themes()
@@ -90,57 +90,57 @@ class CourseSettingsConnector
 
     /**
      * Returns the available course categories
-     * 
+     *
      * @return string[]
      */
     public static function get_categories()
     {
         $categories = array();
-        
+
         $categories_result_set = DataManager::retrieve_course_categories_ordered_by_name();
         while ($category = $categories_result_set->next_result())
         {
             $categories[$category->get_id()] = $category->get_name();
         }
-        
+
         return $categories;
     }
 
     /**
      * Returns the users with status teacher
-     * 
+     *
      * @return string[]
      */
     public static function get_titulars()
     {
         $users = array();
         $users[0] = Translation::get('TitularUnknown', null, 'Chamilo\Application\Weblcms\Course');
-        
+
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_STATUS),
             new StaticConditionVariable(User::STATUS_TEACHER));
-        
+
         $order = array(
-            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)), 
+            new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)),
             new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)));
-        
-        $format = Configuration::getInstance()->get_setting(array(User::CONTEXT, 'fullname_format'));
+
+        $format = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'fullname_format'));
         if ($format == User::NAME_FORMAT_LAST)
         {
             $order = array_reverse($order);
         }
-        
+
         $users_result_set = \Chamilo\Core\User\Storage\DataManager::retrieve_active_users(
-            $condition, 
-            null, 
-            null, 
+            $condition,
+            null,
+            null,
             $order);
-        
+
         while ($user = $users_result_set->next_result())
         {
             $users[$user->get_id()] = $user->get_fullname() . ' (' . $user->get_official_code() . ')';
         }
-        
+
         return $users;
     }
 
@@ -149,10 +149,10 @@ class CourseSettingsConnector
      * Setting Helper Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the title for the course breadcrumb depending on the settings
-     * 
+     *
      * @param $course Course
      *
      * @return String
@@ -161,7 +161,7 @@ class CourseSettingsConnector
     {
         $course_settings_controller = CourseSettingsController::getInstance();
         $breadcrumb_setting = $course_settings_controller->get_course_setting($course, self::BREADCRUMB_LAYOUT);
-        
+
         switch ($breadcrumb_setting)
         {
             case self::BREADCRUMB_LAYOUT_COURSE_HOME :
@@ -178,23 +178,23 @@ class CourseSettingsConnector
      * Special Settings Functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Returns the settings that need to be copied to the course object
-     * 
+     *
      * @return string[]
      */
     public static function get_copied_settings_for_course()
     {
         return array(
-            self::LANGUAGE => Course::PROPERTY_LANGUAGE, 
-            self::CATEGORY => Course::PROPERTY_CATEGORY_ID, 
+            self::LANGUAGE => Course::PROPERTY_LANGUAGE,
+            self::CATEGORY => Course::PROPERTY_CATEGORY_ID,
             self::TITULAR => Course::PROPERTY_TITULAR_ID);
     }
 
     /**
      * Returns the course property (if any) belonging to the given course setting
-     * 
+     *
      * @param $course_setting CourseSetting
      *
      * @return String | null
@@ -202,7 +202,7 @@ class CourseSettingsConnector
     public static function get_course_property_for_setting(CourseSetting $course_setting)
     {
         $copied_settings = self::get_copied_settings_for_course();
-        
+
         if (array_key_exists($course_setting->get_name(), $copied_settings))
         {
             return $copied_settings[$course_setting->get_name()];
