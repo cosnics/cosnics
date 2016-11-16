@@ -8,7 +8,7 @@ class DynamicFormTabsRenderer extends DynamicTabsRenderer
 
     public function __construct($name, $form)
     {
-        parent :: __construct($name);
+        parent::__construct($name);
         $this->form = $form;
     }
 
@@ -33,18 +33,18 @@ class DynamicFormTabsRenderer extends DynamicTabsRenderer
     public function render()
     {
         $tabCount = count($this->get_tabs());
-
+        
         if ($tabCount > 1)
         {
             $this->form->addElement('html', $this->header());
         }
-
+        
         foreach ($this->get_tabs() as $key => $tab)
         {
             $tab->set_form($this->form);
             $tab->body($tabCount == 1);
         }
-
+        
         if ($tabCount > 1)
         {
             $this->form->addElement('html', $this->footer());

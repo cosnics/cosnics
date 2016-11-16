@@ -12,7 +12,7 @@ class RecordProcessor
 
     /**
      * Processes a given record by transforming to the correct type
-     *
+     * 
      * @param mixed[] $record
      * @return mixed[]
      */
@@ -22,7 +22,7 @@ class RecordProcessor
         {
             $field = $this->processField($field, $this->determineFieldTypeFromMap($key, $typeMap));
         }
-
+        
         return $record;
     }
 
@@ -45,12 +45,12 @@ class RecordProcessor
     protected function processField($field, $fieldType = null)
     {
         $field = $this->processResource($field);
-
+        
         if ($fieldType)
         {
             $field = settype($field, $fieldType);
         }
-
+        
         return $field;
     }
 
@@ -64,15 +64,15 @@ class RecordProcessor
         if (is_resource($field))
         {
             $data = '';
-
+            
             while (! feof($field))
             {
                 $data .= fread($field, 1024);
             }
-
+            
             $field = $data;
         }
-
+        
         return $field;
     }
 }

@@ -38,7 +38,7 @@ class Header
 
     /**
      * The html headers which will be added in the <head> tag of the html document.
-     *
+     * 
      * @var string[]
      */
     private $htmlHeaders;
@@ -67,7 +67,7 @@ class Header
         $this->containerMode = $containerMode;
         $this->languageCode = $languageCode;
         $this->textDirection = $textDirection;
-
+        
         $this->htmlHeaders = array();
         $this->addDefaultHeaders();
     }
@@ -185,53 +185,53 @@ class Header
      */
     private function addDefaultHeaders()
     {
-        $server_type = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'server_type');
-        $theme = Theme :: getInstance()->getTheme();
-
+        $server_type = \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'server_type');
+        $theme = Theme::getInstance()->getTheme();
+        
         $parameters = array();
-        $parameters[Application :: PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
-        $parameters[Application :: PARAM_ACTION] = 'resource';
-        $parameters[ResourceUtilities :: PARAM_THEME] = $theme;
-        $parameters[ResourceUtilities :: PARAM_SERVER_TYPE] = $server_type;
-
+        $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
+        $parameters[Application::PARAM_ACTION] = 'resource';
+        $parameters[ResourceUtilities::PARAM_THEME] = $theme;
+        $parameters[ResourceUtilities::PARAM_SERVER_TYPE] = $server_type;
+        
         $this->addHtmlHeader('<meta charset="utf-8">');
         $this->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
-
-        $stylesheetCacheService = new StylesheetCacheService(Path :: getInstance(), Theme :: getInstance());
+        
+        $stylesheetCacheService = new StylesheetCacheService(Path::getInstance(), Theme::getInstance());
         $cssModified = $stylesheetCacheService->getLastModificationTime();
         $cssModified = $cssModified ? $cssModified : time();
-
-        $parameters[ResourceUtilities :: PARAM_TYPE] = 'css';
+        
+        $parameters[ResourceUtilities::PARAM_TYPE] = 'css';
         $parameters['modified'] = $cssModified;
-
-        $this->addCssFile(Path :: getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
-
-        $this->addLink(Path :: getInstance()->getBasePath(true) . 'index.php', 'top');
+        
+        $this->addCssFile(Path::getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
+        
+        $this->addLink(Path::getInstance()->getBasePath(true) . 'index.php', 'top');
         $this->addLink(
-            Theme :: getInstance()->getCommonImagePath('Favicon', 'ico'),
-            'shortcut icon',
-            null,
+            Theme::getInstance()->getCommonImagePath('Favicon', 'ico'), 
+            'shortcut icon', 
+            null, 
             'image/x-icon');
-
+        
         $this->addHtmlHeader(
-            '<script type="text/javascript">var rootWebPath="' . Path :: getInstance()->getBasePath(true) . '";</script>');
-
-        $javascriptCacheService = new JavascriptCacheService(Path :: getInstance());
+            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>');
+        
+        $javascriptCacheService = new JavascriptCacheService(Path::getInstance());
         $javascriptModified = $javascriptCacheService->getLastModificationTime();
         $javascriptModified = $javascriptModified ? $javascriptModified : time();
-
-        $parameters[ResourceUtilities :: PARAM_TYPE] = 'javascript';
+        
+        $parameters[ResourceUtilities::PARAM_TYPE] = 'javascript';
         $parameters['modified'] = $javascriptModified;
         $this->addJavascriptFile(
-            Path :: getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
-
-        $pageTitle = \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'institution') . ' - ' .
-             \Chamilo\Configuration\Configuration :: get('Chamilo\Core\Admin', 'site_name');
-
+            Path::getInstance()->getBasePath(true) . 'index.php?' . http_build_query($parameters));
+        
+        $pageTitle = \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'institution') . ' - ' .
+             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'site_name');
+        
         $this->addHtmlHeader('<title>' . $pageTitle . '</title>');
-
+        
         $this->addGoogleAnalyticsTracking();
     }
 
@@ -240,19 +240,18 @@ class Header
      */
     protected function addGoogleAnalyticsTracking()
     {
-        if(!\Chamilo\Configuration\Configuration::getInstance()->is_available())
+        if (! \Chamilo\Configuration\Configuration::getInstance()->is_available())
         {
             return;
         }
-
+        
         $googleAnalyticsTrackingId = \Chamilo\Configuration\Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'google_analytics_tracking_id')
-            );
-
-        if(!empty($googleAnalyticsTrackingId))
+            array('Chamilo\Core\Admin', 'google_analytics_tracking_id'));
+        
+        if (! empty($googleAnalyticsTrackingId))
         {
             $html = array();
-
+            
             $html[] = '<script>';
             $html[] = '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){';
             $html[] = '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),';
@@ -263,7 +262,7 @@ class Header
             $html[] = 'ga(\'send\', \'pageview\', location.pathname + location.search);';
             $html[] = '';
             $html[] = '</script>';
-
+            
             $this->addHtmlHeader(implode(PHP_EOL, $html));
         }
     }
@@ -315,38 +314,38 @@ class Header
     public function toHtml()
     {
         $html = array();
-
+        
         $html[] = '<!DOCTYPE html>';
         $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->getLanguageCode() . '" lang="' .
              $this->getLanguageCode() . '">';
         $html[] = '<head>';
-
+        
         $htmlHeaders = $this->getHtmlHeaders();
         foreach ($htmlHeaders as $index => $htmlHeader)
         {
             $html[] = $htmlHeader;
         }
-
+        
         $html[] = '</head>';
-
+        
         $html[] = '<body dir="' . $this->getTextDirection() . '">';
-
-        if ($this->getViewMode() != Page :: VIEW_MODE_HEADERLESS)
+        
+        if ($this->getViewMode() != Page::VIEW_MODE_HEADERLESS)
         {
             $banner = new Banner($this->getApplication(), $this->getViewMode(), $this->getContainerMode());
-
+            
             $html[] = $banner->render();
         }
-
+        
         $classes = $this->getContainerMode();
-
-        if ($this->getViewMode() == Page :: VIEW_MODE_HEADERLESS)
+        
+        if ($this->getViewMode() == Page::VIEW_MODE_HEADERLESS)
         {
             $classes .= ' container-headerless';
         }
-
+        
         $html[] = '<div class="' . $classes . '">';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

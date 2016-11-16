@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\File\PackagesContentFinder;
 
 /**
  * Base class that can be used by other classes to include the PackagesClassFinder
- *
+ * 
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -12,14 +12,14 @@ abstract class PackagesClassFinderAware
 
     /**
      * The class finder for packages
-     *
+     * 
      * @var PackagesClassFinder
      */
     private $packagesClassFinder;
 
     /**
      * Constructor
-     *
+     * 
      * @param PackagesClassFinder $packages_class_finder
      */
     public function __construct(PackagesClassFinder $packages_class_finder = null)

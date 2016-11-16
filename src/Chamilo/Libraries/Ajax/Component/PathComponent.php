@@ -15,6 +15,6 @@ class PathComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-        echo Path :: get($_POST['Path']);
+        echo Path::get($_POST['Path']);
     }
 }

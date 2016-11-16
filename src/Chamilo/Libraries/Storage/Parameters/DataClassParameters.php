@@ -19,14 +19,14 @@ abstract class DataClassParameters implements Hashable
 
     /**
      * The condition to be applied to the action
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     private $condition;
 
     /**
      * The joins to be applied to the action
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\Query\Joins
      */
     private $joins;
@@ -40,35 +40,31 @@ abstract class DataClassParameters implements Hashable
      */
     public function __construct($condition = null, Joins $joins = null)
     {
-        if(!is_null($condition) && !$condition instanceof Condition)
+        if (! is_null($condition) && ! $condition instanceof Condition)
         {
             throw new \Exception(
                 sprintf(
                     'The given parameter $condition should be of type ' .
-                    '\Chamilo\Libraries\Storage\Query\Condition\Condition but an object of type %s was given',
-                    gettype($condition)
-                )
-            );
+                         '\Chamilo\Libraries\Storage\Query\Condition\Condition but an object of type %s was given', 
+                        gettype($condition)));
         }
-
-        if(!is_null($joins) && !$joins instanceof Joins)
+        
+        if (! is_null($joins) && ! $joins instanceof Joins)
         {
             throw new \Exception(
                 sprintf(
                     'The given parameter $joins should be of type ' .
-                    '\Chamilo\Libraries\Storage\Query\Joins but an object of type %s was given',
-                    gettype($joins)
-                )
-            );
+                         '\Chamilo\Libraries\Storage\Query\Joins but an object of type %s was given', 
+                        gettype($joins)));
         }
-
+        
         $this->condition = $condition;
         $this->joins = $joins;
     }
 
     /**
      * Get the condition to be applied to the action
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_condition()
@@ -78,7 +74,7 @@ abstract class DataClassParameters implements Hashable
 
     /**
      * Set the condition to be applied to the action
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public function set_condition($condition)
@@ -88,7 +84,7 @@ abstract class DataClassParameters implements Hashable
 
     /**
      * Get the join data classes to be applied to the action
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\Query\Joins
      */
     public function get_joins()
@@ -98,7 +94,7 @@ abstract class DataClassParameters implements Hashable
 
     /**
      * Set the join data classes to be applied to the action
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      */
     public function set_joins($joins)
@@ -109,11 +105,11 @@ abstract class DataClassParameters implements Hashable
     public function getHashParts()
     {
         $hashParts = array();
-
-        $hashParts[] = static :: class_name();
+        
+        $hashParts[] = static::class_name();
         $hashParts[] = ($this->get_condition() instanceof Condition ? $this->get_condition()->getHashParts() : null);
         $hashParts[] = ($this->get_joins() instanceof Joins ? $this->get_joins()->getHashParts() : null);
-
+        
         return $hashParts;
     }
 
@@ -123,6 +119,6 @@ abstract class DataClassParameters implements Hashable
      */
     public static function package()
     {
-        return static :: context();
+        return static::context();
     }
 }

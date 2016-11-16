@@ -43,7 +43,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
                 new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
         $configurablePathBuilder = new ConfigurablePathBuilder(
             $configurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
-
+        
         return $configurablePathBuilder->getCachePath($this->getCachePathNamespace());
     }
 
@@ -57,7 +57,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
         {
             $this->cacheProvider = $this->setupCacheProvider();
         }
-
+        
         return $this->cacheProvider;
     }
 
@@ -109,7 +109,7 @@ abstract class DoctrineCacheService extends IdentifiableCacheService
                 throw new \Exception('CacheError');
             }
         }
-
+        
         return $this->getCacheProvider()->fetch((string) $identifier);
     }
 }

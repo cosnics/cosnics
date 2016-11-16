@@ -29,10 +29,10 @@ class JavascriptCacheService extends AsseticCacheService
     protected function getAssets()
     {
         $assets = array();
-
+        
         $javascriptPath = $this->getPathUtilities()->getJavascriptPath('Chamilo\Libraries');
         $pluginPath = $javascriptPath . 'Plugin/';
-
+        
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.browser.min.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Bootstrap/bootstrap.min.js');
@@ -52,7 +52,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jsuggest.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.jeditable.mini.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.query.js');
-//        $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.simplemodal.js');
+        // $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.simplemodal.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.tree_menu.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'Jquery/jquery.timepicker.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $pluginPath . 'AngularJS/angular.min.js');
@@ -63,7 +63,7 @@ class JavascriptCacheService extends AsseticCacheService
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Notifications.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Help.js');
         $assets[] = new FileAsset($this->getPathUtilities(), $javascriptPath . 'Visit.js');
-
+        
         return $assets;
     }
 

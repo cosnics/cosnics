@@ -22,21 +22,21 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
     public function renderDropdown()
     {
         $html = array();
-
+        
         $linkHtml = array();
-
+        
         $linkHtml[] = '<a';
         $linkHtml[] = 'class="' . implode(' ', $this->determineDropdownActionClasses()) . '"';
         $linkHtml[] = $this->renderDropdownAttributes();
         $linkHtml[] = '>';
-
+        
         $html[] = implode(' ', $linkHtml);
         $html[] = $this->renderCaret();
-        $html[] = '<span class="sr-only">' . Translation :: get('ToggleDropdown') . '</span>';
+        $html[] = '<span class="sr-only">' . Translation::get('ToggleDropdown') . '</span>';
         $html[] = '</a>';
-
+        
         $html[] = $this->renderSubButtons();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -47,12 +47,12 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
     public function determineDropdownActionClasses()
     {
         $classes = array();
-
+        
         $classes[] = 'btn';
         $classes[] = 'btn-default';
         $classes[] = 'dropdown-toggle';
         $classes[] = $this->getButton()->getClasses();
-
+        
         return $classes;
     }
 }

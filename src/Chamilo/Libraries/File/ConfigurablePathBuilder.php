@@ -131,7 +131,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredArchivePath = $configuredPaths['archive_path'];
         }
-
+        
         return $this->configuredArchivePath;
     }
 
@@ -146,7 +146,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredCachePath = $configuredPaths['cache_path'];
         }
-
+        
         return $this->configuredCachePath;
     }
 
@@ -161,7 +161,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredGarbagePath = $configuredPaths['garbage_path'];
         }
-
+        
         return $this->configuredGarbagePath;
     }
 
@@ -176,7 +176,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredHotpotatoesPath = $configuredPaths['hotpotatoes_path'];
         }
-
+        
         return $this->configuredHotpotatoesPath;
     }
 
@@ -191,7 +191,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredLogsPath = $configuredPaths['logs_path'];
         }
-
+        
         return $this->configuredLogsPath;
     }
 
@@ -206,7 +206,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredRepositoryPath = $configuredPaths['repository_path'];
         }
-
+        
         return $this->configuredRepositoryPath;
     }
 
@@ -221,7 +221,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredScormPath = $configuredPaths['scorm_path'];
         }
-
+        
         return $this->configuredScormPath;
     }
 
@@ -236,7 +236,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredTempPath = $configuredPaths['temp_path'];
         }
-
+        
         return $this->configuredTempPath;
     }
 
@@ -251,7 +251,7 @@ class ConfigurablePathBuilder
             $configuredPaths = $this->getConfiguredPaths();
             $this->configuredUserPicturesPath = $configuredPaths['userpictures_path'];
         }
-
+        
         return $this->configuredUserPicturesPath;
     }
 

@@ -17,27 +17,27 @@ class HtmlEditorInstanceComponent extends \Chamilo\Libraries\Ajax\Manager
 
     public function run()
     {
-
+        
         // Getting some properties from the Ajax post
-        $name = Request :: post('name');
-        $label = Request :: post('label');
-
-        $options = Request :: post('options');
+        $name = Request::post('name');
+        $label = Request::post('label');
+        
+        $options = Request::post('options');
         $options = str_replace('\"', '"', $options);
         $options = json_decode($options, true);
-
-        $attributes = Request :: post('attributes');
+        
+        $attributes = Request::post('attributes');
         $attributes = str_replace('\"', '"', $attributes);
         $attributes = json_decode($attributes, true);
-
-        $html_editor = FormValidatorHtmlEditor :: factory(
-            LocalSetting :: getInstance()->get('html_editor'),
-            $name,
-            $label,
-            false,
-            $options,
+        
+        $html_editor = FormValidatorHtmlEditor::factory(
+            LocalSetting::getInstance()->get('html_editor'), 
+            $name, 
+            $label, 
+            false, 
+            $options, 
             $attributes);
-
+        
         echo $html_editor->render();
     }
 }

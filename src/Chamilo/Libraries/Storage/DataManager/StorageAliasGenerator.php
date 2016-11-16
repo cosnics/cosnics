@@ -40,7 +40,7 @@ class StorageAliasGenerator
     public function __construct(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
-
+        
         foreach ($this->get_types() as $type)
         {
             $this->aliases[$type] = array();
@@ -124,26 +124,26 @@ class StorageAliasGenerator
         {
             $possible_name = 'alias_';
             $parts = explode('_', $table_name);
-
+            
             foreach ($parts as $part)
             {
                 $possible_name .= $part{0};
             }
-
+            
             if (in_array($possible_name, $this->aliases[self::TYPE_TABLE]))
             {
                 $original_name = $possible_name;
                 $index = 'a';
-
+                
                 while (in_array($possible_name, $this->aliases[self::TYPE_TABLE]))
                 {
                     $possible_name = $original_name . '_' . $index;
                     $index ++;
                 }
             }
-
+            
             $this->aliases[self::TYPE_TABLE][$table_name] = $possible_name;
-
+            
             return $possible_name;
         }
     }
@@ -158,14 +158,14 @@ class StorageAliasGenerator
     {
         $possible_name = '';
         $parts = explode('_', $table_name);
-
+        
         foreach ($parts as $part)
         {
             $possible_name .= $part{0};
         }
-
+        
         $possible_name = $possible_name . '_' . $column;
-
+        
         if (! array_key_exists($possible_name, $this->aliases[self::TYPE_CONSTRAINT]))
         {
             $this->aliases[self::TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
@@ -175,13 +175,13 @@ class StorageAliasGenerator
         {
             $original_name = $possible_name;
             $index = 'a';
-
+            
             while (array_key_exists($possible_name, $this->aliases[self::TYPE_CONSTRAINT]))
             {
                 $possible_name = $original_name . '_' . $index;
                 $index ++;
             }
-
+            
             $this->aliases[self::TYPE_CONSTRAINT][$possible_name] = serialize(array($table_name, $column));
             return $possible_name;
         }

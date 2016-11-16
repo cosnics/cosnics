@@ -14,19 +14,19 @@ class DataClassResultSet extends \Chamilo\Libraries\Storage\ResultSet\DataClassR
 
     /**
      * Create a new DoctrineResultSet for handling a set of records
-     *
+     * 
      * @param \Doctrine\DBAL\Driver\PDOStatement $handle
      * @param $class_name string
      */
     public function __construct($handle, $class_name)
     {
         $objects = array();
-
-        while ($record = $handle->fetch(\PDO :: FETCH_ASSOC))
+        
+        while ($record = $handle->fetch(\PDO::FETCH_ASSOC))
         {
             $objects[] = $this->get_object($class_name, $this->process_record($record));
         }
-
-        parent :: __construct($class_name, $objects);
+        
+        parent::__construct($class_name, $objects);
     }
 }

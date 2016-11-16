@@ -89,35 +89,35 @@ class PackageBundles extends BasicBundles
     {
         foreach ($this->getPackageNamespaces() as $packageNamespace)
         {
-
+            
             $packageNamespaceAncestors = $this->determinePackageNamespaceAncestors($packageNamespace);
             $packageNamespaceParent = array_shift($packageNamespaceAncestors);
-
+            
             if (! isset($this->packageLists[$packageNamespaceParent]))
             {
                 $this->setPackageList($packageNamespaceParent);
             }
-
+            
             if ($this->isRelevantPackage($packageNamespace) &&
                  ! $this->packageLists[$packageNamespaceParent]->has_package($packageNamespace))
             {
                 $this->packageLists[$packageNamespaceParent]->add_package($this->packageDefinitions[$packageNamespace]);
             }
-
+            
             $previousPackageList = $this->packageLists[$packageNamespaceParent];
-
+            
             foreach ($packageNamespaceAncestors as $packageNamespaceAncestor)
             {
                 if (! isset($this->packageLists[$packageNamespaceAncestor]))
                 {
                     $this->setPackageList($packageNamespaceAncestor);
                 }
-
+                
                 if (! $this->packageLists[$packageNamespaceAncestor]->has_child($previousPackageList->get_type()))
                 {
                     $this->packageLists[$packageNamespaceAncestor]->add_child($previousPackageList);
                 }
-
+                
                 $previousPackageList = $this->packageLists[$packageNamespaceAncestor];
             }
         }
@@ -134,7 +134,7 @@ class PackageBundles extends BasicBundles
              \Chamilo\Configuration\Configuration::is_registered($packageNamespace);
         $isAvailable = $this->mode == PackageList::MODE_AVAILABLE &&
              ! \Chamilo\Configuration\Configuration::is_registered($packageNamespace);
-
+        
         return $isAll || $isInstalled || $isAvailable;
     }
 
@@ -154,9 +154,9 @@ class PackageBundles extends BasicBundles
             $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($packageNamespace);
             $packageImageNamespace = $packageNamespace;
         }
-
+        
         $iconPath = Theme::getInstance()->getImagePath($packageImageNamespace, 'Logo/16', 'png', false);
-
+        
         if (file_exists($iconPath))
         {
             $iconPath = Theme::getInstance()->getImagePath($packageImageNamespace, 'Logo/16');
@@ -165,7 +165,7 @@ class PackageBundles extends BasicBundles
         {
             $iconPath = null;
         }
-
+        
         $this->packageLists[$packageNamespace] = new PackageList($packageNamespace, $typeName, $iconPath);
     }
 
@@ -179,13 +179,13 @@ class PackageBundles extends BasicBundles
         $packageNamespacePath = array();
         $packageParentNamespace = $this->determinePackageParentNamespace($packageNamespace);
         $packagePath[] = $packageParentNamespace;
-
+        
         while ($packageParentNamespace != PackageList::ROOT)
         {
             $packageParentNamespace = $this->determinePackageParentNamespace($packageParentNamespace);
             $packagePath[] = $packageParentNamespace;
         }
-
+        
         return $packagePath;
     }
 

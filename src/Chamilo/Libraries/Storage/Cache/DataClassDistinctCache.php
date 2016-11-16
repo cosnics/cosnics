@@ -29,7 +29,7 @@ class DataClassDistinctCache extends DataClassCache
         {
             throw new Exception('Illegal parameters passed to the DataClassDistinctCache');
         }
-
+        
         if (! is_array($property_values))
         {
             $type = is_object($property_values) ? get_class($property_values) : gettype($property_values);
@@ -37,12 +37,12 @@ class DataClassDistinctCache extends DataClassCache
                 'The DataClassDistinctCache cache only allows for caching of string arrays. Currently trying to add: ' .
                      $type . '.');
         }
-
+        
         if (! DataClassCache::exists($class, $parameters))
         {
             DataClassCache::set_cache($class, $parameters->hash(), $property_values);
         }
-
+        
         return true;
     }
 }

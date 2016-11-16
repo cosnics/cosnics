@@ -27,14 +27,14 @@ class ComparisonConditionTranslator extends ConditionTranslator
         else
         {
             $operatorString = $this->translateOperator($this->getCondition()->get_operator());
-
+            
             return $this->translateCondition($this->getCondition(), $operatorString);
         }
     }
 
     /**
      * Translates the operator to the correct string
-     *
+     * 
      * @param integer $condition_operator
      * @return string
      */
@@ -60,26 +60,26 @@ class ComparisonConditionTranslator extends ConditionTranslator
             default :
                 die('Unknown operator for Comparison condition');
         }
-
+        
         return $translatedOperator;
     }
 
     /**
      * Translates an equality condition with an empty value
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return string
      */
     private function translateEqualityConditionWithEmptyValue($condition)
     {
         return $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
+            $this->getDataClassDatabase(), 
             $condition->get_name()) . ' IS NULL';
     }
 
     /**
      * Translates the (in)equalitycondition with the given operator_string
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param string $operator_string
      * @return string
@@ -87,10 +87,9 @@ class ComparisonConditionTranslator extends ConditionTranslator
     private function translateCondition($condition, $operatorString)
     {
         return $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $condition->get_name()) . ' ' . $operatorString . ' ' .
-             $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $condition->get_value());
+            $this->getDataClassDatabase(), 
+            $condition->get_name()) . ' ' . $operatorString . ' ' . $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(), 
+            $condition->get_value());
     }
 }

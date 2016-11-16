@@ -69,22 +69,21 @@ abstract class QueryAuthentication extends Authentication
 
     /**
      * Retrieves a user by a given security token
-     *
+     * 
      * @param $securityToken
-     *
      * @return User
      *
      * @throws AuthenticationException
      */
     protected function retrieveUserBySecurityToken($securityToken)
     {
-        $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_user_by_security_token($securityToken);
-
-        if (!$user instanceof User)
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_user_by_security_token($securityToken);
+        
+        if (! $user instanceof User)
         {
-            throw new AuthenticationException(Translation:: get('InvalidSecurityToken'));
+            throw new AuthenticationException(Translation::get('InvalidSecurityToken'));
         }
-
+        
         return $user;
     }
 }

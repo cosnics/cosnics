@@ -30,19 +30,17 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
      */
     public function __construct($condition = null, $property = array(), $having = null, Joins $joins = null)
     {
-        parent :: __construct($condition, $property, $joins);
-
-        if(!is_null($having) && !$having instanceof Condition)
+        parent::__construct($condition, $property, $joins);
+        
+        if (! is_null($having) && ! $having instanceof Condition)
         {
             throw new \Exception(
                 sprintf(
                     'The given parameter $having should be of type ' .
-                    '\Chamilo\Libraries\Storage\Query\Condition\Condition but an object of type %s was given',
-                    gettype($having)
-                )
-            );
+                         '\Chamilo\Libraries\Storage\Query\Condition\Condition but an object of type %s was given', 
+                        gettype($having)));
         }
-
+        
         $this->having = $having;
     }
 
@@ -70,16 +68,16 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
      */
     public function getHashParts()
     {
-        $hashParts = parent :: getHashParts();
-
+        $hashParts = parent::getHashParts();
+        
         $hashParts[] = $this->get_having();
-
+        
         return $hashParts;
     }
 
     /**
      * Throw an exception if the DataClassPropertyParameters object is invalid
-     *
+     * 
      * @throws \Exception
      */
     public static function invalid()

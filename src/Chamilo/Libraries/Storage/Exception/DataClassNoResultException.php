@@ -15,21 +15,21 @@ class DataClassNoResultException extends \Exception
 
     /**
      * The fully qualified class name of the DataClass object retrieval for which no result was found
-     *
+     * 
      * @var string
      */
     private $class_name;
 
     /**
      * The parameters of the DataClass object retrieval for which no result was found
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\\Parameters\DataClassResultParameters
      */
     private $parameters;
 
     /**
      * Constructor
-     *
+     * 
      * @param string $class_name
      * @param \Chamilo\Libraries\Storage\\Parameters\DataClassRetrieveParameters $parameters
      * @param string $message
@@ -40,17 +40,17 @@ class DataClassNoResultException extends \Exception
     {
         $this->class_name = $class_name;
         $this->parameters = $parameters;
-
-        $message = Translation :: get(
-            'DataClassNoResultException',
+        
+        $message = Translation::get(
+            'DataClassNoResultException', 
             array('CLASS_NAME' => $class_name, 'MESSAGE' => $message));
-
-        parent :: __construct($message, $code, $previous);
+        
+        parent::__construct($message, $code, $previous);
     }
 
     /**
      * Get the fully qualified class name of the DataClass object retrieval for which no result was found
-     *
+     * 
      * @return string
      */
     public function get_class_name()
@@ -60,7 +60,7 @@ class DataClassNoResultException extends \Exception
 
     /**
      * Set the fully qualified class name of the DataClass object retrieval for which no result was found
-     *
+     * 
      * @param $class_name string
      */
     public function set_class_name($class_name)
@@ -70,7 +70,7 @@ class DataClassNoResultException extends \Exception
 
     /**
      * Get the parameters of the DataClass object retrieval for which no result was found
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\\Parameters\DataClassRetrieveParameters
      */
     public function get_parameters()
@@ -80,7 +80,7 @@ class DataClassNoResultException extends \Exception
 
     /**
      * Set the parameters of the DataClass object retrieval for which no result was found
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\\Parameters\DataClassRetrieveParameters $parameters
      */
     public function set_parameters($parameters)

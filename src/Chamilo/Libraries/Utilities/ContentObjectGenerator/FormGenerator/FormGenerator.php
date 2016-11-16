@@ -34,7 +34,7 @@ class FormGenerator
         $this->template = new MyTemplate();
         $this->template->set_rootdir(__DIR__);
         
-        $location = Path :: get_repository_path() . 'lib/content_object/' . $xml_definition['name'];
+        $location = Path::get_repository_path() . 'lib/content_object/' . $xml_definition['name'];
         
         if (! is_dir($location))
         {
@@ -45,7 +45,7 @@ class FormGenerator
         
         if ($file)
         {
-            $classname = (string) StringUtilities :: getInstance()->createString($xml_definition['name'])->upperCamelize();
+            $classname = (string) StringUtilities::getInstance()->createString($xml_definition['name'])->upperCamelize();
             
             $this->template->set_filenames(array('form' => 'form.template'));
             $this->template->assign_vars(
@@ -55,8 +55,8 @@ class FormGenerator
             {
                 if ($property !== 'id')
                 {
-                    $property_lower = (string) StringUtilities :: getInstance()->createString($property)->underscored();
-                    $property_camelcase = (string) StringUtilities :: getInstance()->createString($property)->upperCamelize();
+                    $property_lower = (string) StringUtilities::getInstance()->createString($property)->underscored();
+                    $property_camelcase = (string) StringUtilities::getInstance()->createString($property)->upperCamelize();
                     $property_const = 'PROPERTY_' . strtoupper($property);
                     
                     $this->template->assign_block_vars(

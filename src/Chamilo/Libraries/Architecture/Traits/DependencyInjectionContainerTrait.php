@@ -16,7 +16,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * The dependency injection container
-     *
+     * 
      * @var ContainerInterface
      */
     protected $container;
@@ -34,7 +34,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Sets the dependency injection container
-     *
+     * 
      * @param ContainerInterface $container
      */
     public function setContainer(ContainerInterface $container)
@@ -44,7 +44,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Returns the dependency injection container
-     *
+     * 
      * @return ContainerInterface
      */
     public function getContainer()
@@ -54,7 +54,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Returns a service from the dependency injection container
-     *
+     * 
      * @param string $service_id
      *
      * @return object
@@ -66,7 +66,7 @@ trait DependencyInjectionContainerTrait
 
     /**
      * Returns the request
-     *
+     * 
      * @return \Symfony\Component\HttpFoundation\Request
      */
     public function getRequest()

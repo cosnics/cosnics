@@ -55,17 +55,17 @@ class ConnectionFactory
     public function getConnection()
     {
         $dataSourceName = $this->getDataSourceName();
-
+        
         $connectionParameters = array(
-            'dbname' => $dataSourceName->get_database(),
-            'user' => $dataSourceName->get_username(),
-            'password' => $dataSourceName->get_password(),
-            'host' => $dataSourceName->get_host(),
-            'driverClass' => $dataSourceName->get_driver(true),
+            'dbname' => $dataSourceName->get_database(), 
+            'user' => $dataSourceName->get_username(), 
+            'password' => $dataSourceName->get_password(), 
+            'host' => $dataSourceName->get_host(), 
+            'driverClass' => $dataSourceName->get_driver(true), 
             'charset' => 'UTF8');
-
+        
         $connection = DriverManager::getConnection($connectionParameters, new \Doctrine\DBAL\Configuration());
-
+        
         try
         {
             return $connection;

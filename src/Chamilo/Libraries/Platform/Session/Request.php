@@ -5,23 +5,23 @@ use Chamilo\Libraries\Platform\Security;
 
 /**
  * $Id: request.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
+ * 
  * @package common.session
  */
 class Request
 {
-
+    
     // TODO OO design this class
     // when OO designing this class, $security should be considered as a dependency
     public static $security;
 
     public static function get_security()
     {
-        if (self :: $security === null)
+        if (self::$security === null)
         {
-            self :: $security = new Security();
+            self::$security = new Security();
         }
-        return self :: $security;
+        return self::$security;
     }
 
     public static function get($variable, $default = null)
@@ -29,9 +29,9 @@ class Request
         if (isset($_GET[$variable]))
         {
             // TODO: Add the necessary security filters if and where necessary
-            return self :: get_security()->remove_XSS($_GET[$variable]);
+            return self::get_security()->remove_XSS($_GET[$variable]);
         }
-
+        
         return $default;
     }
 
@@ -45,9 +45,9 @@ class Request
         if (isset($_POST[$variable]))
         {
             // TODO: Add the necessary security filters if and where necessary
-            return self :: get_security()->remove_XSS($_POST[$variable]);
+            return self::get_security()->remove_XSS($_POST[$variable]);
         }
-
+        
         return null;
     }
 
@@ -58,7 +58,7 @@ class Request
             // TODO: Add the necessary security filters if and where necessary
             return $_SERVER[$variable];
         }
-
+        
         return $default;
     }
 

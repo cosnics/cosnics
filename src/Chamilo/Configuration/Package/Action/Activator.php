@@ -22,33 +22,33 @@ abstract class Activator extends Action
 
     public function run()
     {
-        $registration = \Chamilo\Configuration\Storage\DataManager :: retrieveRegistrationByContext(self :: context());
-
+        $registration = \Chamilo\Configuration\Storage\DataManager::retrieveRegistrationByContext(self::context());
+        
         if (! $registration->is_active())
         {
-
-            $registration->set_status(Registration :: STATUS_ACTIVE);
-
+            
+            $registration->set_status(Registration::STATUS_ACTIVE);
+            
             if (! $registration->update())
             {
-                return $this->failed(Translation :: get('ActivationFailed'));
+                return $this->failed(Translation::get('ActivationFailed'));
             }
             else
             {
-                $this->add_message(self :: TYPE_NORMAL, Translation :: get('ActivationSuccessful'));
+                $this->add_message(self::TYPE_NORMAL, Translation::get('ActivationSuccessful'));
             }
-
+            
             return $this->successful();
         }
         else
         {
-            return $this->failed(Translation :: get('PackageAlreadyActive'));
+            return $this->failed(Translation::get('PackageAlreadyActive'));
         }
     }
 
     /**
      * Creates an application-specific installer.
-     *
+     * 
      * @param $context string The namespace of the package for which we want to start the installer.
      * @param $values string The form values passed on by the wizard.
      */

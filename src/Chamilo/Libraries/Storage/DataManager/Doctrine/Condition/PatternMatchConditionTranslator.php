@@ -29,7 +29,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      * Translates a string with wildcard characters "?" (single character) and "*" (any character sequence) to a SQL
      * pattern for use in a LIKE condition.
      * Should be suitable for any SQL flavor.
-     *
+     * 
      * @param string $string
      * @return string
      */

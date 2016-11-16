@@ -28,7 +28,7 @@ abstract class Hashing
         {
             $type = \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'general', 'hashing_algorithm');
             $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize();
-
+            
             if (class_exists($class))
             {
                 self::$instance = new $class();
@@ -80,10 +80,10 @@ abstract class Hashing
     public static function get_available_types()
     {
         return array(
-            'Haval256' => 'HAVAL-256',
-            'Md5' => 'MD5',
-            'Sha1' => 'SHA-1',
-            'Sha512' => 'SHA-512',
+            'Haval256' => 'HAVAL-256', 
+            'Md5' => 'MD5', 
+            'Sha1' => 'SHA-1', 
+            'Sha512' => 'SHA-512', 
             'Whirlpool' => 'Whirlpool');
     }
 }

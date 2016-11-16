@@ -26,16 +26,16 @@ abstract class Action
     {
         switch ($type)
         {
-            case self :: TYPE_NORMAL :
+            case self::TYPE_NORMAL :
                 $this->message[] = $message;
                 break;
-            case self :: TYPE_CONFIRM :
+            case self::TYPE_CONFIRM :
                 $this->message[] = '<span style="color: green; font-weight: bold;">' . $message . '</span>';
                 break;
-            case self :: TYPE_WARNING :
+            case self::TYPE_WARNING :
                 $this->message[] = '<span style="color: orange; font-weight: bold;">' . $message . '</span>';
                 break;
-            case self :: TYPE_ERROR :
+            case self::TYPE_ERROR :
                 $this->message[] = '<span style="color: red; font-weight: bold;">' . $message . '</span>';
                 break;
             default :
@@ -60,14 +60,14 @@ abstract class Action
 
     public function failed($error_message)
     {
-        $this->add_message(self :: TYPE_ERROR, $error_message);
-        $this->add_message(self :: TYPE_ERROR, Translation :: get($this->get_type() . 'Failed'));
+        $this->add_message(self::TYPE_ERROR, $error_message);
+        $this->add_message(self::TYPE_ERROR, Translation::get($this->get_type() . 'Failed'));
         return false;
     }
 
     public function successful()
     {
-        $this->add_message(self :: TYPE_CONFIRM, Translation :: get($this->get_type() . 'Successful'));
+        $this->add_message(self::TYPE_CONFIRM, Translation::get($this->get_type() . 'Successful'));
         return true;
     }
 
@@ -82,12 +82,12 @@ abstract class Action
 
     public function get_type()
     {
-        return ClassnameUtilities :: getInstance()->getClassnameFromObject($this);
+        return ClassnameUtilities::getInstance()->getClassnameFromObject($this);
     }
 
     public function get_path()
     {
-        return Path :: getInstance()->namespaceToFullPath(static :: package());
+        return Path::getInstance()->namespaceToFullPath(static::package());
     }
 
     /**
@@ -96,6 +96,6 @@ abstract class Action
      */
     public static function package()
     {
-        return ClassnameUtilities :: getInstance()->getNamespaceParent(static :: context());
+        return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
     }
 }

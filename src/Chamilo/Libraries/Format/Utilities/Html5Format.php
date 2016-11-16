@@ -28,7 +28,7 @@ class Html5Format
 
     public function get_extensions()
     {
-        return array_merge(self :: get_audio_extensions(), self :: get_video_extensions());
+        return array_merge(self::get_audio_extensions(), self::get_video_extensions());
     }
 
     public static function get_video_mimetypes()
@@ -57,7 +57,7 @@ class Html5Format
 
     function get_mimetypes()
     {
-        return array_merge(self :: get_audio_mimetypes(), self :: get_video_mimetypes());
+        return array_merge(self::get_audio_mimetypes(), self::get_video_mimetypes());
     }
 
     static public 

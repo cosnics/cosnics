@@ -67,7 +67,7 @@ class FormValidatorPage extends FormValidator
      */
     public function __construct($formName, $method = 'post', $target = '', $attributes = null)
     {
-        parent :: __construct($formName, $method, '', $target, $attributes);
+        parent::__construct($formName, $method, '', $target, $attributes);
     }
 
     /**
@@ -190,7 +190,7 @@ class FormValidatorPage extends FormValidator
      */
     public function exportValues($elementList = null, $filterInternal = false)
     {
-        $values = parent :: exportValues($elementList);
+        $values = parent::exportValues($elementList);
         if ($filterInternal)
         {
             foreach (array_keys($values) as $key)

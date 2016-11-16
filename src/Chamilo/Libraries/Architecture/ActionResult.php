@@ -58,7 +58,7 @@ class ActionResult
         $this->context = $context;
         $this->actionType = $actionType;
         $this->entityType = $entityType;
-
+        
         if ($this->hasFailed())
         {
             throw new \Exception($this->getMessage());
@@ -162,45 +162,42 @@ class ActionResult
     public function getMessage()
     {
         $parameters = array();
-        $parameters['ACTION'] = Translation :: get(
-            'ActionResultAction' . $this->getActionType(),
-            array(),
-            $this->getContext());
-
+        $parameters['ACTION'] = Translation::get('ActionResultAction' . $this->getActionType(), array(), $this->getContext());
+        
         if ($this->isSingleAction())
         {
-            $parameters['OBJECT'] = Translation :: get(
-                'ActionResultSingleEntity' . $this->getEntityType(),
-                array(),
+            $parameters['OBJECT'] = Translation::get(
+                'ActionResultSingleEntity' . $this->getEntityType(), 
+                array(), 
                 $this->getContext());
-
+            
             if ($this->hasFailed())
             {
-                return Translation :: get('ActionResultSingleFailureMessage', $parameters);
+                return Translation::get('ActionResultSingleFailureMessage', $parameters);
             }
             else
             {
-                return Translation :: get('ActionResultSingleSuccessMessage', $parameters);
+                return Translation::get('ActionResultSingleSuccessMessage', $parameters);
             }
         }
         else
         {
-            $parameters['OBJECT'] = Translation :: get(
-                'ActionResultMultipleEntity' . $this->getEntityType(),
-                array(),
+            $parameters['OBJECT'] = Translation::get(
+                'ActionResultMultipleEntity' . $this->getEntityType(), 
+                array(), 
                 $this->getContext());
-
+            
             if ($this->hasSucceeded())
             {
-                return Translation :: get('ActionResultMultipleSuccessMessage', $parameters);
+                return Translation::get('ActionResultMultipleSuccessMessage', $parameters);
             }
             elseif ($this->hasFailedCompletely())
             {
-                return Translation :: get('ActionResultMultipleFailureMessage', $parameters);
+                return Translation::get('ActionResultMultipleFailureMessage', $parameters);
             }
             else
             {
-                return Translation :: get('ActionResultSomeFailureMessage', $parameters);
+                return Translation::get('ActionResultSomeFailureMessage', $parameters);
             }
         }
     }

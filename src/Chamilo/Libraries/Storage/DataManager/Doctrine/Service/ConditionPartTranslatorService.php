@@ -41,7 +41,7 @@ class ConditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\Cache\ConditionPartCache $conditionPartCache
      * @param boolean $isQueryCacheEnabled
      */
-    public function __construct(ConditionPartTranslatorFactory $conditionPartTranslatorFactory,
+    public function __construct(ConditionPartTranslatorFactory $conditionPartTranslatorFactory, 
         ConditionPartCache $conditionPartCache, $queryCacheEnabled = true)
     {
         $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
@@ -118,12 +118,12 @@ class ConditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Condition\ConditionTranslator
      */
-    protected function getConditionPartTranslator(DataClassDatabaseInterface $dataClassDatabase,
+    protected function getConditionPartTranslator(DataClassDatabaseInterface $dataClassDatabase, 
         ConditionPart $conditionPart)
     {
         return $this->getConditionPartTranslatorFactory()->getConditionPartTranslator(
-            $this,
-            $dataClassDatabase,
+            $this, 
+            $dataClassDatabase, 
             $conditionPart);
     }
 
@@ -140,10 +140,10 @@ class ConditionPartTranslatorService
             if (! $this->getConditionPartCache()->exists($conditionPart))
             {
                 $this->getConditionPartCache()->set(
-                    $conditionPart,
+                    $conditionPart, 
                     $this->getConditionPartTranslator($dataClassDatabase, $conditionPart)->translate());
             }
-
+            
             return $this->getConditionPartCache()->get($conditionPart);
         }
         else
@@ -169,7 +169,7 @@ class ConditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
      * @return string
      */
-    public function translateConditionVariable(DataClassDatabaseInterface $dataClassDatabase,
+    public function translateConditionVariable(DataClassDatabaseInterface $dataClassDatabase, 
         ConditionVariable $conditionVariable)
     {
         return $this->translateConditionPart($dataClassDatabase, $conditionVariable);

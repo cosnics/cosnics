@@ -20,6 +20,6 @@ abstract class ConditionVariableTranslator extends \Chamilo\Libraries\Storage\Qu
      */
     public static function runTranslator($conditionVariable)
     {
-        return parent :: factory(DataManager :: TYPE_MDB2, $conditionVariable)->translate();
+        return parent::factory(DataManager::TYPE_MDB2, $conditionVariable)->translate();
     }
 }

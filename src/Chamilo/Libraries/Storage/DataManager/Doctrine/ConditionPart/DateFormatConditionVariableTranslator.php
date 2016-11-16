@@ -20,18 +20,18 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $strings = array();
-
+        
         $strings[] = 'FROM_UNIXTIME';
-
+        
         $strings[] = '(';
-
+        
         $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
+            $this->getDataClassDatabase(), 
             $this->getConditionVariable()->get_condition_variable());
         $strings[] = ', ';
         $strings[] = "'" . $this->getConditionVariable()->get_format() . "'";
         $strings[] = ')';
-
+        
         if ($this->getConditionVariable()->get_alias())
         {
             return implode('', $strings) . ' AS ' . $this->getConditionVariable()->get_alias();

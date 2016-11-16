@@ -38,7 +38,7 @@ abstract class ConditionPartTranslator
      * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
      */
-    public function __construct(ConditionPartTranslatorService $conditionPartTranslatorService,
+    public function __construct(ConditionPartTranslatorService $conditionPartTranslatorService, 
         DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart)
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;

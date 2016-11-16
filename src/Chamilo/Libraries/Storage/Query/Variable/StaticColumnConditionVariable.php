@@ -13,6 +13,6 @@ class StaticColumnConditionVariable extends StaticConditionVariable
 
     public function __construct($value, $quote = false)
     {
-        parent :: __construct($value, $quote);
+        parent::__construct($value, $quote);
     }
 }

@@ -14,10 +14,10 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'HTML_QuickForm_extended_checkbox.p
 class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
 {
 
-    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1,
+    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1, 
         $return_value = null)
     {
-        parent :: __construct($elementName, $elementLabel, $text, $attributes, $value, $return_value);
+        parent::__construct($elementName, $elementLabel, $text, $attributes, $value, $return_value);
         $this->_type = 'toggle';
     }
 
@@ -28,11 +28,11 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
     function toHtml()
     {
         $html = array();
-
-        $html[] = parent :: toHtml();
-        $html[] = ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) . 'Toggle.js');
-
+        
+        $html[] = parent::toHtml();
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) . 'Toggle.js');
+        
         return implode(PHP_EOL, $html);
     }
 

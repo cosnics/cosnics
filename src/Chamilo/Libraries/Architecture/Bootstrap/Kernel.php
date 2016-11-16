@@ -83,19 +83,19 @@ class Kernel
      */
     private $user;
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request,
-        FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter,
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, 
+        FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter, 
         ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, User $user = null)
     {
         $this->request = $request;
-
+        
         $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->configurationConsulter = $configurationConsulter;
-
+        
         $this->applicationFactory = $applicationFactory;
-
+        
         $this->exceptionLogger = $exceptionLogger;
-
+        
         $this->user = $user;
     }
 
@@ -264,7 +264,7 @@ class Kernel
         catch (UserException $exception)
         {
             $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
-
+            
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }
@@ -272,7 +272,7 @@ class Kernel
 
     /**
      * Returns a response that renders the not authenticated message
-     *
+     * 
      * @return NotAuthenticatedResponse
      */
     protected function getNotAuthenticatedResponse()
@@ -287,15 +287,15 @@ class Kernel
     protected function configureContext()
     {
         $getContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-
+        
         if (! $getContext)
         {
             $postContext = $this->getRequest()->request->get(Application::PARAM_CONTEXT);
-
+            
             if (! $postContext)
             {
                 $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Home');
-
+                
                 $context = 'Chamilo\Core\Home';
             }
             else
@@ -307,15 +307,15 @@ class Kernel
         {
             $context = $getContext;
         }
-
+        
         $this->setContext(Application::context_fallback($context, $this->getFallbackContexts()));
-
+        
         return $this;
     }
 
     /**
      * Returns a list of the available fallback contexts
-     *
+     * 
      * @return array
      */
     protected function getFallbackContexts()
@@ -324,7 +324,7 @@ class Kernel
         $fallbackContexts[] = 'Chamilo\Application\\';
         $fallbackContexts[] = 'Chamilo\Core\\';
         $fallbackContexts[] = 'Chamilo\\';
-
+        
         return $fallbackContexts;
     }
 
@@ -335,15 +335,15 @@ class Kernel
     protected function buildApplication()
     {
         $context = $this->getContext();
-
+        
         if (! isset($context))
         {
             throw new \Exception('Must call configureContext before buildApplication');
         }
-
+        
         $this->setApplication(
             $this->getApplicationFactory()->getApplication($this->getContext(), $this->getApplicationConfiguration()));
-
+        
         return $this;
     }
 
@@ -362,19 +362,19 @@ class Kernel
     protected function runApplication()
     {
         $application = $this->getApplication();
-
+        
         if (! isset($application))
         {
             throw new \Exception('Must call buildApplication before runApplication');
         }
-
+        
         $response = $application->run();
-
+        
         if (! $response instanceof Response)
         {
             $response = new Response($response);
         }
-
+        
         $response->send();
     }
 
@@ -395,14 +395,14 @@ class Kernel
     {
         date_default_timezone_set(
             $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'platform_timezone')));
-
+        
         return $this;
     }
 
     /**
      * Redirects response of Microsoft OAuth 2.0 Authorization workflow to the component which have called
      * MicrosoftClientService::login(...).
-     *
+     * 
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
      *
      * @see MicrosoftClientService::login(...)
@@ -412,7 +412,7 @@ class Kernel
         $code = $this->getRequest()->query->get(self::PARAM_CODE);
         $state = $this->getRequest()->query->get(self::PARAM_STATE);
         $session_state = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
-
+        
         if ($code && $state)
         {
             $stateParameters = (array) unserialize(base64_decode($state));
@@ -421,11 +421,11 @@ class Kernel
             {
                 $stateParameters[self::PARAM_SESSION_STATE] = $session_state;
             }
-
+            
             $redirect = new Redirect($stateParameters);
             $redirect->toUrl();
         }
-
+        
         return $this;
     }
 
@@ -437,14 +437,14 @@ class Kernel
     protected function checkAuthentication()
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName(
-            $this->getContext(),
+            $this->getContext(), 
             $this->getApplicationConfiguration());
         $applicationRequiresAuthentication = ! is_subclass_of(
-            $applicationClassName,
+            $applicationClassName, 
             'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
-
+        
         $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfigurationConsulter());
-
+        
         if ($applicationRequiresAuthentication)
         {
             if (! $authenticationValidator->validate())
@@ -452,7 +452,7 @@ class Kernel
                 throw new NotAuthenticatedException(true);
             }
         }
-
+        
         return $this;
     }
 
@@ -463,36 +463,36 @@ class Kernel
     protected function traceVisit()
     {
         $applicationClassName = $this->getApplicationFactory()->getClassName(
-            $this->getContext(),
+            $this->getContext(), 
             $this->getApplicationConfiguration());
         $applicationRequiresTracing = ! is_subclass_of(
-            $applicationClassName,
+            $applicationClassName, 
             'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');
-
+        
         if ($applicationRequiresTracing)
         {
             if ($this->getUser() instanceof User)
             {
                 Event::trigger(
-                    'Online',
-                    \Chamilo\Core\Admin\Manager::context(),
+                    'Online', 
+                    \Chamilo\Core\Admin\Manager::context(), 
                     array('user' => $this->getUser()->get_id()));
-
+                
                 $requestUri = $this->getRequest()->server->get('REQUEST_URI');
-
+                
                 if ($this->getRequest()->query->get(Application::PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
                      $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
                 {
                     $return = Event::trigger(
-                        'Enter',
-                        \Chamilo\Core\User\Manager::context(),
+                        'Enter', 
+                        \Chamilo\Core\User\Manager::context(), 
                         array(
-                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
+                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'], 
                             \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_USER_ID => $this->getUser()->get_id()));
                 }
             }
         }
-
+        
         return $this;
     }
 }

@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 /**
  * Extension on the dependency injection container.
  * Loads local services and parameters for this package.
- *
+ * 
  * @see http://symfony.com/doc/current/components/dependency_injection/compilation.html
  *
  * @package Chamilo\Libraries\DependencyInjection
@@ -27,7 +27,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
     /**
      * Loads a specific configuration.
-     *
+     * 
      * @param string[] $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container A ContainerBuilder instance
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -35,11 +35,11 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function load(array $configuration, ContainerBuilder $container)
     {
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-
+        
         $xmlFileLoader = new XmlFileLoader(
-            $container,
+            $container, 
             new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Libraries') . 'DependencyInjection'));
-
+        
         $xmlFileLoader->load('architecture.xml');
         $xmlFileLoader->load('cache.xml');
         $xmlFileLoader->load('file.xml');
@@ -51,14 +51,14 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('translation.xml');
         $xmlFileLoader->load('utilities.xml');
         $xmlFileLoader->load('vendor.xml');
-
+        
         // Console configuration
         $xmlFileLoader->load('console.xml');
     }
 
     /**
      * Registers the compiler passes in the container
-     *
+     * 
      * @param ContainerBuilder $container
      */
     public function registerCompilerPasses(ContainerBuilder $container)
@@ -69,7 +69,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.
-     *
+     * 
      * @return string
      */
     public function getAlias()

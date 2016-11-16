@@ -23,12 +23,12 @@ abstract class FullRenderer extends ViewRenderer
     public function renderMiniMonth()
     {
         $renderer = new MiniMonthRenderer(
-            $this->getDataProvider(),
-            $this->getLegend(),
-            $this->getDisplayTime(),
-            null,
+            $this->getDataProvider(), 
+            $this->getLegend(), 
+            $this->getDisplayTime(), 
+            null, 
             null);
-
+        
         return $renderer->render();
     }
 
@@ -42,7 +42,7 @@ abstract class FullRenderer extends ViewRenderer
         {
             $this->form = new JumpForm($this->determineNavigationUrl(), $this->getDisplayTime());
         }
-
+        
         return $this->form;
     }
 
@@ -71,43 +71,43 @@ abstract class FullRenderer extends ViewRenderer
     public function render()
     {
         $html = array();
-
+        
         $html[] = '<div class="col-xs-12 col-lg-10 table-calendar-main">';
-
+        
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12 col-lg-4">';
         $html[] = '<div class="pull-left">';
         $html[] = $this->renderNavigation();
         $html[] = '</div>';
-
+        
         $html[] = '<div class="table-calendar-current-time pull-left">';
         $html[] = '<h4>';
         $html[] = $this->renderTitle();
         $html[] = '</h4>';
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         $html[] = '<div class="col-xs-12 col-lg-8">';
         $html[] = '<div class="pull-right">';
         $html[] = $this->renderViewActions();
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         $html[] = $this->renderFullCalendar();
         $html[] = '</div>';
-
+        
         $html[] = '<div class="col-xs-12 col-lg-2 table-calendar-sidebar">';
         $html[] = $this->renderMiniMonth();
         $html[] = $this->getLegend()->render();
         $html[] = $this->getJumpForm()->render();
         $html[] = '</div>';
-
+        
         $html[] = '<div class="clearfix"></div>';
-
+        
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
-
+        
         return implode(PHP_EOL, $html);
     }
 }

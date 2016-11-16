@@ -22,27 +22,27 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         $strings = array();
         switch ($this->get_condition_variable()->get_function())
         {
-            case FunctionConditionVariable :: SUM :
+            case FunctionConditionVariable::SUM :
                 $strings[] = 'SUM';
                 break;
-            case FunctionConditionVariable :: COUNT :
+            case FunctionConditionVariable::COUNT :
                 $strings[] = 'COUNT';
                 break;
-            case FunctionConditionVariable :: MIN :
+            case FunctionConditionVariable::MIN :
                 $strings[] = 'MIN';
                 break;
-            case FunctionConditionVariable :: MAX :
+            case FunctionConditionVariable::MAX :
                 $strings[] = 'MAX';
                 break;
-            case FunctionConditionVariable :: DISTINCT :
+            case FunctionConditionVariable::DISTINCT :
                 $strings[] = 'DISTINCT';
                 break;
-            case FunctionConditionVariable :: AVERAGE :
+            case FunctionConditionVariable::AVERAGE :
                 $strings[] = 'AVG';
                 break;
         }
-
-        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
+        
+        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable::DISTINCT)
         {
             $strings[] = '(';
         }
@@ -50,14 +50,14 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         {
             $strings[] = ' ';
         }
-
-        $strings[] = static :: render($this->get_condition_variable()->get_condition_variable());
-
-        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable :: DISTINCT)
+        
+        $strings[] = static::render($this->get_condition_variable()->get_condition_variable());
+        
+        if ($this->get_condition_variable()->get_function() !== FunctionConditionVariable::DISTINCT)
         {
             $strings[] = ')';
         }
-
+        
         if ($this->get_condition_variable()->get_alias())
         {
             $value = implode('', $strings) . ' AS ' . $this->get_condition_variable()->get_alias();
@@ -66,7 +66,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         {
             $value = implode('', $strings);
         }
-
+        
         return $value;
     }
 }

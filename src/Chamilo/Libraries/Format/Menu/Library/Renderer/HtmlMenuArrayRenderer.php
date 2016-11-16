@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Menu\Library\Renderer;
 
 /**
  * Originaly a PEAR library
- *
+ * 
  * @package Chamilo\Libraries\Format\Menu\Library\Renderer
  * @author Alex Vorobiev <sasha@mathforum.com>
  * @author Ulf Wendel <ulf.wendel@phpdoc.de>
@@ -57,7 +57,7 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
 
     /**
      * Returns the resultant array
-     *
+     * 
      * @return array
      */
     public function toArray()

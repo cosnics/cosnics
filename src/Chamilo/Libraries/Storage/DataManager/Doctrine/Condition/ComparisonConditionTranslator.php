@@ -23,7 +23,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
     public function translate()
     {
         $operator_string = $this->translate_operator($this->get_condition()->get_operator());
-
+        
         // if the operator is an equality operator and no value is given, translate to 'is null' equality condition
         if ($this->get_condition()->get_operator() == ComparisonCondition::EQUAL &&
              is_null($this->get_condition()->get_value()))
@@ -38,7 +38,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
 
     /**
      * Translates the operator to the correct string
-     *
+     * 
      * @param integer $condition_operator
      * @return string
      */
@@ -64,13 +64,13 @@ class ComparisonConditionTranslator extends ConditionTranslator
             default :
                 die('Unknown operator for Comparison condition');
         }
-
+        
         return $translated_operator;
     }
 
     /**
      * Translates an equality condition with an empty value
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return string
      */
@@ -81,7 +81,7 @@ class ComparisonConditionTranslator extends ConditionTranslator
 
     /**
      * Translates the (in)equalitycondition with the given operator_string
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param string $operator_string
      * @return string

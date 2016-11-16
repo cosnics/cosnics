@@ -6,7 +6,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 /**
  * Describes the group by functionality of a query.
  * Uses ConditionVariable to define the group_by's
- *
+ * 
  * @package Chamilo\Libraries\Storage\Query
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -19,7 +19,7 @@ class GroupBy implements Hashable
 
     /**
      * List of ConditionVariables to group by
-     *
+     * 
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
     private $group_by;
@@ -44,7 +44,7 @@ class GroupBy implements Hashable
 
     /**
      * Adds a group by
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $group_by
      */
     public function add($group_by)
@@ -55,14 +55,14 @@ class GroupBy implements Hashable
     public function getHashParts()
     {
         $hashes = array();
-
+        
         foreach ($this->get() as $group_by)
         {
             $hashes[] = $group_by->getHashParts();
         }
-
+        
         sort($hashes);
-
+        
         return $hashes;
     }
 }

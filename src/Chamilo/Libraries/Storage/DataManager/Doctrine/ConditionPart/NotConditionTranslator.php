@@ -19,13 +19,13 @@ class NotConditionTranslator extends ConditionTranslator
     public function translate()
     {
         $string = array();
-
+        
         $string[] = 'NOT (';
         $string[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
+            $this->getDataClassDatabase(), 
             $this->getCondition()->get_condition());
         $string[] = ')';
-
+        
         return implode('', $string);
     }
 }

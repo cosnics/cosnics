@@ -77,23 +77,23 @@ class BasicBundles
     private function discoverPackages($rootNamespace)
     {
         $blacklist = $this->getBlacklistedFolders();
-        $rootNamespace = $rootNamespace == PackageList :: ROOT ? '' : $rootNamespace;
-
-        $path = Path :: getInstance()->namespaceToFullPath($rootNamespace);
-
-        $folders = Filesystem :: get_directory_content($path, Filesystem :: LIST_DIRECTORIES, false);
-
+        $rootNamespace = $rootNamespace == PackageList::ROOT ? '' : $rootNamespace;
+        
+        $path = Path::getInstance()->namespaceToFullPath($rootNamespace);
+        
+        $folders = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
+        
         foreach ($folders as $folder)
         {
             if (! in_array($folder, $blacklist) && substr($folder, 0, 1) != '.')
             {
                 $folderNamespace = ($rootNamespace ? $rootNamespace . '\\' : '') . $folder;
-
+                
                 if ($this->verifyPackage($folderNamespace))
                 {
                     $this->addPackageNamespace($folderNamespace);
                 }
-
+                
                 $this->discoverPackages($folderNamespace);
             }
         }
@@ -115,7 +115,7 @@ class BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $packageInfoPath = Path :: getInstance()->namespaceToFullPath($folderNamespace) . '/package.info';
+        $packageInfoPath = Path::getInstance()->namespaceToFullPath($folderNamespace) . '/package.info';
         return file_exists($packageInfoPath);
     }
 }

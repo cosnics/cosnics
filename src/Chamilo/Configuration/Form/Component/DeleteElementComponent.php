@@ -26,49 +26,49 @@ class DeleteElementComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_DYNAMIC_FORM_ELEMENT_ID);
-
+        $ids = Request::get(self::PARAM_DYNAMIC_FORM_ELEMENT_ID);
+        
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-
+        
         if (! is_array($ids))
         {
             $ids = array($ids);
         }
-
+        
         if (count($ids) > 0)
         {
             $failures = 0;
-
+            
             foreach ($ids as $id)
             {
-                $dynamic_form_element = DataManager :: retrieve_dynamic_form_elements(
+                $dynamic_form_element = DataManager::retrieve_dynamic_form_elements(
                     new EqualityCondition(
-                        new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_ID),
+                        new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
                         new StaticConditionVariable($id)))->next_result();
-
+                
                 if (! $dynamic_form_element->delete())
                 {
                     $failures ++;
                 }
             }
-
+            
             $message = $this->get_result(
-                $failures,
-                count($ids),
-                'DynamicFormElementNotDeleted',
-                'DynamicFormElementsNotDeleted',
-                'DynamicFormElementDeleted',
+                $failures, 
+                count($ids), 
+                'DynamicFormElementNotDeleted', 
+                'DynamicFormElementsNotDeleted', 
+                'DynamicFormElementDeleted', 
                 'DynamicFormElementsDeleted');
-
-            $this->redirect($message, ($failures > 0), array(self :: PARAM_ACTION => self :: ACTION_BUILD_DYNAMIC_FORM));
+            
+            $this->redirect($message, ($failures > 0), array(self::PARAM_ACTION => self::ACTION_BUILD_DYNAMIC_FORM));
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation :: get('NoObjectSelected', null, Utilities :: COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)));
         }
     }
 }

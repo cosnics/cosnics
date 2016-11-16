@@ -7,7 +7,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 ini_set('include_path', realpath(__DIR__ . '/../../../configuration/plugin/pear'));
 
 require_once __DIR__ . '/../../../../../libraries/architecture/php/lib/bootstrap.class.php';
-\Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
+\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
 
 include (__DIR__ . '/settings.inc.php');
 include (__DIR__ . '/my_template.class.php');
@@ -39,35 +39,35 @@ log_message('Folders succesfully created.');
  * Parse XML files Generate DataClasses Generate Forms
  */
 log_message('Generating dataclasses, forms and tables...');
-$files = Filesystem :: get_directory_content($location . '../', Filesystem :: LIST_FILES, false);
+$files = Filesystem::get_directory_content($location . '../', Filesystem::LIST_FILES, false);
 foreach ($files as $file)
 {
     if (substr($file, - 4) != '.xml')
         continue;
-
+    
     $new_path = move_file($location, $file);
-
+    
     $properties = retrieve_properties_from_xml_file($location . '/../', $file);
     $lclass = str_replace('.xml', '', basename($file));
-    $classname = (string) StringUtilities :: getInstance()->createString($lclass)->upperCamelize();
-
+    $classname = (string) StringUtilities::getInstance()->createString($lclass)->upperCamelize();
+    
     $description = 'This class describes a ' . $classname . ' data object';
-
+    
     $data_class_generator->generate_data_class(
-        $location . 'lib/',
-        $classname,
-        $properties,
-        $name,
-        $description,
-        $author,
+        $location . 'lib/', 
+        $classname, 
+        $properties, 
+        $name, 
+        $description, 
+        $author, 
         $name);
     $form_generator->generate_form($location . 'lib/forms/', $classname, $properties, $author, $name);
-
+    
     if ($application['options'][$lclass]['table'] == 1)
     {
         generate_sortable_table($location, $classname, $properties, $name, $author);
     }
-
+    
     $classes[] = $classname;
 }
 log_message('Dataclasses and forms generated.');
@@ -107,63 +107,63 @@ log_message('Package info generated.');
 
 /**
  * Create folders for the application
- *
+ * 
  * @param String $location - The location of the application
  * @param String $name - The name of the application
  */
 function create_folders($location, $name)
 {
     $folders = array(
-        'lib/data_manager',
-        'lib/forms',
-        'install',
-        'lib/' . $name . '_manager',
-        'lib/' . $name . '_manager/component',
-        'rights',
+        'lib/data_manager', 
+        'lib/forms', 
+        'install', 
+        'lib/' . $name . '_manager', 
+        'lib/' . $name . '_manager/component', 
+        'rights', 
         'lib/tables');
     foreach ($folders as $folder)
     {
-        Filesystem :: create_dir($location . $folder);
+        Filesystem::create_dir($location . $folder);
     }
 }
 
 /**
  * Move a file from the root to the install folder
- *
+ * 
  * @param String $file - Path of the file
  * @return String $new_file - New path of the file
  */
 function move_file($location, $file)
 {
     $new_file = $location . 'install/' . basename($file);
-    Filesystem :: copy_file($location . '../' . $file, $new_file);
+    Filesystem::copy_file($location . '../' . $file, $new_file);
     return $new_file;
 }
 
 /**
  * Retrieves the properties from a data xml file
- *
+ * 
  * @param String $file - The xml file
  * @return Array of String - The properties
  */
 function retrieve_properties_from_xml_file($location, $file)
 {
     $properties = array();
-
+    
     $options[] = array(XML_UNSERIALIZER_OPTION_FORCE_ENUM => array('property'));
-    $array = Utilities :: extract_xml_file($location . $file, $options);
-
+    $array = Utilities::extract_xml_file($location . $file, $options);
+    
     foreach ($array['properties']['property'] as $property)
     {
         $properties[] = $property['name'];
     }
-
+    
     return $properties;
 }
 
 /**
  * Generates sortable tables for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $classname - The class names
  * @param String $properties - The class properties
@@ -172,24 +172,24 @@ function retrieve_properties_from_xml_file($location, $file)
  */
 function generate_sortable_table($location, $classname, $properties, $name, $author)
 {
-    $l_class = (string) StringUtilities :: getInstance()->createString($classname)->underscored();
-
+    $l_class = (string) StringUtilities::getInstance()->createString($classname)->underscored();
+    
     $default_location = $location . 'lib/tables/' . $l_class . '_table/';
     $browser_table_location = $location . 'lib/' . $name . '_manager/component/' . $l_class . '_browser/';
-
+    
     global $sortable_table_generator;
     $sortable_table_generator->generate_tables(
-        $default_location,
-        $browser_table_location,
-        $name,
-        $properties,
-        $classname,
+        $default_location, 
+        $browser_table_location, 
+        $name, 
+        $properties, 
+        $classname, 
         $author);
 }
 
 /**
  * Generates the data managers for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $name - The application name
  * @param String $classes - The class names
@@ -201,16 +201,16 @@ function generate_data_managers($location, $name, $classes, $author)
     $database_location = $location . 'lib/data_manager/';
     $data_manager_generator = new DataManagerGenerator();
     $data_manager_generator->generate_data_managers(
-        $data_manager_location,
-        $database_location,
-        $name,
-        $classes,
+        $data_manager_location, 
+        $database_location, 
+        $name, 
+        $classes, 
         $author);
 }
 
 /**
  * Generates the managers for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $name - The application name
  * @param String $classes - The class names
@@ -218,14 +218,15 @@ function generate_data_managers($location, $name, $classes, $author)
  */
 function generate_managers($location, $name, $classes, $author)
 {
-    $manager_location = $location . 'lib/' . (string) StringUtilities :: getInstance()->createString($name)->underscored() . '_manager/';
+    $manager_location = $location . 'lib/' .
+         (string) StringUtilities::getInstance()->createString($name)->underscored() . '_manager/';
     $manager_generator = new ManagerGenerator();
     $manager_generator->generate_managers($manager_location, $name, $classes, $author);
 }
 
 /**
  * Generates the components for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $name - The application name
  * @param String $classes - The class names
@@ -233,17 +234,18 @@ function generate_managers($location, $name, $classes, $author)
  */
 function generate_components($location, $name, $classes, $author)
 {
-    $manager_location = $location . 'lib/' . (string) StringUtilities :: getInstance()->createString($name)->underscored() . '_manager/component/';
+    $manager_location = $location . 'lib/' .
+         (string) StringUtilities::getInstance()->createString($name)->underscored() . '_manager/component/';
     $component_generator = new ComponentGenerator();
-
+    
     global $application;
-
+    
     $component_generator->generate_components($manager_location, $name, $classes, $author, $application['options']);
 }
 
 /**
  * Generates rights files for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $name - The application name
  */
@@ -256,7 +258,7 @@ function generate_rights_files($location, $name)
 
 /**
  * Generates install files for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $name - The application name
  */
@@ -269,7 +271,7 @@ function generate_install_files($location, $name, $author)
 
 /**
  * Log a message to the screen
- *
+ * 
  * @param String $message - The message
  */
 function log_message($message)
@@ -280,7 +282,7 @@ function log_message($message)
 
 /**
  * Generates the autoloader for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $name - The application name
  * @param String $classes - The class names
@@ -294,7 +296,7 @@ function generate_autoloader($location, $name, $classes, $author, $options)
 
 /**
  * Generates the package info for an application
- *
+ * 
  * @param String $location - The application location
  * @param String $name - The application name
  * @param String $author - The Author

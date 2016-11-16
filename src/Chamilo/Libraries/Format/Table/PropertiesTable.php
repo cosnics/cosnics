@@ -12,15 +12,15 @@ class PropertiesTable extends HTML_Table
 
     /**
      * Constructor creates the table
-     *
+     * 
      * @param array $properties
      */
     public function __construct(array $properties)
     {
-        parent :: __construct(
+        parent::__construct(
             array('class' => 'table table-striped table-bordered table-hover table-responsive table-properties'));
         $this->properties = $properties;
-
+        
         $this->build_table();
     }
 
@@ -35,12 +35,12 @@ class PropertiesTable extends HTML_Table
             {
                 $contents = array();
                 $contents[] = $property;
-
+                
                 if (! is_array($values))
                 {
                     $values = array($values);
                 }
-
+                
                 if (count($values) > 0)
                 {
                     foreach ($values as $value)
@@ -48,16 +48,16 @@ class PropertiesTable extends HTML_Table
                         $contents[] = $value;
                     }
                 }
-
+                
                 $this->addRow($contents);
             }
-
+            
             $this->setColAttributes(0, array('class' => 'header'));
         }
         else
         {
             $contents = array();
-            $contents[] = Translation :: get('NoResults', null, Utilities :: COMMON_LIBRARIES);
+            $contents[] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
             $row = $this->addRow($contents);
             $this->setCellAttributes($row, 0, 'style="font-style: italic;text-align:center;" colspan=2');
         }

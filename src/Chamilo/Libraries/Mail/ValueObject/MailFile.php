@@ -8,6 +8,7 @@ namespace Chamilo\Libraries\Mail\ValueObject;
  */
 class MailFile
 {
+
     /**
      * The filename of the embedded object
      * 
@@ -44,6 +45,7 @@ class MailFile
     }
 
     /**
+     *
      * @return string
      */
     public function getFilename()
@@ -52,6 +54,7 @@ class MailFile
     }
 
     /**
+     *
      * @return string
      */
     public function getMimeType()
@@ -60,6 +63,7 @@ class MailFile
     }
 
     /**
+     *
      * @return string
      */
     public function getPath()

@@ -23,7 +23,7 @@ class UUID
      */
     public static function v3($namespace, $name)
     {
-        if (! self :: is_valid($namespace))
+        if (! self::is_valid($namespace))
             return false;
             
             // Get hexadecimal components of namespace
@@ -98,7 +98,7 @@ class UUID
      */
     public static function v5($namespace, $name)
     {
-        if (! self :: is_valid($namespace))
+        if (! self::is_valid($namespace))
             return false;
             
             // Get hexadecimal components of namespace

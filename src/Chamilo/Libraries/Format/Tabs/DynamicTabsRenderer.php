@@ -81,11 +81,11 @@ class DynamicTabsRenderer
     public function header()
     {
         $tabs = $this->get_tabs();
-
+        
         $html = array();
-
+        
         $html[] = '<div id="' . $this->name . 'Tabs">';
-
+        
         // Tab headers
         $html[] = '<ul class="nav nav-tabs tabs-header dynamic-visual-tabs">';
         foreach ($tabs as $key => $tab)
@@ -94,32 +94,32 @@ class DynamicTabsRenderer
         }
         $html[] = '</ul>';
         $html[] = '</div>';
-
+        
         $html[] = '<div id="' . $this->name . 'TabsContent" class="tab-content dynamic-visual-tab-content">';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function get_selected_tab()
     {
-        $selected_tabs = Request :: get(self :: PARAM_SELECTED_TAB);
-
+        $selected_tabs = Request::get(self::PARAM_SELECTED_TAB);
+        
         // TODO: Added this for backwards compatibility from when the one request variable was shared between all
         // instances
         if (! is_array($selected_tabs) && ! empty($selected_tabs))
         {
             $selected_tab = $selected_tabs;
         }
-
+        
         $selected_tab = $selected_tabs[$this->get_name()];
-
+        
         if ($selected_tab)
         {
             if (! $this->is_tab_name_active($selected_tab))
             {
                 return null;
             }
-
+            
             return $this->get_name() . '-' . $selected_tab;
         }
         else
@@ -130,7 +130,7 @@ class DynamicTabsRenderer
 
     /**
      * Checks if a tab is active in this tabs renderer by a given tab name
-     *
+     * 
      * @param string $tab_name
      *
      * @return bool
@@ -144,22 +144,22 @@ class DynamicTabsRenderer
                 return true;
             }
         }
-
+        
         return false;
     }
 
     public function footer()
     {
         $html = array();
-
+        
         $html[] = '</div>';
         $html[] = '<script type="text/javascript">';
-
+        
         $html[] = '$(\'#' . $this->name . 'Tabs a\').click(function (e) {
   e.preventDefault()
   $(this).tab(\'show\')
 })';
-
+        
         // $html[] = 'function setSearchTab(e, ui)
         // {
         // var searchForm = $("div.action_bar div.search_form form");
@@ -171,20 +171,20 @@ class DynamicTabsRenderer
         // searchForm.attr(\'action\', url.set("tab", currentTabId).toString());
         // }
         // }';
-
+        
         // $html[] = ' $(\'#' . $this->get_name() . '_tabs > ul.tabs-header > li > a\').click(function(e) {
         // e.preventDefault();
         // });';
-
+        
         // $html[] = ' $("#' . $this->get_name() . '_tabs ul.tabs-header").css(\'display\', \'block\');';
         // $html[] = ' $("#' . $this->get_name() . '_tabs h2").hide();';
         // $html[] = ' $("#' . $this->get_name() . '_tabs").tabs();';
         // // $html[] = ' var tabs = $(\'#' . $this->get_name() . '_tabs\').tabs(\'paging\', { cycle: false, follow:
         // false}
         // // );';
-
+        
         $selected_tab = $this->get_selected_tab();
-
+        
         if (isset($selected_tab))
         {
             $html[] = '$(\'#' . $this->name . 'Tabs a[href="#' . $selected_tab . '"]\').tab(\'show\');';
@@ -193,11 +193,11 @@ class DynamicTabsRenderer
         {
             $html[] = '$(\'#' . $this->name . 'Tabs a:first\').tab(\'show\')';
         }
-
+        
         // $html[] = ' $(document).on(\'tabsshow\', ("#' . $this->get_name() . '_tabs"), setSearchTab);';
-
+        
         $html[] = '</script>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -207,17 +207,17 @@ class DynamicTabsRenderer
         {
             $html = array();
             $html[] = $this->header();
-
+            
             // Tab content
             $tabs = $this->get_tabs();
-
+            
             foreach ($tabs as $key => $tab)
             {
                 $html[] = $tab->body($this->name . '-' . $tab->get_id());
             }
-
+            
             $html[] = $this->footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

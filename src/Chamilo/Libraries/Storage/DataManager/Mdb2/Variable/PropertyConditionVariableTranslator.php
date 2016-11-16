@@ -19,8 +19,8 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate()
     {
-        return Database :: escape_column_name(
-            $this->get_condition_variable()->get_property(),
+        return Database::escape_column_name(
+            $this->get_condition_variable()->get_property(), 
             $this->get_condition_variable()->get_alias());
     }
 }

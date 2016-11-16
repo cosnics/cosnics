@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="form_value">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="user_id" type="integer" unsigned="1" notnull="1" />
-		<property name="time" type="integer" unsigned="1" notnull="1" />
-		<property name="dynamic_form_element_id" type="integer" unsigned="1" notnull="1" />
-		<property name="value" type="text" length="500" notnull="1" default="" />
-	</properties>
-	<index name="user_id">
-		<indexproperty name="user_id" />
-	</index>
-	<index name="dynamic_form_element_id">
-		<indexproperty name="dynamic_form_element_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="time"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="dynamic_form_element_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="value"
+            type="text"
+            length="500"
+            notnull="1"
+            default="" />
+    </properties>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+    <index name="dynamic_form_element_id">
+        <indexproperty name="dynamic_form_element_id" />
+    </index>
 </object>

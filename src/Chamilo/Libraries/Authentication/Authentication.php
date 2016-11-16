@@ -43,16 +43,16 @@ abstract class Authentication
 
     public static function anonymous_user_exists()
     {
-        $anonymous_user = \Chamilo\Core\User\Storage\DataManager :: retrieve_anonymous_user();
+        $anonymous_user = \Chamilo\Core\User\Storage\DataManager::retrieve_anonymous_user();
         return $anonymous_user instanceof \Chamilo\Core\User\Storage\DataClass\User;
     }
 
     public static function as_anonymous_user()
     {
-        if (self :: anonymous_user_exists())
+        if (self::anonymous_user_exists())
         {
-            $anonymous_user = \Chamilo\Core\User\Storage\DataManager :: retrieve_anonymous_user();
-            Session :: register('_uid', $anonymous_user->get_id());
+            $anonymous_user = \Chamilo\Core\User\Storage\DataManager::retrieve_anonymous_user();
+            Session::register('_uid', $anonymous_user->get_id());
             return $anonymous_user;
         }
         else
@@ -76,14 +76,11 @@ abstract class Authentication
     public function logout($user)
     {
         $this->trackLogout($user);
-        Session :: destroy();
+        Session::destroy();
     }
 
     public function trackLogout($user)
     {
-        Event :: trigger(
-            'Logout',
-            \Chamilo\Core\User\Manager :: context(),
-            array('server' => $_SERVER, 'user' => $user));
+        Event::trigger('Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user));
     }
 }

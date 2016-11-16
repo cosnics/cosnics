@@ -22,7 +22,7 @@ class Configuration extends ParameterBag
      */
     public function getStartDate()
     {
-        return $this->get(self :: PROPERTY_START_DATE);
+        return $this->get(self::PROPERTY_START_DATE);
     }
 
     /**
@@ -31,7 +31,7 @@ class Configuration extends ParameterBag
      */
     public function setStartDate($startDate)
     {
-        return $this->set(self :: PROPERTY_START_DATE, $startDate);
+        return $this->set(self::PROPERTY_START_DATE, $startDate);
     }
 
     /**
@@ -40,7 +40,7 @@ class Configuration extends ParameterBag
      */
     public function getEndDate()
     {
-        return $this->get(self :: PROPERTY_END_DATE);
+        return $this->get(self::PROPERTY_END_DATE);
     }
 
     /**
@@ -49,7 +49,7 @@ class Configuration extends ParameterBag
      */
     public function setEndDate($endDate)
     {
-        return $this->set(self :: PROPERTY_END_DATE, $endDate);
+        return $this->set(self::PROPERTY_END_DATE, $endDate);
     }
 
     /**
@@ -58,7 +58,7 @@ class Configuration extends ParameterBag
      */
     public function getHourStep()
     {
-        return $this->get(self :: PROPERTY_HOUR_STEP);
+        return $this->get(self::PROPERTY_HOUR_STEP);
     }
 
     /**
@@ -67,6 +67,6 @@ class Configuration extends ParameterBag
      */
     public function setHourStep($hourStep)
     {
-        return $this->set(self :: PROPERTY_HOUR_STEP, $hourStep);
+        return $this->set(self::PROPERTY_HOUR_STEP, $hourStep);
     }
 }

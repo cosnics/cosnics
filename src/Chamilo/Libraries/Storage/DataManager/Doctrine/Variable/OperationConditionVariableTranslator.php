@@ -21,10 +21,10 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $strings = array();
-
+        
         $strings[] = '(';
         $strings[] = static::render($this->get_condition_variable()->get_left());
-
+        
         switch ($this->get_condition_variable()->get_operator())
         {
             case OperationConditionVariable::ADDITION :
@@ -46,10 +46,10 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
                 $strings[] = '|';
                 break;
         }
-
+        
         $strings[] = static::render($this->get_condition_variable()->get_right());
         $strings[] = ')';
-
+        
         return implode(' ', $strings);
     }
 }

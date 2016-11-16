@@ -17,11 +17,11 @@ class IdentGlyph extends InlineGlyph
      */
     public function getBaseClassNames()
     {
-        $baseClassNames = parent :: getBaseClassNames();
-
+        $baseClassNames = parent::getBaseClassNames();
+        
         $baseClassNames[] = 'ident';
         $baseClassNames[] = 'ident-' . $this->getType();
-
+        
         return $baseClassNames;
     }
 }

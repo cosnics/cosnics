@@ -9,7 +9,7 @@ use Doctrine\DBAL\DriverManager;
 
 /**
  * This class represents the current configuration
- *
+ * 
  * @package Chamilo\Configuration
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @deprecated Use a ConfigurationConsulter service now
@@ -17,7 +17,7 @@ use Doctrine\DBAL\DriverManager;
 class Configuration
 {
     use \Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
-
+    
     // Constants
     const REGISTRATION_CONTEXT = 1;
     const REGISTRATION_TYPE = 2;
@@ -25,7 +25,7 @@ class Configuration
 
     /**
      * Instance of this class for the singleton pattern.
-     *
+     * 
      * @var \Chamilo\Configuration\Configuration
      */
     private static $instance;
@@ -82,7 +82,7 @@ class Configuration
 
     /**
      * Returns the instance of this class.
-     *
+     * 
      * @return \Chamilo\Configuration\Configuration The instance.
      */
     public static function getInstance()
@@ -113,11 +113,11 @@ class Configuration
     {
         $variables = $keys;
         $values = &$this->settings;
-
+        
         while (count($variables) > 0)
         {
             $key = array_shift($variables);
-
+            
             if (! isset($values[$key]))
             {
                 $values[$key] = null;
@@ -128,7 +128,7 @@ class Configuration
                 $values = &$values[$key];
             }
         }
-
+        
         $values = $value;
     }
 
@@ -153,22 +153,22 @@ class Configuration
     public function is_connectable()
     {
         $configuration = new \Doctrine\DBAL\Configuration();
-
+        
         $data_source_name = DataSourceName::factory(
-            'Doctrine',
+            'Doctrine', 
             array(
-                'driver' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'driver'),
-                'username' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'username'),
-                'host' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'host'),
-                'name' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'name'),
+                'driver' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'driver'), 
+                'username' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'username'), 
+                'host' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'host'), 
+                'name' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'name'), 
                 'password' => \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'database', 'password')));
-
+        
         $connection_parameters = array(
-            'user' => $data_source_name->get_username(),
-            'password' => $data_source_name->get_password(),
-            'host' => $data_source_name->get_host(),
+            'user' => $data_source_name->get_username(), 
+            'password' => $data_source_name->get_password(), 
+            'host' => $data_source_name->get_host(), 
             'driverClass' => $data_source_name->get_driver(true));
-
+        
         try
         {
             DriverManager::getConnection($connection_parameters, $configuration)->connect();

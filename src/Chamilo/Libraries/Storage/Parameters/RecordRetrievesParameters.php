@@ -41,29 +41,27 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $group_by
      */
-    public function __construct(DataClassProperties $properties = null, $condition = null, $count = null, $offset = null,
+    public function __construct(DataClassProperties $properties = null, $condition = null, $count = null, $offset = null, 
         $order_by = array(), Joins $joins = null, GroupBy $group_by = null)
     {
-        parent :: __construct($condition, $count, $offset, $order_by, $joins);
-
-        if(!is_null($properties) && !$properties instanceof DataClassProperties)
+        parent::__construct($condition, $count, $offset, $order_by, $joins);
+        
+        if (! is_null($properties) && ! $properties instanceof DataClassProperties)
         {
             throw new \Exception(
                 sprintf(
                     'The given parameter $properties should be of type ' .
-                    '\Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties but an object of type %s was given',
-                    gettype($properties)
-                )
-            );
+                         '\Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties but an object of type %s was given', 
+                        gettype($properties)));
         }
-
+        
         $this->properties = $properties;
         $this->group_by = $group_by;
     }
 
     /**
      * Get properties
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
      */
     public function get_properties()
@@ -73,7 +71,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
 
     /**
      * Set properties
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
      */
     public function set_properties($properties)
@@ -83,7 +81,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
 
     /**
      * Returns the group by parameter
-     *
+     * 
      * @return \Chamilo\Libraries\Storage\Query\GroupBy
      */
     public function get_group_by()
@@ -93,7 +91,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
 
     /**
      * Sets the group by parameter
-     *
+     * 
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $group_by
      */
     public function set_group_by(GroupBy $group_by)
@@ -107,17 +105,17 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
      */
     public function getHashParts()
     {
-        $hashParts = parent :: getHashParts();
-
+        $hashParts = parent::getHashParts();
+        
         $hashParts[] = ($this->get_properties() instanceof DataClassProperties ? $this->get_properties()->getHashParts() : null);
         $hashParts[] = ($this->get_group_by() instanceof GroupBy ? $this->get_group_by()->getHashParts() : null);
-
+        
         return $hashParts;
     }
 
     /**
      * Generate an instance based on the input or throw an exception if no compatible input was found
-     *
+     * 
      * @param mixed $parameter
      * @return \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters
      *
@@ -131,20 +129,20 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
         {
             return $parameter;
         }
-
+        
         // If the parameter is a Condition, generate a new DataClassRetrievesParameters instance using the Condition
         // provided by the context
         elseif (is_object($parameter) && $parameter instanceof Condition)
         {
             return new self(null, $parameter);
         }
-
+        
         // If it's an integer, assume it will be the count and generate a new DataClassRetrievesParameters
         elseif (is_integer($parameter))
         {
             return new self(null, null, $parameter);
         }
-
+        
         // If the parameter is an array, determine whether it's an array of ObjectTableOrder objects and if so generate
         // a DataClassResultParameters
         elseif (is_array($parameter) && count($parameter) > 0 && $parameter[0] instanceof OrderBy)

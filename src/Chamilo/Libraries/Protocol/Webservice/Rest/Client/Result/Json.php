@@ -14,11 +14,11 @@ class Json extends RestResult
     {
         if ($parse)
         {
-            return json_decode(parent :: get_response_content(false));
+            return json_decode(parent::get_response_content(false));
         }
         else
         {
-            parent :: get_response_content(false);
+            parent::get_response_content(false);
         }
     }
 }

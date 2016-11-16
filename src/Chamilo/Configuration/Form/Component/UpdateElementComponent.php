@@ -24,36 +24,36 @@ class UpdateElementComponent extends Manager
 
     public function run()
     {
-        $element_id = Request :: get(self :: PARAM_DYNAMIC_FORM_ELEMENT_ID);
-        $parameters = array(self :: PARAM_DYNAMIC_FORM_ELEMENT_ID => $element_id);
-
-        $trail = BreadcrumbTrail :: getInstance();
-        $trail->add(new Breadcrumb($this->get_url($parameters), Translation :: get('UpdateElement')));
+        $element_id = Request::get(self::PARAM_DYNAMIC_FORM_ELEMENT_ID);
+        $parameters = array(self::PARAM_DYNAMIC_FORM_ELEMENT_ID => $element_id);
+        
+        $trail = BreadcrumbTrail::getInstance();
+        $trail->add(new Breadcrumb($this->get_url($parameters), Translation::get('UpdateElement')));
         $trail->add_help('dynamic form general');
-
+        
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Element :: class_name(), Element :: PROPERTY_ID),
+            new PropertyConditionVariable(Element::class_name(), Element::PROPERTY_ID), 
             new StaticConditionVariable($element_id));
-        $element = DataManager :: retrieve_dynamic_form_elements($condition)->next_result();
-
-        $form = new BuilderForm(BuilderForm :: TYPE_EDIT, $element, $this->get_url($parameters), $this->get_user());
-
+        $element = DataManager::retrieve_dynamic_form_elements($condition)->next_result();
+        
+        $form = new BuilderForm(BuilderForm::TYPE_EDIT, $element, $this->get_url($parameters), $this->get_user());
+        
         if ($form->validate())
         {
             $success = $form->update_dynamic_form_element();
             $this->redirect(
-                Translation :: get($success ? 'DynamicFormElementUpdated' : 'DynamicFormElementNotUpdated'),
-                ($success ? false : true),
-                array(self :: PARAM_ACTION => self :: ACTION_BUILD_DYNAMIC_FORM));
+                Translation::get($success ? 'DynamicFormElementUpdated' : 'DynamicFormElementNotUpdated'), 
+                ($success ? false : true), 
+                array(self::PARAM_ACTION => self::ACTION_BUILD_DYNAMIC_FORM));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

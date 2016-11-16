@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterfac
 class StorageUnitRepository
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-
+    
     // Storage unit actions
     const ALTER_STORAGE_UNIT_ADD = 1;
     const ALTER_STORAGE_UNIT_CHANGE = 2;
@@ -59,7 +59,7 @@ class StorageUnitRepository
 
     /**
      * Create a storage unit
-     *
+     * 
      * @param string $storageUnitName
      * @param string[] $properties
      * @param string[] $indexes
@@ -72,7 +72,7 @@ class StorageUnitRepository
 
     /**
      * Determine whether a storage unit exists
-     *
+     * 
      * @param string $storageUnitName
      * @return boolean
      */
@@ -83,7 +83,7 @@ class StorageUnitRepository
 
     /**
      * Drop a storage unit
-     *
+     * 
      * @param string $storageUnitName
      * @return boolean
      */
@@ -94,7 +94,7 @@ class StorageUnitRepository
 
     /**
      * Rename a storage unit
-     *
+     * 
      * @param string $oldStorageUnitName
      * @param string $newStorageUnitName
      * @return boolean
@@ -106,7 +106,7 @@ class StorageUnitRepository
 
     /**
      * Alter a storage unit
-     *
+     * 
      * @param integer $type
      * @param string $storageUnitName
      * @param string $property
@@ -120,7 +120,7 @@ class StorageUnitRepository
 
     /**
      * Alter a storage unit index
-     *
+     * 
      * @param integer $type
      * @param string $storageUnitName
      * @param string $indexName
@@ -134,7 +134,7 @@ class StorageUnitRepository
 
     /**
      * Truncate a storage unit and optionally optimize it afterwards
-     *
+     * 
      * @param $storageUnitName string
      * @param $optimize boolean
      * @return boolean
@@ -145,18 +145,18 @@ class StorageUnitRepository
         {
             return false;
         }
-
+        
         if ($optimize && ! $this->optimize($storageUnitName))
         {
             return false;
         }
-
+        
         return true;
     }
 
     /**
      * Optimize a storage unit
-     *
+     * 
      * @param $storageUnitName string
      * @return boolean
      */

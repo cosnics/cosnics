@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Menu\Library\Renderer;
 
 /**
  * Originaly a PEAR library
- *
+ * 
  * @package Chamilo\Libraries\Format\Menu\Library\Renderer
  * @author Alex Vorobiev <sasha@mathforum.com>
  * @author Ulf Wendel <ulf.wendel@phpdoc.de>
@@ -52,9 +52,9 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
      * @var array
      */
     public $_entryTemplates = array(
-        self :: HTML_MENU_ENTRY_INACTIVE => '<a href="{url}">{title}</a>',
-        self :: HTML_MENU_ENTRY_ACTIVE => '<strong>{title}</strong>',
-        self :: HTML_MENU_ENTRY_ACTIVEPATH => '<a href="{url}"><em>{title}</em></a>');
+        self::HTML_MENU_ENTRY_INACTIVE => '<a href="{url}">{title}</a>', 
+        self::HTML_MENU_ENTRY_ACTIVE => '<strong>{title}</strong>', 
+        self::HTML_MENU_ENTRY_ACTIVEPATH => '<a href="{url}"><em>{title}</em></a>');
 
     /**
      *
@@ -80,7 +80,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
     {
         isset($this->_levelHtml[$level]) or $this->_levelHtml[$level] = '';
         $this->_levelHtml[$level] .= $this->_itemTemplate[0] . $this->_itemHtml[$level] . $this->_itemTemplate[1];
-
+        
         if (0 < $level)
         {
             $this->_itemHtml[$level - 1] .= $this->_levelTemplate[0] . $this->_levelHtml[$level] .
@@ -90,7 +90,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
         {
             $this->_html = $this->_levelTemplate[0] . $this->_levelHtml[$level] . $this->_levelTemplate[1];
         }
-
+        
         unset($this->_itemHtml[$level], $this->_levelHtml[$level]);
     }
 
@@ -105,9 +105,9 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
             isset($this->_levelHtml[$level]) or $this->_levelHtml[$level] = '';
             $this->_levelHtml[$level] .= $this->_itemTemplate[0] . $this->_itemHtml[$level] . $this->_itemTemplate[1];
         }
-
+        
         $keys = $values = array();
-
+        
         foreach ($node as $k => $v)
         {
             if ('sub' != $k && is_scalar($v))
@@ -116,7 +116,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
                 $values[] = $v;
             }
         }
-
+        
         $this->_itemHtml[$level] = str_replace($keys, $values, $this->_entryTemplates[$type]);
     }
 

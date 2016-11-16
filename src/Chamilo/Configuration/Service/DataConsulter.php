@@ -61,7 +61,7 @@ class DataConsulter
         {
             $this->data = $this->getDataLoader()->getData();
         }
-
+        
         return $this->data;
     }
 }

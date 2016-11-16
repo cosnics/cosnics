@@ -18,7 +18,7 @@ class FeatureContext extends MinkContext
      */
     public static function installChamilo()
     {
-        $config_file = Path :: getInstance()->getStoragePath() . 'configuration/command_line_configuration.php';
+        $config_file = Path::getInstance()->getStoragePath() . 'configuration/command_line_configuration.php';
         $installer = new CommandLineInstaller($config_file);
         $installer->run();
     }
@@ -95,13 +95,13 @@ class FeatureContext extends MinkContext
     /**
      * Go to an application
      * @When /^I (?:am in|go to) application "(?P<application>[^"]+)"$/
-     *
+     * 
      * @param unknown $application
      */
     public function iGoToApplication($application)
     {
-        $redirect = new Redirect(array(Application :: PARAM_CONTEXT => $application));
-
+        $redirect = new Redirect(array(Application::PARAM_CONTEXT => $application));
+        
         $this->visit($redirect->getUrl());
         $this->thePageShouldBeSuccessfullyLoaded();
     }
@@ -109,14 +109,14 @@ class FeatureContext extends MinkContext
     /**
      * Go to an application and do an action
      * @When /^I (?:am in|go to) application "(?P<application>[^"]+)" and do action "(?P<action>[^"]+)"$/
-     *
+     * 
      * @param unknown $application
      */
     public function iAmInApplicationAndDoAction($application, $action)
     {
         $redirect = new Redirect(
-            array(Application :: PARAM_CONTEXT => $application, Application :: PARAM_ACTION => $action));
-
+            array(Application::PARAM_CONTEXT => $application, Application::PARAM_ACTION => $action));
+        
         $this->visit($redirect->getUrl());
         $this->thePageShouldBeSuccessfullyLoaded();
     }

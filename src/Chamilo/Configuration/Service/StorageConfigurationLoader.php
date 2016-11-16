@@ -55,12 +55,12 @@ class StorageConfigurationLoader implements CacheableDataLoaderInterface
     {
         $settings = array();
         $settingRecords = $this->getConfigurationRepository()->findSettingsAsRecords();
-
+        
         foreach ($settingRecords as $settingRecord)
         {
             $settings[$settingRecord[Setting::PROPERTY_CONTEXT]][$settingRecord[Setting::PROPERTY_VARIABLE]] = $settingRecord[Setting::PROPERTY_VALUE];
         }
-
+        
         return $settings;
     }
 

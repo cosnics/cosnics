@@ -19,9 +19,9 @@ class DataClassFactory
     public function getDataClass($dataClassName, $record)
     {
         $dataClassName = (is_subclass_of($dataClassName, CompositeDataClass::class_name()) ? $record[CompositeDataClass::PROPERTY_TYPE] : $dataClassName);
-
+        
         $dataClass = new $dataClassName();
-
+        
         foreach ($dataClass->get_default_property_names() as $property)
         {
             if (array_key_exists($property, $record))
@@ -30,7 +30,7 @@ class DataClassFactory
                 unset($record[$property]);
             }
         }
-
+        
         if ($dataClass instanceof CompositeDataClass)
         {
             foreach ($dataClass->get_additional_property_names() as $property)
@@ -42,7 +42,7 @@ class DataClassFactory
                 }
             }
         }
-
+        
         if (count($record) > 0 && $dataClass instanceof CompositeDataClass)
         {
             foreach ($record as $optional_property_name => $optional_property_value)
@@ -50,7 +50,7 @@ class DataClassFactory
                 $dataClass->set_optional_property($optional_property_name, $optional_property_value);
             }
         }
-
+        
         return $dataClass;
     }
 }

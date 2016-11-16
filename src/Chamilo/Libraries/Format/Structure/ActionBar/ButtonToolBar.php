@@ -117,11 +117,12 @@ class ButtonToolBar
     }
 
     /**
-     * @param AbstractButtonToolBarItem[]  $buttonToolbarItems
+     *
+     * @param AbstractButtonToolBarItem[] $buttonToolbarItems
      */
     public function addItems($buttonToolbarItems = array())
     {
-        foreach($buttonToolbarItems as $buttonToolbarItem)
+        foreach ($buttonToolbarItems as $buttonToolbarItem)
         {
             $this->addItem($buttonToolbarItem);
         }
@@ -165,7 +166,7 @@ class ButtonToolBar
 
     /**
      * Returns whether or not the current button toolbar has items
-     *
+     * 
      * @return bool
      */
     public function hasItems()

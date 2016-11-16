@@ -29,7 +29,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
      */
     public function getIdentifiers()
     {
-        return array_keys(Configuration :: getInstance()->getLanguages());
+        return array_keys(Configuration::getInstance()->getLanguages());
     }
 
     /**
@@ -49,10 +49,10 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
     {
         if (! isset($this->internationalizationContexts))
         {
-            $internationalizationBundles = new InternationalizationBundles(PackageList :: ROOT);
+            $internationalizationBundles = new InternationalizationBundles(PackageList::ROOT);
             $this->internationalizationContexts = $internationalizationBundles->getPackageNamespaces();
         }
-
+        
         return $this->internationalizationContexts;
     }
 
@@ -64,7 +64,7 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
      */
     private function getInternationalizationPath($context, $isocode)
     {
-        return Path :: getInstance()->getI18nPath($context) . $isocode . '.i18n';
+        return Path::getInstance()->getI18nPath($context) . $isocode . '.i18n';
     }
 
     /**
@@ -74,26 +74,26 @@ class TranslationCacheService extends DoctrinePhpFileCacheService
     public function warmUpForIdentifier($identifier)
     {
         $i18nStrings = array();
-
+        
         foreach ($this->getInternationalizationContexts() as $internationalizationContext)
         {
             $i18nPath = $this->getInternationalizationPath($internationalizationContext, $identifier);
-
+            
             if (! is_readable($i18nPath))
             {
                 continue;
             }
-
+            
             $i18nContextStrings = parse_ini_file($i18nPath);
-
+            
             if (! $i18nContextStrings)
             {
                 continue;
             }
-
+            
             $i18nStrings[$internationalizationContext] = $i18nContextStrings;
         }
-
+        
         return $this->getCacheProvider()->save($identifier, $i18nStrings);
     }
 }

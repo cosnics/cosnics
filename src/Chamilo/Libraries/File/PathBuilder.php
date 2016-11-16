@@ -51,7 +51,7 @@ class PathBuilder
 
     /**
      * Return 'this' as singleton
-     *
+     * 
      * @return \Chamilo\Libraries\File\Path
      */
     static public function getInstance()
@@ -60,13 +60,13 @@ class PathBuilder
         {
             self::$instance = new static(ClassnameUtilities::getInstance());
         }
-
+        
         return static::$instance;
     }
 
     /**
      * Constructor
-     *
+     * 
      * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
      */
     public function __construct(\Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities)
@@ -102,12 +102,12 @@ class PathBuilder
         if ($web)
         {
             $dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] . 'x'));
-
+            
             if ($dir !== '/')
             {
                 $dir .= '/';
             }
-
+            
             $protocol = (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
             $path = $protocol . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . $dir;
         }
@@ -115,7 +115,7 @@ class PathBuilder
         {
             $path = realpath(__DIR__ . '/../../../') . DIRECTORY_SEPARATOR;
         }
-
+        
         return $this->cache[self::BASE][(string) $web] = $path;
     }
 
@@ -128,7 +128,7 @@ class PathBuilder
     public function getStoragePath($namespace = null)
     {
         $basePath = realpath($this->getBasePath() . '../files/');
-
+        
         return $this->cache[self::STORAGE][(string) $namespace] = $basePath . DIRECTORY_SEPARATOR .
              ($namespace ? $this->getClassnameUtilities()->namespaceToPath($namespace) . DIRECTORY_SEPARATOR : '');
     }
@@ -146,7 +146,7 @@ class PathBuilder
         }
         return $this->cache[self::PUBLIC_STORAGE][(string) $namespace][(string) $web] = $basePath .
              ($web ? '/' : DIRECTORY_SEPARATOR) . ($namespace ? $this->getClassnameUtilities()->namespaceToPath(
-                $namespace,
+                $namespace, 
                 $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 
@@ -161,7 +161,7 @@ class PathBuilder
         {
             throw new \Exception('Storage is not directly accessible');
         }
-
+        
         return $this->cache[self::VENDOR][(string) $web] = realpath($this->getBasePath($web) . '../vendor/') .
              ($web ? '/' : DIRECTORY_SEPARATOR);
     }
@@ -175,7 +175,7 @@ class PathBuilder
     public function getPluginPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::PLUGIN][(string) $namespace][(string) $web] = $this->namespaceToFullPath(
-            $namespace,
+            $namespace, 
             $web) . 'Plugin' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -188,7 +188,7 @@ class PathBuilder
     public function getResourcesPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::RESOURCE][(string) $namespace][(string) $web] = $this->namespaceToFullPath(
-            $namespace,
+            $namespace, 
             $web) . 'Resources' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -201,7 +201,7 @@ class PathBuilder
     public function getJavascriptPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::JAVASCRIPT][(string) $namespace][(string) $web] = $this->getResourcesPath(
-            $namespace,
+            $namespace, 
             $web) . 'Javascript' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -226,7 +226,7 @@ class PathBuilder
     public function getConfigurationPath($namespace = 'Chamilo\Configuration', $web = false)
     {
         return $this->cache[self::CONFIGURATION][(string) $namespace][(string) $web] = $this->getResourcesPath(
-            $namespace,
+            $namespace, 
             $web) . 'Configuration' . ($web ? '/' : DIRECTORY_SEPARATOR);
     }
 
@@ -239,7 +239,7 @@ class PathBuilder
     public function namespaceToFullPath($namespace = null, $web = false)
     {
         return $this->cache[self::FULL][(string) $namespace][(string) $web] = $this->getBasePath($web) . ($namespace ? $this->getClassnameUtilities()->namespaceToPath(
-            $namespace,
+            $namespace, 
             $web) . ($web ? '/' : DIRECTORY_SEPARATOR) : '');
     }
 

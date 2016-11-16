@@ -48,7 +48,7 @@ abstract class ConditionTranslator
     {
         $class = 'Chamilo\Libraries\Storage\DataManager\\' . $type . '\Condition\\' .
              ClassnameUtilities::getInstance()->getClassnameFromObject($condition) . 'Translator';
-
+        
         return new $class($condition);
     }
 
@@ -65,12 +65,12 @@ abstract class ConditionTranslator
     public static function render(Condition $condition)
     {
         $conditionCache = ConditionCache::getInstance();
-
+        
         if (! $conditionCache->exists($condition))
         {
             $conditionCache->set($condition, static::runTranslator($condition));
         }
-
+        
         return $conditionCache->get($condition);
     }
 }
