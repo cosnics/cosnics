@@ -222,8 +222,8 @@ class AvailabilityService
                     $user, 
                     $calendarType, 
                     $calendarIdentifier, 
-                    (boolean) $settings[self :: PROPERTY_AVAILABLE], 
-                    $settings[self :: PROPERTY_COLOUR]))
+                    (boolean) $settings[self::PROPERTY_AVAILABLE], 
+                    $settings[self::PROPERTY_COLOUR]))
                 {
                     $failedActions ++;
                 }
@@ -234,7 +234,7 @@ class AvailabilityService
             count($calendarAvailabilityTypes), 
             $failedActions, 
             __METHOD__, 
-            Availability :: class_name(false));
+            Availability::class_name(false));
     }
 
     /**
@@ -261,23 +261,23 @@ class AvailabilityService
     {
         $availableCalendars = array();
         
-        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
-            \Chamilo\Application\Calendar\Manager :: package());
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+            \Chamilo\Application\Calendar\Manager::package());
         
         foreach ($registrations as $registration)
         {
-            $context = $registration[Registration :: PROPERTY_CONTEXT];
+            $context = $registration[Registration::PROPERTY_CONTEXT];
             $class_name = $context . '\Service\CalendarEventDataProvider';
-
+            
             if (class_exists($class_name))
             {
                 $reflectionClass = new \ReflectionClass($class_name);
-                if($reflectionClass->isAbstract())
+                if ($reflectionClass->isAbstract())
                 {
                     continue;
                 }
-
-                $package = ClassnameUtilities :: getInstance()->getNamespaceParent($context, 4);
+                
+                $package = ClassnameUtilities::getInstance()->getNamespaceParent($context, 4);
                 $implementor = new $class_name();
                 $availableCalendars[$package] = $implementor->getCalendars();
             }
