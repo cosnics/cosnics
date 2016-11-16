@@ -4,9 +4,9 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\A
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\ToolBlock;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -40,12 +40,12 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
      * Instatiates the column headers.
      *
      * @param type $parent Pass-through variable. Please refer to parent class(es) for more details. &param type
-     *            $vertical Pass-through variable. Please refer to parent class(es) for more details.
+     *        $vertical Pass-through variable. Please refer to parent class(es) for more details.
      */
     public function __construct($parent, $vertical)
     {
-        self :: $COLUMN_NAME = Translation :: get('Name');
-        parent :: __construct($parent, $vertical);
+        self::$COLUMN_NAME = Translation::get('Name');
+        parent::__construct($parent, $vertical);
     }
 
     /**
@@ -62,17 +62,17 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         }
         $this->reporting_data = new ReportingData();
 
-        $publication = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
-            ContentObjectPublication :: class_name(),
+        $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+            ContentObjectPublication::class_name(),
             $this->get_publication_id());
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_PARENT),
+                ComplexContentObjectItem::class_name(),
+                ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($publication->get_content_object_id()));
-        $complex_questions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(),
+        $complex_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
 
         /**
@@ -82,45 +82,45 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $question_headers = array();
         $question_weights = array();
         // Defines the column headers in the reporting block.
-        $question_headers[- 1] = self :: $COLUMN_NAME;
-        $question_headers[- 2] = Translation :: get('OfficialCode');
+        $question_headers[- 1] = self::$COLUMN_NAME;
+        $question_headers[- 2] = Translation::get('OfficialCode');
 
         $vertical_headers = count($complex_questions) > 5;
         foreach ($complex_questions as $complex_question)
         {
             $question_header = $vertical_headers ? substr($complex_question->get_ref_object()->get_title(), 0, 14) : $complex_question->get_ref_object()->get_title();
             $question_headers[$complex_question->get_id()] = '<div id="' . $complex_question->get_id() . '" title="' .
-                htmlentities($complex_question->get_ref_object()->get_title()) . '">' . $question_header . '</div>';
+                 htmlentities($complex_question->get_ref_object()->get_title()) . '">' . $question_header . '</div>';
             $question_weights[$complex_question->get_id()] = $complex_question->get_weight();
         }
 
         // Defines the row categories in the reporting block.
         $this->reporting_data->set_rows($question_headers);
 
-        $users = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_publication_target_users(
+        $users = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_publication_target_users(
             $this->get_publication_id(),
             $this->get_course_id())->as_array();
 
         foreach ($users as $user)
         {
             $this->reporting_data->add_category($user->get_id());
-            $this->reporting_data->add_data_category_row($user->get_id(), self :: $COLUMN_NAME, $user->get_fullname());
+            $this->reporting_data->add_data_category_row($user->get_id(), self::$COLUMN_NAME, $user->get_fullname());
 
             $this->reporting_data->add_data_category_row(
                 $user->get_id(),
-                Translation :: get('OfficialCode'),
+                Translation::get('OfficialCode'),
                 $user->get_official_code());
         }
         // Retrieve all the assessment attempts trackers for the current assessment ordered by the user id.
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt :: class_name(), AssessmentAttempt :: PROPERTY_ASSESSMENT_ID),
+            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication->get_id()));
         $order_by = array();
         $order_by[] = new OrderBy(
-            new PropertyConditionVariable(AssessmentAttempt :: class_name(), AssessmentAttempt :: PROPERTY_USER_ID));
+            new PropertyConditionVariable(AssessmentAttempt::class_name(), AssessmentAttempt::PROPERTY_USER_ID));
 
-        $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager :: retrieves(
-            AssessmentAttempt :: class_name(),
+        $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
+            AssessmentAttempt::class_name(),
             new DataClassRetrievesParameters($condition))->as_array();
 
         $user_question_statistics = array();
@@ -133,7 +133,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             // question attempts trackers in one database transaction.
             foreach ($assessment_attempts_trackers as $assessment_attempts_tracker)
             {
-                if ($assessment_attempts_tracker->get_status() == AssessmentAttempt :: STATUS_NOT_COMPLETED)
+                if ($assessment_attempts_tracker->get_status() == AssessmentAttempt::STATUS_NOT_COMPLETED)
                 {
                     continue;
                 }
@@ -155,13 +155,16 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
                 $assessment_attempts_tracker_ids);
         }
 
+        $passingPercentage = Configuration::getInstance()->get_setting(
+            array('Chamilo\Core\Admin', 'passing_percentage'));
+
         foreach ($user_question_statistics as $user_id => $question_statistics)
         {
             foreach ($question_statistics as $question_id => $score)
             {
                 if (! is_null($score))
                 {
-                    if (($score / $question_weights[$question_id]) >= PlatformSetting :: get('passing_percentage') / 100)
+                    if (($score / $question_weights[$question_id]) >= $passingPercentage / 100)
                     {
                         $score_html = '<span style="color:green">' . $score . '/' . $question_weights[$question_id] .
                              '</span>';
@@ -184,7 +187,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
      *
      * @author Anthony Hurst (Hogeschool Gent)
      * @param array $assessment_attempts_tracker_ids The ids of the assessment attempts trackers whose question attempts
-     *            trackers are to be retrieved
+     *        trackers are to be retrieved
      * @return array Format $question_id => $question_score.
      */
     private function collate_question_attempts_trackers($assessment_attempts_tracker_ids)
@@ -192,18 +195,18 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         // Retrieve all the question attempts trackers of a single user ordered by the question id.
         $condition = new InCondition(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: PROPERTY_ASSESSMENT_ATTEMPT_ID),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             $assessment_attempts_tracker_ids);
 
         $order_by = array();
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name(),
-                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: PROPERTY_QUESTION_COMPLEX_ID));
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(),
+                \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID));
 
-        $question_attempts_trackers = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieves(
-            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt :: class_name(),
+        $question_attempts_trackers = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
+            \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt::class_name(),
             new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
 
         $user_question_statistics = array();
@@ -241,24 +244,24 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
 
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 
     private function get_score($attempts)
     {
-        $score_type = (Request :: post('sel')) ? Request :: post('sel') : Request :: get('sel');
+        $score_type = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
         ;
         $score = null;
 
         switch ($score_type)
         {
-            case self :: SCORE_TYPE_AVG :
+            case self::SCORE_TYPE_AVG :
                 foreach ($attempts as $attempt)
                 {
                     $score += $attempt->get_score();
                 }
                 return round($score / count($attempts), 2);
-            case self :: SCORE_TYPE_MIN :
+            case self::SCORE_TYPE_MIN :
                 foreach ($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_score() < $score)
@@ -267,7 +270,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
                     }
                 }
                 return $score;
-            case self :: SCORE_TYPE_MAX :
+            case self::SCORE_TYPE_MAX :
                 foreach ($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_score() > $score)
@@ -276,13 +279,13 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
                     }
                 }
                 return $score;
-            case self :: SCORE_TYPE_FIRST :
+            case self::SCORE_TYPE_FIRST :
                 $date = null;
                 foreach ($attempts as $attempt)
                 {
                     return $attempt->get_score();
                 }
-            case self :: SCORE_TYPE_LAST :
+            case self::SCORE_TYPE_LAST :
                 $date = null;
                 foreach ($attempts as $attempt)
                 {

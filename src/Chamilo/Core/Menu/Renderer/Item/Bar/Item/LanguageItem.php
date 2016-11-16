@@ -25,10 +25,10 @@ class LanguageItem extends Bar
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_QUICK_LANG,
-                \Chamilo\Core\User\Manager :: PARAM_CHOICE => $this->getItem()->get_language(),
-                \Chamilo\Core\User\Manager :: PARAM_REFER => $this->getItem()->getCurrentUrl()));
+                Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_QUICK_LANG,
+                \Chamilo\Core\User\Manager::PARAM_CHOICE => $this->getItem()->get_language(),
+                \Chamilo\Core\User\Manager::PARAM_REFER => $this->getItem()->getCurrentUrl()));
 
         $html[] = '<a href="' . $redirect->getUrl() . '">';
         $html[] = '<div class="chamilo-menu-item-label">';
@@ -50,7 +50,8 @@ class LanguageItem extends Bar
     {
         $authorizationChecker = $this->getAuthorizationChecker();
         return $authorizationChecker->isAuthorized(
-            $this->getMenuRenderer()->get_user(), 'Chamilo\Core\User', 'ChangeLanguage'
-        );
+            $this->getMenuRenderer()->get_user(),
+            'Chamilo\Core\User',
+            'ChangeLanguage');
     }
 }

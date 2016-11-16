@@ -17,7 +17,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\Hashing;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
@@ -44,8 +43,9 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $user_id = \Chamilo\Libraries\Platform\Session\Session:: get_user_id();
-        $allow_password_retrieval = PlatformSetting:: get('allow_password_retrieval', Manager::context());
+        $user_id = \Chamilo\Libraries\Platform\Session\Session::get_user_id();
+        $allow_password_retrieval = Configuration::getInstance()->get_setting(
+            array(Manager::context(), 'allow_password_retrieval'));
 
         if ($allow_password_retrieval == false)
         {
@@ -54,61 +54,56 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
 
         if (isset($user_id))
         {
-            return $this->display_error_page(Translation:: get('AlreadyRegistered'));
+            return $this->display_error_page(Translation::get('AlreadyRegistered'));
         }
 
         $html = array();
 
         $html[] = $this->render_header();
 
-        $request_key = Request:: get(self :: PARAM_RESET_KEY);
-        $request_user_id = Request:: get(User :: PROPERTY_ID);
-        if (!is_null($request_key) && !is_null($request_user_id))
+        $request_key = Request::get(self::PARAM_RESET_KEY);
+        $request_user_id = Request::get(User::PROPERTY_ID);
+        if (! is_null($request_key) && ! is_null($request_user_id))
         {
 
-            $user = \Chamilo\Core\User\Storage\DataManager:: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User:: class_name(),
-                (int) $request_user_id
-            );
+            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                (int) $request_user_id);
             if ($this->get_user_key($user) == $request_key)
             {
                 $this->create_new_password($user);
-                Event:: trigger(
+                Event::trigger(
                     'ResetPassword',
-                    Manager:: context(),
-                    array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id())
-                );
-                $html[] = Display:: normal_message(
+                    Manager::context(),
+                    array('target_user_id' => $user->get_id(), 'action_user_id' => $user->get_id()));
+                $html[] = Display::normal_message(
                     Translation::getInstance()->getTranslation(
-                        'YourNewPasswordHasBeenMailedToYou', null, Manager::context()
-                    )
-                );
+                        'YourNewPasswordHasBeenMailedToYou',
+                        null,
+                        Manager::context()));
             }
             else
             {
-                $html[] = Display:: error_message(Translation:: get('InvalidRequest'));
+                $html[] = Display::error_message(Translation::get('InvalidRequest'));
             }
         }
         else
         {
             $form = new FormValidator('lost_password', 'post', $this->get_url());
-            $form->addElement('text', User :: PROPERTY_EMAIL, Translation:: get('Email'));
+            $form->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'));
             $form->addRule(
-                User :: PROPERTY_EMAIL,
-                Translation:: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
-                'required'
-            );
-            $form->addRule(User :: PROPERTY_EMAIL, Translation:: get('WrongEmail'), 'email');
-            $form->addElement('submit', 'submit', Translation:: get('Ok', null, Utilities :: COMMON_LIBRARIES));
+                User::PROPERTY_EMAIL,
+                Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                'required');
+            $form->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
+            $form->addElement('submit', 'submit', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
             if ($form->validate())
             {
                 $values = $form->exportValues();
-                $users = \Chamilo\Core\User\Storage\DataManager:: retrieve_users_by_email(
-                    $values[User :: PROPERTY_EMAIL]
-                );
+                $users = \Chamilo\Core\User\Storage\DataManager::retrieve_users_by_email($values[User::PROPERTY_EMAIL]);
                 if (count($users) == 0)
                 {
-                    $html[] = Display:: error_message('NoUserWithThisEmail');
+                    $html[] = Display::error_message('NoUserWithThisEmail');
                 }
                 else
                 {
@@ -117,14 +112,14 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                     foreach ($users as $index => $user)
                     {
                         $auth_source = $user->get_auth_source();
-                        $auth = Authentication:: factory($auth_source);
-                        if (!$auth instanceof ChangeablePassword)
+                        $auth = Authentication::factory($auth_source);
+                        if (! $auth instanceof ChangeablePassword)
                         {
-                            $html[] = Display:: error_message('ResetPasswordNotPossibleForThisUser');
+                            $html[] = Display::error_message('ResetPasswordNotPossibleForThisUser');
                         }
                         else
                         {
-                            if (!$this->send_reset_link($user))
+                            if (! $this->send_reset_link($user))
                             {
                                 $failures ++;
                             }
@@ -137,19 +132,15 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
                         'ResetLinkHasNotBeenSend',
                         'ResetLinksHasNotBeenSend',
                         'ResetLinkHasBeenSend',
-                        'ResetLinksHasBeenSend'
-                    );
+                        'ResetLinksHasBeenSend');
                     if ($failures == 0)
                     {
-                        $html[] = Display:: normal_message(
-                            Translation::getInstance()->getTranslation(
-                                $message, null, Manager::context()
-                            )
-                        );
+                        $html[] = Display::normal_message(
+                            Translation::getInstance()->getTranslation($message, null, Manager::context()));
                     }
                     else
                     {
-                        $html[] = Display:: error_message($message);
+                        $html[] = Display::error_message($message);
                     }
                 }
             }
@@ -173,31 +164,28 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     private function create_new_password($user)
     {
-        $password = Text:: generate_password();
-        $user->set_password(Hashing:: hash($password));
+        $password = Text::generate_password();
+        $user->set_password(Hashing::hash($password));
         $user->update();
-        $mail_subject = Translation:: get('LoginRequest');
+        $mail_subject = Translation::get('LoginRequest');
         $mail_body[] = '<div style="font-family:arial, sans-serif">';
-        $mail_body[] = '<p>' . Translation:: get('MailResetPasswordDear', array('USER' => $user->get_fullname())) .
-            '</p>';
-        $mail_body[] = '<p>' . Translation:: get('MailResetPasswordDoneBody') . '</p>';
-        $mail_body[] = '<p>' . Translation:: get('UserName') . ': ' . $user->get_username() . '<br/>';
-        $mail_body[] = Translation:: get('MailResetPasswordNew') . ': ' . $password . '</p>';
-        $mail_body[] = '<p>' . Translation:: get(
-                'MailResetPasswordLogIn',
-                array(
-                    'LOGINLINK' => '<a href="' . Path:: getInstance()->getBasePath(true) . '">' .
-                        Path:: getInstance()->getBasePath(true) . '</a>'
-                )
-            ) . '</p>';
-        $mail_body[] = '<p>' . Translation:: get('MailResetPasswordCloser') . '<br/>';
-        $mail_body[] = Translation:: get(
-                'MailResetPasswordSender',
-                array(
-                    'ADMINFIRSTNAME' => PlatformSetting:: get('administrator_firstname'),
-                    'ADMINLASTNAME' => PlatformSetting:: get('administrator_surname')
-                )
-            ) . '</p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordDear', array('USER' => $user->get_fullname())) . '</p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordDoneBody') . '</p>';
+        $mail_body[] = '<p>' . Translation::get('UserName') . ': ' . $user->get_username() . '<br/>';
+        $mail_body[] = Translation::get('MailResetPasswordNew') . ': ' . $password . '</p>';
+        $mail_body[] = '<p>' . Translation::get(
+            'MailResetPasswordLogIn',
+            array(
+                'LOGINLINK' => '<a href="' . Path::getInstance()->getBasePath(true) . '">' .
+                     Path::getInstance()->getBasePath(true) . '</a>')) . '</p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordCloser') . '<br/>';
+        $mail_body[] = Translation::get(
+            'MailResetPasswordSender',
+            array(
+                'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
+                    array('Chamilo\Core\Admin', 'administrator_firstname')),
+                'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
+                    array('Chamilo\Core\Admin', 'administrator_surname')))) . '</p>';
         $mail_body[] = '</div>';
         $mail_body = implode(PHP_EOL, $mail_body);
 
@@ -227,26 +215,25 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     private function send_reset_link($user)
     {
-        $url_params[self :: PARAM_RESET_KEY] = $this->get_user_key($user);
-        $url_params[User :: PROPERTY_ID] = $user->get_id();
+        $url_params[self::PARAM_RESET_KEY] = $this->get_user_key($user);
+        $url_params[User::PROPERTY_ID] = $user->get_id();
         $reset_link = $this->get_url($url_params);
 
-        $mail_subject = Translation:: get('LoginRequest');
+        $mail_subject = Translation::get('LoginRequest');
         $mail_body[] = '<div style="font-family:arial, sans-serif">';
-        $mail_body[] = '<p>' . Translation:: get('MailResetPasswordDear', array('USER' => $user->get_fullname())) .
-            '</p>';
-        $mail_body[] = '<p>' . Translation:: get('MailResetPasswordAskBody') . '</p>';
-        $mail_body[] = '<p>' . Translation:: get('UserName') . ': ' . $user->get_username() . '<br/>';
-        $mail_body[] = Translation:: get('MailResetPasswordLink') . ': <a href="' . $reset_link . '">' . $reset_link .
-            '</a></p>';
-        $mail_body[] = '<p>' . Translation:: get('MailResetPasswordCloser') . '<br/>';
-        $mail_body[] = Translation:: get(
-                'MailResetPasswordSender',
-                array(
-                    'ADMINFIRSTNAME' => PlatformSetting:: get('administrator_firstname'),
-                    'ADMINLASTNAME' => PlatformSetting:: get('administrator_surname')
-                )
-            ) . '</p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordDear', array('USER' => $user->get_fullname())) . '</p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordAskBody') . '</p>';
+        $mail_body[] = '<p>' . Translation::get('UserName') . ': ' . $user->get_username() . '<br/>';
+        $mail_body[] = Translation::get('MailResetPasswordLink') . ': <a href="' . $reset_link . '">' . $reset_link .
+             '</a></p>';
+        $mail_body[] = '<p>' . Translation::get('MailResetPasswordCloser') . '<br/>';
+        $mail_body[] = Translation::get(
+            'MailResetPasswordSender',
+            array(
+                'ADMINFIRSTNAME' => Configuration::getInstance()->get_setting(
+                    array('Chamilo\Core\Admin', 'administrator_firstname')),
+                'ADMINLASTNAME' => Configuration::getInstance()->get_setting(
+                    array('Chamilo\Core\Admin', 'administrator_surname')))) . '</p>';
         $mail_body[] = '</div>';
         $mail_body = implode(PHP_EOL, $mail_body);
 
@@ -278,7 +265,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
     {
         global $security_key;
 
-        return Hashing:: hash($security_key . $user->get_email());
+        return Hashing::hash($security_key . $user->get_email());
     }
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -293,6 +280,6 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail:: getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

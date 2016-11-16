@@ -1,12 +1,12 @@
 <?php
 namespace Chamilo\Core\User\Email\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Email\Form\EmailForm;
 use Chamilo\Core\User\Email\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -22,7 +22,7 @@ class EmailerComponent extends Manager
      */
     public function run()
     {
-        if (PlatformSetting :: get('active_online_email_editor') == 0)
+        if (Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'active_online_email_editor')) == 0)
         {
             throw new NotAllowedException();
         }
@@ -33,7 +33,7 @@ class EmailerComponent extends Manager
         {
             $success = $form->email();
             $this->redirect(
-                Translation :: get($success ? 'EmailSent' : 'EmailNotSent'),
+                Translation::get($success ? 'EmailSent' : 'EmailNotSent'),
                 ($success ? false : true),
                 array());
         }
@@ -58,7 +58,7 @@ class EmailerComponent extends Manager
         $html[] = '<div class="panel panel-default">';
 
         $html[] = '<div class="panel-heading">';
-        $html[] = '<h3 class="panel-title">' . Translation :: get('SelectedUsers') . '</h3>';
+        $html[] = '<h3 class="panel-title">' . Translation::get('SelectedUsers') . '</h3>';
         $html[] = '</div>';
 
         $html[] = '<div class="panel-body">';
@@ -71,7 +71,7 @@ class EmailerComponent extends Manager
                 $target_user = $target_user->get_fullname() . ' &lt;' . $target_user->get_email() . '&gt;';
             }
 
-            $html[] = '<li><img src="' . Theme :: getInstance()->getCommonImagePath('Treemenu/Group') . '" alt="user"/> ' .
+            $html[] = '<li><img src="' . Theme::getInstance()->getCommonImagePath('Treemenu/Group') . '" alt="user"/> ' .
                  $target_user . '</li>';
         }
 

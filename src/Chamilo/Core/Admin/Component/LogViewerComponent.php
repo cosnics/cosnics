@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Admin\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Admin\Manager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use HTML_Table;
@@ -47,8 +47,8 @@ class LogViewerComponent extends Manager
         {
             $type = 'chamilo';
 
-            $dir = Path :: getInstance()->getLogPath();
-            $content = Filesystem :: get_directory_content($dir, Filesystem :: LIST_FILES, false);
+            $dir = Path::getInstance()->getLogPath();
+            $content = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
 
             $chamilo_type = $content[0];
             $lines = '10';
@@ -66,9 +66,9 @@ class LogViewerComponent extends Manager
         $renderer = & $form->defaultRenderer();
         $renderer->setElementTemplate(' {element} ');
 
-        $types = array('server' => Translation :: get('ServerLogs'));
+        $types = array('server' => Translation::get('ServerLogs'));
 
-        $file = Path :: getInstance()->getLogPath();
+        $file = Path::getInstance()->getLogPath();
         $scan_list = scandir($file);
 
         foreach ($scan_list as $i => $item)
@@ -81,17 +81,17 @@ class LogViewerComponent extends Manager
 
         if (count($scan_list) > 0)
         {
-            $types['chamilo'] = Translation :: get('ChamiloLogs');
+            $types['chamilo'] = Translation::get('ChamiloLogs');
         }
 
         $lines = array(
-            '10' => '10 ' . Translation :: get('Lines'),
-            '20' => '20 ' . Translation :: get('Lines'),
-            '50' => '50 ' . Translation :: get('Lines'),
-            'all' => Translation :: get('AllLines'));
+            '10' => '10 ' . Translation::get('Lines'),
+            '20' => '20 ' . Translation::get('Lines'),
+            '50' => '50 ' . Translation::get('Lines'),
+            'all' => Translation::get('AllLines'));
 
-        $dir = Path :: getInstance()->getLogPath();
-        $content = Filesystem :: get_directory_content($dir, Filesystem :: LIST_FILES, false);
+        $dir = Path::getInstance()->getLogPath();
+        $content = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);
         foreach ($content as $file)
         {
             if (substr($file, 0, 1) == '.')
@@ -103,9 +103,9 @@ class LogViewerComponent extends Manager
         }
 
         $server_types = array(
-            'php' => Translation :: get('PHPErrorLog'),
-            'httpd' => Translation :: get('HTTPDErrorLog'),
-            'mysql' => Translation :: get('MYSQLErrorLog'));
+            'php' => Translation::get('PHPErrorLog'),
+            'httpd' => Translation::get('HTTPDErrorLog'),
+            'mysql' => Translation::get('MYSQLErrorLog'));
 
         $form->addElement('select', 'type', '', $types, array('id' => 'type'));
         $form->addElement('select', 'chamilo_type', '', $files, array('id' => 'chamilo_type'));
@@ -116,12 +116,12 @@ class LogViewerComponent extends Manager
         $form->addElement(
             'submit',
             'submit',
-            Translation :: get('Ok', array(), Utilities :: COMMON_LIBRARIES),
+            Translation::get('Ok', array(), Utilities::COMMON_LIBRARIES),
             array('class' => 'positive finish'));
         $form->addElement(
             'html',
-            ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'));
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Admin', true) . 'LogViewer.js'));
 
         return $form;
     }
@@ -130,13 +130,14 @@ class LogViewerComponent extends Manager
     {
         if ($type == 'chamilo')
         {
-            $file = Path :: getInstance()->getLogPath() . $chamilo_type;
-            $message = Translation :: get('NoLogfilesFound');
+            $file = Path::getInstance()->getLogPath() . $chamilo_type;
+            $message = Translation::get('NoLogfilesFound');
         }
         else
         {
-            $file = PlatformSetting :: get($server_type . '_error_location');
-            $message = Translation :: get('ServerLogfileLocationNotDefined');
+            $file = Configuration::getInstance()->get_setting(
+                array('Chamilo\Core\Admin', $server_type . '_error_location'));
+            $message = Translation::get('ServerLogfileLocationNotDefined');
         }
 
         if (! file_exists($file) || is_dir($file))
@@ -208,6 +209,6 @@ class LogViewerComponent extends Manager
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

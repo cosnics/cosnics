@@ -9,7 +9,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -18,16 +17,16 @@ class DenierComponent extends Manager
 
     function run()
     {
-        if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->request_is_allowed())
+        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->request_is_allowed())
         {
             throw new NotAllowedException();
         }
 
-        $ids = $this->getRequest()->get(self :: PARAM_REQUEST_ID);
+        $ids = $this->getRequest()->get(self::PARAM_REQUEST_ID);
 
-        if (!empty($ids))
+        if (! empty($ids))
         {
-            if (!is_array($ids))
+            if (! is_array($ids))
             {
                 return $this->single_deny($ids);
             }
@@ -39,24 +38,19 @@ class DenierComponent extends Manager
 
         return $this->display_error_page(
             htmlentities(
-                Translation:: get(
+                Translation::get(
                     'NoObjectSelected',
-                    array('OBJECT' => Translation:: get('Request')),
-                    Utilities :: COMMON_LIBRARIES
-                )
-            )
-        );
+                    array('OBJECT' => Translation::get('Request')),
+                    Utilities::COMMON_LIBRARIES)));
     }
 
     function single_deny($id)
     {
-        $request = DataManager:: retrieve_by_id(Request:: class_name(), (int) $id);
+        $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
 
-        if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->is_target_user(
-                $this->get_user(),
-                $request->get_user_id()
-            ) && !$this->get_user()->is_platform_admin()
-        )
+        if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->is_target_user(
+            $this->get_user(),
+            $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -65,20 +59,17 @@ class DenierComponent extends Manager
 
         $form = new RequestForm(
             $request,
-            $this->get_url(
-                array(self :: PARAM_ACTION => self :: ACTION_DENY, self :: PARAM_REQUEST_ID => $request->get_id())
-            )
-        );
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_DENY, self::PARAM_REQUEST_ID => $request->get_id())));
 
         if ($form->validate())
         {
             $values = $form->exportValues();
 
-            $request->set_decision(Request :: DECISION_DENIED);
+            $request->set_decision(Request::DECISION_DENIED);
             $request->set_decision_date(time());
-            $request->set_decision_motivation($values[Request :: PROPERTY_DECISION_MOTIVATION]);
+            $request->set_decision_motivation($values[Request::PROPERTY_DECISION_MOTIVATION]);
 
-            if (!$request->update())
+            if (! $request->update())
             {
                 $failures ++;
             }
@@ -92,12 +83,10 @@ class DenierComponent extends Manager
 
         $form->freeze(
             array(
-                Request :: PROPERTY_COURSE_TYPE_ID,
-                Request :: PROPERTY_NAME,
-                Request :: PROPERTY_SUBJECT,
-                Request :: PROPERTY_MOTIVATION
-            )
-        );
+                Request::PROPERTY_COURSE_TYPE_ID,
+                Request::PROPERTY_NAME,
+                Request::PROPERTY_SUBJECT,
+                Request::PROPERTY_MOTIVATION));
 
         $html = array();
 
@@ -114,28 +103,26 @@ class DenierComponent extends Manager
 
         foreach ($ids as $id)
         {
-            $request = DataManager:: retrieve_by_id(Request:: class_name(), (int) $id);
+            $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
 
-            if (!\Chamilo\Application\Weblcms\Request\Rights\Rights:: getInstance()->is_target_user(
-                    $this->get_user(),
-                    $request->get_user_id()
-                ) && !$this->get_user()->is_platform_admin()
-            )
+            if (! \Chamilo\Application\Weblcms\Request\Rights\Rights::getInstance()->is_target_user(
+                $this->get_user(),
+                $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
             {
                 $failures ++;
             }
             else
             {
-                if (!$request->is_pending())
+                if (! $request->is_pending())
                 {
                     $failures ++;
                 }
                 else
                 {
-                    $request->set_decision(Request :: DECISION_DENIED);
+                    $request->set_decision(Request::DECISION_DENIED);
                     $request->set_decision_date(time());
 
-                    if (!$request->update())
+                    if (! $request->update())
                     {
                         $failures ++;
                     }
@@ -163,10 +150,11 @@ class DenierComponent extends Manager
 
         $recipient = $request->get_user();
 
-        $title = Translation:: get(
+        $siteName = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
+
+        $title = Translation::get(
             'RequestDeniedMailTitle',
-            array('PLATFORM' => PlatformSetting:: get('site_name'), 'NAME' => $request->get_name())
-        );
+            array('PLATFORM' => $siteName, 'NAME' => $request->get_name()));
 
         if (strlen($request->get_decision_motivation()) > 0)
         {
@@ -177,16 +165,14 @@ class DenierComponent extends Manager
             $variable = 'RequestDeniedMailBodySimple';
         }
 
-        $body = Translation:: get(
+        $body = Translation::get(
             $variable,
             array(
                 'USER' => $recipient->get_fullname(),
-                'PLATFORM' => PlatformSetting:: get('site_name'),
+                'PLATFORM' => $siteName,
                 'NAME' => $request->get_name(),
                 'DENIER' => $this->get_user()->get_fullname(),
-                'MOTIVATION' => $request->get_decision_motivation()
-            )
-        );
+                'MOTIVATION' => $request->get_decision_motivation()));
 
         $mail = new Mail($title, $body, $recipient->get_email());
 
@@ -238,9 +224,8 @@ class DenierComponent extends Manager
         }
 
         $this->redirect(
-            Translation:: get($message, array(), Manager::context()),
+            Translation::get($message, array(), Manager::context()),
             ($failureCount ? true : false),
-            array(self :: PARAM_ACTION => self :: ACTION_BROWSE)
-        );
+            array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

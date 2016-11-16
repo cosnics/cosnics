@@ -21,7 +21,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -81,7 +80,7 @@ class Basic extends Renderer
     {
         $user = $this->get_user();
 
-        $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
         $generalMode = $this->isGeneralMode();
 
         $isEditable = ($user instanceof User && ($userHomeAllowed || ($user->is_platform_admin() && $generalMode)));
@@ -90,13 +89,14 @@ class Basic extends Renderer
         if ($isEditable)
         {
             $html[] = '<script type="text/javascript" src="' .
-                 Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
+                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeAjax.js' . '"></script>';
         }
 
         if ($this->isGeneralMode())
         {
             $html[] = '<script type="text/javascript" src="' .
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' . '"></script>';
+                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeGeneralModeAjax.js' .
+                 '"></script>';
         }
 
         $html[] = $this->renderTabs();
@@ -108,15 +108,14 @@ class Basic extends Renderer
 
         if ($isGeneralMode)
         {
-            $html[] = '<div class="alert alert-danger">' .
-                 Translation :: get('HomepageInGeneralMode') . '</div>';
+            $html[] = '<div class="alert alert-danger">' . Translation::get('HomepageInGeneralMode') . '</div>';
         }
 
         $html[] = $this->renderPackageContainer();
         $html[] = $this->renderContent();
 
         $html[] = '<script type="text/javascript" src="' .
-             Path :: getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' . '"></script>';
+             Path::getInstance()->getJavascriptPath('Chamilo\Core\Home', true) . 'HomeView.js' . '"></script>';
 
         return implode(PHP_EOL, $html);
     }
@@ -131,7 +130,7 @@ class Basic extends Renderer
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 
-        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab :: class_name());
+        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
 
         foreach ($tabs as $tabKey => $tab)
         {
@@ -181,10 +180,10 @@ class Basic extends Renderer
         $html[] = '<form class="form-inline portal-action-tab-form">';
         $html[] = '<div class="form-group">';
         $html[] = '<input type="text" class="form-control portal-action-tab-title" data-tab-id="" placeholder="' .
-             Translation :: get('EnterTabTitle') . '" />';
+             Translation::get('EnterTabTitle') . '" />';
         $html[] = '</div>';
 
-        $html[] = '<button type="submit" class="btn btn-primary portal-tab-title-save">' . Translation :: get('Save') .
+        $html[] = '<button type="submit" class="btn btn-primary portal-tab-title-save">' . Translation::get('Save') .
              '</button>';
 
         $html[] = '</form>';
@@ -192,7 +191,7 @@ class Basic extends Renderer
         return $this->renderPanel(
             'portal-tab-panel',
             'portal-tab-panel-hide',
-            Translation :: get('EditTabTitle'),
+            Translation::get('EditTabTitle'),
             implode(PHP_EOL, $html));
     }
 
@@ -209,14 +208,14 @@ class Basic extends Renderer
         $html[] = '<div class="input-group">';
         $html[] = '<div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>';
         $html[] = '<input type="text" class="form-control" id="portal-package-name" placeholder="' .
-             Translation :: get('SearchForWidgets') . '">';
+             Translation::get('SearchForWidgets') . '">';
         $html[] = '</div>';
         $html[] = '</div>';
 
         $html[] = '<div class="form-group">';
         $html[] = '<div class="input-group">';
         $html[] = '<select class="form-control" id="portal-package-context">';
-        $html[] = '<option value="">' . Translation :: get('AllPackages') . '</option>';
+        $html[] = '<option value="">' . Translation::get('AllPackages') . '</option>';
         $html[] = '</select>';
         $html[] = '</div>';
         $html[] = '</div>';
@@ -229,7 +228,7 @@ class Basic extends Renderer
         return $this->renderPanel(
             'portal-package-container',
             'portal-action portal-package-hide',
-            Translation :: get('BrowseBlocks'),
+            Translation::get('BrowseBlocks'),
             implode(PHP_EOL, $html));
     }
 
@@ -239,7 +238,7 @@ class Basic extends Renderer
      */
     public function renderContent()
     {
-        $angularConnectorService = new AngularConnectorService(Configuration :: getInstance());
+        $angularConnectorService = new AngularConnectorService(Configuration::getInstance());
         $modules = $angularConnectorService->getAngularModules();
         $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 
@@ -255,7 +254,7 @@ class Basic extends Renderer
 
         $html[] = '<div class="portal-tabs" ng-app="homeApp">';
 
-        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab :: class_name());
+        $tabs = $this->getHomeService()->getElements($this->get_user(), Tab::class_name());
 
         foreach ($tabs as $tabKey => $tab)
         {
@@ -276,7 +275,7 @@ class Basic extends Renderer
     public function renderButtons()
     {
         $user = $this->get_user();
-        $userHomeAllowed = PlatformSetting :: get('allow_user_home', Manager :: context());
+        $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
         $generalMode = $this->isGeneralMode();
         $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
 
@@ -289,10 +288,10 @@ class Basic extends Renderer
             if ($userHomeAllowed || $generalMode)
             {
                 $splitDropdownButton = new SplitDropdownButton(
-                    Translation :: get('NewBlock'),
+                    Translation::get('NewBlock'),
                     new BootstrapGlyph('plus'),
                     '#',
-                    SubButton :: DISPLAY_ICON_AND_LABEL,
+                    SubButton::DISPLAY_ICON_AND_LABEL,
                     false,
                     'portal-add-block btn-link');
                 $splitDropdownButton->setDropdownClasses('dropdown-menu-right');
@@ -301,31 +300,31 @@ class Basic extends Renderer
 
                 $splitDropdownButton->addSubButton(
                     new SubButton(
-                        Translation :: get('NewColumn'),
+                        Translation::get('NewColumn'),
                         null,
                         '#',
-                        SubButton :: DISPLAY_LABEL,
+                        SubButton::DISPLAY_LABEL,
                         false,
                         'portal-add-column btn-link'));
                 $splitDropdownButton->addSubButton(
                     new SubButton(
-                        Translation :: get('NewTab'),
+                        Translation::get('NewTab'),
                         null,
                         '#',
-                        SubButton :: DISPLAY_LABEL,
+                        SubButton::DISPLAY_LABEL,
                         false,
                         'portal-add-tab btn-link'));
 
-                $truncateLink = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_TRUNCATE));
+                $truncateLink = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_TRUNCATE));
 
                 if ($homeUserIdentifier != '0')
                 {
                     $splitDropdownButton->addSubButton(
                         new SubButton(
-                            Translation :: get('ResetHomepage'),
+                            Translation::get('ResetHomepage'),
                             null,
                             $truncateLink->getUrl(),
-                            SubButton :: DISPLAY_LABEL,
+                            SubButton::DISPLAY_LABEL,
                             true,
                             'portal-reset btn-link'));
                 }
@@ -333,14 +332,14 @@ class Basic extends Renderer
 
             if (! $generalMode && $user->is_platform_admin())
             {
-                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_MANAGE_HOME));
+                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_MANAGE_HOME));
 
                 $buttonToolBar->addItem(
-                    new Button(Translation :: get('ConfigureDefault'), new BootstrapGlyph('wrench'), $redirect->getUrl()));
+                    new Button(Translation::get('ConfigureDefault'), new BootstrapGlyph('wrench'), $redirect->getUrl()));
             }
             elseif ($generalMode && $user->is_platform_admin())
             {
-                $redirect = new Redirect(array(Manager :: PARAM_ACTION => Manager :: ACTION_PERSONAL));
+                $redirect = new Redirect(array(Manager::PARAM_ACTION => Manager::ACTION_PERSONAL));
 
                 $title = $userHomeAllowed ? 'BackToPersonal' : 'ViewDefault';
 
@@ -348,15 +347,15 @@ class Basic extends Renderer
                 {
                     $splitDropdownButton->addSubButton(
                         new SubButton(
-                            Translation :: get($title),
+                            Translation::get($title),
                             new BootstrapGlyph('home'),
                             $redirect->getUrl(),
-                            SubButton :: DISPLAY_LABEL));
+                            SubButton::DISPLAY_LABEL));
                 }
                 else
                 {
                     $buttonToolBar->addItem(
-                        new Button(Translation :: get($title), new BootstrapGlyph('home'), $redirect->getUrl()));
+                        new Button(Translation::get($title), new BootstrapGlyph('home'), $redirect->getUrl()));
                 }
             }
 
@@ -374,9 +373,9 @@ class Basic extends Renderer
      */
     protected function isGeneralMode()
     {
-        if(!isset($this->generalMode))
+        if (! isset($this->generalMode))
         {
-            $this->generalMode = \Chamilo\Libraries\Platform\Session\Session:: retrieve('Chamilo\Core\Home\General');
+            $this->generalMode = \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
         }
 
         return $this->generalMode;

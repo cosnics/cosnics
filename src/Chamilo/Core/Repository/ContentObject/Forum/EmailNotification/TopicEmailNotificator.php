@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -67,7 +66,7 @@ class TopicEmailNotificator extends EmailNotificator
             $targetUsers[] = $user->get_email();
         }
 
-        $site_name = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
+        $site_name = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
 
         if ($this->is_topic_edited)
         {
@@ -82,7 +81,7 @@ class TopicEmailNotificator extends EmailNotificator
             $message = $message . $this->topic->get_title() . '<br/>' . $this->topic->get_description();
         }
         $message = str_replace('[/quote]', '</div>', $message);
-        $message = $message . '<br/>' . Translation :: get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
+        $message = $message . '<br/>' . Translation::get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
              $this->action_user->get_lastname();
 
         $mail = new Mail($subject, $message, $targetUsers);

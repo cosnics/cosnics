@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Core\User\Integration\Chamilo\Core\Home\Type;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Authentication\AuthenticationValidator;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -40,7 +40,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
              $this->getUser()->is_anonymous_user()))
         {
             $request = $this->getRenderer()->getApplicationConfiguration()->getRequest();
-            $message = $request->query->get(AuthenticationValidator :: PARAM_AUTHENTICATION_ERROR);
+            $message = $request->query->get(AuthenticationValidator::PARAM_AUTHENTICATION_ERROR);
 
             if ($message)
             {
@@ -50,7 +50,8 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 
             $html[] = $this->displayLoginForm();
 
-            if (! PlatformSetting :: get('allow_registration', \Chamilo\Core\User\Manager :: context()))
+            if (! Configuration::getInstance()->get_setting(
+                array(\Chamilo\Core\User\Manager::context(), 'allow_registration')))
             {
                 // add custom info here if you do not allow registration (if you use LDAP...)
                 // $html[] = "<p>Helpdesk:</p>";
@@ -62,16 +63,17 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
 
             $profilePhotoUrl = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE,
-                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $user->get_id()));
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user->get_id()));
 
-            $maximumHeight = PlatformSetting :: get('restrict_picture_height', \Chamilo\Core\User\Manager :: context()) ? 'max-height:100px' : null;
+            $maximumHeight = Configuration::getInstance()->get_setting(
+                array(\Chamilo\Core\User\Manager::context(), 'restrict_picture_height')) ? 'max-height:100px' : null;
 
             $redirect = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_LOGOUT));
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_LOGOUT));
             $logoutLink = $redirect->getUrl();
 
             $html[] = '<img src="' . htmlspecialchars($profilePhotoUrl->getUrl()) . '" alt="' .
@@ -80,7 +82,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
             $html[] = '<h3>' . htmlspecialchars($user->get_fullname()) . '</h3>';
             $html[] = '<p>' . htmlspecialchars($user->get_email()) . '</p>';
             $html[] = '<p><a href="' . $logoutLink . '" class="btn btn-danger" role="button">' . htmlspecialchars(
-                Translation :: get('Logout')) . '</a></p>';
+                Translation::get('Logout')) . '</a></p>';
         }
 
         return implode(PHP_EOL, $html);
@@ -96,36 +98,34 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
         $form->setRequiredNote(null);
         $html = '<script type="text/javascript">$(document).ready(function(){document.formLogin.login.focus();});</script>';
         $form->addElement('html', $html);
-        $form->addElement('text', 'login', Translation :: get('UserName'), array('style' => 'width: 90%;'));
-        $form->addRule(
-            'login',
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
-            'required');
-        $form->addElement('password', 'password', Translation :: get('Password'), array('style' => 'width: 90%;'));
+        $form->addElement('text', 'login', Translation::get('UserName'), array('style' => 'width: 90%;'));
+        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        $form->addElement('password', 'password', Translation::get('Password'), array('style' => 'width: 90%;'));
         $form->addRule(
             'password',
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
 
         $buttons = array();
         $buttons[] = $form->createElement(
             'style_submit_button',
             'submitAuth',
-            Translation :: get('Login'),
+            Translation::get('Login'),
             null,
             null,
             'log-in');
 
-        if (PlatformSetting :: get('allow_registration', \Chamilo\Core\User\Manager :: context()) || PlatformSetting :: get(
-            'allow_password_retrieval',
-            \Chamilo\Core\User\Manager :: context()))
+        if (Configuration::getInstance()->get_setting(
+            array(\Chamilo\Core\User\Manager::context(), 'allow_registration')) || Configuration::getInstance()->get_setting(
+            array(\Chamilo\Core\User\Manager::context(), 'allow_password_retrieval')))
         {
-            if (PlatformSetting :: get('allow_registration', \Chamilo\Core\User\Manager :: context()))
+            if (Configuration::getInstance()->get_setting(
+                array(\Chamilo\Core\User\Manager::context(), 'allow_registration')))
             {
                 $redirect = new Redirect(
                     array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                        Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_REGISTER_USER));
+                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                        Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_REGISTER_USER));
                 $link = $redirect->getUrl();
 
                 $buttons[] = $form->createElement(
@@ -134,14 +134,15 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
                     null,
                     '<a href="' . htmlspecialchars($link) .
                          '" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> ' . htmlspecialchars(
-                            Translation :: get('Reg')) . '</a>');
+                            Translation::get('Reg')) . '</a>');
             }
-            if (PlatformSetting :: get('allow_password_retrieval', \Chamilo\Core\User\Manager :: context()))
+            if (Configuration::getInstance()->get_setting(
+                array(\Chamilo\Core\User\Manager::context(), 'allow_password_retrieval')))
             {
                 $redirect = new Redirect(
                     array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager :: context(),
-                        Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_RESET_PASSWORD));
+                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                        Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_RESET_PASSWORD));
                 $link = $redirect->getUrl();
 
                 $buttons[] = $form->createElement(
@@ -150,7 +151,7 @@ class Login extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
                     null,
                     '<a href="' . htmlspecialchars($link) .
                          '" class="btn btn-default"><span class="glyphicon glyphicon-question-sign"></span> ' . htmlspecialchars(
-                            Translation :: get('ResetPassword')) . '</a>');
+                            Translation::get('ResetPassword')) . '</a>');
             }
         }
 

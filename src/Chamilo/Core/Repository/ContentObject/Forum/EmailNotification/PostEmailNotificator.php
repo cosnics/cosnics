@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Forum\EmailNotification;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -55,7 +54,7 @@ class PostEmailNotificator extends EmailNotificator
             $targetUsers[] = $user->get_email();
         }
 
-        $site_name = PlatformSetting :: get('site_name', 'Chamilo\Core\Admin');
+        $site_name = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
 
         $subject = '[' . $site_name . '] ' . $this->action_title . ' ' . $this->topic->get_title();
 
@@ -64,12 +63,12 @@ class PostEmailNotificator extends EmailNotificator
 
         $message = preg_replace(
             '/\[quote=("|&quot;)(.*)("|&quot;)\]/',
-            "<div class=\"quotetitle\">$2 " . Translation :: get('Wrote') . ":</div><div class=\"quotecontent\">",
+            "<div class=\"quotetitle\">$2 " . Translation::get('Wrote') . ":</div><div class=\"quotecontent\">",
             $message);
 
         $message = str_replace('[/quote]', '</div>', $message);
-        $message = $message . '<br/>' . Translation :: get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
-            $this->action_user->get_lastname();
+        $message = $message . '<br/>' . Translation::get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
+             $this->action_user->get_lastname();
 
         if ($this->first_post_text)
         {

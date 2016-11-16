@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Core\Admin\Form;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Core\Admin\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -48,7 +48,7 @@ class ConfigurationForm extends FormValidator
      */
     public function __construct($context, $form_name, $method = 'post', $action = null, $is_user_setting_form = false)
     {
-        parent :: __construct($form_name, $method, $action);
+        parent::__construct($form_name, $method, $action);
 
         $this->is_user_setting_form = $is_user_setting_form;
         $this->context = $context;
@@ -70,7 +70,7 @@ class ConfigurationForm extends FormValidator
 
         $is_user_setting = isset($setting['user_setting']) && $setting['user_setting'] == 1;
         $has_availability_method = isset($setting['availability']) && isset($setting['availability']['source']) &&
-             StringUtilities :: getInstance()->hasValue($setting['availability']['source']);
+             StringUtilities::getInstance()->hasValue($setting['availability']['source']);
 
         if ($this->is_user_setting_form)
         {
@@ -136,8 +136,8 @@ class ConfigurationForm extends FormValidator
                         $this->addElement('html', '<div class="configuration_form">');
                         $this->addElement(
                             'html',
-                            '<span class="category">' . Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($category_name)->upperCamelize(),
+                            '<span class="category">' . Translation::get(
+                                (string) StringUtilities::getInstance()->createString($category_name)->upperCamelize(),
                                 null,
                                 $context) . '</span>');
                         $has_settings = true;
@@ -148,8 +148,8 @@ class ConfigurationForm extends FormValidator
                         $this->addElement(
                             'static',
                             $name,
-                            Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                            Translation::get(
+                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                 null,
                                 $context));
                     }
@@ -157,8 +157,8 @@ class ConfigurationForm extends FormValidator
                     {
                         $this->add_textfield(
                             $name,
-                            Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                            Translation::get(
+                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                 null,
                                 $context),
                             ($setting['required'] == 'true'));
@@ -177,7 +177,7 @@ class ConfigurationForm extends FormValidator
 
                                     $this->addRule(
                                         $name,
-                                        Translation :: get($validation['message'], null, $context),
+                                        Translation::get($validation['message'], null, $context),
                                         $validation['rule'],
                                         $validation['format']);
                                 }
@@ -188,8 +188,8 @@ class ConfigurationForm extends FormValidator
                     {
                         $this->add_html_editor(
                             $name,
-                            Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                            Translation::get(
+                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                 null,
                                 $context),
                             ($setting['required'] == 'true'));
@@ -198,8 +198,8 @@ class ConfigurationForm extends FormValidator
                     {
                         $this->addImageUploader(
                             $name,
-                            Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                            Translation::get(
+                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                 null,
                                 $context),
                             ($setting['required'] == 'true'));
@@ -208,8 +208,8 @@ class ConfigurationForm extends FormValidator
                     {
                         $this->add_password(
                             $name,
-                            Translation :: get(
-                                (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                            Translation::get(
+                                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                 null,
                                 $context),
                             ($setting['required'] == 'true'));
@@ -227,7 +227,8 @@ class ConfigurationForm extends FormValidator
                             $options = $setting['options']['values'];
                         }
 
-                        if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
+                        if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox' ||
+                             $setting['field'] == 'toggle')
                         {
                             $group = array();
 
@@ -248,8 +249,8 @@ class ConfigurationForm extends FormValidator
                                         $setting['field'],
                                         $name,
                                         null,
-                                        Translation :: get(
-                                            (string) StringUtilities :: getInstance()->createString($option_name)->upperCamelize(),
+                                        Translation::get(
+                                            (string) StringUtilities::getInstance()->createString($option_name)->upperCamelize(),
                                             null,
                                             $context),
                                         $option_value);
@@ -259,8 +260,8 @@ class ConfigurationForm extends FormValidator
                             $this->addGroup(
                                 $group,
                                 $name,
-                                Translation :: get(
-                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                Translation::get(
+                                    (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                     null,
                                     $context),
                                 '',
@@ -271,8 +272,8 @@ class ConfigurationForm extends FormValidator
                             $this->addElement(
                                 'select',
                                 $name,
-                                Translation :: get(
-                                    (string) StringUtilities :: getInstance()->createString($name)->upperCamelize(),
+                                Translation::get(
+                                    (string) StringUtilities::getInstance()->createString($name)->upperCamelize(),
                                     null,
                                     $context),
                                 $options);
@@ -291,11 +292,11 @@ class ConfigurationForm extends FormValidator
             $buttons[] = $this->createElement(
                 'style_submit_button',
                 'submit',
-                Translation :: get('Save', array(), Utilities :: COMMON_LIBRARIES));
+                Translation::get('Save', array(), Utilities::COMMON_LIBRARIES));
             $buttons[] = $this->createElement(
                 'style_reset_button',
                 'reset',
-                Translation :: get('Reset', array(), Utilities :: COMMON_LIBRARIES));
+                Translation::get('Reset', array(), Utilities::COMMON_LIBRARIES));
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
         else
@@ -303,7 +304,7 @@ class ConfigurationForm extends FormValidator
             $this->addElement(
                 'html',
                 '<div class="warning-message">' .
-                     Translation :: get('NoConfigurableSettings', array(), Utilities :: COMMON_LIBRARIES) . '</div>');
+                     Translation::get('NoConfigurableSettings', array(), Utilities::COMMON_LIBRARIES) . '</div>');
         }
     }
 
@@ -311,7 +312,7 @@ class ConfigurationForm extends FormValidator
     {
         $context = $this->context;
 
-        $file = Path :: getInstance()->namespaceToFullPath($context) . 'Resources/Settings/settings.xml';
+        $file = Path::getInstance()->namespaceToFullPath($context) . 'Resources/Settings/settings.xml';
         $result = array();
 
         if (file_exists($file))
@@ -440,11 +441,11 @@ class ConfigurationForm extends FormValidator
             {
                 if ($setting['user_setting'] && $this->is_user_setting_form)
                 {
-                    $configuration_value = LocalSetting :: getInstance()->get($name, $this->context);
+                    $configuration_value = LocalSetting::getInstance()->get($name, $this->context);
                 }
                 else
                 {
-                    $configuration_value = PlatformSetting :: get($name, $this->context);
+                    $configuration_value = Configuration::getInstance()->get_setting(array($this->context, $name));
                 }
 
                 if (isset($configuration_value) && ($configuration_value == 0 || ! empty($configuration_value)))
@@ -458,7 +459,7 @@ class ConfigurationForm extends FormValidator
             }
         }
 
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     /**
@@ -479,7 +480,7 @@ class ConfigurationForm extends FormValidator
             {
                 if ($setting['locked'] != 'true')
                 {
-                    $platform_setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
+                    $platform_setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
                         $name,
                         $context);
 
@@ -536,7 +537,7 @@ class ConfigurationForm extends FormValidator
     public function update_user_settings()
     {
         $values = $this->exportValues();
-        $adm = DataManager :: getInstance();
+        $adm = DataManager::getInstance();
         $problems = 0;
 
         foreach ($this->configuration['settings'] as $category_name => $settings)
@@ -559,20 +560,20 @@ class ConfigurationForm extends FormValidator
                         $value = 0;
                     }
 
-                    $setting = \Chamilo\Configuration\Storage\DataManager :: retrieve_setting_from_variable_name(
+                    $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name(
                         $name,
                         $this->context);
 
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_SETTING_ID),
+                        new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID),
                         new StaticConditionVariable($setting->get_id()));
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_USER_ID),
-                        new StaticConditionVariable(Session :: get_user_id()));
+                        new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_USER_ID),
+                        new StaticConditionVariable(Session::get_user_id()));
                     $condition = new AndCondition($conditions);
-                    $user_setting = \Chamilo\Core\User\Storage\DataManager :: retrieve(
-                        \Chamilo\Core\User\Storage\DataClass\UserSetting :: class_name(),
+                    $user_setting = \Chamilo\Core\User\Storage\DataManager::retrieve(
+                        \Chamilo\Core\User\Storage\DataClass\UserSetting::class_name(),
                         new DataClassRetrieveParameters($condition));
 
                     if ($user_setting)
@@ -588,7 +589,7 @@ class ConfigurationForm extends FormValidator
                         $user_setting = new UserSetting();
                         $user_setting->set_setting_id($setting->get_id());
                         $user_setting->set_value($value);
-                        $user_setting->set_user_id(Session :: get_user_id());
+                        $user_setting->set_user_id(Session::get_user_id());
                         if (! $user_setting->create())
                         {
                             $problems ++;

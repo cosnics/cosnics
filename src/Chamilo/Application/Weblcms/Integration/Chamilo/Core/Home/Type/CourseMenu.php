@@ -3,11 +3,11 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Weblcms\CourseType\Storage\DataManager as CourseTypeDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\SimpleTemplate;
 
@@ -25,7 +25,7 @@ class CourseMenu extends Block
 
     public function isTeacher()
     {
-        return parent :: getUser()->get_status(User :: STATUS_TEACHER);
+        return parent::getUser()->get_status(User::STATUS_TEACHER);
     }
 
     public function displayContent()
@@ -41,16 +41,15 @@ class CourseMenu extends Block
         $target = $this->getLinkTarget();
 
         $template = '<li class="rss_feed_icon" style="background-repeat: no-repeat; list-style-type: none; padding-left: 25px; margin: 0; background-image: url({$IMG})">
-        <a style="top: -3px; position: relative;" href="{$HREF}" target="' . $target .
-             '">{$TEXT}</a></li>';
+        <a style="top: -3px; position: relative;" href="{$HREF}" target="' . $target . '">{$TEXT}</a></li>';
 
         $ADMIN_MENU = $this->displayAdminMenu($template);
-        $USER_MENU = SimpleTemplate :: all($template, $this->getEditCourseMenu());
+        $USER_MENU = SimpleTemplate::all($template, $this->getEditCourseMenu());
 
         $this->displayAdminMenu($template);
-        SimpleTemplate :: all($template, $this->getEditCourseMenu());
+        SimpleTemplate::all($template, $this->getEditCourseMenu());
 
-        return SimpleTemplate :: ex($html, array('ADMIN_MENU' => $ADMIN_MENU, 'USER_MENU' => $USER_MENU));
+        return SimpleTemplate::ex($html, array('ADMIN_MENU' => $ADMIN_MENU, 'USER_MENU' => $USER_MENU));
     }
 
     public function displayAdminMenu($template)
@@ -60,14 +59,14 @@ class CourseMenu extends Block
         if ($this->getUser()->is_platform_admin())
         {
             $menu = $this->getPlatformAdminMenu();
-            $result[] = SimpleTemplate :: all($template, $menu);
+            $result[] = SimpleTemplate::all($template, $menu);
             $result[] = '<div style="margin: 10px 0 10px 0; border-bottom: 1px dotted #4271B5; height: 0px;"></div>';
         }
         else
         {
             if ($menu = $this->getCreateCourseMenu())
             {
-                $result[] = SimpleTemplate :: all($template, $menu);
+                $result[] = SimpleTemplate::all($template, $menu);
             }
         }
 
@@ -83,31 +82,34 @@ class CourseMenu extends Block
 
         $result = array();
 
-        $course_management_rights = \Chamilo\Application\Weblcms\Rights\CourseManagementRights :: getInstance();
+        $course_management_rights = \Chamilo\Application\Weblcms\Rights\CourseManagementRights::getInstance();
 
         $count_direct = $count_request = 0;
 
-        $course_types = CourseTypeDataManager :: retrieve_active_course_types();
+        $course_types = CourseTypeDataManager::retrieve_active_course_types();
 
         while ($course_type = $course_types->next_result())
         {
             if ($course_management_rights->is_allowed(
-                \Chamilo\Application\Weblcms\Rights\CourseManagementRights :: CREATE_COURSE_RIGHT,
+                \Chamilo\Application\Weblcms\Rights\CourseManagementRights::CREATE_COURSE_RIGHT,
                 $course_type->get_id(),
-                \Chamilo\Application\Weblcms\Rights\CourseManagementRights :: TYPE_COURSE_TYPE))
+                \Chamilo\Application\Weblcms\Rights\CourseManagementRights::TYPE_COURSE_TYPE))
             {
                 $count_direct ++;
             }
             elseif ($course_management_rights->is_allowed(
-                \Chamilo\Application\Weblcms\Rights\CourseManagementRights :: REQUEST_COURSE_RIGHT,
+                \Chamilo\Application\Weblcms\Rights\CourseManagementRights::REQUEST_COURSE_RIGHT,
                 $course_type->get_id(),
-                \Chamilo\Application\Weblcms\Rights\CourseManagementRights :: TYPE_COURSE_TYPE))
+                \Chamilo\Application\Weblcms\Rights\CourseManagementRights::TYPE_COURSE_TYPE))
             {
                 $count_request ++;
             }
         }
 
-        if (PlatformSetting :: get('allow_course_creation_without_coursetype', 'Chamilo\Application\Weblcms'))
+        $allowCourseCreationWithoutCourseType = Configuration::getInstance()->get_setting(
+            array('Chamilo\Application\Weblcms', 'allow_course_creation_without_coursetype'));
+
+        if ($allowCourseCreationWithoutCourseType)
         {
             $count_direct ++;
         }
@@ -115,11 +117,11 @@ class CourseMenu extends Block
         if ($count_direct)
         {
             $href = $this->getCourseActionUrl(
-                \Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_MANAGER,
+                \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_MANAGER,
                 array(
-                    \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE));
-            $TEXT = htmlspecialchars(Translation :: get('CourseCreate'));
-            $IMG = Theme :: getInstance()->getCommonImagePath('Action/Create');
+                    \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE));
+            $TEXT = htmlspecialchars(Translation::get('CourseCreate'));
+            $IMG = Theme::getInstance()->getCommonImagePath('Action/Create');
             $result[] = compact('HREF', 'TEXT', 'IMG');
         }
 
@@ -127,12 +129,12 @@ class CourseMenu extends Block
         {
             $HREF = $this->getUrl(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager :: context(),
-                    Application :: PARAM_ACTION => \Chamilo\Application\Weblcms\Manager :: ACTION_REQUEST,
-                    \Chamilo\Application\Weblcms\Request\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager :: ACTION_CREATE));
+                    Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::context(),
+                    Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_REQUEST,
+                    \Chamilo\Application\Weblcms\Request\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Request\Manager::ACTION_CREATE));
 
-            $TEXT = htmlspecialchars(Translation :: get('CourseRequest'));
-            $IMG = Theme :: getInstance()->getCommonImagePath('Action/Create');
+            $TEXT = htmlspecialchars(Translation::get('CourseRequest'));
+            $IMG = Theme::getInstance()->getCommonImagePath('Action/Create');
             $result[] = compact('HREF', 'TEXT', 'IMG');
         }
 
@@ -144,21 +146,21 @@ class CourseMenu extends Block
         $result = array();
 
         $HREF = $this->getCourseActionUrl(
-            \Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_MANAGER,
+            \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_MANAGER,
             array(
-                \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_UNSUBSCRIBED_COURSES));
+                \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_UNSUBSCRIBED_COURSES));
 
-        $TEXT = htmlspecialchars(Translation :: get('CourseSubscribe'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Subscribe');
+        $TEXT = htmlspecialchars(Translation::get('CourseSubscribe'));
+        $IMG = Theme::getInstance()->getCommonImagePath('Action/Subscribe');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         $HREF = $this->getCourseActionUrl(
-            \Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_MANAGER,
+            \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_MANAGER,
             array(
-                \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_BROWSE_SUBSCRIBED_COURSES));
+                \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_BROWSE_SUBSCRIBED_COURSES));
 
-        $TEXT = htmlspecialchars(Translation :: get('CourseUnsubscribe'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe');
+        $TEXT = htmlspecialchars(Translation::get('CourseUnsubscribe'));
+        $IMG = Theme::getInstance()->getCommonImagePath('Action/Unsubscribe');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         return $result;
@@ -169,28 +171,28 @@ class CourseMenu extends Block
         $result = array();
 
         $HREF = $this->getCourseActionUrl(
-            \Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_MANAGER,
+            \Chamilo\Application\Weblcms\Manager::ACTION_COURSE_MANAGER,
             array(
-                \Chamilo\Application\Weblcms\Course\Manager :: PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager :: ACTION_QUICK_CREATE));
-        $TEXT = htmlspecialchars(Translation :: get('CourseCreate'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Create');
+                \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Course\Manager::ACTION_QUICK_CREATE));
+        $TEXT = htmlspecialchars(Translation::get('CourseCreate'));
+        $IMG = Theme::getInstance()->getCommonImagePath('Action/Create');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
-        $HREF = $this->getCourseActionUrl(\Chamilo\Application\Weblcms\Manager :: ACTION_COURSE_MANAGER);
-        $TEXT = htmlspecialchars(Translation :: get('CourseList'));
-        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Browser');
+        $HREF = $this->getCourseActionUrl(\Chamilo\Application\Weblcms\Manager::ACTION_COURSE_MANAGER);
+        $TEXT = htmlspecialchars(Translation::get('CourseList'));
+        $IMG = Theme::getInstance()->getCommonImagePath('Action/Browser');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
-        $HREF = $this->getCourseActionUrl(\Chamilo\Application\Weblcms\Manager :: ACTION_ADMIN_REQUEST_BROWSER);
+        $HREF = $this->getCourseActionUrl(\Chamilo\Application\Weblcms\Manager::ACTION_ADMIN_REQUEST_BROWSER);
         $TEXT = htmlspecialchars(
-            Translation :: get('UserRequestList', null, \Chamilo\Application\Weblcms\Manager :: context()));
-        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Browser');
+            Translation::get('UserRequestList', null, \Chamilo\Application\Weblcms\Manager::context()));
+        $IMG = Theme::getInstance()->getCommonImagePath('Action/Browser');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
-        $HREF = $this->getCourseActionUrl(\Chamilo\Application\Weblcms\Manager :: ACTION_REQUEST);
+        $HREF = $this->getCourseActionUrl(\Chamilo\Application\Weblcms\Manager::ACTION_REQUEST);
         $TEXT = htmlspecialchars(
-            Translation :: get('RequestList', null, \Chamilo\Application\Weblcms\Manager :: context()));
-        $IMG = Theme :: getInstance()->getCommonImagePath('Action/Browser');
+            Translation::get('RequestList', null, \Chamilo\Application\Weblcms\Manager::context()));
+        $IMG = Theme::getInstance()->getCommonImagePath('Action/Browser');
         $result[] = compact('HREF', 'TEXT', 'IMG');
 
         return $result;
@@ -198,8 +200,8 @@ class CourseMenu extends Block
 
     public function getCourseActionUrl($action, $params = array())
     {
-        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager :: context();
-        $params[\Chamilo\Application\Weblcms\Manager :: PARAM_ACTION] = $action;
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
+        $params[\Chamilo\Application\Weblcms\Manager::PARAM_ACTION] = $action;
 
         $redirect = new Redirect($params);
         return htmlspecialchars($redirect->getUrl());

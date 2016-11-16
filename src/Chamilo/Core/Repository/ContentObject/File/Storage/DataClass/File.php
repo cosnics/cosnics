@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\File\Storage\DataClass;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -11,7 +12,6 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -52,12 +52,12 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public function get_type_string()
     {
-        return Translation :: get('TypeFile', array('EXTENSION' => strtoupper($this->get_extension())));
+        return Translation::get('TypeFile', array('EXTENSION' => strtoupper($this->get_extension())));
     }
 
     /**
@@ -86,82 +86,82 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function get_path()
     {
-        return $this->get_additional_property(self :: PROPERTY_PATH);
+        return $this->get_additional_property(self::PROPERTY_PATH);
     }
 
     public function set_path($path)
     {
-        return $this->set_additional_property(self :: PROPERTY_PATH, $path);
+        return $this->set_additional_property(self::PROPERTY_PATH, $path);
     }
 
     public function get_storage_path()
     {
-        return $this->get_additional_property(self :: PROPERTY_STORAGE_PATH);
+        return $this->get_additional_property(self::PROPERTY_STORAGE_PATH);
     }
 
     public function set_storage_path($storage_path)
     {
-        return $this->set_additional_property(self :: PROPERTY_STORAGE_PATH, $storage_path);
+        return $this->set_additional_property(self::PROPERTY_STORAGE_PATH, $storage_path);
     }
 
     public function get_filename()
     {
-        return $this->get_additional_property(self :: PROPERTY_FILENAME);
+        return $this->get_additional_property(self::PROPERTY_FILENAME);
     }
 
     public function set_filename($filename)
     {
-        return $this->set_additional_property(self :: PROPERTY_FILENAME, $filename);
+        return $this->set_additional_property(self::PROPERTY_FILENAME, $filename);
     }
 
     public function get_filesize()
     {
-        return $this->get_additional_property(self :: PROPERTY_FILESIZE);
+        return $this->get_additional_property(self::PROPERTY_FILESIZE);
     }
 
     public function set_filesize($filesize)
     {
-        return $this->set_additional_property(self :: PROPERTY_FILESIZE, $filesize);
+        return $this->set_additional_property(self::PROPERTY_FILESIZE, $filesize);
     }
 
     public function get_hash()
     {
-        return $this->get_additional_property(self :: PROPERTY_HASH);
+        return $this->get_additional_property(self::PROPERTY_HASH);
     }
 
     public function set_hash($hash)
     {
-        return $this->set_additional_property(self :: PROPERTY_HASH, $hash);
+        return $this->set_additional_property(self::PROPERTY_HASH, $hash);
     }
 
     public function get_mime_type()
     {
-        return FileType :: get_mimetype($this->get_extension());
+        return FileType::get_mimetype($this->get_extension());
     }
 
     public function delete($only_version = false)
     {
         if ($only_version)
         {
-            if (DataManager :: is_only_file_occurence($this->get_storage_path(), $this->get_path()))
+            if (DataManager::is_only_file_occurence($this->get_storage_path(), $this->get_path()))
             {
-                Filesystem :: remove($this->get_full_path());
+                Filesystem::remove($this->get_full_path());
             }
         }
         else
         {
-            if (Text :: is_valid_path($this->get_full_path()))
+            if (Text::is_valid_path($this->get_full_path()))
             {
-                Filesystem :: remove($this->get_full_path());
+                Filesystem::remove($this->get_full_path());
             }
         }
 
-        return parent :: delete($only_version);
+        return parent::delete($only_version);
     }
 
     public function get_url()
     {
-        return Path :: getInstance()->getRepositoryPath(true) . $this->get_path();
+        return Path::getInstance()->getRepositoryPath(true) . $this->get_path();
     }
 
     public function get_full_path()
@@ -175,8 +175,8 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $parts = explode('.', $filename);
         $icon_name = strtolower($parts[count($parts) - 1]);
         $icon_name = $size . '_' . $icon_name;
-        $icon_path = Theme :: getInstance()->getImagePath(
-            ContentObject :: get_content_object_type_namespace($this->get_type()),
+        $icon_path = Theme::getInstance()->getImagePath(
+            ContentObject::get_content_object_type_namespace($this->get_type()),
             'Logo/' . $icon_name,
             'png',
             false);
@@ -192,23 +192,23 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
     {
         return '<img src="' . $this->get_icon_path($size) . '" alt="' . $this->get_extension() . '" title="' .
-            htmlentities($this->get_extension()) . '"/>';
+             htmlentities($this->get_extension()) . '"/>';
     }
 
     public function get_icon_path($size = Theme :: ICON_SMALL)
     {
-        $extension = (string) StringUtilities :: getInstance()->createString($this->get_extension())->upperCamelize();
+        $extension = (string) StringUtilities::getInstance()->createString($this->get_extension())->upperCamelize();
 
-        $path = Theme :: getInstance()->getFileExtension($extension, $size, false);
+        $path = Theme::getInstance()->getFileExtension($extension, $size, false);
         if (file_exists($path))
         {
             $size = $size . ($this->is_current() ? '' : 'Na');
-            return Theme :: getInstance()->getFileExtension($extension, $size);
+            return Theme::getInstance()->getFileExtension($extension, $size);
         }
         else
         {
-            return Theme :: getInstance()->getImagePath(
-                ClassnameUtilities :: getInstance()->getNamespaceParent($this->context(), 2),
+            return Theme::getInstance()->getImagePath(
+                ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2),
                 'Logo/' . $size . ($this->is_current() ? '' : 'Na'));
         }
     }
@@ -245,9 +245,9 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function set_in_memory_file($in_memory_file)
     {
-        if (StringUtilities :: getInstance()->hasValue($in_memory_file))
+        if (StringUtilities::getInstance()->hasValue($in_memory_file))
         {
-            if (StringUtilities :: getInstance()->hasValue($this->get_temporary_file_path()))
+            if (StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()))
             {
                 throw new Exception('A File can not have a temporary file path and in memory content');
             }
@@ -300,9 +300,9 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function set_temporary_file_path($temporary_file_path)
     {
-        if (StringUtilities :: getInstance()->hasValue($temporary_file_path))
+        if (StringUtilities::getInstance()->hasValue($temporary_file_path))
         {
-            if (StringUtilities :: getInstance()->hasValue($this->get_in_memory_file()))
+            if (StringUtilities::getInstance()->hasValue($this->get_in_memory_file()))
             {
                 throw new Exception('A File can not have a temporary file path and in memory content');
             }
@@ -313,7 +313,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function has_file_to_save()
     {
-        return StringUtilities :: getInstance()->hasValue($this->get_temporary_file_path()) || StringUtilities :: getInstance()->hasValue(
+        return StringUtilities::getInstance()->hasValue($this->get_temporary_file_path()) || StringUtilities::getInstance()->hasValue(
             $this->get_in_memory_file());
     }
 
@@ -324,7 +324,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function is_image()
     {
-        return FileType :: is_image($this->get_extension());
+        return FileType::is_image($this->get_extension());
     }
 
     /**
@@ -334,7 +334,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function is_flash()
     {
-        return FileType :: is_flash($this->get_extension());
+        return FileType::is_flash($this->get_extension());
     }
 
     /**
@@ -344,7 +344,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function is_video()
     {
-        return FileType :: is_video($this->get_extension());
+        return FileType::is_video($this->get_extension());
     }
 
     /**
@@ -354,7 +354,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function is_audio()
     {
-        return FileType :: is_audio($this->get_extension());
+        return FileType::is_audio($this->get_extension());
     }
 
     /**
@@ -365,7 +365,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public static function get_image_types()
     {
-        return FileType :: get_type_extensions(FileType :: TYPE_IMAGE);
+        return FileType::get_type_extensions(FileType::TYPE_IMAGE);
     }
 
     /**
@@ -376,7 +376,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public static function get_flash_types()
     {
-        return FileType :: get_type_extensions(FileType :: TYPE_FLASH);
+        return FileType::get_type_extensions(FileType::TYPE_FLASH);
     }
 
     public static function get_flash_video_types()
@@ -395,7 +395,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public static function get_video_types()
     {
-        return FileType :: get_type_extensions(FileType :: TYPE_VIDEO);
+        return FileType::get_type_extensions(FileType::TYPE_VIDEO);
     }
 
     /**
@@ -406,7 +406,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public static function get_audio_types()
     {
-        return FileType :: get_type_extensions(FileType :: TYPE_AUDIO);
+        return FileType::get_type_extensions(FileType::TYPE_AUDIO);
     }
 
     public static function get_showable_types()
@@ -462,18 +462,19 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $response->headers->add(
             array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
 
-        $safeFileName = StringUtilities :: getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
+        $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
             '\\',
             '-')->replace('%', '_')->__toString();
 
         $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag :: DISPOSITION_ATTACHMENT,
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $fileName,
             $safeFileName);
 
         $response->headers->set('Content-Disposition', $dispositionHeader);
 
-        $response->setCallback(function () use($file) {
+        $response->setCallback(function () use ($file)
+        {
             readfile($file);
         });
 
@@ -490,17 +491,18 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $response->headers->add(
             array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
 
-        $safeFileName = StringUtilities :: getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
+        $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
             '\\',
             '-')->replace('%', '_')->__toString();
 
         $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag :: DISPOSITION_INLINE,
+            ResponseHeaderBag::DISPOSITION_INLINE,
             $fileName,
             $safeFileName);
 
         $response->headers->set('Content-Disposition', $dispositionHeader);
-        $response->setCallback(function () use($file) {
+        $response->setCallback(function () use ($file)
+        {
             readfile($file);
         });
 
@@ -511,11 +513,11 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_FILENAME,
-            self :: PROPERTY_FILESIZE,
-            self :: PROPERTY_PATH,
-            self :: PROPERTY_HASH,
-            self :: PROPERTY_STORAGE_PATH);
+            self::PROPERTY_FILENAME,
+            self::PROPERTY_FILESIZE,
+            self::PROPERTY_PATH,
+            self::PROPERTY_HASH,
+            self::PROPERTY_STORAGE_PATH);
     }
 
     /**
@@ -526,23 +528,25 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     protected function check_before_save()
     {
         // Title
-        if (StringUtilities :: getInstance()->isNullOrEmpty($this->get_title()))
+        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_title()))
         {
-            $this->add_error(Translation :: get('FileTitleIsRequired'));
+            $this->add_error(Translation::get('FileTitleIsRequired'));
         }
 
+        $descriptionRequired = Configuration::getInstance()->get_setting(
+            array(\Chamilo\Core\Repository\Manager::context(), 'description_required'));
+
         // Description
-        if (PlatformSetting :: get('description_required', \Chamilo\Core\Repository\Manager :: context()) && StringUtilities :: getInstance()->isNullOrEmpty(
-            $this->get_description()))
+        if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty($this->get_description()))
         {
-            $this->add_error(Translation :: get('FileDescriptionIsRequired'));
+            $this->add_error(Translation::get('FileDescriptionIsRequired'));
         }
 
         // OwnerId
         $owner_id = $this->get_owner_id();
         if (! isset($owner_id) || ! is_numeric($owner_id))
         {
-            $this->add_error(Translation :: get('ContentObjectOwnerIsRequired'));
+            $this->add_error(Translation::get('ContentObjectOwnerIsRequired'));
         }
         /*
          * Save file if needed
@@ -561,7 +565,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             {
                 if (! $this->duplicate_current_file())
                 {
-                    $this->add_error(Translation :: get('FileDuplicateError'));
+                    $this->add_error(Translation::get('FileDuplicateError'));
                 }
             }
 
@@ -569,26 +573,26 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
             if (! isset($fullpath) || ! file_exists($fullpath))
             {
-                $this->add_error(Translation :: get('FileFileContentNotSet'));
+                $this->add_error(Translation::get('FileFileContentNotSet'));
             }
         }
 
         // Filename
-        if (StringUtilities :: getInstance()->isNullOrEmpty($this->get_filename()))
+        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_filename()))
         {
-            $this->add_error(Translation :: get('FileFilenameIsRequired'));
+            $this->add_error(Translation::get('FileFilenameIsRequired'));
         }
 
         // Path
-        if (StringUtilities :: getInstance()->isNullOrEmpty($this->get_path()))
+        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_path()))
         {
-            $this->add_error(Translation :: get('FilePathToFileNotSet'));
+            $this->add_error(Translation::get('FilePathToFileNotSet'));
         }
 
         // Hash
-        if (StringUtilities :: getInstance()->isNullOrEmpty($this->get_hash()))
+        if (StringUtilities::getInstance()->isNullOrEmpty($this->get_hash()))
         {
-            $this->add_error(Translation :: get('FileHashNotSet'));
+            $this->add_error(Translation::get('FileHashNotSet'));
         }
         return ! $this->has_errors();
     }
@@ -617,37 +621,38 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 {
                     $current_path = $this->get_path();
 
-                    if (isset($current_path) && is_file(Path :: getInstance()->getRepositoryPath() . $current_path))
+                    if (isset($current_path) && is_file(Path::getInstance()->getRepositoryPath() . $current_path))
                     {
-                        Filesystem :: remove(Path :: getInstance()->getRepositoryPath() . $current_path);
+                        Filesystem::remove(Path::getInstance()->getRepositoryPath() . $current_path);
                     }
                 }
 
                 $filename_hash = md5($filename);
-                $relative_folder_path = $this->get_owner_id() . '/' . Text :: char_at($filename_hash, 0);
-                $full_folder_path = Path :: getInstance()->getRepositoryPath() . $relative_folder_path;
+                $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
+                $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
 
-                Filesystem :: create_dir($full_folder_path);
-                $unique_hash = Filesystem :: create_unique_name($full_folder_path, $filename_hash);
+                Filesystem::create_dir($full_folder_path);
+                $unique_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
 
                 $relative_path = $relative_folder_path . '/' . $unique_hash;
                 $path_to_save = $full_folder_path . '/' . $unique_hash;
 
                 $save_success = false;
-                if (StringUtilities :: getInstance()->hasValue($this->temporary_file_path))
+                if (StringUtilities::getInstance()->hasValue($this->temporary_file_path))
                 {
-                    if (Filesystem :: move_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
+                    if (Filesystem::move_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
                     {
 
                         $save_success = true;
                     }
                     else
                     {
-                        $this->add_error('File move failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save);
+                        $this->add_error(
+                            'File move failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save);
 
-                        if (Filesystem :: copy_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
+                        if (Filesystem::copy_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
                         {
-                            if (Filesystem :: remove($this->temporary_file_path))
+                            if (Filesystem::remove($this->temporary_file_path))
                             {
                                 $save_success = true;
                             }
@@ -658,11 +663,12 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                         }
                         else
                         {
-                            $this->add_error('File copy failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save);
+                            $this->add_error(
+                                'File copy failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save);
                         }
                     }
                 }
-                elseif (StringUtilities :: getInstance()->hasValue($this->in_memory_file) && Filesystem :: write_to_file(
+                elseif (StringUtilities::getInstance()->hasValue($this->in_memory_file) && Filesystem::write_to_file(
                     $path_to_save,
                     $this->in_memory_file))
                 {
@@ -671,24 +677,26 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
                 if ($save_success)
                 {
-                    Filesystem :: chmod($path_to_save, PlatformSetting :: get('permissions_new_files'));
+                    Filesystem::chmod(
+                        $path_to_save,
+                        Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'permissions_new_files')));
 
-                    $file_bytes = Filesystem :: get_disk_space($path_to_save);
+                    $file_bytes = Filesystem::get_disk_space($path_to_save);
 
                     $this->set_filesize($file_bytes);
-                    $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
+                    $this->set_storage_path(Path::getInstance()->getRepositoryPath());
                     $this->set_path($relative_path);
                     $this->set_hash($unique_hash);
                     $this->set_content_hash(md5_file($path_to_save));
                 }
                 else
                 {
-                    $this->add_error(Translation :: get('FileStoreError'));
+                    $this->add_error(Translation::get('FileStoreError'));
                 }
             }
             else
             {
-                $this->add_error(Translation :: get('FileFilenameNotSet'));
+                $this->add_error(Translation::get('FileFilenameNotSet'));
             }
         }
 
@@ -710,14 +718,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         if (file_exists($full_current_file_path))
         {
             $filename_hash = md5($this->get_filename());
-            $relative_folder_path = $this->get_owner_id() . '/' . Text :: char_at($filename_hash, 0);
-            $full_folder_path = Path :: getInstance()->getRepositoryPath() . $relative_folder_path;
+            $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
+            $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
 
-            $unique_filename_hash = Filesystem :: create_unique_name($full_folder_path, $filename_hash);
+            $unique_filename_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
 
             $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
 
-            $this->set_storage_path(Path :: getInstance()->getRepositoryPath());
+            $this->set_storage_path(Path::getInstance()->getRepositoryPath());
             $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
             $this->set_hash($unique_filename_hash);
 
@@ -742,7 +750,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     {
         $this->clear_errors();
 
-        return parent :: create();
+        return parent::create();
     }
 
     /**
@@ -762,13 +770,13 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
         $this->clear_errors();
 
-        return parent :: update($trueUpdate);
+        return parent::update($trueUpdate);
     }
 
     public function version($trueUpdate = true)
     {
         $this->clear_errors();
-        return parent :: version($trueUpdate);
+        return parent::version($trueUpdate);
     }
 
     public function update_include_links(array $mapping)
@@ -782,7 +790,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             $this->contents = fread($handle, filesize($this->get_full_path()));
 
             // process changes
-            parent :: update_include_links($mapping);
+            parent::update_include_links($mapping);
 
             // write file
             rewind($handle);
@@ -803,6 +811,6 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public static function get_searchable_property_names()
     {
-        return array(self :: PROPERTY_FILENAME);
+        return array(self::PROPERTY_FILENAME);
     }
 }
