@@ -17,14 +17,14 @@ abstract class Manager extends Application
     // Parameters
     const PARAM_FAVOURITE_ID = 'favourite_id';
     const PARAM_ACTION = 'favourite_action';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_CREATE = 'Creator';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      *
@@ -42,6 +42,6 @@ abstract class Manager extends Application
      */
     public function getCurrentPublicationIdentifier()
     {
-        return $this->getRequest()->query->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return $this->getRequest()->query->get(\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
     }
 }

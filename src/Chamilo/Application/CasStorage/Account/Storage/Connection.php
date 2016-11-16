@@ -9,7 +9,7 @@ use Doctrine\DBAL\DriverManager;
 
 /**
  * This class represents the current CAS Account database connection.
- *
+ * 
  * @author Hans De Bisschop
  */
 class Connection extends \Chamilo\Libraries\Storage\DataManager\Doctrine\Connection
@@ -34,7 +34,7 @@ class Connection extends \Chamilo\Libraries\Storage\DataManager\Doctrine\Connect
     {
         $classLoader = new ClassLoader('Doctrine', Path::getInstance()->getPluginPath());
         $classLoader->register();
-
+        
         if (is_null($connection))
         {
             $cas_dbms = Configuration::getInstance()->get_setting(
@@ -47,21 +47,21 @@ class Connection extends \Chamilo\Libraries\Storage\DataManager\Doctrine\Connect
                 array(\Chamilo\Application\CasStorage\Account\Manager::context(), 'host'));
             $cas_database = Configuration::getInstance()->get_setting(
                 array(\Chamilo\Application\CasStorage\Account\Manager::context(), 'database'));
-
+            
             $data_source_name = DataSourceName::factory(
-                'doctrine',
-                $cas_dbms,
-                $cas_user,
-                $cas_host,
-                $cas_database,
+                'doctrine', 
+                $cas_dbms, 
+                $cas_user, 
+                $cas_host, 
+                $cas_database, 
                 $cas_password);
-
+            
             $configuration = new \Doctrine\DBAL\Configuration();
             $connection_parameters = array(
-                'dbname' => $data_source_name->get_database(),
-                'user' => $data_source_name->get_username(),
-                'password' => $data_source_name->get_password(),
-                'host' => $data_source_name->get_host(),
+                'dbname' => $data_source_name->get_database(), 
+                'user' => $data_source_name->get_username(), 
+                'password' => $data_source_name->get_password(), 
+                'host' => $data_source_name->get_host(), 
                 'driverClass' => $data_source_name->get_driver(true));
             $this->connection = DriverManager::getConnection($connection_parameters, $configuration);
         }
@@ -73,7 +73,7 @@ class Connection extends \Chamilo\Libraries\Storage\DataManager\Doctrine\Connect
 
     /**
      * Returns the instance of this class.
-     *
+     * 
      * @return Connection The instance.
      */
     public static function getInstance()
@@ -92,7 +92,7 @@ class Connection extends \Chamilo\Libraries\Storage\DataManager\Doctrine\Connect
 
     /**
      * Gets the database connection.
-     *
+     * 
      * @return Doctrine\DBAL\Connection
      */
     public function get_connection()

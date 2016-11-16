@@ -12,14 +12,14 @@ class GroupTableDataProvider extends DataClassTableDataProvider
 
     function retrieve_data($condition, $offset, $count, $order_property = NULL)
     {
-        return DataManager :: retrieves(
-            Group :: class_name(),
+        return DataManager::retrieves(
+            Group::class_name(), 
             new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
     }
 
     function count_data($condition)
     {
-        return DataManager :: count(Group :: class_name(), new DataClassCountParameters($condition));
+        return DataManager::count(Group::class_name(), new DataClassCountParameters($condition));
     }
 }
 ?>

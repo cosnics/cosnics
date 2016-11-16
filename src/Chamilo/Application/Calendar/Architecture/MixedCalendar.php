@@ -15,11 +15,11 @@ abstract class MixedCalendar implements CalendarInterface
 
     /**
      * Get the source type of the implementing context
-     *
+     * 
      * @return integer
      */
     public function getSourceType()
     {
-        return CalendarRendererProvider :: SOURCE_TYPE_BOTH;
+        return CalendarRendererProvider::SOURCE_TYPE_BOTH;
     }
 }

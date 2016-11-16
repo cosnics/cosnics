@@ -23,9 +23,9 @@ class LocationResult extends ContextLocationResult
     {
         $portfolioUrl = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager :: package(),
-                \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager :: PARAM_STEP => $result->get_id()));
-
+                Application::PARAM_CONTEXT => \Chamilo\Application\Portfolio\Manager::package(), 
+                \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::PARAM_STEP => $result->get_id()));
+        
         return $portfolioUrl->getUrl();
     }
 }

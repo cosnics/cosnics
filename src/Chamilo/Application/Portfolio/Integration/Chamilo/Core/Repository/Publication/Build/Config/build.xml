@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="application\portfolio\integration\core\repository\publication" default="build">
-	<resolvepath propertyName="package-directory" file="../../" />
-	<import file="../../../../../../../../libraries/php/build/build.xml" />
+<project
+    name="application\portfolio\integration\core\repository\publication"
+    default="build">
+    <resolvepath
+        propertyName="package-directory"
+        file="../../" />
+    <import file="../../../../../../../../libraries/php/build/build.xml" />
 </project>

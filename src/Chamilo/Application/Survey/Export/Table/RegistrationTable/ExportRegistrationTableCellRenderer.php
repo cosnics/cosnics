@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupp
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Translation;
 
-class ExportRegistrationTableCellRenderer extends DataClassTableCellRenderer implements
+class ExportRegistrationTableCellRenderer extends DataClassTableCellRenderer implements 
     TableCellRendererActionsColumnSupport
 {
 
@@ -17,12 +17,12 @@ class ExportRegistrationTableCellRenderer extends DataClassTableCellRenderer imp
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Activate'),
-                Theme :: getInstance()->getCommonImagePath('Action/Confirm'),
-                $this->component->get_export_template_create_url($object),
-                ToolbarItem :: DISPLAY_ICON,
+                Translation::get('Activate'), 
+                Theme::getInstance()->getCommonImagePath('Action/Confirm'), 
+                $this->component->get_export_template_create_url($object), 
+                ToolbarItem::DISPLAY_ICON, 
                 true));
-
+        
         return $toolbar->as_html();
     }
 }

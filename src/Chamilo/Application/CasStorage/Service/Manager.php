@@ -20,5 +20,5 @@ abstract class Manager extends Application
     const ACTION_DEACTIVATE = 'Deactivater';
     const ACTION_DELETE = 'Deleter';
     const ACTION_UPDATE = 'Updater';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 }

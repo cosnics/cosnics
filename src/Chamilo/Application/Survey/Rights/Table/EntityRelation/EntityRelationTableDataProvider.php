@@ -20,12 +20,12 @@ class EntityRelationTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $orderProperty = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderProperty);
-        return DataManager :: retrieves(PublicationEntityRelation :: class_name(), $parameters);
+        return DataManager::retrieves(PublicationEntityRelation::class_name(), $parameters);
     }
 
     public function count_data($condition)
     {
         $parameters = new DataClassCountParameters($condition);
-        return DataManager :: count(PublicationEntityRelation :: class_name(), $parameters);
+        return DataManager::count(PublicationEntityRelation::class_name(), $parameters);
     }
 }

@@ -54,47 +54,47 @@ class ExcelMedianExporterComponent extends Manager
      */
     function run()
     {
-        $ids = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-
+        $ids = Request::get(Manager::PARAM_PUBLICATION_ID);
+        
         if (! is_array($ids))
         {
             $ids = array($ids);
         }
-
+        
         $this->create_participants($ids);
-
+        
         // dump($this->participants);
         // dump('hi');
         // exit;
-
+        
         $this->render_data();
     }
 
     public function render_data()
     {
         $excel = new PHPExcel();
-
+        
         $worksheet = $excel->getSheet(0)->setTitle('Algemeen');
         // $this->render_summary_data($worksheet);
-
+        
         $questions = $this->get_questions();
         $worksheet_index = 1;
-
+        
         foreach ($questions as $question_id => $question)
         {
-
-            $title = StringUtilities :: getInstance()->truncate(trim(strip_tags($question->get_title())), 15, true, '');
+            
+            $title = StringUtilities::getInstance()->truncate(trim(strip_tags($question->get_title())), 15, true, '');
             $worksheet = $excel->createSheet($worksheet_index)->setTitle($title);
             $worksheet = $excel->getSheet($worksheet_index);
             $page_reporting_data = $this->create_page_reporting_data($question);
             $this->render_page_data($worksheet, $page_reporting_data);
             $worksheet_index ++;
         }
-
+        
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="' . 'survey_export' . '.xlsx"');
         header('Cache-Control: max-age=0');
-        $objWriter = PHPExcel_IOFactory :: createWriter($excel, 'Excel2007');
+        $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
         return $objWriter->save('php://output');
     }
 
@@ -102,7 +102,7 @@ class ExcelMedianExporterComponent extends Manager
     {
         $page_questions = array();
         $surveys = $this->surveys;
-
+        
         foreach ($surveys as $survey)
         {
             $pages = $survey->get_pages();
@@ -111,16 +111,16 @@ class ExcelMedianExporterComponent extends Manager
                 if ($page->count_questions() != 0)
                 {
                     $questions = $page->get_questions();
-
+                    
                     foreach ($questions as $question)
                     {
-
+                        
                         $page_questions[$question->get_id()] = $question;
                     }
                 }
             }
         }
-
+        
         return $page_questions;
     }
 
@@ -128,113 +128,113 @@ class ExcelMedianExporterComponent extends Manager
     {
         $column = 1;
         $row = 3;
-
+        
         $worksheet->getColumnDimensionByColumn($column)->setWidth(20);
         $worksheet->getColumnDimensionByColumn($column + 1)->setWidth(20);
         $worksheet->getColumnDimensionByColumn($column + 2)->setWidth(20);
         $worksheet->getColumnDimensionByColumn($column + 3)->setWidth(20);
         $worksheet->getColumnDimensionByColumn($column + 4)->setWidth(5);
         $worksheet->getColumnDimensionByColumn($column + 5)->setWidth(200);
-
-        $surveys = $this->participants[self :: SURVEYS];
-
-        $worksheet->setCellValueByColumnAndRow($column, $row, Translation :: get('SurveyName'));
+        
+        $surveys = $this->participants[self::SURVEYS];
+        
+        $worksheet->setCellValueByColumnAndRow($column, $row, Translation::get('SurveyName'));
         $worksheet->getStyleByColumnAndRow($column, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column, $row)->getFont()->setBold(true);
-        $worksheet->setCellValueByColumnAndRow($column + 1, $row, Translation :: get('Description'));
+        $worksheet->setCellValueByColumnAndRow($column + 1, $row, Translation::get('Description'));
         $worksheet->getStyleByColumnAndRow($column + 1, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column + 1, $row)->getFont()->setBold(true);
         $row ++;
-
+        
         foreach ($surveys as $survey)
         {
-            $title = $survey[self :: SURVEY_NAME];
+            $title = $survey[self::SURVEY_NAME];
             $worksheet->setCellValueByColumnAndRow($column, $row, $title);
             $this->wrap_text($worksheet, $column, $row);
-            $description = $survey[self :: SURVEY_DESCRIPTION];
+            $description = $survey[self::SURVEY_DESCRIPTION];
             $worksheet->setCellValueByColumnAndRow($column + 1, $row, $description);
             $this->wrap_text($worksheet, $column, $row);
             $row ++;
         }
-
+        
         $row = $row + 2;
-        $all_participants = $this->participants[self :: ALL_PARTICIPANT_COUNT];
+        $all_participants = $this->participants[self::ALL_PARTICIPANT_COUNT];
         $worksheet->setCellValueByColumnAndRow($column, $row, 'Aantal participanten');
         $worksheet->getStyleByColumnAndRow($column, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column, $row)->getFont()->setBold(true);
-
+        
         $worksheet->setCellValueByColumnAndRow($column + 1, $row, $all_participants);
         $row ++;
-        $started = $this->participants[self :: STARTED_PARTICIPANT_COUNT];
+        $started = $this->participants[self::STARTED_PARTICIPANT_COUNT];
         $worksheet->setCellValueByColumnAndRow($column, $row, 'Deelgenomen');
         $worksheet->getStyleByColumnAndRow($column, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column, $row)->getFont()->setBold(true);
-
+        
         $worksheet->setCellValueByColumnAndRow($column + 1, $row, $started);
         $row ++;
-        $not_started = $this->participants[self :: NOT_STARTED_PARTICIPANT_COUNT];
+        $not_started = $this->participants[self::NOT_STARTED_PARTICIPANT_COUNT];
         $worksheet->setCellValueByColumnAndRow($column, $row, 'Niet deelgenomen');
         $worksheet->getStyleByColumnAndRow($column, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column, $row)->getFont()->setBold(true);
-
+        
         $worksheet->setCellValueByColumnAndRow($column + 1, $row, $not_started);
         $row ++;
-        $participatie = $this->participants[self :: PARTICIPATION_GRADE];
+        $participatie = $this->participants[self::PARTICIPATION_GRADE];
         $worksheet->setCellValueByColumnAndRow($column, $row, 'Participatigraad (%)');
         $worksheet->getStyleByColumnAndRow($column, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column, $row)->getFont()->setBold(true);
-
+        
         $worksheet->setCellValueByColumnAndRow($column + 1, $row, $participatie);
         $row = $row + 2;
-
+        
         $worksheet->setCellValueByColumnAndRow($column, $row, 'Aantal participanten');
         $worksheet->getStyleByColumnAndRow($column, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column, $row)->getFont()->setBold(true);
         $worksheet->setCellValueByColumnAndRow($column + 1, $row, 'Deelgenomen');
         $worksheet->getStyleByColumnAndRow($column + 1, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column + 1, $row)->getFont()->setBold(true);
         $worksheet->setCellValueByColumnAndRow($column + 2, $row, 'Niet deelgenomen');
         $worksheet->getStyleByColumnAndRow($column + 2, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column + 2, $row)->getFont()->setBold(true);
         $worksheet->setCellValueByColumnAndRow($column + 3, $row, 'Participatie (%)');
         $worksheet->getStyleByColumnAndRow($column + 3, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column + 3, $row)->getFont()->setBold(true);
         $worksheet->setCellValueByColumnAndRow($column + 5, $row, 'Groepen');
         $worksheet->getStyleByColumnAndRow($column + 5, $row)->getAlignment()->setHorizontal(
-            PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+            PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $worksheet->getStyleByColumnAndRow($column + 5, $row)->getFont()->setBold(true);
-
+        
         $row = $row + 2;
-
-        $groups = $this->participants[self :: GROUPS];
-
+        
+        $groups = $this->participants[self::GROUPS];
+        
         foreach ($groups as $group_id => $group)
         {
             // $name = $this->participants[self :: GROUPS][$group_id][self :: GROUP_NAME];
-
-            $all_participant_count = $group[self :: ALL_PARTICIPANT_COUNT];
+            
+            $all_participant_count = $group[self::ALL_PARTICIPANT_COUNT];
             $worksheet->setCellValueByColumnAndRow($column, $row, $all_participant_count);
-
-            $started_participant_count = $group[self :: STARTED_PARTICIPANT_COUNT];
+            
+            $started_participant_count = $group[self::STARTED_PARTICIPANT_COUNT];
             $worksheet->setCellValueByColumnAndRow($column + 1, $row, $started_participant_count);
-
-            $not_started_participant_count = $group[self :: NOT_STARTED_PARTICIPANT_COUNT];
+            
+            $not_started_participant_count = $group[self::NOT_STARTED_PARTICIPANT_COUNT];
             $worksheet->setCellValueByColumnAndRow($column + 2, $row, $not_started_participant_count);
-
-            $participatie = $group[self :: PARTICIPATION_GRADE];
+            
+            $participatie = $group[self::PARTICIPATION_GRADE];
             $worksheet->setCellValueByColumnAndRow($column + 3, $row, $participatie);
-
-            $description = $group[self :: GROUP_DESCRIPTION];
+            
+            $description = $group[self::GROUP_DESCRIPTION];
             $worksheet->setCellValueByColumnAndRow($column + 5, $row, $description);
             $row ++;
         }
@@ -244,7 +244,7 @@ class ExcelMedianExporterComponent extends Manager
     {
         $column = 0;
         $block_row = 0;
-
+        
         $worksheet->getColumnDimensionByColumn($column)->setWidth(50);
         $column_count = 1;
         while ($column_count < 7)
@@ -252,42 +252,42 @@ class ExcelMedianExporterComponent extends Manager
             $worksheet->getColumnDimensionByColumn($column + $column_count)->setWidth(15);
             $column_count ++;
         }
-
+        
         if (is_array($data))
         {
-
+            
             foreach ($data as $block_data)
             {
                 $column = 0;
                 $block_row = $block_row + 2;
-
-                $participant_group = $block_data[self :: DATA_GROUP];
-                $participant_count = $block_data[self :: STARTED_PARTICIPANT_COUNT];
-                $block_title = trim(html_entity_decode(strip_tags($block_data[self :: DATA_NAME])));
-                $block_description = trim(html_entity_decode(strip_tags($block_data[self :: DATA_DESCRIPTION])));
-                $block_content_data = $block_data[self :: REPORTING_DATA];
-
+                
+                $participant_group = $block_data[self::DATA_GROUP];
+                $participant_count = $block_data[self::STARTED_PARTICIPANT_COUNT];
+                $block_title = trim(html_entity_decode(strip_tags($block_data[self::DATA_NAME])));
+                $block_description = trim(html_entity_decode(strip_tags($block_data[self::DATA_DESCRIPTION])));
+                $block_content_data = $block_data[self::REPORTING_DATA];
+                
                 $worksheet->setCellValueByColumnAndRow($column, $block_row, $participant_group);
                 $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-                    PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+                    PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
                 $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
                 $this->wrap_text($worksheet, $column, $block_row);
-
+                
                 $block_row ++;
                 $worksheet->setCellValueByColumnAndRow($column, $block_row, 'Deelnemers');
                 $worksheet->setCellValueByColumnAndRow($column + 1, $block_row, $participant_count);
                 $worksheet->getStyleByColumnAndRow($column + 1, $block_row)->getAlignment()->setHorizontal(
-                    PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+                    PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
                 $worksheet->getStyleByColumnAndRow($column + 1, $block_row)->getFont()->setBold(true);
-
+                
                 $block_row = $block_row + 2;
-
+                
                 $worksheet->setCellValueByColumnAndRow($column, $block_row, $block_title);
                 $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-                    PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+                    PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
                 $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
                 $this->wrap_text($worksheet, $column, $block_row);
-
+                
                 if ($block_description != '')
                 {
                     $block_row ++;
@@ -295,86 +295,86 @@ class ExcelMedianExporterComponent extends Manager
                     $this->wrap_text($worksheet, $column, $block_row);
                     $block_row ++;
                 }
-
+                
                 $block_row ++;
-
+                
                 foreach ($block_content_data->get_rows() as $row_id => $row_name)
                 {
                     // dump($row_name);
                     $column ++;
                     $worksheet->getColumnDimensionByColumn($column)->setAutoSize(true);
                     $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-                        PHPExcel_Style_Alignment :: HORIZONTAL_CENTER);
+                        PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                     $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
                     $worksheet->setCellValueByColumnAndRow(
-                        $column,
-                        $block_row,
+                        $column, 
+                        $block_row, 
                         trim(html_entity_decode(strip_tags($row_name), ENT_QUOTES)));
                     $this->wrap_text($worksheet, $column, $block_row);
                 }
-
+                
                 $block_row ++;
-
+                
                 $row_count = count($block_content_data->get_rows());
                 $category_count = count($block_content_data->get_categories());
-
+                
                 $categrory_row_index = 1;
-
+                
                 // dump('row count: ' . $row_count);
                 // dump('cat count: ' . $category_count);
-
+                
                 foreach ($block_content_data->get_categories() as $category_id => $category_name)
                 {
                     $column = 0;
-
+                    
                     $worksheet->setCellValueByColumnAndRow(
-                        $column,
-                        $block_row,
+                        $column, 
+                        $block_row, 
                         trim(html_entity_decode(strip_tags($category_name), ENT_QUOTES)));
                     $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-                        PHPExcel_Style_Alignment :: HORIZONTAL_LEFT);
+                        PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
                     $this->wrap_text($worksheet, $column, $block_row);
-
+                    
                     // dump('category row index: ' . $categrory_row_index);
                     // dump('cat row: ' . $block_row);
                     //
-
+                    
                     if ($categrory_row_index == $category_count && $category_count != 1)
                     {
                         $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
                     }
-
+                    
                     $row_index = 1;
                     // dump('row index: ' . $row_index);
-
+                    
                     foreach ($block_content_data->get_rows() as $row_id => $row_name)
                     {
                         $column ++;
                         $worksheet->setCellValueByColumnAndRow(
-                            $column,
-                            $block_row,
+                            $column, 
+                            $block_row, 
                             $block_content_data->get_data_category_row($category_id, $row_id));
                         $worksheet->getStyleByColumnAndRow($column, $block_row)->getAlignment()->setHorizontal(
-                            PHPExcel_Style_Alignment :: HORIZONTAL_CENTER);
+                            PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                         // dump('row index: ' . $row_index);
                         // dump('row: ' . $block_row);
-
+                        
                         if ($row_index == $row_count && $row_count != 1)
                         {
                             $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
                         }
-
+                        
                         if ($categrory_row_index == $category_count && $category_count != 1)
                         {
                             $worksheet->getStyleByColumnAndRow($column, $block_row)->getFont()->setBold(true);
                         }
-
+                        
                         $row_index ++;
                     }
                     $categrory_row_index ++;
                     $block_row ++;
                 }
-
+                
                 // exit();
             }
         }
@@ -388,79 +388,79 @@ class ExcelMedianExporterComponent extends Manager
     private function create_page_reporting_data($question)
     {
         $page_reporting_data = array();
-
-        $all_participants_ids = $this->participants[self :: ALL_PARTICIPANTS];
+        
+        $all_participants_ids = $this->participants[self::ALL_PARTICIPANTS];
         $reporting_data = $this->create_reporting_data($question, $all_participants_ids);
-
+        
         $reporting_data_question = array();
-        $reporting_data_question[self :: DATA_GROUP] = Translation :: get(AllGroups);
-        $reporting_data_question[self :: DATA_NAME] = $question->get_title();
-        $reporting_data_question[self :: DATA_DESCRIPTION] = $question->get_description();
-        $reporting_data_question[self :: STARTED_PARTICIPANT_COUNT] = $this->participants[self :: STARTED_PARTICIPANT_COUNT];
-        $reporting_data_question[self :: REPORTING_DATA] = $reporting_data;
+        $reporting_data_question[self::DATA_GROUP] = Translation::get(AllGroups);
+        $reporting_data_question[self::DATA_NAME] = $question->get_title();
+        $reporting_data_question[self::DATA_DESCRIPTION] = $question->get_description();
+        $reporting_data_question[self::STARTED_PARTICIPANT_COUNT] = $this->participants[self::STARTED_PARTICIPANT_COUNT];
+        $reporting_data_question[self::REPORTING_DATA] = $reporting_data;
         $page_reporting_data[] = $reporting_data_question;
-
-        $groups = $this->participants[self :: GROUPS];
+        
+        $groups = $this->participants[self::GROUPS];
         foreach ($groups as $group)
         {
             $reporting_data_question = array();
-            $reporting_data_question[self :: DATA_GROUP] = $group[self :: GROUP_DESCRIPTION];
-            $reporting_data_question[self :: DATA_NAME] = $question->get_title();
-            $reporting_data_question[self :: DATA_DESCRIPTION] = $question->get_description();
-            $reporting_data_question[self :: STARTED_PARTICIPANT_COUNT] = $group[self :: STARTED_PARTICIPANT_COUNT];
-            $all_participants_ids = $group[self :: ALL_PARTICIPANTS];
+            $reporting_data_question[self::DATA_GROUP] = $group[self::GROUP_DESCRIPTION];
+            $reporting_data_question[self::DATA_NAME] = $question->get_title();
+            $reporting_data_question[self::DATA_DESCRIPTION] = $question->get_description();
+            $reporting_data_question[self::STARTED_PARTICIPANT_COUNT] = $group[self::STARTED_PARTICIPANT_COUNT];
+            $all_participants_ids = $group[self::ALL_PARTICIPANTS];
             $reporting_data = $this->create_reporting_data($question, $all_participants_ids);
-            $reporting_data_question[self :: REPORTING_DATA] = $reporting_data;
+            $reporting_data_question[self::REPORTING_DATA] = $reporting_data;
             $page_reporting_data[] = $reporting_data_question;
         }
-
+        
         return $page_reporting_data;
     }
 
     private function create_reporting_data($question, $participant_ids)
     {
-
+        
         // retrieve the answer trackers
         $conditions = array();
-        $conditions[] = new InCondition(Answer :: PROPERTY_SURVEY_PARTICIPANT_ID, $participant_ids);
-        $conditions[] = new EqualityCondition(Answer :: PROPERTY_COMPLEX_QUESTION_ID, $question->get_id());
+        $conditions[] = new InCondition(Answer::PROPERTY_SURVEY_PARTICIPANT_ID, $participant_ids);
+        $conditions[] = new EqualityCondition(Answer::PROPERTY_COMPLEX_QUESTION_ID, $question->get_id());
         $condition = new AndCondition($conditions);
         // $trackers = Tracker :: get_data(Answer :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
-
+        
         // option and matches of question
         $options = array();
         $matches = array();
-
+        
         // matrix to store the answer count
         $answer_count = array();
-
+        
         // reporting data and type of question
         $reporting_data = new ReportingData();
         $type = $question->get_type();
-
+        
         switch ($type)
         {
-            case Matrix :: get_type_name() :
-
+            case Matrix::get_type_name() :
+                
                 // get options and matches
                 $opts = $question->get_options();
                 foreach ($opts as $option)
                 {
                     $options[] = $option->get_value();
                 }
-
+                
                 $matchs = $question->get_matches();
                 foreach ($matchs as $match)
                 {
                     $matches[] = $match;
                 }
                 $total_key = count($matches);
-                $matches[] = Translation :: get(self :: COUNT);
-
+                $matches[] = Translation::get(self::COUNT);
+                
                 // create answer matrix for answer counting
-
+                
                 $option_count = count($options) - 1;
-
+                
                 while ($option_count >= 0)
                 {
                     $match_count = count($matches) - 1;
@@ -472,9 +472,9 @@ class ExcelMedianExporterComponent extends Manager
                     // $answer_count[$option_count][$total_key] = 0;
                     $option_count --;
                 }
-
+                
                 // count answers from all answer trackers
-
+                
                 // while ($tracker = $trackers->next_result())
                 // {
                 // $answer = $tracker->get_answer();
@@ -497,16 +497,16 @@ class ExcelMedianExporterComponent extends Manager
                 // }
                 // }
                 // }
-
+                
                 // creating actual reporing data
-
+                
                 foreach ($matches as $match)
                 {
                     $reporting_data->add_row(strip_tags($match));
                 }
-
+                
                 $totals = array();
-
+                
                 // like it was: = abdsolute figures
                 // foreach ($options as $option_key => $option)
                 // {
@@ -525,35 +525,35 @@ class ExcelMedianExporterComponent extends Manager
                 // }
                 //
                 // }
-
+                
                 // percentage figures
-
+                
                 // total count
-
+                
                 // dump($answer_count);
-
+                
                 foreach ($options as $option_key => $option)
                 {
-
+                    
                     foreach ($matches as $match_key => $match)
                     {
-
+                        
                         $totals[$match_key] = $totals[$match_key] + $answer_count[$option_key][$match_key];
                     }
                     $totals[$match_key] = $totals[$match_key];
                 }
-
+                
                 // dump($totals);
-
+                
                 // exit;
-
+                
                 $total_colums = count($totals);
                 $total_count = $totals[$total_colums - 1];
-
+                
                 $summary_totals = array();
-
+                
                 $median_number = 1;
-
+                
                 foreach ($totals as $index => $value)
                 {
                     if ($total_count == 0)
@@ -572,14 +572,14 @@ class ExcelMedianExporterComponent extends Manager
                 // dump($summary_totals);
                 // exit;
                 // set the actual percentages
-
+                
                 // dump($answer_count);
                 $match_count = count($matches);
                 $total_index = $match_count - 1;
                 // dump($match_count);
-
+                
                 // exit();
-
+                
                 foreach ($options as $option_key => $option)
                 {
                     $reporting_data->add_category($option);
@@ -600,7 +600,7 @@ class ExcelMedianExporterComponent extends Manager
                             // $value = $answer_count[$option_key][$match_key] / $total_count;
                             // $percentage = number_format($value * 100, 2);
                             $count = $answer_count[$option_key][$total_index];
-
+                            
                             // dump($count);
                             // dump($match);
                             // $reporting_data->add_data_category_row($option, strip_tags($match), $percentage);
@@ -614,68 +614,68 @@ class ExcelMedianExporterComponent extends Manager
                             $median = $median + $percentage;
                             $reporting_data->add_data_category_row($option, strip_tags($match), $percentage);
                         }
-
+                        
                         $median_number ++;
                     }
                     $median = $median / $count;
                     $median = number_format($median, 2);
-                    $reporting_data->add_data_category_row($option, Translation :: get(self :: COUNT), $median);
-
+                    $reporting_data->add_data_category_row($option, Translation::get(self::COUNT), $median);
+                    
                     // dump($median);
                 }
-
+                
                 // exit;
-
+                
                 // dump($totals);
                 //
                 // dump($answer_count);
-
+                
                 // dump($totals);
-
+                
                 // exit;
-
+                
                 if (count($options) > 1)
                 {
-                    $reporting_data->add_category(Translation :: get(self :: TOTAL));
-
+                    $reporting_data->add_category(Translation::get(self::TOTAL));
+                    
                     // foreach ($options as $option)
                     // {
                     $total = 0;
                     foreach ($matches as $match_key => $match)
                     {
-                        if ($match != Translation :: get(self :: COUNT))
+                        if ($match != Translation::get(self::COUNT))
                         {
-
+                            
                             $reporting_data->add_data_category_row(
-                                Translation :: get(self :: TOTAL),
-                                strip_tags($match),
+                                Translation::get(self::TOTAL), 
+                                strip_tags($match), 
                                 $summary_totals[$match_key]);
                             $total = $total + $summary_totals[$match_key];
                         }
-
+                        
                         // dump($match_key);
                         // dump($match);
                         // dump($summary_totals[$match_key]);
                     }
                     // dump($total);
                     // dump($totals);
-                    $keys = array_keys($matches, Translation :: get(self :: COUNT));
+                    $keys = array_keys($matches, Translation::get(self::COUNT));
                     // dump($totals[$keys[0]]);
-
+                    
                     $median = $total / $totals[$keys[0]];
                     $median = number_format($median, 2);
                     // dump($median);
                     $reporting_data->add_data_category_row(
-                        Translation :: get(self :: TOTAL),
-                        Translation :: get(self :: COUNT),
+                        Translation::get(self::TOTAL), 
+                        Translation::get(self::COUNT), 
                         $median);
-
+                    
                     // }
                 }
                 // exit;
                 break;
-            case MultipleChoice :: get_type_name() :
-
+            case MultipleChoice::get_type_name() :
+                
                 // get options and matches
                 $opts = $question->get_options();
                 foreach ($opts as $option)
@@ -683,11 +683,11 @@ class ExcelMedianExporterComponent extends Manager
                     $options[] = $option->get_value();
                 }
                 // $options[] = self :: NO_ANSWER;
-
-                $matches[] = Translation :: get(self :: COUNT);
-
+                
+                $matches[] = Translation::get(self::COUNT);
+                
                 // create answer matrix for answer counting
-
+                
                 $option_count = count($options) - 1;
                 while ($option_count >= 0)
                 {
@@ -695,9 +695,9 @@ class ExcelMedianExporterComponent extends Manager
                     $option_count --;
                 }
                 // $answer_count[self :: NO_ANSWER] = 0;
-
+                
                 // count answers from all answer trackers
-
+                
                 // while ($tracker = $trackers->next_result())
                 // {
                 // $answer = $tracker->get_answer();
@@ -713,28 +713,28 @@ class ExcelMedianExporterComponent extends Manager
                 // }
                 // }
                 // }
-
+                
                 // totalcount
                 $total_count = 0;
                 foreach ($options as $option_key => $option)
                 {
-
+                    
                     foreach ($matches as $match)
                     {
                         $total_count = $total_count + $answer_count[$option_key];
                     }
                 }
-
+                
                 // creating actual reporing data
-
+                
                 foreach ($matches as $match)
                 {
                     $reporting_data->add_row(strip_tags($match));
                 }
-
+                
                 foreach ($options as $option_key => $option)
                 {
-
+                    
                     $reporting_data->add_category($option);
                     foreach ($matches as $match)
                     {
@@ -745,22 +745,19 @@ class ExcelMedianExporterComponent extends Manager
                 }
                 if (count($options) > 1)
                 {
-                    $reporting_data->add_category(Translation :: get(self :: TOTAL));
+                    $reporting_data->add_category(Translation::get(self::TOTAL));
                     foreach ($matches as $match)
                     {
-                        $reporting_data->add_data_category_row(
-                            Translation :: get(self :: TOTAL),
-                            strip_tags($match),
-                            100);
+                        $reporting_data->add_data_category_row(Translation::get(self::TOTAL), strip_tags($match), 100);
                     }
                 }
-
+                
                 break;
             default :
                 ;
                 break;
         }
-
+        
         return $reporting_data;
     }
 
@@ -768,36 +765,36 @@ class ExcelMedianExporterComponent extends Manager
     {
         $this->participants = array();
         $this->surveys = array();
-
+        
         $surveys = array();
         $total_users_ids = array();
-
+        
         foreach ($ids as $id)
         {
             $sv = array();
-            $survey_publication = DataManager :: retrieve_by_id(Publication :: class_name(), $id);
+            $survey_publication = DataManager::retrieve_by_id(Publication::class_name(), $id);
             $survey = $survey_publication->getContentObject();
             $this->surveys[] = $survey;
             $survey_title = $survey->get_title();
             $survey_description = $survey->get_description();
-            $sv[self :: SURVEY_NAME] = StringUtilities :: getInstance()->truncate(
-                trim(strip_tags($survey_title)),
-                20,
-                true,
+            $sv[self::SURVEY_NAME] = StringUtilities::getInstance()->truncate(
+                trim(strip_tags($survey_title)), 
+                20, 
+                true, 
                 '');
-            $sv[self :: SURVEY_DESCRIPTION] = StringUtilities :: getInstance()->truncate(
-                trim(strip_tags($survey_description)),
-                20,
-                true,
+            $sv[self::SURVEY_DESCRIPTION] = StringUtilities::getInstance()->truncate(
+                trim(strip_tags($survey_description)), 
+                20, 
+                true, 
                 '');
             $surveys[$id] = $sv;
-            $user_ids = RightsService :: getInstance();
+            $user_ids = RightsService::getInstance();
             $total_users_ids = array_merge($user_ids, $total_users_ids);
         }
-
-        $this->participants[self :: SURVEYS] = $surveys;
-        $this->participants[self :: SURVEY_COUNT] = count($surveys);
-
+        
+        $this->participants[self::SURVEYS] = $surveys;
+        $this->participants[self::SURVEY_COUNT] = count($surveys);
+        
         // $condition = new InCondition(PublicationGroup :: PROPERTY_SURVEY_PUBLICATION, $ids);
         // $publication_rel_groups = DataManager :: retrieve_survey_publication_groups($condition);
         //
@@ -837,26 +834,26 @@ class ExcelMedianExporterComponent extends Manager
         //
         //
         $total_users_ids = array_unique($total_users_ids);
-
+        
         $conditions = array();
-        $conditions[] = new InCondition(Participant :: PROPERTY_SURVEY_PUBLICATION_ID, $ids);
-        $conditions[] = new InCondition(Participant :: PROPERTY_USER_ID, $total_users_ids);
+        $conditions[] = new InCondition(Participant::PROPERTY_SURVEY_PUBLICATION_ID, $ids);
+        $conditions[] = new InCondition(Participant::PROPERTY_USER_ID, $total_users_ids);
         $condition = new AndCondition($conditions);
-
+        
         // $trackers = Tracker :: get_data(Participant :: CLASS_NAME, Manager :: APPLICATION_NAME, $condition);
-
+        
         $all_participants = array();
         $started_participants = array();
         $not_started_participants = array();
-
+        
         $started_users = array();
         $not_started_users = array();
-
+        
         // while ($tracker = $trackers->next_result())
         // {
-
+        
         // $all_participants[] = $tracker->get_id();
-
+        
         // switch ($tracker->get_status())
         // {
         // case Participant :: STATUS_NOTSTARTED :
@@ -873,21 +870,21 @@ class ExcelMedianExporterComponent extends Manager
         // break;
         // }
         // }
-
-        $this->participants[self :: ALL_PARTICIPANTS] = $all_participants;
+        
+        $this->participants[self::ALL_PARTICIPANTS] = $all_participants;
         $all_participant_count = count($all_participants);
-        $this->participants[self :: ALL_PARTICIPANT_COUNT] = $all_participant_count;
-        $this->participants[self :: NOT_STARTED_PARTICIPANTS] = $not_started_participants;
+        $this->participants[self::ALL_PARTICIPANT_COUNT] = $all_participant_count;
+        $this->participants[self::NOT_STARTED_PARTICIPANTS] = $not_started_participants;
         $not_started_particpant_count = count($not_started_participants);
-        $this->participants[self :: NOT_STARTED_PARTICIPANT_COUNT] = $not_started_particpant_count;
-        $this->participants[self :: STARTED_PARTICIPANTS] = $started_participants;
+        $this->participants[self::NOT_STARTED_PARTICIPANT_COUNT] = $not_started_particpant_count;
+        $this->participants[self::STARTED_PARTICIPANTS] = $started_participants;
         $started_participant_count = count($started_participants);
-        $this->participants[self :: STARTED_PARTICIPANT_COUNT] = $started_participant_count;
-
+        $this->participants[self::STARTED_PARTICIPANT_COUNT] = $started_participant_count;
+        
         $participatie = $started_participant_count / $all_participant_count * 100;
         $participatie = number_format($participatie, 2);
-        $this->participants[self :: PARTICIPATION_GRADE] = $participatie;
-
+        $this->participants[self::PARTICIPATION_GRADE] = $participatie;
+        
         // foreach ($groups as $group)
         // {
         //

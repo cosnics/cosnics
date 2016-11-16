@@ -18,45 +18,41 @@ class EditorComponent extends Manager
      */
     function run()
     {
-        $publication = DataManager :: retrieve_by_id(
-            Publication :: class_name(), 
-            Request :: get(self :: PARAM_PUBLICATION_ID));
+        $publication = DataManager::retrieve_by_id(
+            Publication::class_name(), 
+            Request::get(self::PARAM_PUBLICATION_ID));
         
-        if (! Rights :: getInstance()->is_right_granted(
-            Rights :: RIGHT_EDIT, 
-            $publication->getId()))
+        if (! Rights::getInstance()->is_right_granted(Rights::RIGHT_EDIT, $publication->getId()))
         
         {
-           throw new NotAllowedException();
+            throw new NotAllowedException();
         }
         
         $form = new PublicationForm(
-            PublicationForm :: TYPE_EDIT, 
+            PublicationForm::TYPE_EDIT, 
             $publication, 
             $this->get_user(), 
-            $this->get_url(array(self :: PARAM_PUBLICATION_ID => $publication->getId())), 
+            $this->get_url(array(self::PARAM_PUBLICATION_ID => $publication->getId())), 
             $publication);
         
         if ($form->validate())
         {
             $success = $form->update_publication();
             $this->redirect(
-                $success ? Translation :: get('PublicationUpdated') : Translation :: get('PublicationNotUpdated'), 
+                $success ? Translation::get('PublicationUpdated') : Translation::get('PublicationNotUpdated'), 
                 ! $success, 
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
             
             $html[] = $this->render_header();
-            $html[] =$form->toHtml();
+            $html[] = $form->toHtml();
             $html[] = $this->render_footer();
             
             return implode(PHP_EOL, $html);
-          
         }
     }
-
 }
 ?>

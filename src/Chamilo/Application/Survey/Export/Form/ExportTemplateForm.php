@@ -17,15 +17,15 @@ class ExportTemplateForm extends FormValidator
 
     function __construct($form_type, $action, $export_template)
     {
-        parent :: __construct('create_export_template', 'post', $action);
-
+        parent::__construct('create_export_template', 'post', $action);
+        
         $this->export_template = $export_template;
-
-        if ($form_type == self :: TYPE_EDIT)
+        
+        if ($form_type == self::TYPE_EDIT)
         {
             $this->build_editing_form();
         }
-        elseif ($form_type == self :: TYPE_CREATE)
+        elseif ($form_type == self::TYPE_CREATE)
         {
             $this->build_creation_form();
         }
@@ -35,31 +35,31 @@ class ExportTemplateForm extends FormValidator
     function build_basic_form()
     {
         $this->addElement(
-            'text',
-            ExportTemplate :: PROPERTY_NAME,
-            Translation :: get('TemplateName'),
+            'text', 
+            ExportTemplate::PROPERTY_NAME, 
+            Translation::get('TemplateName'), 
             array("size" => "50"));
-        $this->addRule(ExportTemplate :: PROPERTY_NAME, Translation :: get('ThisFieldIsRequired'), 'required');
-        $this->add_html_editor(ExportTemplate :: PROPERTY_DESCRIPTION, Translation :: get('Description'), true);
+        $this->addRule(ExportTemplate::PROPERTY_NAME, Translation::get('ThisFieldIsRequired'), 'required');
+        $this->add_html_editor(ExportTemplate::PROPERTY_DESCRIPTION, Translation::get('Description'), true);
     }
 
     function build_editing_form()
     {
         $export_template = $this->export_template;
-
+        
         $this->build_basic_form();
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Update', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -67,14 +67,14 @@ class ExportTemplateForm extends FormValidator
     {
         $this->build_basic_form();
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -82,9 +82,9 @@ class ExportTemplateForm extends FormValidator
     {
         $export_template = $this->export_template;
         $values = $this->exportValues();
-        $export_template->set_name($values[ExportTemplate :: PROPERTY_NAME]);
-        $export_template->set_description($values[ExportTemplate :: PROPERTY_DESCRIPTION]);
-
+        $export_template->set_name($values[ExportTemplate::PROPERTY_NAME]);
+        $export_template->set_description($values[ExportTemplate::PROPERTY_DESCRIPTION]);
+        
         return $export_template->update();
     }
 
@@ -92,23 +92,23 @@ class ExportTemplateForm extends FormValidator
     {
         $export_template = $this->export_template;
         $values = $this->exportValues();
-        $export_template->set_name($values[ExportTemplate :: PROPERTY_NAME]);
-        $export_template->set_description($values[ExportTemplate :: PROPERTY_DESCRIPTION]);
-
+        $export_template->set_name($values[ExportTemplate::PROPERTY_NAME]);
+        $export_template->set_description($values[ExportTemplate::PROPERTY_DESCRIPTION]);
+        
         return $export_template->create();
     }
 
     /**
      * Sets default values.
-     *
+     * 
      * @param array $defaults Default values for this form's parameters.
      */
     function setDefaults($defaults = array ())
     {
         $export_template = $this->export_template;
-        $defaults[ExportTemplate :: PROPERTY_NAME] = $export_template->get_name();
-        $defaults[ExportTemplate :: PROPERTY_DESCRIPTION] = $export_template->get_description();
-        parent :: setDefaults($defaults);
+        $defaults[ExportTemplate::PROPERTY_NAME] = $export_template->get_name();
+        $defaults[ExportTemplate::PROPERTY_DESCRIPTION] = $export_template->get_description();
+        parent::setDefaults($defaults);
     }
 
     function get_export_template()

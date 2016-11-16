@@ -29,10 +29,10 @@ class ShareTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getPublicationService()->getPublicationsForUser(
-            $this->get_component()->get_user(),
-            RightsService :: RIGHT_ADD,
-            $limit,
-            $offset,
+            $this->get_component()->get_user(), 
+            RightsService::RIGHT_ADD, 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
@@ -43,8 +43,8 @@ class ShareTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         return $this->getPublicationService()->countPublicationsForUser(
-            $this->get_component()->get_user(),
-            RightsService :: RIGHT_ADD);
+            $this->get_component()->get_user(), 
+            RightsService::RIGHT_ADD);
     }
 
     /**
@@ -57,7 +57,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
         {
             $this->publicationService = new PublicationService(new PublicationRepository());
         }
-
+        
         return $this->publicationService;
     }
 }

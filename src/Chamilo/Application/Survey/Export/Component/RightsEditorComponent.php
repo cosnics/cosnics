@@ -19,9 +19,9 @@ class RightsEditorComponent extends Manager implements DelegateComponent
      */
     function run()
     {
-        $template_ids = Request :: get(self :: PARAM_EXPORT_TEMPLATE_ID);
+        $template_ids = Request::get(self::PARAM_EXPORT_TEMPLATE_ID);
         
-        $this->set_parameter(self :: PARAM_EXPORT_TEMPLATE_ID, $template_ids);
+        $this->set_parameter(self::PARAM_EXPORT_TEMPLATE_ID, $template_ids);
         
         if ($template_ids && ! is_array($template_ids))
         {
@@ -35,17 +35,16 @@ class RightsEditorComponent extends Manager implements DelegateComponent
         foreach ($template_ids as $template_id)
         {
             
-            $template = DataManager :: retrieve_export_template_by_id($template_id);
+            $template = DataManager::retrieve_export_template_by_id($template_id);
             
             if ($this->get_user()->is_platform_admin() || $template->get_owner_id() == $this->get_user_id())
             {
                 $publication_id = $template->get_publication_id();
-                $locations[] = RightsService :: getInstance();
-                   
+                $locations[] = RightsService::getInstance();
             }
         }
         
-        \Chamilo\Core\Rights\Editor\Manager :: launch($this, self :: context(), $locations);
+        \Chamilo\Core\Rights\Editor\Manager::launch($this, self::context(), $locations);
         
         // $user_ids = Rights :: get_allowed_users(Rights :: RIGHT_EXPORT_RESULT, $publication_id, Rights ::
         // TYPE_PUBLICATION);
@@ -64,7 +63,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
 
     function get_available_rights()
     {
-        return RightsService :: getInstance();
+        return RightsService::getInstance();
     }
 
     function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
@@ -73,23 +72,23 @@ class RightsEditorComponent extends Manager implements DelegateComponent
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_EXPORT)), 
-                Translation :: get('BrowserComponent')));
+                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => BrowserComponent::TAB_EXPORT)), 
+                Translation::get('BrowserComponent')));
         
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                        Manager :: PARAM_PUBLICATION_ID => Request :: get(Manager :: PARAM_PUBLICATION_ID), 
-                        DynamicTabsRenderer :: PARAM_SELECTED_TAB => BrowserComponent :: TAB_EXPORT_TEMPLATES)), 
-                Translation :: get('BrowserComponent')));
+                        self::PARAM_ACTION => self::ACTION_BROWSE, 
+                        Manager::PARAM_PUBLICATION_ID => Request::get(Manager::PARAM_PUBLICATION_ID), 
+                        DynamicTabsRenderer::PARAM_SELECTED_TAB => BrowserComponent::TAB_EXPORT_TEMPLATES)), 
+                Translation::get('BrowserComponent')));
     }
 
     function get_parameters()
     {
-        return array(Manager :: PARAM_PUBLICATION_ID, self :: PARAM_EXPORT_TEMPLATE_ID);
+        return array(Manager::PARAM_PUBLICATION_ID, self::PARAM_EXPORT_TEMPLATE_ID);
     }
 }
 ?>

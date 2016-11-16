@@ -12,9 +12,9 @@ class ExportTemplateTableColumnModel extends DataClassTableColumnModel implement
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_NAME));
+            new DataClassPropertyTableColumn(ExportTemplate::class_name(), ExportTemplate::PROPERTY_NAME));
         $this->add_column(
-            new DataClassPropertyTableColumn(ExportTemplate :: class_name(), ExportTemplate :: PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(ExportTemplate::class_name(), ExportTemplate::PROPERTY_DESCRIPTION));
     }
 }
 ?>

@@ -19,35 +19,36 @@ class ShareTableCellRenderer extends DataClassTableCellRenderer implements Table
     {
         switch ($column->get_name())
         {
-            case Publication :: PROPERTY_PUBLISHER_ID :
+            case Publication::PROPERTY_PUBLISHER_ID :
                 return $publication->getCreator()->get_fullname();
-            case Publication :: PROPERTY_PUBLISHED :
-                return DatetimeUtilities :: format_locale_date(
-                    Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
+            case Publication::PROPERTY_PUBLISHED :
+                return DatetimeUtilities::format_locale_date(
+                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), 
                     $publication->getCreationDate());
         }
-
-        return parent :: render_cell($column, $publication);
+        
+        return parent::render_cell($column, $publication);
     }
 
     public function get_actions($publication)
     {
         $toolbar = new Toolbar();
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Share'),
-                $this->get_component()->get_url(array(Manager :: PARAM_SELECTED_PUBLICATION_ID => $publication->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
+                Translation::get('Share', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Share'), 
+                $this->get_component()->get_url(
+                    array(Manager::PARAM_SELECTED_PUBLICATION_ID => $publication->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Details', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Details'),
-                null,
-                ToolbarItem :: DISPLAY_ICON));
-
+                Translation::get('Details', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Details'), 
+                null, 
+                ToolbarItem::DISPLAY_ICON));
+        
         return $toolbar->as_html();
     }
 }

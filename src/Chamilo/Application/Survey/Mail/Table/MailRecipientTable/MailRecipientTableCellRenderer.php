@@ -12,32 +12,32 @@ class MailRecipientTableCellRenderer extends DataClassTableCellRenderer
     function render_cell($column, $user_mail)
     {
         $user_id = $user_mail->get_user_id();
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(User :: class_name(), $user_id);
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), $user_id);
         
         switch ($column->get_name())
         {
-            case User :: PROPERTY_USERNAME :
+            case User::PROPERTY_USERNAME :
                 return $user->get_fullname();
                 break;
-            case User :: PROPERTY_EMAIL :
+            case User::PROPERTY_EMAIL :
                 return $user->get_email();
                 break;
-            case User :: PROPERTY_FIRSTNAME :
+            case User::PROPERTY_FIRSTNAME :
                 return $user->get_firstname();
                 break;
-            case User :: PROPERTY_LASTNAME :
+            case User::PROPERTY_LASTNAME :
                 return $user->get_lastname();
                 break;
         }
         
-        return parent :: render_cell($column, $user_mail);
+        return parent::render_cell($column, $user_mail);
     }
 
     private function get_date($date)
     {
         if ($date == 0)
         {
-            return Translation :: get('MailNotSent');
+            return Translation::get('MailNotSent');
         }
         else
         {

@@ -11,8 +11,8 @@ class GroupTableColumnModel extends DataClassTableColumnModel implements TableCo
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_NAME));
-        $this->add_column(new DataClassPropertyTableColumn(Group :: class_name(), Group :: PROPERTY_DESCRIPTION));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Group::class_name(), Group::PROPERTY_DESCRIPTION));
     }
 }
 ?>

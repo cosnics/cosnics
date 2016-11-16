@@ -23,40 +23,40 @@ class CreatorComponent extends Manager
 
     public function run()
     {
-        $publicationIdentifier = $this->getRequest()->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
-
+        $publicationIdentifier = $this->getRequest()->get(\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
+        
         if (! $publicationIdentifier)
         {
-            throw new NoObjectSelectedException(Translation :: get('Publication'));
+            throw new NoObjectSelectedException(Translation::get('Publication'));
         }
-
+        
         $publicationService = new PublicationService(new PublicationRepository());
         $publication = $publicationService->getPublicationByIdentifier($publicationIdentifier);
-
+        
         $favouriteService = new FavouriteService(new FavouriteRepository());
         $publicationUserFavourite = $favouriteService->createPublicationUserFavourite(
-            $this->get_user(),
+            $this->get_user(), 
             $publicationIdentifier);
-
+        
         if ($publicationUserFavourite instanceof PublicationUserFavourite)
         {
             $this->redirect(
-                Translation :: get(
-                    'ObjectCreated',
-                    array('OBJECT' => Translation :: get('PublicationUserFavourite')),
-                    Utilities :: COMMON_LIBRARIES),
-                false,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                Translation::get(
+                    'ObjectCreated', 
+                    array('OBJECT' => Translation::get('PublicationUserFavourite')), 
+                    Utilities::COMMON_LIBRARIES), 
+                false, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $this->redirect(
-                Translation :: get(
-                    'ObjectNotCreated',
-                    array('OBJECT' => Translation :: get('PublicationUserFavourite')),
-                    Utilities :: COMMON_LIBRARIES),
-                true,
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                Translation::get(
+                    'ObjectNotCreated', 
+                    array('OBJECT' => Translation::get('PublicationUserFavourite')), 
+                    Utilities::COMMON_LIBRARIES), 
+                true, 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
     }
 }

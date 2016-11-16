@@ -19,16 +19,16 @@ abstract class Manager extends Application
     // Parameters
     const PARAM_ENTITY_RELATION_ID = 'entity_relation_id';
     const PARAM_ACTION = 'rights_action';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_CREATE = 'Creator';
     const ACTION_UPDATE = 'Updater';
     const ACTION_RIGHTS = 'Rights';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_CREATE;
+    const DEFAULT_ACTION = self::ACTION_CREATE;
 
     /**
      *
@@ -38,15 +38,17 @@ abstract class Manager extends Application
     {
         $publicationService = new PublicationService(new PublicationRepository());
         $publicationId = $this->getCurrentPublicationIdentifier();
-        if($publicationId){
+        if ($publicationId)
+        {
             return $publicationService->getPublicationByIdentifier($this->getCurrentPublicationIdentifier());
-        }else{
+        }
+        else
+        {
             $publication = new Publication();
             $publication->setId(0);
             $publication->setPublisherId(0);
             return $publication;
         }
-       
     }
 
     /**
@@ -55,16 +57,19 @@ abstract class Manager extends Application
      */
     public function getCurrentPublicationIdentifier()
     {
-        return $this->getRequest()->query->get(\Chamilo\Application\Survey\Manager :: PARAM_PUBLICATION_ID);
+        return $this->getRequest()->query->get(\Chamilo\Application\Survey\Manager::PARAM_PUBLICATION_ID);
     }
-    
-    protected function determineRightType(){
-        
+
+    protected function determineRightType()
+    {
         $publicationId = $this->getCurrentPublicationIdentifier();
         
-        if($publicationId){
+        if ($publicationId)
+        {
             return RightsService::PUBLICATION_RIGHTS;
-        }else{
+        }
+        else
+        {
             return RightsService::APPLICATION_RIGHTS;
         }
     }

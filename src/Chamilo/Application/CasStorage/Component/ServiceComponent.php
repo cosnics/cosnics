@@ -15,8 +15,8 @@ class ServiceComponent extends Manager implements DelegateComponent
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Application\CasStorage\Service\Manager :: context(),
-           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            \Chamilo\Application\CasStorage\Service\Manager::context(), 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

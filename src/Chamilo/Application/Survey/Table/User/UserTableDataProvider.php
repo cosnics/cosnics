@@ -8,7 +8,7 @@ class UserTableDataProvider extends DataClassTableDataProvider
 
     function retrieve_data($condition, $offset, $count, $order_property = null, $order_direction = null)
     {
-        return \Chamilo\Core\User\Storage\DataManager :: retrieve_active_users(
+        return \Chamilo\Core\User\Storage\DataManager::retrieve_active_users(
             $condition, 
             $count, 
             $offset, 
@@ -18,7 +18,7 @@ class UserTableDataProvider extends DataClassTableDataProvider
 
     function count_data($condition)
     {
-        return \Chamilo\Core\User\Storage\DataManager :: count_active_users($condition);
+        return \Chamilo\Core\User\Storage\DataManager::count_active_users($condition);
     }
 }
 ?>

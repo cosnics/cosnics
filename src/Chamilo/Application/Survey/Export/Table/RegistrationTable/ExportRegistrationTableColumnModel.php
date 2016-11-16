@@ -13,11 +13,11 @@ class ExportRegistrationTableColumnModel extends DataClassTableColumnModel imple
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ExportRegistration :: class_name(), ExportRegistration :: PROPERTY_NAME));
+            new DataClassPropertyTableColumn(ExportRegistration::class_name(), ExportRegistration::PROPERTY_NAME));
         $this->add_column(
             new DataClassPropertyTableColumn(
-                ExportRegistration :: class_name(), 
-                ExportRegistration :: PROPERTY_DESCRIPTION));
+                ExportRegistration::class_name(), 
+                ExportRegistration::PROPERTY_DESCRIPTION));
     }
 }
 ?>

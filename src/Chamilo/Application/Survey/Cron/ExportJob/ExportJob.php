@@ -11,7 +11,7 @@ try
     
     echo '[EXPORT JOB STARTED] ' . date('c', time()) . "\n";
     
-    ExportJobManager :: launch_job();
+    ExportJobManager::launch_job();
     
     echo '  [EXPORT JOB ENDED] ' . date('c', time()) . "\n";
 }

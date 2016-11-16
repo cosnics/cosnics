@@ -23,9 +23,9 @@ class SharedPublicationTableDataProvider extends PublicationTableDataProvider
     {
         $publicationService = new PublicationService(new PublicationRepository());
         return $publicationService->getSharedPublicationsForUser(
-            $this->get_component()->get_user(),
-            $limit,
-            $offset,
+            $this->get_component()->get_user(), 
+            $limit, 
+            $offset, 
             $orderProperty);
     }
 
