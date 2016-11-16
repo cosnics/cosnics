@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\User\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\User\Form\RegisterForm;
 use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -10,7 +11,6 @@ use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbGenerator;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 
@@ -27,7 +27,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
      */
     public function run()
     {
-        $allow_registration = PlatformSetting :: get('allow_registration', self :: context());
+        $allow_registration = Configuration::getInstance()->get_setting(array(self::context(), 'allow_registration'));
         if ($allow_registration == false)
         {
             throw new NotAllowedException();
@@ -47,19 +47,19 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             {
                 $parameters = array();
 
-                if (PlatformSetting :: get('allow_registration', self :: context()) == 2)
+                if (Configuration::getInstance()->get_setting(array(self::context(), 'allow_registration')) == 2)
                 {
-                    $parameters['message'] = Translation :: get('UserAwaitingApproval');
+                    $parameters['message'] = Translation::get('UserAwaitingApproval');
                 }
 
-                $parameters[Application :: PARAM_CONTEXT] = '';
+                $parameters[Application::PARAM_CONTEXT] = '';
 
                 $redirect = new Redirect($parameters);
                 $redirect->toUrl();
             }
             else
             {
-                Request :: set_get('error_message', Translation :: get('UsernameNotAvailable'));
+                Request::set_get('error_message', Translation::get('UsernameNotAvailable'));
 
                 $html = array();
 
@@ -94,6 +94,6 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
      */
     public function get_breadcrumb_generator()
     {
-        return new BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
+        return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

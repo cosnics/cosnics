@@ -6,7 +6,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 
 /**
  *
@@ -18,20 +17,9 @@ use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 class LanguageCategoryItem extends CategoryItem
 {
 
-    private function isQuickLanguageChangeAllowed()
-    {
-        return true;
-
-        return PlatformSetting:: get('allow_user_change_platform_language', \Chamilo\Core\User\Manager:: context()) ==
-        1 && PlatformSetting:: get(
-            'allow_user_quick_change_platform_language',
-            \Chamilo\Core\User\Manager:: context()
-        ) == 1;
-    }
-
     public function render()
     {
-        if (!$this->canViewMenuItem($this->getMenuRenderer()->get_user()))
+        if (! $this->canViewMenuItem($this->getMenuRenderer()->get_user()))
         {
             return '';
         }
@@ -40,7 +28,7 @@ class LanguageCategoryItem extends CategoryItem
 
         $sub_html = array();
 
-        $languages = \Chamilo\Configuration\Configuration:: getInstance()->getLanguages();
+        $languages = \Chamilo\Configuration\Configuration::getInstance()->getLanguages();
 
         if (count($languages) > 1)
         {
@@ -49,18 +37,16 @@ class LanguageCategoryItem extends CategoryItem
 
             $sub_html[] = '<ul class="dropdown-menu language-selector">';
 
-            $currentLanguage = LocalSetting:: getInstance()->get('platform_language');
+            $currentLanguage = LocalSetting::getInstance()->get('platform_language');
 
             foreach ($languages as $isocode => $language)
             {
                 $redirect = new Redirect(
                     array(
-                        Application :: PARAM_CONTEXT => \Chamilo\Core\User\Manager:: context(),
-                        Application :: PARAM_ACTION => \Chamilo\Core\User\Manager :: ACTION_QUICK_LANG,
-                        \Chamilo\Core\User\Manager :: PARAM_CHOICE => $isocode,
-                        \Chamilo\Core\User\Manager :: PARAM_REFER => $currentUrl
-                    )
-                );
+                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
+                        Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_QUICK_LANG,
+                        \Chamilo\Core\User\Manager::PARAM_CHOICE => $isocode,
+                        \Chamilo\Core\User\Manager::PARAM_REFER => $currentUrl));
 
                 $languageItem = new \Chamilo\Core\Menu\Storage\DataClass\LanguageItem();
                 $languageItem->set_language($isocode);
@@ -69,7 +55,7 @@ class LanguageCategoryItem extends CategoryItem
 
                 if ($currentLanguage != $isocode)
                 {
-                    $sub_html[] = Renderer:: toHtml($this->getMenuRenderer(), $languageItem, $this);
+                    $sub_html[] = Renderer::toHtml($this->getMenuRenderer(), $languageItem, $this);
                 }
             }
 
@@ -79,8 +65,7 @@ class LanguageCategoryItem extends CategoryItem
 
         $html[] = '<li class="dropdown">';
 
-        $html[] =
-            '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
+        $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
         $html[] = '<div class="chamilo-menu-item-label">';
         $html[] = $currentLanguage;
         $html[] = '<span class="caret"></span>';
@@ -105,8 +90,9 @@ class LanguageCategoryItem extends CategoryItem
     {
         $authorizationChecker = $this->getAuthorizationChecker();
 
-        return $this->isQuickLanguageChangeAllowed() && $authorizationChecker->isAuthorized(
-            $this->getMenuRenderer()->get_user(), 'Chamilo\Core\User', 'ChangeLanguage'
-        );
+        return $authorizationChecker->isAuthorized(
+            $this->getMenuRenderer()->get_user(),
+            'Chamilo\Core\User',
+            'ChangeLanguage');
     }
 }

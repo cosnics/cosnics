@@ -5,7 +5,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Translation;
 
 /**
@@ -20,16 +19,16 @@ class SettingsConnector
 
     public static function get_languages()
     {
-        return \Chamilo\Configuration\Configuration :: getInstance()->getLanguages();
+        return \Chamilo\Configuration\Configuration::getInstance()->getLanguages();
     }
 
     public static function get_themes()
     {
-        $options = Theme :: getInstance()->getAvailableThemes();
+        $options = Theme::getInstance()->getAvailableThemes();
 
         return $options;
     }
-    
+
     public static function getMailers()
     {
         $mailerFactory = new MailerFactory(Configuration::getInstance());
@@ -54,19 +53,19 @@ class SettingsConnector
 
     public static function get_active_applications()
     {
-        $registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(Registration :: TYPE_APPLICATION);
+        $registrations = \Chamilo\Configuration\Configuration::registrations_by_type(Registration::TYPE_APPLICATION);
 
         $options = array();
-        $options['Chamilo\Core\Home'] = Translation :: get('Homepage', array(), 'Chamilo\Core\Home');
+        $options['Chamilo\Core\Home'] = Translation::get('Homepage', array(), 'Chamilo\Core\Home');
 
         foreach ($registrations as $registration)
         {
-            if ($registration[Registration :: PROPERTY_STATUS])
+            if ($registration[Registration::PROPERTY_STATUS])
             {
-                $options[$registration[Registration :: PROPERTY_CONTEXT]] = Translation :: get(
+                $options[$registration[Registration::PROPERTY_CONTEXT]] = Translation::get(
                     'TypeName',
                     null,
-                    $registration[Registration :: PROPERTY_CONTEXT]);
+                    $registration[Registration::PROPERTY_CONTEXT]);
             }
         }
 
@@ -91,26 +90,26 @@ class SettingsConnector
 
     public static function is_allowed_to_change_platform_language()
     {
-        return PlatformSetting :: get('allow_user_change_platform_language', \Chamilo\Core\User\Manager :: context()) ==
-             1;
+        return Configuration::getInstance()->get_setting(
+            array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_language')) == 1;
     }
 
     // support for quick language change
     public static function is_allowed_quick_change_platform_language()
     {
-        return self :: is_allowed_to_change_platform_language() && PlatformSetting :: get(
-            'allow_user_quick_change_platform_language',
-            \Chamilo\Core\User\Manager :: context()) == 1;
+        return self::is_allowed_to_change_platform_language() && Configuration::getInstance()->get_setting(
+            array(\Chamilo\Core\User\Manager::context(), 'allow_user_quick_change_platform_language')) == 1;
     }
 
     public static function is_allowed_to_change_platform_timezone()
     {
-        return PlatformSetting :: get('allow_user_change_platform_timezone', \Chamilo\Core\User\Manager :: context()) ==
-             1;
+        return Configuration::getInstance()->get_setting(
+            array(\Chamilo\Core\User\Manager::context(), 'allow_user_change_platform_timezone')) == 1;
     }
 
     public static function is_allowed_to_change_theme()
     {
-        return PlatformSetting :: get('allow_user_theme_selection', \Chamilo\Core\User\Manager :: context()) == 1;
+        return Configuration::getInstance()->get_setting(
+            array(\Chamilo\Core\User\Manager::context(), 'allow_user_theme_selection')) == 1;
     }
 }

@@ -3,8 +3,8 @@ namespace Chamilo\Application\CasStorage\Service\Storage\DataClass;
 
 use Chamilo\Application\CasStorage\Service\Storage\DataManager;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Configuration\Configuration;
 
 /**
  *
@@ -37,143 +37,139 @@ class Service extends DataClass
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_NAME,
-                self :: PROPERTY_DESCRIPTION,
-                self :: PROPERTY_SERVICE_ID,
-                self :: PROPERTY_THEME,
-                self :: PROPERTY_ALLOWED_TO_PROXY,
-                self :: PROPERTY_ANONYMOUS_ACCESS,
-                self :: PROPERTY_EVALUATION_ORDER,
-                self :: PROPERTY_IGNORE_ATTRIBUTES,
-                self :: PROPERTY_SSO_ENABLED,
-                self :: PROPERTY_ENABLED));
+                self::PROPERTY_NAME,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_SERVICE_ID,
+                self::PROPERTY_THEME,
+                self::PROPERTY_ALLOWED_TO_PROXY,
+                self::PROPERTY_ANONYMOUS_ACCESS,
+                self::PROPERTY_EVALUATION_ORDER,
+                self::PROPERTY_IGNORE_ATTRIBUTES,
+                self::PROPERTY_SSO_ENABLED,
+                self::PROPERTY_ENABLED));
     }
 
     public function get_data_manager()
     {
-        return DataManager :: getInstance();
+        return DataManager::getInstance();
     }
 
     public function get_name()
     {
-        return $this->get_default_property(self :: PROPERTY_NAME);
+        return $this->get_default_property(self::PROPERTY_NAME);
     }
 
     public function set_name($name)
     {
-        $this->set_default_property(self :: PROPERTY_NAME, $name);
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 
     public function get_description()
     {
-        return $this->get_default_property(self :: PROPERTY_DESCRIPTION);
+        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
     }
 
     public function set_description($description)
     {
-        $this->set_default_property(self :: PROPERTY_DESCRIPTION, $description);
+        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
     }
 
     public function get_service_id()
     {
-        return $this->get_default_property(self :: PROPERTY_SERVICE_ID);
+        return $this->get_default_property(self::PROPERTY_SERVICE_ID);
     }
 
     public function set_service_id($service_id)
     {
-        $this->set_default_property(self :: PROPERTY_SERVICE_ID, $service_id);
+        $this->set_default_property(self::PROPERTY_SERVICE_ID, $service_id);
     }
 
     public function get_theme()
     {
-        return $this->get_default_property(self :: PROPERTY_THEME);
+        return $this->get_default_property(self::PROPERTY_THEME);
     }
 
     public function set_theme($theme)
     {
-        $this->set_default_property(self :: PROPERTY_THEME, $theme);
+        $this->set_default_property(self::PROPERTY_THEME, $theme);
     }
 
     public function get_allowed_to_proxy()
     {
-        return $this->get_default_property(self :: PROPERTY_ALLOWED_TO_PROXY);
+        return $this->get_default_property(self::PROPERTY_ALLOWED_TO_PROXY);
     }
 
     public function set_allowed_to_proxy($allowed_to_proxy)
     {
-        $this->set_default_property(self :: PROPERTY_ALLOWED_TO_PROXY, $allowed_to_proxy);
+        $this->set_default_property(self::PROPERTY_ALLOWED_TO_PROXY, $allowed_to_proxy);
     }
 
     public function get_anonymous_access()
     {
-        return $this->get_default_property(self :: PROPERTY_ANONYMOUS_ACCESS);
+        return $this->get_default_property(self::PROPERTY_ANONYMOUS_ACCESS);
     }
 
     public function set_anonymous_access($anonymous_access)
     {
-        $this->set_default_property(self :: PROPERTY_anonymous_access, $anonymous_access);
+        $this->set_default_property(self::PROPERTY_anonymous_access, $anonymous_access);
     }
 
     public function get_evaluation_order()
     {
-        return $this->get_default_property(self :: PROPERTY_EVALUATION_ORDER);
+        return $this->get_default_property(self::PROPERTY_EVALUATION_ORDER);
     }
 
     public function set_evaluation_order($evaluation_order)
     {
-        $this->set_default_property(self :: PROPERTY_EVALUATION_ORDER, $evaluation_order);
+        $this->set_default_property(self::PROPERTY_EVALUATION_ORDER, $evaluation_order);
     }
 
     public function get_ignore_attributes()
     {
-        return $this->get_default_property(self :: PROPERTY_IGNORE_ATTRIBUTES);
+        return $this->get_default_property(self::PROPERTY_IGNORE_ATTRIBUTES);
     }
 
     public function set_ignore_attributes($ignore_attributes)
     {
-        $this->set_default_property(self :: PROPERTY_IGNORE_ATTRIBUTES, $ignore_attributes);
+        $this->set_default_property(self::PROPERTY_IGNORE_ATTRIBUTES, $ignore_attributes);
     }
 
     public function get_sso_enabled()
     {
-        return $this->get_default_property(self :: PROPERTY_SSO_ENABLED);
+        return $this->get_default_property(self::PROPERTY_SSO_ENABLED);
     }
 
     public function set_sso_enabled($sso_enabled)
     {
-        $this->set_default_property(self :: PROPERTY_SSO_ENABLED, $sso_enabled);
+        $this->set_default_property(self::PROPERTY_SSO_ENABLED, $sso_enabled);
     }
 
     public function get_enabled()
     {
-        return $this->get_default_property(self :: PROPERTY_ENABLED);
+        return $this->get_default_property(self::PROPERTY_ENABLED);
     }
 
     public function set_enabled($enabled)
     {
-        $this->set_default_property(self :: PROPERTY_ENABLED, $enabled);
+        $this->set_default_property(self::PROPERTY_ENABLED, $enabled);
     }
 
     public static function get_table_name()
     {
-        return PlatformSetting :: get('table', __NAMESPACE__);
+        return Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'table'));
     }
 
     public function get_enabled_icon()
     {
         switch ($this->get_enabled())
         {
-            case self :: STATUS_ENABLED :
-                $path = Theme :: getInstance()->getImagePath(
-                    'Chamilo\Application\CasStorage\Service',
-                    'Enabled/Enabled');
+            case self::STATUS_ENABLED :
+                $path = Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Enabled/Enabled');
                 break;
-            case self :: STATUS_DISABLED :
-                $path = Theme :: getInstance()->getImagePath(
-                    'Chamilo\Application\CasStorage\Service',
-                    'Enabled/Disabled');
+            case self::STATUS_DISABLED :
+                $path = Theme::getInstance()->getImagePath('Chamilo\Application\CasStorage\Service', 'Enabled/Disabled');
                 break;
         }
 
@@ -182,6 +178,6 @@ class Service extends DataClass
 
     public function is_enabled()
     {
-        return $this->get_enabled() == self :: STATUS_ENABLED;
+        return $this->get_enabled() == self::STATUS_ENABLED;
     }
 }

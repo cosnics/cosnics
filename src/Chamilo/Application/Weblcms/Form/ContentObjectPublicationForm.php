@@ -28,7 +28,6 @@ use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\ValueObject\Mail;
 use Chamilo\Libraries\Mail\ValueObject\MailFile;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -1044,7 +1043,9 @@ class ContentObjectPublicationForm extends BasePublicationForm
             $log .= " (unsuccessfull)\n";
         }
 
-        if (PlatformSetting::get('log_mails', Manager::package()))
+        $logMails = Configuration::getInstance()->get_setting(array(Manager::package(), 'log_mails'));
+
+        if ($logMails)
         {
             $dir = Path::getInstance()->getLogPath() . 'mail';
 

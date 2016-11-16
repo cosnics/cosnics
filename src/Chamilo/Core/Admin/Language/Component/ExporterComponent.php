@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Core\Admin\Language\Component;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Admin\Language\Manager;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 
 class ExporterComponent extends Manager
 {
@@ -17,16 +17,16 @@ class ExporterComponent extends Manager
         ini_set("memory_limit", "-1");
         set_time_limit(0);
 
-        $translations_file = Path :: getInstance()->getTemporaryPath(__NAMESPACE__) . 'translations.csv';
-        Filesystem :: create_dir(dirname($translations_file));
+        $translations_file = Path::getInstance()->getTemporaryPath(__NAMESPACE__) . 'translations.csv';
+        Filesystem::create_dir(dirname($translations_file));
 
         $time_start = microtime(true);
 
         $file_handle = fopen($translations_file, 'w');
 
-        $base_language = PlatformSetting :: get('base_language', __NAMESPACE__);
-        $source_language = PlatformSetting :: get('source_language', __NAMESPACE__);
-        $target_languages = PlatformSetting :: get('target_languages', __NAMESPACE__);
+        $base_language = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'base_language'));
+        $source_language = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'source_language'));
+        $target_languages = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'target_languages'));
 
         $this->write_line(
             $file_handle,
@@ -43,14 +43,14 @@ class ExporterComponent extends Manager
 
         $this->write_line($file_handle, $language_values);
 
-        $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_type_packages();
+        $package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_type_packages();
 
         foreach ($package_list as $packages)
         {
             foreach ($packages as $package)
             {
                 $translations = array();
-                $language_path = Path :: getInstance()->namespaceToFullPath($package) . 'resources/i18n/';
+                $language_path = Path::getInstance()->namespaceToFullPath($package) . 'resources/i18n/';
 
                 foreach (array_unique($languages) as $language)
                 {
@@ -87,7 +87,7 @@ class ExporterComponent extends Manager
 
         $time_end = microtime(true);
 
-        Filesystem :: file_send_for_download($translations_file, true);
+        Filesystem::file_send_for_download($translations_file, true);
     }
 
     /**

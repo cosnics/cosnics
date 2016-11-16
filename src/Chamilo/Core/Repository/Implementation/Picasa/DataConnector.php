@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Picasa;
 
+use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Translation;
@@ -41,13 +41,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
+        parent::__construct($external_repository_instance);
 
-        $session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
+        $session_token = Setting::get('session_token', $this->get_external_repository_instance_id());
 
-        Zend_Loader :: loadClass('Zend_Gdata_Photos');
-        Zend_Loader :: loadClass('Zend_Gdata_Photos_PhotoQuery');
-        Zend_Loader :: loadClass('Zend_Gdata_AuthSub');
+        Zend_Loader::loadClass('Zend_Gdata_Photos');
+        Zend_Loader::loadClass('Zend_Gdata_Photos_PhotoQuery');
+        Zend_Loader::loadClass('Zend_Gdata_AuthSub');
 
         if (! $session_token)
         {
@@ -59,30 +59,30 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $scope = 'http://picasaweb.google.com/data';
                 $secure = false;
                 $session = true;
-                $redirect_url = Zend_Gdata_AuthSub :: getAuthSubTokenUri($currentUrl, $scope, $secure, $session);
+                $redirect_url = Zend_Gdata_AuthSub::getAuthSubTokenUri($currentUrl, $scope, $secure, $session);
 
                 header('Location: ' . $redirect_url);
             }
             else
             {
-                $session_token = Zend_Gdata_AuthSub :: getAuthSubSessionToken($_GET['token']);
+                $session_token = Zend_Gdata_AuthSub::getAuthSubSessionToken($_GET['token']);
 
                 if ($session_token)
                 {
-                    $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
+                    $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_setting_from_variable_name(
                         'session_token',
                         $this->get_external_repository_instance_id());
                     $user_setting = new Setting();
                     $user_setting->set_setting_id($setting->get_id());
-                    $user_setting->set_user_id(Session :: get_user_id());
+                    $user_setting->set_user_id(Session::get_user_id());
                     $user_setting->set_value($session_token);
                     $user_setting->create();
                 }
             }
         }
 
-        $httpClient = Zend_Gdata_AuthSub :: getHttpClient($session_token);
-        $application = PlatformSetting :: get('site_name');
+        $httpClient = Zend_Gdata_AuthSub::getHttpClient($session_token);
+        $application = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
         $this->picasa = new Zend_Gdata_Photos($httpClient, $application);
     }
 
@@ -110,15 +110,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $medium_info = getimagesize($medium_url);
 
         $photo_urls = array();
-        $photo_urls[ExternalObject :: SIZE_THUMBNAIL] = array(
+        $photo_urls[ExternalObject::SIZE_THUMBNAIL] = array(
             'source' => $thumbnail->getUrl(),
             'width' => $thumbnail->getWidth(),
             'height' => $thumbnail->getHeight());
-        $photo_urls[ExternalObject :: SIZE_MEDIUM] = array(
+        $photo_urls[ExternalObject::SIZE_MEDIUM] = array(
             'source' => $medium_url,
             'width' => $medium_info[0],
             'height' => $medium_info[1]);
-        $photo_urls[ExternalObject :: SIZE_ORIGINAL] = array(
+        $photo_urls[ExternalObject::SIZE_ORIGINAL] = array(
             'source' => $original->getUrl(),
             'width' => $original->getWidth(),
             'height' => $original->getHeight());
@@ -238,25 +238,25 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     private function get_special_folder_names()
     {
-        return array(self :: PHOTOS_MINE);
+        return array(self::PHOTOS_MINE);
     }
 
     private function get_photos_feed($condition, $order_property = null, $offset = null, $count = null)
     {
-        $folder = Request :: get(Manager :: PARAM_FOLDER);
+        $folder = Request::get(Manager::PARAM_FOLDER);
 
         if (! $folder)
         {
-            $folder = self :: PHOTOS_MINE;
+            $folder = self::PHOTOS_MINE;
         }
 
-        if ($folder == self :: PHOTOS_MINE)
+        if ($folder == self::PHOTOS_MINE)
         {
             $query = $this->picasa->newUserQuery();
             $query->setUser('default');
             $query->setKind('photo');
         }
-        elseif ($folder == self :: PHOTOS_PUBLIC)
+        elseif ($folder == self::PHOTOS_PUBLIC)
         {
             $query = $this->picasa->newQuery("http://picasaweb.google.com/data/feed/api/all");
             $query->setParam("kind", "photo");
@@ -323,19 +323,19 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function determine_rights($owner_id)
     {
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = true;
+        $rights[ExternalObject::RIGHT_USE] = true;
 
         if ($owner_id == $this->get_authenticated_user())
         {
-            $rights[ExternalObject :: RIGHT_EDIT] = true;
-            $rights[ExternalObject :: RIGHT_DELETE] = true;
-            $rights[ExternalObject :: RIGHT_DOWNLOAD] = true;
+            $rights[ExternalObject::RIGHT_EDIT] = true;
+            $rights[ExternalObject::RIGHT_DELETE] = true;
+            $rights[ExternalObject::RIGHT_DOWNLOAD] = true;
         }
         else
         {
-            $rights[ExternalObject :: RIGHT_EDIT] = false;
-            $rights[ExternalObject :: RIGHT_DELETE] = false;
-            $rights[ExternalObject :: RIGHT_DOWNLOAD] = false;
+            $rights[ExternalObject::RIGHT_EDIT] = false;
+            $rights[ExternalObject::RIGHT_DELETE] = false;
+            $rights[ExternalObject::RIGHT_DOWNLOAD] = false;
         }
         return $rights;
     }
@@ -357,7 +357,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function get_authenticated_user_albums()
     {
         $albums = array();
-        $albums['default'] = Translation :: get('PicasaDropBoxAlbum');
+        $albums['default'] = Translation::get('PicasaDropBoxAlbum');
 
         $user_feed = $this->picasa->getUserFeed('default');
 
@@ -384,16 +384,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $entry = $this->picasa->newPhotoEntry();
         $entry->setMediaSource($media_source);
         $entry->setTitle($this->picasa->newTitle($photo['name']));
-        $entry->setSummary($this->picasa->newSummary($values[ExternalObject :: PROPERTY_TITLE]));
+        $entry->setSummary($this->picasa->newSummary($values[ExternalObject::PROPERTY_TITLE]));
 
         $keywords = new Zend_Gdata_Media_Extension_MediaKeywords();
-        $keywords->setText($values[ExternalObject :: PROPERTY_TAGS]);
+        $keywords->setText($values[ExternalObject::PROPERTY_TAGS]);
         $entry->mediaGroup = new Zend_Gdata_Media_Extension_MediaGroup();
         $entry->mediaGroup->keywords = $keywords;
 
         $album_query = $this->picasa->newAlbumQuery();
         $album_query->setUser($this->get_authenticated_user());
-        $album_query->setAlbumId($values[ExternalObject :: PROPERTY_ALBUM_ID]);
+        $album_query->setAlbumId($values[ExternalObject::PROPERTY_ALBUM_ID]);
 
         $entry = $this->picasa->insertPhotoEntry($entry, $album_query->getQueryUrl());
         return $this->get_authenticated_user() . ':' . $entry->getGphotoAlbumId()->getText() . ':' .
@@ -407,7 +407,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function update_external_repository_object($values)
     {
-        $identifiers = explode(':', $values[ExternalObject :: PROPERTY_ID]);
+        $identifiers = explode(':', $values[ExternalObject::PROPERTY_ID]);
 
         $photo_query = new Zend_Gdata_Photos_PhotoQuery();
         $photo_query->setUser($identifiers[0]);
@@ -416,10 +416,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $photo_query->setType("entry");
 
         $photo_entry = $this->picasa->getPhotoEntry($photo_query);
-        $photo_entry->summary->text = $values[ExternalObject :: PROPERTY_TITLE];
+        $photo_entry->summary->text = $values[ExternalObject::PROPERTY_TITLE];
 
         $keywords = new Zend_Gdata_Media_Extension_MediaKeywords();
-        $keywords->setText($values[ExternalObject :: PROPERTY_TAGS]);
+        $keywords->setText($values[ExternalObject::PROPERTY_TAGS]);
         $photo_entry->mediaGroup->keywords = $keywords;
         $updated_entry = $photo_entry->save();
 
