@@ -5,7 +5,8 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\In
 
 /**
  *
- * @package Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Integration\Chamilo\Core\Metadata\Package
+ * @package
+ *          Chamilo\Core\Repository\ContentObject\Survey\Page\Question\MultipleChoice\Integration\Chamilo\Core\Metadata\Package
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -16,6 +17,6 @@ class Installer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metada
 
     public function getPropertyProviderTypes()
     {
-        return array(ContentObjectPropertyProvider :: class_name());
+        return array(ContentObjectPropertyProvider::class_name());
     }
 }

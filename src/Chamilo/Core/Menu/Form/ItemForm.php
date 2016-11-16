@@ -38,7 +38,7 @@ class ItemForm extends FormValidator
     public function __construct($form_type, $item, $action)
     {
         parent::__construct('item', 'post', $action);
-
+        
         $this->item = $item;
         $this->form_type = $form_type;
         if ($this->form_type == self::TYPE_EDIT)
@@ -57,32 +57,32 @@ class ItemForm extends FormValidator
     {
         $this->addElement('category', Translation::get('General'));
         $this->addElement(
-            'select',
-            Item::PROPERTY_PARENT,
-            Translation::get('Parent'),
-            $this->get_parents(),
+            'select', 
+            Item::PROPERTY_PARENT, 
+            Translation::get('Parent'), 
+            $this->get_parents(), 
             array('class' => 'form-control'));
         $this->addRule(Item::PROPERTY_PARENT, Translation::get('ThisFieldIsRequired'), 'required');
-
+        
         $this->addElement('checkbox', Item::PROPERTY_HIDDEN, Translation::get('Hidden'));
         $this->addElement('category');
-
+        
         $this->addElement('category', Translation::get('Titles'));
         $active_languages = \Chamilo\Configuration\Configuration::getInstance()->getLanguages();
         $platform_language = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'platform_language'));
         foreach ($active_languages as $isocode => $language)
         {
             $this->addElement(
-                'text',
-                ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']',
-                $language,
+                'text', 
+                ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']', 
+                $language, 
                 array("class" => "form-control"));
-
+            
             if ($isocode == $platform_language)
             {
                 $this->addRule(
-                    ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']',
-                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
+                    ItemTitle::PROPERTY_TITLE . '[' . $isocode . ']', 
+                    Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
                     'required');
             }
         }
@@ -96,24 +96,24 @@ class ItemForm extends FormValidator
         {
             case self::TYPE_CREATE :
                 $buttons[] = $this->createElement(
-                    'style_submit_button',
-                    'submit_button',
+                    'style_submit_button', 
+                    'submit_button', 
                     Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
                 break;
             case self::TYPE_EDIT :
                 $buttons[] = $this->createElement(
-                    'style_submit_button',
-                    'submit_button',
-                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES),
-                    null,
-                    null,
+                    'style_submit_button', 
+                    'submit_button', 
+                    Translation::get('Update', null, Utilities::COMMON_LIBRARIES), 
+                    null, 
+                    null, 
                     'arrow-right');
                 break;
         }
-
+        
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
+            'style_reset_button', 
+            'reset', 
             Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -133,27 +133,27 @@ class ItemForm extends FormValidator
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT),
+            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT), 
             new StaticConditionVariable(0));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_TYPE),
+            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_TYPE), 
             new StaticConditionVariable(CategoryItem::class_name()));
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrievesParameters(
-            $condition,
-            null,
-            null,
+            $condition, 
+            null, 
+            null, 
             new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
         $items = DataManager::retrieves(Item::class_name(), $parameters);
-
+        
         $item_options = array();
         $item_options[0] = Translation::get('Root', null, Utilities::COMMON_LIBRARIES);
-
+        
         while ($item = $items->next_result())
         {
             $item_options[$item->get_id()] = '-- ' . $item->get_titles()->get_current_translation();
         }
-
+        
         return $item_options;
     }
 
@@ -161,7 +161,7 @@ class ItemForm extends FormValidator
      * Sets default values.
      * Traditionally, you will want to extend this method so it sets default for your learning
      * object type's additional properties.
-     *
+     * 
      * @param $defaults array Default values for this form's parameters.
      */
     public function setDefaults($defaults = array())
@@ -177,7 +177,7 @@ class ItemForm extends FormValidator
         $defaults[Item::PROPERTY_PARENT] = $item->get_parent();
         $defaults[Item::PROPERTY_HIDDEN] = $item->get_hidden();
         $defaults[Item::PROPERTY_TYPE] = $item->get_type();
-
+        
         parent::setDefaults($defaults);
     }
 
@@ -190,15 +190,15 @@ class ItemForm extends FormValidator
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
         $itemClass = $classNameUtilities->getClassnameFromObject($item);
-
+        
         $formName = $itemClass . 'Form';
         $formClass = __NAMESPACE__ . '\\Item\\' . $formName;
-
+        
         if (class_exists($formClass))
         {
             return new $formClass($form_type, $item, $action);
         }
-
+        
         return new self($form_type, $item, $action);
     }
 }

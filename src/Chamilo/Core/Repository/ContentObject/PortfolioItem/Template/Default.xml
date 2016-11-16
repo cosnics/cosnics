@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\PortfolioItem">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Portfolio item</translation>
-			<translation language="nl">Portfolio item</translation>
-			<translation language="fr">Elément du portfolio</translation>
-			<translation language="de">Portfolioposition</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Portfolio item</translation>
+            <translation language="nl">Portfolio item</translation>
+            <translation language="fr">Elément du portfolio</translation>
+            <translation language="de">Portfolioposition</translation>
+        </variable>
+    </translations>
 </template>

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Roles\Storage\Repository;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
@@ -15,14 +14,15 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Repository to manage the data of roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class RoleRepository implements RoleRepositoryInterface
 {
+
     /**
      * Returns a role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -30,18 +30,15 @@ class RoleRepository implements RoleRepositoryInterface
     public function findRoleByName($roleName)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE),
-            new StaticConditionVariable(
-                $roleName
-            )
-        );
-
+            new PropertyConditionVariable(Role::class_name(), Role::PROPERTY_ROLE), 
+            new StaticConditionVariable($roleName));
+        
         return DataManager::retrieve(Role::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
      * Retrieves the roles
-     *
+     * 
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -52,21 +49,19 @@ class RoleRepository implements RoleRepositoryInterface
     public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = array())
     {
         return DataManager::retrieves(
-            Role::class_name(), new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
-        )->as_array();
+            Role::class_name(), 
+            new DataClassRetrievesParameters($condition, $count, $offset, $orderBy))->as_array();
     }
 
     /**
      * Counts the roles
-     *
+     * 
      * @param Condition $condition
      *
      * @return int
      */
     public function countRoles(Condition $condition = null)
     {
-        return DataManager::count(
-            Role::class_name(), new DataClassCountParameters($condition)
-        );
+        return DataManager::count(Role::class_name(), new DataClassCountParameters($condition));
     }
 }

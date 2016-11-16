@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Table column model for the schema
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class SelectTableColumnModel extends DataClassTableColumnModel implements TableColumnModelActionsColumnSupport
@@ -26,16 +26,16 @@ class SelectTableColumnModel extends DataClassTableColumnModel implements TableC
     {
         $this->add_column(
             new StaticTableColumn(
-                self :: COLUMN_TYPE,
-                Theme :: getInstance()->getImage(
-                    'Action/Category',
-                    'png',
-                    Translation :: get('Type', null, $this->get_component()->package()),
-                    null,
-                    ToolbarItem :: DISPLAY_ICON,
-                    false,
+                self::COLUMN_TYPE, 
+                Theme::getInstance()->getImage(
+                    'Action/Category', 
+                    'png', 
+                    Translation::get('Type', null, $this->get_component()->package()), 
+                    null, 
+                    ToolbarItem::DISPLAY_ICON, 
+                    false, 
                     'Chamilo\Configuration')));
-
-        $this->add_column(new DataClassPropertyTableColumn(Vocabulary :: class_name(), Vocabulary :: PROPERTY_VALUE));
+        
+        $this->add_column(new DataClassPropertyTableColumn(Vocabulary::class_name(), Vocabulary::PROPERTY_VALUE));
     }
 }

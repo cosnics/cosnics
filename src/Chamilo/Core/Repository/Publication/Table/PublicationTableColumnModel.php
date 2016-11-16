@@ -11,10 +11,10 @@ class PublicationTableColumnModel extends DataClassTableColumnModel implements T
 
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Attributes :: class_name(), Attributes :: PROPERTY_TITLE));
+        $this->add_column(new DataClassPropertyTableColumn(Attributes::class_name(), Attributes::PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(Attributes :: class_name(), Attributes :: PROPERTY_APPLICATION));
-        $this->add_column(new DataClassPropertyTableColumn(Attributes :: class_name(), Attributes :: PROPERTY_LOCATION));
-        $this->add_column(new DataClassPropertyTableColumn(Attributes :: class_name(), Attributes :: PROPERTY_DATE));
+            new DataClassPropertyTableColumn(Attributes::class_name(), Attributes::PROPERTY_APPLICATION));
+        $this->add_column(new DataClassPropertyTableColumn(Attributes::class_name(), Attributes::PROPERTY_LOCATION));
+        $this->add_column(new DataClassPropertyTableColumn(Attributes::class_name(), Attributes::PROPERTY_DATE));
     }
 }

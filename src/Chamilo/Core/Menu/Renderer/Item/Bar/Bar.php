@@ -33,20 +33,20 @@ abstract class Bar extends Renderer
 
     public function render()
     {
-        if(!$this->canViewMenuItem($this->getMenuRenderer()->get_user()))
+        if (! $this->canViewMenuItem($this->getMenuRenderer()->get_user()))
         {
             return '';
         }
-
+        
         $html = array();
-
+        
         $selected = $this->isItemSelected();
-
+        
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = $this->getContent();
-
+        
         $html[] = '</li>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

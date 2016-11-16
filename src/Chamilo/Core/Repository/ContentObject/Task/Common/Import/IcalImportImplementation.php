@@ -53,21 +53,21 @@ class IcalImportImplementation extends ImportImplementation
             switch ($recurrence['FREQ'])
             {
                 case 'MONTHLY' :
-                    $content_object->set_frequency(Task :: FREQUENCY_MONTHLY);
+                    $content_object->set_frequency(Task::FREQUENCY_MONTHLY);
                     break;
                 case 'YEARLY' :
-                    $content_object->set_frequency(Task :: FREQUENCY_YEARLY);
+                    $content_object->set_frequency(Task::FREQUENCY_YEARLY);
                     break;
                 case 'WEEKLY' :
-                    $content_object->set_frequency(Task :: FREQUENCY_BIWEEKLY);
+                    $content_object->set_frequency(Task::FREQUENCY_BIWEEKLY);
                     
                     if ($recurrence['INTERVAL'] == '2')
                     {
-                        $content_object->set_frequency(Task :: FREQUENCY_BIWEEKLY);
+                        $content_object->set_frequency(Task::FREQUENCY_BIWEEKLY);
                     }
                     else
                     {
-                        $content_object->set_frequency(Task :: FREQUENCY_WEEKLY);
+                        $content_object->set_frequency(Task::FREQUENCY_WEEKLY);
                     }
                     
                     break;
@@ -76,23 +76,23 @@ class IcalImportImplementation extends ImportImplementation
                     
                     if ($recurrence['BYDAY'] == $weekdays)
                     {
-                        $content_object->set_frequency(Task :: FREQUENCY_WEEKDAYS);
+                        $content_object->set_frequency(Task::FREQUENCY_WEEKDAYS);
                     }
                     else
                     {
-                        $content_object->set_frequency(Task :: FREQUENCY_DAILY);
+                        $content_object->set_frequency(Task::FREQUENCY_DAILY);
                     }
                     break;
             }
             
             if ($recurrence['UNTIL'])
             {
-                $content_object->set_until(DateTimeParser :: parseDateTime($recurrence['UNTIL'])->getTimestamp());
+                $content_object->set_until(DateTimeParser::parseDateTime($recurrence['UNTIL'])->getTimestamp());
             }
         }
         else
         {
-            $content_object->set_frequency(Task :: FREQUENCY_NONE);
+            $content_object->set_frequency(Task::FREQUENCY_NONE);
         }
         
         return $content_object;

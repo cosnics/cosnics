@@ -10,18 +10,18 @@ use Chamilo\Core\Repository\ContentObject\Survey\Page\Integration\Chamilo\Core\R
  */
 abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Reporting\Preview\Manager
 {
-
+    
     // Actions
     const ACTION_TABLE = 'Table';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_TABLE;
-
+    const DEFAULT_ACTION = self::ACTION_TABLE;
+    
     // Url Creation
     function get_viewer_url($question_id)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_TABLE, TableTemplate :: PARAM_QUESTION_ID => $question_id));
+            array(self::PARAM_ACTION => self::ACTION_TABLE, TableTemplate::PARAM_QUESTION_ID => $question_id));
     }
 
     /**
@@ -30,7 +30,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Integration\Chamilo\Core
      */
     static public function get_available_actions()
     {
-        return array(self :: ACTION_TABLE);
+        return array(self::ACTION_TABLE);
     }
 }
 ?>

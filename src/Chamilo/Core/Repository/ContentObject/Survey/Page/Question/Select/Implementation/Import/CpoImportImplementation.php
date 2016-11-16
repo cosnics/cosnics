@@ -14,22 +14,22 @@ class CpoImportImplementation extends ImportImplementation
 
     function import()
     {
-        $content_object = ContentObjectImport :: launch($this);
+        $content_object = ContentObjectImport::launch($this);
         
         $dom_xpath = $this->get_controller()->get_dom_xpath();
         $content_object_node = $this->get_content_object_import_parameters()->get_content_object_node();
         
-        $export_node = $dom_xpath->query(CpoExportImplementation :: SURVEY_SELECT_QUESTION_EXPORT, $content_object_node)->item(
+        $export_node = $dom_xpath->query(CpoExportImplementation::SURVEY_SELECT_QUESTION_EXPORT, $content_object_node)->item(
             0);
         
-        $option_node_list = $dom_xpath->query(CpoExportImplementation :: OPTIONS_NODE, $export_node)->item(0);
+        $option_node_list = $dom_xpath->query(CpoExportImplementation::OPTIONS_NODE, $export_node)->item(0);
         
-        foreach ($dom_xpath->query(CpoExportImplementation :: OPTION_NODE, $option_node_list) as $option_node)
+        foreach ($dom_xpath->query(CpoExportImplementation::OPTION_NODE, $option_node_list) as $option_node)
         {
             
             $this->get_controller()->set_cache_id(
-                SelectOption :: get_table_name(), 
-                SelectOption :: PROPERTY_ID, 
+                SelectOption::get_table_name(), 
+                SelectOption::PROPERTY_ID, 
                 $option_node->getAttribute('id'), 
                 $option_node->getAttribute('display_order'));
             $option = new SelectOption();
@@ -46,38 +46,38 @@ class CpoImportImplementation extends ImportImplementation
         $dom_xpath = $this->get_controller()->get_dom_xpath();
         $content_object_node = $this->get_content_object_import_parameters()->get_content_object_node();
         
-        $export_node = $dom_xpath->query(CpoExportImplementation :: SURVEY_SELECT_QUESTION_EXPORT, $content_object_node)->item(
+        $export_node = $dom_xpath->query(CpoExportImplementation::SURVEY_SELECT_QUESTION_EXPORT, $content_object_node)->item(
             0);
         
-        $option_node_list = $dom_xpath->query(CpoExportImplementation :: OPTIONS_NODE, $export_node)->item(0);
+        $option_node_list = $dom_xpath->query(CpoExportImplementation::OPTIONS_NODE, $export_node)->item(0);
         
-        foreach ($dom_xpath->query(CpoExportImplementation :: OPTION_NODE, $option_node_list) as $option_node)
+        foreach ($dom_xpath->query(CpoExportImplementation::OPTION_NODE, $option_node_list) as $option_node)
         {
             $display_order = $this->get_controller()->get_cache_id(
-                SelectOption :: get_table_name(), 
-                SelectOption :: PROPERTY_ID, 
+                SelectOption::get_table_name(), 
+                SelectOption::PROPERTY_ID, 
                 $option_node->getAttribute('id'));
             
-            $dm = DataManager :: getInstance();
+            $dm = DataManager::getInstance();
             $conditions = array();
-            $conditions[] = new EqualityCondition(SelectOption :: PROPERTY_QUESTION_ID, $content_object->get_id());
-            $conditions[] = new EqualityCondition(SelectOption :: PROPERTY_DISPLAY_ORDER, $display_order);
+            $conditions[] = new EqualityCondition(SelectOption::PROPERTY_QUESTION_ID, $content_object->get_id());
+            $conditions[] = new EqualityCondition(SelectOption::PROPERTY_DISPLAY_ORDER, $display_order);
             $condition = new AndCondition($conditions);
             $option = $dm->retrieve_survey_select_question_options($condition)->next_result();
             
             if ($option)
             {
                 $this->get_controller()->set_cache_id(
-                    SelectOption :: get_table_name(), 
-                    SelectOption :: PROPERTY_ID, 
+                    SelectOption::get_table_name(), 
+                    SelectOption::PROPERTY_ID, 
                     $option_node->getAttribute('id'), 
                     $option->get_id());
             }
             else
             {
                 $this->get_controller()->set_cache_id(
-                    SelectOption :: get_table_name(), 
-                    SelectOption :: PROPERTY_ID, 
+                    SelectOption::get_table_name(), 
+                    SelectOption::PROPERTY_ID, 
                     $option_node->getAttribute('id'), 
                     null);
             }

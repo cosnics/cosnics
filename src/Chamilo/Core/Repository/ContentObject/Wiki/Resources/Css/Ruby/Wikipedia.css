@@ -1,12 +1,14 @@
-@import url ('../../Aqua/Wikipedia.css');
-
+@import
+url
+(
+'../../Aqua/Wikipedia.css'
+);
 .wiki-pane {
 	width: 90%;
 	border-left: 1px solid #EFEFEF;
 	float: right;
 	margin-left: -1px;
 }
-
 
 .wiki-pane-actions li a {
 	display: block;

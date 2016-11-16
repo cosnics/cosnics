@@ -7,18 +7,21 @@ use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
 
 abstract class PageDisplay
 {
+
     protected $formvalidator;
 
     protected $complex_content_object_path_node;
 
     protected $renderer;
-    
+
     /**
+     *
      * @var Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface
      */
     protected $answerService;
 
-    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, AnswerServiceInterface $answerService)
+    function __construct($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, 
+        AnswerServiceInterface $answerService)
     {
         $this->formvalidator = $formvalidator;
         $this->renderer = $formvalidator->defaultRenderer();
@@ -45,7 +48,8 @@ abstract class PageDisplay
         $this->addFooter();
     }
 
-    abstract function process(ComplexContentObjectPathNode $complex_content_object_path_node, AnswerServiceInterface $answerService);
+    abstract function process(ComplexContentObjectPathNode $complex_content_object_path_node, 
+        AnswerServiceInterface $answerService);
 
     function addHeader()
     {
@@ -63,7 +67,8 @@ abstract class PageDisplay
         $formvalidator->addElement('html', $footer);
     }
 
-    static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, AnswerServiceInterface $answerService)
+    static function factory($formvalidator, ComplexContentObjectPathNode $complex_content_object_path_node, 
+        AnswerServiceInterface $answerService)
     {
         $content_object = $complex_content_object_path_node->get_content_object();
         $package = $content_object->package();
@@ -81,13 +86,14 @@ abstract class PageDisplay
         
         return $display;
     }
-    
+
     /**
+     *
      * @return \Chamilo\Core\Repository\ContentObject\Survey\Service\AnswerServiceInterface
      */
-    public function getAnswerService(){
+    public function getAnswerService()
+    {
         return $this->answerService;
     }
-    
 }
 ?>

@@ -98,7 +98,7 @@ abstract class Stream
      */
     public function get_size()
     {
-        $properties = FileProperties :: from_url($this->get_url());
+        $properties = FileProperties::from_url($this->get_url());
         return $properties->get_size();
     }
 

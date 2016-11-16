@@ -13,7 +13,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class ContentObjectTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_ID;
 
     /**
      * The user id of the current active user.
@@ -32,7 +32,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
 
     /**
      * Constructor.
-     *
+     * 
      * @param int $owner The id of the current user.
      * @param array $types The types of objects that can be published in current location.
      * @param string $query The search query, or null if none.
@@ -42,7 +42,7 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
      */
     public function __construct($component, $owner, $types, $query)
     {
-        parent :: __construct($component);
+        parent::__construct($component);
         $this->set_types($types);
         $this->set_owner($owner);
         $this->set_query($query);
@@ -50,14 +50,14 @@ class ContentObjectTable extends DataClassTable implements TableFormActionsSuppo
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
-
-        if ($this->get_component()->get_maximum_select() != Manager :: SELECT_SINGLE)
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        
+        if ($this->get_component()->get_maximum_select() != Manager::SELECT_SINGLE)
         {
             $actions->add_form_action(
-                new TableFormAction($this->get_component()->get_url(), Translation :: get('PublishSelected'), false));
+                new TableFormAction($this->get_component()->get_url(), Translation::get('PublishSelected'), false));
         }
-
+        
         return $actions;
     }
 

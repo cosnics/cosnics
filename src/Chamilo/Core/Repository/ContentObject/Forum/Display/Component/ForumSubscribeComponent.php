@@ -20,21 +20,21 @@ class ForumSubscribeComponent extends Manager
         $forum = $this->get_selected_complex_content_object_item();
         
         $params = array();
-        $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_FORUM;
-        $params[self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
+        $params[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         
-        $succes = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager :: create_subscribe(
+        $succes = \Chamilo\Core\Repository\ContentObject\Forum\Storage\DataManager::create_subscribe(
             $this->get_user_id(), 
             $forum->get_ref());
         
         if ($succes)
         {
-            $message = Translation :: get("SuccesSubscribe");
+            $message = Translation::get("SuccesSubscribe");
             $this->redirect($message, false, $params);
         }
         else
         {
-            $message = Translation :: get("UnSuccesSubscribe");
+            $message = Translation::get("UnSuccesSubscribe");
             $this->redirect($message, true, $params);
         }
     }

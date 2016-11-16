@@ -10,26 +10,25 @@ class LogoutComponent extends Manager
 {
 
     /**
-     *  Delete session token created by MicrosoftClientSettingsProvider.
+     * Delete session token created by MicrosoftClientSettingsProvider.
      */
     public function run()
     {
-        $settingsProvider = new MicrosoftSharePointClientSettingsProvider($this->get_external_repository(), $this->get_user());
-
+        $settingsProvider = new MicrosoftSharePointClientSettingsProvider(
+            $this->get_external_repository(), 
+            $this->get_user());
+        
         if ($settingsProvider->removeUserSetting('session_token'))
         {
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(
-                Translation :: get('LogoutSuccessful', null, Utilities :: COMMON_LIBRARIES),
-                false,
-                $parameters);
+            $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
+            $this->redirect(Translation::get('LogoutSuccessful', null, Utilities::COMMON_LIBRARIES), false, $parameters);
         }
         else
         {
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(Translation :: get('LogoutFailed', null, Utilities :: COMMON_LIBRARIES), true, $parameters);
+            $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
+            $this->redirect(Translation::get('LogoutFailed', null, Utilities::COMMON_LIBRARIES), true, $parameters);
         }
     }
 }

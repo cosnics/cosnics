@@ -28,33 +28,33 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        if (! RightsService :: getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        if (! RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
         
-        $type = $this->getRequest()->query->get(self :: PARAM_IMPORT_TYPE);
+        $type = $this->getRequest()->query->get(self::PARAM_IMPORT_TYPE);
         $contentObjectImportService = new ContentObjectImportService($type, $this->getWorkspace(), $this);
         
-        $type = Request :: get(self :: PARAM_IMPORT_TYPE);
+        $type = Request::get(self::PARAM_IMPORT_TYPE);
         
         if ($type)
         {
             if ($contentObjectImportService->hasFinished())
             {
                 // Session :: register(self :: PARAM_MESSAGES, $controller->get_messages_for_url());
-                $this->simple_redirect(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS));
+                $this->simple_redirect(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
             }
             else
             {
-                BreadcrumbTrail :: getInstance()->add(
+                BreadcrumbTrail::getInstance()->add(
                     new Breadcrumb(
                         $this->get_url(), 
-                        Translation :: get(
+                        Translation::get(
                             'ImportType', 
                             array(
-                                'TYPE' => Translation :: get(
-                                    'ImportType' . StringUtilities :: getInstance()->createString($type)->upperCamelize())))));
+                                'TYPE' => Translation::get(
+                                    'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize())))));
                 
                 $html = array();
                 
@@ -67,8 +67,8 @@ class ImporterComponent extends Manager
         }
         else
         {
-            BreadcrumbTrail :: getInstance()->add(
-                new Breadcrumb($this->get_url(), Translation :: get('ChooseImportFormat')));
+            BreadcrumbTrail::getInstance()->add(
+                new Breadcrumb($this->get_url(), Translation::get('ChooseImportFormat')));
             
             $importTypeSelector = new ImportTypeSelector($this->get_parameters(), $this->getImportTypes());
             
@@ -88,15 +88,15 @@ class ImporterComponent extends Manager
      */
     public function getImportTypes()
     {
-        $registrations = Configuration :: getInstance()->get_registrations_by_type(
+        $registrations = Configuration::getInstance()->get_registrations_by_type(
             'Chamilo\Core\Repository\ContentObject');
         
         $types = array();
         
         foreach ($registrations as $registration)
         {
-            $namespace = $registration[Registration :: PROPERTY_CONTEXT];
-            $packageName = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+            $namespace = $registration[Registration::PROPERTY_CONTEXT];
+            $packageName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
             $types[] = $namespace . '\Storage\DataClass\\' . $packageName;
         }
         

@@ -11,12 +11,12 @@ class YoutubeContentObjectImportForm extends ContentObjectImportForm
 
     public function build_basic_form()
     {
-        parent :: build_basic_form();
-        $this->add_textfield(self :: PROPERTY_URL, Translation :: get('Link'));
+        parent::build_basic_form();
+        $this->add_textfield(self::PROPERTY_URL, Translation::get('Link'));
     }
 
     public function setDefaults($defaults = array ())
     {
-        parent :: setDefaults(array(self :: PROPERTY_TYPE => ContentObjectImport :: FORMAT_YOUTUBE));
+        parent::setDefaults(array(self::PROPERTY_TYPE => ContentObjectImport::FORMAT_YOUTUBE));
     }
 }

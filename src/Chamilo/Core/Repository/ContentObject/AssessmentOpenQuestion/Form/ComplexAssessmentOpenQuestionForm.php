@@ -28,19 +28,19 @@ class ComplexAssessmentOpenQuestionForm extends ComplexContentObjectItemForm
         $elements = array();
         $elements[] = $this->createElement(
             'text', 
-            ComplexAssessmentOpenQuestion :: PROPERTY_WEIGHT, 
-            Translation :: get('Weight'), 
+            ComplexAssessmentOpenQuestion::PROPERTY_WEIGHT, 
+            Translation::get('Weight'), 
             array("size" => "50"));
         
-        $elements[] = ConfigurationForm :: build_answer_feedback(
+        $elements[] = ConfigurationForm::build_answer_feedback(
             $this, 
             array(
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_ALL));
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_ALL));
         
         return $elements;
     }
@@ -55,8 +55,8 @@ class ComplexAssessmentOpenQuestionForm extends ComplexContentObjectItemForm
         
         if (isset($complex_content_object_item))
         {
-            $defaults[ComplexAssessmentOpenQuestion :: PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
-            $defaults[ComplexAssessmentOpenQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            $defaults[ComplexAssessmentOpenQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
+            $defaults[ComplexAssessmentOpenQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
         }
         
         return $defaults;
@@ -72,7 +72,7 @@ class ComplexAssessmentOpenQuestionForm extends ComplexContentObjectItemForm
         $complex_content_object_item = $this->get_complex_content_object_item();
         $this->set_values($complex_content_object_item, $values);
         
-        return parent :: update();
+        return parent::update();
     }
 
     /**
@@ -82,8 +82,8 @@ class ComplexAssessmentOpenQuestionForm extends ComplexContentObjectItemForm
      */
     private function set_values($complex_content_object_item, $values)
     {
-        $complex_content_object_item->set_weight($values[ComplexAssessmentOpenQuestion :: PROPERTY_WEIGHT]);
+        $complex_content_object_item->set_weight($values[ComplexAssessmentOpenQuestion::PROPERTY_WEIGHT]);
         $complex_content_object_item->set_show_answer_feedback(
-            $values[ComplexAssessmentOpenQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK]);
+            $values[ComplexAssessmentOpenQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK]);
     }
 }

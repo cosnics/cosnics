@@ -70,7 +70,7 @@ class Basic extends Xlsx
             
             foreach ($views as $key => $view)
             {
-                if ($view == static :: get_format())
+                if ($view == static::get_format())
                 {
                     $specific_views[] = $key;
                 }
@@ -82,17 +82,17 @@ class Basic extends Xlsx
                 if (count($specific_views) == 1)
                 {
                     $current_block = $this->get_template()->get_block($specific_views[0]);
-                    $file_name = Translation :: get(
-                        ClassnameUtilities :: getInstance()->getClassnameFromObject($current_block), 
+                    $file_name = Translation::get(
+                        ClassnameUtilities::getInstance()->getClassnameFromObject($current_block), 
                         null, 
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($current_block)) .
-                         date('_Y-m-d_H-i-s') . '.xlsx';
+                        ClassnameUtilities::getInstance()->getNamespaceFromObject($current_block)) . date('_Y-m-d_H-i-s') .
+                         '.xlsx';
                     
-                    BlockRenditionImplementation :: launch(
+                    BlockRenditionImplementation::launch(
                         $this, 
                         $current_block, 
                         $this->get_format(), 
-                        XlsxBlockRendition :: VIEW_BASIC);
+                        XlsxBlockRendition::VIEW_BASIC);
                 }
                 else
                 {
@@ -105,17 +105,17 @@ class Basic extends Xlsx
                         $this->php_excel->createSheet($key);
                         $this->php_excel->setActiveSheetIndex($key);
                         
-                        BlockRenditionImplementation :: launch(
+                        BlockRenditionImplementation::launch(
                             $this, 
                             $block, 
                             $this->get_format(), 
-                            XlsxBlockRendition :: VIEW_BASIC);
+                            XlsxBlockRendition::VIEW_BASIC);
                     }
                     
-                    $file_name = Translation :: get(
-                        ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template()), 
+                    $file_name = Translation::get(
+                        ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_template()), 
                         null, 
-                        ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_template())) .
+                        ClassnameUtilities::getInstance()->getNamespaceFromObject($this->get_template())) .
                          date('_Y-m-d_H-i-s') . '.xlsx';
                 }
             }
@@ -130,17 +130,17 @@ class Basic extends Xlsx
                     $this->php_excel->createSheet($key);
                     $this->php_excel->setActiveSheetIndex($key);
                     
-                    BlockRenditionImplementation :: launch(
+                    BlockRenditionImplementation::launch(
                         $this, 
                         $block, 
                         $this->get_format(), 
-                        XlsxBlockRendition :: VIEW_BASIC);
+                        XlsxBlockRendition::VIEW_BASIC);
                 }
                 
-                $file_name = Translation :: get(
-                    ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_template()), 
+                $file_name = Translation::get(
+                    ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_template()), 
                     null, 
-                    ClassnameUtilities :: getInstance()->getNamespaceFromObject($this->get_template())) .
+                    ClassnameUtilities::getInstance()->getNamespaceFromObject($this->get_template())) .
                      date('_Y-m-d_H-i-s') . '.xlsx';
             }
         }
@@ -148,24 +148,24 @@ class Basic extends Xlsx
         {
             $current_block_id = $this->get_context()->get_current_block();
             $current_block = $this->get_template()->get_block($current_block_id);
-            $file_name = Translation :: get(
-                ClassnameUtilities :: getInstance()->getClassnameFromObject($current_block), 
+            $file_name = Translation::get(
+                ClassnameUtilities::getInstance()->getClassnameFromObject($current_block), 
                 null, 
-                ClassnameUtilities :: getInstance()->getNamespaceFromObject($current_block)) . date('_Y-m-d_H-i-s') .
+                ClassnameUtilities::getInstance()->getNamespaceFromObject($current_block)) . date('_Y-m-d_H-i-s') .
                  '.xlsx';
             
-            BlockRenditionImplementation :: launch(
+            BlockRenditionImplementation::launch(
                 $this, 
                 $current_block, 
                 $this->get_format(), 
-                XlsxBlockRendition :: VIEW_BASIC);
+                XlsxBlockRendition::VIEW_BASIC);
         }
         
-        $file = Path :: getInstance()->getArchivePath() . Filesystem :: create_unique_name(
-            Path :: getInstance()->getArchivePath(), 
+        $file = Path::getInstance()->getArchivePath() . Filesystem::create_unique_name(
+            Path::getInstance()->getArchivePath(), 
             $file_name);
         
-        $php_excel_writer = PHPExcel_IOFactory :: createWriter($this->php_excel, 'Excel2007');
+        $php_excel_writer = PHPExcel_IOFactory::createWriter($this->php_excel, 'Excel2007');
         $php_excel_writer->save($file);
         
         $this->php_excel->disconnectWorksheets();

@@ -9,7 +9,7 @@ use Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Interfa
 
 /**
  * Synchronizes configuration files where default structure locations and roles are defined with the database
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class Synchronizer implements SynchronizerInterface
@@ -41,14 +41,14 @@ class Synchronizer implements SynchronizerInterface
 
     /**
      * StructureLocationConfigurationSynchronizer constructor.
-     *
+     * 
      * @param LoaderInterface $structureLocationConfigurationLoader
      * @param RegistrationConsulter $registrationConsulter
      * @param StructureLocationServiceInterface $structureLocationService
      * @param StructureLocationRoleServiceInterface $structureLocationRoleService
      */
-    public function __construct(LoaderInterface $structureLocationConfigurationLoader,
-        RegistrationConsulter $registrationConsulter, StructureLocationServiceInterface $structureLocationService,
+    public function __construct(LoaderInterface $structureLocationConfigurationLoader, 
+        RegistrationConsulter $registrationConsulter, StructureLocationServiceInterface $structureLocationService, 
         StructureLocationRoleServiceInterface $structureLocationRoleService)
     {
         $this->structureLocationConfigurationLoader = $structureLocationConfigurationLoader;
@@ -64,9 +64,9 @@ class Synchronizer implements SynchronizerInterface
     {
         $configuration = $this->structureLocationConfigurationLoader->loadConfiguration(
             $this->registrationConsulter->getRegistrationContexts());
-
+        
         $this->structureLocationService->truncateStructureLocations();
-
+        
         foreach ($configuration as $package => $packageConfiguration)
         {
             foreach ($packageConfiguration as $actions)
@@ -77,14 +77,14 @@ class Synchronizer implements SynchronizerInterface
                     {
                         $action = null;
                     }
-
+                    
                     $structureLocation = $this->structureLocationService->createStructureLocation($package, $action);
-
+                    
                     if (! is_array($roles))
                     {
                         $roles = array($roles);
                     }
-
+                    
                     foreach ($roles as $role)
                     {
                         $this->structureLocationRoleService->addRoleToStructureLocation($structureLocation, $role);

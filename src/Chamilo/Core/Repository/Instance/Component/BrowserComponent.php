@@ -44,25 +44,25 @@ class BrowserComponent extends Manager implements TableSupport
         }
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $parameters = $this->get_parameters();
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
         $tabs = new DynamicTabsRenderer('instances');
         
         $tabs->add_tab(
             new DynamicContentTab(
                 'personal_instance', 
-                Translation :: get('PersonalInstance'), 
+                Translation::get('PersonalInstance'), 
                 null, 
-                $this->get_table(PersonalInstance :: class_name())));
+                $this->get_table(PersonalInstance::class_name())));
         
         if ($this->get_user()->is_platform_admin())
         {
             $tabs->add_tab(
                 new DynamicContentTab(
                     'platform_instance', 
-                    Translation :: get('PlatformInstance'), 
+                    Translation::get('PlatformInstance'), 
                     null, 
-                    $this->get_table(PlatformInstance :: class_name())));
+                    $this->get_table(PlatformInstance::class_name())));
         }
         
         $html = array();
@@ -92,22 +92,22 @@ class BrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('AddExternalInstance'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Create'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('AddExternalInstance'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Create'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $this->get_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ManageRights', null, \Chamilo\Core\Rights\Manager :: package()), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_RIGHTS)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('ManageRights', null, \Chamilo\Core\Rights\Manager::package()), 
+                    Theme::getInstance()->getCommonImagePath('Action/Rights'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -126,20 +126,20 @@ class BrowserComponent extends Manager implements TableSupport
         $conditions = array();
         
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TYPE), 
+            new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_TYPE), 
             new StaticConditionVariable($this->type));
         
-        if ($this->type == PersonalInstance :: class_name())
+        if ($this->type == PersonalInstance::class_name())
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(PersonalInstance :: class_name(), PersonalInstance :: PROPERTY_USER_ID), 
+                new PropertyConditionVariable(PersonalInstance::class_name(), PersonalInstance::PROPERTY_USER_ID), 
                 new StaticConditionVariable($this->get_user_id()));
         }
         
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Instance :: class_name(), Instance :: PROPERTY_TITLE), 
+                new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_TITLE), 
                 '*' . $query . '*');
         }
         

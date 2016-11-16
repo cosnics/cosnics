@@ -21,7 +21,7 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
 
     protected function set_scores($scores)
     {
-        parent :: set_scores($scores, $this->neutral_score);
+        parent::set_scores($scores, $this->neutral_score);
     }
 
     public function is_valid($value)
@@ -37,7 +37,8 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
         $count = $this->row_count;
         
         // get an array of the row totals
-        $row_totals = array_map(function ($item) {
+        $row_totals = array_map(function ($item)
+        {
             return array_sum($item);
         }, $this->scores);
         
@@ -73,7 +74,7 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
 
     public function allow_empty_scores()
     {
-        return self :: ALLOW_EMPTY_SCORES;
+        return self::ALLOW_EMPTY_SCORES;
     }
 
     /**
@@ -82,7 +83,7 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
      */
     public function get_graph_offset()
     {
-        return self :: GRAPH_OFFSET;
+        return self::GRAPH_OFFSET;
     }
 
     /**
@@ -91,17 +92,17 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
      */
     public function get_graph_range()
     {
-        return self :: GRAPH_RANGE;
+        return self::GRAPH_RANGE;
     }
 
     public function get_intro_title()
     {
-        return Translation :: get('DochyIntroTitle');
+        return Translation::get('DochyIntroTitle');
     }
 
     public function get_intro_description()
     {
-        return Translation :: get('DochyIntroDescription');
+        return Translation::get('DochyIntroDescription');
     }
 
     public function render_table($indicators, $users)
@@ -115,14 +116,14 @@ class DochyResultProcessor extends PeerAssessmentResultprocessor
             $html[] = '<table class="table table-striped table-bordered table-hover table-data" style="width: auto">';
             $html[] = '<thead>';
             $html[] = '<tr>';
-            $html[] = '<th>' . Translation :: get('User') . '</th>';
+            $html[] = '<th>' . Translation::get('User') . '</th>';
             
             foreach ($indicators as $i)
             {
                 $html[] = '<th>' . $i->get_title() . '</th>';
             }
             
-            $html[] = '<th>' . Translation :: get('Average') . '</th>';
+            $html[] = '<th>' . Translation::get('Average') . '</th>';
             $html[] = '</tr>';
             $html[] = '</thead>';
             $html[] = '<tfoot>';

@@ -63,8 +63,8 @@ class UserFactory
      * @param \Chamilo\Libraries\Platform\Translation $translationUtilities
      * @param \Chamilo\Libraries\Platform\Configuration\LocalSetting $localSettingUtilities
      */
-    public function __construct(SessionUtilities $sessionUtilities, UserService $userService,
-        ConfigurationConsulter $configurationConsulter, Theme $themeUtilities, Translation $translationUtilities,
+    public function __construct(SessionUtilities $sessionUtilities, UserService $userService, 
+        ConfigurationConsulter $configurationConsulter, Theme $themeUtilities, Translation $translationUtilities, 
         LocalSetting $localSettingUtilities)
     {
         $this->sessionUtilities = $sessionUtilities;
@@ -190,32 +190,32 @@ class UserFactory
     public function getUser()
     {
         $userIdentifier = $this->getSessionUtilities()->get_user_id();
-
+        
         if ($userIdentifier)
         {
             $user = $this->getUserService()->findUserByIdentifier($userIdentifier);
         }
-
+        
         if ($user instanceof User)
         {
             $themeSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
                 array('Chamilo\Core\User', 'allow_user_theme_selection'));
-
+            
             if ($themeSelectionAllowed)
             {
                 $this->getThemeUtilities()->setTheme($this->getLocalSettingUtilities()->get('theme'));
             }
-
+            
             $languageSelectionAllowed = $this->getConfigurationConsulter()->getSetting(
                 array('Chamilo\Core\User', 'allow_user_change_platform_language'));
-
+            
             if ($languageSelectionAllowed)
             {
                 $this->getTranslationUtilities()->setLanguageIsocode(
                     $this->getLocalSettingUtilities()->get('platform_language'));
             }
         }
-
+        
         return $user;
     }
 }

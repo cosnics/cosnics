@@ -10,33 +10,35 @@ class ExternalObject extends StreamingMediaExternalObject
     const ID_SEPARATOR = 'ChannelId=';
 
     /**
-     *  \brief Sets the ID of Office 365 video object to the concatenation of the video ID and the channel ID.
-     *
-     *  Calls to the Microsoft Video API require always both the channel and the video Id. Therefore we concatenated these ID's and store
-     *  them as the ID of this external object.
-     *
-     *  @see See static function getVideoId(...) and getChannelId(...) for splittin the return value of get_id().
+     * \brief Sets the ID of Office 365 video object to the concatenation of the video ID and the channel ID.
+     * Calls to the Microsoft Video API require always both the channel and the video Id. Therefore we concatenated
+     * these ID's and store
+     * them as the ID of this external object.
+     * 
+     * @see See static function getVideoId(...) and getChannelId(...) for splittin the return value of get_id().
      */
     public function setVideoAndChannelId($videoId, $channelId)
     {
-        $this->set_id($videoId . self :: ID_SEPARATOR . $channelId);
+        $this->set_id($videoId . self::ID_SEPARATOR . $channelId);
     }
 
     /**
-     *  @see setVideoAndChannelId(...)
+     *
+     * @see setVideoAndChannelId(...)
      */
     public static function getVideoId($videoAndChannelId)
     {
-        $splitId = explode(self :: ID_SEPARATOR, $videoAndChannelId);
+        $splitId = explode(self::ID_SEPARATOR, $videoAndChannelId);
         return $splitId[0];
     }
 
     /**
-     *  @see setVideoAndChannelId(...)
+     *
+     * @see setVideoAndChannelId(...)
      */
     public function getChannelId($videoAndChannelId)
     {
-        $splitId = explode(self :: ID_SEPARATOR, $videoAndChannelId);
+        $splitId = explode(self::ID_SEPARATOR, $videoAndChannelId);
         return $splitId[1];
     }
 
@@ -51,33 +53,33 @@ class ExternalObject extends StreamingMediaExternalObject
         switch ($status)
         {
             case 0 :
-                return Translation :: get('PendingProcessing');
+                return Translation::get('PendingProcessing');
             case 1 :
-                return Translation :: get('Processing');
+                return Translation::get('Processing');
             case 2 :
-                return Translation :: get('ReadyForPlay');
+                return Translation::get('ReadyForPlay');
             case 3 :
-                return Translation :: get('ErrorOnUploading');
+                return Translation::get('ErrorOnUploading');
             case 4 :
-                return Translation :: get('ErrorOnProcessing');
+                return Translation::get('ErrorOnProcessing');
             case 5 :
-                return Translation :: get('Timeout');
+                return Translation::get('Timeout');
             case 6 :
-                return Translation :: get('UnsupportedFormat');
+                return Translation::get('UnsupportedFormat');
             case 7 :
-                return Translation :: get('CorruptedFile');
+                return Translation::get('CorruptedFile');
             default :
-                return Translation :: get('Unknown');
+                return Translation::get('Unknown');
         }
     }
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     /**
-     *  Returns HTML embed code.
+     * Returns HTML embed code.
      */
     public function getVideoEmbedCode($width = 600, $height = 480)
     {

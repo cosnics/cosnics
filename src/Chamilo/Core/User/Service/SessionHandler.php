@@ -40,7 +40,7 @@ class SessionHandler implements \SessionHandlerInterface
     public function __construct(SessionRepository $sessionRepository)
     {
         $this->sessionRepository = $sessionRepository;
-
+        
         // see warning for php < 5.4: http://www.php.net/manual/en/function.session-set-save-handler.php
         register_shutdown_function('session_write_close');
     }
@@ -121,7 +121,7 @@ class SessionHandler implements \SessionHandlerInterface
     {
         $this->savePath = $savePath;
         $this->name = $name;
-
+        
         return true;
     }
 
@@ -137,10 +137,10 @@ class SessionHandler implements \SessionHandlerInterface
     public function read($sessionIdentifier)
     {
         $session = $this->getSessionRepository()->getSessionForIdentifierNameAndSavePath(
-            $sessionIdentifier,
-            $this->getName(),
+            $sessionIdentifier, 
+            $this->getName(), 
             $this->getSavePath());
-
+        
         if ($session instanceof Session)
         {
             if ($session->is_valid())
@@ -152,7 +152,7 @@ class SessionHandler implements \SessionHandlerInterface
                 $this->destroy($sessionIdentifier);
             }
         }
-
+        
         return '';
     }
 
@@ -163,17 +163,17 @@ class SessionHandler implements \SessionHandlerInterface
     public function write($sessionIdentifier, $data)
     {
         $data = base64_encode($data);
-
+        
         $session = $this->getSessionRepository()->getSessionForIdentifierNameAndSavePath(
-            $sessionIdentifier,
-            $this->getName(),
+            $sessionIdentifier, 
+            $this->getName(), 
             $this->getSavePath());
-
+        
         if ($session instanceof Session)
         {
             $session->set_data($data);
             $session->set_modified(time());
-
+            
             return $session->update();
         }
         else
@@ -185,7 +185,7 @@ class SessionHandler implements \SessionHandlerInterface
             $session->set_name($this->getName());
             $session->set_save_path($this->getSavePath());
             $session->set_session_id($sessionIdentifier);
-
+            
             return $session->create();
         }
     }
@@ -197,8 +197,8 @@ class SessionHandler implements \SessionHandlerInterface
     public function destroy($sessionIdentifier)
     {
         return $this->getSessionRepository()->deleteSessionForIdentifierNameAndSavePath(
-            $sessionIdentifier,
-            $this->getName(),
+            $sessionIdentifier, 
+            $this->getName(), 
             $this->getSavePath());
     }
 
@@ -210,7 +210,7 @@ class SessionHandler implements \SessionHandlerInterface
     public function garbage($maxLifetime)
     {
         $border = time() - $this->getLifetime();
-
+        
         return $this->getSessionRepository()->deleteSessionsOlderThanTimestamp($border);
     }
 

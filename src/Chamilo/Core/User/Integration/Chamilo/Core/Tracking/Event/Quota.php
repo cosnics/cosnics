@@ -19,6 +19,6 @@ class Quota extends Event
      */
     public function getTrackerClasses()
     {
-        return array(\Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change :: class_name());
+        return array(\Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::class_name());
     }
 }

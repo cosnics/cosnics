@@ -18,39 +18,39 @@ class ActivatorComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $ids = Request :: get(self :: PARAM_INSTANCE_ID);
+        
+        $ids = Request::get(self::PARAM_INSTANCE_ID);
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
-                $external_instance = DataManager :: retrieve_by_id(Instance :: class_name(), $id);
+                $external_instance = DataManager::retrieve_by_id(Instance::class_name(), $id);
                 $external_instance->activate();
-
+                
                 if (! $external_instance->update())
                 {
                     $failures ++;
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectNotActivated';
-                    $parameter = array('OBJECT' => Translation :: get('ExternalInstance'));
+                    $parameter = array('OBJECT' => Translation::get('ExternalInstance'));
                 }
                 else
                 {
                     $message = 'ObjectsNotActivated';
-                    $parameter = array('OBJECTS' => Translation :: get('VideosConferencing'));
+                    $parameter = array('OBJECTS' => Translation::get('VideosConferencing'));
                 }
             }
             else
@@ -58,28 +58,28 @@ class ActivatorComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectActivated';
-                    $parameter = array('OBJECT' => Translation :: get('ExternalInstance'));
+                    $parameter = array('OBJECT' => Translation::get('ExternalInstance'));
                 }
                 else
                 {
                     $message = 'ObjectsActivated';
-                    $parameter = array('OBJECTS' => Translation :: get('VideosConferencing'));
+                    $parameter = array('OBJECTS' => Translation::get('VideosConferencing'));
                 }
             }
-
+            
             $this->redirect(
-                Translation :: get($message, $parameter, Utilities :: COMMON_LIBRARIES),
-                ($failures ? true : false),
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), 
+                ($failures ? true : false), 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('ExternalRepository')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('ExternalRepository')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 }

@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return LearningPath :: class_name();
+        return LearningPath::class_name();
     }
 }

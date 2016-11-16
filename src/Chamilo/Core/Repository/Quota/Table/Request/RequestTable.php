@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class RequestTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_REQUEST_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_REQUEST_ID;
     const TYPE_PERSONAL = 1;
     const TYPE_PENDING = 2;
     const TYPE_GRANTED = 3;
@@ -19,33 +19,33 @@ class RequestTable extends DataClassTable implements TableFormActionsSupport
 
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
-
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
+        
         if ($this->get_component()->get_user()->is_platform_admin())
         {
-            if ($this->get_component()->get_table_type() == self :: TYPE_PENDING ||
-                 $this->get_component()->get_table_type() == self :: TYPE_DENIED)
+            if ($this->get_component()->get_table_type() == self::TYPE_PENDING ||
+                 $this->get_component()->get_table_type() == self::TYPE_DENIED)
             {
                 $actions->add_form_action(
                     new TableFormAction(
-                        $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_GRANT)),
-                        Translation :: get('GrantSelected', null, Utilities :: COMMON_LIBRARIES)));
+                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_GRANT)), 
+                        Translation::get('GrantSelected', null, Utilities::COMMON_LIBRARIES)));
             }
-
-            if ($this->get_component()->get_table_type() == self :: TYPE_PENDING)
+            
+            if ($this->get_component()->get_table_type() == self::TYPE_PENDING)
             {
                 $actions->add_form_action(
                     new TableFormAction(
-                        $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DENY)),
-                        Translation :: get('DenySelected', null, Utilities :: COMMON_LIBRARIES)));
+                        $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DENY)), 
+                        Translation::get('DenySelected', null, Utilities::COMMON_LIBRARIES)));
             }
         }
-
+        
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
-                Translation :: get('RemoveSelected', null, Utilities :: COMMON_LIBRARIES)));
-
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
+                Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)));
+        
         return $actions;
     }
 }

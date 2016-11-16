@@ -1,77 +1,225 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <help>
-	<help_item name="administration general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="administration diagnoser" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="administration system announcements" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="group general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="group export" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="group rights" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="group importer" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="group subscribe users" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="group unsubscribe users" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="common whoisonline" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="rights general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="home general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="home build" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="menu general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="tracking general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="user general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="webservice general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="help general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="reporting general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository userviews" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository rights" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository recyclebin" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository metadata" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository publications" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository importer" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository exporter" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository comparer" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository publication wizard" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository builder" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository assessment builder" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository forum builder" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="repository glossary builder" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses category manager" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses create" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses delete" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses importer" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses user importer" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses reporting" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses subscribe" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses unsubscribe" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses announcement tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses assessment tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses blog tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses calendar tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses chat tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses reporting" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses group" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses sections" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses settings" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses description tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses document tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses forum tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses glossary tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses learnpath tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses link tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses maintenance" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses note tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses search tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses user" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="courses wiki tool" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="profiler general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="personal messenger general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="personal calendar general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="webconferencing general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio general" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio viewer" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio browser" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio system defaults" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio edit" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio permissions" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio feedback" url="http://www.chamilo.org/chamilo_2.0.0" />
-	<help_item name="portfolio create" url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="administration general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="administration diagnoser"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="administration system announcements"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="group general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="group export"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="group rights"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="group importer"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="group subscribe users"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="group unsubscribe users"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="common whoisonline"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="rights general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="home general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="home build"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="menu general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="tracking general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="user general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="webservice general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="help general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="reporting general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository userviews"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository rights"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository recyclebin"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository metadata"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository publications"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository importer"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository exporter"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository comparer"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository publication wizard"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository builder"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository assessment builder"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository forum builder"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="repository glossary builder"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses category manager"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses create"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses delete"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses importer"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses user importer"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses reporting"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses subscribe"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses unsubscribe"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses announcement tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses assessment tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses blog tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses calendar tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses chat tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses reporting"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses group"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses sections"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses settings"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses description tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses document tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses forum tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses glossary tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses learnpath tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses link tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses maintenance"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses note tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses search tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses user"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="courses wiki tool"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="profiler general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="personal messenger general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="personal calendar general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="webconferencing general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio general"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio viewer"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio browser"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio system defaults"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio edit"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio permissions"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio feedback"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
+    <help_item
+        name="portfolio create"
+        url="http://www.chamilo.org/chamilo_2.0.0" />
 </help>

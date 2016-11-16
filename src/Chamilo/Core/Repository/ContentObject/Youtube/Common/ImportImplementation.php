@@ -9,6 +9,6 @@ class ImportImplementation extends ContentObjectImportImplementation
 
     public static function get_types()
     {
-        return parent :: get_types(array(ContentObjectImport :: FORMAT_YOUTUBE));
+        return parent::get_types(array(ContentObjectImport::FORMAT_YOUTUBE));
     }
 }

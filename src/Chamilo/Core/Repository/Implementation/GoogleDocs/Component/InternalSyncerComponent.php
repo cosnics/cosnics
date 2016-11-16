@@ -18,7 +18,7 @@ class InternalSyncerComponent extends Manager
     {
         $synchronization_data = $external_object->get_synchronization_data();
         $document = $synchronization_data->get_content_object();
-
+        
         $document->set_title($external_object->get_title());
         if (Configuration::getInstance()->get_setting(
             array(\Chamilo\Core\Repository\Manager::context(), 'description_required')) && StringUtilities::getInstance()->isNullOrEmpty(
@@ -30,21 +30,21 @@ class InternalSyncerComponent extends Manager
         {
             $document->set_description($external_object->get_description());
         }
-
+        
         $mimeTypeExtensionParser = new MimeTypeExtensionParser();
         $exportFormat = $mimeTypeExtensionParser->getMimeTypeForExtension($document->get_extension());
-
+        
         if (! $exportFormat)
         {
             throw new \RuntimeException(
                 'Can not synchronize the google docs because there is no valid export format for the current file');
         }
-
+        
         $document->set_in_memory_file($external_object->get_content_data($exportFormat));
-
+        
         $document->set_filename(
             Filesystem::create_safe_name($external_object->get_title()) . '.' . $document->get_extension());
-
+        
         if ($document->update())
         {
             $synchronization_data->set_content_object_timestamp($document->get_modification_date());
@@ -57,11 +57,11 @@ class InternalSyncerComponent extends Manager
                 $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $document->get_id();
                 $this->redirect(
                     Translation::get(
-                        'ObjectUpdated',
-                        array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES),
-                    false,
-                    $parameters,
+                        'ObjectUpdated', 
+                        array('OBJECT' => Translation::get('ContentObject')), 
+                        Utilities::COMMON_LIBRARIES), 
+                    false, 
+                    $parameters, 
                     array(Manager::PARAM_EXTERNAL_REPOSITORY));
             }
             else
@@ -71,10 +71,10 @@ class InternalSyncerComponent extends Manager
                 $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
                 $this->redirect(
                     Translation::get(
-                        'ObjectFailedUpdated',
-                        array('OBJECT' => Translation::get('ContentObject')),
-                        Utilities::COMMON_LIBRARIES),
-                    true,
+                        'ObjectFailedUpdated', 
+                        array('OBJECT' => Translation::get('ContentObject')), 
+                        Utilities::COMMON_LIBRARIES), 
+                    true, 
                     $parameters);
             }
         }
@@ -85,10 +85,10 @@ class InternalSyncerComponent extends Manager
             $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
             $this->redirect(
                 Translation::get(
-                    'ObjectFailedUpdated',
-                    array('OBJECT' => Translation::get('ContentObject')),
-                    Utilities::COMMON_LIBRARIES),
-                true,
+                    'ObjectFailedUpdated', 
+                    array('OBJECT' => Translation::get('ContentObject')), 
+                    Utilities::COMMON_LIBRARIES), 
+                true, 
                 $parameters);
         }
     }

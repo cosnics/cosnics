@@ -22,11 +22,11 @@ class LocationResult extends ContextLocationResult
     public function get_link(\Chamilo\Core\Repository\Publication\LocationSupport $location, $result)
     {
         $parameters = array();
-        $parameters[Application :: PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager :: context();
-        $parameters[\Chamilo\Core\Admin\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Manager :: ACTION_SYSTEM_ANNOUNCEMENTS;
-        $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager :: ACTION_VIEW;
-        $parameters[\Chamilo\Core\Admin\Announcement\Manager :: PARAM_SYSTEM_ANNOUNCEMENT_ID] = $result->get_id();
-
+        $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager::context();
+        $parameters[\Chamilo\Core\Admin\Manager::PARAM_ACTION] = \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS;
+        $parameters[\Chamilo\Core\Admin\Announcement\Manager::PARAM_ACTION] = \Chamilo\Core\Admin\Announcement\Manager::ACTION_VIEW;
+        $parameters[\Chamilo\Core\Admin\Announcement\Manager::PARAM_SYSTEM_ANNOUNCEMENT_ID] = $result->get_id();
+        
         $redirect = new Redirect($parameters);
         return $redirect->getUrl();
     }

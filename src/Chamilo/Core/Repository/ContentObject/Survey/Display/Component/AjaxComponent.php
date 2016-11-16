@@ -13,19 +13,15 @@ class AjaxComponent extends Manager implements DelegateComponent
     function run()
     {
         
-//         $parameters = $this->getRequest()->request->get('parameters');
-        $context = $this->getRequest()->request->get(AnswerServiceInterface :: PARAM_SERVICE_CONTEXT);
+        // $parameters = $this->getRequest()->request->get('parameters');
+        $context = $this->getRequest()->request->get(AnswerServiceInterface::PARAM_SERVICE_CONTEXT);
         
-        $surveyConfiguration = new SurveyConfiguration(
-            $this->getRequest(), 
-            $this->get_user(), 
-            $this, 
-            $context);
+        $surveyConfiguration = new SurveyConfiguration($this->getRequest(), $this->get_user(), $this, $context);
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager :: context(), 
+            \Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager::context(), 
             $surveyConfiguration);
-//         $component = $factory->getComponent();
-//         $component->set_p; 
+        // $component = $factory->getComponent();
+        // $component->set_p;
         return $factory->run();
     }
 }

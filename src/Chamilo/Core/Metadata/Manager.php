@@ -15,23 +15,23 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
  */
 abstract class Manager extends Application
 {
-    const DEFAULT_ACTION = self :: ACTION_SCHEMA;
+    const DEFAULT_ACTION = self::ACTION_SCHEMA;
     const ACTION_SCHEMA = 'Schema';
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent:: __construct($applicationConfiguration);
-
+        parent::__construct($applicationConfiguration);
+        
         $this->checkAuthorization(Manager::context());
     }
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \Chamilo\Libraries\Format\Structure\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

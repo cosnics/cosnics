@@ -1,6 +1,8 @@
-@import url ('../../Aqua/Stylesheet.css');
-
-
+@import
+url
+(
+'../../Aqua/Stylesheet.css'
+);
 .wiki-pane {
 	width: 90%;
 	border-left: 1px solid #EFEFEF;
@@ -56,6 +58,7 @@
 	background-image: url(../../Images/Ruby/Logo/48.png);
 	background-repeat: no-repeat;
 }
+
 .wiki-menu-section {
 	padding-top: 0.5em;
 	margin-top: 0.1em;

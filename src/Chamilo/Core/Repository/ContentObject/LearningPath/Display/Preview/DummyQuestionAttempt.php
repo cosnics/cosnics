@@ -20,7 +20,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function update()
     {
-        return PreviewStorage :: getInstance()->update_learning_path_question_attempt($this);
+        return PreviewStorage::getInstance()->update_learning_path_question_attempt($this);
     }
 
     /**
@@ -29,8 +29,8 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function create()
     {
-        $this->set_id(UUID :: v4());
-        return PreviewStorage :: getInstance()->create_learning_path_question_attempt($this);
+        $this->set_id(UUID::v4());
+        return PreviewStorage::getInstance()->create_learning_path_question_attempt($this);
     }
 
     /**
@@ -39,6 +39,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function delete()
     {
-        return PreviewStorage :: getInstance()->delete_learning_path_question_attempt($this);
+        return PreviewStorage::getInstance()->delete_learning_path_question_attempt($this);
     }
 }

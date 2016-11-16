@@ -60,20 +60,20 @@ class Menu extends \Chamilo\Core\Repository\Display\Menu
     {
         $application = $this->getApplication();
         $extraMenuItems = array();
-
+        
         $progressItem = array();
         $progressItem['text'] = Translation::get('Progress');
         $progressItem['href'] = $application->get_url(
             array(Manager::PARAM_ACTION => Manager::ACTION_REPORTING, Manager::PARAM_STEP => null));
         $progressItem['icon'] = 'type_statistics';
-
+        
         if ($application->get_action() == Manager::ACTION_REPORTING && ! $application->is_current_step_set())
         {
             $progressItem['state'] = array('selected' => true);
         }
-
+        
         $extraMenuItems[] = $progressItem;
-
+        
         return $extraMenuItems;
     }
 }

@@ -101,89 +101,88 @@ abstract class LocationResult
     public function add(LocationSupport $location, ContentObject $content_object, $result)
     {
         $data_row = array();
-
+        
         foreach ($this->get_location($location) as $cell)
         {
             $data_row[] = $cell;
         }
-
+        
         $data_row[] = $content_object->get_title();
-
+        
         if ($result)
         {
             $link = $this->get_link($location, $result);
-
+            
             if (! empty($link))
             {
                 $toolbarItem = new ToolbarItem(
-                    Translation :: get('ViewPublication'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Right'),
-                    $link,
-                    ToolbarItem :: DISPLAY_ICON,
-                    false,
-                    null,
-                    '_blank'
-                );
-
+                    Translation::get('ViewPublication'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Right'), 
+                    $link, 
+                    ToolbarItem::DISPLAY_ICON, 
+                    false, 
+                    null, 
+                    '_blank');
+                
                 $data_row[] = $toolbarItem->as_html();
             }
             else
             {
                 $data_row[] = '';
             }
-
-            $data_row[] = Theme :: getInstance()->getCommonImage(
-                'Status/ConfirmMini',
-                'png',
-                Translation :: get('PublicationCreated'),
-                null,
-                ToolbarItem :: DISPLAY_ICON);
+            
+            $data_row[] = Theme::getInstance()->getCommonImage(
+                'Status/ConfirmMini', 
+                'png', 
+                Translation::get('PublicationCreated'), 
+                null, 
+                ToolbarItem::DISPLAY_ICON);
         }
         else
         {
             $data_row[] = '';
-            $data_row[] = Theme :: getInstance()->getCommonImage(
-                'Status/ErrorMini',
-                'png',
-                Translation :: get('PublicationFailed'),
-                null,
-                ToolbarItem :: DISPLAY_ICON);
+            $data_row[] = Theme::getInstance()->getCommonImage(
+                'Status/ErrorMini', 
+                'png', 
+                Translation::get('PublicationFailed'), 
+                null, 
+                ToolbarItem::DISPLAY_ICON);
         }
-
+        
         $this->table_data[] = $data_row;
     }
 
     public function as_html()
     {
         $tableColumns = array();
-
+        
         $headers = $this->get_header();
-
+        
         foreach ($headers as $key => $header)
         {
             $tableColumns[] = new StaticTableColumn($header);
         }
-
-        $tableColumns[] = new StaticTableColumn(Translation :: get('ContentObject'));
-
+        
+        $tableColumns[] = new StaticTableColumn(Translation::get('ContentObject'));
+        
         $tableColumns[] = new StaticTableColumn(
-            Theme :: getInstance()->getCommonImage(
-                'Action/Search',
-                'png',
-                Translation :: get('ViewPublication'),
-                null,
-                ToolbarItem :: DISPLAY_ICON));
-
+            Theme::getInstance()->getCommonImage(
+                'Action/Search', 
+                'png', 
+                Translation::get('ViewPublication'), 
+                null, 
+                ToolbarItem::DISPLAY_ICON));
+        
         $tableColumns[] = new StaticTableColumn(
-            Theme :: getInstance()->getCommonImage(
-                'Status/NormalMini',
-                'png',
-                Translation :: get('Result'),
-                null,
-                ToolbarItem :: DISPLAY_ICON));
-
+            Theme::getInstance()->getCommonImage(
+                'Status/NormalMini', 
+                'png', 
+                Translation::get('Result'), 
+                null, 
+                ToolbarItem::DISPLAY_ICON));
+        
         $this->table = new SortableTableFromArray($this->table_data, $tableColumns, array(), 0, count($this->table_data));
-
+        
         return $this->table->toHtml();
     }
 

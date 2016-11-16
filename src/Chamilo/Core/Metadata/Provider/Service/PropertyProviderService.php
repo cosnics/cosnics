@@ -71,7 +71,7 @@ class PropertyProviderService
         $providerLink = $this->getProviderLinkForElement($element);
         $providerRegistration = $providerLink->getProviderRegistration();
         $provider = $this->getPropertyProviderFromRegistration($providerRegistration);
-
+        
         return $provider->renderProperty($providerRegistration->get_property_name(), $this->getEntity()->getDataClass());
     }
 
@@ -83,18 +83,16 @@ class PropertyProviderService
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(ProviderLink::class_name(), ProviderLink::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable($this->getEntity()->getDataClassName()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ELEMENT_ID),
+            new PropertyConditionVariable(ProviderLink::class_name(), ProviderLink::PROPERTY_ELEMENT_ID), 
             new StaticConditionVariable($element->get_id()));
-
+        
         $condition = new AndCondition($conditions);
-
-        $providerLink = DataManager :: retrieve(
-            ProviderLink :: class_name(),
-            new DataClassRetrieveParameters($condition));
-
+        
+        $providerLink = DataManager::retrieve(ProviderLink::class_name(), new DataClassRetrieveParameters($condition));
+        
         if ($providerLink instanceof ProviderLink)
         {
             return $providerLink;
@@ -124,12 +122,12 @@ class PropertyProviderService
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ProviderRegistration :: class_name(),
-                ProviderRegistration :: PROPERTY_ENTITY_TYPE),
+                ProviderRegistration::class_name(), 
+                ProviderRegistration::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable($this->getEntity()->getDataClassName()));
-
+        
         $parameters = new DataClassRetrievesParameters($condition);
-        return DataManager :: retrieves(ProviderRegistration :: class_name(), $parameters);
+        return DataManager::retrieves(ProviderRegistration::class_name(), $parameters);
     }
 
     /**
@@ -139,11 +137,11 @@ class PropertyProviderService
     public function getProviderLinksForEntity()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(ProviderLink :: class_name(), ProviderLink :: PROPERTY_ENTITY_TYPE),
+            new PropertyConditionVariable(ProviderLink::class_name(), ProviderLink::PROPERTY_ENTITY_TYPE), 
             new StaticConditionVariable($this->getEntity()->getDataClassName()));
-
+        
         $parameters = new DataClassRetrievesParameters($condition);
-        return DataManager :: retrieves(ProviderLink :: class_name(), $parameters);
+        return DataManager::retrieves(ProviderLink::class_name(), $parameters);
     }
 
     /**
@@ -154,25 +152,25 @@ class PropertyProviderService
      * @param string[] $submittedProviderLinkValues
      * @return boolean
      */
-    public function updateEntityProviderLinks(EntityService $entityService, ElementService $elementService,
+    public function updateEntityProviderLinks(EntityService $entityService, ElementService $elementService, 
         RelationService $relationService, $submittedProviderLinkValues)
     {
         $availableSchemas = $entityService->getAvailableSchemasForEntityType($relationService, $this->getEntity())->as_array();
-
+        
         foreach ($availableSchemas as $availableSchema)
         {
             if (isset($submittedProviderLinkValues[$availableSchema->get_id()]))
             {
                 if (! $this->updateEntityProviderLinksForSchema(
-                    $elementService,
-                    $availableSchema,
+                    $elementService, 
+                    $availableSchema, 
                     $submittedProviderLinkValues[$availableSchema->get_id()]))
                 {
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
 
@@ -182,11 +180,11 @@ class PropertyProviderService
      * @param \Chamilo\Core\Metadata\Storage\DataClass\Schema $schema
      * @param string[] $submittedSchemaValues
      */
-    public function updateEntityProviderLinksForSchema(ElementService $elementService, Schema $schema,
+    public function updateEntityProviderLinksForSchema(ElementService $elementService, Schema $schema, 
         $submittedSchemaValues)
     {
         $elements = $elementService->getElementsForSchema($schema);
-
+        
         while ($element = $elements->next_result())
         {
             if (isset($submittedSchemaValues[$element->get_id()]))
@@ -197,7 +195,7 @@ class PropertyProviderService
                 }
             }
         }
-
+        
         return true;
     }
 
@@ -217,7 +215,7 @@ class PropertyProviderService
                 $providerLink->set_entity_type($this->getEntity()->getDataClassName());
                 $providerLink->set_element_id($element->get_id());
                 $providerLink->set_provider_registration_id($submittedProviderRegistrationId);
-
+                
                 return $providerLink->create();
             }
         }

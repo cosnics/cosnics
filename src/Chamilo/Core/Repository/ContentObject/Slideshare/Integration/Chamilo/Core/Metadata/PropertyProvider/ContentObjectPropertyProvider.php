@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Slideshare\Storage\DataClass\Slideshar
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Slideshare :: class_name();
+        return Slideshare::class_name();
     }
 }

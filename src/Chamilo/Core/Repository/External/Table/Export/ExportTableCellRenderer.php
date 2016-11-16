@@ -19,36 +19,36 @@ class ExportTableCellRenderer extends DataClassTableCellRenderer implements Tabl
     {
         switch ($column->get_name())
         {
-            case Theme :: getInstance()->getCommonImage(
-                'Action/Category',
-                'png',
-                Translation :: get('Type'),
-                null,
-                ToolbarItem :: DISPLAY_ICON) :
-                return $object->get_icon_image(Theme :: ICON_MINI);
-            case ContentObject :: PROPERTY_TITLE :
-                return StringUtilities :: getInstance()->truncate($object->get_title(), 50);
-            case ContentObject :: PROPERTY_DESCRIPTION :
-                return Utilities :: htmlentities(
-                    StringUtilities :: getInstance()->truncate($object->get_description(), 50));
+            case Theme::getInstance()->getCommonImage(
+                'Action/Category', 
+                'png', 
+                Translation::get('Type'), 
+                null, 
+                ToolbarItem::DISPLAY_ICON) :
+                return $object->get_icon_image(Theme::ICON_MINI);
+            case ContentObject::PROPERTY_TITLE :
+                return StringUtilities::getInstance()->truncate($object->get_title(), 50);
+            case ContentObject::PROPERTY_DESCRIPTION :
+                return Utilities::htmlentities(
+                    StringUtilities::getInstance()->truncate($object->get_description(), 50));
         }
-        return parent :: render_cell($column, $object);
+        return parent::render_cell($column, $object);
     }
 
     public function get_actions($object)
     {
         $toolbar = new Toolbar();
-
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Export'),
+                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Export'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_EXPORT_EXTERNAL_REPOSITORY,
-                        Manager :: PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
+                        Manager::PARAM_ACTION => Manager::ACTION_EXPORT_EXTERNAL_REPOSITORY, 
+                        Manager::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
+        
         return $toolbar->as_html();
     }
 }

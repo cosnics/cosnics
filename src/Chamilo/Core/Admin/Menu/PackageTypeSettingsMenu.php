@@ -18,12 +18,12 @@ class PackageTypeSettingsMenu extends HtmlMenu
     public function __construct($current_type, $format)
     {
         $this->format = $format;
-
-        parent :: __construct(
+        
+        parent::__construct(
             array(
                 $this->get_items(
-                    \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list())));
-
+                    \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list())));
+        
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));
     }
@@ -34,10 +34,10 @@ class PackageTypeSettingsMenu extends HtmlMenu
         $item['class'] = 'category';
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
-        $item[OptionsMenuRenderer :: KEY_ID] = $package_list->get_type();
-
+        $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
+        
         $sub_items = array();
-
+        
         foreach ($package_list->get_children() as $child)
         {
             $children = $this->get_items($child);
@@ -46,33 +46,33 @@ class PackageTypeSettingsMenu extends HtmlMenu
                 $sub_items[] = $children;
             }
         }
-
+        
         if (count($sub_items) > 0)
         {
             $item['sub'] = $sub_items;
         }
-
+        
         $has_settings = false;
         $packages = $package_list->get_packages();
         foreach ($packages as $package)
         {
-            if (\Chamilo\Configuration\Configuration :: getInstance()->has_settings($package->get_context()))
+            if (\Chamilo\Configuration\Configuration::getInstance()->has_settings($package->get_context()))
             {
                 $has_settings = true;
                 break;
             }
         }
-
+        
         if ($has_settings || (count($sub_items) > 0))
         {
             if (! $has_settings)
             {
                 unset($item['url']);
             }
-
+            
             return $item;
         }
-
+        
         return false;
     }
 
@@ -83,7 +83,7 @@ class PackageTypeSettingsMenu extends HtmlMenu
 
     public function render_as_tree()
     {
-        $renderer = new TreeMenuRenderer(ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__CLASS__, true));
+        $renderer = new TreeMenuRenderer(ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true));
         $this->render($renderer, 'sitemap');
         return $renderer->toHTML();
     }

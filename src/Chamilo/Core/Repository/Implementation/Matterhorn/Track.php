@@ -214,16 +214,16 @@ class Track
         $html = array();
         
         $html[] = '<table class="no_border"><tr><td style="width: 22px;">';
-        $html[] = Utilities :: mimetype_to_image($this->get_mimetype());
+        $html[] = Utilities::mimetype_to_image($this->get_mimetype());
         $html[] = '</td><td>';
         if ($this->get_video())
         {
-            $html[] = '<b>' . Translation :: get('Video') . ':</b> ' . $this->get_video()->as_string();
+            $html[] = '<b>' . Translation::get('Video') . ':</b> ' . $this->get_video()->as_string();
             $html[] = '<br/>';
         }
         if ($this->get_audio())
         {
-            $html[] = '<b>' . Translation :: get('Audio') . ':</b> ' . $this->get_audio()->as_string();
+            $html[] = '<b>' . Translation::get('Audio') . ':</b> ' . $this->get_audio()->as_string();
         }
         $html[] = '</td></tr></table>';
         return implode("", $html);
@@ -276,7 +276,7 @@ class Track
             {
                 $codecs[] = $this->get_video()->get_encoder();
             }
-            return Html5MediaValidator :: is_container($extension, $this->get_mimetype(), $codecs);
+            return Html5MediaValidator::is_container($extension, $this->get_mimetype(), $codecs);
         }
         else
         {
@@ -296,7 +296,7 @@ class Track
 
     public function get_extension()
     {
-        $file_properties = FileProperties :: from_url($this->get_url());
+        $file_properties = FileProperties::from_url($this->get_url());
         return $file_properties->get_extension();
     }
 }

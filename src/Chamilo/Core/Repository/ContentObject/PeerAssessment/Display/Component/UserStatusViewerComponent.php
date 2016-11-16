@@ -25,24 +25,22 @@ class UserStatusViewerComponent extends Manager
      */
     public function run()
     {
-        $this->publication_id = Request :: get(self :: PARAM_PUBLICATION);
-        $this->attempt_id = Request :: get(self :: PARAM_ATTEMPT);
-        $this->user_id = Request :: get(self :: PARAM_USER);
+        $this->publication_id = Request::get(self::PARAM_PUBLICATION);
+        $this->attempt_id = Request::get(self::PARAM_ATTEMPT);
+        $this->user_id = Request::get(self::PARAM_USER);
         
         // only edit right is allowed
-        if (! $this->is_allowed(self :: EDIT_RIGHT))
+        if (! $this->is_allowed(self::EDIT_RIGHT))
         {
             $this->redirect(
-                Translation :: get('Notallowed'), 
+                Translation::get('Notallowed'), 
                 true, 
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE_ATTEMPTS));
+                array(self::PARAM_ACTION => self::ACTION_BROWSE_ATTEMPTS));
         }
         
         if ($this->user_id != $this->get_user()->get_id())
         {
-            $subject_user = \Chamilo\Core\User\Storage\Datamanager :: retrieve_by_id(
-                User :: class_name(), 
-                $this->user_id);
+            $subject_user = \Chamilo\Core\User\Storage\Datamanager::retrieve_by_id(User::class_name(), $this->user_id);
         }
         else
         {
@@ -68,18 +66,18 @@ class UserStatusViewerComponent extends Manager
         
         $tabs = new DynamicTabsRenderer('', $this);
         
-        if ($assesment_type == PeerAssessment :: TYPE_BOTH || $assesment_type == PeerAssessment :: TYPE_SCORES)
+        if ($assesment_type == PeerAssessment::TYPE_BOTH || $assesment_type == PeerAssessment::TYPE_SCORES)
         {
             // // render the scores tab
-            $tabs->add_tab(new DynamicContentTab('scores', Translation :: get('Scores'), null, $this->render_scores()));
+            $tabs->add_tab(new DynamicContentTab('scores', Translation::get('Scores'), null, $this->render_scores()));
         }
         
-        if ($assesment_type == PeerAssessment :: TYPE_BOTH || $assesment_type == PeerAssessment :: TYPE_FEEDBACK)
+        if ($assesment_type == PeerAssessment::TYPE_BOTH || $assesment_type == PeerAssessment::TYPE_FEEDBACK)
         {
             // render the feedback tab
             
             $tabs->add_tab(
-                new DynamicContentTab('feedback', Translation :: get('Feedback'), null, $this->render_feedback()));
+                new DynamicContentTab('feedback', Translation::get('Feedback'), null, $this->render_feedback()));
         }
         return $tabs->render();
     }
@@ -98,7 +96,7 @@ class UserStatusViewerComponent extends Manager
         $html[] = '<table class="table table-striped table-bordered table-hover table-data" style="width: auto">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th>' . Translation :: get('User') . '</th>';
+        $html[] = '<th>' . Translation::get('User') . '</th>';
         
         foreach ($indicators as $i)
         {
@@ -144,8 +142,8 @@ class UserStatusViewerComponent extends Manager
         $html[] = '<table class="table table-striped table-bordered table-hover table-data" style="width: auto">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th>' . Translation :: get('User') . '</th>';
-        $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+        $html[] = '<th>' . Translation::get('User') . '</th>';
+        $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';
@@ -170,11 +168,11 @@ class UserStatusViewerComponent extends Manager
 
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
-        parent :: add_additional_breadcrumbs($breadcrumbtrail);
+        parent::add_additional_breadcrumbs($breadcrumbtrail);
         
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_STATUS)), 
-                Translation :: get('StatusOverview')));
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_OVERVIEW_STATUS)), 
+                Translation::get('StatusOverview')));
     }
 }

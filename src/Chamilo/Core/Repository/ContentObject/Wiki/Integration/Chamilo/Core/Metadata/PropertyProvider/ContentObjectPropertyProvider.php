@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Wiki\Storage\DataClass\Wiki;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Wiki :: class_name();
+        return Wiki::class_name();
     }
 }

@@ -23,7 +23,7 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     /**
@@ -32,17 +32,17 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
      */
     public function get_allowed_types()
     {
-        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Portfolio', 
-            \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
+            \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
         $types = array();
         
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                $registration[Registration :: PROPERTY_CONTEXT], 
+            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                $registration[Registration::PROPERTY_CONTEXT], 
                 6);
-            $classname = ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+            $classname = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
             $types[] = $namespace . '\Storage\DataClass\\' . $classname;
         }
         

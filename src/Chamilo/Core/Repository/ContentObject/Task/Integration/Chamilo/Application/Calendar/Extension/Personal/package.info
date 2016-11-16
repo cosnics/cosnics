@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>Personal</name>
-		<code>Personal</code>
-		<context>Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Application\Calendar\Extension\Personal
-		</context>
-		<type>Chamilo\Core\Repository\ContentObject\Task\Integration</type>
-		<category>Agenda</category>
-		<authors />
-		<version>5.0.0</version>
-		<description />
-		<pre-depends>
-			<dependencies operator="1">
-				<dependency type="registration">
-					<id>Chamilo\Core\Repository\ContentObject\Task</id>
-					<version operator="4">5.0.0</version>
-				</dependency>
-				<dependency type="registration">
-					<id>Chamilo\Application\Calendar\Extension\Personal</id>
-					<version operator="4">5.0.0</version>
-				</dependency>
-			</dependencies>
-		</pre-depends>
-	</package>
+    <package>
+        <name>Personal</name>
+        <code>Personal</code>
+        <context>Chamilo\Core\Repository\ContentObject\Task\Integration\Chamilo\Application\Calendar\Extension\Personal
+        </context>
+        <type>Chamilo\Core\Repository\ContentObject\Task\Integration</type>
+        <category>Agenda</category>
+        <authors />
+        <version>5.0.0</version>
+        <description />
+        <pre-depends>
+            <dependencies operator="1">
+                <dependency type="registration">
+                    <id>Chamilo\Core\Repository\ContentObject\Task</id>
+                    <version operator="4">5.0.0</version>
+                </dependency>
+                <dependency type="registration">
+                    <id>Chamilo\Application\Calendar\Extension\Personal</id>
+                    <version operator="4">5.0.0</version>
+                </dependency>
+            </dependencies>
+        </pre-depends>
+    </package>
 </packages>

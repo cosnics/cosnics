@@ -9,18 +9,18 @@ abstract class ContentObjectDeactivator extends \Chamilo\Configuration\Package\A
 
     public function run()
     {
-        $success = parent :: run();
+        $success = parent::run();
         
         if (! $success)
         {
             return false;
         }
         
-        $success = DataManager :: deactivate_content_object_type(self :: context());
+        $success = DataManager::deactivate_content_object_type(self::context());
         
         if (! $success)
         {
-            $this->failed(Translation :: get('ContentObjectStatusUpdateFailed'));
+            $this->failed(Translation::get('ContentObjectStatusUpdateFailed'));
         }
         else
         {

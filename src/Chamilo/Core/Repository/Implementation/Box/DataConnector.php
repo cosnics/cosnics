@@ -9,7 +9,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
-require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'box-api/boxlibphp5.php';
+require_once Path::getInstance()->getPluginPath(__NAMESPACE__) . 'box-api/boxlibphp5.php';
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
@@ -21,9 +21,9 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
-        $this->key = Setting :: get('key', $this->get_external_repository_instance_id());
-        $session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
+        parent::__construct($external_repository_instance);
+        $this->key = Setting::get('key', $this->get_external_repository_instance_id());
+        $session_token = Setting::get('session_token', $this->get_external_repository_instance_id());
         
         $this->boxnet = new boxclient($this->key, '');
         
@@ -43,16 +43,16 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
         if (is_null($session_token) && ! is_null($auth_token))
         {
-            $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
+            $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_setting_from_variable_name(
                 'session_token', 
                 $this->get_external_repository_instance_id());
             $user_setting = new Setting();
             $user_setting->set_setting_id($setting->get_id());
-            $user_setting->set_user_id(Session :: get_user_id());
+            $user_setting->set_user_id(Session::get_user_id());
             $user_setting->set_value($auth_token);
             $user_setting->create();
         }
-        $session_token = Setting :: get('session_token', $this->get_external_repository_instance_id());
+        $session_token = Setting::get('session_token', $this->get_external_repository_instance_id());
         $this->boxnet = new boxclient($this->boxnet->api_key, $session_token);
     }
 
@@ -66,7 +66,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function retrieve_files($condition = null, $order_property, $offset, $count)
     {
-        $folder = Request :: get('folder');
+        $folder = Request::get('folder');
         if (is_null($folder))
             $folder = 0;
         $files = $this->boxnet->get_files($folder);
@@ -169,7 +169,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (count($order_properties) > 0)
         {
             $order_property = $order_properties[0]->get_property();
-            if ($order_property == self :: SORT_RELEVANCE)
+            if ($order_property == self::SORT_RELEVANCE)
             {
                 return $order_property;
             }
@@ -196,19 +196,19 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public static function get_sort_properties()
     {
-        $feed_type = Request :: get(Manager :: PARAM_FEED_TYPE);
-        $query = ActionBarSearchForm :: get_query();
+        $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
+        $query = ActionBarSearchForm::get_query();
         
-        if (($feed_type == Manager :: FEED_TYPE_GENERAL && $query))
+        if (($feed_type == Manager::FEED_TYPE_GENERAL && $query))
         {
-            return array(self :: SORT_DATE_CREATED);
+            return array(self::SORT_DATE_CREATED);
         }
         else
         {
             return array();
         }
     }
-    
+
     /*
      * (non-PHPdoc) @see
      * application/common/external_repository_manager/ExternalRepositoryConnector#retrieve_external_repository_object()
@@ -230,10 +230,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function determine_rights()
     {
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = true;
-        $rights[ExternalObject :: RIGHT_EDIT] = false;
-        $rights[ExternalObject :: RIGHT_DELETE] = true;
-        $rights[ExternalObject :: RIGHT_DOWNLOAD] = true;
+        $rights[ExternalObject::RIGHT_USE] = true;
+        $rights[ExternalObject::RIGHT_EDIT] = false;
+        $rights[ExternalObject::RIGHT_DELETE] = true;
+        $rights[ExternalObject::RIGHT_DOWNLOAD] = true;
         return $rights;
     }
 

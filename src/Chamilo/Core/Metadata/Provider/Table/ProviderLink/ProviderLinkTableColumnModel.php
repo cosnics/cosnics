@@ -25,9 +25,9 @@ class ProviderLinkTableColumnModel extends DataClassTableColumnModel implements 
      */
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_TYPE));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_NAME));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_SCHEMA));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_ELEMENT));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_NAME));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_SCHEMA));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_ELEMENT));
     }
 }

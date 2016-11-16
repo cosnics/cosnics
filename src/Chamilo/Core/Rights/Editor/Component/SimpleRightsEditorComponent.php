@@ -40,7 +40,7 @@ class SimpleRightsEditorComponent extends RightsEditorComponent implements Deleg
         {
             $succes = $form->handle_form_submit();
             
-            $message = Translation :: get($succes ? 'RightsChanged' : 'RightsNotChanged');
+            $message = Translation::get($succes ? 'RightsChanged' : 'RightsNotChanged');
             $this->redirect($message, ! $succes);
         }
         
@@ -66,10 +66,10 @@ class SimpleRightsEditorComponent extends RightsEditorComponent implements Deleg
             $commonActions = new ButtonGroup();
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('AdvancedRightsEditor'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Config'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_ADVANCED_RIGHTS)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('AdvancedRightsEditor'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Config'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_ADVANCED_RIGHTS)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);

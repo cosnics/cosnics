@@ -10,7 +10,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -23,7 +23,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th>' . Translation :: get('PossibleAnswer') . '</th>';
+        $html[] = '<th>' . Translation::get('PossibleAnswer') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';

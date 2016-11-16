@@ -19,12 +19,7 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
      */
     public function getRequiredPostParameters()
     {
-        return array(
-            self :: PARAM_CONTENT_OBJECT_ID,
-            self :: PARAM_FORMAT,
-            self :: PARAM_VIEW,
-            self :: PARAM_PARAMETERS
-        );
+        return array(self::PARAM_CONTENT_OBJECT_ID, self::PARAM_FORMAT, self::PARAM_VIEW, self::PARAM_PARAMETERS);
     }
 
     /*
@@ -34,27 +29,25 @@ class RenditionImplementationComponent extends \Chamilo\Core\Repository\Ajax\Man
     {
         try
         {
-            $object = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_by_id(
-                ContentObject:: class_name(),
-                $this->getPostDataValue(self :: PARAM_CONTENT_OBJECT_ID)
-            );
-
-            $display = ContentObjectRenditionImplementation:: factory(
-                $object,
-                $this->getPostDataValue(self :: PARAM_FORMAT),
-                $this->getPostDataValue(self :: PARAM_VIEW),
-                $this
-            );
-
-            $rendition = $display->render($this->getPostDataValue(self :: PARAM_PARAMETERS));
+            $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
+                $this->getPostDataValue(self::PARAM_CONTENT_OBJECT_ID));
+            
+            $display = ContentObjectRenditionImplementation::factory(
+                $object, 
+                $this->getPostDataValue(self::PARAM_FORMAT), 
+                $this->getPostDataValue(self::PARAM_VIEW), 
+                $this);
+            
+            $rendition = $display->render($this->getPostDataValue(self::PARAM_PARAMETERS));
         }
-        catch( \Exception $ex)
+        catch (\Exception $ex)
         {
             $rendition = array('url' => Theme::getInstance()->getCommonImagePath('NoThumbnail'));
         }
-
+        
         $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_RENDITION, $rendition);
+        $result->set_property(self::PROPERTY_RENDITION, $rendition);
         $result->display();
     }
 }

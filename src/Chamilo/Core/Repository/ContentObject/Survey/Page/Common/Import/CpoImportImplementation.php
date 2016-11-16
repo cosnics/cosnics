@@ -23,7 +23,7 @@ class CpoImportImplementation extends ImportImplementation
 
     function import()
     {
-        $content_object = ContentObjectImport :: launch($this);
+        $content_object = ContentObjectImport::launch($this);
         return $content_object;
     }
 
@@ -32,17 +32,17 @@ class CpoImportImplementation extends ImportImplementation
         $dom_xpath = $this->get_controller()->get_dom_xpath();
         $content_object_node = $this->get_content_object_import_parameters()->get_content_object_node();
         
-        $export_node = $dom_xpath->query(CpoExportImplementation :: PAGE_CONFIGURATIONS, $content_object_node)->item(0);
+        $export_node = $dom_xpath->query(CpoExportImplementation::PAGE_CONFIGURATIONS, $content_object_node)->item(0);
         
-        $configuration_node_list = $dom_xpath->query(CpoExportImplementation :: CONFIGURATIONS_NODE, $export_node)->item(
+        $configuration_node_list = $dom_xpath->query(CpoExportImplementation::CONFIGURATIONS_NODE, $export_node)->item(
             0);
         
-        foreach ($dom_xpath->query(CpoExportImplementation :: CONFIGURATION_NODE, $configuration_node_list) as $configuration_node)
+        foreach ($dom_xpath->query(CpoExportImplementation::CONFIGURATION_NODE, $configuration_node_list) as $configuration_node)
         {
             
             $configuration = new Configuration();
             
-            foreach (Configuration :: get_default_property_names() as $property)
+            foreach (Configuration::get_default_property_names() as $property)
             {
                 $configuration->set_default_property($property, $configuration_node->getAttribute($property));
             }
@@ -56,16 +56,16 @@ class CpoImportImplementation extends ImportImplementation
             
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_ID), 
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_ID), 
                 new StaticConditionVariable($new_complex_question_id));
             
-            $complex_question = \Chamilo\Core\Repository\Storage\DataManager :: retrieve(
-                ComplexContentObjectItem :: class_name(), 
+            $complex_question = \Chamilo\Core\Repository\Storage\DataManager::retrieve(
+                ComplexContentObjectItem::class_name(), 
                 new DataClassRetrieveParameters($condition));
             $question = $complex_question->get_ref_object();
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($question);
-            $class = ClassnameUtilities :: getInstance()->getClassnameFromObject($question, true);
+            $namespace = ClassnameUtilities::getInstance()->getNamespaceFromObject($question);
+            $class = ClassnameUtilities::getInstance()->getClassnameFromObject($question, true);
             
             $to_visible_question_ids = $configuration->getToVisibleQuestionIds();
             $new_to_vivible_question_ids = array();
@@ -87,9 +87,9 @@ class CpoImportImplementation extends ImportImplementation
                     $ids = explode('_', $key);
                     $new_keys = array();
                     $new_keys[] = $new_complex_question_id;
-                    $class = (string) StringUtilities :: getInstance()->createString($class)->upperCamelize();
+                    $class = (string) StringUtilities::getInstance()->createString($class)->upperCamelize();
                     $option_id = $this->get_controller()->get_cache_id(
-                        (string) StringUtilities :: getInstance()->createString($class)->underscored(), 
+                        (string) StringUtilities::getInstance()->createString($class)->underscored(), 
                         'id', 
                         $ids[1]);
                     $new_keys[] = $option_id;
@@ -106,7 +106,7 @@ class CpoImportImplementation extends ImportImplementation
                 foreach ($answer_matches as $key => $answer_match)
                 {
                     $option_id = $this->get_controller()->get_cache_id(
-                        (string) StringUtilities :: getInstance()->createString($class)->underscored(), 
+                        (string) StringUtilities::getInstance()->createString($class)->underscored(), 
                         'id', 
                         $answer_match);
                     $new_answer_matches[$new_complex_question_id] = $option_id;
@@ -116,7 +116,7 @@ class CpoImportImplementation extends ImportImplementation
             elseif ($question instanceof Matrix || $question instanceof Matching)
             {
                 
-                $class = (string) StringUtilities :: getInstance()->createString($class)->upperCamelize();
+                $class = (string) StringUtilities::getInstance()->createString($class)->upperCamelize();
                 $optionClass = $question->class_name() . 'Option';
                 $matchClass = $question->class_name() . 'Match';
                 $answer_matches = $configuration->getAnswerMatches();

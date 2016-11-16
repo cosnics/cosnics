@@ -32,51 +32,51 @@ class RelationTableCellRenderer extends DataClassTableCellRenderer implements Ta
     {
         switch ($column->get_name())
         {
-            case RelationTableColumnModel :: PROPERTY_SOURCE :
+            case RelationTableColumnModel::PROPERTY_SOURCE :
                 return $this->renderEntityByTypeAndIdentifier(
-                    $relationInstance->get_source_type(),
+                    $relationInstance->get_source_type(), 
                     $relationInstance->get_source_id());
-            case RelationTableColumnModel :: PROPERTY_TARGET :
+            case RelationTableColumnModel::PROPERTY_TARGET :
                 return $this->renderEntityByTypeAndIdentifier(
-                    $relationInstance->get_target_type(),
+                    $relationInstance->get_target_type(), 
                     $relationInstance->get_target_id());
-            case RelationTableColumnModel :: PROPERTY_RELATION :
+            case RelationTableColumnModel::PROPERTY_RELATION :
                 return $relationInstance->getRelation()->getTranslationByIsocode(
-                    Translation :: getInstance()->getLanguageIsocode());
+                    Translation::getInstance()->getLanguageIsocode());
         }
-
-        return parent :: render_cell($column, $relationInstance);
+        
+        return parent::render_cell($column, $relationInstance);
     }
 
     public function renderEntityByTypeAndIdentifier($entityType, $entityIdentifier = 0)
     {
-        $entityFactory = DataClassEntityFactory :: getInstance();
+        $entityFactory = DataClassEntityFactory::getInstance();
         $entity = $entityFactory->getEntity($entityType, $entityIdentifier);
-
+        
         return $entity->getName();
     }
 
     /**
      * Returns the actions toolbar
-     *
+     * 
      * @param \Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance $relationInstance
      * @return string
      */
     public function get_actions($relationInstance)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                        Manager :: PARAM_RELATION_INSTANCE_ID => $relationInstance->get_id())),
-                ToolbarItem :: DISPLAY_ICON,
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                        Manager::PARAM_RELATION_INSTANCE_ID => $relationInstance->get_id())), 
+                ToolbarItem::DISPLAY_ICON, 
                 true));
-
+        
         return $toolbar->as_html();
     }
 }

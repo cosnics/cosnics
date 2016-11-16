@@ -13,7 +13,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         
         if ($is_thumbnail || ! $url)
         {
-            return parent :: get_preview($is_thumbnail);
+            return parent::get_preview($is_thumbnail);
         }
         else
         {

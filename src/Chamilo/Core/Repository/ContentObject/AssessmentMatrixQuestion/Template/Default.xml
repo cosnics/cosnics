@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Matrix question</translation>
-			<translation language="nl">Matrix vraag</translation>
-			<translation language="fr">Question de matrice</translation>
-			<translation language="de">Matrixfrage</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Matrix question</translation>
+            <translation language="nl">Matrix vraag</translation>
+            <translation language="fr">Question de matrice</translation>
+            <translation language="de">Matrixfrage</translation>
+        </variable>
+    </translations>
 </template>

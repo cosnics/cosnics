@@ -10,5 +10,5 @@ abstract class Manager extends Application
     const ACTION_BROWSE = 'Browser';
     const ACTION_SYNCHRONIZE = 'Synchronizer';
     const ACTION_DOWNLOAD = 'Download';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 }

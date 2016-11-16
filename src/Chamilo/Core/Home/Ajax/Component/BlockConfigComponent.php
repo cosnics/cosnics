@@ -32,7 +32,7 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_BLOCK, self :: PARAM_DATA);
+        return array(self::PARAM_BLOCK, self::PARAM_DATA);
     }
 
     /*
@@ -40,41 +40,41 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager:: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult:: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $block = intval($this->getPostDataValue(self :: PARAM_BLOCK));
-        $data = $this->getPostDataValue(self :: PARAM_DATA);
-
-        $block = DataManager:: retrieve_by_id(Block:: class_name(), $block);
-
+        
+        $block = intval($this->getPostDataValue(self::PARAM_BLOCK));
+        $data = $this->getPostDataValue(self::PARAM_DATA);
+        
+        $block = DataManager::retrieve_by_id(Block::class_name(), $block);
+        
         /** @var Element $block */
         if ($block->getUserId() == $userId)
         {
-            $postedValues = $this->getPostDataValue(self :: PARAM_DATA);
-
+            $postedValues = $this->getPostDataValue(self::PARAM_DATA);
+            
             // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
             // $renderer = $rendererFactory->getRenderer();
-
+            
             $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));
-
-            $blockRendererFactory =
-                new BlockRendererFactory($this, $homeService, $block, BlockRendererFactory::SOURCE_AJAX);
-
+            
+            $blockRendererFactory = new BlockRendererFactory(
+                $this, 
+                $homeService, 
+                $block, 
+                BlockRendererFactory::SOURCE_AJAX);
+            
             $blockRenderer = $blockRendererFactory->getRenderer();
-
-            $contentObjectPublicationService =
-                new ContentObjectPublicationService(
-                    new ContentObjectPublicationRepository(new PublicationRepository())
-                );
-
+            
+            $contentObjectPublicationService = new ContentObjectPublicationService(
+                new ContentObjectPublicationRepository(new PublicationRepository()));
+            
             if ($blockRenderer instanceof ConfigurableInterface ||
-                $blockRenderer instanceof ContentObjectPublicationBlockInterface
-            )
+                 $blockRenderer instanceof ContentObjectPublicationBlockInterface)
             {
                 if ($blockRenderer instanceof ConfigurableInterface)
                 {
@@ -83,42 +83,42 @@ class BlockConfigComponent extends \Chamilo\Core\Home\Ajax\Manager
                         $block->setSetting($configurationVariable, $postedValues[$configurationVariable]);
                     }
                 }
-
+                
                 if ($blockRenderer instanceof ContentObjectPublicationBlockInterface)
                 {
                     foreach ($blockRenderer->getContentObjectConfigurationVariables() as $configurationVariable)
                     {
                         $contentObjectPublicationService->setOnlyContentObjectForElement(
-                            $block, $postedValues[$configurationVariable]
-                        );
+                            $block, 
+                            $postedValues[$configurationVariable]);
                     }
                 }
-
-                if (isset($postedValues[Block :: PROPERTY_TITLE]))
+                
+                if (isset($postedValues[Block::PROPERTY_TITLE]))
                 {
-                    $block->setTitle($postedValues[Block :: PROPERTY_TITLE]);
+                    $block->setTitle($postedValues[Block::PROPERTY_TITLE]);
                 }
-
-                if (!$block->update())
+                
+                if (! $block->update())
                 {
-                    JsonAjaxResult:: general_error();
+                    JsonAjaxResult::general_error();
                 }
                 else
                 {
-
+                    
                     $result = new JsonAjaxResult(200);
-                    $result->set_property(self :: PROPERTY_BLOCK, $blockRenderer->toHtml());
+                    $result->set_property(self::PROPERTY_BLOCK, $blockRenderer->toHtml());
                     $result->display();
                 }
             }
             else
             {
-                JsonAjaxResult:: bad_request();
+                JsonAjaxResult::bad_request();
             }
         }
         else
         {
-            JsonAjaxResult:: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

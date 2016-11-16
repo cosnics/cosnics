@@ -12,9 +12,9 @@ class PortalHome extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer
     {
         $html = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'portal_home'));
         $html = $html ? $html : Translation::get('ConfigurePortalHomeFirst');
-
+        
         $renderer = new ContentObjectResourceRenderer($this, $html);
-
+        
         return $renderer->run();
     }
 

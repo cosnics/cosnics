@@ -10,13 +10,11 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_display_properties()
     {
         $object = $this->get_object();
-
-        $properties = parent :: get_display_properties();
-        $properties[Translation :: get('LastViewed')] = DatetimeUtilities :: format_locale_date(
-            null,
-            $object->get_viewed());
-        $properties[Translation :: get('LastModifiedBy')] = $object->get_modifier_id();
-
+        
+        $properties = parent::get_display_properties();
+        $properties[Translation::get('LastViewed')] = DatetimeUtilities::format_locale_date(null, $object->get_viewed());
+        $properties[Translation::get('LastModifiedBy')] = $object->get_modifier_id();
+        
         return $properties;
     }
 
@@ -30,7 +28,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
         }
         else
         {
-            return parent :: get_preview($is_thumbnail);
+            return parent::get_preview($is_thumbnail);
         }
     }
 }

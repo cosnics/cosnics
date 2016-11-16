@@ -41,9 +41,9 @@ class ItemMenu extends HtmlMenu
     public function __construct($current_category, $url_format = '?item=__ITEM__', $condition = null)
     {
         $this->urlFmt = $url_format;
-
+        
         $menu = $this->get_items($condition);
-        parent :: __construct($menu);
+        parent::__construct($menu);
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_category_url($current_category));
     }
@@ -51,26 +51,26 @@ class ItemMenu extends HtmlMenu
     private function get_items($condition)
     {
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT),
+            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT), 
             new StaticConditionVariable(0));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_TYPE),
-            new StaticConditionVariable(CategoryItem :: class_name()));
+            new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_TYPE), 
+            new StaticConditionVariable(CategoryItem::class_name()));
         $condition = new AndCondition($conditions);
-
+        
         $parameters = new DataClassRetrievesParameters(
-            $condition,
-            null,
-            null,
-            new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_SORT)));
-        $items = DataManager :: retrieves(Item :: class_name(), $parameters);
-
+            $condition, 
+            null, 
+            null, 
+            new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
+        $items = DataManager::retrieves(Item::class_name(), $parameters);
+        
         $menu_item = array();
-        $menu_item['title'] = Translation :: get('Home');
+        $menu_item['title'] = Translation::get('Home');
         $menu_item['url'] = $this->get_category_url(0);
         $menu_item['class'] = 'home';
-        $menu_item[OptionsMenuRenderer :: KEY_ID] = 0;
-
+        $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
+        
         $sub_menu_items = array();
         while ($item = $items->next_result())
         {
@@ -78,10 +78,10 @@ class ItemMenu extends HtmlMenu
             $sub_menu_item['title'] = $item->get_titles()->get_current_translation();
             $sub_menu_item['url'] = $this->get_category_url($item->get_id());
             $sub_menu_item['class'] = 'category';
-            $sub_menu_item[OptionsMenuRenderer :: KEY_ID] = $item->get_id();
+            $sub_menu_item[OptionsMenuRenderer::KEY_ID] = $item->get_id();
             $sub_menu_items[] = $sub_menu_item;
         }
-
+        
         $menu_item['sub'] = $sub_menu_items;
         $menu[] = $menu_item;
         return $menu;
@@ -89,7 +89,7 @@ class ItemMenu extends HtmlMenu
 
     /**
      * Gets the URL of a given category
-     *
+     * 
      * @param int $category The id of the category
      * @return string The requested URL
      */
@@ -100,7 +100,7 @@ class ItemMenu extends HtmlMenu
 
     /**
      * Get the breadcrumbs which lead to the current category.
-     *
+     * 
      * @return array The breadcrumbs.
      */
     public function get_breadcrumbs()
@@ -117,7 +117,7 @@ class ItemMenu extends HtmlMenu
 
     /**
      * Renders the menu as a tree
-     *
+     * 
      * @return string The HTML formatted tree
      */
     public function render_as_tree()
@@ -129,14 +129,14 @@ class ItemMenu extends HtmlMenu
 
     public static function get_tree_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: TREE_NAME, true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::TREE_NAME, true);
     }
 
     public function render_as_list()
     {
         $renderer = new OptionsMenuRenderer();
         $this->render($renderer, 'sitemap');
-        $list = array('0' => Translation :: get('RootCategory')) + $renderer->toArray();
+        $list = array('0' => Translation::get('RootCategory')) + $renderer->toArray();
         return $list;
     }
 }

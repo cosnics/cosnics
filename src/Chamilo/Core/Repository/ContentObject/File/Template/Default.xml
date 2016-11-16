@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\File">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">File</translation>
-			<translation language="nl">Bestand</translation>
-			<translation language="fr">File</translation>
-			<translation language="de">Dokument</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">File</translation>
+            <translation language="nl">Bestand</translation>
+            <translation language="fr">File</translation>
+            <translation language="de">Dokument</translation>
+        </variable>
+    </translations>
 </template>

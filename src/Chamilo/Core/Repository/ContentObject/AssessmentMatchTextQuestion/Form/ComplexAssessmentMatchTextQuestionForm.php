@@ -30,24 +30,24 @@ class ComplexAssessmentMatchTextQuestionForm extends ComplexContentObjectItemFor
         
         $elements[] = $this->createElement(
             'checkbox', 
-            self :: PROPERTY_RECALCULATE_WEIGHT, 
-            Translation :: get('RecalculateWeight'));
+            self::PROPERTY_RECALCULATE_WEIGHT, 
+            Translation::get('RecalculateWeight'));
         
         $elements[] = $this->createElement(
             'text', 
-            ComplexAssessmentMatchTextQuestion :: PROPERTY_WEIGHT, 
-            Translation :: get('Weight'), 
+            ComplexAssessmentMatchTextQuestion::PROPERTY_WEIGHT, 
+            Translation::get('Weight'), 
             array("size" => "50", 'disabled' => 'disabled'));
         
-        $elements[] = ConfigurationForm :: build_answer_feedback(
+        $elements[] = ConfigurationForm::build_answer_feedback(
             $this, 
             array(
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_ALL));
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_ALL));
         
         return $elements;
     }
@@ -62,9 +62,9 @@ class ComplexAssessmentMatchTextQuestionForm extends ComplexContentObjectItemFor
         
         if (isset($complex_content_object_item))
         {
-            $defaults[ComplexAssessmentMatchTextQuestion :: PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
-            $defaults[self :: PROPERTY_RECALCULATE_WEIGHT] = 1;
-            $defaults[ComplexAssessmentMatchTextQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            $defaults[ComplexAssessmentMatchTextQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
+            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
+            $defaults[ComplexAssessmentMatchTextQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
         }
         
         return $defaults;
@@ -80,7 +80,7 @@ class ComplexAssessmentMatchTextQuestionForm extends ComplexContentObjectItemFor
         $complex_content_object_item = $this->get_complex_content_object_item();
         $this->set_values($complex_content_object_item, $values);
         
-        return parent :: update();
+        return parent::update();
     }
 
     /**
@@ -90,17 +90,17 @@ class ComplexAssessmentMatchTextQuestionForm extends ComplexContentObjectItemFor
      */
     private function set_values($complex_content_object_item, $values)
     {
-        if ($values[self :: PROPERTY_RECALCULATE_WEIGHT] == 1)
+        if ($values[self::PROPERTY_RECALCULATE_WEIGHT] == 1)
         {
             $complex_content_object_item->set_weight(
                 $complex_content_object_item->get_ref_object()->get_default_weight());
         }
         else
         {
-            $complex_content_object_item->set_weight($values[ComplexAssessmentMatchTextQuestion :: PROPERTY_WEIGHT]);
+            $complex_content_object_item->set_weight($values[ComplexAssessmentMatchTextQuestion::PROPERTY_WEIGHT]);
         }
         
         $complex_content_object_item->set_show_answer_feedback(
-            $values[ComplexAssessmentMatchTextQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK]);
+            $values[ComplexAssessmentMatchTextQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK]);
     }
 }

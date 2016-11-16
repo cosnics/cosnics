@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class provides a navigation menu to browse through the entities
- *
+ * 
  * @author Sven Vanpoucke
  * @package application\weblcms
  */
@@ -23,7 +23,7 @@ class LocationEntityBrowserTreeMenu extends GenericTree
 
     /**
      * The selected entity
-     *
+     * 
      * @var RightsEntity
      */
     private $entity;
@@ -32,7 +32,7 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     {
         $this->parent = $parent;
         $this->entity = $entity;
-        parent :: __construct(false, $entity->get_root_ids());
+        parent::__construct(false, $entity->get_root_ids());
     }
 
     public function get_parent()
@@ -58,8 +58,8 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     public function get_node_url($node_id)
     {
         $parameters = array();
-        $parameters[\Chamilo\Core\Rights\Editor\Manager :: PARAM_ENTITY_ID] = $node_id;
-
+        $parameters[\Chamilo\Core\Rights\Editor\Manager::PARAM_ENTITY_ID] = $node_id;
+        
         return $this->get_parent()->get_url($parameters);
     }
 
@@ -71,7 +71,7 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     public function get_node($node_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_id_property()),
+            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_id_property()), 
             new StaticConditionVariable($node_id));
         return $this->entity->retrieve_entity_items($condition)->next_result();
     }
@@ -79,7 +79,7 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     public function get_node_children($parent_node_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_parent_property()),
+            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_parent_property()), 
             new StaticConditionVariable($parent_node_id));
         return $this->entity->retrieve_entity_items($condition);
     }
@@ -87,10 +87,10 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     public function node_has_children($node_id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_parent_property()),
+            new PropertyConditionVariable($this->entity->data_class_class_name(), $this->entity->get_parent_property()), 
             new StaticConditionVariable($node_id));
         $count = $this->entity->count_entity_items($condition);
-
+        
         return ($count > 0);
     }
 
@@ -102,27 +102,27 @@ class LocationEntityBrowserTreeMenu extends GenericTree
     public function get_url_format()
     {
         $parameters = array();
-        $parameters[\Chamilo\Core\Rights\Editor\Manager :: PARAM_ENTITY_ID] = null;
-
+        $parameters[\Chamilo\Core\Rights\Editor\Manager::PARAM_ENTITY_ID] = null;
+        
         $url_format = $this->get_parent()->get_url($parameters);
-        $url_format .= '&' . \Chamilo\Core\Rights\Editor\Manager :: PARAM_ENTITY_ID . '=';
-
+        $url_format .= '&' . \Chamilo\Core\Rights\Editor\Manager::PARAM_ENTITY_ID . '=';
+        
         return $url_format;
     }
 
     public function get_root_node_class()
     {
-        return self :: ROOT_NODE_CLASS;
+        return self::ROOT_NODE_CLASS;
     }
 
     public function get_node_class($node)
     {
-        return self :: NODE_CLASS;
+        return self::NODE_CLASS;
     }
 
     public function get_root_node_title()
     {
-        return Translation :: get('Root');
+        return Translation::get('Root');
     }
 
     public function get_node_title($node)

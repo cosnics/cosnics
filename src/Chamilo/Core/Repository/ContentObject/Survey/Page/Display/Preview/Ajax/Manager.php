@@ -26,6 +26,4 @@ abstract class Manager extends AjaxManager
     const PARAM_ANSWER_ID = 'answer_id';
     const PARAM_ANSWER_VALUE = 'answer_value';
     const PARAM_QUESTION_VISIBILITY = 'question_visibility';
-    
-  
 }

@@ -24,37 +24,37 @@ class ExternalObjectForm extends FormValidator
 
     public function __construct($form_type, $action, $application)
     {
-        parent :: __construct(ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true), 'post', $action);
-
+        parent::__construct(ClassnameUtilities::getInstance()->getClassnameFromObject($this, true), 'post', $action);
+        
         $this->application = $application;
-
+        
         $this->form_type = $form_type;
-
-        if ($this->form_type == self :: TYPE_EDIT)
+        
+        if ($this->form_type == self::TYPE_EDIT)
         {
             $this->build_editing_form();
         }
-        elseif ($this->form_type == self :: TYPE_CREATE)
+        elseif ($this->form_type == self::TYPE_CREATE)
         {
             $this->build_creation_form();
         }
-
+        
         $this->setDefaults();
     }
 
     public function set_external_repository_object(ExternalObject $external_repository_object)
     {
         $this->external_repository_object = $external_repository_object;
-
-        $defaults[ExternalObject :: PROPERTY_ID] = $external_repository_object->get_id();
-        $defaults[ExternalObject :: PROPERTY_TITLE] = $external_repository_object->get_description();
-        $defaults[ExternalObject :: PROPERTY_ALBUM_ID] = $external_repository_object->get_album_id();
-        $defaults[ExternalObject :: PROPERTY_TAGS] = $external_repository_object->get_tags_string();
-
-        $display = ExternalObjectDisplay :: factory($external_repository_object);
-        $defaults[self :: PREVIEW] = $display->get_preview();
-
-        parent :: setDefaults($defaults);
+        
+        $defaults[ExternalObject::PROPERTY_ID] = $external_repository_object->get_id();
+        $defaults[ExternalObject::PROPERTY_TITLE] = $external_repository_object->get_description();
+        $defaults[ExternalObject::PROPERTY_ALBUM_ID] = $external_repository_object->get_album_id();
+        $defaults[ExternalObject::PROPERTY_TAGS] = $external_repository_object->get_tags_string();
+        
+        $display = ExternalObjectDisplay::factory($external_repository_object);
+        $defaults[self::PREVIEW] = $display->get_preview();
+        
+        parent::setDefaults($defaults);
     }
 
     public function get_tags()
@@ -66,56 +66,56 @@ class ExternalObjectForm extends FormValidator
     public function build_basic_form()
     {
         $this->addElement(
-            'text',
-            ExternalObject :: PROPERTY_TITLE,
-            Translation :: get('Title', null, Utilities :: COMMON_LIBRARIES),
+            'text', 
+            ExternalObject::PROPERTY_TITLE, 
+            Translation::get('Title', null, Utilities::COMMON_LIBRARIES), 
             array('size' => '50'));
         $this->addRule(
-            ExternalObject :: PROPERTY_TITLE,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            ExternalObject::PROPERTY_TITLE, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $albums = $this->application->get_external_repository_manager_connector()->get_authenticated_user_albums();
-
-        if ($this->form_type == self :: TYPE_EDIT)
+        
+        if ($this->form_type == self::TYPE_EDIT)
         {
-            $this->add_information_message('picasa_api_move', null, Translation :: get('PicasaAPIMoveImpossible'));
+            $this->add_information_message('picasa_api_move', null, Translation::get('PicasaAPIMoveImpossible'));
         }
-
-        $this->addElement('select', ExternalObject :: PROPERTY_ALBUM_ID, Translation :: get('Album'), $albums);
-
-        if ($this->form_type == self :: TYPE_EDIT)
+        
+        $this->addElement('select', ExternalObject::PROPERTY_ALBUM_ID, Translation::get('Album'), $albums);
+        
+        if ($this->form_type == self::TYPE_EDIT)
         {
-            $this->freeze(ExternalObject :: PROPERTY_ALBUM_ID);
+            $this->freeze(ExternalObject::PROPERTY_ALBUM_ID);
         }
-
+        
         $this->addElement(
-            'textarea',
-            ExternalObject :: PROPERTY_TAGS,
-            Translation :: get('Tags'),
+            'textarea', 
+            ExternalObject::PROPERTY_TAGS, 
+            Translation::get('Tags'), 
             array('rows' => '7', 'cols' => '80'));
     }
 
     public function build_editing_form()
     {
-        $this->addElement('static', self :: PREVIEW);
-
+        $this->addElement('static', self::PREVIEW);
+        
         $this->build_basic_form();
-
-        $this->addElement('hidden', ExternalObject :: PROPERTY_ID);
-
+        
+        $this->addElement('hidden', ExternalObject::PROPERTY_ID);
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -127,11 +127,11 @@ class ExternalObjectForm extends FormValidator
 
     public function upload_photo()
     {
-        if (StringUtilities :: getInstance()->hasValue(($_FILES[self :: FILE]['name'])))
+        if (StringUtilities::getInstance()->hasValue(($_FILES[self::FILE]['name'])))
         {
             return $this->application->get_external_repository_manager_connector()->create_external_repository_object(
-                $this->exportValues(),
-                $_FILES[self :: FILE]);
+                $this->exportValues(), 
+                $_FILES[self::FILE]);
         }
         else
         {
@@ -142,12 +142,12 @@ class ExternalObjectForm extends FormValidator
     public function build_creation_form()
     {
         $this->build_basic_form();
-
-        $this->addElement('file', self :: FILE, Translation :: get('FileName'));
-
-        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('Create'));
-        $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset'));
-
+        
+        $this->addElement('file', self::FILE, Translation::get('FileName'));
+        
+        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation::get('Create'));
+        $buttons[] = $this->createElement('style_reset_button', 'reset', Translation::get('Reset'));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 }

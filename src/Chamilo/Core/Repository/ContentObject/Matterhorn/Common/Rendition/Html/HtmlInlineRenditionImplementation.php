@@ -12,10 +12,10 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     {
         $html = array();
         $html[] = '<p>';
-        $html[] = ContentObjectRenditionImplementation :: launch(
+        $html[] = ContentObjectRenditionImplementation::launch(
             $object = $this->get_content_object(), 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_PREVIEW, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_PREVIEW, 
             $this->get_context());
         $html[] = '</p>';
         

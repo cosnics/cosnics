@@ -15,8 +15,8 @@ class Tab extends Element
 
     public function canBeDeleted()
     {
-        $blocks = DataManager :: retrieveTabBlocks($this);
-
+        $blocks = DataManager::retrieveTabBlocks($this);
+        
         while ($block = $blocks->next_result())
         {
             if ($block->getContext() == 'Chamilo\Core\Admin' || $block->getContext() == 'Chamilo\Core\User')
@@ -24,7 +24,7 @@ class Tab extends Element
                 return false;
             }
         }
-
+        
         return true;
     }
 }

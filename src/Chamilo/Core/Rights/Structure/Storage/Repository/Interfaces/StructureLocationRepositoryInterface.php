@@ -5,14 +5,15 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 
 /**
  * Repository to manage the data of roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface StructureLocationRepositoryInterface
 {
+
     /**
      * Returns a structure location by a given context and action
-     *
+     * 
      * @param string $context
      * @param string $action
      *
@@ -22,7 +23,7 @@ interface StructureLocationRepositoryInterface
 
     /**
      * Truncates the structure locations and roles for the structure locations
-     *
+     * 
      * @return bool
      */
     public function truncateStructureLocationsAndRoles();

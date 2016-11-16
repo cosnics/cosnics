@@ -8,6 +8,6 @@ class NoTemplateException extends \Exception
 
     public function __construct()
     {
-        parent :: __construct(Translation :: get('NoTemplateAvailable'));
+        parent::__construct(Translation::get('NoTemplateAvailable'));
     }
 }

@@ -32,19 +32,19 @@ class WebInterfaceInstaller implements InstallerObserver
         {
             $parameters = array();
         }
-
+        
         if (! is_array($parameters))
         {
             $parameters = array($parameters);
         }
-
+        
         $html = array();
-
+        
         foreach ($this->observers as $observer)
         {
             $html[] = call_user_func_array(array($observer, $method_name), $parameters);
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 

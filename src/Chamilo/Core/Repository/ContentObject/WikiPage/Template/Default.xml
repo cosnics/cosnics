@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\WikiPage">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Wiki page</translation>
-			<translation language="nl">Wiki pagina</translation>
-			<translation language="fr">Page Wiki</translation>
-			<translation language="de">Wiki-Seite</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Wiki page</translation>
+            <translation language="nl">Wiki pagina</translation>
+            <translation language="fr">Page Wiki</translation>
+            <translation language="de">Wiki-Seite</translation>
+        </variable>
+    </translations>
 </template>

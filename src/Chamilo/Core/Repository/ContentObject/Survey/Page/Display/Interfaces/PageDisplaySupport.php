@@ -10,17 +10,17 @@ use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
  * 
  * @author Hans De Bisschop
  */
-interface PageDisplaySupport extends \Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport
+interface PageDisplaySupport extends 
+    \Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDisplaySupport
 {
-    
-      /**
+
+    /**
      * Determine the complex content object that should be displayed
      * 
      * @return ContentObject
      * @todo Fix DisplaySupport conflicts
      */
     public function get_root_content_object();
-    
 
     /**
      * Return a URI-template for the page tree menu
@@ -28,7 +28,7 @@ interface PageDisplaySupport extends \Chamilo\Core\Repository\ContentObject\Surv
      * @return string
      */
     public function get_tree_menu_url();
-  
+
     /**
      * Is the user allowed to edit the content for the given node
      * 
@@ -57,6 +57,5 @@ interface PageDisplaySupport extends \Chamilo\Core\Repository\ContentObject\Surv
      * @return boolean
      */
     public function is_own_page();
-   
 }
 ?>

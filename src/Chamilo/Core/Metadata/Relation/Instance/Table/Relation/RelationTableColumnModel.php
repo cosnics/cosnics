@@ -24,8 +24,8 @@ class RelationTableColumnModel extends DataClassTableColumnModel implements Tabl
      */
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_SOURCE));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_RELATION));
-        $this->add_column(new StaticTableColumn(self :: PROPERTY_TARGET));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_SOURCE));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_RELATION));
+        $this->add_column(new StaticTableColumn(self::PROPERTY_TARGET));
     }
 }

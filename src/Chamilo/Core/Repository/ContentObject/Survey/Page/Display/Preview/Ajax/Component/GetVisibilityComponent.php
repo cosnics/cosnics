@@ -12,24 +12,24 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Page\Display\Preview\Ajax\Manager
 {
-   
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
     function getRequiredPostParameters()
     {
-        return array(self :: PARAM_PARAMETERS);
+        return array(self::PARAM_PARAMETERS);
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     function run()
     {
-        $parameters = $this->getPostDataValue(self :: PARAM_PARAMETERS);
+        $parameters = $this->getPostDataValue(self::PARAM_PARAMETERS);
         $content_object_id = $parameters['content_object_id'];
         
-        $content_object = DataManager :: retrieve_by_id(Page :: class_name(), $content_object_id);
+        $content_object = DataManager::retrieve_by_id(Page::class_name(), $content_object_id);
         
         $path = $content_object->get_complex_content_object_path();
         
@@ -116,22 +116,22 @@ class GetVisibilityComponent extends \Chamilo\Core\Repository\ContentObject\Surv
             }
             
             $result = new JsonAjaxResult(200);
-            $result->set_property(self :: PARAM_QUESTION_VISIBILITY, $question_visibility);
+            $result->set_property(self::PARAM_QUESTION_VISIBILITY, $question_visibility);
             $result->display();
         }
         else
         {
             $result = new JsonAjaxResult(200);
-            $result->set_property(self :: PARAM_QUESTION_VISIBILITY, array());
+            $result->set_property(self::PARAM_QUESTION_VISIBILITY, array());
             $result->display();
         }
     }
 
     private function get_answer($complex_question_id)
     {
-        $answers = Session :: retrieve(self :: TEMPORARY_STORAGE);
+        $answers = Session::retrieve(self::TEMPORARY_STORAGE);
         $answer = $answers[$complex_question_id];
-         
+        
         if ($answer)
         {
             return $answer;

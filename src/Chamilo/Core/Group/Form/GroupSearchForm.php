@@ -72,7 +72,7 @@ class GroupSearchForm extends FormValidator
      */
     public function __construct($manager, $url)
     {
-        parent :: __construct(self :: FORM_NAME, 'post', $url);
+        parent::__construct(self::FORM_NAME, 'post', $url);
         $this->renderer = clone $this->defaultRenderer();
         $this->manager = $manager;
         $this->frozen_elements = array();
@@ -109,7 +109,7 @@ class GroupSearchForm extends FormValidator
         }
         foreach ($this->frozen_elements as $element)
         {
-            $element->setValue(Request :: get($element->getName()));
+            $element->setValue(Request::get($element->getName()));
         }
     }
 
@@ -121,10 +121,10 @@ class GroupSearchForm extends FormValidator
         $this->renderer->setElementTemplate('{element}');
         $this->frozen_elements[] = $this->addElement(
             'text', 
-            self :: PARAM_SIMPLE_SEARCH_QUERY, 
-            Translation :: get('Search', null, Utilities :: COMMON_LIBRARIES), 
+            self::PARAM_SIMPLE_SEARCH_QUERY, 
+            Translation::get('Search', null, Utilities::COMMON_LIBRARIES), 
             'size="20" class="search_query"');
-        $this->addElement('submit', 'search', Translation :: get('Ok', null, Utilities :: COMMON_LIBRARIES));
+        $this->addElement('submit', 'search', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
     }
 
     /**
@@ -158,14 +158,14 @@ class GroupSearchForm extends FormValidator
     {
         $values = $this->exportValues();
         
-        $query = $values[self :: PARAM_SIMPLE_SEARCH_QUERY];
+        $query = $values[self::PARAM_SIMPLE_SEARCH_QUERY];
         
         if (isset($query) && $query != '')
         {
             $conditions = array();
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group :: class_name(), Group :: PROPERTY_NAME), 
-                '*' . $values[self :: PARAM_SIMPLE_SEARCH_QUERY] . '*');
+                new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME), 
+                '*' . $values[self::PARAM_SIMPLE_SEARCH_QUERY] . '*');
             
             return new OrCondition($conditions);
         }

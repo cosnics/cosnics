@@ -8,6 +8,6 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
 
     public function get_data_manager()
     {
-        return DataManager :: getInstance();
+        return DataManager::getInstance();
     }
 }

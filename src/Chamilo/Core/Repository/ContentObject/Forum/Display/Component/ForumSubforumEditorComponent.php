@@ -32,20 +32,20 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             
             $url = $this->get_url(
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_EDIT_SUBFORUM, 
-                    self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(), 
-                    self :: PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item->get_id()));
+                    self::PARAM_ACTION => self::ACTION_EDIT_SUBFORUM, 
+                    self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id(), 
+                    self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID => $selected_complex_content_object_item->get_id()));
             
-            $forum_object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(), 
+            $forum_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
                 $selected_complex_content_object_item->get_ref());
             
-            BreadcrumbTrail :: getInstance()->add(
+            BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM, 
-                            self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)), 
+                            self::PARAM_ACTION => self::ACTION_VIEW_FORUM, 
+                            self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => null)), 
                     $this->get_root_content_object()->get_title()));
             
             if ($this->get_complex_content_object_item())
@@ -62,12 +62,12 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     foreach ($forums_with_key_cloi as $key => $value)
                     {
                         
-                        BreadcrumbTrail :: getInstance()->add(
+                        BreadcrumbTrail::getInstance()->add(
                             new Breadcrumb(
                                 $this->get_url(
                                     array(
-                                        self :: PARAM_ACTION => self :: ACTION_VIEW_FORUM, 
-                                        self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)), 
+                                        self::PARAM_ACTION => self::ACTION_VIEW_FORUM, 
+                                        self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $key)), 
                                 $value->get_title()));
                     }
                 }
@@ -76,12 +76,12 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     throw new \Exception('The forum you requested has not been found');
                 }
             }
-            BreadcrumbTrail :: getInstance()->add(
+            BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
                     $this->get_url(), 
-                    Translation :: get('SubforumEditor', array('SUBFORUM' => $forum_object->get_title()))));
-            $form = ContentObjectForm :: factory(
-                ContentObjectForm :: TYPE_EDIT, 
+                    Translation::get('SubforumEditor', array('SUBFORUM' => $forum_object->get_title()))));
+            $form = ContentObjectForm::factory(
+                ContentObjectForm::TYPE_EDIT, 
                 new PersonalWorkspace($this->get_user()), 
                 $forum_object, 
                 'edit', 
@@ -98,14 +98,14 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                     $selected_complex_content_object_item->set_ref($new_id);
                     $selected_complex_content_object_item->update();
                     
-                    $children = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-                        ComplexContentObjectItem :: class_name(), 
+                    $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                        ComplexContentObjectItem::class_name(), 
                         new EqualityCondition(
                             new PropertyConditionVariable(
-                                ComplexContentObjectItem :: class_name(), 
-                                ComplexContentObjectItem :: PROPERTY_PARENT), 
+                                ComplexContentObjectItem::class_name(), 
+                                ComplexContentObjectItem::PROPERTY_PARENT), 
                             new StaticConditionVariable($old_id), 
-                            ComplexContentObjectItem :: get_table_name()));
+                            ComplexContentObjectItem::get_table_name()));
                     while ($child = $children->next_result())
                     {
                         $child->set_parent($new_id);
@@ -135,14 +135,14 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
     private function my_redirect($success)
     {
         $message = htmlentities(
-            Translation :: get(
+            Translation::get(
                 ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
-                array('OBJECT' => Translation :: get('Subforum')), 
-                Utilities :: COMMON_LIBRARIES));
+                array('OBJECT' => Translation::get('Subforum')), 
+                Utilities::COMMON_LIBRARIES));
         
         $params = array();
-        $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_FORUM;
-        $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
+        $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         
         $this->redirect($message, ($success ? false : true), $params);
     }

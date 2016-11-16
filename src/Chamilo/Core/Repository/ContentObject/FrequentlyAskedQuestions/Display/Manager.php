@@ -5,7 +5,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * Portfolio display manager which serves as a base for all matters related to the displaying of portfolios
- *
+ * 
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -14,19 +14,19 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     // Actions
     const ACTION_MOVE = 'Mover';
     const ACTION_SORT = 'Sorter';
-
+    
     // Parameters
     const PARAM_STEP = 'step';
     const PARAM_FAQ_ITEM_ID = 'faq_item_id';
     const PARAM_VIRTUAL_USER_ID = 'virtual_user_id';
     const PARAM_SORT = 'sort';
-
+    
     // Sorting
     const SORT_UP = 'Up';
     const SORT_DOWN = 'Down';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+    const DEFAULT_ACTION = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
     /**
      *
@@ -36,26 +36,26 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Get the id of the currently requested step
-     *
+     * 
      * @return int
      */
     public function get_current_step()
     {
         if (! isset($this->current_step))
         {
-            $this->current_step = Request :: get(self :: PARAM_STEP) ? Request :: get(self :: PARAM_STEP) : 1;
+            $this->current_step = Request::get(self::PARAM_STEP) ? Request::get(self::PARAM_STEP) : 1;
             if (is_array($this->current_step))
             {
                 $this->current_step = $this->current_step[0];
             }
         }
-
+        
         return $this->current_step;
     }
 
     /**
      * Get the content object linked to the current step
-     *
+     * 
      * @return \core\repository\ContentObject
      */
     public function get_current_content_object()
@@ -65,7 +65,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Get the complex content object item linked to the current step
-     *
+     * 
      * @return \core\repository\storage\data_class\ComplexContentObjectItem
      */
     public function get_current_complex_content_object_item()
@@ -75,7 +75,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * Get the node linked to the current step
-     *
+     * 
      * @return \core\repository\common\path\ComplexContentObjectPathNode
      */
     public function get_current_node()

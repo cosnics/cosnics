@@ -32,17 +32,17 @@ class UnsubscriberComponent extends Manager
             if (! $notification->delete())
             {
                 throw new \Exception(
-                    Translation :: get(
+                    Translation::get(
                         'ObjectNotDeleted', 
-                        array('OBJECT' => Translation :: get('Notification')), 
-                        Utilities :: COMMON_LIBRARIES));
+                        array('OBJECT' => Translation::get('Notification')), 
+                        Utilities::COMMON_LIBRARIES));
             }
             
             $success = true;
-            $message = Translation :: get(
+            $message = Translation::get(
                 'ObjectDeleted', 
-                array('OBJECT' => Translation :: get('Notification')), 
-                Utilities :: COMMON_LIBRARIES);
+                array('OBJECT' => Translation::get('Notification')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
@@ -50,6 +50,6 @@ class UnsubscriberComponent extends Manager
             $message = $ex->getMessage();
         }
         
-        $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+        $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }
 }

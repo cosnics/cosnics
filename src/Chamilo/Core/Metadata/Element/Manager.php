@@ -26,7 +26,7 @@ abstract class Manager extends Application
     const ACTION_VOCABULARY = 'Vocabulary';
     
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      *
@@ -34,6 +34,6 @@ abstract class Manager extends Application
      */
     public function getSchemaId()
     {
-        return $this->getRequest()->query->get(\Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID);
+        return $this->getRequest()->query->get(\Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID);
     }
 }

@@ -14,13 +14,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     function get_root_content_object()
     {
         $this->set_parameter(
-            \Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager :: PARAM_FAQ_ITEM_ID,
-            Request :: get(
-                \Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager :: PARAM_FAQ_ITEM_ID));
+            \Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager::PARAM_FAQ_ITEM_ID, 
+            Request::get(
+                \Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions\Display\Manager::PARAM_FAQ_ITEM_ID));
         $this->set_parameter(
-            \Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-            Request :: get(\Chamilo\Core\Repository\Display\Manager :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID));
-        return parent :: get_root_content_object();
+            \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID, 
+            Request::get(\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID));
+        return parent::get_root_content_object();
     }
 
     /*

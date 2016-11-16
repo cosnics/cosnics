@@ -37,37 +37,37 @@ class Html extends BlockRendition
     public function render()
     {
         $rendered_block = $this->get_content();
-
+        
         if (count($this->get_block()->get_views()) > 1)
         {
             $tabs = new DynamicVisualTabsRenderer(
-                ClassnameUtilities :: getInstance()->getClassnameFromObject($this->get_block(), true),
+                ClassnameUtilities::getInstance()->getClassnameFromObject($this->get_block(), true), 
                 $rendered_block);
-
+            
             $context_parameters = $this->get_context()->get_context()->get_parameters();
-
+            
             foreach ($this->get_block()->get_views() as $view)
             {
-                $view_parameters = $context_parameters[Manager :: PARAM_VIEWS] ? $context_parameters[Manager :: PARAM_VIEWS] : array();
+                $view_parameters = $context_parameters[Manager::PARAM_VIEWS] ? $context_parameters[Manager::PARAM_VIEWS] : array();
                 $view_parameters[$this->get_block()->get_id()] = $view;
-
-                $view_parameters = array_merge($context_parameters, array(Manager :: PARAM_VIEWS => $view_parameters));
-                $view_parameters[Manager :: PARAM_BLOCK_ID] = $this->get_context()->determine_current_block_id();
-
+                
+                $view_parameters = array_merge($context_parameters, array(Manager::PARAM_VIEWS => $view_parameters));
+                $view_parameters[Manager::PARAM_BLOCK_ID] = $this->get_context()->determine_current_block_id();
+                
                 $is_current_view = $view == $this->get_context()->determine_current_block_view(
                     $this->get_block()->get_id()) ? true : false;
                 $tabs->add_tab(
-                   new DynamicVisualTab(
-                        $view,              
-                        Translation :: get(
-                            (string) StringUtilities :: getInstance()->createString(self :: FORMAT . '_' . $view)->upperCamelize()),
-                         Theme :: getInstance()->getImagePath(
-                            'Chamilo\Core\Reporting\Viewer',
-                            'Rendition/Block/' . self :: FORMAT . '/' . $view),
-                        $this->get_context()->get_context()->get_url($view_parameters),
+                    new DynamicVisualTab(
+                        $view, 
+                        Translation::get(
+                            (string) StringUtilities::getInstance()->createString(self::FORMAT . '_' . $view)->upperCamelize()), 
+                        Theme::getInstance()->getImagePath(
+                            'Chamilo\Core\Reporting\Viewer', 
+                            'Rendition/Block/' . self::FORMAT . '/' . $view), 
+                        $this->get_context()->get_context()->get_url($view_parameters), 
                         $is_current_view));
             }
-
+            
             return $tabs->render();
         }
         else

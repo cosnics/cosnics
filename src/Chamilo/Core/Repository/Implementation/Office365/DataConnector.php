@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
 
 /**
  * Data Connector Microsoft Graph API
- *
  * @notes The Graph API has some shortcomings when querying files on Microsoft OneDrive.
  * - Cannot retrieve folders only or files only, we always receive both sorts of object.
  * - API does not support offset and count.
@@ -21,56 +20,62 @@ use Chamilo\Libraries\Storage\ResultSet\ArrayResultSet;
  * - Folders appear in the table on the right pane.
  * - Menu only shows the path to the current directory.
  * - Searching for items in folder is restricted to searching for items starting with given string.
- *
+ * 
  * @author Andras Zolnay - edufiles
  */
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
+
     private $driveItems;
+
     private $folderPath;
+
     private $rootFolderId;
+
     /**
+     *
      * @var MicrosoftClientService;
      */
     protected $microsoftClientService;
-
     const DOCUMENTS_SHARED = 'shared_with_me';
     const DOCUMENTS_RECENT = 'recent';
 
     /**
      * DataConnector constructor.
-     *
+     * 
      * @param Instance $externalRepositoryInstance
      */
     public function __construct($externalRepositoryInstance)
     {
-        parent:: __construct($externalRepositoryInstance);
-
+        parent::__construct($externalRepositoryInstance);
+        
         $user = new User();
         $user->setId(Session::get_user_id());
-
-        $this->microsoftClientService = new MicrosoftClientService(new MicrosoftGraphClientSettingsProvider($externalRepositoryInstance, $user));
+        
+        $this->microsoftClientService = new MicrosoftClientService(
+            new MicrosoftGraphClientSettingsProvider($externalRepositoryInstance, $user));
     }
 
     public function login()
     {
-        $error = Request :: get('error');
+        $error = Request::get('error');
         if (! is_null($error))
         {
             return false;
         }
-
+        
         $replyParameters = array();
-        $replyParameters[Application :: PARAM_CONTEXT] = Manager :: context();
-        $replyParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_LOGIN;
-        $replyParameters[Manager :: PARAM_EXTERNAL_REPOSITORY] = $this->get_external_repository_instance_id();
-
-        $code = Request :: get('code');
+        $replyParameters[Application::PARAM_CONTEXT] = Manager::context();
+        $replyParameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGIN;
+        $replyParameters[Manager::PARAM_EXTERNAL_REPOSITORY] = $this->get_external_repository_instance_id();
+        
+        $code = Request::get('code');
         return $this->microsoftClientService->login($replyParameters, $code);
     }
 
     /**
      * Retrieves the given objects and converts the response to an ExternalObject instance.
+     * 
      * @param $id string
      * @return ExternalObject
      */
@@ -78,7 +83,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $request = $this->microsoftClientService->createRequest('GET', 'drive/items/' . $id);
         $result = $this->microsoftClientService->sendRequest($request);
-
+        
         return $this->parseExternalRepositoryObject($result);
     }
 
@@ -126,14 +131,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_objects($condition, $orderProperty, $offset, $count)
     {
         $driveItems = $this->getDriveItems($condition, $orderProperty);
-    
+        
         $objects = array();
         $end = min(count($driveItems), $offset + $count);
-        for ($i = $offset; $i < $end; ++$i)
+        for ($i = $offset; $i < $end; ++ $i)
         {
             $objects[] = $this->parseExternalRepositoryObject($driveItems[$i]);
         }
-
+        
         return new ArrayResultSet($objects);
     }
 
@@ -144,7 +149,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     }
 
     public function import_external_repository_object($id)
-    {        
+    {
         $request = $this->microsoftClientService->createRequest('GET', 'drive/items/' . $id . '/content');
         return $this->microsoftClientService->sendRequest($request, false);
     }
@@ -154,8 +159,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (! isset($this->folderPath))
         {
             $this->folderPath = array();
-
-            $folderId = Request :: get(Manager :: PARAM_FOLDER);
+            
+            $folderId = Request::get(Manager::PARAM_FOLDER);
             if (! empty($folderId))
             {
                 $this->folderPath[$folderId] = array(); // Children of current folder are in table.
@@ -164,7 +169,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 {
                     $folder = $this->retrieveFolder($folderId);
                     if (empty($folder->getParent()))
-                    {               
+                    {
                         break;
                     }
                     
@@ -173,7 +178,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 }
             }
         }
-
+        
         return $this->folderPath;
     }
 
@@ -183,15 +188,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $this->rootFolderId = $this->retrieveFolder('root')->getId();
         }
-
+        
         return $this->rootFolderId;
     }
-     
+
     public function retrieveFolder($id)
     {
         $folder = new Folder();
         
-        if ($id == self :: DOCUMENTS_SHARED || $id == self :: DOCUMENTS_RECENT)
+        if ($id == self::DOCUMENTS_SHARED || $id == self::DOCUMENTS_RECENT)
         {
             $folder->setId($id);
             $folder->setTitle($id);
@@ -211,10 +216,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     }
 
     /**
-     *   \brief Creates an external repository object from the result of GET request.
-     *
-     *   @param \stdClass $response
-     *   @return ExternalObject
+     * \brief Creates an external repository object from the result of GET request.
+     * 
+     * @param \stdClass $response
+     * @return ExternalObject
      */
     private function parseExternalRepositoryObject($response)
     {
@@ -223,7 +228,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $object->set_created(strtotime($response->createdDateTime));
         $object->set_modified(strtotime($response->lastModifiedDateTime));
-   
+        
         if (is_null($response->remoteItem))
         {
             $object->set_title($response->name);
@@ -240,67 +245,65 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_type($this->parseType($response->remoteItem));
             $object->set_rights($this->parseRights($response->remoteItem));
         }
-
+        
         return $object;
     }
 
     /**
-     *  Determines the type of the external object
-     *
-     *  Type is partially based on facets folder and image and partially based on the the extension of the file.
+     * Determines the type of the external object
+     * Type is partially based on facets folder and image and partially based on the the extension of the file.
      */
     private function parseType($response)
     {
         if (! is_null($response->folder))
         {
-            return ExternalObject :: TYPE_FOLDER;
+            return ExternalObject::TYPE_FOLDER;
         }
-    
+        
         if (! is_null($response->image))
         {
-            return ExternalObject :: TYPE_IMAGE;
-        } 
+            return ExternalObject::TYPE_IMAGE;
+        }
         
-        $file_properties = FileProperties :: from_path($response->name);
+        $file_properties = FileProperties::from_path($response->name);
         if (! empty($file_properties->get_extension()))
         {
             return $file_properties->get_extension();
         }
-
-        return ExternalObject :: TYPE_FILE;
+        
+        return ExternalObject::TYPE_FILE;
     }
 
     /**
-     *  Returns rights dependent on type.
+     * Returns rights dependent on type.
      */
     private function parseRights($response)
     {
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = is_null($response->folder);
-        $rights[ExternalObject :: RIGHT_EDIT] = false;
-        $rights[ExternalObject :: RIGHT_DELETE] = false;
-        $rights[ExternalObject :: RIGHT_DOWNLOAD] = is_null($response->folder);
+        $rights[ExternalObject::RIGHT_USE] = is_null($response->folder);
+        $rights[ExternalObject::RIGHT_EDIT] = false;
+        $rights[ExternalObject::RIGHT_DELETE] = false;
+        $rights[ExternalObject::RIGHT_DOWNLOAD] = is_null($response->folder);
         return $rights;
     }
 
     /**
-     *  \brief Retrieves all driveitems in current folder for given $searchString.
-     *
-     *  All driveitems are retrieved by looping over all resulting pages. 
+     * \brief Retrieves all driveitems in current folder for given $searchString.
+     * All driveitems are retrieved by looping over all resulting pages.
      */
     private function getDriveItems($searchString = null, $orderProperty = null)
     {
         if (! isset($this->driveItems))
         {
             $this->driveItems = array();
-
+            
             $link = $this->getDriveItemsRequest($searchString);
             while (true)
             {
                 $request = $this->microsoftClientService->createRequest('GET', $link);
                 $result = get_object_vars($this->microsoftClientService->sendRequest($request));
-        
-                $this->driveItems = array_merge($this->driveItems, $result['value']);   
+                
+                $this->driveItems = array_merge($this->driveItems, $result['value']);
                 
                 if (array_key_exists('@odata.nextLink', $result))
                 {
@@ -310,98 +313,99 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 {
                     break;
                 }
-             
             }
         }
         
         $this->sortDriveItems($this->driveItems, $orderProperty);
         
-        //die(var_dump($this->driveItems));
+        // die(var_dump($this->driveItems));
         return $this->driveItems;
     }
-    
+
     /**
-     *  Return search request for given condition and ordering.
-     *
-     *  @return Examples: 
-     *  - Condition is NULL and PARAM_FOLDER is null: drive/root/children
+     * Return search request for given condition and ordering.
+     * 
+     * @return Examples: - Condition is NULL and PARAM_FOLDER is null: drive/root/children
      */
     private function getDriveItemsRequest($searchString = null)
     {
         $request = 'drive/';
-
-        $folder = Request :: get(Manager :: PARAM_FOLDER);
+        
+        $folder = Request::get(Manager::PARAM_FOLDER);
         if (is_null($folder))
         {
             $request .= 'root/children';
         }
-        else if ($folder == self :: DOCUMENTS_SHARED)
-        {
-            $request .= 'sharedWithMe';
-        }
-        else if ($folder == self :: DOCUMENTS_RECENT)
-        {
-            $request .= 'recent';
-        }
-        else
-        {
-            $request .= 'items/' . $folder . '/children';
-        }
-
-        $queryParameters = array();
-   
-        // Retrieve only used properties
-        //$queryParameters[] = '$select=id,name,folder,file,parentReference,createdDateTime';
+        else 
+            if ($folder == self::DOCUMENTS_SHARED)
+            {
+                $request .= 'sharedWithMe';
+            }
+            else 
+                if ($folder == self::DOCUMENTS_RECENT)
+                {
+                    $request .= 'recent';
+                }
+                else
+                {
+                    $request .= 'items/' . $folder . '/children';
+                }
         
-        if (!is_null($searchString))
+        $queryParameters = array();
+        
+        // Retrieve only used properties
+        // $queryParameters[] = '$select=id,name,folder,file,parentReference,createdDateTime';
+        
+        if (! is_null($searchString))
         {
             // substringof does not seem to be implemented although part of OData Filters.
-            //$queryParameters[] = '$filter=substringof(\'' . $searchString . '\', name)';
+            // $queryParameters[] = '$filter=substringof(\'' . $searchString . '\', name)';
             // $search is accepted, however does not have any effect.
-            //$queryParameters[] = '$search=' . $searchString;
+            // $queryParameters[] = '$search=' . $searchString;
             // Funtion endswith does not ssem to be implemented either.
-            //$queryParameters[] = '$filter=startswith(name, \'' . $searchString . '\') Or endswith(name, \'' . $searchString . '\')';
+            // $queryParameters[] = '$filter=startswith(name, \'' . $searchString . '\') Or endswith(name, \'' .
+            // $searchString . '\')';
             $queryParameters[] = '$filter=startswith(name, \'' . $searchString . '\')';
         }
-    
+        
         if (! empty($queryParameters))
         {
-            $request .= '?' . implode('&', $queryParameters); 
+            $request .= '?' . implode('&', $queryParameters);
         }
-
-        return $request;    
+        
+        return $request;
     }
 
     private function sortDriveItems(&$driveItems, $orderProperty)
     {
         if (! empty($orderProperty))
-        {        
+        {
             switch ($orderProperty[0]->get_property()->get_property())
             {
-                case ExternalObject :: PROPERTY_TITLE:
+                case ExternalObject::PROPERTY_TITLE :
                     $compareFunctionName = 'compareDriveItemNames';
                     
-                    $folderId = Request :: get(Manager :: PARAM_FOLDER);
-                    if ($folderId == self :: DOCUMENTS_SHARED || $folderId == self :: DOCUMENTS_RECENT)
+                    $folderId = Request::get(Manager::PARAM_FOLDER);
+                    if ($folderId == self::DOCUMENTS_SHARED || $folderId == self::DOCUMENTS_RECENT)
                     {
                         $compareFunctionName .= 'RemoteItem';
                     }
-
+                    
                     break;
-    
-                case ExternalObject :: PROPERTY_CREATED:
+                
+                case ExternalObject::PROPERTY_CREATED :
                     $compareFunctionName = 'compareDriveItemCreationDates';
                     break;
-                   
-                default:
+                
+                default :
                     $compareFunctionName = null;
                     break;
             }
-
-            $direction = 'Desc'; 
+            
+            $direction = 'Desc';
             if ($orderProperty[0]->get_direction() == SORT_ASC)
             {
-                $direction = 'Asc'; 
+                $direction = 'Asc';
             }
             
             if (! is_null($compareFunctionName))
@@ -411,32 +415,32 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
     }
 
-    public static function compareDriveItemNamesAsc($a, $b) 
+    public static function compareDriveItemNamesAsc($a, $b)
     {
         return strcmp($a->name, $b->name);
     }
 
-    public static function compareDriveItemNamesDesc($a, $b) 
+    public static function compareDriveItemNamesDesc($a, $b)
     {
         return strcmp($b->name, $a->name);
     }
 
-    public static function compareDriveItemNamesRemoteItemAsc($a, $b) 
+    public static function compareDriveItemNamesRemoteItemAsc($a, $b)
     {
         return strcmp($a->remoteItem->name, $b->remoteItem->name);
     }
 
-    public static function compareDriveItemNamesRemoteItemDesc($a, $b) 
+    public static function compareDriveItemNamesRemoteItemDesc($a, $b)
     {
         return strcmp($b->remoteItem->name, $a->remoteItem->name);
     }
 
-    public static function compareDriveItemCreationDatesAsc($a, $b) 
+    public static function compareDriveItemCreationDatesAsc($a, $b)
     {
         return strtotime($a->createdDateTime) > strtotime($b->createdDateTime);
     }
 
-    public static function compareDriveItemCreationDatesDesc($a, $b) 
+    public static function compareDriveItemCreationDatesDesc($a, $b)
     {
         return strtotime($b->createdDateTime) > strtotime($a->createdDateTime);
     }

@@ -16,22 +16,22 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function __construct($default_properties)
     {
-        parent :: __construct($default_properties);
+        parent::__construct($default_properties);
     }
 
     public function get_license()
     {
-        return $this->get_default_property(self :: PROPERTY_LICENSE);
+        return $this->get_default_property(self::PROPERTY_LICENSE);
     }
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     public function set_license($license)
     {
-        return $this->set_default_property(self :: PROPERTY_LICENSE, $license);
+        return $this->set_default_property(self::PROPERTY_LICENSE, $license);
     }
 
     public function get_license_name()
@@ -70,23 +70,23 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_license_icon()
     {
         $icon = new ToolbarItem(
-            $this->get_license_name(),
-            Theme :: getInstance()->getImagePath(
-                'Chamilo\Core\Repository\Implementation\Scribd',
-                'Licenses/' . $this->get_license()),
-            null,
-            ToolbarItem :: DISPLAY_ICON);
+            $this->get_license_name(), 
+            Theme::getInstance()->getImagePath(
+                'Chamilo\Core\Repository\Implementation\Scribd', 
+                'Licenses/' . $this->get_license()), 
+            null, 
+            ToolbarItem::DISPLAY_ICON);
         return $icon->as_html();
     }
 
     public function get_tags()
     {
-        return $this->get_default_property(self :: PROPERTY_TAGS);
+        return $this->get_default_property(self::PROPERTY_TAGS);
     }
 
     public function set_tags($tags)
     {
-        return $this->set_default_property(self :: PROPERTY_TAGS, $tags);
+        return $this->set_default_property(self::PROPERTY_TAGS, $tags);
     }
 
     public function get_tags_string()
@@ -96,17 +96,17 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_url()
     {
-        return $this->get_default_property(self :: PROPERTY_URL);
+        return $this->get_default_property(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        return $this->set_default_property(self :: PROPERTY_URL, $url);
+        return $this->set_default_property(self::PROPERTY_URL, $url);
     }
 
     public function get_download_formats()
     {
-        return $this->get_default_property(self :: PROPERTY_DOWNLOAD_FORMATS);
+        return $this->get_default_property(self::PROPERTY_DOWNLOAD_FORMATS);
     }
 
     public function get_download_formats_string()
@@ -115,30 +115,30 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         foreach ($this->get_download_formats() as $format)
         {
             $icon = new ToolbarItem(
-                $format,
-                Theme :: getInstance()->getImagePath(
-                    'Chamilo\Core\Repository\Implementation\Scribd',
-                    'Download/' . $format),
-                null,
-                ToolbarItem :: DISPLAY_ICON);
+                $format, 
+                Theme::getInstance()->getImagePath(
+                    'Chamilo\Core\Repository\Implementation\Scribd', 
+                    'Download/' . $format), 
+                null, 
+                ToolbarItem::DISPLAY_ICON);
             $toolbar->add_item($icon);
         }
-
+        
         return $toolbar->as_html();
     }
 
     public function set_download_formats($download_formats)
     {
-        return $this->set_default_property(self :: PROPERTY_DOWNLOAD_FORMATS, $download_formats);
+        return $this->set_default_property(self::PROPERTY_DOWNLOAD_FORMATS, $download_formats);
     }
 
     public function get_document($download_format)
     {
-        $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_by_id(
-            Instance :: class_name(),
+        $external_repository = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_by_id(
+            Instance::class_name(), 
             $this->get_external_repository_id());
-        return DataConnector :: getInstance($external_repository)->download_external_repository_object(
-            $this,
+        return DataConnector::getInstance($external_repository)->download_external_repository_object(
+            $this, 
             $download_format);
     }
 }

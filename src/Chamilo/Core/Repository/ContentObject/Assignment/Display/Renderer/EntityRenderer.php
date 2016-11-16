@@ -89,7 +89,7 @@ abstract class EntityRenderer
         {
             $this->entity = $this->findEntity();
         }
-
+        
         return $this->entity;
     }
 

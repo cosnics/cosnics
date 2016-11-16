@@ -21,8 +21,8 @@ class Block extends Element
      */
     public static function getConfigurationVariables($configurationVariables = array())
     {
-        return parent :: getConfigurationVariables(
-            array(self :: CONFIGURATION_VISIBILITY, self :: CONFIGURATION_CONTEXT, self :: CONFIGURATION_BLOCK_TYPE));
+        return parent::getConfigurationVariables(
+            array(self::CONFIGURATION_VISIBILITY, self::CONFIGURATION_CONTEXT, self::CONFIGURATION_BLOCK_TYPE));
     }
 
     /**
@@ -31,7 +31,7 @@ class Block extends Element
      */
     public function getVisibility()
     {
-        return $this->getSetting(self :: CONFIGURATION_VISIBILITY);
+        return $this->getSetting(self::CONFIGURATION_VISIBILITY);
     }
 
     /**
@@ -40,7 +40,7 @@ class Block extends Element
      */
     public function setVisibility($visibility)
     {
-        $this->setSetting(self :: CONFIGURATION_VISIBILITY, $visibility);
+        $this->setSetting(self::CONFIGURATION_VISIBILITY, $visibility);
     }
 
     /**
@@ -58,7 +58,7 @@ class Block extends Element
      */
     public function getContext()
     {
-        return $this->getSetting(self :: CONFIGURATION_CONTEXT);
+        return $this->getSetting(self::CONFIGURATION_CONTEXT);
     }
 
     /**
@@ -67,7 +67,7 @@ class Block extends Element
      */
     public function setContext($context)
     {
-        $this->setSetting(self :: CONFIGURATION_CONTEXT, $context);
+        $this->setSetting(self::CONFIGURATION_CONTEXT, $context);
     }
 
     /**
@@ -76,7 +76,7 @@ class Block extends Element
      */
     public function getBlockType()
     {
-        return $this->getSetting(self :: CONFIGURATION_BLOCK_TYPE);
+        return $this->getSetting(self::CONFIGURATION_BLOCK_TYPE);
     }
 
     /**
@@ -85,6 +85,6 @@ class Block extends Element
      */
     public function setBlockType($blockType)
     {
-        $this->setSetting(self :: CONFIGURATION_BLOCK_TYPE, $blockType);
+        $this->setSetting(self::CONFIGURATION_BLOCK_TYPE, $blockType);
     }
 }

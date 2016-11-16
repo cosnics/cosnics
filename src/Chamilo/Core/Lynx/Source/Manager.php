@@ -8,5 +8,5 @@ abstract class Manager extends Application
     const PARAM_ACTION = 'source_action';
     const PARAM_SOURCE_ID = 'source_id';
     const ACTION_BROWSE = 'Browser';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 }

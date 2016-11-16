@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: group_rel_user.class.php 224 2009-11-13 14:40:30Z kariboe $
- *
+ * 
  * @package group.lib
  */
 /**
@@ -25,32 +25,32 @@ class GroupRelUser extends DataClass
 
     public function get_group_id()
     {
-        return $this->get_default_property(self :: PROPERTY_GROUP_ID);
+        return $this->get_default_property(self::PROPERTY_GROUP_ID);
     }
 
     public function set_group_id($group_id)
     {
-        $this->set_default_property(self :: PROPERTY_GROUP_ID, $group_id);
+        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
     }
 
     public function get_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $user_id);
+        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
      * Get the default properties of all groups.
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_GROUP_ID, self :: PROPERTY_USER_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_GROUP_ID, self::PROPERTY_USER_ID));
     }
 
     /**
@@ -58,21 +58,21 @@ class GroupRelUser extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: getInstance();
+        return DataManager::getInstance();
     }
 
     public function delete()
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_GROUP_ID),
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_GROUP_ID), 
             new StaticConditionVariable($this->get_group_id()));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(GroupRelUser :: class_name(), GroupRelUser :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(GroupRelUser::class_name(), GroupRelUser::PROPERTY_USER_ID), 
             new StaticConditionVariable($this->get_user_id()));
-
+        
         $condition = new AndCondition($conditions);
-
-        return DataManager :: deletes(GroupRelUser :: class_name(), $condition);
+        
+        return DataManager::deletes(GroupRelUser::class_name(), $condition);
     }
 }

@@ -13,14 +13,14 @@ class PublicationTableDataProvider extends RecordTableDataProvider
         $type = $this->get_component()->get_type();
         switch ($type)
         {
-            case BrowserComponent :: TYPE_FROM_ME :
-                return DataManager :: retrieve_publications($condition);
+            case BrowserComponent::TYPE_FROM_ME :
+                return DataManager::retrieve_publications($condition);
                 break;
-            case BrowserComponent :: TYPE_ALL :
-                return DataManager :: retrieve_publications($condition);
+            case BrowserComponent::TYPE_ALL :
+                return DataManager::retrieve_publications($condition);
                 break;
             default :
-                return DataManager :: retrieve_publications_for_me(
+                return DataManager::retrieve_publications_for_me(
                     $condition, 
                     $order_property, 
                     $offset, 
@@ -35,16 +35,14 @@ class PublicationTableDataProvider extends RecordTableDataProvider
         $type = $this->get_component()->get_type();
         switch ($type)
         {
-            case BrowserComponent :: TYPE_FROM_ME :
-                return DataManager :: count_publications($condition);
+            case BrowserComponent::TYPE_FROM_ME :
+                return DataManager::count_publications($condition);
                 break;
-            case BrowserComponent :: TYPE_ALL :
-                return DataManager :: count_publications($condition);
+            case BrowserComponent::TYPE_ALL :
+                return DataManager::count_publications($condition);
                 break;
             default :
-                return DataManager :: count_publications_for_me(
-                    $condition, 
-                    $this->get_component()->get_user()->get_id());
+                return DataManager::count_publications_for_me($condition, $this->get_component()->get_user()->get_id());
                 break;
         }
     }

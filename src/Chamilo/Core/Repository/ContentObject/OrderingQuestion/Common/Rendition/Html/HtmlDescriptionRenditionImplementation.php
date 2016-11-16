@@ -11,7 +11,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -25,7 +25,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th></th>';
-        $html[] = '<th>' . Translation :: get('PutAnswersCorrectOrder') . '</th>';
+        $html[] = '<th>' . Translation::get('PutAnswersCorrectOrder') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';

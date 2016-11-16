@@ -18,11 +18,11 @@ class FormProcessor extends \Chamilo\Core\Repository\Common\Import\FormProcessor
     public function getImportParameters()
     {
         return new FileImportParameters(
-            'file',
-            $this->getUserIdentifier(),
-            $this->getWorkspace(),
-            $this->determineCategoryIdentifier(),
-            $this->getFile(),
+            'file', 
+            $this->getUserIdentifier(), 
+            $this->getWorkspace(), 
+            $this->determineCategoryIdentifier(), 
+            $this->getFile(), 
             $this->getFormValues());
     }
 }

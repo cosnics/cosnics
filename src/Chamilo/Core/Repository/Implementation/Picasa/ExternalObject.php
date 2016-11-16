@@ -20,18 +20,18 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_URLS,
-                self :: PROPERTY_LICENSE,
-                self :: PROPERTY_OWNER,
-                self :: PROPERTY_TAGS,
-                self :: PROPERTY_ALBUM_ID));
+                self::PROPERTY_URLS, 
+                self::PROPERTY_LICENSE, 
+                self::PROPERTY_OWNER, 
+                self::PROPERTY_TAGS, 
+                self::PROPERTY_ALBUM_ID));
     }
 
     public static function get_default_sizes()
     {
-        return array(self :: SIZE_THUMBNAIL, self :: SIZE_MEDIUM, self :: SIZE_ORIGINAL);
+        return array(self::SIZE_THUMBNAIL, self::SIZE_MEDIUM, self::SIZE_ORIGINAL);
     }
 
     public function get_available_sizes()
@@ -43,30 +43,30 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     {
         $available_sizes = $this->get_available_sizes();
         $html = array();
-
+        
         foreach ($available_sizes as $available_size)
         {
-            $html[] = '<a href="' . $this->get_url($available_size) . '">' . Translation :: get(
-                (string) StringUtilities :: getInstance()->createString($available_size)->upperCamelize()) . ' (' .
+            $html[] = '<a href="' . $this->get_url($available_size) . '">' . Translation::get(
+                (string) StringUtilities::getInstance()->createString($available_size)->upperCamelize()) . ' (' .
                  $this->get_available_size_dimensions_string($available_size) . ')</a>';
         }
-
+        
         return implode('<br />' . "\n", $html);
     }
 
     public function get_available_size_dimensions($size = self :: SIZE_MEDIUM)
     {
-        if (! in_array($size, self :: get_default_sizes()))
+        if (! in_array($size, self::get_default_sizes()))
         {
-            $size = self :: SIZE_MEDIUM;
+            $size = self::SIZE_MEDIUM;
         }
-
+        
         if (! in_array($size, $this->get_available_sizes()))
         {
             $sizes = $this->get_available_sizes();
             $size = $sizes[0];
         }
-
+        
         $urls = $this->get_urls();
         return array('width' => $urls[$size]['width'], 'height' => $urls[$size]['height']);
     }
@@ -74,40 +74,40 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_available_size_dimensions_string($size = self :: SIZE_MEDIUM)
     {
         $available_size_dimensions = $this->get_available_size_dimensions($size);
-
+        
         return $available_size_dimensions['width'] . ' x ' . $available_size_dimensions['height'];
     }
 
     public function get_urls()
     {
-        return $this->get_default_property(self :: PROPERTY_URLS);
+        return $this->get_default_property(self::PROPERTY_URLS);
     }
 
     public function set_urls($urls)
     {
-        return $this->set_default_property(self :: PROPERTY_URLS, $urls);
+        return $this->set_default_property(self::PROPERTY_URLS, $urls);
     }
 
     public function get_url($size = self :: SIZE_MEDIUM)
     {
-        if (! in_array($size, self :: get_default_sizes()))
+        if (! in_array($size, self::get_default_sizes()))
         {
-            $size = self :: SIZE_MEDIUM;
+            $size = self::SIZE_MEDIUM;
         }
-
+        
         if (! in_array($size, $this->get_available_sizes()))
         {
             $sizes = $this->get_available_sizes();
             $size = $sizes[0];
         }
-
+        
         $urls = $this->get_urls();
         return $urls[$size]['source'];
     }
 
     public function get_license()
     {
-        return $this->get_default_property(self :: PROPERTY_LICENSE);
+        return $this->get_default_property(self::PROPERTY_LICENSE);
     }
 
     public function get_license_id()
@@ -142,27 +142,27 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_license_icon()
     {
-        return Theme :: getInstance()->getCommonImage(
-            'Chamilo/Core/Repository/Implementation/Picasa/Licenses/License' . $this->get_license_id(),
-            'png',
-            $this->get_license_name(),
-            $this->get_license_url(),
-            ToolbarItem :: DISPLAY_ICON);
+        return Theme::getInstance()->getCommonImage(
+            'Chamilo/Core/Repository/Implementation/Picasa/Licenses/License' . $this->get_license_id(), 
+            'png', 
+            $this->get_license_name(), 
+            $this->get_license_url(), 
+            ToolbarItem::DISPLAY_ICON);
     }
 
     public function set_license($license)
     {
-        return $this->set_default_property(self :: PROPERTY_LICENSE, $license);
+        return $this->set_default_property(self::PROPERTY_LICENSE, $license);
     }
 
     public function get_owner()
     {
-        return $this->get_default_property(self :: PROPERTY_OWNER);
+        return $this->get_default_property(self::PROPERTY_OWNER);
     }
 
     public function set_owner($owner)
     {
-        return $this->set_default_property(self :: PROPERTY_OWNER, $owner);
+        return $this->set_default_property(self::PROPERTY_OWNER, $owner);
     }
 
     public function get_owner_string()
@@ -175,12 +175,12 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_tags()
     {
-        return $this->get_default_property(self :: PROPERTY_TAGS);
+        return $this->get_default_property(self::PROPERTY_TAGS);
     }
 
     public function set_tags($tags)
     {
-        return $this->set_default_property(self :: PROPERTY_TAGS, $tags);
+        return $this->set_default_property(self::PROPERTY_TAGS, $tags);
     }
 
     public function get_tags_string()
@@ -190,16 +190,16 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_album_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ALBUM_ID);
+        return $this->get_default_property(self::PROPERTY_ALBUM_ID);
     }
 
     public function set_album_id($album_id)
     {
-        return $this->set_default_property(self :: PROPERTY_ALBUM_ID, $album_id);
+        return $this->set_default_property(self::PROPERTY_ALBUM_ID, $album_id);
     }
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 }

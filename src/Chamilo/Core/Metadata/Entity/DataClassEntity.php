@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 abstract class DataClassEntity implements EntityInterface
 {
     const INSTANCE_IDENTIFIER = 0;
-
+    
     // Properties
     const PROPERTY_TYPE = 'type';
     const PROPERTY_IDENTIFIER = 'id';
@@ -96,7 +96,7 @@ abstract class DataClassEntity implements EntityInterface
         {
             $this->dataClass = $this->getDataClassObject($this->dataClassName, $this->dataClassIdentifier);
         }
-
+        
         return $this->dataClass;
     }
 
@@ -108,7 +108,7 @@ abstract class DataClassEntity implements EntityInterface
      */
     public function getDataClassObject($dataClassName, $dataClassIdentifier)
     {
-        return DataManager :: retrieve_by_id($dataClassName, $dataClassIdentifier);
+        return DataManager::retrieve_by_id($dataClassName, $dataClassIdentifier);
     }
 
     /**
@@ -127,7 +127,7 @@ abstract class DataClassEntity implements EntityInterface
     public function isDataClassIdentified()
     {
         return ! is_null($this->getDataClassIdentifier()) &&
-             $this->getDataClassIdentifier() != self :: INSTANCE_IDENTIFIER;
+             $this->getDataClassIdentifier() != self::INSTANCE_IDENTIFIER;
     }
 
     /**
@@ -158,7 +158,7 @@ abstract class DataClassEntity implements EntityInterface
     public function getName()
     {
         $dataClass = $this->getDataClass();
-
+        
         if ($dataClass instanceof DataClass)
         {
             return $this->getDisplayName();
@@ -173,8 +173,8 @@ abstract class DataClassEntity implements EntityInterface
     {
         return serialize(
             array(
-                self :: PROPERTY_TYPE => $this->getDataClassName(),
-                self :: PROPERTY_IDENTIFIER => $this->getDataClassIdentifier()));
+                self::PROPERTY_TYPE => $this->getDataClassName(), 
+                self::PROPERTY_IDENTIFIER => $this->getDataClassIdentifier()));
     }
 
     /**

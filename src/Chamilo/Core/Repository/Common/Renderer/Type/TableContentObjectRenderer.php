@@ -15,12 +15,12 @@ class TableContentObjectRenderer extends ContentObjectRenderer
      */
     public function as_html()
     {
-        $class = RepositoryTable :: class_name(false);
+        $class = RepositoryTable::class_name(false);
         
         if ($this->get_repository_browser()->has_filter_type())
         {
             $filter_type = $this->get_repository_browser()->get_filter_type();
-            $template_registration = \Chamilo\Core\Repository\Configuration :: registration_by_id($filter_type);
+            $template_registration = \Chamilo\Core\Repository\Configuration::registration_by_id($filter_type);
             
             $classname = $template_registration->get_content_object_type() . '\\' . $class;
             if (! class_exists($classname))
@@ -30,7 +30,7 @@ class TableContentObjectRenderer extends ContentObjectRenderer
         }
         else
         {
-            $classname = Manager :: package() . '\Table\ContentObject\Table\\' . $class;
+            $classname = Manager::package() . '\Table\ContentObject\Table\\' . $class;
         }
         
         $table = new $classname($this, $this->get_parameters(), $this->get_condition());

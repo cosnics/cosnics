@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Platform\Translation;
 
-class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface,
+class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Block implements ConfigurableInterface, 
     StaticBlockTitleInterface, ContentObjectPublicationBlockInterface
 {
 
@@ -23,12 +23,10 @@ class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\B
      * @param int $source
      * @param string $defaultTitle
      */
-    public function __construct(
-        Application $application, HomeService $homeService, Block $block, $source = self::SOURCE_DEFAULT,
-        $defaultTitle = ''
-    )
+    public function __construct(Application $application, HomeService $homeService, Block $block, 
+        $source = self::SOURCE_DEFAULT, $defaultTitle = '')
     {
-        parent:: __construct($application, $homeService, $block, $source, Translation:: get('Displayer'));
+        parent::__construct($application, $homeService, $block, $source, Translation::get('Displayer'));
     }
 
     public function isVisible()
@@ -39,14 +37,13 @@ class Displayer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\B
     public function displayContent()
     {
         $content_object = $this->getObject();
-
-        $display = ContentObjectRenditionImplementation:: factory(
-            $content_object,
-            ContentObjectRendition :: FORMAT_HTML,
-            ContentObjectRendition :: VIEW_DESCRIPTION,
-            $this
-        );
-
+        
+        $display = ContentObjectRenditionImplementation::factory(
+            $content_object, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_DESCRIPTION, 
+            $this);
+        
         return $display->render();
     }
 }

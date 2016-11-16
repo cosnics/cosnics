@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Core\Repository\Implementation\Bitbucket\DataConnector;
+
 /**
  * Description of mediamosa_rest_clientclass
- *
+ * 
  * @author jevdheyd
  */
 class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\RestClient
@@ -19,8 +20,8 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
 
     public function __construct($bitbucket_url)
     {
-        parent :: __construct();
-
+        parent::__construct();
+        
         $this->bitbucket_url = $bitbucket_url;
     }
 
@@ -29,13 +30,13 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
         if (is_array($data))
         {
             $tmp = array();
-
+            
             foreach ($data as $key => $value)
             {
                 if (is_array($value))
                 {
                     $subtmp = array();
-
+                    
                     foreach ($value as $subkey => $subvalue)
                     {
                         $tmp[] = $key . '[]' . '=' . $subvalue;
@@ -57,28 +58,28 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
     public function request($method, $url, $data = null, $response_type = self :: RESPONSE_TYPE_XML)
     {
         $this->set_http_method($method);
-
+        
         $this->set_data_to_send('');
-
+        
         // different method need different handling of data
-        if (($method == self :: METHOD_POST) || ($method == self :: METHOD_PUT) || ($method == self :: METHOD_DELETE))
+        if (($method == self::METHOD_POST) || ($method == self::METHOD_PUT) || ($method == self::METHOD_DELETE))
         {
             // if (is_array($data))
             $this->set_data_to_send($data);
             $url = $this->bitbucket_url . $url;
         }
-        elseif ($method == self :: METHOD_GET)
+        elseif ($method == self::METHOD_GET)
         {
             if (is_array($data))
             {
                 $tmp = array();
-
+                
                 foreach ($data as $key => $value)
                 {
                     if (is_array($value))
                     {
                         $subtmp = array();
-
+                        
                         foreach ($value as $subkey => $subvalue)
                         {
                             $tmp[] = $key . '[]' . '=' . $subvalue;
@@ -89,21 +90,21 @@ class RestClient extends \Chamilo\Libraries\Protocol\Webservice\Rest\Client\Rest
                         $tmp[] = $key . '=' . $value;
                     }
                 }
-
+                
                 $get_string = implode('&', $tmp);
                 $url .= '?' . $get_string;
             }
             $url = $this->bitbucket_url . $url;
         }
-
+        
         $this->set_url($url);
-
+        
         $response = $this->send_request();
-        if ($response_type == self :: RESPONSE_TYPE_XML)
+        if ($response_type == self::RESPONSE_TYPE_XML)
         {
             $response->set_response_content_xml();
         }
-
+        
         return $response;
     }
 }

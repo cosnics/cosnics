@@ -24,11 +24,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
-        $this->username = Setting :: get('username', $this->get_external_repository_instance_id());
-        $password = Setting :: get('password', $this->get_external_repository_instance_id());
-        $this->bitbucket = RestClient :: factory('https://api.bitbucket.org/1.0/');
-        $authentication = RestAuthentication :: factory($this->bitbucket, RestAuthentication :: TYPE_BASIC);
+        parent::__construct($external_repository_instance);
+        $this->username = Setting::get('username', $this->get_external_repository_instance_id());
+        $password = Setting::get('password', $this->get_external_repository_instance_id());
+        $this->bitbucket = RestClient::factory('https://api.bitbucket.org/1.0/');
+        $authentication = RestAuthentication::factory($this->bitbucket, RestAuthentication::TYPE_BASIC);
         $authentication->set_login($this->username);
         $authentication->set_password($password);
         
@@ -39,7 +39,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $repositories = $this->retrieve_bitbuckets($condition, $order_property, $offset, $count);
         $repositories = array_slice($repositories, $offset, $count);
-        $repository_type = Request :: get(Manager :: PARAM_FOLDER);
+        $repository_type = Request::get(Manager::PARAM_FOLDER);
         
         $bitbucket_repositories = array();
         foreach ($repositories as $repository)
@@ -47,11 +47,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $bitbucket_repository = $this->set_bitbucket_object($repository);
             switch ($repository_type)
             {
-                case Manager :: TYPE_OTHER :
+                case Manager::TYPE_OTHER :
                     $bitbucket_repository->set_id($repository->owner . '/' . $repository->slug);
                     $bitbucket_repository->set_owner_id($repository->owner);
                     break;
-                case Manager :: TYPE_OWN :
+                case Manager::TYPE_OWN :
                     $bitbucket_repository->set_id($this->username . '/' . $repository->slug);
                     $bitbucket_repository->set_owner_id($this->username);
                     break;
@@ -70,21 +70,21 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         // $response = $this->bitbucket->request(BitbucketRestClient :: METHOD_GET, 'repositories/' . $id . '/');
         $endpoint = 'repositories/' . $id . '/';
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
         $response = $this->bitbucket->request();
         
         $repository = $response->get_response_content();
         
         $bitbucket_repository = new ExternalObject();
         
-        $repository_type = Request :: get(Manager :: PARAM_FOLDER);
+        $repository_type = Request::get(Manager::PARAM_FOLDER);
         switch ($repository_type)
         {
-            case Manager :: TYPE_OTHER :
+            case Manager::TYPE_OTHER :
                 $bitbucket_repository->set_id($repository->owner . '/' . $repository->slug);
                 $bitbucket_repository->set_owner_id($repository->owner);
                 break;
-            case Manager :: TYPE_OWN :
+            case Manager::TYPE_OWN :
                 $bitbucket_repository->set_id($this->username . '/' . $repository->slug);
                 $bitbucket_repository->set_owner_id($this->username);
                 break;
@@ -108,26 +108,26 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function retrieve_bitbuckets($condition = null, $order_property, $offset, $count)
     {
-        $repository_type = Request :: get(Manager :: PARAM_FOLDER);
+        $repository_type = Request::get(Manager::PARAM_FOLDER);
         
         switch ($repository_type)
         {
-            case Manager :: TYPE_OTHER :
-                $this->bitbucket->configure(RestClient :: METHOD_GET, 'repositories/?name=', $condition);
+            case Manager::TYPE_OTHER :
+                $this->bitbucket->configure(RestClient::METHOD_GET, 'repositories/?name=', $condition);
                 $response = $this->bitbucket->request();
                 $response = $response->get_response_content();
                 $repositories = $response->repositories;
                 break;
-            case Manager :: TYPE_OWN :
+            case Manager::TYPE_OWN :
                 $endpoint = 'users/' . $this->username . '/';
-                $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+                $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
                 $response = $this->bitbucket->request();
                 $response = $response->get_response_content();
                 $repositories = $response->repositories;
                 break;
             default :
                 $endpoint = 'users/' . $this->username . '/';
-                $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+                $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
                 $response = $this->bitbucket->request();
                 $response = $response->get_response_content();
                 $repositories = $response->repositories;
@@ -153,11 +153,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_tags($id)
     {
         $endpoint = 'repositories/' . $id . '/tags/';
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
         $response = $this->bitbucket->request();
         $tags = $response->get_response_content();
         $reflect = new ReflectionObject($tags);
-        $properties = $reflect->getProperties(ReflectionProperty :: IS_PUBLIC);
+        $properties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
         
         $bitbucket_tags = array();
         foreach ($properties as $property)
@@ -184,7 +184,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_branches($id)
     {
         $endpoint = 'repositories/' . $id . '/branches/';
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
         $response = $this->bitbucket->request();
         $branches = $response->get_response_content();
         $reflect = new ReflectionObject($branches);
@@ -200,7 +200,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_changesets($id, $limit = 5)
     {
         $endpoint = 'repositories/' . $id . '/changesets/?limit=' . $limit;
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
         $response = $this->bitbucket->request();
         $changesets = $response->get_response_content();
         $bitbucket_changesets = array();
@@ -222,7 +222,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_privileges($id)
     {
         $endpoint = 'privileges/' . $id . '/';
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
         $response = $this->bitbucket->request();
         $privileges = $response->get_response_content();
         
@@ -244,7 +244,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_groups_privileges($id)
     {
         $endpoint = 'group-privileges/' . $id . '/';
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
         $response = $this->bitbucket->request();
         $privileges = $response->get_response_content();
         
@@ -266,7 +266,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_groups($id)
     {
         $endpoint = 'groups/' . $id . '/';
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint);
         $response = $this->bitbucket->request();
         
         $groups = $response->get_response_content();
@@ -296,7 +296,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $url = 'privileges/' . $id;
         }
         
-        $this->bitbucket->configure(RestClient :: METHOD_DELETE, $url);
+        $this->bitbucket->configure(RestClient::METHOD_DELETE, $url);
         $response = $this->bitbucket->request();
         if ($response->get_response_code() == 204)
         {
@@ -313,7 +313,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if ($group)
         {
             $url = 'group-privileges/' . $id . '/' . $group;
-            $this->bitbucket->configure(RestClient :: METHOD_DELETE, $url);
+            $this->bitbucket->configure(RestClient::METHOD_DELETE, $url);
             $response = $this->bitbucket->request();
             if ($response->get_response_code() == 204)
             {
@@ -330,7 +330,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             foreach ($groups as $group)
             {
                 $url = 'group-privileges/' . $id . '/' . $group->get_owner_username() . '/' . $group->get_group();
-                $this->bitbucket->configure(RestClient :: METHOD_DELETE, $url);
+                $this->bitbucket->configure(RestClient::METHOD_DELETE, $url);
                 $response = $this->bitbucket->request();
                 if ($response->get_response_code() !== 204)
                 {
@@ -346,7 +346,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if ($group)
         {
             $url = 'groups/' . $group;
-            $this->bitbucket->configure(RestClient :: METHOD_DELETE, $url);
+            $this->bitbucket->configure(RestClient::METHOD_DELETE, $url);
             $response = $this->bitbucket->request();
             if ($response->get_response_code() == 204)
             {
@@ -367,22 +367,22 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $url = 'groups/' . $this->username;
         $this->bitbucket->configure(
-            RestClient :: METHOD_POST, 
+            RestClient::METHOD_POST, 
             $url, 
             array(), 
-            RestData :: factory(
-                RestData :: TYPE_URL, 
+            RestData::factory(
+                RestData::TYPE_URL, 
                 array('auto_add' => true, 'permission' => $permission, 'name' => $name)));
         $response = $this->bitbucket->request();
         if ($response->get_response_code() == 200)
         {
             $url = 'groups/' . $this->username . '/' . rawurlencode($name);
             $this->bitbucket->configure(
-                RestClient :: METHOD_PUT, 
+                RestClient::METHOD_PUT, 
                 $url, 
                 array(), 
-                RestData :: factory(
-                    RestData :: TYPE_FORM, 
+                RestData::factory(
+                    RestData::TYPE_FORM, 
                     array('name' => $name, 'permission' => $permission, 'auto_add' => true)));
             $response = $this->bitbucket->request();
             if ($response->get_response_code() == 200)
@@ -404,11 +404,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $endpoint = 'repositories/';
         $this->bitbucket->configure(
-            RestClient :: METHOD_POST, 
+            RestClient::METHOD_POST, 
             $endpoint, 
             array(), 
-            RestData :: factory(
-                RestData :: TYPE_FORM, 
+            RestData::factory(
+                RestData::TYPE_FORM, 
                 array(
                     'name' => $values['name'], 
                     'website' => $values['website'], 
@@ -429,10 +429,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $endpoint = 'groups/' . $group . '/members/' . $user . '/';
         $this->bitbucket->configure(
-            RestClient :: METHOD_PUT, 
+            RestClient::METHOD_PUT, 
             $endpoint, 
             array(), 
-            RestData :: factory(RestData :: TYPE_PLAIN, ''));
+            RestData::factory(RestData::TYPE_PLAIN, ''));
         $response = $this->bitbucket->request();
         if ($response->get_response_code() != 200)
         {
@@ -448,10 +448,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $endpoint = 'privileges/' . $id . '/' . $users;
         $this->bitbucket->configure(
-            RestClient :: METHOD_PUT, 
+            RestClient::METHOD_PUT, 
             $endpoint, 
             array(), 
-            RestData :: factory(RestData :: TYPE_PLAIN, $privilege));
+            RestData::factory(RestData::TYPE_PLAIN, $privilege));
         $response = $this->bitbucket->request();
         if ($response->get_response_code() == 401 || $response->get_response_code() == 403 ||
              $response->get_response_code() == 404)
@@ -468,10 +468,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $endpoint = 'group-privileges/' . $id . '/' . $group;
         $this->bitbucket->configure(
-            RestClient :: METHOD_PUT, 
+            RestClient::METHOD_PUT, 
             $endpoint, 
             array(), 
-            RestData :: factory(RestData :: TYPE_PLAIN, $privilege));
+            RestData::factory(RestData::TYPE_PLAIN, $privilege));
         $response = $this->bitbucket->request();
         if ($response->get_response_code() == 401 || $response->get_response_code() == 403 ||
              $response->get_response_code() == 404)
@@ -487,7 +487,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_users_from_group($group)
     {
         $endpoint = 'groups/' . $group . '/members/';
-        $this->bitbucket->configure(RestClient :: METHOD_GET, $endpoint/*, array(), RestData :: factory(RestData :: TYPE_PLAIN, '')*/);
+        $this->bitbucket->configure(RestClient::METHOD_GET, $endpoint/*, array(), RestData :: factory(RestData :: TYPE_PLAIN, '')*/);
         $response = $this->bitbucket->request();
         if ($response->get_response_code() != 200)
         {
@@ -510,10 +510,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $endpoint = 'groups/' . $group . '/members/' . $user . '/';
         $this->bitbucket->configure(
-            RestClient :: METHOD_DELETE, 
+            RestClient::METHOD_DELETE, 
             $endpoint, 
             array(), 
-            RestData :: factory(RestData :: TYPE_PLAIN, ''));
+            RestData::factory(RestData::TYPE_PLAIN, ''));
         $response = $this->bitbucket->request();
         
         if ($response->get_response_code() != 204)
@@ -530,11 +530,11 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $endpoint = 'repositories/' . $values['id'];
         $this->bitbucket->configure(
-            RestClient :: METHOD_PUT, 
+            RestClient::METHOD_PUT, 
             $endpoint, 
             array(), 
-            RestData :: factory(
-                RestData :: TYPE_FORM, 
+            RestData::factory(
+                RestData::TYPE_FORM, 
                 array(
                     'name' => $values['name'], 
                     'website' => $values['website'], 
@@ -559,7 +559,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function delete_external_repository_object($id)
     {
         $endpoint = 'repositories/' . $id . '/';
-        $this->bitbucket->configure(RestClient :: METHOD_DELETE, $endpoint);
+        $this->bitbucket->configure(RestClient::METHOD_DELETE, $endpoint);
         $response = $this->bitbucket->request();
         if ($response->get_response_code() == 401 || $response->get_response_code() == 403 ||
              $response->get_response_code() == 404)
@@ -583,17 +583,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if ($bitbucket->get_owner_id() == $this->username)
         {
             
-            $rights[ExternalObject :: RIGHT_USE] = true;
-            $rights[ExternalObject :: RIGHT_EDIT] = true;
-            $rights[ExternalObject :: RIGHT_DELETE] = true;
-            $rights[ExternalObject :: RIGHT_DOWNLOAD] = true;
+            $rights[ExternalObject::RIGHT_USE] = true;
+            $rights[ExternalObject::RIGHT_EDIT] = true;
+            $rights[ExternalObject::RIGHT_DELETE] = true;
+            $rights[ExternalObject::RIGHT_DOWNLOAD] = true;
         }
         else
         {
-            $rights[ExternalObject :: RIGHT_USE] = true;
-            $rights[ExternalObject :: RIGHT_EDIT] = false;
-            $rights[ExternalObject :: RIGHT_DELETE] = false;
-            $rights[ExternalObject :: RIGHT_DOWNLOAD] = false;
+            $rights[ExternalObject::RIGHT_USE] = true;
+            $rights[ExternalObject::RIGHT_EDIT] = false;
+            $rights[ExternalObject::RIGHT_DELETE] = false;
+            $rights[ExternalObject::RIGHT_DOWNLOAD] = false;
         }
         return $rights;
     }
@@ -612,10 +612,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $endpoint = 'repositories/' . $repository_id . '/services/';
         $this->bitbucket->configure(
-            RestClient :: METHOD_POST, 
+            RestClient::METHOD_POST, 
             $endpoint, 
             array(), 
-            RestData :: factory(RestData :: TYPE_FORM, $service_configuration));
+            RestData::factory(RestData::TYPE_FORM, $service_configuration));
         $response = $this->bitbucket->request();
         if ($response->get_response_code() != 200)
         {

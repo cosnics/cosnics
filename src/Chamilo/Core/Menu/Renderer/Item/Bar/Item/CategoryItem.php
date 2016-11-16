@@ -42,7 +42,7 @@ class CategoryItem extends Bar
         if (! isset($this->isItemSelected))
         {
             $this->isItemSelected = false;
-
+            
             foreach ($this->getChildren() as $child)
             {
                 if ($this->getItemRenderer($this->getMenuRenderer(), $child, $this)->isItemSelected())
@@ -52,34 +52,34 @@ class CategoryItem extends Bar
                 }
             }
         }
-
+        
         return $this->isItemSelected;
     }
 
     public function render()
     {
         $html = array();
-
+        
         $sub_html = array();
         $selected = $this->isSelected();
-
+        
         if ($this->getItem()->has_children())
         {
             $sub_html[] = '<ul class="dropdown-menu">';
-
+            
             $entities = array();
             $entities[] = new UserEntity();
             $entities[] = new PlatformGroupEntity();
-
+            
             foreach ($this->getChildren() as $child)
             {
-                if (($child->get_id() && Rights :: getInstance()->is_allowed(
-                    Rights :: VIEW_RIGHT,
-                    Manager :: context(),
-                    null,
-                    $entities,
-                    $child->get_id(),
-                    Rights :: TYPE_ITEM)) || ! $child->get_id())
+                if (($child->get_id() && Rights::getInstance()->is_allowed(
+                    Rights::VIEW_RIGHT, 
+                    Manager::context(), 
+                    null, 
+                    $entities, 
+                    $child->get_id(), 
+                    Rights::TYPE_ITEM)) || ! $child->get_id())
                 {
                     if (! $child->is_hidden())
                     {
@@ -87,39 +87,38 @@ class CategoryItem extends Bar
                     }
                 }
             }
-
+            
             $sub_html[] = '</ul>';
         }
-
-        $title = $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode());
-
+        
+        $title = $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode());
+        
         $html[] = '<li class="dropdown' . ($selected ? ' active' : '') . '">';
         $html[] = '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">';
-
+        
         if ($this->getItem()->show_icon())
         {
-            $imagePath = Theme :: getInstance()->getImagePath(
-                Manager :: context(),
+            $imagePath = Theme::getInstance()->getImagePath(
+                Manager::context(), 
                 'Menu/Folder' . ($selected ? 'Selected' : ''));
-
+            
             $html[] = '<img class="chamilo-menu-item-icon' .
-                ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') .
-                '" src="' . $imagePath . '" title="' . htmlentities($title) . '" alt="' .
-                 $title . '" />';
+                 ($this->getItem()->show_title() ? ' chamilo-menu-item-image-with-label' : '') . '" src="' . $imagePath .
+                 '" title="' . htmlentities($title) . '" alt="' . $title . '" />';
         }
-
+        
         if ($this->getItem()->show_title())
         {
             $html[] = '<div class="chamilo-menu-item-label' .
                  ($this->getItem()->show_icon() ? ' chamilo-menu-item-label-with-image' : '') . '">' . $title . '</div>';
         }
-
+        
         $html[] = '<div class="clearfix"></div>';
         $html[] = '</a>';
         $html[] = implode(PHP_EOL, $sub_html);
-
+        
         $html[] = '</li>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -129,14 +128,14 @@ class CategoryItem extends Bar
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @return \Chamilo\Core\Menu\Renderer\Item\Bar\Bar
      */
-    public function getItemRenderer(\Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer, Item $item,
+    public function getItemRenderer(\Chamilo\Core\Menu\Renderer\Menu\Renderer $menuRenderer, Item $item, 
         \Chamilo\Core\Menu\Renderer\Item\Bar\Bar $parentRenderer)
     {
         if (! isset($this->itemRenderers[$item->get_id()]))
         {
-            $this->itemRenderers[$item->get_id()] = Renderer :: factory($menuRenderer, $item, $parentRenderer);
+            $this->itemRenderers[$item->get_id()] = Renderer::factory($menuRenderer, $item, $parentRenderer);
         }
-
+        
         return $this->itemRenderers[$item->get_id()];
     }
 

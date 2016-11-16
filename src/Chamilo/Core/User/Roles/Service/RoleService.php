@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Roles\Service;
 
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
@@ -10,19 +9,21 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Manages roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class RoleService implements RoleServiceInterface
 {
+
     /**
+     *
      * @var RoleRepositoryInterface
      */
     protected $roleRepository;
 
     /**
      * RoleService constructor.
-     *
+     * 
      * @param RoleRepositoryInterface $roleRepository
      */
     public function __construct(RoleRepositoryInterface $roleRepository)
@@ -32,7 +33,7 @@ class RoleService implements RoleServiceInterface
 
     /**
      * Creates a role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -43,25 +44,25 @@ class RoleService implements RoleServiceInterface
     {
         $role = new Role();
         $role->setRole($roleName);
-
-        if (!$role->create())
+        
+        if (! $role->create())
         {
             throw new \Exception('The role with name ' . $roleName . ' could not be created');
         }
-
+        
         return $role;
     }
 
     /**
      * Deletes a given role
-     *
+     * 
      * @param Role $role
      *
      * @throws \Exception
      */
     public function deleteRole(Role $role)
     {
-        if(!$role->delete())
+        if (! $role->delete())
         {
             $roleName = $role->getRole();
             throw new \Exception('The role with name ' . $roleName . ' could not be deleted');
@@ -70,7 +71,7 @@ class RoleService implements RoleServiceInterface
 
     /**
      * Returns a role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -80,17 +81,17 @@ class RoleService implements RoleServiceInterface
     public function getRoleByName($roleName)
     {
         $role = $this->roleRepository->findRoleByName($roleName);
-        if(!$role instanceof Role)
+        if (! $role instanceof Role)
         {
             throw new \Exception('Role not found by given name ' . $roleName);
         }
-
+        
         return $role;
     }
 
     /**
      * Either retrieves or creates a new role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -101,18 +102,18 @@ class RoleService implements RoleServiceInterface
         {
             return $this->getRoleByName($roleName);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             $role = $this->createRoleByName($roleName);
             DataClassCache::truncate(Role::class_name());
-
+            
             return $role;
         }
     }
 
     /**
      * Retrieves the roles
-     *
+     * 
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -127,7 +128,7 @@ class RoleService implements RoleServiceInterface
 
     /**
      * Counts the roles
-     *
+     * 
      * @param Condition $condition
      *
      * @return int

@@ -18,17 +18,17 @@ class ComplexMultipleChoice extends ComplexContentObjectItem implements PageDisp
 
     static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_VISIBLE);
+        return array(self::PROPERTY_VISIBLE);
     }
 
     function get_visible()
     {
-        return $this->get_additional_property(self :: PROPERTY_VISIBLE);
+        return $this->get_additional_property(self::PROPERTY_VISIBLE);
     }
 
     function set_visible($value)
     {
-        $this->set_additional_property(self :: PROPERTY_VISIBLE, $value);
+        $this->set_additional_property(self::PROPERTY_VISIBLE, $value);
     }
 
     function is_visible()
@@ -54,8 +54,8 @@ class ComplexMultipleChoice extends ComplexContentObjectItem implements PageDisp
             $answerId = $this->getId();
         }
         
-        if ($this->get_ref_object()->get_display_type() == MultipleChoice :: DISPLAY_TYPE_TABLE &&
-             $this->get_ref_object()->get_answer_type() == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
+        if ($this->get_ref_object()->get_display_type() == MultipleChoice::DISPLAY_TYPE_TABLE &&
+             $this->get_ref_object()->get_answer_type() == MultipleChoice::ANSWER_TYPE_CHECKBOX)
         {
             foreach ($this->get_ref_object()->get_options() as $option)
             {
@@ -74,20 +74,20 @@ class ComplexMultipleChoice extends ComplexContentObjectItem implements PageDisp
     {
         $attributes = array();
         $question = $this->get_ref_object();
-        if ($question->get_display_type() == MultipleChoice :: DISPLAY_TYPE_SELECT)
+        if ($question->get_display_type() == MultipleChoice::DISPLAY_TYPE_SELECT)
         {
-            if ($question->get_answer_type() == MultipleChoice :: ANSWER_TYPE_CHECKBOX)
+            if ($question->get_answer_type() == MultipleChoice::ANSWER_TYPE_CHECKBOX)
             {
-                $attributes[self :: DATA_DISPLAY_TYPE] = 'mcspecial';
+                $attributes[self::DATA_DISPLAY_TYPE] = 'mcspecial';
             }
             else
             {
-                $attributes[self :: DATA_DISPLAY_TYPE] = 'mcnormal';
+                $attributes[self::DATA_DISPLAY_TYPE] = 'mcnormal';
             }
         }
         else
         {
-            $attributes[self :: DATA_DISPLAY_TYPE] = 'mcnormal';
+            $attributes[self::DATA_DISPLAY_TYPE] = 'mcnormal';
         }
         
         return $attributes;

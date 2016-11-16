@@ -37,59 +37,59 @@ class PublisherComponent extends Manager
     {
         if (! $this->getCurrentWorkspace() instanceof Workspace)
         {
-            throw new \Exception(Translation :: get('NoValidWorkspace'));
+            throw new \Exception(Translation::get('NoValidWorkspace'));
         }
-
-        if (! RightsService :: getInstance()->canAddContentObjects($this->get_user(), $this->getCurrentWorkspace()))
+        
+        if (! RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getCurrentWorkspace()))
         {
             throw new NotAllowedException();
         }
-
-        if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
+        
+        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $this->getRequest()->query->set(
-                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ACTION,
-                \Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER);
-
+                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION, 
+                \Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER);
+            
             $applicationConfiguration = new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this);
-            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager :: SETTING_TABS_DISABLED, true);
-
+            $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
+            
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager :: context(),
+                \Chamilo\Core\Repository\Viewer\Manager::context(), 
                 $applicationConfiguration);
-
+            
             $component = $factory->getComponent();
             $component->set_excluded_objects($this->getExcludedObjects());
-            $component->set_actions(array(\Chamilo\Core\Repository\Viewer\Manager :: ACTION_BROWSER));
-
+            $component->set_actions(array(\Chamilo\Core\Repository\Viewer\Manager::ACTION_BROWSER));
+            
             return $component->run();
         }
         else
         {
-            $selectedContentObjectIdentifiers = (array) \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
-
-            $parentId = $this->getRequest()->get(FilterData :: FILTER_CATEGORY);
+            $selectedContentObjectIdentifiers = (array) \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            
+            $parentId = $this->getRequest()->get(FilterData::FILTER_CATEGORY);
             $parentId = $parentId ? $parentId : 0;
-
+            
             foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {
-                $contentObject = DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
+                $contentObject = DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
                     $selectedContentObjectIdentifier);
-
+                
                 $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
                 $contentObjectRelationService->createContentObjectRelation(
-                    $this->getCurrentWorkspace()->getId(),
-                    $contentObject->get_object_number(),
+                    $this->getCurrentWorkspace()->getId(), 
+                    $contentObject->get_object_number(), 
                     $parentId);
             }
-
+            
             $this->redirect(
-                Translation :: get('ContentObjectsAddedToWorkspace'),
-                false,
+                Translation::get('ContentObjectsAddedToWorkspace'), 
+                false, 
                 array(
-                    \Chamilo\Core\Repository\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Manager :: ACTION_BROWSE_CONTENT_OBJECTS,
-                    self :: PARAM_ACTION => null));
+                    \Chamilo\Core\Repository\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS, 
+                    self::PARAM_ACTION => null));
         }
     }
 
@@ -99,40 +99,40 @@ class PublisherComponent extends Manager
      */
     public function get_allowed_content_object_types()
     {
-        $registrations = Configuration :: registrations_by_type('Chamilo\Core\Repository\ContentObject');
-
+        $registrations = Configuration::registrations_by_type('Chamilo\Core\Repository\ContentObject');
+        
         foreach ($registrations as $registration)
         {
-            $namespace = $registration[Registration :: PROPERTY_CONTEXT];
+            $namespace = $registration[Registration::PROPERTY_CONTEXT];
             $types[] = $namespace . '\Storage\DataClass\\' .
-                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
         }
-
+        
         return $types;
     }
-
+    
     // TODO: This should return ALL ids of ALL content object ids attached to the object numbers
     public function getExcludedObjects()
     {
         $workspace = $this->get_application()->getWorkspace();
-
+        
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                WorkspaceContentObjectRelation :: class_name(),
-                WorkspaceContentObjectRelation :: PROPERTY_WORKSPACE_ID),
+                WorkspaceContentObjectRelation::class_name(), 
+                WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID), 
             new StaticConditionVariable($workspace->getId()));
-
-        $contentObjectNumbers = DataManager :: distinct(
-            WorkspaceContentObjectRelation :: class_name(),
-            new DataClassDistinctParameters($condition, WorkspaceContentObjectRelation :: PROPERTY_CONTENT_OBJECT_ID));
-
-        return DataManager :: distinct(
-            ContentObject :: class_name(),
+        
+        $contentObjectNumbers = DataManager::distinct(
+            WorkspaceContentObjectRelation::class_name(), 
+            new DataClassDistinctParameters($condition, WorkspaceContentObjectRelation::PROPERTY_CONTENT_OBJECT_ID));
+        
+        return DataManager::distinct(
+            ContentObject::class_name(), 
             new DataClassDistinctParameters(
                 new InCondition(
-                    new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_OBJECT_NUMBER),
-                    $contentObjectNumbers),
-                ContentObject :: PROPERTY_ID));
+                    new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OBJECT_NUMBER), 
+                    $contentObjectNumbers), 
+                ContentObject::PROPERTY_ID));
     }
 
     public function getCurrentWorkspace()

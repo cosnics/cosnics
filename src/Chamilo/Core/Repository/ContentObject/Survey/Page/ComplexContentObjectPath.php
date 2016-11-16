@@ -20,11 +20,12 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
     function get_properties($parent_id, $complex_content_object_item, $content_object)
     {
         $properties = array();
-               
-        if ($complex_content_object_item instanceof PageDisplayItem && !($complex_content_object_item instanceof ComplexDescription) )
+        
+        if ($complex_content_object_item instanceof PageDisplayItem &&
+             ! ($complex_content_object_item instanceof ComplexDescription))
         {
             
-            $properties[ComplexContentObjectPathNode :: PROPERTY_QUESTION] = $content_object->get_question();
+            $properties[ComplexContentObjectPathNode::PROPERTY_QUESTION] = $content_object->get_question();
             if ($complex_content_object_item->is_visible())
             {
                 $this->question_nr ++;
@@ -37,17 +38,17 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
                 $nr = $this->question_nr . '.' . $this->invisible_question_nr;
             }
             
-            $properties[ComplexContentObjectPathNode :: PROPERTY_QUESTION_NR] = $nr;
-            $properties[ComplexContentObjectPathNode :: PROPERTY_IS_QUESTION] = true;
-                    }
+            $properties[ComplexContentObjectPathNode::PROPERTY_QUESTION_NR] = $nr;
+            $properties[ComplexContentObjectPathNode::PROPERTY_IS_QUESTION] = true;
+        }
         else
         {
-            $properties[ComplexContentObjectPathNode :: PROPERTY_IS_QUESTION] = false;
+            $properties[ComplexContentObjectPathNode::PROPERTY_IS_QUESTION] = false;
         }
         
         return $properties;
     }
-    
+
     /**
      *
      * @param AnswerServiceInterface $answerService
@@ -56,27 +57,29 @@ class ComplexContentObjectPath extends \Chamilo\Core\Repository\Common\Path\Comp
     public function getProgress(AnswerServiceInterface $answerService)
     {
         $nodes = $this->get_nodes();
-    
+        
         $questionCount = 0;
         $answerCount = 0;
         foreach ($nodes as $node)
         {
             if ($node->isQuestion())
             {
-                if($node->isVisible($answerService))
+                if ($node->isVisible($answerService))
                 {
                     $questionCount ++;
                     $answer = $answerService->getAnswer($node->get_id());
-                    if($answer){
-                        $answerCount++;
+                    if ($answer)
+                    {
+                        $answerCount ++;
                     }
                 }
             }
         }
         
         $progress = 0;
-        if($questionCount > 0){
-            $progress = round($answerCount/$questionCount*100, 2);
+        if ($questionCount > 0)
+        {
+            $progress = round($answerCount / $questionCount * 100, 2);
         }
         return $progress;
     }

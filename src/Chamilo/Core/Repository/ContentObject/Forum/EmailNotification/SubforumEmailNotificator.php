@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * the email notificator of a post extends abstract email notificator
- *
+ * 
  * @author Mattias De Pauw
  */
 class SubforumEmailNotificator extends EmailNotificator
@@ -25,7 +25,7 @@ class SubforumEmailNotificator extends EmailNotificator
 
     /**
      * sets the forum
-     *
+     * 
      * @param Forum $forum
      */
     public function set_forum($forum)
@@ -48,22 +48,22 @@ class SubforumEmailNotificator extends EmailNotificator
         {
             $targetUsers[] = $user->get_email();
         }
-
+        
         $site_name = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name'));
-
+        
         $subject = '[' . $site_name . '] ' . $this->action_title . ' ' . $this->forum->get_title();
-
+        
         $message = $this->action_body . ' ' . $this->forum->get_title() . '<br/>' . '-' . '<br/>';
         $message = $message . $this->subforum->get_title() . '<br/>' . $this->subforum->get_description();
         $message = str_replace('[/quote]', '</div>', $message);
         $message = $message . '<br/>' . Translation::get("By") . ': ' . $this->action_user->get_firstname() . ' ' .
              $this->action_user->get_lastname();
-
+        
         $mail = new Mail($subject, $message, $targetUsers);
-
+        
         $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
-
+        
         try
         {
             $mailer->sendMail($mail);

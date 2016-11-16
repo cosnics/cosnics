@@ -83,12 +83,12 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     {
         if ($this->get_template_registration_id())
         {
-            return \Chamilo\Core\Repository\Configuration :: registration_by_id(
+            return \Chamilo\Core\Repository\Configuration::registration_by_id(
                 (int) $this->get_template_registration_id());
         }
         else
         {
-            throw new \Exception(Translation :: get('NoTemplateRegistrationSelected'));
+            throw new \Exception(Translation::get('NoTemplateRegistrationSelected'));
         }
     }
 
@@ -99,7 +99,7 @@ class ContentObjectTypeSelectorOption implements TypeSelectorOption
     {
         $namespace = $this->get_template_registration()->get_content_object_type();
         
-        return Theme :: getInstance()->getImagePath(
+        return Theme::getInstance()->getImagePath(
             $namespace, 
             'Logo/' . ($this->get_template_registration_id() ? 'Template/' .
                  $this->get_template_registration()->get_name() . '/' : '') . $imageSize);

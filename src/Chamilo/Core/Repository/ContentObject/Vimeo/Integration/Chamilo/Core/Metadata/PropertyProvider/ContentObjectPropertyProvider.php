@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Vimeo :: class_name();
+        return Vimeo::class_name();
     }
 }

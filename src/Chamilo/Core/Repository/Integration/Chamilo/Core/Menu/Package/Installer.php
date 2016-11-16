@@ -27,34 +27,34 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
      */
     public function __construct($formValues)
     {
-        parent :: __construct($formValues, Item :: DISPLAY_ICON, false);
+        parent::__construct($formValues, Item::DISPLAY_ICON, false);
     }
 
     public function extra()
     {
         $item = new RepositoryApplicationItem();
         $item_title = new ItemTitle();
-        $item_title->set_title(Translation :: get('TypeName', null, $this->context()));
-        $item_title->set_isocode(Translation :: getInstance()->getLanguageIsocode());
+        $item_title->set_title(Translation::get('TypeName', null, $this->context()));
+        $item_title->set_isocode(Translation::getInstance()->getLanguageIsocode());
         $item_titles = new ItemTitles(new ArrayResultSet(array($item_title)));
-
+        
         $item->set_titles($item_titles);
-
-        $context = ClassnameUtilities :: getInstance()->getNamespaceParent($this->context(), 5);
+        
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 5);
         $item->set_application($context);
-
+        
         $item->set_display($this->getItemDisplay());
-
+        
         $item->set_use_translation(1);
-
+        
         if (! $item->create())
         {
             return false;
         }
-
+        
         $repository_implementation = new RepositoryImplementationCategoryItem();
         $repository_implementation->set_display($this->getItemDisplay());
-
+        
         if (! $repository_implementation->create())
         {
             return false;
@@ -62,18 +62,18 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
         else
         {
             $item_title = new ItemTitle();
-            $item_title->set_title(Translation :: get('Instances'));
-            $item_title->set_isocode(Translation :: getInstance()->getLanguageIsocode());
+            $item_title->set_title(Translation::get('Instances'));
+            $item_title->set_isocode(Translation::getInstance()->getLanguageIsocode());
             $item_title->set_item_id($repository_implementation->get_id());
             if (! $item_title->create())
             {
                 return false;
             }
         }
-
+        
         $workspace = new WorkspaceCategoryItem();
         $workspace->set_display($this->getItemDisplay());
-
+        
         if (! $workspace->create())
         {
             return false;
@@ -81,15 +81,15 @@ class Installer extends \Chamilo\Core\Menu\Action\Installer
         else
         {
             $item_title = new ItemTitle();
-            $item_title->set_title(Translation :: get('Workspaces'));
-            $item_title->set_isocode(Translation :: getInstance()->getLanguageIsocode());
+            $item_title->set_title(Translation::get('Workspaces'));
+            $item_title->set_isocode(Translation::getInstance()->getLanguageIsocode());
             $item_title->set_item_id($workspace->get_id());
             if (! $item_title->create())
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 }

@@ -19,7 +19,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formvalidator = parent :: initialize();
+        $formvalidator = parent::initialize();
         $question = $this->get_content_object();
         
         if ($this->getComplexContentObjectPathNode())
@@ -47,7 +47,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th class="info" >' . Translation :: get('PossibleMatches') . '</th>';
+        $table_header[] = '<th class="info" >' . Translation::get('PossibleMatches') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
@@ -88,7 +88,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th class="list"></th>';
-        $table_header[] = '<th class="info" colspan="2">' . Translation :: get('ChooseYourOptionMatch') . '</th>';
+        $table_header[] = '<th class="info" colspan="2">' . Translation::get('ChooseYourOptionMatch') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';

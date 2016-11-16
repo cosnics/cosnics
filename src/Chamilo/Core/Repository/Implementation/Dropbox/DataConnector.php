@@ -12,7 +12,7 @@ use Dropbox\API;
 use Dropbox\OAuth\Consumer\Curl;
 use Dropbox\OAuth\Storage\Encrypter;
 
-require_once Path :: getInstance()->getPluginPath(__NAMESPACE__) . 'Dropbox/Autoloader.class.php';
+require_once Path::getInstance()->getPluginPath(__NAMESPACE__) . 'Dropbox/Autoloader.class.php';
 class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 {
 
@@ -31,38 +31,38 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function __construct($external_repository_instance)
     {
-        parent :: __construct($external_repository_instance);
+        parent::__construct($external_repository_instance);
         spl_autoload_register('Dropbox\Autoloader::load');
-        $this->key = Setting :: get('key', $this->get_external_repository_instance_id());
-        $this->secret = Setting :: get('secret', $this->get_external_repository_instance_id());
-
+        $this->key = Setting::get('key', $this->get_external_repository_instance_id());
+        $this->secret = Setting::get('secret', $this->get_external_repository_instance_id());
+        
         $redirect = new Redirect();
         $callback = $redirect->getCurrentUrl();
-        $security_key = \Chamilo\Configuration\Configuration :: get('Chamilo\Configuration', 'general', 'security_key');
+        $security_key = \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'general', 'security_key');
         $encrypter = new Encrypter($security_key);
         $storage = new \Dropbox\OAuth\Storage\Session($encrypter);
         $curl = new Curl($this->key, $this->secret, $storage, $callback);
-
+        
         if ($_SESSION['dropbox_api']['access_token'])
         {
-            $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieve_setting_from_variable_name(
-                'access_token',
+            $setting = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieve_setting_from_variable_name(
+                'access_token', 
                 $this->get_external_repository_instance_id());
             $token = $_SESSION['dropbox_api']['access_token'];
             $setting->set_value($token);
             if ($setting->create())
             {
-                Session :: unregister('dropbox_api');
+                Session::unregister('dropbox_api');
                 $storage->set($encrypter->decrypt($token), 'access_token');
             }
         }
-
+        
         else
         {
-            $token = Setting :: get('access_token', $this->get_external_repository_instance_id());
+            $token = Setting::get('access_token', $this->get_external_repository_instance_id());
             $storage->set($encrypter->decrypt($token), 'access_token');
         }
-
+        
         $this->dropbox = new API($curl, 'dropbox');
     }
 
@@ -76,14 +76,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function retrieve_files($condition = null, $order_property, $offset, $count)
     {
-        $folder = Request :: get('folder');
+        $folder = Request::get('folder');
         if (! is_null($folder))
         {
             $folder = urldecode($folder);
         }
         else
             $folder = '/';
-
+        
         $files = $this->dropbox->metaData($folder);
         return $files;
     }
@@ -106,7 +106,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $files = $this->retrieve_files($condition, $order_property, $offset, $count);
         $file_count = 0;
-
+        
         $objects = array();
         foreach ($files['body']->contents as $file)
         {
@@ -121,7 +121,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $object->set_type($file->icon);
                 $object->set_description($file->size);
                 $object->set_rights($this->determine_rights());
-
+                
                 $file_count ++;
                 if ($file_count > $offset && $file_count <= ($count + $offset))
                 {
@@ -136,7 +136,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $folders = array();
         $files = $this->retrieve_folder('/');
-
+        
         foreach ($files['body']->contents as $file)
         {
             if ($file->is_dir == 1)
@@ -168,7 +168,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $sub_folder['title'] = substr($child->path, strripos($child->path, '/') + 1);
                 $sub_folder['url'] = str_replace('__PLACEHOLDER__', $child->path, $folder_url);
                 $sub_folder['class'] = 'category';
-
+                
                 $sub = $this->get_folder_tree($folder_url, $child->path);
                 if (count($sub) > 0)
                 {
@@ -188,7 +188,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function count_external_repository_objects($condition)
     {
         $files = $this->retrieve_files($condition);
-
+        
         $objects = array();
         $count = 0;
         foreach ($files['body']->contents as $file)
@@ -221,14 +221,14 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         if (count($order_properties) > 0)
         {
             $order_property = $order_properties[0]->get_property();
-            if ($order_property == self :: SORT_RELEVANCE)
+            if ($order_property == self::SORT_RELEVANCE)
             {
                 return $order_property;
             }
             else
             {
                 $sorting_direction = $order_properties[0]->get_direction();
-
+                
                 if ($sorting_direction == SORT_ASC)
                 {
                     return $order_property . '-asc';
@@ -248,12 +248,12 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public static function get_sort_properties()
     {
-        $feed_type = Request :: get(Manager :: PARAM_FEED_TYPE);
-        $query = ActionBarSearchForm :: get_query();
-
-        if (($feed_type == Manager :: FEED_TYPE_GENERAL && $query))
+        $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
+        $query = ActionBarSearchForm::get_query();
+        
+        if (($feed_type == Manager::FEED_TYPE_GENERAL && $query))
         {
-            return array(self :: SORT_DATE_CREATED);
+            return array(self::SORT_DATE_CREATED);
         }
         else
         {
@@ -268,7 +268,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_external_repository_object($id)
     {
         $file = $this->dropbox->metaData($id);
-
+        
         $object = new ExternalObject();
         $object->set_external_repository_id($this->get_external_repository_instance_id());
         $object->set_id($id);
@@ -277,7 +277,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_modified($file->modified);
         $object->set_type($file->icon);
         $object->set_description($file->size);
-
+        
         $object->set_rights($this->determine_rights());
         return $object;
     }
@@ -285,10 +285,10 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function determine_rights()
     {
         $rights = array();
-        $rights[ExternalObject :: RIGHT_USE] = true;
-        $rights[ExternalObject :: RIGHT_EDIT] = false;
-        $rights[ExternalObject :: RIGHT_DELETE] = true;
-        $rights[ExternalObject :: RIGHT_DOWNLOAD] = true;
+        $rights[ExternalObject::RIGHT_USE] = true;
+        $rights[ExternalObject::RIGHT_EDIT] = false;
+        $rights[ExternalObject::RIGHT_DELETE] = true;
+        $rights[ExternalObject::RIGHT_DOWNLOAD] = true;
         return $rights;
     }
 

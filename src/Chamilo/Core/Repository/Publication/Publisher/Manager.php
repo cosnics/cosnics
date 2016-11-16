@@ -11,7 +11,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the parent application
-     *
+     * 
      * @return Application | PublisherSupport
      */
     public function getParentApplication()
@@ -21,7 +21,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the publication form
-     *
+     * 
      * @param array $selectedContentObjects
      *
      * @return \Chamilo\Libraries\Format\Form\FormValidator
@@ -33,7 +33,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the publication Handler
-     *
+     * 
      * @return Interfaces\PublicationHandlerInterface
      */
     public function getPublicationHandler()
@@ -43,7 +43,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the allowed content object types
-     *
+     * 
      * @return array
      */
     public function get_allowed_content_object_types()

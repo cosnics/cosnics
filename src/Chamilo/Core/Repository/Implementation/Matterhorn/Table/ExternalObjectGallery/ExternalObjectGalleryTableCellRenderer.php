@@ -16,12 +16,12 @@ class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGaller
     public function renderContent($object)
     {
         $html = array();
-
-        $display = ExternalObjectDisplay :: factory($object);
-
+        
+        $display = ExternalObjectDisplay::factory($object);
+        
         $html[] = '<a href="' . $this->get_component()->get_external_repository_object_viewing_url($object) . '">' . $display->get_preview(
             true) . '</a><br/>';
-        $html[] = '<i>' . StringUtilities :: getInstance()->truncate($object->get_description(), 100) . '</i><br/>';
+        $html[] = '<i>' . StringUtilities::getInstance()->truncate($object->get_description(), 100) . '</i><br/>';
         return implode(PHP_EOL, $html);
     }
 
@@ -31,7 +31,7 @@ class ExternalObjectGalleryTableCellRenderer extends DefaultExternalObjectGaller
      */
     public function renderTitle($object)
     {
-        return StringUtilities :: getInstance()->truncate($object->get_title(), 25) . ' (' . DatetimeUtilities :: format_seconds_to_minutes(
+        return StringUtilities::getInstance()->truncate($object->get_title(), 25) . ' (' . DatetimeUtilities::format_seconds_to_minutes(
             $object->get_duration() / 1000);
     }
 }

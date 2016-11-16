@@ -7,7 +7,6 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Translation;
 
-
 class ActivityComponent extends TabComponent implements TableSupport
 {
 
@@ -16,21 +15,20 @@ class ActivityComponent extends TabComponent implements TableSupport
      */
     public function build()
     {
-
         $activity_table = new ActivityTable($this);
-
-        $trail = BreadcrumbTrail :: getInstance();
+        
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_STEP => $this->get_current_step())),
-                Translation :: get('ActivityComponent')));
-
+                $this->get_url(array(self::PARAM_STEP => $this->get_current_step())), 
+                Translation::get('ActivityComponent')));
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $activity_table->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 

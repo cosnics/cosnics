@@ -17,18 +17,19 @@ class GraphComponent extends Manager implements TemplateSupport
     public function run()
     {
         $question = $this->get_parent()->get_content_object();
-
+        
         if ((! $this->get_user()->is_platform_admin()) || ($this->get_user_id() != $question->get_owner_id()))
         {
             throw new NotAllowedException();
         }
-
-        $factory = new ApplicationFactory('\Chamilo\Core\Reporting\Viewer', new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+        
+        $factory = new ApplicationFactory(
+            '\Chamilo\Core\Reporting\Viewer', 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         $viewer = $factory->getComponent();
-        $viewer->set_template_by_name(GraphTemplate :: class_name());
+        $viewer->set_template_by_name(GraphTemplate::class_name());
         
         return $viewer->run();
-
     }
 
     /*
@@ -38,13 +39,13 @@ class GraphComponent extends Manager implements TemplateSupport
     public function get_answers($survey_matrix_question_id)
     {
         $answers = array();
-
+        
         $question = $this->get_question();
         $options = $question->get_options();
         $matches = $question->get_matches();
-
+        
         $answer_count = rand(0, 50);
-
+        
         for ($i = 0; $i <= $answer_count; $i ++)
         {
             foreach ($options as $option)
@@ -54,7 +55,7 @@ class GraphComponent extends Manager implements TemplateSupport
                 $answers[] = array($id => $matches[$random_match]->get_id());
             }
         }
-
+        
         return $answers;
     }
 

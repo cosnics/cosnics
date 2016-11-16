@@ -22,8 +22,8 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 abstract class Manager extends Application implements NoContextComponent
 {
-    const DEFAULT_ACTION = self :: ACTION_INTRODUCTION;
-
+    const DEFAULT_ACTION = self::ACTION_INTRODUCTION;
+    
     /**
      * Constant defining an action of the repository manager.
      */
@@ -33,7 +33,7 @@ abstract class Manager extends Application implements NoContextComponent
     const ACTION_LICENSE = 'license';
     const ACTION_SETTINGS = 'settings';
     const ACTION_OVERVIEW = 'overview';
-
+    
     // Parameters
     const PARAM_LANGUAGE = 'install_language';
     const PARAM_SETTINGS = 'install_settings';
@@ -50,7 +50,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent::__construct($applicationConfiguration);
         $this->initialize();
     }
 
@@ -59,16 +59,16 @@ abstract class Manager extends Application implements NoContextComponent
         // PHP settings
         ini_set("memory_limit", "-1");
         ini_set("max_execution_time", "7200");
-
+        
         // Display language
-        $language = $this->getRequest()->query->get(self :: PARAM_LANGUAGE, 'en');
-
+        $language = $this->getRequest()->query->get(self::PARAM_LANGUAGE, 'en');
+        
         if ($language)
         {
-            Session :: register(self :: PARAM_LANGUAGE, $language);
+            Session::register(self::PARAM_LANGUAGE, $language);
         }
-
-        Translation :: getInstance()->setLanguageIsocode(Session :: retrieve(self :: PARAM_LANGUAGE));
+        
+        Translation::getInstance()->setLanguageIsocode(Session::retrieve(self::PARAM_LANGUAGE));
     }
 
     /**
@@ -77,22 +77,22 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function render_header()
     {
-        $page = Page :: getInstance();
+        $page = Page::getInstance();
         $page->setApplication($this);
         $page->setContainerMode('container');
-
+        
         $html = array();
-
+        
         $html[] = $page->getHeader()->toHtml();
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
-
+        
         $html[] = $this->renderWizardHeader();
-
+        
         $html[] = '<div class="alert alert-info">';
         $html[] = $this->getInfo();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -102,7 +102,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     protected function getInfo()
     {
-        return Translation :: get(ClassnameUtilities :: getInstance()->getClassnameFromObject($this) . 'Information');
+        return Translation::get(ClassnameUtilities::getInstance()->getClassnameFromObject($this) . 'Information');
     }
 
     /**
@@ -112,39 +112,39 @@ abstract class Manager extends Application implements NoContextComponent
     public function render_footer()
     {
         $html = array();
-
+        
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = Page :: getInstance()->getFooter()->toHtml();
-
+        $html[] = Page::getInstance()->getFooter()->toHtml();
+        
         return implode(PHP_EOL, $html);
     }
 
     public function getLanguages()
     {
-        $language_path = Path :: getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
-        $language_files = Filesystem :: get_directory_content($language_path, Filesystem :: LIST_FILES, false);
-
+        $language_path = Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
+        $language_files = Filesystem::get_directory_content($language_path, Filesystem::LIST_FILES, false);
+        
         $language_list = array();
         foreach ($language_files as $language_file)
         {
             $file_info = pathinfo($language_file);
             $language_info_file = $language_path . $file_info['filename'] . '.info';
-
+            
             if (file_exists($language_info_file))
             {
                 $dom_document = new \DOMDocument('1.0', 'UTF-8');
                 $dom_document->load($language_info_file);
                 $dom_xpath = new \DOMXPath($dom_document);
-
+                
                 $language_node = $dom_xpath->query('/packages/package')->item(0);
-
+                
                 $language_list[$dom_xpath->query('extra/isocode', $language_node)->item(0)->nodeValue] = $dom_xpath->query(
-                    'name',
+                    'name', 
                     $language_node)->item(0)->nodeValue;
             }
         }
-
+        
         return $language_list;
     }
 
@@ -155,13 +155,13 @@ abstract class Manager extends Application implements NoContextComponent
     protected function renderWizardHeader()
     {
         $wizardHeaderRenderer = new WizardHeaderRenderer($this->getWizardHeader());
-
+        
         $html = array();
-
+        
         $html[] = '<div class="container-install-wizard">';
         $html[] = $wizardHeaderRenderer->render();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -175,20 +175,20 @@ abstract class Manager extends Application implements NoContextComponent
         {
             $currentAction = $this->get_action();
             $wizardActions = $this->getWizardHeaderActions();
-
+            
             $this->wizardHeader = new WizardHeader();
             $this->wizardHeader->setStepTitles(
                 array(
-                    Translation :: get('IntroductionComponentTitle'),
-                    Translation :: get('RequirementsComponentTitle'),
-                    Translation :: get('LicenseComponentTitle'),
-                    Translation :: get('SettingsComponentTitle'),
-                    Translation :: get('OverviewComponentTitle'),
-                    Translation :: get('InstallerComponentTitle')));
-
+                    Translation::get('IntroductionComponentTitle'), 
+                    Translation::get('RequirementsComponentTitle'), 
+                    Translation::get('LicenseComponentTitle'), 
+                    Translation::get('SettingsComponentTitle'), 
+                    Translation::get('OverviewComponentTitle'), 
+                    Translation::get('InstallerComponentTitle')));
+            
             $this->wizardHeader->setSelectedStepIndex(array_search($currentAction, $wizardActions));
         }
-
+        
         return $this->wizardHeader;
     }
 
@@ -199,12 +199,12 @@ abstract class Manager extends Application implements NoContextComponent
     protected function getWizardHeaderActions()
     {
         return array(
-            self :: ACTION_INTRODUCTION,
-            self :: ACTION_REQUIREMENTS,
-            self :: ACTION_LICENSE,
-            self :: ACTION_SETTINGS,
-            self :: ACTION_OVERVIEW,
-            self :: ACTION_INSTALL_PLATFORM);
+            self::ACTION_INTRODUCTION, 
+            self::ACTION_REQUIREMENTS, 
+            self::ACTION_LICENSE, 
+            self::ACTION_SETTINGS, 
+            self::ACTION_OVERVIEW, 
+            self::ACTION_INSTALL_PLATFORM);
     }
 
     /**
@@ -213,19 +213,18 @@ abstract class Manager extends Application implements NoContextComponent
     protected function checkInstallationAllowed()
     {
         $configuration = Configuration::getInstance();
-
-        if(!$configuration->is_available())
+        
+        if (! $configuration->is_available())
         {
             return;
         }
-
+        
         $installationBlocked = (bool) $configuration->get_setting(array('Chamilo\Core\Admin', 'installation_blocked'));
-
-        if($installationBlocked)
+        
+        if ($installationBlocked)
         {
             throw new \Exception(
-                Translation::getInstance()->getTranslation('InstallationBlockedByAdministrator', null, self::context())
-            );
+                Translation::getInstance()->getTranslation('InstallationBlockedByAdministrator', null, self::context()));
         }
     }
 }

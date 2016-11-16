@@ -16,27 +16,27 @@ class GroupCreatorComponent extends Manager
         if ($group_form->validate())
         {
             $success = $group_form->create_group();
-
-            $message = $success ? Translation :: get('GroupCreated') : Translation :: get('GroupNotCreated');
+            
+            $message = $success ? Translation::get('GroupCreated') : Translation::get('GroupNotCreated');
             if ($success)
             {
-                $parameters[Manager :: PARAM_ACTION] = Manager :: ACTION_GROUPS_VIEWER;
+                $parameters[Manager::PARAM_ACTION] = Manager::ACTION_GROUPS_VIEWER;
             }
             else
             {
-                $parameters[Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP] = Request :: get(
-                    Manager :: PARAM_EXTERNAL_REPOSITORY_GROUP);
+                $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_GROUP] = Request::get(
+                    Manager::PARAM_EXTERNAL_REPOSITORY_GROUP);
             }
             $this->redirect($message, ! $success, $parameters);
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $group_form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

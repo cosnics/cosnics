@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Numeric matching question</translation>
-			<translation language="nl">Numerieke matching vraag</translation>
-			<translation language="fr">Question à correspondance numérique</translation>
-			<translation language="de">Nummerische Zuordnungsfrage</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Numeric matching question</translation>
+            <translation language="nl">Numerieke matching vraag</translation>
+            <translation language="fr">Question à correspondance numérique</translation>
+            <translation language="de">Nummerische Zuordnungsfrage</translation>
+        </variable>
+    </translations>
 </template>

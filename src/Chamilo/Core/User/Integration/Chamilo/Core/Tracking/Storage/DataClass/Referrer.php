@@ -15,24 +15,24 @@ class Referrer extends User
     {
         $server = $parameters['server'];
         $referer = $server['HTTP_REFERER'];
-
-        $this->set_type(self :: TYPE_REFERER);
+        
+        $this->set_type(self::TYPE_REFERER);
         $this->set_name($referer);
     }
 
     public function empty_tracker($event)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
-            new StaticConditionVariable(self :: TYPE_REFERER));
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
+            new StaticConditionVariable(self::TYPE_REFERER));
         return $this->remove($condition);
     }
 
     public function export($start_date, $end_date)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(self :: class_name(), self :: PROPERTY_TYPE),
-            new StaticConditionVariable(self :: TYPE_REFERER));
-        return DataManager :: retrieves(self :: class_name(), new DataClassRetrievesParameters($condition));
+            new PropertyConditionVariable(self::class_name(), self::PROPERTY_TYPE), 
+            new StaticConditionVariable(self::TYPE_REFERER));
+        return DataManager::retrieves(self::class_name(), new DataClassRetrievesParameters($condition));
     }
 }

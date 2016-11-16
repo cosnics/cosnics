@@ -21,27 +21,27 @@ class CalendarEventDifference extends ContentObjectDifference
 
     public function render()
     {
-        $date_format = Translation :: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES);
+        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
         
         $object = $this->get_object();
         $version = $this->get_version();
         
         $object_string = htmlentities(
-            Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                 DatetimeUtilities :: format_locale_date($date_format, $object->get_start_date()) . ' ' .
-                 Translation :: get('Until', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                 DatetimeUtilities :: format_locale_date($date_format, $object->get_end_date()));
+            Translation::get('From', null, Utilities::COMMON_LIBRARIES) . ' ' .
+                 DatetimeUtilities::format_locale_date($date_format, $object->get_start_date()) . ' ' .
+                 Translation::get('Until', null, Utilities::COMMON_LIBRARIES) . ' ' .
+                 DatetimeUtilities::format_locale_date($date_format, $object->get_end_date()));
         $object_string = explode("\n", strip_tags($object_string));
         
         $version_string = htmlentities(
-            Translation :: get('From', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                 DatetimeUtilities :: format_locale_date($date_format, $version->get_start_date()) . ' ' .
-                 Translation :: get('Until', null, Utilities :: COMMON_LIBRARIES) . ' ' .
-                 DatetimeUtilities :: format_locale_date($date_format, $version->get_end_date()));
+            Translation::get('From', null, Utilities::COMMON_LIBRARIES) . ' ' .
+                 DatetimeUtilities::format_locale_date($date_format, $version->get_start_date()) . ' ' .
+                 Translation::get('Until', null, Utilities::COMMON_LIBRARIES) . ' ' .
+                 DatetimeUtilities::format_locale_date($date_format, $version->get_end_date()));
         $version_string = explode("\n", strip_tags($version_string));
         
         $html = array();
-        $html[] = parent :: render();
+        $html[] = parent::render();
         
         $difference = new \Diff($version_string, $object_string);
         $renderer = new \Diff_Renderer_Html_SideBySide();

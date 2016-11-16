@@ -22,12 +22,12 @@ class PublisherComponent extends Manager implements DelegateComponent
     public function run()
     {
         $locationForm = new LocationForm(
-            $this,
+            $this, 
             $this->get_url(
                 array(
-                    \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID => $this->getRequest()->get(
-                        \Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID))));
-
+                    \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID => $this->getRequest()->get(
+                        \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID))));
+        
         if ($locationForm->validate())
         {
             $publicationProcessor = new PublicationProcessor($this, $locationForm->exportValues());
@@ -36,11 +36,11 @@ class PublisherComponent extends Manager implements DelegateComponent
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $locationForm->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -60,6 +60,6 @@ class PublisherComponent extends Manager implements DelegateComponent
      */
     public function get_additional_parameters()
     {
-        return array(\Chamilo\Core\Repository\Manager :: PARAM_CONTENT_OBJECT_ID);
+        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
     }
 }

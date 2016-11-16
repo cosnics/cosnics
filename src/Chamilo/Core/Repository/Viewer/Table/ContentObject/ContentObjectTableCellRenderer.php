@@ -27,7 +27,7 @@ class ContentObjectTableCellRenderer extends DataClassTableCellRenderer implemen
             case ContentObject::PROPERTY_MODIFICATION_DATE :
                 return DatetimeUtilities::format_locale_date(null, $content_object->get_modification_date());
         }
-
+        
         return parent::render_cell($column, $content_object);
     }
 

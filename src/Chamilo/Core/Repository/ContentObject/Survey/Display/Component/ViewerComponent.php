@@ -23,49 +23,49 @@ class ViewerComponent extends TabComponent
      */
     function build()
     {
-        $this->current_step = Request :: get(self :: PARAM_STEP, 1);
-
+        $this->current_step = Request::get(self::PARAM_STEP, 1);
+        
         if ($this->is_form_submitted())
         {
             $action = $this->get_action();
-
+            
             $this->saveAnswers();
-
-            if ($action == self :: FORM_BACK)
+            
+            if ($action == self::FORM_BACK)
             {
                 $this->current_step = $this->current_step - 1;
             }
-            elseif ($action == self :: FORM_NEXT)
+            elseif ($action == self::FORM_NEXT)
             {
                 $this->current_step = $this->current_step + 1;
             }
-            elseif ($action == self :: FORM_SUBMIT)
+            elseif ($action == self::FORM_SUBMIT)
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $this->get_finish_html();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
-
-            $this->set_parameter(self :: PARAM_STEP, $this->current_step);
+            
+            $this->set_parameter(self::PARAM_STEP, $this->current_step);
             $this->redirect(null, false, $this->get_parameters());
         }
         else
         {
             // var_dump($_SESSION);
-
-            $form = new ViewerForm($this, $this->get_url(array(self :: PARAM_STEP => $this->current_step)));
-
+            
+            $form = new ViewerForm($this, $this->get_url(array(self::PARAM_STEP => $this->current_step)));
+            
             $html = array();
             $html[] = $this->render_header();
             $html[] = $this->addHiddenFields($form);
             $html[] = $this->addJavascript();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -83,33 +83,33 @@ class ViewerComponent extends TabComponent
 
     private function is_form_submitted()
     {
-        return ! is_null(Request :: post('_qf__' . ViewerForm :: FORM_NAME));
+        return ! is_null(Request::post('_qf__' . ViewerForm::FORM_NAME));
     }
 
     public function get_action()
     {
-        $actions = array(self :: FORM_NEXT, self :: FORM_SUBMIT, self :: FORM_BACK);
-
+        $actions = array(self::FORM_NEXT, self::FORM_SUBMIT, self::FORM_BACK);
+        
         foreach ($actions as $action)
         {
-            if (! is_null(Request :: post($action)))
+            if (! is_null(Request::post($action)))
             {
                 return $action;
             }
         }
-
-        return self :: FORM_NEXT;
+        
+        return self::FORM_NEXT;
     }
 
     private function addHiddenFields($form)
     {
         $paramaters = $this->get_parameters();
         $answerServiceContext = $this->getApplicationConfiguration()->getAnswerService()->getServiceContext();
-
-        $paramaters[AnswerServiceInterface :: PARAM_SERVICE_CONTEXT] = $answerServiceContext;
-        $paramaters[self :: PARAM_STEP] = $this->get_current_step();
-        $paramaters[\Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager :: PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object_id();
-
+        
+        $paramaters[AnswerServiceInterface::PARAM_SERVICE_CONTEXT] = $answerServiceContext;
+        $paramaters[self::PARAM_STEP] = $this->get_current_step();
+        $paramaters[\Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager::PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object_id();
+        
         foreach ($paramaters as $name => $value)
         {
             $form->addHiddenField($name, $value);
@@ -118,28 +118,28 @@ class ViewerComponent extends TabComponent
 
     private function addJavascript()
     {
-        return ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Ajax', true) .
+        return ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\Survey\Ajax', true) .
                  'ProcessVisibility.js');
     }
 
     private function get_finish_html()
     {
         $html = array();
-
+        
         $html[] = '<div class="panel panel-default">';
-
+        
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">' . $this->get_root_content_object()->get_icon_image() . ' ' .
              $this->get_root_content_object()->get_title() . '</h3>';
         $html[] = '</div>';
-
+        
         $html[] = '<div class="panel-body">';
         $html[] = $this->get_root_content_object()->get_finish_text();
         $html[] = '</div>';
-
+        
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -152,7 +152,7 @@ class ViewerComponent extends TabComponent
         elseif ($this->get_current_complex_content_object_item() instanceof ComplexPage)
         {
             $nodes = $this->get_current_complex_content_object_path_node()->get_descendants();
-
+            
             foreach ($nodes as $node)
             {
                 if ($node->get_complex_content_object_item() instanceof PageDisplayItem)
@@ -168,12 +168,12 @@ class ViewerComponent extends TabComponent
         $answerService = $this->getApplicationConfiguration()->getAnswerService();
         $complexContentObjectItem = $node->get_complex_content_object_item();
         $answerIds = $complexContentObjectItem->getAnswerIds($answerService->getPrefix());
-
+        
         $answers = $answerService->getAnswer($node->get_id());
-
+        
         foreach ($answerIds as $answerId)
         {
-            $answer = Request :: post($answerId);
+            $answer = Request::post($answerId);
             if ($answer)
             {
                 $answers[$answerId] = $answer;
@@ -183,7 +183,7 @@ class ViewerComponent extends TabComponent
                 unset($answers[$answerId]);
             }
         }
-
+        
         if ($answers)
         {
             $answerService->saveAnswer($node->get_id(), $answers);

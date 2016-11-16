@@ -25,7 +25,7 @@ class Column extends Element
      */
     public static function getConfigurationVariables($configurationVariables = array())
     {
-        return parent :: getConfigurationVariables(array(self :: CONFIGURATION_WIDTH));
+        return parent::getConfigurationVariables(array(self::CONFIGURATION_WIDTH));
     }
 
     /**
@@ -34,7 +34,7 @@ class Column extends Element
      */
     public function getWidth()
     {
-        return $this->getSetting(self :: CONFIGURATION_WIDTH);
+        return $this->getSetting(self::CONFIGURATION_WIDTH);
     }
 
     /**
@@ -43,16 +43,16 @@ class Column extends Element
      */
     public function setWidth($width)
     {
-        $this->setSetting(self :: CONFIGURATION_WIDTH, $width);
+        $this->setSetting(self::CONFIGURATION_WIDTH, $width);
     }
 
     public function is_empty()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Block :: class_name(), Block :: PROPERTY_COLUMN), 
+            new PropertyConditionVariable(Block::class_name(), Block::PROPERTY_COLUMN), 
             new StaticConditionVariable($this->get_id()));
         
-        $blocks_count = DataManager :: count(Block :: class_name(), new DataClassCountParameters($condition));
+        $blocks_count = DataManager::count(Block::class_name(), new DataClassCountParameters($condition));
         
         return ($blocks_count == 0);
     }

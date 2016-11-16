@@ -23,7 +23,7 @@ class ContextLocationSelector extends LocationSelector
     {
         $table_header = array();
         $table_header[] = '<th>';
-        $table_header[] = Translation :: get('Location', null, Manager :: context());
+        $table_header[] = Translation::get('Location', null, Manager::context());
         $table_header[] = '</th>';
         
         return implode('', $table_header);

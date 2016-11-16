@@ -31,7 +31,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function __construct(Application $parent, TypeSelector $typeSelector, $parameters = array())
     {
-        parent :: __construct($parent, $typeSelector);
+        parent::__construct($parent, $typeSelector);
         
         $this->parameters = $parameters;
     }
@@ -69,7 +69,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
                 // If multiple categories add category header?
                 $subButtons[] = new SubButton(
                     $option->get_label(), 
-                    $option->get_image_path(Theme :: ICON_MINI), 
+                    $option->get_image_path(Theme::ICON_MINI), 
                     $this->getContentObjectTypeUrl($option->get_template_registration_id()));
             }
         }
@@ -85,7 +85,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
     public function getContentObjectTypeUrl($templateRegistrationIdentifier)
     {
         $objectTypeParameters = $this->getParameters();
-        $objectTypeParameters[TypeSelector :: PARAM_SELECTION] = $templateRegistrationIdentifier;
+        $objectTypeParameters[TypeSelector::PARAM_SELECTION] = $templateRegistrationIdentifier;
         
         $url = new Redirect($objectTypeParameters);
         

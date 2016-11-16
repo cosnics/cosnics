@@ -20,7 +20,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         $score = 0;
         $total_weight = 0;
         
-        if ($question->get_matrix_type() == AssessmentMatrixQuestion :: MATRIX_TYPE_RADIO)
+        if ($question->get_matrix_type() == AssessmentMatrixQuestion::MATRIX_TYPE_RADIO)
         {
             foreach ($options as $index => $option)
             {

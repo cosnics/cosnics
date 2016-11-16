@@ -24,7 +24,7 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
      */
     public static function launch($context, ReportingBlock $block, $format = BlockRendition :: FORMAT_HTML, $view = null)
     {
-        return self :: factory($context, $block, $format, $view)->render();
+        return self::factory($context, $block, $format, $view)->render();
     }
 
     /**
@@ -37,9 +37,9 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
      */
     public static function factory($context, ReportingBlock $block, $format = BlockRendition :: FORMAT_HTML, $view = null)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($block);
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromObject($block);
         $class = $namespace . '\Implementation\\' .
-             (string) StringUtilities :: getInstance()->createString($format)->upperCamelize() . '\\' . StringUtilities :: getInstance()->createString(
+             (string) StringUtilities::getInstance()->createString($format)->upperCamelize() . '\\' . StringUtilities::getInstance()->createString(
                 $view)->upperCamelize();
         
         if (! class_exists($class, true))
@@ -58,7 +58,7 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
      */
     public function get_view()
     {
-        $class_name_parts = explode('_', ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true));
+        $class_name_parts = explode('_', ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
         return $class_name_parts[1];
     }
 
@@ -68,7 +68,7 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
      */
     public function get_format()
     {
-        $class_name_parts = explode('_', ClassnameUtilities :: getInstance()->getClassnameFromObject($this, true));
+        $class_name_parts = explode('_', ClassnameUtilities::getInstance()->getClassnameFromObject($this, true));
         return $class_name_parts[0];
     }
 }

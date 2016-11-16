@@ -20,32 +20,30 @@ class RemoverComponent extends Manager implements DelegateComponent
      */
     public function run()
     {
-        $context = Request :: get(self :: PARAM_CONTEXT);
+        $context = Request::get(self::PARAM_CONTEXT);
         $remover = new PackageRemover($context);
         $remover->run();
-
-        BreadcrumbTrail :: getInstance()->add(
+        
+        BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
-                null,
-                Translation :: get(
-                    'RemovingPackage',
-                    array('PACKAGE' => Translation :: get('TypeName', null, $context)))));
-
+                null, 
+                Translation::get('RemovingPackage', array('PACKAGE' => Translation::get('TypeName', null, $context)))));
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $remover->get_result(true);
-
+        
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('BackToPackageOVerview'),
-                Theme :: getInstance()->getCommonImagePath('Action/Back'),
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
-
+                Translation::get('BackToPackageOVerview'), 
+                Theme::getInstance()->getCommonImagePath('Action/Back'), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))));
+        
         $html[] = $toolbar->as_html();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 }

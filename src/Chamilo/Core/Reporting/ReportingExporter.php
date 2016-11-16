@@ -21,7 +21,7 @@ abstract class ReportingExporter
 
     public static function factory($type, $template)
     {
-        $class = __NAMESPACE__ . '\Exporter\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize();
+        $class = __NAMESPACE__ . '\Exporter\\' . StringUtilities::getInstance()->createString($type)->upperCamelize();
         
         return new $class($template);
     }

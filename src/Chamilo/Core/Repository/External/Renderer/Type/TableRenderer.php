@@ -24,6 +24,6 @@ class TableRenderer extends Renderer implements TableSupport
      */
     public function as_html()
     {
-        return ExternalObjectTable :: factory($this)->as_html();
+        return ExternalObjectTable::factory($this)->as_html();
     }
 }

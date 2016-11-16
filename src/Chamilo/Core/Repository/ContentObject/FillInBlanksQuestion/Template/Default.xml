@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\FillInBlanksQuestion">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Fill in the blanks</translation>
-			<translation language="nl">Gatentekst</translation>
-			<translation language="fr">Remplissez les blancs</translation>
-			<translation language="de">Die leeren Stellen ausfüllen</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Fill in the blanks</translation>
+            <translation language="nl">Gatentekst</translation>
+            <translation language="fr">Remplissez les blancs</translation>
+            <translation language="de">Die leeren Stellen ausfüllen</translation>
+        </variable>
+    </translations>
 </template>

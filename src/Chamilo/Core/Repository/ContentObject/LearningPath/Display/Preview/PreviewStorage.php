@@ -31,11 +31,11 @@ class PreviewStorage
      */
     public static function getInstance()
     {
-        if (! isset(self :: $instance))
+        if (! isset(self::$instance))
         {
-            self :: $instance = new PreviewStorage();
+            self::$instance = new PreviewStorage();
         }
-        return self :: $instance;
+        return self::$instance;
     }
 
     /**
@@ -44,7 +44,7 @@ class PreviewStorage
     public function __construct()
     {
         $storage = $this->get_storage();
-
+        
         if (! isset($storage))
         {
             $this->set_storage(array());
@@ -53,7 +53,7 @@ class PreviewStorage
 
     /**
      * Empty the storage
-     *
+     * 
      * @return boolean
      */
     public function reset()
@@ -67,7 +67,7 @@ class PreviewStorage
      */
     public function get_storage()
     {
-        return unserialize(Session :: retrieve(__NAMESPACE__));
+        return unserialize(Session::retrieve(__NAMESPACE__));
     }
 
     /**
@@ -77,7 +77,7 @@ class PreviewStorage
      */
     public function set_storage($data)
     {
-        Session :: register(__NAMESPACE__, serialize($data));
+        Session::register(__NAMESPACE__, serialize($data));
         return true;
     }
 
@@ -110,11 +110,11 @@ class PreviewStorage
      */
     public function get_item_attempts()
     {
-        $attempts = $this->get_property(self :: PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS);
+        $attempts = $this->get_property(self::PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS);
         if (! isset($attempts))
         {
             $attempts = array();
-            $this->set_property(self :: PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS, $attempts);
+            $this->set_property(self::PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS, $attempts);
         }
         return $attempts;
     }
@@ -128,7 +128,7 @@ class PreviewStorage
     {
         $attempts = $this->get_item_attempts();
         $attempts[$item_attempt->get_learning_path_attempt_id()][$item_attempt->get_learning_path_item_id()][$item_attempt->get_id()] = $item_attempt;
-        return $this->set_property(self :: PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS, $attempts);
+        return $this->set_property(self::PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS, $attempts);
     }
 
     /**
@@ -151,7 +151,7 @@ class PreviewStorage
         $attempts = $this->get_item_attempts();
         unset(
             $attempts[$item_attempt->get_learning_path_attempt_id()][$item_attempt->get_learning_path_item_id()][$item_attempt->get_id()]);
-        return $this->set_property(self :: PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS, $attempts);
+        return $this->set_property(self::PROPERTY_LEARNING_PATH_ITEM_ATTEMPTS, $attempts);
     }
 
     /**
@@ -195,11 +195,11 @@ class PreviewStorage
      */
     public function get_learning_path_attempts()
     {
-        $attempts = $this->get_property(self :: PROPERTY_LEARNING_PATH_ATTEMPT);
+        $attempts = $this->get_property(self::PROPERTY_LEARNING_PATH_ATTEMPT);
         if (! isset($attempts))
         {
             $attempts = array();
-            $this->set_property(self :: PROPERTY_LEARNING_PATH_ATTEMPT, $attempts);
+            $this->set_property(self::PROPERTY_LEARNING_PATH_ATTEMPT, $attempts);
         }
         return $attempts;
     }
@@ -213,7 +213,7 @@ class PreviewStorage
     {
         $attempts = $this->get_learning_path_attempts();
         $attempts[$attempt->get_content_object_id()] = $attempt;
-        return $this->set_property(self :: PROPERTY_LEARNING_PATH_ATTEMPT, $attempts);
+        return $this->set_property(self::PROPERTY_LEARNING_PATH_ATTEMPT, $attempts);
     }
 
     /**
@@ -235,7 +235,7 @@ class PreviewStorage
     {
         $attempts = $this->get_learning_path_attempts();
         unset($attempts[$attempt->get_content_object_id()]);
-        return $this->set_property(self :: PROPERTY_LEARNING_PATH_ATTEMPT, $attempts);
+        return $this->set_property(self::PROPERTY_LEARNING_PATH_ATTEMPT, $attempts);
     }
 
     /**
@@ -254,11 +254,11 @@ class PreviewStorage
      */
     public function get_question_attempts()
     {
-        $attempts = $this->get_property(self :: PROPERTY_QUESTION_ATTEMPTS);
+        $attempts = $this->get_property(self::PROPERTY_QUESTION_ATTEMPTS);
         if (! isset($attempts))
         {
             $attempts = array();
-            $this->set_property(self :: PROPERTY_QUESTION_ATTEMPTS, $attempts);
+            $this->set_property(self::PROPERTY_QUESTION_ATTEMPTS, $attempts);
         }
         return $attempts;
     }
@@ -272,7 +272,7 @@ class PreviewStorage
     {
         $attempts = $this->get_question_attempts();
         $attempts[$question_attempt->get_item_attempt_id()][$question_attempt->get_question_complex_id()] = $question_attempt;
-        return $this->set_property(self :: PROPERTY_QUESTION_ATTEMPTS, $attempts);
+        return $this->set_property(self::PROPERTY_QUESTION_ATTEMPTS, $attempts);
     }
 
     /**
@@ -294,7 +294,7 @@ class PreviewStorage
     {
         $attempts = $this->get_question_attempts();
         unset($attempts[$question_attempt->get_item_attempt_id()][$question_attempt->get_question_complex_id()]);
-        return $this->set_property(self :: PROPERTY_QUESTION_ATTEMPTS, $attempts);
+        return $this->set_property(self::PROPERTY_QUESTION_ATTEMPTS, $attempts);
     }
 
     /**

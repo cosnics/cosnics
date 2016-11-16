@@ -15,15 +15,15 @@ class BrowserComponent extends Manager implements TableSupport
         {
             throw new NotAllowedException();
         }
-
+        
         $table = new EntityTable($this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-        $html[] = $this->get_tabs(self :: ACTION_BROWSE, $table->as_html())->render();
+        $html[] = $this->get_tabs(self::ACTION_BROWSE, $table->as_html())->render();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 

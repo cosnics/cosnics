@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Render the parameters set via FilterData as HTML
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFilterRenderer
@@ -20,20 +20,20 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
     {
         $filter_data = $this->get_filter_data();
         $html = array();
-
-        $html[] = parent :: add_properties();
-
-        if ($filter_data->has_filter_property(FilterData :: FILTER_ICON))
+        
+        $html[] = parent::add_properties();
+        
+        if ($filter_data->has_filter_property(FilterData::FILTER_ICON))
         {
-            $translation = Translation :: get(
-                'IconSearchParameter',
+            $translation = Translation::get(
+                'IconSearchParameter', 
                 array(
-                    'ICON' => SystemAnnouncement :: icon_name(
-                        $filter_data->get_filter_property(FilterData :: FILTER_ICON))));
-
-            $html[] = $this->renderParameter($this->get_parameter_name(FilterData :: FILTER_ICON), $translation);
+                    'ICON' => SystemAnnouncement::icon_name(
+                        $filter_data->get_filter_property(FilterData::FILTER_ICON))));
+            
+            $html[] = $this->renderParameter($this->get_parameter_name(FilterData::FILTER_ICON), $translation);
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 }

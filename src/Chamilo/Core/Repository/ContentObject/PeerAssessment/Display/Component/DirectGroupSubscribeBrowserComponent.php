@@ -63,7 +63,7 @@ class DirectGroupSubscribeBrowserComponent extends Manager
         // TODO date locale doesn't work
         $html = array();
         
-        $image = Theme :: getInstance()->getCommonImagePath('Treemenu/Group');
+        $image = Theme::getInstance()->getCommonImagePath('Treemenu/Group');
         
         // loop through all the attempts and render them
         foreach ($groups as $g)
@@ -84,16 +84,16 @@ class DirectGroupSubscribeBrowserComponent extends Manager
                         $user_string .= $user->get_firstname() . ' ' . $user->get_lastname() . ', ';
                     }
                     
-                    $description .= Translation :: get('InThisGroup') . ': ' . rtrim($user_string, ' ,');
+                    $description .= Translation::get('InThisGroup') . ': ' . rtrim($user_string, ' ,');
                 }
                 else
                 {
-                    $description .= '<span style="color:#f00">' . Translation :: get('NoUsersEnrolled') . '!</span>';
+                    $description .= '<span style="color:#f00">' . Translation::get('NoUsersEnrolled') . '!</span>';
                 }
                 $actions = $this->render_toolbar($g);
                 $level = $level == 1 ? 2 : 1;
                 
-                $html[] = Manager :: render_list_item($title, $description, '$info', $actions, $level, false, $image);
+                $html[] = Manager::render_list_item($title, $description, '$info', $actions, $level, false, $image);
             }
         }
         
@@ -108,25 +108,25 @@ class DirectGroupSubscribeBrowserComponent extends Manager
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Subscribe', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Subscribe'), 
+                    Translation::get('Subscribe', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Subscribe'), 
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER, 
-                            self :: PARAM_GROUP => $group->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON));
+                            self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER, 
+                            self::PARAM_GROUP => $group->get_id())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
         elseif ($this->settings->get_unsubscribe_available() && ! $this->group_has_scores($group->get_id()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Unsubscribe', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Unsubscribe'), 
+                    Translation::get('Unsubscribe', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Unsubscribe'), 
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_UNSUBSCRIBE_USER, 
-                            self :: PARAM_GROUP => $group->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON));
+                            self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_USER, 
+                            self::PARAM_GROUP => $group->get_id())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
         
         return $toolbar->as_html();
@@ -146,9 +146,9 @@ class DirectGroupSubscribeBrowserComponent extends Manager
         $commonActions = new ButtonGroup();
         $commonActions->addButton(
             new Button(
-                Translation :: get('CreateGroup'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_SUBSCRIBE_USER))));
+                Translation::get('CreateGroup'), 
+                Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER))));
         
         $buttonToolbar->addButtonGroup($commonActions);
         

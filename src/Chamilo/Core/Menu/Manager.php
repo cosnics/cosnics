@@ -30,45 +30,45 @@ abstract class Manager extends Application
     const ACTION_RIGHTS = 'Rights';
     const PARAM_DIRECTION_UP = 'up';
     const PARAM_DIRECTION_DOWN = 'down';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent:: __construct($applicationConfiguration);
-
+        parent::__construct($applicationConfiguration);
+        
         $this->checkAuthorization(Manager::context());
     }
 
     public function get_item_creation_url()
     {
-        return $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_ADD));
+        return $this->get_url(array(self::PARAM_ACTION => self::ACTION_ADD));
     }
 
     public function get_item_editing_url($navigation_item)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_EDIT, self :: PARAM_ITEM => $navigation_item->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_EDIT, self::PARAM_ITEM => $navigation_item->get_id()));
     }
 
     public function get_item_rights_url($navigation_item)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_RIGHTS, self :: PARAM_ITEM => $navigation_item->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_RIGHTS, self::PARAM_ITEM => $navigation_item->get_id()));
     }
 
     public function get_item_deleting_url($navigation_item)
     {
         return $this->get_url(
-            array(self :: PARAM_ACTION => self :: ACTION_DELETE, self :: PARAM_ITEM => $navigation_item->get_id()));
+            array(self::PARAM_ACTION => self::ACTION_DELETE, self::PARAM_ITEM => $navigation_item->get_id()));
     }
 
     public function get_item_moving_url($navigation_item, $direction)
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_MOVE,
-                self :: PARAM_ITEM => $navigation_item->get_id(),
-                self :: PARAM_DIRECTION => $direction));
+                self::PARAM_ACTION => self::ACTION_MOVE, 
+                self::PARAM_ITEM => $navigation_item->get_id(), 
+                self::PARAM_DIRECTION => $direction));
     }
 
     public function get_menu()
@@ -77,17 +77,15 @@ abstract class Manager extends Application
         {
             $temp_replacement = '__ITEM__';
             $url_format = $this->get_url(
-                array(
-                    Application :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                    Manager :: PARAM_PARENT => $temp_replacement));
-            $this->menu = new ItemMenu(Request :: get(self :: PARAM_PARENT), $url_format);
+                array(Application::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $temp_replacement));
+            $this->menu = new ItemMenu(Request::get(self::PARAM_PARENT), $url_format);
         }
         return $this->menu;
     }
 
     public function get_menu_home_url()
     {
-        return $this->get_url(array(Application :: PARAM_ACTION => Manager :: ACTION_BROWSE));
+        return $this->get_url(array(Application::PARAM_ACTION => Manager::ACTION_BROWSE));
     }
 
     public function check_allowed()
@@ -96,9 +94,9 @@ abstract class Manager extends Application
         {
             throw new NotAllowedException();
         }
-
-        $setting = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
-
+        
+        $setting = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'enable_rights'));
+        
         if ($setting != 1)
         {
             throw new NotAllowedException();
@@ -107,11 +105,11 @@ abstract class Manager extends Application
 
     /**
      * Returns the admin breadcrumb generator
-     *
+     * 
      * @return \libraries\format\BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()
     {
-        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail :: getInstance());
+        return new \Chamilo\Core\Admin\Core\BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 }

@@ -11,12 +11,12 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
     public function render()
     {
         $object = $this->get_content_object()->get_synchronization_data()->get_external_object();
-        $settings = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
-            'url',
+        $settings = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting::get(
+            'url', 
             $object->get_external_repository_id());
-
+        
         $search_preview = $object->get_search_preview();
-
+        
         if ($search_preview instanceof Attachment)
         {
             $width = 320;
@@ -25,7 +25,7 @@ class HtmlThumbnailRenditionImplementation extends HtmlRenditionImplementation
         }
         else
         {
-            return ContentObjectRendition :: factory($this)->render();
+            return ContentObjectRendition::factory($this)->render();
         }
     }
 }

@@ -19,6 +19,6 @@ class NoProviderAvailableException extends \Exception
      */
     public function __construct($code, $previous)
     {
-        parent :: __construct(Translation :: get('NoProviderAvailable'), $code, $previous);
+        parent::__construct(Translation::get('NoProviderAvailable'), $code, $previous);
     }
 }

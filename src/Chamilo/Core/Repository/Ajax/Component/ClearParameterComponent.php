@@ -19,7 +19,7 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_PARAMETER, self :: PARAM_URL);
+        return array(self::PARAM_PARAMETER, self::PARAM_URL);
     }
 
     /*
@@ -27,40 +27,40 @@ class ClearParameterComponent extends \Chamilo\Core\Repository\Ajax\Manager
      */
     public function run()
     {
-        $parameter = $this->getPostDataValue(self :: PARAM_PARAMETER);
+        $parameter = $this->getPostDataValue(self::PARAM_PARAMETER);
         $parameter = explode('_', $parameter, 2);
-
+        
         try
         {
             if (count($parameter) == 2 && is_string($parameter[1]))
             {
-                $currentWorkspaceIdentifier = $this->getRequest()->request->get(self :: PARAM_CURRENT_WORKSPACE_ID);
+                $currentWorkspaceIdentifier = $this->getRequest()->request->get(self::PARAM_CURRENT_WORKSPACE_ID);
                 $currentWorkspaceIdentifier = $currentWorkspaceIdentifier ? $currentWorkspaceIdentifier : null;
-
+                
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $currentWorkspace = $workspaceService->determineWorkspaceForUserByIdentifier(
-                    $this->get_user(),
+                    $this->get_user(), 
                     $currentWorkspaceIdentifier);
-
-                ParameterFilterRenderer :: factory(
-                    FilterData :: getInstance($currentWorkspace),
-                    $currentWorkspace,
+                
+                ParameterFilterRenderer::factory(
+                    FilterData::getInstance($currentWorkspace), 
+                    $currentWorkspace, 
                     $parameter[1])->render();
-                $url = FilterData :: clean_url($currentWorkspace, $this->getPostDataValue(self :: PARAM_URL));
-
+                $url = FilterData::clean_url($currentWorkspace, $this->getPostDataValue(self::PARAM_URL));
+                
                 $result = new JsonAjaxResult();
-                $result->set_property(self :: PARAM_URL, $url);
+                $result->set_property(self::PARAM_URL, $url);
                 $result->set_result_code(200);
                 $result->display();
             }
             else
             {
-                JsonAjaxResult :: general_error(Translation :: get('NoParameterConfiguredToClear'));
+                JsonAjaxResult::general_error(Translation::get('NoParameterConfiguredToClear'));
             }
         }
         catch (\Exception $exception)
         {
-            JsonAjaxResult :: error(500);
+            JsonAjaxResult::error(500);
         }
     }
 }

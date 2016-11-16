@@ -60,15 +60,15 @@ class ContentObjectService
      *
      * @see ContentObjectService::getContentObjectsByTypeForWorkspace
      */
-    public function getContentObjectsForWorkspace(WorkspaceInterface $workspace,
+    public function getContentObjectsForWorkspace(WorkspaceInterface $workspace, 
         ConditionFilterRenderer $filterConditionRenderer, $offset, $count, $orderProperty)
     {
         return $this->getContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(),
-            $workspace,
-            $filterConditionRenderer,
-            $offset,
-            $count,
+            ContentObject::class_name(), 
+            $workspace, 
+            $filterConditionRenderer, 
+            $offset, 
+            $count, 
             $orderProperty);
     }
 
@@ -83,18 +83,18 @@ class ContentObjectService
      *
      * @see ContentObjectService::countContentObjectsByTypeForWorkspace
      */
-    public function countContentObjectsForWorkspace(WorkspaceInterface $workspace,
+    public function countContentObjectsForWorkspace(WorkspaceInterface $workspace, 
         ConditionFilterRenderer $filterConditionRenderer)
     {
         return $this->countContentObjectsByTypeForWorkspace(
-            ContentObject::class_name(),
-            $workspace,
+            ContentObject::class_name(), 
+            $workspace, 
             $filterConditionRenderer);
     }
 
     /**
      * Returns a list of content objects in a given workspace by a specific type
-     *
+     * 
      * @param string $contentObjectClassName
      * @param WorkspaceInterface $workspace
      * @param ConditionFilterRenderer $filterConditionRenderer
@@ -104,29 +104,29 @@ class ContentObjectService
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
      */
-    public function getContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
+    public function getContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace, 
         ConditionFilterRenderer $filterConditionRenderer, $offset, $count, $orderProperty)
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class_name() : $contentObjectClassName;
-
+        
         if ($workspace instanceof PersonalWorkspace)
         {
             return $this->getContentObjectRepository()->findAllInPersonalWorkspace(
-                $contentObjectClassName,
-                $workspace,
-                $filterConditionRenderer,
-                $offset,
-                $count,
+                $contentObjectClassName, 
+                $workspace, 
+                $filterConditionRenderer, 
+                $offset, 
+                $count, 
                 $orderProperty);
         }
         else
         {
             return $this->getContentObjectRepository()->findAllInWorkspace(
-                $contentObjectClassName,
-                $workspace,
-                $filterConditionRenderer,
-                $offset,
-                $count,
+                $contentObjectClassName, 
+                $workspace, 
+                $filterConditionRenderer, 
+                $offset, 
+                $count, 
                 $orderProperty);
         }
     }
@@ -139,23 +139,23 @@ class ContentObjectService
      *
      * @return int
      */
-    public function countContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
+    public function countContentObjectsByTypeForWorkspace($contentObjectClassName, WorkspaceInterface $workspace, 
         ConditionFilterRenderer $filterConditionRenderer)
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class_name() : $contentObjectClassName;
-
+        
         if ($workspace instanceof PersonalWorkspace)
         {
             return $this->getContentObjectRepository()->countAllInPersonalWorkspace(
-                $contentObjectClassName,
-                $workspace,
+                $contentObjectClassName, 
+                $workspace, 
                 $filterConditionRenderer);
         }
         else
         {
             return $this->getContentObjectRepository()->countAllInWorkspace(
-                $contentObjectClassName,
-                $workspace,
+                $contentObjectClassName, 
+                $workspace, 
                 $filterConditionRenderer);
         }
     }

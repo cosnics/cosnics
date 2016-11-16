@@ -14,10 +14,10 @@ class ContentObjectEmbedder extends Embedder
      */
     public function render()
     {
-        $content_object_display = ContentObjectRenditionImplementation :: launch(
+        $content_object_display = ContentObjectRenditionImplementation::launch(
             $this->get_node()->get_content_object(), 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_FULL, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_FULL, 
             $this->get_application());
         
         return $content_object_display;

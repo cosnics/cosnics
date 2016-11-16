@@ -62,7 +62,7 @@ class DetailsProcessor
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Storage\DataClass\Note $note
      * @param string[] $submittedValues
      */
-    public function __construct(AssignmentDataProvider $assignmentDataProvider, User $user, Entry $entry,
+    public function __construct(AssignmentDataProvider $assignmentDataProvider, User $user, Entry $entry, 
         Score $score = null, Note $note = null, $submittedValues)
     {
         $this->assignmentDataProvider = $assignmentDataProvider;
@@ -191,12 +191,12 @@ class DetailsProcessor
         {
             return false;
         }
-
+        
         if (! $this->processNote())
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -207,10 +207,10 @@ class DetailsProcessor
     protected function processScore()
     {
         $score = $this->getScore();
-
+        
         $submittedValues = $this->getSubmittedValues();
-        $submittedScore = $submittedValues[Score :: PROPERTY_SCORE];
-
+        $submittedScore = $submittedValues[Score::PROPERTY_SCORE];
+        
         if ($score instanceof Score)
         {
             if ($score->getScore() != $submittedScore)
@@ -218,7 +218,7 @@ class DetailsProcessor
                 $score->setScore($submittedScore);
                 $score->setModified(time());
                 $score->setUserId($this->getUser()->getId());
-
+                
                 return $this->getAssignmentDataProvider()->updateScore($score);
             }
         }
@@ -226,7 +226,7 @@ class DetailsProcessor
         {
             return $this->getAssignmentDataProvider()->createScore($this->getEntry(), $this->getUser(), $submittedScore);
         }
-
+        
         return true;
     }
 
@@ -237,10 +237,10 @@ class DetailsProcessor
     protected function processNote()
     {
         $note = $this->getNote();
-
+        
         $submittedValues = $this->getSubmittedValues();
-        $submittedNote = $submittedValues[Note :: PROPERTY_NOTE];
-
+        $submittedNote = $submittedValues[Note::PROPERTY_NOTE];
+        
         if ($note instanceof Note)
         {
             if ($note->getNote() != $submittedNote)
@@ -248,7 +248,7 @@ class DetailsProcessor
                 $note->setNote($submittedNote);
                 $note->setModified(time());
                 $note->setUserId($this->getUser()->getId());
-
+                
                 return $this->getAssignmentDataProvider()->updateNote($note);
             }
         }
@@ -256,7 +256,7 @@ class DetailsProcessor
         {
             return $this->getAssignmentDataProvider()->createNote($this->getEntry(), $this->getUser(), $submittedNote);
         }
-
+        
         return true;
     }
 }

@@ -17,7 +17,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formValidator = parent :: initialize();
+        $formValidator = parent::initialize();
         $renderer = $formValidator->get_renderer();
         $questionId = $this->getQuestionId();
         

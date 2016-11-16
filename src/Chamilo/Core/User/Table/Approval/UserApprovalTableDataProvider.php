@@ -24,7 +24,7 @@ class UserApprovalTableDataProvider extends DataClassTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: retrieve_approval_users($condition, $count, $offset, $order_property);
+        return DataManager::retrieve_approval_users($condition, $count, $offset, $order_property);
     }
 
     /**
@@ -34,6 +34,6 @@ class UserApprovalTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_approval_users($condition);
+        return DataManager::count_approval_users($condition);
     }
 }

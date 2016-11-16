@@ -17,10 +17,10 @@ class RepositoryApplicationItem extends ApplicationItem
     public function isItemSelected()
     {
         $currentWorkspace = $this->getMenuRenderer()->getRequest()->get(
-            \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID);
-
-        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application :: PARAM_CONTEXT);
-
+            \Chamilo\Core\Repository\Manager::PARAM_WORKSPACE_ID);
+        
+        $currentContext = $this->getMenuRenderer()->getRequest()->get(Application::PARAM_CONTEXT);
+        
         return ($currentContext == $this->getItem()->get_application() && ! isset($currentWorkspace));
     }
 }

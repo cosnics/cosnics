@@ -25,48 +25,48 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $trail = BreadcrumbTrail :: getInstance();
-
-        $id = Request :: get(self :: PARAM_USER_VIEW_ID);
-        $this->set_parameter(self :: PARAM_USER_VIEW_ID, $id);
+        $trail = BreadcrumbTrail::getInstance();
+        
+        $id = Request::get(self::PARAM_USER_VIEW_ID);
+        $this->set_parameter(self::PARAM_USER_VIEW_ID, $id);
         if ($id)
         {
-            $user_view = DataManager :: retrieve_by_id(UserView :: class_name(), $id);
-
+            $user_view = DataManager::retrieve_by_id(UserView::class_name(), $id);
+            
             $form = new UserViewForm(
-                UserViewForm :: TYPE_EDIT,
-                $user_view,
-                $this->get_url(array(self :: PARAM_USER_VIEW_ID => $id)),
+                UserViewForm::TYPE_EDIT, 
+                $user_view, 
+                $this->get_url(array(self::PARAM_USER_VIEW_ID => $id)), 
                 $this->get_user());
-
+            
             if ($form->validate())
             {
                 $success = $form->update_user_view();
                 $user_view = $form->get_user_view();
-
-                $message = Translation :: get(
-                    $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                    array('OBJECT' => Translation :: get('UserView')),
-                    Utilities :: COMMON_LIBRARIES);
-
+                
+                $message = Translation::get(
+                    $success ? 'ObjectUpdated' : 'ObjectNotUpdated', 
+                    array('OBJECT' => Translation::get('UserView')), 
+                    Utilities::COMMON_LIBRARIES);
+                
                 if (! $success)
                 {
                     $message .= '<br />' . implode('<br /', $user_view->get_errors());
                 }
-
+                
                 $this->redirect(
-                    $message,
-                    ($success ? false : true),
-                    array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                    $message, 
+                    ($success ? false : true), 
+                    array(self::PARAM_ACTION => self::ACTION_BROWSE));
             }
             else
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
@@ -74,10 +74,10 @@ class UpdaterComponent extends Manager
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('UserView')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('UserView')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 }

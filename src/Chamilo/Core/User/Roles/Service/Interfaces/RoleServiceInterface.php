@@ -6,14 +6,15 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Manages roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface RoleServiceInterface
 {
+
     /**
      * Creates a role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -24,7 +25,7 @@ interface RoleServiceInterface
 
     /**
      * Deletes a given role
-     *
+     * 
      * @param Role $role
      *
      * @throws \Exception
@@ -33,7 +34,7 @@ interface RoleServiceInterface
 
     /**
      * Returns a role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -44,7 +45,7 @@ interface RoleServiceInterface
 
     /**
      * Either retrieves or creates a new role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -53,7 +54,7 @@ interface RoleServiceInterface
 
     /**
      * Retrieves the roles
-     *
+     * 
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -65,7 +66,7 @@ interface RoleServiceInterface
 
     /**
      * Counts the roles
-     *
+     * 
      * @param Condition $condition
      *
      * @return int

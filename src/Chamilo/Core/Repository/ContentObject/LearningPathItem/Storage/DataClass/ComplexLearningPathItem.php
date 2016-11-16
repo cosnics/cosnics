@@ -15,22 +15,22 @@ class ComplexLearningPathItem extends ComplexContentObjectItem
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_PREREQUISITES);
+        return array(self::PROPERTY_PREREQUISITES);
     }
 
     public function get_prerequisites()
     {
-        return $this->get_additional_property(self :: PROPERTY_PREREQUISITES);
+        return $this->get_additional_property(self::PROPERTY_PREREQUISITES);
     }
 
     public function set_prerequisites($value)
     {
-        $this->set_additional_property(self :: PROPERTY_PREREQUISITES, $value);
+        $this->set_additional_property(self::PROPERTY_PREREQUISITES, $value);
     }
 
     public function has_prerequisites()
     {
-        return ! StringUtilities :: getInstance()->isNullOrEmpty(
-            $this->get_additional_property(self :: PROPERTY_PREREQUISITES));
+        return ! StringUtilities::getInstance()->isNullOrEmpty(
+            $this->get_additional_property(self::PROPERTY_PREREQUISITES));
     }
 }

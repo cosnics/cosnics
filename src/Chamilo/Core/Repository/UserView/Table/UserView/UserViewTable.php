@@ -18,7 +18,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class UserViewTable extends DataClassTable implements TableFormActionsSupport
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_USER_VIEW_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_USER_VIEW_ID;
 
     /**
      *
@@ -26,11 +26,11 @@ class UserViewTable extends DataClassTable implements TableFormActionsSupport
      */
     public function get_implemented_form_actions()
     {
-        $actions = new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
+        $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_DELETE)),
-                Translation :: get('DeleteSelected', null, Utilities :: COMMON_LIBRARIES)));
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE)), 
+                Translation::get('DeleteSelected', null, Utilities::COMMON_LIBRARIES)));
         return $actions;
     }
 }

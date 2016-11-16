@@ -17,16 +17,16 @@ abstract class Manager extends Application
     // Parameters
     const PARAM_ENTITY_RELATION_ID = 'entity_relation_id';
     const PARAM_ACTION = 'rights_action';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_DELETE = 'Deleter';
     const ACTION_CREATE = 'Creator';
     const ACTION_UPDATE = 'Updater';
     const ACTION_RIGHTS = 'Rights';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_CREATE;
+    const DEFAULT_ACTION = self::ACTION_CREATE;
 
     /**
      *
@@ -44,6 +44,6 @@ abstract class Manager extends Application
      */
     public function getCurrentWorkspaceIdentifier()
     {
-        return $this->getRequest()->query->get(\Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
+        return $this->getRequest()->query->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_WORKSPACE_ID);
     }
 }

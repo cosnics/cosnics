@@ -14,18 +14,18 @@ use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 
 /**
  * Container to enable previews of a portfolio in the context of the repository
- *
+ * 
  * @package repository\content_object\portfolio\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Manager implements
+class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Preview\Manager implements 
     PortfolioDisplaySupport
 {
 
     function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::context(),
+            \Chamilo\Core\Repository\ContentObject\Portfolio\Display\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
@@ -60,7 +60,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset)
     {
         return PreviewStorage::getInstance()->retrieve_feedbacks(
-            $this->get_root_content_object()->get_id(),
+            $this->get_root_content_object()->get_id(), 
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }
 
@@ -148,7 +148,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     function retrieve_portfolio_notification(ComplexContentObjectPathNode $node)
     {
         return PreviewStorage::getInstance()->retrieve_notification(
-            $this->get_root_content_object()->get_id(),
+            $this->get_root_content_object()->get_id(), 
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }
 
@@ -161,7 +161,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
     public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
     {
         return PreviewStorage::getInstance()->retrieve_notifications(
-            $this->get_root_content_object()->get_id(),
+            $this->get_root_content_object()->get_id(), 
             $node->get_complex_content_object_item() ? $node->get_complex_content_object_item()->get_id() : 0);
     }
 

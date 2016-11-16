@@ -9,11 +9,11 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
     public function render()
     {
         $object = $this->get_content_object();
-
+        
         $html = array();
-
+        
         $html[] = '<div class="link_url" style="margin-top: 1em;">';
-
+        
         if ($object->get_show_in_iframe())
         {
             $html[] = '<div style="border: 1px solid grey;">';

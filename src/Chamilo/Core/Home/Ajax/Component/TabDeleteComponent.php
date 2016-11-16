@@ -20,7 +20,7 @@ class TabDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_TAB);
+        return array(self::PARAM_TAB);
     }
 
     /*
@@ -28,29 +28,29 @@ class TabDeleteComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager :: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $tab = DataManager :: retrieve_by_id(Tab :: class_name(), intval($this->getPostDataValue(self :: PARAM_TAB)));
-
+        
+        $tab = DataManager::retrieve_by_id(Tab::class_name(), intval($this->getPostDataValue(self::PARAM_TAB)));
+        
         if ($tab->getUserId() == $userId && $tab->canBeDeleted())
         {
             if ($tab->delete())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: general_error(Translation :: get('TabNotDeleted'));
+                JsonAjaxResult::general_error(Translation::get('TabNotDeleted'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

@@ -23,13 +23,13 @@ class LanguageCategoryItem extends Item
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
-        parent :: __construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
     public function get_children()
@@ -37,14 +37,14 @@ class LanguageCategoryItem extends Item
         if (! isset($this->children))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_PARENT),
+                new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_PARENT), 
                 new StaticConditionVariable($this->get_id()));
             $parameters = new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                new OrderBy(new PropertyConditionVariable(Item :: class_name(), Item :: PROPERTY_SORT)));
-            $items = DataManager :: retrieves(Item :: class_name(), $parameters);
+                $condition, 
+                null, 
+                null, 
+                new OrderBy(new PropertyConditionVariable(Item::class_name(), Item::PROPERTY_SORT)));
+            $items = DataManager::retrieves(Item::class_name(), $parameters);
             $this->children = $items->as_array();
         }
         return $this->children;
@@ -74,7 +74,7 @@ class LanguageCategoryItem extends Item
                 return false;
             }
         }
-
-        return parent :: delete();
+        
+        return parent::delete();
     }
 }

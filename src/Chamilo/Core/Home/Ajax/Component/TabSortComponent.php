@@ -19,7 +19,7 @@ class TabSortComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_ORDER);
+        return array(self::PARAM_ORDER);
     }
 
     /*
@@ -27,35 +27,35 @@ class TabSortComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
-
+        $user_id = DataManager::determine_user_id();
+        
         if ($user_id === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        parse_str($this->getPostDataValue(self :: PARAM_ORDER), $tabs);
-
+        
+        parse_str($this->getPostDataValue(self::PARAM_ORDER), $tabs);
+        
         $errors = 0;
-
-        foreach ($tabs[self :: PARAM_ORDER] as $sortOrder => $tabId)
+        
+        foreach ($tabs[self::PARAM_ORDER] as $sortOrder => $tabId)
         {
-            $tab = DataManager :: retrieve_by_id(Tab :: class_name(), intval($tabId));
+            $tab = DataManager::retrieve_by_id(Tab::class_name(), intval($tabId));
             $tab->setSort($sortOrder + 1);
-
+            
             if (! $tab->update())
             {
                 $errors ++;
             }
         }
-
+        
         if ($errors > 0)
         {
-            JsonAjaxResult :: error(409, Translation :: get('OneOrMoreTabsNotUpdated'));
+            JsonAjaxResult::error(409, Translation::get('OneOrMoreTabsNotUpdated'));
         }
         else
         {
-            JsonAjaxResult :: success();
+            JsonAjaxResult::success();
         }
     }
 }

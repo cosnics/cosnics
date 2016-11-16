@@ -5,5 +5,4 @@ use Behat\MinkExtension\Context\RawMinkContext;
 
 class Context extends RawMinkContext
 {
-
 }

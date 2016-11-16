@@ -11,7 +11,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -50,13 +50,13 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             
             foreach ($matches as $j => $match)
             {
-                if ($type == AssessmentMatrixQuestion :: MATRIX_TYPE_RADIO)
+                if ($type == AssessmentMatrixQuestion::MATRIX_TYPE_RADIO)
                 
                 {
                     $answer_name = $question_id . '_' . $index . '_0';
                     $html[] = '<td style="text-align: center;"><input type="radio" name="' . $answer_name . '"/></td>';
                 }
-                elseif ($type == AssessmentMatrixQuestion :: MATRIX_TYPE_CHECKBOX)
+                elseif ($type == AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX)
                 
                 {
                     $answer_name = $question_id . '_' . $index . '[' . $j . ']';

@@ -13,32 +13,32 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_LOGO));
+        return parent::get_default_property_names(array(self::PROPERTY_LOGO));
     }
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     public function get_logo()
     {
-        return $this->get_default_property(self :: PROPERTY_LOGO);
+        return $this->get_default_property(self::PROPERTY_LOGO);
     }
 
     public function set_logo($logo)
     {
-        return $this->set_default_property(self :: PROPERTY_LOGO, $logo);
+        return $this->set_default_property(self::PROPERTY_LOGO, $logo);
     }
 
     public function get_website()
     {
-        return $this->get_default_property(self :: PROPERTY_WEBSITE);
+        return $this->get_default_property(self::PROPERTY_WEBSITE);
     }
 
     public function set_website($website)
     {
-        return $this->set_default_property(self :: PROPERTY_WEBSITE, $website);
+        return $this->set_default_property(self::PROPERTY_WEBSITE, $website);
     }
 
     public function get_tags()

@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class File extends ContentObject implements Versionable, Includeable, FileStorageSupport
 {
-
+    
     // Properties
     const PROPERTY_STORAGE_PATH = 'storage_path';
     const PROPERTY_PATH = 'path';
@@ -33,7 +33,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     const PROPERTY_FILESIZE = 'filesize';
     const PROPERTY_HASH = 'hash';
     const PROPERTY_EXTENSION = 'extension';
-
+    
     // Filetype groups
     const TYPE_AUDIO = 1;
     const TYPE_VIDEO = 2;
@@ -63,7 +63,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * In memory file content.
      * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
-     *
+     * 
      * @var mixed
      */
     private $in_memory_file;
@@ -72,14 +72,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      * Temporary file path.
      * A path to a file that has to be moved and renamed when the File is saved. Useful for
      * instance when a file is uploaded to the server.
-     *
+     * 
      * @var string
      */
     private $temporary_file_path;
 
     /**
      * Indicates wether the File must be saved as a new version when its save() or update() method is called
-     *
+     * 
      * @var boolean
      */
     private $save_as_new_version = false;
@@ -155,7 +155,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 Filesystem::remove($this->get_full_path());
             }
         }
-
+        
         return parent::delete($only_version);
     }
 
@@ -176,16 +176,16 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         $icon_name = strtolower($parts[count($parts) - 1]);
         $icon_name = $size . '_' . $icon_name;
         $icon_path = Theme::getInstance()->getImagePath(
-            ContentObject::get_content_object_type_namespace($this->get_type()),
-            'Logo/' . $icon_name,
-            'png',
+            ContentObject::get_content_object_type_namespace($this->get_type()), 
+            'Logo/' . $icon_name, 
+            'png', 
             false);
-
+        
         if (! file_exists($icon_path))
         {
             return $size;
         }
-
+        
         return $icon_name;
     }
 
@@ -198,7 +198,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function get_icon_path($size = Theme :: ICON_SMALL)
     {
         $extension = (string) StringUtilities::getInstance()->createString($this->get_extension())->upperCamelize();
-
+        
         $path = Theme::getInstance()->getFileExtension($extension, $size, false);
         if (file_exists($path))
         {
@@ -208,7 +208,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         else
         {
             return Theme::getInstance()->getImagePath(
-                ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2),
+                ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), 
                 'Logo/' . $size . ($this->is_current() ? '' : 'Na'));
         }
     }
@@ -228,7 +228,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Get In memory file content.
      * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
-     *
+     * 
      * @return mixed
      */
     public function get_in_memory_file()
@@ -239,7 +239,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Set In memory file content.
      * Will be saved on disk if it doesn't exist yet. Mainly used to create a new File.
-     *
+     * 
      * @var $in_memory_file mixed
      * @return void
      */
@@ -251,14 +251,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             {
                 throw new Exception('A File can not have a temporary file path and in memory content');
             }
-
+            
             $this->in_memory_file = $in_memory_file;
         }
     }
 
     /**
      * Get a value indicating wether the File must be saved as a new version if its save() or update() method is called
-     *
+     * 
      * @return boolean
      */
     public function get_save_as_new_version()
@@ -268,7 +268,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Set a value indicating wether the File must be saved as a new version if its save() or update() method is called
-     *
+     * 
      * @var $save_as_new_version boolean
      * @return void
      */
@@ -283,7 +283,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Get temporary file path.
      * A path to a file that has to be moved and renamed when the File is saved
-     *
+     * 
      * @return string
      */
     public function get_temporary_file_path()
@@ -294,7 +294,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Set temporary file path.
      * A path to a file that has to be moved and renamed when the File is saved
-     *
+     * 
      * @var $temporary_file_path string
      * @return void
      */
@@ -306,7 +306,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             {
                 throw new Exception('A File can not have a temporary file path and in memory content');
             }
-
+            
             $this->temporary_file_path = $temporary_file_path;
         }
     }
@@ -319,7 +319,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Determines if this document is an image
-     *
+     * 
      * @return boolean True if the document is an image
      */
     public function is_image()
@@ -329,7 +329,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Determines if this document is a flash movie
-     *
+     * 
      * @return boolean True if the document is a flash movie
      */
     public function is_flash()
@@ -339,7 +339,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Determines if this document is a video
-     *
+     * 
      * @return boolean True if the document is a video
      */
     public function is_video()
@@ -349,7 +349,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Determines if this document is an audio file
-     *
+     * 
      * @return boolean True if the document is an audio file
      */
     public function is_audio()
@@ -359,7 +359,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Get extensions for images
-     *
+     * 
      * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_IMAGE) now
      * @return string[]
      */
@@ -370,7 +370,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Get extensions for flash
-     *
+     * 
      * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_FLASH) now
      * @return string[]
      */
@@ -383,13 +383,13 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     {
         $flash_types = array();
         $flash_types[] = 'flv';
-
+        
         return $flash_types;
     }
 
     /**
      * Get extensions for video
-     *
+     * 
      * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_VIDEO) now
      * @return string[]
      */
@@ -400,7 +400,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     /**
      * Get extensions for audio
-     *
+     * 
      * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_AUDIO) now
      * @return string[]
      */
@@ -425,7 +425,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         // $showable_types[] = 'docx';
         // $showable_types[] = 'xlsx';
         // $showable_types[] = 'mht';
-
+        
         return $showable_types;
     }
 
@@ -456,28 +456,28 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function send_as_download()
     {
         $fileName = str_replace(' ', '_', $this->get_filename());
-
+        
         $file = $this->get_full_path();
         $response = new StreamedResponse();
         $response->headers->add(
             array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
-
+        
         $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
-            '\\',
+            '\\', 
             '-')->replace('%', '_')->__toString();
-
+        
         $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $fileName,
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT, 
+            $fileName, 
             $safeFileName);
-
+        
         $response->headers->set('Content-Disposition', $dispositionHeader);
-
+        
         $response->setCallback(function () use ($file)
         {
             readfile($file);
         });
-
+        
         $response->send();
         exit();
     }
@@ -485,27 +485,27 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function open_in_browser()
     {
         $fileName = str_replace(' ', '_', $this->get_filename());
-
+        
         $file = $this->get_full_path();
         $response = new StreamedResponse();
         $response->headers->add(
             array('Content-Type' => $this->get_mime_type(), 'Content-Length' => $this->get_filesize()));
-
+        
         $safeFileName = StringUtilities::getInstance()->createString($fileName)->toAscii()->replace('/', '-')->replace(
-            '\\',
+            '\\', 
             '-')->replace('%', '_')->__toString();
-
+        
         $dispositionHeader = $response->headers->makeDisposition(
-            ResponseHeaderBag::DISPOSITION_INLINE,
-            $fileName,
+            ResponseHeaderBag::DISPOSITION_INLINE, 
+            $fileName, 
             $safeFileName);
-
+        
         $response->headers->set('Content-Disposition', $dispositionHeader);
         $response->setCallback(function () use ($file)
         {
             readfile($file);
         });
-
+        
         $response->send();
         exit();
     }
@@ -513,16 +513,16 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public static function get_additional_property_names()
     {
         return array(
-            self::PROPERTY_FILENAME,
-            self::PROPERTY_FILESIZE,
-            self::PROPERTY_PATH,
-            self::PROPERTY_HASH,
+            self::PROPERTY_FILENAME, 
+            self::PROPERTY_FILESIZE, 
+            self::PROPERTY_PATH, 
+            self::PROPERTY_HASH, 
             self::PROPERTY_STORAGE_PATH);
     }
 
     /**
      * (non-PHPdoc)
-     *
+     * 
      * @see common/DataClass#check_before_save()
      */
     protected function check_before_save()
@@ -532,16 +532,16 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         {
             $this->add_error(Translation::get('FileTitleIsRequired'));
         }
-
+        
         $descriptionRequired = Configuration::getInstance()->get_setting(
             array(\Chamilo\Core\Repository\Manager::context(), 'description_required'));
-
+        
         // Description
         if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty($this->get_description()))
         {
             $this->add_error(Translation::get('FileDescriptionIsRequired'));
         }
-
+        
         // OwnerId
         $owner_id = $this->get_owner_id();
         if (! isset($owner_id) || ! is_numeric($owner_id))
@@ -557,7 +557,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         }
         else
         {
-
+            
             /*
              * Make a copy of the current file if the update has to create a new version, without saving a new content
              */
@@ -568,27 +568,27 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                     $this->add_error(Translation::get('FileDuplicateError'));
                 }
             }
-
+            
             $fullpath = $this->get_full_path();
-
+            
             if (! isset($fullpath) || ! file_exists($fullpath))
             {
                 $this->add_error(Translation::get('FileFileContentNotSet'));
             }
         }
-
+        
         // Filename
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_filename()))
         {
             $this->add_error(Translation::get('FileFilenameIsRequired'));
         }
-
+        
         // Path
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_path()))
         {
             $this->add_error(Translation::get('FilePathToFileNotSet'));
         }
-
+        
         // Hash
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_hash()))
         {
@@ -600,13 +600,13 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Save the in memory file or the temporary file to the current user disk space Return true if the file could be
      * saved
-     *
+     * 
      * @return boolean
      */
     private function save_file()
     {
         $save_success = false;
-
+        
         if ($this->has_file_to_save())
         {
             $filename = $this->get_filename();
@@ -620,36 +620,36 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 if (! $as_new_version && $this->is_identified())
                 {
                     $current_path = $this->get_path();
-
+                    
                     if (isset($current_path) && is_file(Path::getInstance()->getRepositoryPath() . $current_path))
                     {
                         Filesystem::remove(Path::getInstance()->getRepositoryPath() . $current_path);
                     }
                 }
-
+                
                 $filename_hash = md5($filename);
                 $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
                 $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
-
+                
                 Filesystem::create_dir($full_folder_path);
                 $unique_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
-
+                
                 $relative_path = $relative_folder_path . '/' . $unique_hash;
                 $path_to_save = $full_folder_path . '/' . $unique_hash;
-
+                
                 $save_success = false;
                 if (StringUtilities::getInstance()->hasValue($this->temporary_file_path))
                 {
                     if (Filesystem::move_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
                     {
-
+                        
                         $save_success = true;
                     }
                     else
                     {
                         $this->add_error(
                             'File move failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save);
-
+                        
                         if (Filesystem::copy_file($this->temporary_file_path, $path_to_save, ! $as_new_version))
                         {
                             if (Filesystem::remove($this->temporary_file_path))
@@ -669,20 +669,20 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                     }
                 }
                 elseif (StringUtilities::getInstance()->hasValue($this->in_memory_file) && Filesystem::write_to_file(
-                    $path_to_save,
+                    $path_to_save, 
                     $this->in_memory_file))
                 {
                     $save_success = true;
                 }
-
+                
                 if ($save_success)
                 {
                     Filesystem::chmod(
-                        $path_to_save,
+                        $path_to_save, 
                         Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'permissions_new_files')));
-
+                    
                     $file_bytes = Filesystem::get_disk_space($path_to_save);
-
+                    
                     $this->set_filesize($file_bytes);
                     $this->set_storage_path(Path::getInstance()->getRepositoryPath());
                     $this->set_path($relative_path);
@@ -699,7 +699,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 $this->add_error(Translation::get('FileFilenameNotSet'));
             }
         }
-
+        
         return $save_success;
     }
 
@@ -708,27 +708,27 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      * Set the new values of path and hash of the current object. Useful
      * when a File is updated as a new version, without replacing the content Note: needed as when saving a new version
      * of a File, a new record is saved in the repository_document table, and the 'hash' field must be unique.
-     *
+     * 
      * @return boolean
      */
     private function duplicate_current_file()
     {
         $full_current_file_path = $this->get_full_path();
-
+        
         if (file_exists($full_current_file_path))
         {
             $filename_hash = md5($this->get_filename());
             $relative_folder_path = $this->get_owner_id() . '/' . Text::char_at($filename_hash, 0);
             $full_folder_path = Path::getInstance()->getRepositoryPath() . $relative_folder_path;
-
+            
             $unique_filename_hash = Filesystem::create_unique_name($full_folder_path, $filename_hash);
-
+            
             $path_to_copied_file = $full_folder_path . '/' . $unique_filename_hash;
-
+            
             $this->set_storage_path(Path::getInstance()->getRepositoryPath());
             $this->set_path($relative_folder_path . '/' . $unique_filename_hash);
             $this->set_hash($unique_filename_hash);
-
+            
             return copy($full_current_file_path, $path_to_copied_file);
         }
         else
@@ -740,22 +740,22 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Active record functions
      */
-
+    
     /**
      * (non-PHPdoc)
-     *
+     * 
      * @see repository/lib/ContentObject#create()
      */
     public function create()
     {
         $this->clear_errors();
-
+        
         return parent::create();
     }
 
     /**
      * (non-PHPdoc)
-     *
+     * 
      * @see repository/lib/ContentObject#update($trueUpdate)
      */
     public function update($trueUpdate = true)
@@ -767,9 +767,9 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         {
             return $this->version();
         }
-
+        
         $this->clear_errors();
-
+        
         return parent::update($trueUpdate);
     }
 
@@ -785,17 +785,17 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         {
             // open file
             $handle = fopen($this->get_full_path(), 'r+');
-
+            
             // read contents
             $this->contents = fread($handle, filesize($this->get_full_path()));
-
+            
             // process changes
             parent::update_include_links($mapping);
-
+            
             // write file
             rewind($handle);
             fwrite($handle, $this->contents);
-
+            
             // close file
             fclose($handle);
         }

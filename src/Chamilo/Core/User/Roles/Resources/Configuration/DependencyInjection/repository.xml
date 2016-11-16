@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="chamilo.core.user.roles.storage.repository.role_repository"
-                 class="Chamilo\Core\User\Roles\Storage\Repository\RoleRepository">
+        <service
+            id="chamilo.core.user.roles.storage.repository.role_repository"
+            class="Chamilo\Core\User\Roles\Storage\Repository\RoleRepository">
         </service>
 
-        <service id="chamilo.core.user.roles.storage.repository.user_role_repository"
-                 class="Chamilo\Core\User\Roles\Storage\Repository\UserRoleRepository">
+        <service
+            id="chamilo.core.user.roles.storage.repository.user_role_repository"
+            class="Chamilo\Core\User\Roles\Storage\Repository\UserRoleRepository">
         </service>
     </services>
 </container>

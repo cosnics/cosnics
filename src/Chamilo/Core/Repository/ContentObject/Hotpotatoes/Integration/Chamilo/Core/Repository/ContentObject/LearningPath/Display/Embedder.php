@@ -21,24 +21,24 @@ class Embedder extends ContentObjectEmbedder
     public function run()
     {
         $attempt_data = $this->get_node()->get_current_attempt();
-
+        
         // TODO: Make this implementation context-independent
-
+        
         $redirect = new Redirect(
             array(
-                \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::context(),
+                \Chamilo\Application\Weblcms\Manager::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Ajax\Manager::context(), 
                 \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Ajax\Manager::ACTION_SAVE_LEARNING_PATH_HOTPOTATOES_SCORE));
-
+        
         $link = $this->get_node()->get_content_object()->add_javascript(
-            $redirect->getUrl(),
-            null,
+            $redirect->getUrl(), 
+            null, 
             $attempt_data->get_id());
-
+        
         $html = array();
-
+        
         $html[] = '<iframe frameborder="0" class="link_iframe" src="' . $link . '" width="100%" height="700px">';
         $html[] = '<p>Your browser does not support iframes.</p></iframe>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

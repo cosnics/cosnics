@@ -6,7 +6,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
 
     /**
      * Considering that this is a preview, always return true
-     *
+     * 
      * @param $right
      * @return boolean
      */
@@ -14,7 +14,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
     {
         return true;
     }
-
+    
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
     public function is_allowed_to_edit_content_object()
     {

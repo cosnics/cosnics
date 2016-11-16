@@ -11,7 +11,7 @@ class QuotaComponent extends Manager
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Quota\Manager :: context(),
+            \Chamilo\Core\Repository\Quota\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

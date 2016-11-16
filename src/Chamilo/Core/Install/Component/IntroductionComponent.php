@@ -29,58 +29,58 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
         $this->checkInstallationAllowed();
         
         $phpVersion = phpversion();
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
-
+        
         if ($phpVersion >= 5.4)
         {
             $buttonToolBar = new ButtonToolBar();
-
+            
             $dropDownButton = new DropdownButton(
-                Translation :: get('Install'),
-                new BootstrapGlyph('ok'),
-                Button :: DISPLAY_ICON_AND_LABEL,
+                Translation::get('Install'), 
+                new BootstrapGlyph('ok'), 
+                Button::DISPLAY_ICON_AND_LABEL, 
                 'btn-primary');
-
+            
             $buttonToolBar->addItem($dropDownButton);
-
+            
             foreach ($this->getLanguages() as $languageKey => $languageValue)
             {
                 $dropDownButton->addSubButton(
                     new SubButton(
-                        $languageValue,
-                        null,
+                        $languageValue, 
+                        null, 
                         $this->get_url(
                             array(
-                                self :: PARAM_ACTION => self :: ACTION_REQUIREMENTS,
-                                self :: PARAM_LANGUAGE => $languageKey))));
+                                self::PARAM_ACTION => self::ACTION_REQUIREMENTS, 
+                                self::PARAM_LANGUAGE => $languageKey))));
             }
-
+            
             $buttonToolBar->addItem(
                 new Button('Read the installation guide', new BootstrapGlyph('book'), 'documentation/install.txt'));
             $buttonToolBar->addItem(
                 new Button('Visit chamilo.org', new BootstrapGlyph('globe'), 'http://www.chamilo.org/'));
             $buttonToolBar->addItem(
                 new Button('Get support', new BootstrapGlyph('question-sign'), 'http://www.chamilo.org/forum/'));
-
+            
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
-
+            
             $html[] = $buttonToolbarRenderer->render();
         }
-
+        
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     protected function getInfo()
     {
         $phpVersion = phpversion();
-
+        
         $html = array();
-
+        
         if ($phpVersion >= 5.4)
         {
             $html[] = 'From the looks of it, Chamilo is currently not installed on your system.';
@@ -101,7 +101,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
             $html[] = '</a>';
             $html[] = '</div>';
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 }

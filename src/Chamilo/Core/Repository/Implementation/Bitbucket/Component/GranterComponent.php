@@ -10,10 +10,10 @@ class GranterComponent extends Manager
 
     public function run()
     {
-        $id = Request :: get(self :: PARAM_EXTERNAL_REPOSITORY_ID);
-        $user = Request :: get(self :: PARAM_EXTERNAL_REPOSITORY_USER);
+        $id = Request::get(self::PARAM_EXTERNAL_REPOSITORY_ID);
+        $user = Request::get(self::PARAM_EXTERNAL_REPOSITORY_USER);
         
-        $privilege = Request :: get(self :: PARAM_EXTERNAL_REPOSITORY_PRIVILEGE);
+        $privilege = Request::get(self::PARAM_EXTERNAL_REPOSITORY_PRIVILEGE);
         
         if ($id || ($id && $user && $privilege))
         {
@@ -21,18 +21,18 @@ class GranterComponent extends Manager
             if ($success)
             {
                 $parameters = $this->get_parameters();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
-                $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-                $parameters[self :: PARAM_EXTERNAL_REPOSITORY_USER] = $user;
-                $parameters[self :: PARAM_EXTERNAL_REPOSITORY_PRIVILEGE] = $privilege;
-                $this->redirect(Translation :: get('PrivilegesGranted'), false, $parameters);
+                $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
+                $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+                $parameters[self::PARAM_EXTERNAL_REPOSITORY_USER] = $user;
+                $parameters[self::PARAM_EXTERNAL_REPOSITORY_PRIVILEGE] = $privilege;
+                $this->redirect(Translation::get('PrivilegesGranted'), false, $parameters);
             }
             else
             {
                 $parameters = $this->get_parameters();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
-                $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-                $this->redirect(Translation :: get('PrivilegesNotGranted'), true, $parameters);
+                $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
+                $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+                $this->redirect(Translation::get('PrivilegesNotGranted'), true, $parameters);
             }
         }
         else

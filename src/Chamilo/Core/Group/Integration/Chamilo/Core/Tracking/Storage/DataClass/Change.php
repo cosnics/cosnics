@@ -17,16 +17,16 @@ class Change extends ChangesTracker
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_TARGET_USER_ID));
+        return parent::get_default_property_names(array(self::PROPERTY_TARGET_USER_ID));
     }
 
     public function validate_parameters(array $parameters = array())
     {
-        parent :: validate_parameters($parameters);
+        parent::validate_parameters($parameters);
         
-        if ($parameters[self :: PROPERTY_TARGET_USER_ID])
+        if ($parameters[self::PROPERTY_TARGET_USER_ID])
         {
-            $this->set_target_user_id($parameters[self :: PROPERTY_TARGET_USER_ID]);
+            $this->set_target_user_id($parameters[self::PROPERTY_TARGET_USER_ID]);
         }
         else
         {
@@ -37,7 +37,7 @@ class Change extends ChangesTracker
     public function empty_tracker($event)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($event :: class_name(), 'action'), 
+            new PropertyConditionVariable($event::class_name(), 'action'), 
             new StaticColumnConditionVariable($event->get_name()));
         return $this->remove($condition);
     }
@@ -46,9 +46,9 @@ class Change extends ChangesTracker
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($event :: class_name(), 'action'), 
+            new PropertyConditionVariable($event::class_name(), 'action'), 
             new StaticColumnConditionVariable($event->get_name()));
-        return parent :: export($start_date, $end_date, $conditions);
+        return parent::export($start_date, $end_date, $conditions);
     }
 
     public function is_summary_tracker()
@@ -62,7 +62,7 @@ class Change extends ChangesTracker
      */
     public function get_target_user_id()
     {
-        return $this->get_default_property(self :: PROPERTY_TARGET_USER_ID);
+        return $this->get_default_property(self::PROPERTY_TARGET_USER_ID);
     }
 
     /**
@@ -71,6 +71,6 @@ class Change extends ChangesTracker
      */
     public function set_target_user_id($target_user_id)
     {
-        $this->set_default_property(self :: PROPERTY_TARGET_USER_ID, $target_user_id);
+        $this->set_default_property(self::PROPERTY_TARGET_USER_ID, $target_user_id);
     }
 }

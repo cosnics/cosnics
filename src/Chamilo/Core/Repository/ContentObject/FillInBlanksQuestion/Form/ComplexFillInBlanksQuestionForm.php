@@ -30,29 +30,29 @@ class ComplexFillInBlanksQuestionForm extends ComplexContentObjectItemForm
         
         $elements[] = $this->createElement(
             'checkbox', 
-            self :: PROPERTY_RECALCULATE_WEIGHT, 
-            Translation :: get('RecalculateWeight'));
+            self::PROPERTY_RECALCULATE_WEIGHT, 
+            Translation::get('RecalculateWeight'));
         
         $elements[] = $this->createElement(
             'text', 
-            ComplexFillInBlanksQuestion :: PROPERTY_WEIGHT, 
-            Translation :: get('Weight'), 
+            ComplexFillInBlanksQuestion::PROPERTY_WEIGHT, 
+            Translation::get('Weight'), 
             array("size" => "50", 'disabled' => 'disabled'));
         
         $elements[] = $this->createElement(
             'checkbox', 
-            ComplexFillInBlanksQuestion :: PROPERTY_RANDOM, 
-            Translation :: get('RandomizeHotspots'));
+            ComplexFillInBlanksQuestion::PROPERTY_RANDOM, 
+            Translation::get('RandomizeHotspots'));
         
-        $elements[] = ConfigurationForm :: build_answer_feedback(
+        $elements[] = ConfigurationForm::build_answer_feedback(
             $this, 
             array(
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_WRONG, 
-                Configuration :: ANSWER_FEEDBACK_TYPE_ALL));
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_CORRECT, 
+                Configuration::ANSWER_FEEDBACK_TYPE_WRONG, 
+                Configuration::ANSWER_FEEDBACK_TYPE_ALL));
         
         return $elements;
     }
@@ -67,10 +67,10 @@ class ComplexFillInBlanksQuestionForm extends ComplexContentObjectItemForm
         
         if (isset($complex_content_object_item))
         {
-            $defaults[ComplexFillInBlanksQuestion :: PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
-            $defaults[self :: PROPERTY_RECALCULATE_WEIGHT] = 1;
-            $defaults[ComplexFillInBlanksQuestion :: PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
-            $defaults[ComplexFillInBlanksQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            $defaults[ComplexFillInBlanksQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
+            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
+            $defaults[ComplexFillInBlanksQuestion::PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
+            $defaults[ComplexFillInBlanksQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
         }
         
         return $defaults;
@@ -86,7 +86,7 @@ class ComplexFillInBlanksQuestionForm extends ComplexContentObjectItemForm
         $complex_content_object_item = $this->get_complex_content_object_item();
         $this->set_values($complex_content_object_item, $values);
         
-        return parent :: update();
+        return parent::update();
     }
 
     /**
@@ -96,18 +96,18 @@ class ComplexFillInBlanksQuestionForm extends ComplexContentObjectItemForm
      */
     private function set_values($complex_content_object_item, $values)
     {
-        if ($values[self :: PROPERTY_RECALCULATE_WEIGHT] == 1)
+        if ($values[self::PROPERTY_RECALCULATE_WEIGHT] == 1)
         {
             $complex_content_object_item->set_weight(
                 $complex_content_object_item->get_ref_object()->get_default_weight());
         }
         else
         {
-            $complex_content_object_item->set_weight($values[ComplexFillInBlanksQuestion :: PROPERTY_WEIGHT]);
+            $complex_content_object_item->set_weight($values[ComplexFillInBlanksQuestion::PROPERTY_WEIGHT]);
         }
         
-        $complex_content_object_item->set_random($values[ComplexFillInBlanksQuestion :: PROPERTY_RANDOM]);
+        $complex_content_object_item->set_random($values[ComplexFillInBlanksQuestion::PROPERTY_RANDOM]);
         $complex_content_object_item->set_show_answer_feedback(
-            $values[ComplexFillInBlanksQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK]);
+            $values[ComplexFillInBlanksQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK]);
     }
 }

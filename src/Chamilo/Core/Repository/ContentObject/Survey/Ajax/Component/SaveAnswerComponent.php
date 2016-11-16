@@ -5,12 +5,13 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 class SaveAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Survey\Ajax\Manager
 {
+
     function run()
     {
         $result = new JsonAjaxResult(200);
-        $nodeId = $this->getRequest()->request->get(self :: PARAM_NODE_ID);
-        $answerId = $this->getRequest()->request->get(self :: PARAM_ANSWER_ID);
-        $answerValue = $this->getRequest()->request->get(self :: PARAM_ANSWER_VALUE);
+        $nodeId = $this->getRequest()->request->get(self::PARAM_NODE_ID);
+        $answerId = $this->getRequest()->request->get(self::PARAM_ANSWER_ID);
+        $answerValue = $this->getRequest()->request->get(self::PARAM_ANSWER_VALUE);
         $this->saveAnswer($nodeId, $answerId, $answerValue);
         $result->display();
     }

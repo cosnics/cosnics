@@ -39,7 +39,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         
         $answer_text = $this->get_question()->get_answer_text();
         $answer_text = nl2br($answer_text);
-        $this->parts = preg_split(FillInBlanksQuestionAnswer :: QUESTIONS_REGEX, $answer_text);
+        $this->parts = preg_split(FillInBlanksQuestionAnswer::QUESTIONS_REGEX, $answer_text);
         
         $html[] = '<div class="with_borders">';
         $html[] = array_shift($this->parts);
@@ -52,13 +52,13 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 switch ($this->get_question()->is_correct($i, $answers[$i]))
                 {
-                    case FillInBlanksQuestion :: MARK_MAX :
+                    case FillInBlanksQuestion::MARK_MAX :
                         $text[] = '<span style="color:green"><b>' . $answers[$i] . '</b></span>';
                         break;
-                    case FillInBlanksQuestion :: MARK_CORRECT :
+                    case FillInBlanksQuestion::MARK_CORRECT :
                         $text[] = '<span style="color:orange"><b>' . $answers[$i] . '</b></span>';
                         break;
-                    case FillInBlanksQuestion :: MARK_WRONG :
+                    case FillInBlanksQuestion::MARK_WRONG :
                         $best_answer = $this->get_question()->get_best_answer_for_question($index);
                         $best_answer_text = $best_answer->get_value();
                         $text[] = '<span style="color:green"><b>' . $best_answer_text . '</b></span>';
@@ -82,16 +82,16 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<tr>';
         $html[] = '<th class="list"></th>';
         
-        $html[] = '<th>' . Translation :: get('Answer') . '</th>';
+        $html[] = '<th>' . Translation::get('Answer') . '</th>';
         
         if ($configuration->show_answer_feedback())
         {
-            $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+            $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         }
         
         if ($configuration->show_score())
         {
-            $html[] = '<th class="empty">' . Translation :: get('Score') . '</th>';
+            $html[] = '<th class="empty">' . Translation::get('Score') . '</th>';
         }
         
         $html[] = '</tr>';
@@ -118,30 +118,30 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $best_answer = $question->get_best_answer_for_question($index);
         $complex_content_object_question = $this->get_complex_content_object_question();
         $feedback_options_type = $this->getViewerApplication()->get_configuration();
-        $all_feedback_options = $feedback_options_type == Configuration :: ANSWER_FEEDBACK_TYPE_ALL;
+        $all_feedback_options = $feedback_options_type == Configuration::ANSWER_FEEDBACK_TYPE_ALL;
         $configuration = $this->getViewerApplication()->get_configuration();
         
         $is_first_option = true;
         
         switch ($correct)
         {
-            case FillInBlanksQuestion :: MARK_MAX :
+            case FillInBlanksQuestion::MARK_MAX :
                 // Selected answer = best answer
                 $html[] = '<tr class="' . ($row_count % 2 == 0 ? 'row_even' : 'row_odd') . '">';
                 $html[] = '<td>' . ($index + 1) . '.</td>';
-                $show_answer = empty($answer) ? Translation :: get('NoAnswer') : $answer;
+                $show_answer = empty($answer) ? Translation::get('NoAnswer') : $answer;
                 
                 if ($configuration->show_correction() || $configuration->show_solution())
                 {
-                    $html[] = '<td>' . Translation :: get('YourAnswer') . ': <span style="color:green"><b>' .
-                         $show_answer . '</b></span></td>';
+                    $html[] = '<td>' . Translation::get('YourAnswer') . ': <span style="color:green"><b>' . $show_answer .
+                         '</b></span></td>';
                 }
                 else
                 {
-                    $html[] = '<td>' . Translation :: get('YourAnswer') . ': <b>' . $show_answer . '</b></td>';
+                    $html[] = '<td>' . Translation::get('YourAnswer') . ': <b>' . $show_answer . '</b></td>';
                 }
                 
-                if (AnswerFeedbackDisplay :: allowed(
+                if (AnswerFeedbackDisplay::allowed(
                     $configuration, 
                     $this->get_complex_content_object_question(), 
                     true, 
@@ -164,23 +164,23 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $html[] = '</tr>';
                 
                 break;
-            case FillInBlanksQuestion :: MARK_CORRECT :
+            case FillInBlanksQuestion::MARK_CORRECT :
                 // Selected answer
                 $html[] = '<tr class="' . ($row_count % 2 == 0 ? 'row_even' : 'row_odd') . '">';
                 $html[] = '<td rowspan="' . ($all_feedback_options ? '2' : '1') . '">' . ($index + 1) . '.</td>';
-                $show_answer = empty($answer) ? Translation :: get('NoAnswer') : $answer;
+                $show_answer = empty($answer) ? Translation::get('NoAnswer') : $answer;
                 
                 if ($configuration->show_correction() || $configuration->show_solution())
                 {
-                    $html[] = '<td>' . Translation :: get('YourAnswer') . ': <span style="color:orange"><b>' .
-                         $show_answer . '</b></span></td>';
+                    $html[] = '<td>' . Translation::get('YourAnswer') . ': <span style="color:orange"><b>' . $show_answer .
+                         '</b></span></td>';
                 }
                 else
                 {
-                    $html[] = '<td>' . Translation :: get('YourAnswer') . ': <b>' . $show_answer . '</b></td>';
+                    $html[] = '<td>' . Translation::get('YourAnswer') . ': <b>' . $show_answer . '</b></td>';
                 }
                 
-                if (AnswerFeedbackDisplay :: allowed(
+                if (AnswerFeedbackDisplay::allowed(
                     $configuration, 
                     $this->get_complex_content_object_question(), 
                     true, 
@@ -210,15 +210,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $html[] = '<td></td>';
                     
                     $show_answer = $best_answer->get_value();
-                    $show_answer = empty($show_answer) ? Translation :: get('NoAnswer') : $best_answer->get_value();
+                    $show_answer = empty($show_answer) ? Translation::get('NoAnswer') : $best_answer->get_value();
                     $number_of_positive_answers = $question->count_positive_answers($index);
-                    $show_answer = Translation :: get(
+                    $show_answer = Translation::get(
                         $number_of_positive_answers > 1 ? 'BestAnswerWas' : 'AnswerWas', 
                         array('ANSWER' => $show_answer));
                     
                     $html[] = '<td>' . $show_answer . '</td>';
                     
-                    if (AnswerFeedbackDisplay :: allowed(
+                    if (AnswerFeedbackDisplay::allowed(
                         $configuration, 
                         $this->get_complex_content_object_question(), 
                         true, 
@@ -237,17 +237,17 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $html[] = '</tr>';
                 }
                 break;
-            case FillInBlanksQuestion :: MARK_WRONG :
+            case FillInBlanksQuestion::MARK_WRONG :
                 // Selected answer
                 $html[] = '<tr class="' . ($row_count % 2 == 0 ? 'row_even' : 'row_odd') . '">';
                 $html[] = '<td rowspan="' . ($all_feedback_options ? '2' : '1') . '">' . ($index + 1) . '.</td>';
-                $show_answer = empty($answer) ? Translation :: get('NoAnswer') : $answer;
+                $show_answer = empty($answer) ? Translation::get('NoAnswer') : $answer;
                 
                 if ($configuration->show_correction() || $configuration->show_solution())
                 {
                     $percentage = 0;
                     if (! $question->get_best_answer_for_question($index)->check_regex() &&
-                         $question->get_question_type() != FillInBlanksQuestion :: TYPE_SELECT)
+                         $question->get_question_type() != FillInBlanksQuestion::TYPE_SELECT)
                     {
                         // always do similarity checks caseinsensitive.
                         similar_text(
@@ -257,15 +257,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     }
                     
                     $colour = $percentage >= 70 ? 'orange' : 'red';
-                    $html[] = '<td>' . Translation :: get('YourAnswer') . ': <span style="color:' . $colour . '"><b>' .
+                    $html[] = '<td>' . Translation::get('YourAnswer') . ': <span style="color:' . $colour . '"><b>' .
                          $show_answer . '</b></span></td>';
                 }
                 else
                 {
-                    $html[] = '<td>' . Translation :: get('YourAnswer') . ': <b>' . $show_answer . '</b></td>';
+                    $html[] = '<td>' . Translation::get('YourAnswer') . ': <b>' . $show_answer . '</b></td>';
                 }
                 
-                if (AnswerFeedbackDisplay :: allowed(
+                if (AnswerFeedbackDisplay::allowed(
                     $configuration, 
                     $this->get_complex_content_object_question(), 
                     true, 
@@ -295,15 +295,15 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                     $html[] = '<td></td>';
                     
                     $show_answer = $best_answer->get_value();
-                    $show_answer = empty($show_answer) ? Translation :: get('NoAnswer') : $best_answer->get_value();
+                    $show_answer = empty($show_answer) ? Translation::get('NoAnswer') : $best_answer->get_value();
                     $number_of_positive_answers = $question->count_positive_answers($index);
-                    $show_answer = Translation :: get(
+                    $show_answer = Translation::get(
                         $number_of_positive_answers > 1 ? 'BestAnswerWas' : 'AnswerWas', 
                         array('ANSWER' => $show_answer));
                     
                     $html[] = '<td>' . $show_answer . '</td>';
                     
-                    if (AnswerFeedbackDisplay :: allowed(
+                    if (AnswerFeedbackDisplay::allowed(
                         $configuration, 
                         $this->get_complex_content_object_question(), 
                         true, 

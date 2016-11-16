@@ -14,6 +14,6 @@ class PackageTableColumnModel extends DataClassTableColumnModel implements Table
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Package :: class_name(), Package :: PROPERTY_CONTEXT));
+        $this->add_column(new DataClassPropertyTableColumn(Package::class_name(), Package::PROPERTY_CONTEXT));
     }
 }

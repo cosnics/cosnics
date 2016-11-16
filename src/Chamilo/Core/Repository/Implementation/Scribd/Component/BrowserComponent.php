@@ -11,11 +11,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        if (! ActionBarSearchForm :: get_query())
+        if (! ActionBarSearchForm::get_query())
         {
-            Request :: set_get(ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY, 'chamilo');
+            Request::set_get(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY, 'chamilo');
         }
-
-        return parent :: run();
+        
+        return parent::run();
     }
 }

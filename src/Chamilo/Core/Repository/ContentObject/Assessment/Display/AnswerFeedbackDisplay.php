@@ -142,7 +142,7 @@ class AnswerFeedbackDisplay
                 if ($this->get_configuration()->show_answer_feedback())
                 {
                     if ($this->get_configuration()->get_show_answer_feedback() ==
-                         Configuration :: ANSWER_FEEDBACK_TYPE_QUESTION)
+                         Configuration::ANSWER_FEEDBACK_TYPE_QUESTION)
                     {
                         $show_answer_feedback = $this->get_complex_question()->get_show_answer_feedback();
                     }
@@ -153,22 +153,22 @@ class AnswerFeedbackDisplay
                     
                     switch ($show_answer_feedback)
                     {
-                        case Configuration :: ANSWER_FEEDBACK_TYPE_ALL :
+                        case Configuration::ANSWER_FEEDBACK_TYPE_ALL :
                             return true;
                             break;
-                        case Configuration :: ANSWER_FEEDBACK_TYPE_CORRECT :
+                        case Configuration::ANSWER_FEEDBACK_TYPE_CORRECT :
                             return $this->is_correct();
                             break;
-                        case Configuration :: ANSWER_FEEDBACK_TYPE_WRONG :
+                        case Configuration::ANSWER_FEEDBACK_TYPE_WRONG :
                             return $this->is_wrong();
                             break;
-                        case Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN :
+                        case Configuration::ANSWER_FEEDBACK_TYPE_GIVEN :
                             return $this->is_given_answer();
                             break;
-                        case Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT :
+                        case Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_CORRECT :
                             return $this->is_given_answer() && $this->is_correct();
                             break;
-                        case Configuration :: ANSWER_FEEDBACK_TYPE_GIVEN_WRONG :
+                        case Configuration::ANSWER_FEEDBACK_TYPE_GIVEN_WRONG :
                             return $this->is_given_answer() && $this->is_wrong();
                             break;
                     }

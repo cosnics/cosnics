@@ -19,30 +19,30 @@ class VisibilityChangerComponent extends TabComponent
         {
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();
-
+            
             $selected_complex_content_object_item->toggle_visibility();
-
+            
             $succes = $selected_complex_content_object_item->update();
-
+            
             if ($succes)
             {
-                Event :: trigger(
-                    'Activity',
-                    \Chamilo\Core\Repository\Manager :: context(),
+                Event::trigger(
+                    'Activity', 
+                    \Chamilo\Core\Repository\Manager::context(), 
                     array(
-                        Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,
-                        Activity :: PROPERTY_USER_ID => $this->get_user_id(),
-                        Activity :: PROPERTY_DATE => time(),
-                        Activity :: PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(),
-                        Activity :: PROPERTY_CONTENT => $content_object->get_title()));
+                        Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED, 
+                        Activity::PROPERTY_USER_ID => $this->get_user_id(), 
+                        Activity::PROPERTY_DATE => time(), 
+                        Activity::PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                        Activity::PROPERTY_CONTENT => $content_object->get_title()));
             }
-
-            $message = $succes ? self :: MESSAGE_VISIBILITY_CHANGED : self :: MESSAGE_VISIBILITY_NOT_CHANGED;
-
+            
+            $message = $succes ? self::MESSAGE_VISIBILITY_CHANGED : self::MESSAGE_VISIBILITY_NOT_CHANGED;
+            
             $parameters = array();
-            $parameters[self :: PARAM_STEP] = $this->get_current_node()->get_id();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-
+            $parameters[self::PARAM_STEP] = $this->get_current_node()->get_id();
+            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+            
             $this->redirect($message, (! $succes), $parameters);
         }
         else

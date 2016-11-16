@@ -22,8 +22,8 @@ class PersonalBlogLayout extends BlogLayout
     public function display_blog_item(ComplexBlogItem $complex_blog_item)
     {
         $blog_item = $complex_blog_item->get_ref_object();
-        $owner = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            User :: class_name(), 
+        $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            User::class_name(), 
             (int) $blog_item->get_owner_id());
         
         if ($owner)
@@ -31,15 +31,15 @@ class PersonalBlogLayout extends BlogLayout
             $name = $owner->get_fullname();
             $profilePhotoUrl = new Redirect(
                 array(
-                    Application :: PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager :: context(), 
-                    Application :: PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager :: ACTION_USER_PICTURE, 
-                    \Chamilo\Core\User\Manager :: PARAM_USER_USER_ID => $owner->get_id()));
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(), 
+                    Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE, 
+                    \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $owner->get_id()));
             $picture = $profilePhotoUrl->getUrl();
         }
         else
         {
-            $name = Translation :: get('AuthorUnknown');
-            $picture = Theme :: getInstance()->getCommonImagePath('Unknown');
+            $name = Translation::get('AuthorUnknown');
+            $picture = Theme::getInstance()->getCommonImagePath('Unknown');
         }
         
         $html = array();
@@ -48,7 +48,7 @@ class PersonalBlogLayout extends BlogLayout
         $html[] = '<div class="information_box">';
         $html[] = '<img class="user_image" src="' . $picture . '" /><br /><br />';
         $html[] = $name . '<br />';
-        $html[] = DatetimeUtilities :: format_locale_date(null, $complex_blog_item->get_add_date());
+        $html[] = DatetimeUtilities::format_locale_date(null, $complex_blog_item->get_add_date());
         $html[] = '</div>';
         $html[] = '<div class="message_box">';
         $html[] = '<div class="title">' . $blog_item->get_title() . '</div>';
@@ -83,8 +83,8 @@ class PersonalBlogLayout extends BlogLayout
         {
             $html[] = '<div class="attachments">';
             $html[] = '<div class="attachments_title">' . htmlentities(
-                Translation :: get('Attachements', null, Utilities :: COMMON_LIBRARIES)) . '</div>';
-            Utilities :: order_content_objects_by_title($attachments);
+                Translation::get('Attachements', null, Utilities::COMMON_LIBRARIES)) . '</div>';
+            Utilities::order_content_objects_by_title($attachments);
             $html[] = '<ul class="attachments_list">';
             
             foreach ($attachments as $attachment)
@@ -93,15 +93,14 @@ class PersonalBlogLayout extends BlogLayout
                     $attachment, 
                     $complex_blog_item->get_id());
                 $url = 'javascript:openPopup(\'' . $url . '\'); return false;';
-                $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme :: getInstance()->getImagePath(
-                    ClassnameUtilities :: getInstance()->getNamespaceParent($attachment->get_type(), 3), 
-                    'Logo/' . Theme :: ICON_MINI) . '" alt="' .
-                     htmlentities(
-                        Translation :: get(
-                            'TypeName', 
-                            null, 
-                            ClassnameUtilities :: getInstance()->getNamespaceParent($attachment->get_type(), 3))) .
-                     '"/> ' . $attachment->get_title() . '</a></li>';
+                $html[] = '<li><a href="#" onClick="' . $url . '"><img src="' . Theme::getInstance()->getImagePath(
+                    ClassnameUtilities::getInstance()->getNamespaceParent($attachment->get_type(), 3), 
+                    'Logo/' . Theme::ICON_MINI) . '" alt="' . htmlentities(
+                    Translation::get(
+                        'TypeName', 
+                        null, 
+                        ClassnameUtilities::getInstance()->getNamespaceParent($attachment->get_type(), 3))) . '"/> ' .
+                     $attachment->get_title() . '</a></li>';
             }
             
             $html[] = '</ul>';

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>External Calendar</name>
-		<code>ExternalCalendar</code>
-		<context>Chamilo\Core\Repository\ContentObject\ExternalCalendar</context>
-		<type>Chamilo\Core\Repository\ContentObject</type>
-		<category>Agenda</category>
-		<authors />
-		<version>5.0.0</version>
-		<description />
-		<pre-depends>
-			<dependency type="registration">
-				<id>Chamilo\Core\Repository</id>
-				<version operator="4">5.0.0</version>
-			</dependency>
-		</pre-depends>
-		<extra>
-			<default-install>1</default-install>
-		</extra>
-	</package>
+    <package>
+        <name>External Calendar</name>
+        <code>ExternalCalendar</code>
+        <context>Chamilo\Core\Repository\ContentObject\ExternalCalendar</context>
+        <type>Chamilo\Core\Repository\ContentObject</type>
+        <category>Agenda</category>
+        <authors />
+        <version>5.0.0</version>
+        <description />
+        <pre-depends>
+            <dependency type="registration">
+                <id>Chamilo\Core\Repository</id>
+                <version operator="4">5.0.0</version>
+            </dependency>
+        </pre-depends>
+        <extra>
+            <default-install>1</default-install>
+        </extra>
+    </package>
 </packages>
