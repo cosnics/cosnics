@@ -68,7 +68,6 @@ class ConnectionFactory
 
         try
         {
-            $connection->connect();
             return $connection;
         }
         catch (\Exception $exception)
