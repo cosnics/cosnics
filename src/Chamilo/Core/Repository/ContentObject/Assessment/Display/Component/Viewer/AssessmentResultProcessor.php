@@ -17,7 +17,7 @@ class AssessmentResultProcessor
 
     /**
      * To determine wheter it is a result in between or completely finished
-     *
+     * 
      * @var boolean
      */
     private $finished;
@@ -41,7 +41,7 @@ class AssessmentResultProcessor
     public function save_answers($results_page_number)
     {
         $questions_cloi = $this->assessment_viewer->get_questions_for_page($results_page_number);
-
+        
         if ($this->assessment_viewer->get_root_content_object()->get_questions_per_page() == 0)
         {
             $question_number = 1;
@@ -51,13 +51,13 @@ class AssessmentResultProcessor
             $question_number = ($results_page_number *
                  $this->assessment_viewer->get_root_content_object()->get_questions_per_page());
         }
-
+        
         $values = $_POST;
-
+        
         foreach ($values as $key => $value)
         {
-            $value = Security :: remove_XSS($value);
-
+            $value = Security::remove_XSS($value);
+            
             if (! is_array($value))
             {
                 $value = trim($value);
@@ -69,51 +69,51 @@ class AssessmentResultProcessor
                     $value_element = trim($value_element);
                 }
             }
-
+            
             $split_key = explode('_', $key);
             $question_id = $split_key[0];
-
+            
             if (is_numeric($question_id))
             {
                 $answer_index = $split_key[1];
                 $values[$question_id][$answer_index] = $value;
             }
         }
-
+        
         foreach ($questions_cloi as $question_cloi)
         {
             $answers = $values[$question_cloi->get_id()];
             $hints = $values['hint_question'][$question_cloi->get_id()];
-
-            $score_calculator = ScoreCalculator :: factory(
-                $question_cloi->get_ref_object(),
-                $answers,
+            
+            $score_calculator = ScoreCalculator::factory(
+                $question_cloi->get_ref_object(), 
+                $answers, 
                 $question_cloi->get_weight());
             $score = $score_calculator->calculate_score();
-
+            
             if ($this->assessment_viewer->get_configuration()->show_feedback_after_every_page())
             {
-                $display = AssessmentQuestionResultDisplay :: factory(
-                    $this->get_assessment_viewer(),
-                    $question_cloi,
-                    $question_number,
-                    $answers,
-                    $score,
+                $display = AssessmentQuestionResultDisplay::factory(
+                    $this->get_assessment_viewer(), 
+                    $question_cloi, 
+                    $question_number, 
+                    $answers, 
+                    $score, 
                     $hints);
-
+                
                 $this->question_results[] = $display->as_html();
             }
-
+            
             $question_number ++;
-
+            
             // $tracker = $this->assessment_viewer->get_assessment_question_attempt($question_cloi->get_id());
             //
             // if (is_null($tracker))
             // {
             $this->assessment_viewer->save_assessment_answer(
-                $question_cloi->get_id(),
-                serialize($answers),
-                $score,
+                $question_cloi->get_id(), 
+                serialize($answers), 
+                $score, 
                 $values['hint_question'][$question_cloi->get_id()]);
             // }
             // elseif (! is_null($tracker) && !
@@ -131,24 +131,24 @@ class AssessmentResultProcessor
     {
         $assessment = $this->get_assessment_viewer()->get_root_content_object();
         $this->finished = true;
-
+        
         $this->question_results[] = '<div class="assessment">';
-        $this->question_results[] = '<h2>' . Translation :: get('ViewAssessmentResults') . '</h2>';
-
+        $this->question_results[] = '<h2>' . Translation::get('ViewAssessmentResults') . '</h2>';
+        
         $this->question_results[] = '<div class="form-row"><div class="formc formc_no_margin">';
         $this->question_results[] = '<b>' . $assessment->get_title() . '</b><br />';
         $this->question_results[] = $assessment->get_description() . '</div></div>';
-
+        
         $this->question_results[] = '</div>';
-
+        
         $complex_questions = $this->get_assessment_viewer()->get_questions();
-
+        
         $answers = $this->get_assessment_viewer()->get_assessment_question_attempts();
-
+        
         $question_number = 1;
         $total_score = 0;
         $total_weight = 0;
-
+        
         foreach ($complex_questions as $complex_question)
         {
             $tracker = $answers[$complex_question->get_id()];
@@ -162,40 +162,40 @@ class AssessmentResultProcessor
                 $score = 0;
                 $answer = null;
             }
-
+            
             $total_score += $score;
             $total_weight += $complex_question->get_weight();
-
+            
             $question_number ++;
         }
-
+        
         if ($total_score < 0)
         {
             $total_score = 0;
         }
-
+        
         $percent = round(($total_score / $total_weight) * 100);
         $this->get_assessment_viewer()->save_assessment_result($percent);
-
+        
         if ($this->get_assessment_viewer()->get_configuration()->show_score())
         {
             $this->question_results[] = '<div class="question">';
             $this->question_results[] = '<div class="title">';
             $this->question_results[] = '<div class="text">';
             $this->question_results[] = '<div class="bevel" style="float: left;">';
-            $this->question_results[] = Translation :: get('TotalScore');
+            $this->question_results[] = Translation::get('TotalScore');
             $this->question_results[] = '</div>';
             $this->question_results[] = '<div class="bevel" style="text-align: right;">';
-
+            
             $this->question_results[] = $total_score . ' / ' . $total_weight . ' (' . $percent . '%)';
             $this->question_results[] = '</div>';
-
+            
             $this->question_results[] = '</div></div></div>';
             $this->question_results[] = '<div class="clear"></div>';
         }
-
+        
         $question_number = 1;
-
+        
         foreach ($complex_questions as $complex_question)
         {
             $tracker = $answers[$complex_question->get_id()];
@@ -211,17 +211,17 @@ class AssessmentResultProcessor
                 $hints = 0;
                 $answer = null;
             }
-
-            $display = AssessmentQuestionResultDisplay :: factory(
-                $this->get_assessment_viewer(),
-                $complex_question,
-                $question_number,
-                $answer,
-                $score,
+            
+            $display = AssessmentQuestionResultDisplay::factory(
+                $this->get_assessment_viewer(), 
+                $complex_question, 
+                $question_number, 
+                $answer, 
+                $score, 
                 $hints);
-
+            
             $this->question_results[] = $display->as_html();
-
+            
             $question_number ++;
         }
     }
@@ -246,7 +246,7 @@ class AssessmentResultProcessor
 
     /**
      * Returns wheter the result is finished or not
-     *
+     * 
      * @return boolean
      */
     public function is_finished()

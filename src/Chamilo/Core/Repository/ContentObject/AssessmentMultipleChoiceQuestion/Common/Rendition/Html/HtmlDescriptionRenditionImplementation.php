@@ -12,7 +12,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -24,10 +24,10 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $type = $lo->get_answer_type();
         switch ($type)
         {
-            case AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_RADIO :
+            case AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO :
                 $type = 'radio';
                 break;
-            case AssessmentMultipleChoiceQuestion :: ANSWER_TYPE_CHECKBOX :
+            case AssessmentMultipleChoiceQuestion::ANSWER_TYPE_CHECKBOX :
                 $type = 'checkbox';
                 break;
         }
@@ -36,7 +36,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<thead>';
         $html[] = '<tr>';
         $html[] = '<th></th>';
-        $html[] = '<th>' . Translation :: get('Options') . '</th>';
+        $html[] = '<th>' . Translation::get('Options') . '</th>';
         $html[] = '</tr>';
         $html[] = '</thead>';
         $html[] = '<tbody>';

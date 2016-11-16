@@ -22,28 +22,28 @@ class ForumUnsubscribeComponent extends Manager
     public function run()
     {
         $succes = false;
-        $subscribe_id = Request :: get(self :: PARAM_SUBSCRIBE_ID);
+        $subscribe_id = Request::get(self::PARAM_SUBSCRIBE_ID);
         
         $params = array();
-        $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_FORUM;
-        $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
+        $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         
         if ($subscribe_id)
         {
-            $subscribe = DataManager :: retrieve_by_id(ForumSubscribe :: class_name(), $subscribe_id);
+            $subscribe = DataManager::retrieve_by_id(ForumSubscribe::class_name(), $subscribe_id);
             $succes = $subscribe->delete();
             if ($succes)
             {
-                $message = Translation :: get("SuccesUnSubscribe");
+                $message = Translation::get("SuccesUnSubscribe");
             }
             else
             {
-                $message = Translation :: get("UnSuccesUnSubscribe");
+                $message = Translation::get("UnSuccesUnSubscribe");
             }
         }
         else
         {
-            $message = Translation :: get("UnSuccesUnSubscribe");
+            $message = Translation::get("UnSuccesUnSubscribe");
         }
         
         $this->redirect($message, ($succes ? false : true), $params);

@@ -21,23 +21,23 @@ class RandomizerComponent extends Manager
 
     public function run()
     {
-        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(), 
+        $complex_content_object_items = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(), 
-                        ComplexContentObjectItem :: PROPERTY_PARENT), 
+                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::PROPERTY_PARENT), 
                     new StaticConditionVariable($this->get_parent_content_object_id()))));
         
         $supported_types = array(
-            ComplexFillInBlanksQuestion :: class_name(), 
-            ComplexHotspotQuestion :: class_name(), 
-            ComplexAssessmentMatchingQuestion :: class_name(), 
-            ComplexAssessmentMatrixQuestion :: class_name(), 
-            ComplexAssessmentMultipleChoiceQuestion :: class_name(), 
-            ComplexOrderingQuestion :: class_name(), 
-            ComplexAssessmentSelectQuestion :: class_name());
+            ComplexFillInBlanksQuestion::class_name(), 
+            ComplexHotspotQuestion::class_name(), 
+            ComplexAssessmentMatchingQuestion::class_name(), 
+            ComplexAssessmentMatrixQuestion::class_name(), 
+            ComplexAssessmentMultipleChoiceQuestion::class_name(), 
+            ComplexOrderingQuestion::class_name(), 
+            ComplexAssessmentSelectQuestion::class_name());
         
         $failures = 0;
         $questions = 0;
@@ -91,10 +91,10 @@ class RandomizerComponent extends Manager
         }
         
         $this->redirect(
-            Translation :: get($message), 
+            Translation::get($message), 
             false, 
             array(
-                self :: PARAM_ACTION => self :: ACTION_BROWSE, 
-                self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+                self::PARAM_ACTION => self::ACTION_BROWSE, 
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
     }
 }

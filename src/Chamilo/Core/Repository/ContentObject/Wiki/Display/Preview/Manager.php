@@ -5,9 +5,10 @@ use Chamilo\Libraries\Platform\Translation;
 
 abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
 {
+
     /**
      * Preview mode, so always return true.
-     *
+     * 
      * @param $right
      * @return boolean
      */
@@ -21,9 +22,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
      */
     public function get_publication()
     {
-        $this->not_available(Translation :: get('ImpossibleInPreviewMode'));
+        $this->not_available(Translation::get('ImpossibleInPreviewMode'));
     }
-
+    
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
     public function is_allowed_to_edit_content_object()
     {

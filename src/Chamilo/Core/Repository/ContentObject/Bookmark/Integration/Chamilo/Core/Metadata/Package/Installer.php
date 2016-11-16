@@ -16,6 +16,6 @@ class Installer extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metada
 
     public function getPropertyProviderTypes()
     {
-        return array(ContentObjectPropertyProvider :: class_name());
+        return array(ContentObjectPropertyProvider::class_name());
     }
 }

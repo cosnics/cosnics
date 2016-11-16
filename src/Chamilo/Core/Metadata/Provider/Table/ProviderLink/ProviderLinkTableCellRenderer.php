@@ -34,48 +34,48 @@ class ProviderLinkTableCellRenderer extends DataClassTableCellRenderer implement
     {
         switch ($column->get_name())
         {
-            case ProviderLinkTableColumnModel :: PROPERTY_TYPE :
-                $entity = DataClassEntityFactory :: getInstance()->getEntityFromDataClassName(
+            case ProviderLinkTableColumnModel::PROPERTY_TYPE :
+                $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClassName(
                     $providerLink->get_entity_type());
                 return $entity->getType();
-            case ProviderLinkTableColumnModel :: PROPERTY_NAME :
-                $propertyNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
+            case ProviderLinkTableColumnModel::PROPERTY_NAME :
+                $propertyNamespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname(
                     $providerLink->getProviderRegistration()->get_provider_class());
                 $propertyName = $providerLink->getProviderRegistration()->get_property_name();
-                $propertyNameTranslationVariable = StringUtilities :: getInstance()->createString($propertyName)->upperCamelize()->__toString();
-
-                return Translation :: get($propertyNameTranslationVariable, null, $propertyNamespace);
-            case ProviderLinkTableColumnModel :: PROPERTY_SCHEMA :
+                $propertyNameTranslationVariable = StringUtilities::getInstance()->createString($propertyName)->upperCamelize()->__toString();
+                
+                return Translation::get($propertyNameTranslationVariable, null, $propertyNamespace);
+            case ProviderLinkTableColumnModel::PROPERTY_SCHEMA :
                 return $providerLink->getElement()->getSchema()->getTranslationByIsocode(
-                    Translation :: getInstance()->getLanguageIsocode());
-            case ProviderLinkTableColumnModel :: PROPERTY_ELEMENT :
+                    Translation::getInstance()->getLanguageIsocode());
+            case ProviderLinkTableColumnModel::PROPERTY_ELEMENT :
                 return $providerLink->getElement()->get_display_name();
         }
-
-        return parent :: render_cell($column, $providerLink);
+        
+        return parent::render_cell($column, $providerLink);
     }
 
     /**
      * Returns the actions toolbar
-     *
+     * 
      * @param \Chamilo\Core\Metadata\Relation\Instance\Storage\DataClass\RelationInstance $providerLink
      * @return string
      */
     public function get_actions($providerLink)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
-
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
+        
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'),
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                        Manager :: PARAM_PROVIDER_LINK_ID => $providerLink->get_id())),
-                ToolbarItem :: DISPLAY_ICON,
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                        Manager::PARAM_PROVIDER_LINK_ID => $providerLink->get_id())), 
+                ToolbarItem::DISPLAY_ICON, 
                 true));
-
+        
         return $toolbar->as_html();
     }
 }

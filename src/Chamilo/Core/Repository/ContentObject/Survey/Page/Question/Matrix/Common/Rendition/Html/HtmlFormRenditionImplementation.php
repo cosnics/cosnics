@@ -19,7 +19,7 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
      */
     public function initialize()
     {
-        $formValidator = parent :: initialize();
+        $formValidator = parent::initialize();
         $renderer = $formValidator->get_renderer();
         
         $question = $this->get_content_object();
@@ -72,14 +72,14 @@ class HtmlFormRenditionImplementation extends \Chamilo\Core\Repository\ContentOb
                     $option_name = $question_id . '_' . $i;
                 }
                 
-                if ($type == Matrix :: MATRIX_TYPE_RADIO)
+                if ($type == Matrix::MATRIX_TYPE_RADIO)
                 {
                     
                     $radio = $formValidator->createElement('radio', $option_name, null, null, $j, $attributes);
                     
                     $group[] = $radio;
                 }
-                elseif ($type == Matrix :: MATRIX_TYPE_CHECKBOX)
+                elseif ($type == Matrix::MATRIX_TYPE_CHECKBOX)
                 {
                     $option_name = $option_name . '_' . $j;
                     

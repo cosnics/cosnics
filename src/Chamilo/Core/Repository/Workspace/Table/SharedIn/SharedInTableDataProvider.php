@@ -29,7 +29,7 @@ class SharedInTableDataProvider extends ShareTableDataProvider
     public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
     {
         return $this->getContentObjectRelationService()->getWorkspacesForContentObject(
-            $this->getWorkspaceService(),
+            $this->getWorkspaceService(), 
             $this->getSelectedContentObject());
     }
 
@@ -53,7 +53,7 @@ class SharedInTableDataProvider extends ShareTableDataProvider
         {
             $this->contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
         }
-
+        
         return $this->contentObjectRelationService;
     }
 

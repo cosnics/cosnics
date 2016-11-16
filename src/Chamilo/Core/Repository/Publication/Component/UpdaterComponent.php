@@ -9,7 +9,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: publication_updater.class.php 204 2009-11-13 12:51:30Z kariboe $
- *
+ * 
  * @package repository.lib.repository_manager.component
  */
 /**
@@ -23,38 +23,38 @@ class UpdaterComponent extends Manager
      */
     public function run()
     {
-        $application = Request :: get(self :: PARAM_PUBLICATION_APPLICATION);
-        $publication_id = Request :: get(self :: PARAM_PUBLICATION_ID);
-
-        $this->set_parameter(self :: PARAM_PUBLICATION_ID, $publication_id);
-        $this->set_parameter(self :: PARAM_PUBLICATION_APPLICATION, $application);
-
+        $application = Request::get(self::PARAM_PUBLICATION_APPLICATION);
+        $publication_id = Request::get(self::PARAM_PUBLICATION_ID);
+        
+        $this->set_parameter(self::PARAM_PUBLICATION_ID, $publication_id);
+        $this->set_parameter(self::PARAM_PUBLICATION_APPLICATION, $application);
+        
         if (! empty($application) && ! empty($publication_id))
         {
-            $publication_attributes = DataManager :: get_content_object_publication_attribute(
-                $publication_id,
+            $publication_attributes = DataManager::get_content_object_publication_attribute(
+                $publication_id, 
                 $application);
             $latest_version = $publication_attributes->get_content_object()->get_latest_version_id();
-
+            
             $publication_attributes->set_content_object_id($latest_version);
             $success = $publication_attributes->update();
-
+            
             $this->redirect(
-                Translation :: get(
-                    $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
-                    array('OBJECT' => Translation :: get('Publication')),
-                    Utilities :: COMMON_LIBRARIES),
-                ($success ? false : true),
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                Translation::get(
+                    $success ? 'ObjectUpdated' : 'ObjectNotUpdated', 
+                    array('OBJECT' => Translation::get('Publication')), 
+                    Utilities::COMMON_LIBRARIES), 
+                ($success ? false : true), 
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $this->display_warning_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('Publication')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('Publication')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 }

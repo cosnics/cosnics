@@ -14,7 +14,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Controller to update the controlled vocabulary
- *
+ * 
  * @package core\metadata
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -30,61 +30,61 @@ class UpdaterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $element_id = Request :: get(self :: PARAM_ELEMENT_ID);
-        $this->set_parameter(self :: PARAM_ELEMENT_ID, $element_id);
-
-        $element = DataManager :: retrieve_by_id(Element :: class_name(), $element_id);
-
+        
+        $element_id = Request::get(self::PARAM_ELEMENT_ID);
+        $this->set_parameter(self::PARAM_ELEMENT_ID, $element_id);
+        
+        $element = DataManager::retrieve_by_id(Element::class_name(), $element_id);
+        
         $form = new ElementForm($this->get_url(), $element);
-
+        
         if ($form->validate())
         {
             try
             {
                 $values = $form->exportValues();
-
-                $element->set_name($values[Element :: PROPERTY_NAME]);
-                $element->set_display_name($values[Element :: PROPERTY_DISPLAY_NAME]);
-                $element->set_value_type($values[Element :: PROPERTY_VALUE_TYPE]);
-
+                
+                $element->set_name($values[Element::PROPERTY_NAME]);
+                $element->set_display_name($values[Element::PROPERTY_DISPLAY_NAME]);
+                $element->set_value_type($values[Element::PROPERTY_VALUE_TYPE]);
+                
                 $success = $element->update();
-
+                
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
-                $message = Translation :: get(
-                    $translation,
-                    array('OBJECT' => Translation :: get('Element')),
-                    Utilities :: COMMON_LIBRARIES);
+                
+                $message = Translation::get(
+                    $translation, 
+                    array('OBJECT' => Translation::get('Element')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             catch (\Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();
             }
-
+            
             $this->redirect(
-                $message,
-                ! $success,
+                $message, 
+                ! $success, 
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                    \Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID => $element->get_schema_id()));
+                    self::PARAM_ACTION => self::ACTION_BROWSE, 
+                    \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $element->get_schema_id()));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
 
     /**
      * Adds additional breadcrumbs
-     *
+     * 
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -92,9 +92,7 @@ class UpdaterComponent extends Manager
     {
         $breadcrumb_trail->add(
             new Breadcrumb(
-                $this->get_url(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
-                    array(self :: PARAM_ELEMENT_ID)),
-                Translation :: get('BrowserComponent')));
+                $this->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE), array(self::PARAM_ELEMENT_ID)), 
+                Translation::get('BrowserComponent')));
     }
 }

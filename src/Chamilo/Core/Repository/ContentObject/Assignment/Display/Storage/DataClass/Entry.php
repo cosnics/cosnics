@@ -30,14 +30,14 @@ abstract class Entry extends DataClass
      */
     public static function get_default_property_names($extendedPropertyNames = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_CONTENT_OBJECT_ID,
-                self :: PROPERTY_SUBMITTED,
-                self :: PROPERTY_ENTITY_TYPE,
-                self :: PROPERTY_ENTITY_ID,
-                self :: PROPERTY_USER_ID,
-                self :: PROPERTY_IP_ADDRESS));
+                self::PROPERTY_CONTENT_OBJECT_ID, 
+                self::PROPERTY_SUBMITTED, 
+                self::PROPERTY_ENTITY_TYPE, 
+                self::PROPERTY_ENTITY_ID, 
+                self::PROPERTY_USER_ID, 
+                self::PROPERTY_IP_ADDRESS));
     }
 
     /**
@@ -46,7 +46,7 @@ abstract class Entry extends DataClass
      */
     public function getContentObjectId()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -55,7 +55,7 @@ abstract class Entry extends DataClass
      */
     public function setContentObjectId($contentObjectId)
     {
-        $this->set_default_property(self :: PROPERTY_CONTENT_OBJECT_ID, $contentObjectId);
+        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $contentObjectId);
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class Entry extends DataClass
      */
     public function getEntityId()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_ID);
+        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class Entry extends DataClass
      */
     public function setEntityId($entityId)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_ID, $entityId);
+        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class Entry extends DataClass
      */
     public function getSubmitted()
     {
-        return $this->get_default_property(self :: PROPERTY_SUBMITTED);
+        return $this->get_default_property(self::PROPERTY_SUBMITTED);
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class Entry extends DataClass
      */
     public function setSubmitted($submitted)
     {
-        $this->set_default_property(self :: PROPERTY_SUBMITTED, $submitted);
+        $this->set_default_property(self::PROPERTY_SUBMITTED, $submitted);
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class Entry extends DataClass
      */
     public function getEntityType()
     {
-        return $this->get_default_property(self :: PROPERTY_ENTITY_TYPE);
+        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class Entry extends DataClass
      */
     public function setEntityType($entityType)
     {
-        $this->set_default_property(self :: PROPERTY_ENTITY_TYPE, $entityType);
+        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class Entry extends DataClass
      */
     public function getUserId()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_ID);
+        return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -127,7 +127,7 @@ abstract class Entry extends DataClass
      */
     public function setUserId($userId)
     {
-        $this->set_default_property(self :: PROPERTY_USER_ID, $userId);
+        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
     }
 
     /**
@@ -136,7 +136,7 @@ abstract class Entry extends DataClass
      */
     public function getIpAddress()
     {
-        return $this->get_default_property(self :: PROPERTY_IP_ADDRESS);
+        return $this->get_default_property(self::PROPERTY_IP_ADDRESS);
     }
 
     /**
@@ -145,7 +145,7 @@ abstract class Entry extends DataClass
      */
     public function setIpAddress($ipAddress)
     {
-        $this->set_default_property(self :: PROPERTY_IP_ADDRESS, $ipAddress);
+        $this->set_default_property(self::PROPERTY_IP_ADDRESS, $ipAddress);
     }
 
     /**
@@ -158,11 +158,11 @@ abstract class Entry extends DataClass
         {
             if (! isset($this->contentObject))
             {
-                $this->contentObject = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
+                $this->contentObject = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
                     $this->getContentObjectId());
             }
-
+            
             return $this->contentObject;
         }
         catch (\Exception $ex)

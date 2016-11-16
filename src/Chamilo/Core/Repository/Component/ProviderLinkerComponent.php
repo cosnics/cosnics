@@ -25,12 +25,12 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Metadata\Provider\Manager :: context(),
+            \Chamilo\Core\Metadata\Provider\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
-
+        
         $component = $factory->getComponent();
         $component->setEntities($this->getEntities());
-
+        
         return $component->run();
     }
 
@@ -40,20 +40,20 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
      */
     public function getEntities()
     {
-        $registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(
+        $registrations = \Chamilo\Configuration\Configuration::registrations_by_type(
             'Chamilo\Core\Repository\ContentObject');
-
+        
         $entities = array();
-        $entityFactory = DataClassEntityFactory :: getInstance();
-
+        $entityFactory = DataClassEntityFactory::getInstance();
+        
         foreach ($registrations as $registration)
         {
             $entities[] = $entityFactory->getEntity(
-                $registration[Registration :: PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
-                     $registration[Registration :: PROPERTY_NAME],
-                    DataClassEntity :: INSTANCE_IDENTIFIER);
+                $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
+                     $registration[Registration::PROPERTY_NAME], 
+                    DataClassEntity::INSTANCE_IDENTIFIER);
         }
-
+        
         return $entities;
     }
 }

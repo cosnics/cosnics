@@ -17,37 +17,32 @@ class SurveyForm extends ContentObjectForm
         $object = $this->get_content_object();
         if ($object != null)
         {
-            $defaults[Survey :: PROPERTY_PROGRESS_BAR] = $object->get_progress_bar();
-            $defaults[Survey :: PROPERTY_MENU] = $object->get_menu();
-            $defaults[Survey :: PROPERTY_FINISH_TEXT] = $object->get_finish_text();
+            $defaults[Survey::PROPERTY_PROGRESS_BAR] = $object->get_progress_bar();
+            $defaults[Survey::PROPERTY_MENU] = $object->get_menu();
+            $defaults[Survey::PROPERTY_FINISH_TEXT] = $object->get_finish_text();
         }
         
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 
     protected function build_creation_form()
     {
         $html_editor_options = array();
-        $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
+        $html_editor_options[FormValidatorHtmlEditorOptions::OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
         
-        parent :: build_creation_form();
+        parent::build_creation_form();
         
-        $this->addElement('category', Translation :: get('Properties'));
-        $checkbox = $this->createElement(
-            'checkbox', 
-            Survey :: PROPERTY_MENU, 
-            Translation :: get('WithMenu'), 
-            '', 
-            array());
+        $this->addElement('category', Translation::get('Properties'));
+        $checkbox = $this->createElement('checkbox', Survey::PROPERTY_MENU, Translation::get('WithMenu'), '', array());
         $this->addElement($checkbox);
         $checkbox = $this->createElement(
             'checkbox', 
-            Survey :: PROPERTY_PROGRESS_BAR, 
-            Translation :: get('WithProgressBar'), 
+            Survey::PROPERTY_PROGRESS_BAR, 
+            Translation::get('WithProgressBar'), 
             '', 
             array());
         $this->addElement($checkbox);
-        $this->add_html_editor(Survey :: PROPERTY_FINISH_TEXT, Translation :: get('SurveyFinishText'), false);
+        $this->add_html_editor(Survey::PROPERTY_FINISH_TEXT, Translation::get('SurveyFinishText'), false);
         $this->addElement('category');
     }
     
@@ -55,26 +50,21 @@ class SurveyForm extends ContentObjectForm
     protected function build_editing_form()
     {
         $html_editor_options = array();
-        $html_editor_options[FormValidatorHtmlEditorOptions :: OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
+        $html_editor_options[FormValidatorHtmlEditorOptions::OPTION_TOOLBAR] = 'RepositorySurveyQuestion';
         
-        parent :: build_editing_form();
+        parent::build_editing_form();
         
-        $this->addElement('category', Translation :: get('Properties'));
-        $checkbox = $this->createElement(
-            'checkbox', 
-            Survey :: PROPERTY_MENU, 
-            Translation :: get('WithMenu'), 
-            '', 
-            array());
+        $this->addElement('category', Translation::get('Properties'));
+        $checkbox = $this->createElement('checkbox', Survey::PROPERTY_MENU, Translation::get('WithMenu'), '', array());
         $this->addElement($checkbox);
         $checkbox = $this->createElement(
             'checkbox', 
-            Survey :: PROPERTY_PROGRESS_BAR, 
-            Translation :: get('WithProgressBar'), 
+            Survey::PROPERTY_PROGRESS_BAR, 
+            Translation::get('WithProgressBar'), 
             '', 
             array());
         $this->addElement($checkbox);
-        $this->add_html_editor(Survey :: PROPERTY_FINISH_TEXT, Translation :: get('SurveyFinishText'), false);
+        $this->add_html_editor(Survey::PROPERTY_FINISH_TEXT, Translation::get('SurveyFinishText'), false);
         $this->addElement('category');
     }
     
@@ -84,11 +74,11 @@ class SurveyForm extends ContentObjectForm
         $object = new Survey();
         $values = $this->exportValues();
         
-        $object->set_progress_bar($values[Survey :: PROPERTY_PROGRESS_BAR]);
-        $object->set_menu($values[Survey :: PROPERTY_MENU]);
-        $object->set_finish_text($values[Survey :: PROPERTY_FINISH_TEXT]);
+        $object->set_progress_bar($values[Survey::PROPERTY_PROGRESS_BAR]);
+        $object->set_menu($values[Survey::PROPERTY_MENU]);
+        $object->set_finish_text($values[Survey::PROPERTY_FINISH_TEXT]);
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 
     function update_content_object()
@@ -96,11 +86,11 @@ class SurveyForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
         
-        $object->set_progress_bar($values[Survey :: PROPERTY_PROGRESS_BAR]);
-        $object->set_finish_text($values[Survey :: PROPERTY_FINISH_TEXT]);
-        $object->set_menu($values[Survey :: PROPERTY_MENU]);
+        $object->set_progress_bar($values[Survey::PROPERTY_PROGRESS_BAR]);
+        $object->set_finish_text($values[Survey::PROPERTY_FINISH_TEXT]);
+        $object->set_menu($values[Survey::PROPERTY_MENU]);
         $this->set_content_object($object);
-        return parent :: update_content_object();
+        return parent::update_content_object();
     }
 }
 ?>

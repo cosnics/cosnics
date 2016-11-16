@@ -21,7 +21,7 @@ class CreatorComponent extends TabComponent
     public function build()
     {
         $form = new WorkspaceForm($this->get_url());
-
+        
         if ($form->validate())
         {
             try
@@ -29,46 +29,45 @@ class CreatorComponent extends TabComponent
                 $values = $form->exportValues();
                 $values[Workspace::PROPERTY_CREATOR_ID] = $this->get_user_id();
                 $values[Workspace::PROPERTY_CREATION_DATE] = time();
-
+                
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $workspace = $workspaceService->createWorkspace($values);
-
+                
                 $success = $workspace instanceof Workspace;
                 $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
-                $message = Translation:: get(
-                    $translation,
-                    array('OBJECT' => Translation:: get('Workspace')),
-                    Utilities::COMMON_LIBRARIES
-                );
-
-                if(!$success)
+                
+                $message = Translation::get(
+                    $translation, 
+                    array('OBJECT' => Translation::get('Workspace')), 
+                    Utilities::COMMON_LIBRARIES);
+                
+                if (! $success)
                 {
                     throw new \Exception($message);
                 }
-
+                
                 $redirectParameters = array(
-                    self::PARAM_ACTION => self::ACTION_RIGHTS, self::PARAM_WORKSPACE_ID => $workspace->getId()
-                );
+                    self::PARAM_ACTION => self::ACTION_RIGHTS, 
+                    self::PARAM_WORKSPACE_ID => $workspace->getId());
             }
             catch (\Exception $ex)
             {
                 $success = false;
                 $message = $ex->getMessage();
-
+                
                 $redirectParameters = array(self::PARAM_ACTION => self::ACTION_BROWSE_PERSONAL);
             }
-
-            $this->redirect($message, !$success, $redirectParameters);
+            
+            $this->redirect($message, ! $success, $redirectParameters);
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

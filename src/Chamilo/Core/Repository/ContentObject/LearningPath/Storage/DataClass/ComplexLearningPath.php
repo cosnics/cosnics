@@ -14,6 +14,6 @@ class ComplexLearningPath extends ComplexContentObjectItem
 
     public function get_allowed_types()
     {
-        return array(LearningPath :: class_name(), LearningPathItem :: class_name());
+        return array(LearningPath::class_name(), LearningPathItem::class_name());
     }
 }

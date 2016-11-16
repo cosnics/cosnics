@@ -12,7 +12,7 @@ class Form extends FormValidator
 
     function __construct($parent)
     {
-        parent :: __construct(self :: FORM_NAME, 'post');
+        parent::__construct(self::FORM_NAME, 'post');
         $this->parent = $parent;
         $this->buildForm();
     }
@@ -20,10 +20,13 @@ class Form extends FormValidator
     function buildForm()
     {
         $surveyConfiguration = $this->parent->getApplicationConfiguration();
-        $pageDisplay = PageDisplay :: factory($this, $this->parent->get_current_complex_content_object_path_node(), $surveyConfiguration->getAnswerService());
+        $pageDisplay = PageDisplay::factory(
+            $this, 
+            $this->parent->get_current_complex_content_object_path_node(), 
+            $surveyConfiguration->getAnswerService());
         $pageDisplay->run();
     }
-    
+
     public function getParent()
     {
         return $this->parent;

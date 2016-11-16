@@ -91,7 +91,7 @@ class ProviderFormService
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      * @param \Chamilo\Libraries\Format\Form\FormValidator $formValidator
      */
-    public function __construct(EntityService $entityService, ElementService $elementService,
+    public function __construct(EntityService $entityService, ElementService $elementService, 
         RelationService $relationService, DataClassEntity $entity, FormValidator $formValidator)
     {
         $this->entityService = $entityService;
@@ -200,10 +200,10 @@ class ProviderFormService
         if (! isset($this->availableSchemas))
         {
             $this->availableSchemas = $this->getEntityService()->getAvailableSchemasForEntityType(
-                $this->getRelationService(),
+                $this->getRelationService(), 
                 $this->getEntity())->as_array();
         }
-
+        
         return $this->availableSchemas;
     }
 
@@ -211,18 +211,18 @@ class ProviderFormService
     {
         $availableSchemas = $this->getAvailableSchemas();
         $tabs_generator = new DynamicFormTabsRenderer('ProviderLinks', $this->getFormValidator());
-
+        
         foreach ($availableSchemas as $availableSchema)
         {
             $tabs_generator->add_tab(
                 new DynamicFormTab(
-                    'schema-' . $availableSchema->get_id(),
-                    $availableSchema->get_name(),
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self :: TAB_METADATA),
-                    array($this, 'addElementsForSchema'),
+                    'schema-' . $availableSchema->get_id(), 
+                    $availableSchema->get_name(), 
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Repository', 'Tab/' . self::TAB_METADATA), 
+                    array($this, 'addElementsForSchema'), 
                     array($availableSchema)));
         }
-
+        
         $tabs_generator->render();
     }
 
@@ -233,13 +233,13 @@ class ProviderFormService
     public function addElementsForSchema(Schema $schema)
     {
         $elements = $this->getElementsForSchema($schema);
-
+        
         foreach ($elements as $element)
         {
             $this->getFormValidator()->addElement(
-                'select',
-                $this->getElementName($schema, $element),
-                $element->get_display_name(),
+                'select', 
+                $this->getElementName($schema, $element), 
+                $element->get_display_name(), 
                 $this->getElementOptions());
         }
     }
@@ -250,7 +250,7 @@ class ProviderFormService
         {
             $this->schemaElements[$schema->get_id()] = $this->getElementService()->getElementsForSchema($schema)->as_array();
         }
-
+        
         return $this->schemaElements[$schema->get_id()];
     }
 
@@ -263,10 +263,10 @@ class ProviderFormService
     {
         if (! isset($this->elementNames[$schema->get_id()][$element->get_id()]))
         {
-            $this->elementNames[$schema->get_id()][$element->get_id()] = EntityService :: PROPERTY_METADATA_SCHEMA . '[' .
+            $this->elementNames[$schema->get_id()][$element->get_id()] = EntityService::PROPERTY_METADATA_SCHEMA . '[' .
                  $schema->get_id() . '][' . $element->get_id() . ']';
         }
-
+        
         return $this->elementNames[$schema->get_id()][$element->get_id()];
     }
 
@@ -274,26 +274,26 @@ class ProviderFormService
     {
         if (! isset($this->elementOptions))
         {
-            $this->elementOptions[0] = Translation :: get('NoProvidedValue', null, 'Chamilo\Core\Metadata\Provider');
-
+            $this->elementOptions[0] = Translation::get('NoProvidedValue', null, 'Chamilo\Core\Metadata\Provider');
+            
             $propertyProviderService = new PropertyProviderService($this->getEntity());
             $providerRegistrations = $propertyProviderService->getProviderRegistrationsForEntity();
-
+            
             while ($providerRegistration = $providerRegistrations->next_result())
             {
-                $translationNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    $providerRegistration->get_provider_class(),
+                $translationNamespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                    $providerRegistration->get_provider_class(), 
                     2);
-                $translationVariable = StringUtilities :: getInstance()->createString(
+                $translationVariable = StringUtilities::getInstance()->createString(
                     $providerRegistration->get_property_name())->upperCamelize();
-
-                $this->elementOptions[$providerRegistration->get_id()] = Translation :: get(
-                    $translationVariable,
-                    null,
+                
+                $this->elementOptions[$providerRegistration->get_id()] = Translation::get(
+                    $translationVariable, 
+                    null, 
                     $translationNamespace);
             }
         }
-
+        
         return $this->elementOptions;
     }
 
@@ -301,12 +301,12 @@ class ProviderFormService
     {
         $defaults = array();
         $availableSchemas = $this->getAvailableSchemas();
-
+        
         foreach ($availableSchemas as $availableSchema)
         {
             $defaults = array_merge($defaults, $this->getDefaultsForSchema($availableSchema));
         }
-
+        
         $this->getFormValidator()->setDefaults($defaults);
     }
 
@@ -318,17 +318,17 @@ class ProviderFormService
     {
         $defaults = array();
         $elements = $this->getElementsForSchema($schema);
-
+        
         foreach ($elements as $element)
         {
             $providerLink = $this->getElementProviderLink($element);
-
+            
             if ($providerLink instanceof ProviderLink)
             {
                 $defaults[$this->getElementName($schema, $element)] = $providerLink->get_provider_registration_id();
             }
         }
-
+        
         return $defaults;
     }
 
@@ -353,13 +353,13 @@ class ProviderFormService
         {
             $propertyProviderService = new PropertyProviderService($this->getEntity());
             $entityProviderLinks = $propertyProviderService->getProviderLinksForEntity();
-
+            
             while ($entityProviderLink = $entityProviderLinks->next_result())
             {
                 $this->entityProviderLinks[$entityProviderLink->get_element_id()] = $entityProviderLink;
             }
         }
-
+        
         return $this->entityProviderLinks;
     }
 }

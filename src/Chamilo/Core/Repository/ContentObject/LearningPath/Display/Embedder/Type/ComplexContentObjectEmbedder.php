@@ -19,7 +19,7 @@ class ComplexContentObjectEmbedder extends Embedder
         
         $html[] = '<iframe frameborder="0" class="link_iframe" src="' . $link . '" width="100%" height="700px">';
         $html[] = '<p>Your browser does not support iframes.</p></iframe>';
-
+        
         $html[] = '<script type="text/javascript">';
         $html[] = 'function resizeIframe() {';
         $html[] = '     $(".link_iframe")[0].height = $(".link_iframe")[0].contentWindow.document.body.offsetHeight + 20;';
@@ -28,7 +28,7 @@ class ComplexContentObjectEmbedder extends Embedder
         $html[] = '     resizeIframe();';
         $html[] = '     setTimeout(resizeIframe, 750);';
         $html[] = '});';
-
+        
         $html[] = '</script>';
         
         return implode(PHP_EOL, $html);
@@ -41,8 +41,8 @@ class ComplexContentObjectEmbedder extends Embedder
     public function get_parameters()
     {
         $parameters = array();
-        $parameters[Manager :: PARAM_ACTION] = null;
-        $parameters[self :: PARAM_EMBEDDED_CONTENT_OBJECT_ID] = $this->get_node()->get_content_object()->get_id();
+        $parameters[Manager::PARAM_ACTION] = null;
+        $parameters[self::PARAM_EMBEDDED_CONTENT_OBJECT_ID] = $this->get_node()->get_content_object()->get_id();
         return $parameters;
     }
 }

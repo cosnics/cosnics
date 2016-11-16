@@ -50,7 +50,7 @@ class DomMediaPackageParser extends MediaPackageParser
         $matterhorn_external_repository_object->set_license(
             $media_package->getElementsByTagName('license')->item(0)->nodeValue);
         $matterhorn_external_repository_object->set_type(
-            (string) StringUtilities :: getInstance()->createString(
+            (string) StringUtilities::getInstance()->createString(
                 $result->getElementsByTagName('mediaType')->item(0)->nodeValue)->underscored());
         $matterhorn_external_repository_object->set_modified(
             strtotime($result->getElementsByTagName('modified')->item(0)->nodeValue));

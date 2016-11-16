@@ -9,6 +9,6 @@ class JsonImageContentObjectRendition extends JsonContentObjectRendition
 
     public function render()
     {
-        return array(self :: PROPERTY_URL => '');
+        return array(self::PROPERTY_URL => '');
     }
 }

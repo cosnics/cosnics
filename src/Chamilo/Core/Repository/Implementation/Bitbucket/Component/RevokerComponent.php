@@ -10,9 +10,9 @@ class RevokerComponent extends Manager
 
     public function run()
     {
-        $id = Request :: get(self :: PARAM_EXTERNAL_REPOSITORY_ID);
-        $user = Request :: get(self :: PARAM_EXTERNAL_REPOSITORY_USER);
-        $group = Request :: get(self :: PARAM_EXTERNAL_REPOSITORY_GROUP);
+        $id = Request::get(self::PARAM_EXTERNAL_REPOSITORY_ID);
+        $user = Request::get(self::PARAM_EXTERNAL_REPOSITORY_USER);
+        $group = Request::get(self::PARAM_EXTERNAL_REPOSITORY_GROUP);
         if ($id || ($id && $user) || ($id && $group))
         {
             if (! $user && ! $group)
@@ -31,16 +31,16 @@ class RevokerComponent extends Manager
             if ($success)
             {
                 $parameters = $this->get_parameters();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
-                $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-                $this->redirect(Translation :: get('PrivilegesRevoked'), false, $parameters);
+                $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
+                $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+                $this->redirect(Translation::get('PrivilegesRevoked'), false, $parameters);
             }
             else
             {
                 $parameters = $this->get_parameters();
-                $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
-                $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $id;
-                $this->redirect(Translation :: get('PrivilegesNotRevoked'), true, $parameters);
+                $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY_PRIVILEGES;
+                $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $id;
+                $this->redirect(Translation::get('PrivilegesNotRevoked'), true, $parameters);
             }
         }
     }

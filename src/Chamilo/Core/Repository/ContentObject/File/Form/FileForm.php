@@ -30,24 +30,24 @@ class FileForm extends ContentObjectForm
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
         parent::build_creation_form($description_options);
-
+        
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
-
+        
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
                 (int) $this->get_owner_id()));
-
+        
         $this->addSingleFileDropzone(
-            'file',
+            'file', 
             array(
-                'maxFilesize' => $calculator->getMaximumUploadSize(),
+                'maxFilesize' => $calculator->getMaximumUploadSize(), 
                 'titleInputName' => ContentObject::PROPERTY_TITLE));
-
+        
         $this->addRule('file', Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota');
-
+        
         $calculator->addUploadWarningToForm($this);
-
+        
         $this->addFormRule(array($this, 'check_document_form'));
         $this->addElement('category');
     }
@@ -58,46 +58,46 @@ class FileForm extends ContentObjectForm
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
         parent::build_editing_form($description_options);
-
+        
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
-
+        
         $calculator = new Calculator(
             \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
                 (int) $this->get_owner_id()));
-
+        
         /** @var File $content_object */
         $content_object = $this->get_content_object();
-
+        
         $this->add_information_message(
-            'current_selected_file',
-            '',
+            'current_selected_file', 
+            '', 
             Translation::getInstance()->getTranslation(
-                'CurrentlySelectedFile',
+                'CurrentlySelectedFile', 
                 array(
-                    'FILENAME' => $content_object->get_filename(),
+                    'FILENAME' => $content_object->get_filename(), 
                     'FILESIZE' => Filesystem::format_file_size($content_object->get_filesize()))));
-
+        
         $this->addSingleFileDropzone(
-            'file',
+            'file', 
             array(
-                'maxFilesize' => $calculator->getMaximumUploadSize(),
+                'maxFilesize' => $calculator->getMaximumUploadSize(), 
                 'titleInputName' => ContentObject::PROPERTY_TITLE));
-
+        
         $javascriptHtml = array();
-
+        
         $javascriptHtml[] = '<script type="text/javascript">';
         $javascriptHtml[] = '$(document).ready(function() {';
         $javascriptHtml[] = '$(\'button[type=submit]\').prop(\'disabled\', false)';
         $javascriptHtml[] = '});';
         $javascriptHtml[] = '</script>';
-
+        
         $this->addElement('html', implode(PHP_EOL, $javascriptHtml));
-
+        
         $this->addRule('file', Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES), 'disk_quota');
-
+        
         $calculator->addUploadWarningToForm($this);
-
+        
         $this->addElement('category');
     }
 
@@ -110,7 +110,7 @@ class FileForm extends ContentObjectForm
     public function create_content_object()
     {
         $object = new File();
-
+        
         if (isset($_FILES['file']) && strlen($_FILES['file']['name']) > 0)
         {
             $object->set_filename($_FILES['file']['name']);
@@ -121,18 +121,18 @@ class FileForm extends ContentObjectForm
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
             $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                  $fileUploadData->temporaryFileName;
-
+            
             $object->set_filename($fileUploadData->name);
             $object->set_temporary_file_path($temporaryFilePath);
         }
-
+        
         $this->set_content_object($object);
-
+        
         $document = parent::create_content_object();
-
+        
         $owner = $this->get_owner_id();
         $owner_path = $this->get_upload_path() . $owner;
-
+        
         return $document;
     }
 
@@ -141,7 +141,7 @@ class FileForm extends ContentObjectForm
         /** @var File $document */
         $document = $this->get_content_object();
         $values = $this->exportValues();
-
+        
         if (isset($_FILES['file']) && strlen($_FILES['file']['name']) > 0)
         {
             $document->set_filename($_FILES['file']['name']);
@@ -150,17 +150,17 @@ class FileForm extends ContentObjectForm
         else
         {
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
-
+            
             if ($fileUploadData)
             {
                 $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                      $fileUploadData->temporaryFileName;
-
+                
                 $document->set_filename($fileUploadData->name);
                 $document->set_temporary_file_path($temporaryFilePath);
             }
         }
-
+        
         if ((isset($values['version']) && $values['version'] == 0) || ! isset($values['version']))
         {
             $document->set_save_as_new_version(false);
@@ -169,7 +169,7 @@ class FileForm extends ContentObjectForm
         {
             $document->set_save_as_new_version(true);
         }
-
+        
         return parent::update_content_object();
     }
 
@@ -177,15 +177,15 @@ class FileForm extends ContentObjectForm
     {
         // TODO: Do the errors need htmlentities()?
         $errors = array();
-
+        
         $owner_id = $this->get_owner_id();
-
+        
         $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User::class_name(),
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
             (int) $owner_id);
-
+        
         $calculator = new Calculator($owner);
-
+        
         if (isset($_FILES['file']) && isset($_FILES['file']['error']) && $_FILES['file']['error'] != 0 &&
              $_FILES['file']['error'] != 4)
         {
@@ -205,20 +205,20 @@ class FileForm extends ContentObjectForm
         elseif (isset($_FILES['file']) && strlen($_FILES['file']['name']) > 0)
         {
             $size = $_FILES['file']['size'];
-
+            
             if (! $calculator->canUpload($size))
             {
                 $errors['file'] = Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES);
             }
-
+            
             $array = explode('.', $_FILES['file']['name']);
             $type = $array[count($array) - 1];
-
+            
             if (isset($fields['uncompress']) && $type != 'zip')
             {
                 $errors['file'] = Translation::get('UncompressNotAvailableForThisFile');
             }
-
+            
             if (! $fields['uncompress'] && ! $this->allow_file_type($type))
             {
                 if (Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'rename_instead_of_disallow')) ==
@@ -239,9 +239,9 @@ class FileForm extends ContentObjectForm
             $fileUploadData = json_decode($this->exportValue('file_upload_data'));
             $temporaryFilePath = Path::getInstance()->getTemporaryPath('Chamilo\Libraries\Ajax\Component') .
                  $fileUploadData->temporaryFileName;
-
+            
             $size = filesize($temporaryFilePath);
-
+            
             if (! $calculator->canUpload($size))
             {
                 $errors['file_upload_data'] = Translation::get('DiskQuotaExceeded', null, Utilities::COMMON_LIBRARIES);
@@ -252,12 +252,12 @@ class FileForm extends ContentObjectForm
             $errors['file'] = Translation::get('NoFileSelected');
             $errors['file_upload_data'] = Translation::get('NoFileSelected');
         }
-
+        
         if (count($errors) == 0)
         {
             return true;
         }
-
+        
         return $errors;
     }
 
@@ -269,29 +269,29 @@ class FileForm extends ContentObjectForm
     private function allow_file_type($type)
     {
         $filtering_type = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'type_of_filtering'));
-
+        
         if ($filtering_type == 'blacklist')
         {
             $blacklist = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'blacklist'));
             $items = explode(',', $blacklist);
-
+            
             if (in_array($type, $items))
             {
                 return false;
             }
-
+            
             return true;
         }
         else
         {
             $whitelist = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'whitelist'));
             $items = explode(',', $whitelist);
-
+            
             if (in_array($type, $items))
             {
                 return true;
             }
-
+            
             return false;
         }
     }

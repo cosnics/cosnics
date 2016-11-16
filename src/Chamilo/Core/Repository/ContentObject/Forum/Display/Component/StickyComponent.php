@@ -20,26 +20,26 @@ class StickyComponent extends Manager
         if ($topic->get_forum_type() == 1)
         {
             $topic->set_forum_type(null);
-            $message = Translation :: get('TopicUnStickied');
+            $message = Translation::get('TopicUnStickied');
         }
         else
         {
             $topic->set_forum_type(1);
-            $message = Translation :: get('TopicStickied');
+            $message = Translation::get('TopicStickied');
         }
         $success = $topic->update();
         
         if (! $success)
         {
-            $message = Translation :: get(
+            $message = Translation::get(
                 'ObjectNotUpdated', 
-                array('OBJECT' => Translation :: get('ForumTopic')), 
-                Utilities :: COMMON_LIBRARIES);
+                array('OBJECT' => Translation::get('ForumTopic')), 
+                Utilities::COMMON_LIBRARIES);
         }
         
         $params = array();
-        $params[self :: PARAM_ACTION] = self :: ACTION_VIEW_FORUM;
-        $params[self :: PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
+        $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
+        $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         
         $this->redirect($message, ($success ? false : true), $params);
     }

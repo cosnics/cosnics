@@ -35,7 +35,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     {
         $developer_key = Configuration::getInstance()->get_setting(
             array($external_repository->get_id(), 'developer_key'));
-
+        
         if (! $developer_key)
         {
             return false;
@@ -61,7 +61,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $parameters = array();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        
         return $this->get_url($parameters);
     }
 
@@ -71,19 +71,19 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_menu_items()
     {
         $menu_items = array();
-
+        
         $channels = $this->get_external_repository_manager_connector()->getChannels();
         foreach ($channels as $id => $name)
         {
             $menu_item = array();
             $menu_item['title'] = $name;
             $menu_item['url'] = $this->get_url(
-                array(self::PARAM_CHANNEL_ID => $id),
+                array(self::PARAM_CHANNEL_ID => $id), 
                 array(ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY));
             $my_videos['class'] = 'user';
             $menu_items[] = $menu_item;
         }
-
+        
         return $menu_items;
     }
 
@@ -93,7 +93,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
-
+        
         if (! $this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
             $actions[] = self::ACTION_LOGIN;
@@ -123,10 +123,10 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         foreach ($video_types as $video_type)
         {
             $video_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME),
+                new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
                 '*.' . $video_type);
         }
-
+        
         return new OrCondition($video_conditions);
     }
 
@@ -149,7 +149,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
                 }
             }
         }
-
+        
         return $channelId;
     }
 }

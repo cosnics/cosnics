@@ -27,18 +27,18 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th style="text-align: center;" class="list">' . Translation :: get('YourOrder') . '</th>';
+        $html[] = '<th style="text-align: center;" class="list">' . Translation::get('YourOrder') . '</th>';
         
         if ($configuration->show_solution())
         {
-            $html[] = '<th style="text-align: center;" class="list">' . Translation :: get('CorrectOrder') . '</th>';
+            $html[] = '<th style="text-align: center;" class="list">' . Translation::get('CorrectOrder') . '</th>';
         }
         
-        $html[] = '<th>' . Translation :: get('Answer') . '</th>';
+        $html[] = '<th>' . Translation::get('Answer') . '</th>';
         
         if ($configuration->show_answer_feedback())
         {
-            $html[] = '<th>' . Translation :: get('Feedback') . '</th>';
+            $html[] = '<th>' . Translation::get('Feedback') . '</th>';
         }
         
         $html[] = '</tr>';
@@ -58,16 +58,16 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 if ($correct_answer)
                 {
-                    $result = ' <img style="vertical-align: middle;" src="' . Theme :: getInstance()->getImagePath(
+                    $result = ' <img style="vertical-align: middle;" src="' . Theme::getInstance()->getImagePath(
                         __NAMESPACE__, 
-                        'AnswerCorrect') . '" alt="' . Translation :: get('Correct') . '" title="' .
-                         Translation :: get('Correct') . '" style="" />';
+                        'AnswerCorrect') . '" alt="' . Translation::get('Correct') . '" title="' .
+                         Translation::get('Correct') . '" style="" />';
                 }
                 else
                 {
                     $result = ' <img style="vertical-align: middle;" src="' .
-                         Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                         Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                         Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                         Translation::get('Wrong') . '" title="' . Translation::get('Wrong') . '" />';
                 }
             }
             else
@@ -77,7 +77,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             if ($user_answers[$i + 1] == - 1)
             {
-                $html[] = '<td style="text-align: center;">' . Translation :: get('NoAnswer') . $result . '</td>';
+                $html[] = '<td style="text-align: center;">' . Translation::get('NoAnswer') . $result . '</td>';
             }
             else
             {
@@ -93,7 +93,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             
             $html[] = '<td>' . $object_renderer->run() . '</td>';
             
-            if (AnswerFeedbackDisplay :: allowed(
+            if (AnswerFeedbackDisplay::allowed(
                 $configuration, 
                 $this->get_complex_content_object_question(), 
                 true, 

@@ -45,11 +45,11 @@ class DataManager
 
     public function init_storage_access()
     {
-        $classLoader = new ClassLoader('Doctrine', Path :: getInstance()->getPluginPath());
+        $classLoader = new ClassLoader('Doctrine', Path::getInstance()->getPluginPath());
         $classLoader->register();
         
-        $data_source_name = DataSourceName :: factory(
-            'Doctrine',
+        $data_source_name = DataSourceName::factory(
+            'Doctrine', 
             $this->installer_config->get_db_driver(), 
             $this->installer_config->get_db_username(), 
             $this->installer_config->get_db_host(), 
@@ -64,7 +64,7 @@ class DataManager
             'host' => $data_source_name->get_host(), 
             'driverClass' => $data_source_name->get_driver(true));
         
-        $connection = DriverManager :: getConnection($connection_parameters, $configuration);
+        $connection = DriverManager::getConnection($connection_parameters, $configuration);
         
         try
         {
@@ -82,8 +82,8 @@ class DataManager
         $name = $this->installer_config->get_db_name();
         $overwrite = $this->installer_config->get_db_overwrite();
         
-        $data_source_name = DataSourceName :: factory(
-            'Doctrine',
+        $data_source_name = DataSourceName::factory(
+            'Doctrine', 
             $this->installer_config->get_db_driver(), 
             $this->installer_config->get_db_username(), 
             $this->installer_config->get_db_host(), 
@@ -98,7 +98,7 @@ class DataManager
             'host' => $data_source_name->get_host(), 
             'driverClass' => $data_source_name->get_driver(true));
         
-        $connection = DriverManager :: getConnection($connection_parameters, $configuration);
+        $connection = DriverManager::getConnection($connection_parameters, $configuration);
         
         if (! $this->database_exists)
         {

@@ -38,7 +38,7 @@ class SessionHandlerFactory
      * @param string $configuredSessionHandler
      * @param \Chamilo\Core\User\Storage\Repository\SessionRepository
      */
-    public function __construct(FileConfigurationLocator $fileConfigurationLocator, $configuredSessionHandler,
+    public function __construct(FileConfigurationLocator $fileConfigurationLocator, $configuredSessionHandler, 
         SessionRepository $sessionRepository = null)
     {
         $this->fileConfigurationLocator = $fileConfigurationLocator;
@@ -113,7 +113,7 @@ class SessionHandlerFactory
                 return new SessionHandler($this->getSessionRepository());
             }
         }
-
+        
         return null;
     }
 }

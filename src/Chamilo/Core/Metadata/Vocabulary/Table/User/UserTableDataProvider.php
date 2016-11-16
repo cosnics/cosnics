@@ -25,7 +25,7 @@ class UserTableDataProvider extends RecordTableDataProvider
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: retrieve_vocabulary_users($condition, $count, $offset, $order_property);
+        return DataManager::retrieve_vocabulary_users($condition, $count, $offset, $order_property);
     }
 
     /**
@@ -37,6 +37,6 @@ class UserTableDataProvider extends RecordTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_vocabulary_users($condition);
+        return DataManager::count_vocabulary_users($condition);
     }
 }

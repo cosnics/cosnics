@@ -23,21 +23,20 @@ class LinkApplicationItem extends Bar
     public function getContent()
     {
         $html = array();
-
+        
         if ($this->getItem()->get_parent() == 0)
         {
             $selected = $this->isSelected();
         }
-
+        
         $html[] = '<a' . ($selected ? ' class="chamilo-menu-item-current"' : '') . ' href="' .
              $this->getItem()->get_url() . '" target="' . $this->getItem()->get_target_string() . '">';
-
+        
         $html[] = '<div class="chamilo-menu-item-label">' .
-             $this->getItem()->get_titles()->get_translation(Translation :: getInstance()->getLanguageIsocode()) .
-             '</div>';
-
+             $this->getItem()->get_titles()->get_translation(Translation::getInstance()->getLanguageIsocode()) . '</div>';
+        
         $html[] = '</a>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

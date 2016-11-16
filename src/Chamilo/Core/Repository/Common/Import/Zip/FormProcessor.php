@@ -18,11 +18,11 @@ class FormProcessor extends \Chamilo\Core\Repository\Common\Import\FormProcessor
     public function getImportParameters()
     {
         return new ZipImportParameters(
-            'zip',
-            $this->getUserIdentifier(),
-            $this->getWorkspace(),
-            $this->determineCategoryIdentifier(),
-            $this->getFile(),
+            'zip', 
+            $this->getUserIdentifier(), 
+            $this->getWorkspace(), 
+            $this->determineCategoryIdentifier(), 
+            $this->getFile(), 
             $this->getFormValues());
     }
 }

@@ -9,8 +9,8 @@ class DeleteAnswerComponent extends \Chamilo\Core\Repository\ContentObject\Surve
     function run()
     {
         $result = new JsonAjaxResult(200);
-        $nodeId = $this->getRequest()->request->get(self :: PARAM_NODE_ID);
-        $answerId = $this->getRequest()->request->get(self :: PARAM_ANSWER_ID);
+        $nodeId = $this->getRequest()->request->get(self::PARAM_NODE_ID);
+        $answerId = $this->getRequest()->request->get(self::PARAM_ANSWER_ID);
         $this->deleteAnswer($nodeId, $answerId);
         $result->display();
     }

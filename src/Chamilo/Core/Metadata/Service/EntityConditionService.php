@@ -32,12 +32,12 @@ class EntityConditionService
     public function getEntitiesCondition($entities, $dataClass, $typeProperty, $identifierProperty = null)
     {
         $entityConditions = array();
-
+        
         foreach ($entities as $entity)
         {
             $entityConditions[] = $this->getEntityCondition($entity, $dataClass, $typeProperty, $identifierProperty);
         }
-
+        
         return new OrCondition($entityConditions);
     }
 
@@ -52,18 +52,18 @@ class EntityConditionService
     public function getEntityCondition($entity, $dataClass, $typeProperty, $identifierProperty = null)
     {
         $entityConditions = array();
-
+        
         $entityConditions[] = new EqualityCondition(
-            new PropertyConditionVariable($dataClass :: class_name(), $typeProperty),
+            new PropertyConditionVariable($dataClass::class_name(), $typeProperty), 
             new StaticConditionVariable($entity->getDataClassName()));
-
+        
         if (! $entity->isDataClassType() && $identifierProperty)
         {
             $entityConditions[] = new EqualityCondition(
-                new PropertyConditionVariable($dataClass :: class_name(), $identifierProperty),
+                new PropertyConditionVariable($dataClass::class_name(), $identifierProperty), 
                 new StaticConditionVariable($entity->getDataClassIdentifier()));
         }
-
+        
         return new AndCondition($entityConditions);
     }
 
@@ -75,13 +75,13 @@ class EntityConditionService
     public function expandEntities($entities)
     {
         $expandedEntities = array();
-
+        
         foreach ($entities as $entity)
         {
-
+            
             $expandedEntities = array_merge($expandedEntities, $this->expandEntity($entity));
         }
-
+        
         return $expandedEntities;
     }
 
@@ -93,24 +93,23 @@ class EntityConditionService
     public function expandEntity($entity)
     {
         $expandedEntities = array();
-
+        
         if (! $entity->isDataClassType())
         {
             $expandedEntities[] = $entity;
         }
         else
         {
-            $dataClassInstances = DataManager :: retrieves(
-                $entity->getDataClassName(),
+            $dataClassInstances = DataManager::retrieves(
+                $entity->getDataClassName(), 
                 new DataClassRetrievesParameters());
-
+            
             while ($dataClassInstance = $dataClassInstances->next_result())
             {
-                $expandedEntities[] = DataClassEntityFactory :: getInstance()->getEntityFromDataClass(
-                    $dataClassInstance);
+                $expandedEntities[] = DataClassEntityFactory::getInstance()->getEntityFromDataClass($dataClassInstance);
             }
         }
-
+        
         return $expandedEntities;
     }
 }

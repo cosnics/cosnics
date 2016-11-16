@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: forum_form.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.forum
  */
 class ForumForm extends ContentObjectForm
@@ -19,22 +19,22 @@ class ForumForm extends ContentObjectForm
         $object = new Forum();
         $object->set_locked(false);
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 
     public function update_content_object()
     {
         $object = $this->get_content_object();
-        $object->set_locked($this->exportValue(Forum :: PROPERTY_LOCKED));
+        $object->set_locked($this->exportValue(Forum::PROPERTY_LOCKED));
         // $this->set_content_object($object);
-        return parent :: update_content_object();
+        return parent::update_content_object();
     }
 
     public function build_editing_form()
     {
-        parent :: build_editing_form();
-        $this->addElement('category', Translation :: get('Properties', null, Utilities :: COMMON_LIBRARIES));
-        $this->addElement('checkbox', 'locked', Translation :: get('ForumLocked'));
+        parent::build_editing_form();
+        $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
+        $this->addElement('checkbox', 'locked', Translation::get('ForumLocked'));
         $this->addElement('category');
     }
 
@@ -43,8 +43,8 @@ class ForumForm extends ContentObjectForm
         $object = $this->get_content_object();
         if ($object != null)
         {
-            $defaults[Forum :: PROPERTY_LOCKED] = $object->get_locked();
+            $defaults[Forum::PROPERTY_LOCKED] = $object->get_locked();
         }
-        parent :: setDefaults($defaults);
+        parent::setDefaults($defaults);
     }
 }

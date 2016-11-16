@@ -82,6 +82,6 @@ class Tag
 
     public function get_download_link()
     {
-        return sprintf(DataConnector :: BASIC_DOWNLOAD_URL, $this->repository, $this->id);
+        return sprintf(DataConnector::BASIC_DOWNLOAD_URL, $this->repository, $this->id);
     }
 }

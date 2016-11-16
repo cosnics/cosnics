@@ -20,13 +20,11 @@ class ComplexTableDataProvider extends DataClassTableDataProvider
     {
         $order_property[] = new OrderBy(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER));
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER));
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
         
-        return DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(), 
-            $parameters);
+        return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class_name(), $parameters);
     }
 
     /**
@@ -36,6 +34,6 @@ class ComplexTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager :: count_complex_content_object_items(ComplexContentObjectItem :: class_name(), $condition);
+        return DataManager::count_complex_content_object_items(ComplexContentObjectItem::class_name(), $condition);
     }
 }

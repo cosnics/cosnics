@@ -18,13 +18,13 @@ class WorkspaceCategoryItem extends Item
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
-        parent :: __construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
     public function get_children()
@@ -32,14 +32,14 @@ class WorkspaceCategoryItem extends Item
         if (! isset($this->children))
         {
             $this->children = array();
-
+            
             $configurationItem = new WorkspaceConfigureItem();
             $configurationItem->set_parent($this->get_id());
             $configurationItem->set_display($this->get_display());
-
+            
             $this->children[] = $configurationItem;
         }
-
+        
         return $this->children;
     }
 
@@ -67,7 +67,7 @@ class WorkspaceCategoryItem extends Item
                 return false;
             }
         }
-
-        return parent :: delete();
+        
+        return parent::delete();
     }
 }

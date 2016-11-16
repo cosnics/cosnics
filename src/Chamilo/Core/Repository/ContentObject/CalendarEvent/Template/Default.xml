@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\CalendarEvent">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">Calendar event</translation>
-			<translation language="nl">Kalender event</translation>
-			<translation language="fr">Calendrier</translation>
-			<translation language="de">Kalenderereignis</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Calendar event</translation>
+            <translation language="nl">Kalender event</translation>
+            <translation language="fr">Calendrier</translation>
+            <translation language="de">Kalenderereignis</translation>
+        </variable>
+    </translations>
 </template>

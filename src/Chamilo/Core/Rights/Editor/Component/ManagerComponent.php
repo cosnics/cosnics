@@ -27,34 +27,34 @@ class ManagerComponent extends Manager
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $form = new ManageForm(
-            $this->get_url(),
-            $this->get_context(),
-            $this->get_locations(),
-            $this->get_available_rights(),
+            $this->get_url(), 
+            $this->get_context(), 
+            $this->get_locations(), 
+            $this->get_available_rights(), 
             $this->get_entities());
-
+        
         if ($form->validate())
         {
             $succes = $form->handle_form_submit();
-
-            $message = Translation :: get($succes ? 'RightsChanged' : 'RightsNotChanged');
-            $this->redirect($message, ! $succes, array(self :: PARAM_ACTION => self :: ACTION_EDIT_ADVANCED_RIGHTS));
+            
+            $message = Translation::get($succes ? 'RightsChanged' : 'RightsNotChanged');
+            $this->redirect($message, ! $succes, array(self::PARAM_ACTION => self::ACTION_EDIT_ADVANCED_RIGHTS));
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = '<br />';
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $form->toHtml();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Builds the actionbar;
-     *
+     * 
      * @return ButtonToolBarRenderer
      */
     public function getButtonToolbarRenderer()
@@ -66,16 +66,16 @@ class ManagerComponent extends Manager
             // Add the simple rights editor button
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('AdvancedRightsEditor'),
-                    Theme :: getInstance()->getCommonImagePath('Action/Config'),
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_EDIT_ADVANCED_RIGHTS)),
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
-
+                    Translation::get('AdvancedRightsEditor'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Config'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_EDIT_ADVANCED_RIGHTS)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+            
             $buttonToolbar->addButtonGroup($commonActions);
-
+            
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
-
+        
         return $this->buttonToolbarRenderer;
     }
 }

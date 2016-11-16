@@ -16,23 +16,23 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
     function render()
     {
-        ContentObjectExport :: launch($this);
+        ContentObjectExport::launch($this);
         
         $content_object_node = $this->get_context()->get_content_object_sub_node(
-            CpoExportImplementation :: SURVEY_MATCHING_QUESTION_EXPORT, 
+            CpoExportImplementation::SURVEY_MATCHING_QUESTION_EXPORT, 
             $this->get_content_object()->get_id());
         
         $dom_document = $this->get_context()->get_dom_document();
         
         $options_node = $content_object_node->appendChild(
-            $dom_document->createElement(CpoExportImplementation :: OPTIONS_NODE));
+            $dom_document->createElement(CpoExportImplementation::OPTIONS_NODE));
         $options = $this->get_content_object()->get_options();
         
         // options
         while ($option = $options->next_result())
         {
             $option_node = $options_node->appendChild(
-                $dom_document->createElement(CpoExportImplementation :: OPTION_NODE));
+                $dom_document->createElement(CpoExportImplementation::OPTION_NODE));
             
             $value = $option_node->appendChild($dom_document->createAttribute('id'));
             $value->appendChild($dom_document->createTextNode($option->get_id()));
@@ -45,13 +45,13 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
         }
         
         $matches_node = $content_object_node->appendChild(
-            $dom_document->createElement(CpoExportImplementation :: MATCHES_NODE));
+            $dom_document->createElement(CpoExportImplementation::MATCHES_NODE));
         $matches = $this->get_content_object()->get_matches();
         // matches
         while ($match = $matches->next_result())
         {
             $match_node = $matches_node->appendChild(
-                $dom_document->createElement(CpoExportImplementation :: MATCH_NODE));
+                $dom_document->createElement(CpoExportImplementation::MATCH_NODE));
             
             $value = $match_node->appendChild($dom_document->createAttribute('id'));
             $value->appendChild($dom_document->createTextNode($match->get_id()));

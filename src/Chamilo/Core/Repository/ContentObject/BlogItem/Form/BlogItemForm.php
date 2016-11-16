@@ -22,6 +22,6 @@ class BlogItemForm extends ContentObjectForm
     {
         $object = new BlogItem();
         $this->set_content_object($object);
-        return parent :: create_content_object();
+        return parent::create_content_object();
     }
 }

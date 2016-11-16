@@ -19,6 +19,6 @@ class ExportImplementation extends ContentObjectExportImplementation
      */
     public static function get_types()
     {
-        return parent :: get_types(array(ContentObjectExport :: FORMAT_HTML));
+        return parent::get_types(array(ContentObjectExport::FORMAT_HTML));
     }
 }

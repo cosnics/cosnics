@@ -28,7 +28,7 @@ class GlossaryRendererFactory
      */
     public static function factory($type, $component, $glossary, $search_query = null)
     {
-        $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\Type\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'GlossaryRenderer';
         if (! class_exists($class))
         {
@@ -50,6 +50,6 @@ class GlossaryRendererFactory
      */
     public static function launch($type, $component, $glossary, $search_query = null)
     {
-        return self :: factory($type, $component, $glossary, $search_query)->render();
+        return self::factory($type, $component, $glossary, $search_query)->render();
     }
 }

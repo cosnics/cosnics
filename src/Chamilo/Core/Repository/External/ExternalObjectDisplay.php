@@ -32,7 +32,7 @@ abstract class ExternalObjectDisplay
      */
     public static function factory($object)
     {
-        $class = $object :: context() . '\ExternalObjectDisplay';
+        $class = $object::context() . '\ExternalObjectDisplay';
         return new $class($object);
     }
 
@@ -85,28 +85,28 @@ abstract class ExternalObjectDisplay
         $object = $this->get_object();
         
         $properties = array();
-        $properties[Translation :: get('Title')] = $object->get_title();
+        $properties[Translation::get('Title')] = $object->get_title();
         
         if ($object->get_description())
         {
-            $properties[Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES)] = $object->get_description();
+            $properties[Translation::get('Description', null, Utilities::COMMON_LIBRARIES)] = $object->get_description();
         }
         
         if ($object->get_created() > 0)
         {
-            $properties[Translation :: get('UploadedOn')] = DatetimeUtilities :: format_locale_date(
+            $properties[Translation::get('UploadedOn')] = DatetimeUtilities::format_locale_date(
                 null, 
                 $object->get_created());
         }
         
         if ($object->get_created() != $object->get_modified())
         {
-            $properties[Translation :: get('ModifiedOn')] = DatetimeUtilities :: format_locale_date(
+            $properties[Translation::get('ModifiedOn')] = DatetimeUtilities::format_locale_date(
                 null, 
                 $object->get_modified());
         }
         
-        $properties[Translation :: get('OwnerName')] = $object->get_owner_name();
+        $properties[Translation::get('OwnerName')] = $object->get_owner_name();
         
         return $properties;
     }
@@ -131,14 +131,14 @@ abstract class ExternalObjectDisplay
         if ($is_thumbnail)
         {
             $class = 'no_thumbnail';
-            $image = Theme :: getInstance()->getCommonImage('thumbnail');
-            $text = '<h3>' . Translation :: get('NoThumbnailAvailable') . '</h3>';
+            $image = Theme::getInstance()->getCommonImage('thumbnail');
+            $text = '<h3>' . Translation::get('NoThumbnailAvailable') . '</h3>';
         }
         else
         {
             $class = 'no_preview';
-            $image = Theme :: getInstance()->getCommonImage('preview');
-            $text = '<h1>' . Translation :: get('NoPreviewAvailable') . '</h1>';
+            $image = Theme::getInstance()->getCommonImage('preview');
+            $text = '<h1>' . Translation::get('NoPreviewAvailable') . '</h1>';
         }
         
         $html = array();

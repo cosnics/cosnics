@@ -13,17 +13,17 @@ class RenditionComponent extends Manager
     public function run()
     {
         $display = ContentObjectRenditionImplementation::factory(
-            $this->get_content_object(),
-            $this->getCurrentFormat(),
-            $this->getCurrentView(),
+            $this->get_content_object(), 
+            $this->getCurrentFormat(), 
+            $this->getCurrentView(), 
             $this);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $display->render();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -40,7 +40,7 @@ class RenditionComponent extends Manager
     {
         $parameters = $this->get_parameters();
         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $attachment->get_id();
-
+        
         return $this->get_url($parameters);
     }
 }

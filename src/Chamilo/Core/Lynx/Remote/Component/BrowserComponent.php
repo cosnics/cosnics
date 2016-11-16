@@ -46,11 +46,11 @@ class BrowserComponent extends Manager implements TableSupport
         $parameters = new DataClassCountParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
-                    \Chamilo\Core\Lynx\Source\DataClass\Source :: PROPERTY_STATUS), 
-                new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source :: STATUS_ACTIVE)));
-        $count = \Chamilo\Core\Lynx\Source\DataManager :: count(
-            \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
+                    \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
+                    \Chamilo\Core\Lynx\Source\DataClass\Source::PROPERTY_STATUS), 
+                new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source::STATUS_ACTIVE)));
+        $count = \Chamilo\Core\Lynx\Source\DataManager::count(
+            \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
             $parameters);
         
         if ($count == 0)
@@ -64,53 +64,53 @@ class BrowserComponent extends Manager implements TableSupport
             return implode(PHP_EOL, $html);
         }
         
-        $current_source_id = Request :: get(\Chamilo\Core\Lynx\Source\Manager :: PARAM_SOURCE_ID);
+        $current_source_id = Request::get(\Chamilo\Core\Lynx\Source\Manager::PARAM_SOURCE_ID);
         
         if (! $current_source_id)
         {
             $parameters = new DataClassRetrieveParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
-                        \Chamilo\Core\Lynx\Source\DataClass\Source :: PROPERTY_STATUS), 
-                    new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source :: STATUS_ACTIVE)), 
+                        \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
+                        \Chamilo\Core\Lynx\Source\DataClass\Source::PROPERTY_STATUS), 
+                    new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source::STATUS_ACTIVE)), 
                 array(
                     new OrderBy(
                         new PropertyConditionVariable(
-                            \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
-                            \Chamilo\Core\Lynx\Source\DataClass\Source :: PROPERTY_NAME))));
-            $this->current_source = \Chamilo\Core\Lynx\Source\DataManager :: retrieve(
-                \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
+                            \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
+                            \Chamilo\Core\Lynx\Source\DataClass\Source::PROPERTY_NAME))));
+            $this->current_source = \Chamilo\Core\Lynx\Source\DataManager::retrieve(
+                \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
                 $parameters);
         }
         else
         {
-            $this->current_source = \Chamilo\Core\Lynx\Source\DataManager :: retrieve_by_id(
-                \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
+            $this->current_source = \Chamilo\Core\Lynx\Source\DataManager::retrieve_by_id(
+                \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
                 (int) $current_source_id);
             
             if (! $this->current_source instanceof \Chamilo\Core\Lynx\Source\DataClass\Source ||
-                 $this->current_source->get_status() == \Chamilo\Core\Lynx\Source\DataClass\Source :: STATUS_INACTIVE)
+                 $this->current_source->get_status() == \Chamilo\Core\Lynx\Source\DataClass\Source::STATUS_INACTIVE)
             {
                 $parameters = new DataClassRetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(
-                            \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
-                            \Chamilo\Core\Lynx\Source\DataClass\Source :: PROPERTY_STATUS), 
-                        new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source :: STATUS_ACTIVE)), 
+                            \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
+                            \Chamilo\Core\Lynx\Source\DataClass\Source::PROPERTY_STATUS), 
+                        new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source::STATUS_ACTIVE)), 
                     array(
                         new OrderBy(
                             new PropertyConditionVariable(
-                                \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
-                                \Chamilo\Core\Lynx\Source\DataClass\Source :: PROPERTY_NAME))));
+                                \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
+                                \Chamilo\Core\Lynx\Source\DataClass\Source::PROPERTY_NAME))));
                 
-                $this->current_source = \Chamilo\Core\Lynx\Source\DataManager :: retrieve(
-                    \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
+                $this->current_source = \Chamilo\Core\Lynx\Source\DataManager::retrieve(
+                    \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
                     $parameters);
             }
         }
         
-        $this->set_parameter(\Chamilo\Core\Lynx\Source\Manager :: PARAM_SOURCE_ID, $this->current_source->get_id());
+        $this->set_parameter(\Chamilo\Core\Lynx\Source\Manager::PARAM_SOURCE_ID, $this->current_source->get_id());
         
         $table = new PackageTable($this);
         
@@ -119,24 +119,24 @@ class BrowserComponent extends Manager implements TableSupport
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
-                    \Chamilo\Core\Lynx\Source\DataClass\Source :: PROPERTY_STATUS), 
-                new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source :: STATUS_ACTIVE)), 
+                    \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
+                    \Chamilo\Core\Lynx\Source\DataClass\Source::PROPERTY_STATUS), 
+                new StaticConditionVariable(\Chamilo\Core\Lynx\Source\DataClass\Source::STATUS_ACTIVE)), 
             null, 
             null, 
             array(
                 new OrderBy(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
-                        \Chamilo\Core\Lynx\Source\DataClass\Source :: PROPERTY_NAME))));
+                        \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
+                        \Chamilo\Core\Lynx\Source\DataClass\Source::PROPERTY_NAME))));
         
-        $sources = \Chamilo\Core\Lynx\Source\DataManager :: retrieves(
-            \Chamilo\Core\Lynx\Source\DataClass\Source :: class_name(), 
+        $sources = \Chamilo\Core\Lynx\Source\DataManager::retrieves(
+            \Chamilo\Core\Lynx\Source\DataClass\Source::class_name(), 
             $parameters);
         
         while ($source = $sources->next_result())
         {
-            $url = $this->get_url(array(\Chamilo\Core\Lynx\Source\Manager :: PARAM_SOURCE_ID => $source->get_id()));
+            $url = $this->get_url(array(\Chamilo\Core\Lynx\Source\Manager::PARAM_SOURCE_ID => $source->get_id()));
             $tabs->add_tab(
                 new DynamicVisualTab(
                     $source->get_id(), 
@@ -162,13 +162,13 @@ class BrowserComponent extends Manager implements TableSupport
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Package :: class_name(), Package :: PROPERTY_SOURCE_ID), 
+            new PropertyConditionVariable(Package::class_name(), Package::PROPERTY_SOURCE_ID), 
             new StaticConditionVariable($this->get_source()->get_id()));
         
         if (isset($query) && $query != '')
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Package :: class_name(), Package :: PROPERTY_CONTEXT), 
+                new PropertyConditionVariable(Package::class_name(), Package::PROPERTY_CONTEXT), 
                 '*' . $query . '*');
         }
         
@@ -181,15 +181,15 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $buttonToolbar = new ButtonToolBar(
                 $this->get_url(
-                    array(\Chamilo\Core\Lynx\Source\Manager :: PARAM_SOURCE_ID => $this->get_source()->get_id())));
+                    array(\Chamilo\Core\Lynx\Source\Manager::PARAM_SOURCE_ID => $this->get_source()->get_id())));
             $commonActions = new ButtonGroup();
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('Synchronize'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx\Remote', 'Action/Synchronize'), 
-                    $this->get_url(array(Manager :: PARAM_ACTION => Manager :: ACTION_SYNCHRONIZE)), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    Translation::get('Synchronize'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Lynx\Remote', 'Action/Synchronize'), 
+                    $this->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_SYNCHRONIZE)), 
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             

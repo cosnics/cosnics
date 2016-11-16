@@ -33,15 +33,15 @@ class VocabularyForm extends FormValidator
      * @param \Chamilo\Core\Metadata\Service\EntityTranslationFormService $entityTranslationFormService
      * @param string $form_url
      */
-    public function __construct(Vocabulary $vocabulary, EntityTranslationFormService $entityTranslationFormService,
+    public function __construct(Vocabulary $vocabulary, EntityTranslationFormService $entityTranslationFormService, 
         $formUrl)
     {
-        parent :: __construct('vocabulary', 'post', $formUrl);
-
+        parent::__construct('vocabulary', 'post', $formUrl);
+        
         $this->vocabulary = $vocabulary;
         $this->entityTranslationFormService = $entityTranslationFormService;
         $this->entityTranslationFormService->setFormValidator($this);
-
+        
         $this->buildForm();
         $this->setFormDefaults();
     }
@@ -51,68 +51,68 @@ class VocabularyForm extends FormValidator
      */
     protected function buildForm()
     {
-        $element = \Chamilo\Core\Metadata\Storage\DataManager :: retrieve_by_id(
-            Element :: class_name(),
+        $element = \Chamilo\Core\Metadata\Storage\DataManager::retrieve_by_id(
+            Element::class_name(), 
             $this->vocabulary->get_element_id());
-
-        $this->addElement('category', Translation :: get('General'));
+        
+        $this->addElement('category', Translation::get('General'));
         $this->addElement(
-            'static',
-            null,
-            Translation :: get('Element', null, 'Chamilo\Core\Metadata'),
+            'static', 
+            null, 
+            Translation::get('Element', null, 'Chamilo\Core\Metadata'), 
             $element->render_name());
-
+        
         if ($this->vocabulary->isForEveryone())
         {
-            $displayUser = Translation :: get('PredefinedValues', null, 'Chamilo\Core\Metadata\Element');
+            $displayUser = Translation::get('PredefinedValues', null, 'Chamilo\Core\Metadata\Element');
         }
         else
         {
             $user = $this->vocabulary->getUser();
-
+            
             if ($user instanceof User)
             {
                 $displayUser = $user->get_fullname();
             }
             else
             {
-                throw new \Exception(Translation :: get('UnknownUser'));
+                throw new \Exception(Translation::get('UnknownUser'));
             }
         }
-
-        $this->addElement('static', null, Translation :: get('User', null, 'Chamilo\Core\Metadata'), $displayUser);
-
+        
+        $this->addElement('static', null, Translation::get('User', null, 'Chamilo\Core\Metadata'), $displayUser);
+        
         $this->addElement(
-            'text',
-            Vocabulary :: PROPERTY_VALUE,
-            Translation :: get('Value', null, Utilities :: COMMON_LIBRARIES));
+            'text', 
+            Vocabulary::PROPERTY_VALUE, 
+            Translation::get('Value', null, Utilities::COMMON_LIBRARIES));
         $this->addRule(
-            Vocabulary :: PROPERTY_VALUE,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Vocabulary::PROPERTY_VALUE, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
-        $this->addElement('checkbox', Vocabulary :: PROPERTY_DEFAULT_VALUE, Translation :: get('DefaultValue'));
-
+        
+        $this->addElement('checkbox', Vocabulary::PROPERTY_DEFAULT_VALUE, Translation::get('DefaultValue'));
+        
         $this->addElement('category');
-
+        
         $this->entityTranslationFormService->addFieldsToForm();
         $this->addSaveResetButtons();
     }
 
     /**
      * Sets the default values
-     *
+     * 
      * @param Element $element
      */
     protected function setFormDefaults()
     {
         $defaults = array();
-
-        $defaults[Vocabulary :: PROPERTY_VALUE] = $this->vocabulary->get_value();
-        $defaults[Vocabulary :: PROPERTY_DEFAULT_VALUE] = $this->vocabulary->get_default_value();
-
+        
+        $defaults[Vocabulary::PROPERTY_VALUE] = $this->vocabulary->get_value();
+        $defaults[Vocabulary::PROPERTY_DEFAULT_VALUE] = $this->vocabulary->get_default_value();
+        
         $this->setDefaults($defaults);
-
+        
         $this->entityTranslationFormService->setFormDefaults();
     }
 }

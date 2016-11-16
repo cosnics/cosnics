@@ -62,7 +62,7 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
     public function get_user_html()
     {
         $parameters = $this->get_parameters(true);
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         
         $table = new UserApprovalTable($this);
         
@@ -81,13 +81,13 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
                 '*' . $query . '*');
             $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME), 
+                new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME), 
                 '*' . $query . '*');
             return new OrCondition($or_conditions);
         }
@@ -102,10 +102,10 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
             
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('ShowAll', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
+                    Translation::get('ShowAll', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'), 
                     $this->get_url(), 
-                    ToolbarItem :: DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
             
             $buttonToolbar->addButtonGroup($commonActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);

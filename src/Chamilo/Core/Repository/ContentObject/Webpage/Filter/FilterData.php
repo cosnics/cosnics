@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Webpage\Storage\DataClass\Webpage;
 class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
 {
     // Available type filters
-    const FILTER_FILESIZE = Webpage :: PROPERTY_FILESIZE;
+    const FILTER_FILESIZE = Webpage::PROPERTY_FILESIZE;
     const FILTER_COMPARE = 'compare';
     const FILTER_FORMAT = 'format';
 
@@ -22,7 +22,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function is_set()
     {
-        return parent :: is_set() || $this->has_filter_property(self :: FILTER_FILESIZE);
+        return parent::is_set() || $this->has_filter_property(self::FILTER_FILESIZE);
     }
 
     /**
@@ -32,10 +32,10 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      */
     public function get_filter_properties($filter_properties = array())
     {
-        $filter_properties[] = self :: FILTER_FILESIZE;
-        $filter_properties[] = self :: FILTER_COMPARE;
-        $filter_properties[] = self :: FILTER_FORMAT;
+        $filter_properties[] = self::FILTER_FILESIZE;
+        $filter_properties[] = self::FILTER_COMPARE;
+        $filter_properties[] = self::FILTER_FORMAT;
         
-        return parent :: get_filter_properties($filter_properties);
+        return parent::get_filter_properties($filter_properties);
     }
 }

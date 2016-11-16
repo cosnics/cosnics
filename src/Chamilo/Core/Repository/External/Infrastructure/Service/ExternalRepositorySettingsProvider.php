@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Repository\External\Infrastructure\Service;
 
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Instance;
@@ -9,28 +8,29 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Base class for external repository settings providers
- *
+ * 
  * @author Andras Zolnay - edufiles
  */
 class ExternalRepositorySettingsProvider
 {
+
     /**
      * The external repository instance
-     *
+     * 
      * @var Instance
      */
     protected $externalRepositoryInstance;
 
     /**
      * The user that accesses the external repository service
-     *
+     * 
      * @var User
      */
     protected $user;
 
     /**
      * Constructor
-     *
+     * 
      * @param Instance $externalRepositoryInstance
      * @param User $user
      */
@@ -42,7 +42,7 @@ class ExternalRepositorySettingsProvider
 
     /**
      * Returns the client id
-     *
+     * 
      * @return string
      */
     public function getClientId()
@@ -52,7 +52,7 @@ class ExternalRepositorySettingsProvider
 
     /**
      * Returns the client secret
-     *
+     * 
      * @return string
      */
     public function getClientSecret()
@@ -62,7 +62,7 @@ class ExternalRepositorySettingsProvider
 
     /**
      * Saves a user setting for the given variable with the given value
-     *
+     * 
      * @param string $variable
      * @param string $value
      *
@@ -70,18 +70,21 @@ class ExternalRepositorySettingsProvider
      */
     public function saveUserSetting($variable, $value)
     {
-        $setting = DataManager::retrieveUserSetting($this->externalRepositoryInstance->getId(), $this->user->getId(), $variable);
+        $setting = DataManager::retrieveUserSetting(
+            $this->externalRepositoryInstance->getId(), 
+            $this->user->getId(), 
+            $variable);
         
-        if (!$setting)
+        if (! $setting)
         {
             $setting = new Setting();
         }
-
+        
         $setting->set_external_id($this->externalRepositoryInstance->getId());
         $setting->set_variable($variable);
         $setting->set_user_id($this->user->getId());
         $setting->set_value($value);
-
+        
         return $setting->save();
     }
 
@@ -94,32 +97,38 @@ class ExternalRepositorySettingsProvider
      */
     public function getUserSettingValue($variable)
     {
-        $setting = DataManager::retrieveUserSetting($this->externalRepositoryInstance->getId(), $this->user->getId(), $variable);
-
+        $setting = DataManager::retrieveUserSetting(
+            $this->externalRepositoryInstance->getId(), 
+            $this->user->getId(), 
+            $variable);
+        
         if ($setting)
         {
             return $setting->get_value();
         }
-
+        
         return null;
     }
 
     /**
      * Removes a user setting
-     *
+     * 
      * @param string $variable
      *
      * @return bool
      */
     public function removeUserSetting($variable)
     {
-        $setting = DataManager::retrieveUserSetting($this->externalRepositoryInstance->getId(), $this->user->getId(), $variable);
-
+        $setting = DataManager::retrieveUserSetting(
+            $this->externalRepositoryInstance->getId(), 
+            $this->user->getId(), 
+            $variable);
+        
         if ($setting)
         {
             return $setting->delete();
         }
-
+        
         return true;
     }
 }

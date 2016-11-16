@@ -42,26 +42,26 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_MAXIMUM_ATTEMPTS, 
-            self :: PROPERTY_QUESTIONS_PER_PAGE, 
-            self :: PROPERTY_MAXIMUM_TIME, 
-            self :: PROPERTY_RANDOM_QUESTIONS);
+            self::PROPERTY_MAXIMUM_ATTEMPTS, 
+            self::PROPERTY_QUESTIONS_PER_PAGE, 
+            self::PROPERTY_MAXIMUM_TIME, 
+            self::PROPERTY_RANDOM_QUESTIONS);
     }
 
     public function set_assessment_type($type)
     {
-        $this->set_additional_property(self :: PROPERTY_ASSESSMENT_TYPE, $type);
+        $this->set_additional_property(self::PROPERTY_ASSESSMENT_TYPE, $type);
     }
 
     public function get_maximum_attempts()
     {
-        return $this->get_additional_property(self :: PROPERTY_MAXIMUM_ATTEMPTS);
+        return $this->get_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS);
     }
 
     public function has_unlimited_attempts()
@@ -71,53 +71,53 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function set_maximum_attempts($value)
     {
-        $this->set_additional_property(self :: PROPERTY_MAXIMUM_ATTEMPTS, $value);
+        $this->set_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS, $value);
     }
 
     public function get_maximum_time()
     {
-        return $this->get_additional_property(self :: PROPERTY_MAXIMUM_TIME);
+        return $this->get_additional_property(self::PROPERTY_MAXIMUM_TIME);
     }
 
     public function set_maximum_time($value)
     {
-        $this->set_additional_property(self :: PROPERTY_MAXIMUM_TIME, $value);
+        $this->set_additional_property(self::PROPERTY_MAXIMUM_TIME, $value);
     }
 
     public function get_questions_per_page()
     {
-        return $this->get_additional_property(self :: PROPERTY_QUESTIONS_PER_PAGE);
+        return $this->get_additional_property(self::PROPERTY_QUESTIONS_PER_PAGE);
     }
 
     public function set_questions_per_page($value)
     {
-        $this->set_additional_property(self :: PROPERTY_QUESTIONS_PER_PAGE, $value);
+        $this->set_additional_property(self::PROPERTY_QUESTIONS_PER_PAGE, $value);
     }
 
     public function get_random_questions()
     {
-        return $this->get_additional_property(self :: PROPERTY_RANDOM_QUESTIONS);
+        return $this->get_additional_property(self::PROPERTY_RANDOM_QUESTIONS);
     }
 
     public function set_random_questions($random_questions)
     {
-        $this->set_additional_property(self :: PROPERTY_RANDOM_QUESTIONS, $random_questions);
+        $this->set_additional_property(self::PROPERTY_RANDOM_QUESTIONS, $random_questions);
     }
 
     public function get_allowed_types()
     {
-        $registrations = Configuration :: getInstance()->getIntegrationRegistrations(
-            self :: package(), 
-            \Chamilo\Core\Repository\Manager :: package() . '\ContentObject');
+        $registrations = Configuration::getInstance()->getIntegrationRegistrations(
+            self::package(), 
+            \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
         $types = array();
         
         foreach ($registrations as $registration)
         {
-            $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                $registration[Registration :: PROPERTY_CONTEXT], 
+            $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                $registration[Registration::PROPERTY_CONTEXT], 
                 6);
             $types[] = $namespace . '\Storage\DataClass\\' .
-                 ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+                 ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
         }
         
         return $types;
@@ -125,21 +125,21 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function get_table()
     {
-        return self :: get_type_name();
+        return self::get_type_name();
     }
 
     public function count_questions()
     {
         if (! isset($this->question_count))
         {
-            $this->question_count = \Chamilo\Core\Repository\Storage\DataManager :: count_complex_content_object_items(
-                ComplexContentObjectItem :: class_name(), 
+            $this->question_count = \Chamilo\Core\Repository\Storage\DataManager::count_complex_content_object_items(
+                ComplexContentObjectItem::class_name(), 
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(), 
-                        ComplexContentObjectItem :: PROPERTY_PARENT), 
+                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::PROPERTY_PARENT), 
                     new StaticConditionVariable($this->get_id()), 
-                    ComplexContentObjectItem :: get_table_name()));
+                    ComplexContentObjectItem::get_table_name()));
         }
         
         return $this->question_count;
@@ -151,12 +151,12 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(), 
-                    ComplexContentObjectItem :: PROPERTY_PARENT), 
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($this->get_id()), 
-                ComplexContentObjectItem :: get_table_name());
-            $this->questions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-                ComplexContentObjectItem :: class_name(), 
+                ComplexContentObjectItem::get_table_name());
+            $this->questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+                ComplexContentObjectItem::class_name(), 
                 $condition);
         }
         return $this->questions;
@@ -169,13 +169,13 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_PARENT), 
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_id()));
         
-        $clo_questions = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
+        $clo_questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
             $this->get_type_name(), 
-            ComplexContentObjectItem :: class_name(), 
+            ComplexContentObjectItem::class_name(), 
             $condition);
         
         $maxscore = 0;

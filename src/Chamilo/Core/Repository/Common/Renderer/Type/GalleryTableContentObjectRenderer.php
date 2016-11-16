@@ -21,7 +21,7 @@ class GalleryTableContentObjectRenderer extends ContentObjectRenderer implements
         $table = new GalleryTable($this);
         return $table->as_html();
     }
-    
+
     /*
      * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
      */

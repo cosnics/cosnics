@@ -5,13 +5,13 @@ use Chamilo\Core\Repository\ContentObject\Survey\Display\Interfaces\SurveyDispla
 
 interface PageDisplayItem extends SurveyDisplayItem
 {
-    
+
     /**
+     *
      * @param string $prefix
      * @return mixed
      */
     public function getAnswerIds($prefix = null);
-    
 }
 
 ?>

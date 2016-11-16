@@ -25,8 +25,8 @@ class ComplexWikiPageForm extends ComplexContentObjectItemForm
         
         $elements[] = $this->createElement(
             'checkbox', 
-            ComplexWikiPage :: PROPERTY_IS_HOMEPAGE, 
-            Translation :: get('IsHomepage'));
+            ComplexWikiPage::PROPERTY_IS_HOMEPAGE, 
+            Translation::get('IsHomepage'));
         
         return $elements;
     }
@@ -41,7 +41,7 @@ class ComplexWikiPageForm extends ComplexContentObjectItemForm
         
         if (isset($complex_content_object_item))
         {
-            $defaults[ComplexWikiPage :: PROPERTY_IS_HOMEPAGE] = $complex_content_object_item->get_is_homepage() ? $complex_content_object_item->get_is_homepage() : false;
+            $defaults[ComplexWikiPage::PROPERTY_IS_HOMEPAGE] = $complex_content_object_item->get_is_homepage() ? $complex_content_object_item->get_is_homepage() : false;
         }
         
         return $defaults;
@@ -56,7 +56,7 @@ class ComplexWikiPageForm extends ComplexContentObjectItemForm
     {
         $complex_content_object_item = $this->get_complex_content_object_item();
         $complex_content_object_item->set_is_homepage(
-            empty($values[ComplexWikiPage :: PROPERTY_IS_HOMEPAGE]) ? false : $values[ComplexWikiPage :: PROPERTY_IS_HOMEPAGE]);
-        return parent :: update();
+            empty($values[ComplexWikiPage::PROPERTY_IS_HOMEPAGE]) ? false : $values[ComplexWikiPage::PROPERTY_IS_HOMEPAGE]);
+        return parent::update();
     }
 }

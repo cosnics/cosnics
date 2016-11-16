@@ -11,8 +11,8 @@ class TableTemplate extends ReportingTemplate
 
     public function __construct($parent)
     {
-        parent :: __construct($parent);
-        $this->set_parameter(self :: PARAM_PAGE_ID, Request :: get(self :: PARAM_PAGE_ID));
+        parent::__construct($parent);
+        $this->set_parameter(self::PARAM_PAGE_ID, Request::get(self::PARAM_PAGE_ID));
         $this->add_reporting_block(new QuestionBlock($this));
     }
 

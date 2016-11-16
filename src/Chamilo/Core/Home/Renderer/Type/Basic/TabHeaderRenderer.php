@@ -109,15 +109,15 @@ class TabHeaderRenderer
     {
         $tab = $this->getTab();
         $request = $this->getApplication()->getRequest();
-
+        
         $html = array();
-
+        
         $tab_id = $tab->get_id();
-
+        
         $listItem = array();
-
+        
         $listItem[] = '<li';
-
+        
         if ($isActiveTab)
         {
             $listItem[] = 'class="portal-nav-tab active"';
@@ -126,35 +126,35 @@ class TabHeaderRenderer
         {
             $listItem[] = 'class="portal-nav-tab"';
         }
-
+        
         $listItem[] = ' data-tab-id="' . $tab->get_id() . '"';
         $listItem[] = ' data-tab-title="' . $tab->getTitle() . '"';
         $listItem[] = '>';
-
+        
         $html[] = implode(' ', $listItem);
-
+        
         $html[] = '<a class="portal-action-tab-title" href="#">';
-
+        
         $html[] = '<span class="portal-nav-tab-title">' . htmlspecialchars($tab->getTitle()) . '</span>';
-
+        
         $user = $this->getApplication()->getUser();
         $isUser = $user instanceof User;
         $homeAllowed = $isUser && ($this->getHomeService()->isUserHomeAllowed() ||
              ($user->is_platform_admin()) && $this->getHomeService()->isInGeneralMode());
         $isAnonymous = $isUser && $user->is_anonymous_user();
-
+        
         if ($isUser && $homeAllowed && ! $isAnonymous)
         {
             $userHasMultipleTabs = $this->getHomeService()->userHasMultipleTabs($user);
-
+            
             $html[] = '<span class="glyphicon glyphicon-remove portal-action-tab-delete ' .
                  ($userHasMultipleTabs ? 'show' : 'hidden') . '"></span>';
         }
-
+        
         $html[] = '</a>';
-
+        
         $html[] = '</li>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

@@ -60,10 +60,10 @@ abstract class ContentObjectDescriptionRenderer
      */
     public function render()
     {
-        $rendition_implementation = ContentObjectRenditionImplementation :: factory(
+        $rendition_implementation = ContentObjectRenditionImplementation::factory(
             $this->content_object, 
-            ContentObjectRendition :: FORMAT_HTML, 
-            ContentObjectRendition :: VIEW_DESCRIPTION, 
+            ContentObjectRendition::FORMAT_HTML, 
+            ContentObjectRendition::VIEW_DESCRIPTION, 
             $this);
         
         return $rendition_implementation->render();

@@ -57,7 +57,7 @@ abstract class NavigationGenerator
      * @param integer $feedbackCount
      * @param boolean $isActive
      */
-    public function __construct(Application $application, $baseParameters, $isAllowedToViewFeedback = false,
+    public function __construct(Application $application, $baseParameters, $isAllowedToViewFeedback = false, 
         $feedbackCount = 0, $hasNotification = false, $isActive = false)
     {
         $this->application = $application;
@@ -124,7 +124,7 @@ abstract class NavigationGenerator
 
     /**
      * Helper method
-     *
+     * 
      * @return boolean
      */
     public function isAllowedToViewFeedback()
@@ -152,7 +152,7 @@ abstract class NavigationGenerator
 
     /**
      * Helper method
-     *
+     * 
      * @return boolean
      */
     public function hasFeedback()
@@ -180,7 +180,7 @@ abstract class NavigationGenerator
 
     /**
      * Helper method
-     *
+     * 
      * @return boolean
      */
     public function hasNotification()
@@ -208,7 +208,7 @@ abstract class NavigationGenerator
 
     /**
      * Helper method
-     *
+     * 
      * @return boolean
      */
     public function isActive()

@@ -1,12 +1,11 @@
 <?php
-
 namespace Chamilo\Core\Rights\Structure\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Defines the relation between a structure location and a role
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class StructureLocationRole extends DataClass
@@ -16,7 +15,7 @@ class StructureLocationRole extends DataClass
 
     /**
      * Get the default properties of all data classes.
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[]
@@ -30,6 +29,7 @@ class StructureLocationRole extends DataClass
     }
 
     /**
+     *
      * @return int
      */
     public function getStructureLocationId()
@@ -38,6 +38,7 @@ class StructureLocationRole extends DataClass
     }
 
     /**
+     *
      * @param int $structureLocationId
      *
      * @return $this
@@ -45,11 +46,12 @@ class StructureLocationRole extends DataClass
     public function setStructureLocationId($structureLocationId)
     {
         $this->set_default_property(self::PROPERTY_STRUCTURE_LOCATION_ID, $structureLocationId);
-
+        
         return $this;
     }
 
     /**
+     *
      * @return int
      */
     public function getRoleId()
@@ -58,6 +60,7 @@ class StructureLocationRole extends DataClass
     }
 
     /**
+     *
      * @param int $roleId
      *
      * @return $this
@@ -65,7 +68,7 @@ class StructureLocationRole extends DataClass
     public function setRoleId($roleId)
     {
         $this->set_default_property(self::PROPERTY_ROLE_ID, $roleId);
-
+        
         return $this;
     }
 }

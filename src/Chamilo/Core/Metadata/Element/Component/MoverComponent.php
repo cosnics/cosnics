@@ -12,7 +12,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Component to move metadata_element object
- *
+ * 
  * @author Sven Vanpoucke
  */
 class MoverComponent extends Manager
@@ -23,39 +23,39 @@ class MoverComponent extends Manager
      */
     public function run()
     {
-        if ($metadata_element_id = Request :: get(Manager :: PARAM_ELEMENT_ID))
+        if ($metadata_element_id = Request::get(Manager::PARAM_ELEMENT_ID))
         {
-            $this->set_parameter(self :: PARAM_ELEMENT_ID, $metadata_element_id);
-
-            $metadata_element = DataManager :: retrieve_by_id(Element :: class_name(), $metadata_element_id);
-            if ($move = Request :: get(Manager :: PARAM_MOVE))
+            $this->set_parameter(self::PARAM_ELEMENT_ID, $metadata_element_id);
+            
+            $metadata_element = DataManager::retrieve_by_id(Element::class_name(), $metadata_element_id);
+            if ($move = Request::get(Manager::PARAM_MOVE))
             {
-                $this->set_parameter(self :: PARAM_MOVE, $move);
-
+                $this->set_parameter(self::PARAM_MOVE, $move);
+                
                 $metadata_element->move($move);
-
+                
                 $this->redirect(
-                    '',
-                    false,
+                    '', 
+                    false, 
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE,
-                        \Chamilo\Core\Metadata\Schema\Manager :: PARAM_SCHEMA_ID => $metadata_element->get_schema_id()),
+                        Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
+                        \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $metadata_element->get_schema_id()), 
                     $this->get_additional_parameters());
             }
             else
             {
-                throw new \Exception(Translation :: get('MoveDirectionNotSelected'));
+                throw new \Exception(Translation::get('MoveDirectionNotSelected'));
             }
         }
         else
         {
-            throw new NoObjectSelectedException(Translation :: get('Element'));
+            throw new NoObjectSelectedException(Translation::get('Element'));
         }
     }
 
     /**
      * Adds additional breadcrumbs
-     *
+     * 
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -64,8 +64,8 @@ class MoverComponent extends Manager
         $breadcrumb_trail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE),
-                    $this->get_additional_parameters()),
-                Translation :: get('BrowserComponent')));
+                    array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE), 
+                    $this->get_additional_parameters()), 
+                Translation::get('BrowserComponent')));
     }
 }

@@ -10,9 +10,9 @@ class PublicationTableDataProvider extends DataClassTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        return DataManager :: get_content_object_publication_attributes(
+        return DataManager::get_content_object_publication_attributes(
             $this->get_component()->get_user_id(), 
-            PublicationInterface :: ATTRIBUTES_TYPE_USER, 
+            PublicationInterface::ATTRIBUTES_TYPE_USER, 
             $condition, 
             $count, 
             $offset, 
@@ -21,8 +21,8 @@ class PublicationTableDataProvider extends DataClassTableDataProvider
 
     public function count_data($condition)
     {
-        return DataManager :: count_publication_attributes(
-            PublicationInterface :: ATTRIBUTES_TYPE_USER, 
+        return DataManager::count_publication_attributes(
+            PublicationInterface::ATTRIBUTES_TYPE_USER, 
             $this->get_component()->get_user_id(), 
             $condition);
     }

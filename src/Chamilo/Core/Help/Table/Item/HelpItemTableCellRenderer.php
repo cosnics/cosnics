@@ -19,14 +19,14 @@ class HelpItemTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $toolbar = new Toolbar();
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'),
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_component()->get_url(
                     array(
-                        Application :: PARAM_ACTION => Manager :: ACTION_UPDATE_HELP_ITEM,
-                        Manager :: PARAM_HELP_ITEM => $help_item->get_id())),
-                ToolbarItem :: DISPLAY_ICON));
-
+                        Application::PARAM_ACTION => Manager::ACTION_UPDATE_HELP_ITEM, 
+                        Manager::PARAM_HELP_ITEM => $help_item->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
+        
         return $toolbar->as_html();
     }
 }

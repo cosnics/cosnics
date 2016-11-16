@@ -36,19 +36,18 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
     {
         switch ($column->get_name())
         {
-            case Workspace :: PROPERTY_CREATOR_ID :
+            case Workspace::PROPERTY_CREATOR_ID :
                 return $workspace->getCreator()->get_fullname();
-            case Workspace :: PROPERTY_CREATION_DATE :
-                return DatetimeUtilities:: format_locale_date(
-                    Translation:: get('DateTimeFormatLong', null, Utilities :: COMMON_LIBRARIES),
-                    $workspace->getCreationDate()
-                );
-            case Workspace :: PROPERTY_NAME :
+            case Workspace::PROPERTY_CREATION_DATE :
+                return DatetimeUtilities::format_locale_date(
+                    Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES), 
+                    $workspace->getCreationDate());
+            case Workspace::PROPERTY_NAME :
                 return '<a href="' . $this->getWorkspaceUrl($workspace) . '">' .
-                parent:: render_cell($column, $workspace) . '</a>';
+                     parent::render_cell($column, $workspace) . '</a>';
         }
-
-        return parent:: render_cell($column, $workspace);
+        
+        return parent::render_cell($column, $workspace);
     }
 
     /**
@@ -69,117 +68,92 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
     public function getToolbar($workspace)
     {
         $toolbar = new Toolbar();
-
+        
         $favouriteService = new FavouriteService(new FavouriteRepository());
         $favourite = $favouriteService->getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(
-            $this->get_component()->get_user(),
-            $workspace->getId()
-        );
-
+            $this->get_component()->get_user(), 
+            $workspace->getId());
+        
         if ($favourite instanceof WorkspaceUserFavourite)
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('RemoveFavourite', null, Manager::context()),
-                    Theme:: getInstance()->getImagePath(\Chamilo\Core\Repository\Workspace\Favourite\Manager:: context(), 'Action/Delete'),
+                    Translation::get('RemoveFavourite', null, Manager::context()), 
+                    Theme::getInstance()->getImagePath(
+                        \Chamilo\Core\Repository\Workspace\Favourite\Manager::context(), 
+                        'Action/Delete'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
-                            \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_DELETE,
-                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
-                        )
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
+                            Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE, 
+                            \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_DELETE, 
+                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(), 
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
         else
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Favourite', null, Manager::context()),
-                    Theme:: getInstance()->getImagePath(Manager:: context(), 'Action/Favourite'),
+                    Translation::get('Favourite', null, Manager::context()), 
+                    Theme::getInstance()->getImagePath(Manager::context(), 'Action/Favourite'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_FAVOURITE,
-                            \Chamilo\Core\Repository\Workspace\Favourite\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager :: ACTION_CREATE,
-                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
-                        )
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
+                            Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE, 
+                            \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_CREATE, 
+                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(), 
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action())), 
+                    ToolbarItem::DISPLAY_ICON));
         }
-
-        if (RightsService:: getInstance()->canManageWorkspace($this->get_component()->get_user(), $workspace))
+        
+        if (RightsService::getInstance()->canManageWorkspace($this->get_component()->get_user(), $workspace))
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme:: getInstance()->getCommonImagePath('Action/Edit'),
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE,
-                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action()
-                        )
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
-
+                            Manager::PARAM_ACTION => Manager::ACTION_UPDATE, 
+                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(), 
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action())), 
+                    ToolbarItem::DISPLAY_ICON));
+            
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('CreateRightsComponent'),
-                    Theme:: getInstance()->getCommonImagePath('Action/Share'),
+                    Translation::get('CreateRightsComponent'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Share'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
-                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(),
-                            \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION =>
-                                \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE
-                        )
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
-
+                            Manager::PARAM_ACTION => Manager::ACTION_RIGHTS, 
+                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(), 
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(), 
+                            \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_CREATE)), 
+                    ToolbarItem::DISPLAY_ICON));
+            
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('RightsComponent'),
-                    Theme:: getInstance()->getCommonImagePath('Action/Rights'),
+                    Translation::get('RightsComponent'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Rights'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_RIGHTS,
-                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id(),
-                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(),
-                            \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION =>
-                                \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_BROWSE
-                        )
-                    ),
-                    ToolbarItem :: DISPLAY_ICON
-                )
-            );
-
+                            Manager::PARAM_ACTION => Manager::ACTION_RIGHTS, 
+                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id(), 
+                            Manager::PARAM_BROWSER_SOURCE => $this->get_component()->get_action(), 
+                            \Chamilo\Core\Repository\Workspace\Rights\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Rights\Manager::ACTION_BROWSE)), 
+                    ToolbarItem::DISPLAY_ICON));
+            
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation:: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme:: getInstance()->getCommonImagePath('Action/Delete'),
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                     $this->get_component()->get_url(
                         array(
-                            Manager :: PARAM_ACTION => Manager :: ACTION_DELETE,
-                            Manager :: PARAM_WORKSPACE_ID => $workspace->get_id()
-                        )
-                    ),
-                    ToolbarItem :: DISPLAY_ICON,
-                    true
-                )
-            );
+                            Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                            Manager::PARAM_WORKSPACE_ID => $workspace->get_id())), 
+                    ToolbarItem::DISPLAY_ICON, 
+                    true));
         }
-
+        
         return $toolbar;
     }
 
@@ -193,11 +167,9 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => \Chamilo\Core\Repository\Manager:: package(),
-                \Chamilo\Core\Repository\Manager :: PARAM_WORKSPACE_ID => $workspace->getId()
-            )
-        );
-
+                Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::package(), 
+                \Chamilo\Core\Repository\Manager::PARAM_WORKSPACE_ID => $workspace->getId()));
+        
         return $redirect->getUrl();
     }
 }

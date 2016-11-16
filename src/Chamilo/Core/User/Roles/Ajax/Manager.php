@@ -4,8 +4,8 @@ namespace Chamilo\Core\User\Roles\Ajax;
 use Chamilo\Libraries\Architecture\AjaxManager;
 
 /**
- * @package Chamilo\Application\Weblcms\Ajax
  *
+ * @package Chamilo\Application\Weblcms\Ajax
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 abstract class Manager extends AjaxManager

@@ -22,10 +22,10 @@ class RelationService
     public function getRelationByName($relationName)
     {
         $condition = new ComparisonCondition(
-            new PropertyConditionVariable(Relation :: class_name(), Relation :: PROPERTY_NAME),
-            ComparisonCondition :: EQUAL,
+            new PropertyConditionVariable(Relation::class_name(), Relation::PROPERTY_NAME), 
+            ComparisonCondition::EQUAL, 
             new StaticConditionVariable($relationName));
-
-        return DataManager :: retrieve(Relation :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return DataManager::retrieve(Relation::class_name(), new DataClassRetrieveParameters($condition));
     }
 }

@@ -110,35 +110,35 @@ class ColumnRenderer
     {
         $column = $this->getColumn();
         $html = array();
-
+        
         $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' portal-column" data-tab-id="' .
              $column->getParentId() . '" data-element-id="' . $column->getId() . '" data-element-width="' .
              $column->getWidth() . '">';
-
+        
         $blocks = $this->getHomeService()->getElements(
-            $this->getApplication()->getUser(),
-            Block :: class_name(),
+            $this->getApplication()->getUser(), 
+            Block::class_name(), 
             $column->getId());
-
+        
         foreach ($blocks as $block)
         {
             $blockRendererFactory = new BlockRendererFactory($this->getApplication(), $this->getHomeService(), $block);
             $blockRenderer = $blockRendererFactory->getRenderer();
-
+            
             if ($blockRenderer->isVisible())
             {
                 $html[] = $blockRenderer->toHtml();
             }
         }
-
+        
         $hasMultipleColumns = $this->getHomeService()->tabByUserAndIdentifierHasMultipleColumns(
-            $this->getApplication()->getUser(),
+            $this->getApplication()->getUser(), 
             $column->getParentId());
-
+        
         $html[] = $this->renderEmptyColumn($column->getId(), (count($blocks) > 0), ! $hasMultipleColumns);
-
+        
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -151,21 +151,21 @@ class ColumnRenderer
     public function renderEmptyColumn($columnId, $isEmpty = false, $isOnlyColumn = false)
     {
         $html = array();
-
+        
         $html[] = '<div class="panel panel-warning portal-column-empty ' . ($isEmpty ? 'hidden' : 'show') . '">';
         $html[] = '<div class="panel-heading">';
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="#" class="portal-action portal-action-column-delete ' . ($isOnlyColumn ? 'hidden' : 'show') .
-             '" data-column-id="' . $columnId . '" title="' . Translation :: get('Delete') . '">';
+             '" data-column-id="' . $columnId . '" title="' . Translation::get('Delete') . '">';
         $html[] = '<span class="glyphicon glyphicon-remove"></span></a>';
         $html[] = '</div>';
-        $html[] = '<h3 class="panel-title">' . Translation :: get('EmptyColumnTitle') . '</h3>';
+        $html[] = '<h3 class="panel-title">' . Translation::get('EmptyColumnTitle') . '</h3>';
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
-        $html[] = Translation :: get('EmptyColumnBody');
+        $html[] = Translation::get('EmptyColumnBody');
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

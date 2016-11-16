@@ -21,62 +21,62 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
     {
         set_time_limit(0);
         ini_set("memory_limit", - 1);
-
+        
         $this->initialize();
-
+        
         $html = array();
-
-        $html[] = Display :: header();
-
+        
+        $html[] = Display::header();
+        
         while (($package = $this->get_next_package()) != null)
         {
             $package_upgrader = new PackageUpgrader($package, false);
             $success = $package_upgrader->run();
-
+            
             $upgrader = $package_upgrader->get_upgrader();
             if ($upgrader)
             {
                 $this->add_packages($upgrader->get_additional_packages());
             }
-
-            $image = Theme :: getInstance()->getImagePath($package, 'Logo/48');
-            $title = Translation :: get('TypeName', null, $package);
+            
+            $image = Theme::getInstance()->getImagePath($package, 'Logo/48');
+            $title = Translation::get('TypeName', null, $package);
             $result = $package_upgrader->get_result(true);
-
+            
             $html[] = $this->render_upgrade_step($image, $title, $result);
-
+            
             flush();
-
+            
             if (! $success)
             {
                 break;
             }
         }
-
+        
         if ($success)
         {
             $html[] = $this->upgrade_successfull();
         }
-
-        $html[] = ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Lynx', true) . 'LynxProcess.js');
-
-        $html[] = Display :: footer($this);
-
+        
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Lynx', true) . 'LynxProcess.js');
+        
+        $html[] = Display::footer($this);
+        
         return implode(PHP_EOL, $html);
     }
 
     public function render_upgrade_step($image, $title, $result)
     {
         $html = array();
-
+        
         $html[] = '<div class="package_upgrade upgrade-step-collapsed" style="background-image: url(' . $image . ');">';
         $html[] = '<div class="package"><div class="title">' . $title . '</div></div>';
         $html[] = '<div class="description">';
         $html[] = $result;
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -131,17 +131,17 @@ class UpgraderComponent extends Manager implements NoAuthenticationSupport
     public function initialize()
     {
         $this->add_package('\Chamilo\Configuration');
-        $this->add_packages(Application :: get_packages_from_filesystem(Registration :: TYPE_CORE));
+        $this->add_packages(Application::get_packages_from_filesystem(Registration::TYPE_CORE));
     }
 
     public function upgrade_successfull()
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/Finished');
-        $title = Translation :: get('PlatformUpgraded');
-        $result = Translation :: get(
-            'CoreUpgraded',
-            array('URL' => $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CONTENT_OBJECT_UPGRADE))));
-
+        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/Finished');
+        $title = Translation::get('PlatformUpgraded');
+        $result = Translation::get(
+            'CoreUpgraded', 
+            array('URL' => $this->get_url(array(self::PARAM_ACTION => self::ACTION_CONTENT_OBJECT_UPGRADE))));
+        
         return $this->render_upgrade_step($image, $title, $result);
     }
 }

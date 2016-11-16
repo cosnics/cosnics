@@ -1,5 +1,8 @@
-@import url ('../../HtmlEditor/Ckeditor/Aqua');
-
+@import
+url
+(
+'../../HtmlEditor/Ckeditor/Aqua'
+);
 .cke_chamilo_youtube {
 	background-image: url(../../../../../Images/Ruby/Logo/48.png);
 	background-position: center center;

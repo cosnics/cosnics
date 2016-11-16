@@ -35,10 +35,10 @@ class ConfigurerComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
+        
         $selectedEntity = $this->getSelectedEntity();
-        $this->set_parameter(self :: PARAM_ENTITY_TYPE, $selectedEntity);
-
+        $this->set_parameter(self::PARAM_ENTITY_TYPE, $selectedEntity);
+        
         if ($selectedEntity instanceof DataClassEntity)
         {
             return $this->handleSelectedEntityType();
@@ -55,16 +55,16 @@ class ConfigurerComponent extends Manager
      */
     public function getSelectedEntity()
     {
-        $entityType = $this->getRequest()->query->get(self :: PARAM_ENTITY_TYPE);
-
+        $entityType = $this->getRequest()->query->get(self::PARAM_ENTITY_TYPE);
+        
         if (is_string($entityType))
         {
-            return DataClassEntityFactory :: getInstance()->getEntityFromDataClassName($entityType);
+            return DataClassEntityFactory::getInstance()->getEntityFromDataClassName($entityType);
         }
         else
         {
             $expandedEntities = $this->getExpandedEntities();
-
+            
             if (count($expandedEntities) == 1)
             {
                 return array_pop($expandedEntities);
@@ -79,27 +79,27 @@ class ConfigurerComponent extends Manager
     public function renderEntityTypeSelectionTable()
     {
         $headers = array();
-
+        
         $headers[] = new SortableStaticTableColumn(
-            Theme :: getInstance()->getImage(
-                'Action/Category',
-                'png',
-                Translation :: get('EntityType'),
-                null,
-                ToolbarItem :: DISPLAY_ICON,
-                false,
+            Theme::getInstance()->getImage(
+                'Action/Category', 
+                'png', 
+                Translation::get('EntityType'), 
+                null, 
+                ToolbarItem::DISPLAY_ICON, 
+                false, 
                 'Chamilo\Configuration'));
-        $headers[] = new SortableStaticTableColumn(Translation :: get('EntityType'));
+        $headers[] = new SortableStaticTableColumn(Translation::get('EntityType'));
         $headers[] = new StaticTableColumn('');
-
+        
         $table = new SortableTableFromArray($this->getEntityTypeSelectionTableData(), $headers);
-
+        
         $html = array();
-
+        
         $html[] = $this->render_header();
         $html[] = $table->toHtml();
         $html[] = $this->render_footer();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -110,19 +110,19 @@ class ConfigurerComponent extends Manager
     public function getEntityTypeSelectionTableData()
     {
         $tableData = array();
-
+        
         foreach ($this->getExpandedEntities() as $expandedEntity)
         {
-            $actionUrl = $this->get_url(array(self :: PARAM_ENTITY_TYPE => $expandedEntity->getDataClassName()));
+            $actionUrl = $this->get_url(array(self::PARAM_ENTITY_TYPE => $expandedEntity->getDataClassName()));
             $actionItem = new ToolbarItem(
-                Translation :: get('SetProviderLinks'),
-                Theme :: getInstance()->getImagePath('Chamilo\Core\Metadata\Provider', 'SetProviderLinks'),
-                $actionUrl,
-                ToolbarItem :: DISPLAY_ICON);
-
+                Translation::get('SetProviderLinks'), 
+                Theme::getInstance()->getImagePath('Chamilo\Core\Metadata\Provider', 'SetProviderLinks'), 
+                $actionUrl, 
+                ToolbarItem::DISPLAY_ICON);
+            
             $tableData[] = array($expandedEntity->getIcon(), $expandedEntity->getType(), $actionItem->as_html());
         }
-
+        
         return $tableData;
     }
 
@@ -131,42 +131,42 @@ class ConfigurerComponent extends Manager
         $entityService = new EntityService();
         $elementService = new ElementService();
         $relationService = new RelationService();
-
+        
         $form = new ProviderLinkForm(
-            $entityService,
-            $elementService,
-            $relationService,
-            $this->getSelectedEntity(),
+            $entityService, 
+            $elementService, 
+            $relationService, 
+            $this->getSelectedEntity(), 
             $this->get_url());
-
+        
         if ($form->validate())
         {
             $submittedValues = $form->exportValues();
-
+            
             $propertyProviderService = new PropertyProviderService($this->getSelectedEntity());
             $success = $propertyProviderService->updateEntityProviderLinks(
-                $entityService,
-                $elementService,
-                $relationService,
-                $submittedValues[EntityService :: PROPERTY_METADATA_SCHEMA]);
-
+                $entityService, 
+                $elementService, 
+                $relationService, 
+                $submittedValues[EntityService::PROPERTY_METADATA_SCHEMA]);
+            
             $translation = $success ? 'ObjectCreated' : 'ObjectNotCreated';
-
-            $message = Translation :: get(
-                $translation,
-                array('OBJECT' => Translation :: get('ProviderLink')),
-                Utilities :: COMMON_LIBRARIES);
-
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+            
+            $message = Translation::get(
+                $translation, 
+                array('OBJECT' => Translation::get('ProviderLink')), 
+                Utilities::COMMON_LIBRARIES);
+            
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

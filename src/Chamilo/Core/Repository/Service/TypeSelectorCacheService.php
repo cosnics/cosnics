@@ -83,8 +83,8 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
     public function getForContentObjectTypesAndUserIdentifier($contentObjectTypes, $userIdentifier = null)
     {
         $parameterBag = new ParameterBag(
-            array(self :: PARAM_TYPES => $contentObjectTypes, self :: PARAM_USER_IDENTIFIER => $userIdentifier));
-
+            array(self::PARAM_TYPES => $contentObjectTypes, self::PARAM_USER_IDENTIFIER => $userIdentifier));
+        
         return $this->getForIdentifier($parameterBag);
     }
 }

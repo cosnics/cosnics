@@ -21,7 +21,7 @@ class BlockEditComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_BLOCK, self :: PARAM_TITLE);
+        return array(self::PARAM_BLOCK, self::PARAM_TITLE);
     }
 
     /*
@@ -29,33 +29,33 @@ class BlockEditComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $user_id = DataManager :: determine_user_id();
+        $user_id = DataManager::determine_user_id();
         
         if ($user_id === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
         
-        $block = intval($this->getPostDataValue(self :: PARAM_BLOCK));
-        $title = $this->getPostDataValue(self :: PARAM_TITLE);
+        $block = intval($this->getPostDataValue(self::PARAM_BLOCK));
+        $title = $this->getPostDataValue(self::PARAM_TITLE);
         
-        $block = DataManager :: retrieve_by_id(Block :: class_name(), $block);
+        $block = DataManager::retrieve_by_id(Block::class_name(), $block);
         
         if ($block->getUserId() == $user_id)
         {
             $block->setTitle($title);
             if ($block->update())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: general_error(Translation :: get('BlockNotUpdated'));
+                JsonAjaxResult::general_error(Translation::get('BlockNotUpdated'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

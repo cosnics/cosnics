@@ -9,13 +9,13 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     public function get_display_properties()
     {
         $object = $this->get_object();
-        $properties = parent :: get_display_properties();
+        $properties = parent::get_display_properties();
         if (count($object->get_download_formats()) > 0)
         {
-            $properties[Translation :: get('DownloadFormats')] = $object->get_download_formats_string();
+            $properties[Translation::get('DownloadFormats')] = $object->get_download_formats_string();
         }
-        $properties[Translation :: get('Tags')] = $object->get_tags_string();
-        $properties[Translation :: get('License')] = $object->get_license_icon();
+        $properties[Translation::get('Tags')] = $object->get_tags_string();
+        $properties[Translation::get('License')] = $object->get_license_icon();
         
         return $properties;
     }

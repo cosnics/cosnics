@@ -19,7 +19,7 @@ use Exception;
 /**
  * Abstract class to define a blog layout so users are able to define new blog layouts and choose between them in the
  * local settings
- *
+ * 
  * @author Sven Vanpoucke
  */
 abstract class BlogLayout
@@ -32,14 +32,14 @@ abstract class BlogLayout
 
     /**
      * The blog which needs to be rendered
-     *
+     * 
      * @var Blog
      */
     private $blog;
 
     /**
      * Constructor
-     *
+     * 
      * @param $parent
      * @param $blog Blog
      */
@@ -51,7 +51,7 @@ abstract class BlogLayout
 
     /**
      * Factory
-     *
+     * 
      * @param $parent
      * @param $blog Blog
      */
@@ -59,15 +59,15 @@ abstract class BlogLayout
     {
         $type = $blog->get_blog_layout();
         $class = __NAMESPACE__ . '\BlogLayout\\' . $type . 'BlogLayout';
-
+        
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('BlogLayoutNotExists', array('BLOGLAYOUT' => $type)));
+            throw new Exception(Translation::get('BlogLayoutNotExists', array('BLOGLAYOUT' => $type)));
         }
-
+        
         return new $class($parent, $blog);
     }
-
+    
     // Getters and setters
     public function get_blog()
     {
@@ -92,28 +92,28 @@ abstract class BlogLayout
     public function as_html()
     {
         $html = array();
-
+        
         $complex_blog_items = $this->retrieve_complex_blog_items();
         while ($complex_blog_item = $complex_blog_items->next_result())
         {
             $html[] = $this->display_blog_item($complex_blog_item);
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays a given blog item
-     *
+     * 
      * @param $complex_blog_item ComplexBlogItem
      */
     abstract public function display_blog_item(ComplexBlogItem $complex_blog_item);
-
+    
     // Helper methods
-
+    
     /**
      * Returns the actions for the blog item
-     *
+     * 
      * @param $complex_blog_item ComplexBlogItem
      */
     public function get_blog_item_actions($complex_blog_item)
@@ -123,23 +123,23 @@ abstract class BlogLayout
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Edit'),
-                    $this->get_parent()->get_complex_content_object_item_update_url($complex_blog_item),
-                    ToolbarItem :: DISPLAY_ICON));
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Edit'), 
+                    $this->get_parent()->get_complex_content_object_item_update_url($complex_blog_item), 
+                    ToolbarItem::DISPLAY_ICON));
         }
-
+        
         if ($this->get_parent()->get_parent()->is_allowed_to_delete_child())
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES),
-                    Theme :: getInstance()->getCommonImagePath('Action/Delete'),
-                    $this->get_parent()->get_complex_content_object_item_delete_url($complex_blog_item),
-                    ToolbarItem :: DISPLAY_ICON,
+                    Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Delete'), 
+                    $this->get_parent()->get_complex_content_object_item_delete_url($complex_blog_item), 
+                    ToolbarItem::DISPLAY_ICON, 
                     true));
         }
-
+        
         return $toolbar->as_html();
     }
 
@@ -150,22 +150,22 @@ abstract class BlogLayout
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_PARENT),
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_blog()->get_id()));
-
+        
         $parameters = new DataClassRetrievesParameters(
-            $condition,
-            null,
-            null,
+            $condition, 
+            null, 
+            null, 
             array(
                 new OrderBy(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem :: class_name(),
-                        ComplexContentObjectItem :: PROPERTY_ADD_DATE))));
-
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieves(
-            ComplexContentObjectItem :: class_name(),
+                        ComplexContentObjectItem::class_name(), 
+                        ComplexContentObjectItem::PROPERTY_ADD_DATE))));
+        
+        return \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+            ComplexContentObjectItem::class_name(), 
             $parameters);
     }
 }

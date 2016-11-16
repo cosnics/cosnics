@@ -33,200 +33,182 @@ class ExternalObjectForm extends FormValidator
 
     public function __construct($form_type, $action, $application)
     {
-        parent :: __construct('matterhorn_upload', 'post', $action);
-
+        parent::__construct('matterhorn_upload', 'post', $action);
+        
         $this->application = $application;
-
+        
         $this->form_type = $form_type;
-
-        if ($this->form_type == self :: TYPE_EDIT)
+        
+        if ($this->form_type == self::TYPE_EDIT)
         {
             $this->build_editing_form();
         }
-        elseif ($this->form_type == self :: TYPE_CREATE)
+        elseif ($this->form_type == self::TYPE_CREATE)
         {
             $this->build_creation_form();
         }
-
+        
         $this->setDefaults();
     }
 
     public function set_external_repository_object($object)
     {
         $this->external_repository_object = $object;
-
-        $defaults[ExternalObject :: PROPERTY_ID] = $object->get_id();
-        $defaults[ExternalObject :: PROPERTY_TITLE] = $object->get_title();
-        $defaults[ExternalObject :: PROPERTY_DESCRIPTION] = $object->get_description();
-        $defaults[ExternalObject :: PROPERTY_DURATION] = $object->get_duration();
-        $defaults[ExternalObject :: PROPERTY_CONTRIBUTORS] = $object->get_contributors();
-        $defaults[ExternalObject :: PROPERTY_SERIES] = $object->get_series();
-        $defaults[ExternalObject :: PROPERTY_OWNER_ID] = $object->get_owner_id();
-        $defaults[ExternalObject :: PROPERTY_CREATED] = $object->get_created();
-        $defaults[ExternalObject :: PROPERTY_SUBJECTS] = $object->get_subjects();
-        $defaults[ExternalObject :: PROPERTY_LICENSE] = $object->get_license();
-        $defaults[ExternalObject :: PROPERTY_TYPE] = $object->get_type();
-        $defaults[ExternalObject :: PROPERTY_MODIFIED] = $object->get_modified();
-        $defaults[ExternalObject :: PROPERTY_TRACKS] = $object->get_tracks();
-        $defaults[ExternalObject :: PROPERTY_ATTACHMENTS] = $object->get_attachments();
-
-        parent :: setDefaults($defaults);
+        
+        $defaults[ExternalObject::PROPERTY_ID] = $object->get_id();
+        $defaults[ExternalObject::PROPERTY_TITLE] = $object->get_title();
+        $defaults[ExternalObject::PROPERTY_DESCRIPTION] = $object->get_description();
+        $defaults[ExternalObject::PROPERTY_DURATION] = $object->get_duration();
+        $defaults[ExternalObject::PROPERTY_CONTRIBUTORS] = $object->get_contributors();
+        $defaults[ExternalObject::PROPERTY_SERIES] = $object->get_series();
+        $defaults[ExternalObject::PROPERTY_OWNER_ID] = $object->get_owner_id();
+        $defaults[ExternalObject::PROPERTY_CREATED] = $object->get_created();
+        $defaults[ExternalObject::PROPERTY_SUBJECTS] = $object->get_subjects();
+        $defaults[ExternalObject::PROPERTY_LICENSE] = $object->get_license();
+        $defaults[ExternalObject::PROPERTY_TYPE] = $object->get_type();
+        $defaults[ExternalObject::PROPERTY_MODIFIED] = $object->get_modified();
+        $defaults[ExternalObject::PROPERTY_TRACKS] = $object->get_tracks();
+        $defaults[ExternalObject::PROPERTY_ATTACHMENTS] = $object->get_attachments();
+        
+        parent::setDefaults($defaults);
     }
 
     public function build_basic_form()
     {
         $this->addElement(
-            'text',
-            ExternalObject :: PROPERTY_TITLE,
-            Translation :: get('Title', null, Utilities :: COMMON_LIBRARIES),
+            'text', 
+            ExternalObject::PROPERTY_TITLE, 
+            Translation::get('Title', null, Utilities::COMMON_LIBRARIES), 
             array("size" => "50"));
         $this->addRule(
-            ExternalObject :: PROPERTY_TITLE,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            ExternalObject::PROPERTY_TITLE, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $this->addElement(
-            'text',
-            ExternalObject :: PROPERTY_CONTRIBUTORS,
-            Translation :: get('Contributors'),
+            'text', 
+            ExternalObject::PROPERTY_CONTRIBUTORS, 
+            Translation::get('Contributors'), 
             array("size" => "50"));
-
+        
+        $this->addElement('text', ExternalObject::PROPERTY_OWNER_ID, Translation::get('Creator'), array("size" => "50"));
+        
         $this->addElement(
-            'text',
-            ExternalObject :: PROPERTY_OWNER_ID,
-            Translation :: get('Creator'),
-            array("size" => "50"));
-
-        $this->addElement(
-            'text',
-            ExternalObject :: PROPERTY_SUBJECTS,
-            Translation :: get('Subjects'),
+            'text', 
+            ExternalObject::PROPERTY_SUBJECTS, 
+            Translation::get('Subjects'), 
             array("size" => "50"));
     }
 
     public function build_editing_form()
     {
         $this->build_basic_form();
-
-        $this->addElement('hidden', ExternalObject :: PROPERTY_ID);
-
+        
+        $this->addElement('hidden', ExternalObject::PROPERTY_ID);
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'arrow-right');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
     public function build_creation_form()
     {
         $this->build_basic_form();
-
-        $this->addElement('select', Series :: PROPERTY_TITLE, Translation :: get('Series'), $this->get_all_series());
-
+        
+        $this->addElement('select', Series::PROPERTY_TITLE, Translation::get('Series'), $this->get_all_series());
+        
         $this->addRule(
-            Series :: PROPERTY_TITLE,
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
+            Series::PROPERTY_TITLE, 
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-
+        
         $this->addElement(
-            'textarea',
-            ExternalObject :: PROPERTY_DESCRIPTION,
-            Translation :: get('Description', null, Utilities :: COMMON_LIBRARIES),
+            'textarea', 
+            ExternalObject::PROPERTY_DESCRIPTION, 
+            Translation::get('Description', null, Utilities::COMMON_LIBRARIES), 
             array("rows" => "7", "cols" => "80"));
-
-        $this->addElement(
-            'text',
-            ExternalObject :: PROPERTY_LICENSE,
-            Translation :: get('License'),
-            array("size" => "50"));
-
+        
+        $this->addElement('text', ExternalObject::PROPERTY_LICENSE, Translation::get('License'), array("size" => "50"));
+        
         // series
         $series_group = array();
+        $series_group[] = $this->createElement('select', 'series', Translation::get('Series'), $this->get_series_list());
         $series_group[] = $this->createElement(
-            'select',
-            'series',
-            Translation :: get('Series'),
-            $this->get_series_list());
-        $series_group[] = $this->createElement(
-            'image',
-            'add_series',
-            Theme :: getInstance()->getCommonImagePath('Action/Add'),
+            'image', 
+            'add_series', 
+            Theme::getInstance()->getCommonImagePath('Action/Add'), 
             array('id' => 'add_series', 'style' => 'display:none'));
-        $this->addGroup($series_group, null, Translation :: get('Series'));
-
+        $this->addGroup($series_group, null, Translation::get('Series'));
+        
         $group = array();
-        $group[] = $this->createElement('static', null, null, '<div id="' . self :: NEW_SERIES . '">');
-        $group[] = $this->createElement('static', null, null, Translation :: get('AddNewSeries'));
-        $group[] = $this->createElement('text', self :: NEW_SERIES);
+        $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_SERIES . '">');
+        $group[] = $this->createElement('static', null, null, Translation::get('AddNewSeries'));
+        $group[] = $this->createElement('text', self::NEW_SERIES);
         $group[] = $this->createElement('static', null, null, '</div>');
         $this->addGroup($group);
-
+        
         // file upload choice
         $this->addElement(
-            'radio',
-            self :: PARAM_UPLOAD,
-            Translation :: get('File'),
-            Translation :: get('FileUpload'),
-            0,
+            'radio', 
+            self::PARAM_UPLOAD, 
+            Translation::get('File'), 
+            Translation::get('FileUpload'), 
+            0, 
             array('id' => 'file_upload'));
-
+        
         $this->addElement('html', '<div style="margin-left:25px;display:block;" id="upload">');
-
+        
         $this->addElement('file', 'track');
         $this->addElement('html', '</div>');
-
-        $this->addElement(
-            'radio',
-            self :: PARAM_UPLOAD,
-            '',
-            Translation :: get('Inbox'),
-            1,
-            array('id' => 'file_inbox'));
-
+        
+        $this->addElement('radio', self::PARAM_UPLOAD, '', Translation::get('Inbox'), 1, array('id' => 'file_inbox'));
+        
         $this->addElement('html', '<div style="margin-left:25px;display:block;" id="inbox">');
-
+        
         $this->addElement('select', 'inbox', '', $this->get_inbox_list());
         $this->addElement('html', '</div>');
-
+        
         // workflow choice
         $this->addElement(
-            'radio',
-            self :: PARAM_WORKFLOW,
-            Translation :: get('Type'),
-            Translation :: get('Audio'),
+            'radio', 
+            self::PARAM_WORKFLOW, 
+            Translation::get('Type'), 
+            Translation::get('Audio'), 
             'audio/source');
-
-        $this->addElement('radio', self :: PARAM_WORKFLOW, null, Translation :: get('Video'), 'video/source');
-
+        
+        $this->addElement('radio', self::PARAM_WORKFLOW, null, Translation::get('Video'), 'video/source');
+        
         $this->addElement(
-            'html',
-            ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
+            'html', 
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
                      'Upload.js'));
-
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES));
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Create', null, Utilities::COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-
+        
         $defaults = array();
-        $defaults[self :: PARAM_UPLOAD] = 0;
-        $defaults[self :: PARAM_WORKFLOW] = 'audio/source';
-        parent :: setDefaults($defaults);
+        $defaults[self::PARAM_UPLOAD] = 0;
+        $defaults[self::PARAM_WORKFLOW] = 'audio/source';
+        parent::setDefaults($defaults);
     }
 
     public function get_workflows_list()
@@ -244,7 +226,7 @@ class ExternalObjectForm extends FormValidator
     {
         $series = $this->application->get_external_repository_manager_connector()->get_all_series();
         $options = array();
-        $options[0] = Translation :: get('NoSeries');
+        $options[0] = Translation::get('NoSeries');
         while ($serie = $series->next_result())
         {
             $options[$serie->get_id()] = $serie->get_title();
@@ -286,23 +268,22 @@ class ExternalObjectForm extends FormValidator
     public function upload_video()
     {
         $values = $this->exportValues();
-        if ($values[ExternalObjectForm :: PARAM_UPLOAD] == 0)
+        if ($values[ExternalObjectForm::PARAM_UPLOAD] == 0)
         {
-            if (StringUtilities :: getInstance()->hasValue(($_FILES['track']['name'])))
+            if (StringUtilities::getInstance()->hasValue(($_FILES['track']['name'])))
             {
-                $folder = Path :: getInstance()->getTemporaryPath(__NAMESPACE__) . $this->application->get_user_id() .
-                     '/';
+                $folder = Path::getInstance()->getTemporaryPath(__NAMESPACE__) . $this->application->get_user_id() . '/';
                 if (! file_exists($folder) || ! is_dir($folder))
                 {
-                    Filesystem :: create_dir($folder);
+                    Filesystem::create_dir($folder);
                 }
                 $path = $folder . $_FILES['track']['name'];
-                if (Filesystem :: move_file($_FILES['track']['tmp_name'], $path))
+                if (Filesystem::move_file($_FILES['track']['tmp_name'], $path))
                 {
                     $object = $this->application->get_external_repository_manager_connector()->create_external_repository_object(
-                        $values,
+                        $values, 
                         $path);
-                    Filesystem :: remove($path);
+                    Filesystem::remove($path);
                     if ($object)
                     {
                         return $object->get_id();
@@ -322,7 +303,7 @@ class ExternalObjectForm extends FormValidator
                 return false;
             }
         }
-        elseif ($values[ExternalObjectForm :: PARAM_UPLOAD] == 1)
+        elseif ($values[ExternalObjectForm::PARAM_UPLOAD] == 1)
         {
             $object = $this->application->get_external_repository_manager_connector()->create_external_repository_object(
                 $values);
@@ -333,7 +314,7 @@ class ExternalObjectForm extends FormValidator
     public function get_all_series()
     {
         $series = $this->application->get_external_repository_manager_connector()->get_all_series();
-
+        
         $seriesList = array();
         while ($opencast_series = $series->next_result())
         {

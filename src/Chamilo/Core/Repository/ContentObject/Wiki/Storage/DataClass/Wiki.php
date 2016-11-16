@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * $Id: wiki.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.wiki
  */
 class Wiki extends ContentObject implements ComplexContentObjectSupport
@@ -25,65 +25,65 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
         ;
     }
 
     public function get_allowed_types()
     {
-        return array(WikiPage :: class_name());
+        return array(WikiPage::class_name());
     }
 
     public function get_locked()
     {
-        return $this->get_additional_property(self :: PROPERTY_LOCKED);
+        return $this->get_additional_property(self::PROPERTY_LOCKED);
     }
 
     public function set_locked($locked)
     {
-        return $this->set_additional_property(self :: PROPERTY_LOCKED, $locked);
+        return $this->set_additional_property(self::PROPERTY_LOCKED, $locked);
     }
 
     public function get_links()
     {
-        return $this->get_additional_property(self :: PROPERTY_LINKS);
+        return $this->get_additional_property(self::PROPERTY_LINKS);
     }
 
     public function set_links($links)
     {
-        return $this->set_additional_property(self :: PROPERTY_LINKS, $links);
+        return $this->set_additional_property(self::PROPERTY_LINKS, $links);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_LOCKED, self :: PROPERTY_LINKS);
+        return array(self::PROPERTY_LOCKED, self::PROPERTY_LINKS);
     }
 
     public function get_wiki_pages($return_complex_items = false)
     {
-        $complex_content_objects = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_complex_content_object_items(
-            ComplexContentObjectItem :: class_name(),
+        $complex_content_objects = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
+            ComplexContentObjectItem::class_name(), 
             new EqualityCondition(
                 new PropertyConditionVariable(
-                    ComplexContentObjectItem :: class_name(),
-                    ComplexContentObjectItem :: PROPERTY_PARENT),
-                new StaticConditionVariable($this->get_id()),
-                ComplexContentObjectItem :: get_table_name()));
-
+                    ComplexContentObjectItem::class_name(), 
+                    ComplexContentObjectItem::PROPERTY_PARENT), 
+                new StaticConditionVariable($this->get_id()), 
+                ComplexContentObjectItem::get_table_name()));
+        
         if ($return_complex_items)
         {
             return $complex_content_objects;
         }
-
+        
         $wiki_pages = array();
-
+        
         while ($complex_content_object = $complex_content_objects->next_result())
         {
-            $wiki_pages[] = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                ContentObject :: class_name(),
+            $wiki_pages[] = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                ContentObject::class_name(), 
                 $complex_content_object->get_ref());
         }
-
+        
         return $wiki_pages;
     }
 
@@ -91,34 +91,34 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     {
         $complex_content_object_item_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_PARENT),
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($this->get_id()));
-
+        
         $content_object_conditions = array();
         $content_object_conditions[] = $title_condition;
         $content_object_conditions[] = new SubselectCondition(
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID),
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(),
-                ComplexContentObjectItem :: PROPERTY_REF),
-            ComplexContentObjectItem :: get_table_name(),
-            $complex_content_object_item_condition,
-            ContentObject :: get_table_name());
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_REF), 
+            ComplexContentObjectItem::get_table_name(), 
+            $complex_content_object_item_condition, 
+            ContentObject::get_table_name());
         $content_object_condition = new AndCondition($content_object_conditions);
-
-        return \Chamilo\Core\Repository\Storage\DataManager :: retrieve_active_content_objects(
-            ContentObject :: class_name(),
+        
+        return \Chamilo\Core\Repository\Storage\DataManager::retrieve_active_content_objects(
+            ContentObject::class_name(), 
             $content_object_condition);
     }
 
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
-     *
+     * 
      * @return multitype:string
      */
     public static function get_html_editors($html_editors = array())
     {
-        return parent :: get_html_editors(array(self :: PROPERTY_LINKS));
+        return parent::get_html_editors(array(self::PROPERTY_LINKS));
     }
 }

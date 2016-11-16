@@ -27,14 +27,14 @@ abstract class Menu extends BootstrapTreeMenu
     public function getNodes()
     {
         $menu = array();
-
+        
         $menu[] = $this->getMenuItem($this->getComplexContentObjectPath()->get_root());
-
+        
         foreach ($this->getExtraMenuItems() as $extraMenuItem)
         {
             $menu[] = $extraMenuItem;
         }
-
+        
         return $menu;
     }
 
@@ -46,11 +46,11 @@ abstract class Menu extends BootstrapTreeMenu
     public function getMenuItem(ComplexContentObjectPathNode $node)
     {
         $application = $this->getApplication();
-
+        
         $menuItem['text'] = $node->get_content_object()->get_title();
         $menuItem['node-id'] = $node->get_id();
         $menuItem['icon'] = $this->getItemIcon($node);
-
+        
         if ($application->get_parent()->is_allowed_to_view_content_object($node))
         {
             $menuItem['href'] = $this->getNodeUrl($node->get_id());
@@ -59,24 +59,24 @@ abstract class Menu extends BootstrapTreeMenu
         {
             $menuItem['href'] = '#';
         }
-
+        
         if ($this->isSelectedItem($node))
         {
             $menuItem['state'] = array('selected' => true);
         }
-
+        
         if ($node->has_children())
         {
             $menuItem['nodes'] = array();
-
+            
             $children = $node->get_children();
-
+            
             foreach ($children as $child)
             {
                 $menuItem['nodes'][] = $this->getMenuItem($child);
             }
         }
-
+        
         return $menuItem;
     }
 
@@ -87,9 +87,9 @@ abstract class Menu extends BootstrapTreeMenu
      */
     protected function getItemIcon(ComplexContentObjectPathNode $node)
     {
-        $objectType = (string) StringUtilities :: getInstance()->createString(
-            ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($node->get_content_object()->package()))->underscored();
-
+        $objectType = (string) StringUtilities::getInstance()->createString(
+            ClassnameUtilities::getInstance()->getPackageNameFromNamespace($node->get_content_object()->package()))->underscored();
+        
         return 'type_' . $objectType;
     }
 

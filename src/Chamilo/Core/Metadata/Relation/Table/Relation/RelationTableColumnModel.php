@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSuppo
 
 /**
  * Table column model for the schema
- *
+ * 
  * @package Chamilo\Core\Metadata\Schema\Table\Schema
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -23,6 +23,6 @@ class RelationTableColumnModel extends DataClassTableColumnModel implements Tabl
      */
     public function initialize_columns()
     {
-        $this->add_column(new DataClassPropertyTableColumn(Relation :: class_name(), Relation :: PROPERTY_NAME));
+        $this->add_column(new DataClassPropertyTableColumn(Relation::class_name(), Relation::PROPERTY_NAME));
     }
 }

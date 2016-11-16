@@ -13,31 +13,31 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class ComplexPageForm extends ComplexContentObjectItemForm
 {
+
     public function get_elements()
     {
-        $elements[] = $this->createElement('checkbox', ComplexPage :: PROPERTY_VISIBLE, Translation :: get('Visible'));
+        $elements[] = $this->createElement('checkbox', ComplexPage::PROPERTY_VISIBLE, Translation::get('Visible'));
         return $elements;
     }
-    
+
     function get_default_values()
     {
         $cloi = $this->get_complex_content_object_item();
-    
+        
         if (isset($cloi))
         {
-            $defaults[ComplexPage :: PROPERTY_VISIBLE] = $cloi->get_visible();
+            $defaults[ComplexPage::PROPERTY_VISIBLE] = $cloi->get_visible();
         }
-    
+        
         return $defaults;
     }
-    
+
     function update_from_values($values)
     {
         $cloi = $this->get_complex_content_object_item();
-        $cloi->set_visible($values[ComplexPage :: PROPERTY_VISIBLE]);
-        return parent :: update();
+        $cloi->set_visible($values[ComplexPage::PROPERTY_VISIBLE]);
+        return parent::update();
     }
-    
 }
 
 ?>

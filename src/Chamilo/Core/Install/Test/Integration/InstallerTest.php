@@ -52,7 +52,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function __construct()
     {
-        parent :: __construct();
+        parent::__construct();
         $this->backupGlobals = false; // MDB needs this
         $this->install_configuration_file = __DIR__ . '/__files/install_config.php';
     }
@@ -68,10 +68,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        Filesystem :: remove(Path :: getInstance()->getStoragePath() . 'configuration/configuration.php');
+        Filesystem::remove(Path::getInstance()->getStoragePath() . 'configuration/configuration.php');
         foreach ($this->EXTRA_DIRECTORIES as $directory)
         {
-            Filesystem :: remove(Path :: getInstance()->getStoragePath() . $directory);
+            Filesystem::remove(Path::getInstance()->getStoragePath() . $directory);
         }
         $this->reset_db();
     }
@@ -100,9 +100,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     public function test_installation_should_create_config_file()
     {
         $this->installer_config->set_db_overwrite(false); // faster
-        $this->assertFileNotExists(Path :: getInstance()->getStoragePath() . 'configuration/configuration.php');
+        $this->assertFileNotExists(Path::getInstance()->getStoragePath() . 'configuration/configuration.php');
         $this->installer->perform_install();
-        $this->assertFileExists(Path :: getInstance()->getStoragePath() . 'configuration/configuration.php');
+        $this->assertFileExists(Path::getInstance()->getStoragePath() . 'configuration/configuration.php');
     }
 
     public function test_installation_should_create_extra_directories()
@@ -110,12 +110,12 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->installer_config->set_db_overwrite(false); // faster
         foreach ($this->EXTRA_DIRECTORIES as $directory)
         {
-            $this->assertFileNotExists(Path :: getInstance()->getStoragePath() . $directory);
+            $this->assertFileNotExists(Path::getInstance()->getStoragePath() . $directory);
         }
         $this->installer->perform_install();
         foreach ($this->EXTRA_DIRECTORIES as $directory)
         {
-            $this->assertFileExists(Path :: getInstance()->getStoragePath() . $directory);
+            $this->assertFileExists(Path::getInstance()->getStoragePath() . $directory);
         }
     }
 
@@ -134,8 +134,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->installer->perform_install();
         foreach ($this->CORE_APPS as $application_name)
         {
-            $this->assertTrue(CoreApplication :: exists($application_name));
-            $application = CoreApplication :: factory($application_name);
+            $this->assertTrue(CoreApplication::exists($application_name));
+            $application = CoreApplication::factory($application_name);
             $this->assertTrue($application->is_active());
         }
     }
@@ -224,7 +224,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     private function assertIsNotMDB2Error($mdb2Result)
     {
-        if (\Chamilo\MDB2 :: isError($mdb2Result))
+        if (\Chamilo\MDB2::isError($mdb2Result))
         {
             $this->fail("MDB2 shouldn't have returned an error : {$mdb2Result->getMessage()}");
         }
@@ -235,7 +235,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->add_dumb_table_in_db();
         $this->installer_config->set_db_overwrite(true);
         $this->installer->perform_install();
-        $table_list = Connection :: getInstance()->get_connection()->listTables();
+        $table_list = Connection::getInstance()->get_connection()->listTables();
         $this->assertNotContains("dumb", $table_list);
     }
 
@@ -254,7 +254,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->add_dumb_table_in_db();
         $this->installer_config->set_db_overwrite(false);
         $this->installer->perform_install();
-        $table_list = Connection :: getInstance()->get_connection()->listTables();
+        $table_list = Connection::getInstance()->get_connection()->listTables();
         $this->assertContains("dumb", $table_list);
     }
 }

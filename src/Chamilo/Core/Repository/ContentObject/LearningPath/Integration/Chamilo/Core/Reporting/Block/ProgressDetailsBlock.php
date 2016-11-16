@@ -25,75 +25,75 @@ class ProgressDetailsBlock extends ReportingBlock
     public function count_data()
     {
         $reporting_data = new ReportingData();
-
+        
         $reporting_data->set_rows(
             array(
-                Translation :: get('LastStartTime'),
-                Translation :: get('Status'),
-                Translation :: get('Score'),
-                Translation :: get('Time'),
-                Translation :: get('Action')));
-
+                Translation::get('LastStartTime'), 
+                Translation::get('Status'), 
+                Translation::get('Score'), 
+                Translation::get('Time'), 
+                Translation::get('Action')));
+        
         $current_node = $this->get_parent()->get_parent()->get_current_node();
-
+        
         $counter = 1;
-
+        
         foreach ($current_node->get_data() as $item_attempt)
         {
             $category = $counter;
             $reporting_data->add_category($category);
             $reporting_data->add_data_category_row(
-                $category,
-                Translation :: get('LastStartTime'),
-                DatetimeUtilities :: format_locale_date(null, $item_attempt->get_start_time()));
+                $category, 
+                Translation::get('LastStartTime'), 
+                DatetimeUtilities::format_locale_date(null, $item_attempt->get_start_time()));
             $reporting_data->add_data_category_row(
-                $category,
-                Translation :: get('Status'),
-                Translation :: get($item_attempt->get_status() == 'completed' ? 'Completed' : 'Incomplete'));
+                $category, 
+                Translation::get('Status'), 
+                Translation::get($item_attempt->get_status() == 'completed' ? 'Completed' : 'Incomplete'));
             $reporting_data->add_data_category_row(
-                $category,
-                Translation :: get('Score'),
+                $category, 
+                Translation::get('Score'), 
                 $item_attempt->get_score() . '%');
             $reporting_data->add_data_category_row(
-                $category,
-                Translation :: get('Time'),
-                DatetimeUtilities :: format_seconds_to_hours($item_attempt->get_total_time()));
-
+                $category, 
+                Translation::get('Time'), 
+                DatetimeUtilities::format_seconds_to_hours($item_attempt->get_total_time()));
+            
             if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
             {
                 $delete_url = $this->get_parent()->get_parent()->get_url(
                     array(
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: ACTION_ATTEMPT,
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_STEP => $current_node->get_id(),
-                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager :: PARAM_ITEM_ATTEMPT_ID => $item_attempt->get_id()));
-
-                $action = Theme :: getInstance()->getCommonImage(
-                    'Action/Delete',
-                    'png',
-                    Translation :: get('DeleteAttempt'),
-                    $delete_url,
-                    ToolbarItem :: DISPLAY_ICON);
-
-                $reporting_data->add_data_category_row($category, Translation :: get('Action'), $action);
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_ATTEMPT, 
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP => $current_node->get_id(), 
+                        \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ITEM_ATTEMPT_ID => $item_attempt->get_id()));
+                
+                $action = Theme::getInstance()->getCommonImage(
+                    'Action/Delete', 
+                    'png', 
+                    Translation::get('DeleteAttempt'), 
+                    $delete_url, 
+                    ToolbarItem::DISPLAY_ICON);
+                
+                $reporting_data->add_data_category_row($category, Translation::get('Action'), $action);
             }
-
+            
             $counter ++;
         }
-
+        
         $category = '-';
         $reporting_data->add_category($category);
-        $reporting_data->add_data_category_row($category, Translation :: get('LastStartTime'), '');
+        $reporting_data->add_data_category_row($category, Translation::get('LastStartTime'), '');
         $reporting_data->add_data_category_row(
-            $category,
-            Translation :: get('Status'),
-            '<span style="font-weight: bold;">' . Translation :: get('TotalTime') . '</span>');
-        $reporting_data->add_data_category_row($category, Translation :: get('Score'), '');
+            $category, 
+            Translation::get('Status'), 
+            '<span style="font-weight: bold;">' . Translation::get('TotalTime') . '</span>');
+        $reporting_data->add_data_category_row($category, Translation::get('Score'), '');
         $reporting_data->add_data_category_row(
-            $category,
-            Translation :: get('Time'),
+            $category, 
+            Translation::get('Time'), 
             '<span style="font-weight: bold;">' .
-                 DatetimeUtilities :: format_seconds_to_hours($current_node->get_total_time()) . '</span>');
-
+                 DatetimeUtilities::format_seconds_to_hours($current_node->get_total_time()) . '</span>');
+        
         return $reporting_data;
     }
 
@@ -112,6 +112,6 @@ class ProgressDetailsBlock extends ReportingBlock
      */
     public function get_views()
     {
-        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html :: VIEW_TABLE);
+        return array(\Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html::VIEW_TABLE);
     }
 }

@@ -18,17 +18,17 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function get_category()
     {
-        return $this->get_default_property(self :: PROPERTY_CATEGORY);
+        return $this->get_default_property(self::PROPERTY_CATEGORY);
     }
 
     public function set_category($category)
     {
-        return $this->set_default_property(self :: PROPERTY_CATEGORY, $category);
+        return $this->set_default_property(self::PROPERTY_CATEGORY, $category);
     }
 
     public function get_tags()
     {
-        return $this->get_default_property(self :: PROPERTY_TAGS);
+        return $this->get_default_property(self::PROPERTY_TAGS);
     }
 
     public function get_tags_string()
@@ -43,12 +43,12 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function set_tags($tags)
     {
-        return $this->set_default_property(self :: PROPERTY_TAGS, $tags);
+        return $this->set_default_property(self::PROPERTY_TAGS, $tags);
     }
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(array(self :: PROPERTY_CATEGORY, self :: PROPERTY_TAGS));
+        return parent::get_default_property_names(array(self::PROPERTY_CATEGORY, self::PROPERTY_TAGS));
     }
 
     public function get_status_text()
@@ -56,33 +56,33 @@ class ExternalObject extends StreamingMediaExternalObject
         $status = $this->get_status();
         switch ($status)
         {
-            case self :: STATUS_REJECTED :
-                return Translation :: get('Rejected');
+            case self::STATUS_REJECTED :
+                return Translation::get('Rejected');
                 break;
-            case self :: STATUS_PROCESSED :
-                return Translation :: get('Processed');
+            case self::STATUS_PROCESSED :
+                return Translation::get('Processed');
                 break;
-            case self :: STATUS_FAILED :
-                return Translation :: get('Failed');
+            case self::STATUS_FAILED :
+                return Translation::get('Failed');
                 break;
-            case self :: STATUS_UPLOADED :
-                return Translation :: get('Uploaded');
+            case self::STATUS_UPLOADED :
+                return Translation::get('Uploaded');
                 break;
-            case self :: STATUS_DELETED :
-                return Translation :: get('Deleted');
+            case self::STATUS_DELETED :
+                return Translation::get('Deleted');
                 break;
             default :
-                return Translation :: get('Unknown');
+                return Translation::get('Unknown');
         }
     }
 
     public static function get_object_type()
     {
-        return self :: OBJECT_TYPE;
+        return self::OBJECT_TYPE;
     }
 
     public function get_video_url()
     {
-        return sprintf(self :: YOUTUBE_PLAYER_URI, $this->get_id());
+        return sprintf(self::YOUTUBE_PLAYER_URI, $this->get_id());
     }
 }

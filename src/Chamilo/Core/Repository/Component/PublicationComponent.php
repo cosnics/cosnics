@@ -22,7 +22,7 @@ class PublicationComponent extends Manager implements ApplicationSupport
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Publication\Manager :: context(),
+            \Chamilo\Core\Repository\Publication\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

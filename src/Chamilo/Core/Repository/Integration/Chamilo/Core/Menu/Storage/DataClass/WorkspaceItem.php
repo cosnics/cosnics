@@ -18,37 +18,37 @@ class WorkspaceItem extends Item
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
-        parent :: __construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
     public function getWorkspaceId()
     {
-        return $this->get_additional_property(self :: PROPERTY_WORKSPACE_ID);
+        return $this->get_additional_property(self::PROPERTY_WORKSPACE_ID);
     }
 
     public function setWorkspaceId($workspace_id)
     {
-        return $this->set_additional_property(self :: PROPERTY_WORKSPACE_ID, $workspace_id);
+        return $this->set_additional_property(self::PROPERTY_WORKSPACE_ID, $workspace_id);
     }
 
     public function getName()
     {
-        return $this->get_additional_property(self :: PROPERTY_NAME);
+        return $this->get_additional_property(self::PROPERTY_NAME);
     }
 
     public function setName($name)
     {
-        return $this->set_additional_property(self :: PROPERTY_NAME, $name);
+        return $this->set_additional_property(self::PROPERTY_NAME, $name);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_WORKSPACE_ID, self :: PROPERTY_NAME);
+        return array(self::PROPERTY_WORKSPACE_ID, self::PROPERTY_NAME);
     }
 }

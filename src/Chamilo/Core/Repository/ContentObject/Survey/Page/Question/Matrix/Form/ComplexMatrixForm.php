@@ -17,7 +17,7 @@ class ComplexMatrixForm extends ComplexContentObjectItemForm
 
     public function get_elements()
     {
-        $elements[] = $this->createElement('checkbox', ComplexMatrix :: PROPERTY_VISIBLE, Translation :: get('Visible'));
+        $elements[] = $this->createElement('checkbox', ComplexMatrix::PROPERTY_VISIBLE, Translation::get('Visible'));
         return $elements;
     }
 
@@ -27,7 +27,7 @@ class ComplexMatrixForm extends ComplexContentObjectItemForm
         
         if (isset($cloi))
         {
-            $defaults[ComplexMatrix :: PROPERTY_VISIBLE] = $cloi->get_visible();
+            $defaults[ComplexMatrix::PROPERTY_VISIBLE] = $cloi->get_visible();
         }
         
         return $defaults;
@@ -36,7 +36,7 @@ class ComplexMatrixForm extends ComplexContentObjectItemForm
     function update_from_values($values)
     {
         $cloi = $this->get_complex_content_object_item();
-        $cloi->set_visible($values[ComplexMatrix :: PROPERTY_VISIBLE]);
-        return parent :: update();
+        $cloi->set_visible($values[ComplexMatrix::PROPERTY_VISIBLE]);
+        return parent::update();
     }
 }

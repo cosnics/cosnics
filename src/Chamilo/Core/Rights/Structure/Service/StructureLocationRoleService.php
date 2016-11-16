@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Rights\Structure\Service;
 
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;
@@ -10,37 +9,39 @@ use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
 
 /**
  * Manages structure location roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class StructureLocationRoleService implements StructureLocationRoleServiceInterface
 {
+
     /**
+     *
      * @var RoleServiceInterface
      */
     protected $roleService;
 
     /**
+     *
      * @var StructureLocationService
      */
     protected $structureLocationService;
 
     /**
+     *
      * @var StructureLocationRoleRepositoryInterface
      */
     protected $structureLocationRoleRepository;
 
     /**
      * StructureLocationRoleService constructor.
-     *
+     * 
      * @param RoleServiceInterface $roleService
      * @param StructureLocationService $structureLocationService
      * @param StructureLocationRoleRepositoryInterface $structureLocationRoleRepository
      */
-    public function __construct(
-        RoleServiceInterface $roleService, StructureLocationService $structureLocationService,
-        StructureLocationRoleRepositoryInterface $structureLocationRoleRepository
-    )
+    public function __construct(RoleServiceInterface $roleService, StructureLocationService $structureLocationService, 
+        StructureLocationRoleRepositoryInterface $structureLocationRoleRepository)
     {
         $this->roleService = $roleService;
         $this->structureLocationService = $structureLocationService;
@@ -49,7 +50,7 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
 
     /**
      * Adds a role to a given structure location
-     *
+     * 
      * @param StructureLocation $structureLocation
      * @param string $roleName
      *
@@ -60,27 +61,25 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
     public function addRoleToStructureLocation(StructureLocation $structureLocation, $roleName)
     {
         $role = $this->roleService->getOrCreateRoleByName($roleName);
-
+        
         $structureLocationRole = new StructureLocationRole();
-
+        
         $structureLocationRole->setRoleId($role->getId());
         $structureLocationRole->setStructureLocationId($structureLocation->getId());
-
-        if (!$structureLocationRole->create())
+        
+        if (! $structureLocationRole->create())
         {
             throw new \Exception(
-                'The structure location role for context ' . $structureLocation->getContext() .
-                ', action ' . $structureLocation->getAction() .
-                ' and role ' . $roleName . ' could not be created'
-            );
+                'The structure location role for context ' . $structureLocation->getContext() . ', action ' .
+                     $structureLocation->getAction() . ' and role ' . $roleName . ' could not be created');
         }
-
+        
         return $structureLocationRole;
     }
 
     /**
      * Removes a role from a given structure location
-     *
+     * 
      * @param StructureLocation $structureLocation
      * @param string $roleName
      *
@@ -92,34 +91,31 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
         {
             $role = $this->roleService->getRoleByName($roleName);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return;
         }
-
-        $structureLocationRole = $this->structureLocationRoleRepository
-            ->findStructureLocationRoleByStructureLocationAndRole(
-                $structureLocation->getId(), $role->getId()
-            );
-
-        if(!$structureLocationRole)
+        
+        $structureLocationRole = $this->structureLocationRoleRepository->findStructureLocationRoleByStructureLocationAndRole(
+            $structureLocation->getId(), 
+            $role->getId());
+        
+        if (! $structureLocationRole)
         {
             return;
         }
-
-        if(!$structureLocationRole->delete())
+        
+        if (! $structureLocationRole->delete())
         {
             throw new \Exception(
-                'The structure location role for context ' . $structureLocation->getContext() .
-                ', action ' . $structureLocation->getAction() .
-                ' and role ' . $roleName . ' could not be removed'
-            );
+                'The structure location role for context ' . $structureLocation->getContext() . ', action ' .
+                     $structureLocation->getAction() . ' and role ' . $roleName . ' could not be removed');
         }
     }
 
     /**
      * Returns a list of roles for a given structure location
-     *
+     * 
      * @param StructureLocation $structureLocation
      *
      * @return Role[]
@@ -131,23 +127,23 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
 
     /**
      * Returns a list of roles for a given structure location identified by given context and comnponent
-     *
+     * 
      * @param string $context
      * @param string $action
      *
      * @return \Chamilo\Core\User\Roles\Storage\DataClass\Role[]
      */
-    public function getRolesForLocationByContextAndAction($context, $action= null)
+    public function getRolesForLocationByContextAndAction($context, $action = null)
     {
         try
         {
             $structureLocation = $this->structureLocationService->getStructureLocationByContextAndAction(
-                $context, $action
-            );
-
+                $context, 
+                $action);
+            
             return $this->getRolesForLocation($structureLocation);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return array();
         }

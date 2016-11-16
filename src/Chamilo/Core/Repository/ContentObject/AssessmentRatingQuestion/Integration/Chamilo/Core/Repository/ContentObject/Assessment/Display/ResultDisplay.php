@@ -29,11 +29,11 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
         $html[] = '<tr>';
-        $html[] = '<th class="list">' . Translation :: get('YourRating') . '</th>';
+        $html[] = '<th class="list">' . Translation::get('YourRating') . '</th>';
         
         if ($configuration->show_solution())
         {
-            $html[] = '<th class="list">' . Translation :: get('CorrectRating') . '</th>';
+            $html[] = '<th class="list">' . Translation::get('CorrectRating') . '</th>';
         }
         
         $html[] = '</tr>';
@@ -47,14 +47,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             if ($correct_answer)
             {
                 $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
-                     Translation :: get('Correct') . '" title="' . Translation :: get('Correct') . '" style="" />';
+                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerCorrect') . '" alt="' .
+                     Translation::get('Correct') . '" title="' . Translation::get('Correct') . '" style="" />';
             }
             else
             {
                 $result = ' <img style="vertical-align: middle;" src="' .
-                     Theme :: getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
-                     Translation :: get('Wrong') . '" title="' . Translation :: get('Wrong') . '" />';
+                     Theme::getInstance()->getImagePath(__NAMESPACE__, 'AnswerWrong') . '" alt="' .
+                     Translation::get('Wrong') . '" title="' . Translation::get('Wrong') . '" />';
             }
         }
         else
@@ -74,7 +74,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '</tbody>';
         $html[] = '</table>';
         
-        if (AnswerFeedbackDisplay :: allowed(
+        if (AnswerFeedbackDisplay::allowed(
             $configuration, 
             $this->get_complex_content_object_question(), 
             true, 
@@ -85,7 +85,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 $this->get_question()->get_feedback());
             
             $html[] = '<div class="splitter">';
-            $html[] = Translation :: get('Feedback');
+            $html[] = Translation::get('Feedback');
             $html[] = '</div>';
             
             $html[] = '<div style="padding: 10px; border-left: 1px solid #B5CAE7; border-right: 1px solid #B5CAE7; border-bottom: 1px solid #B5CAE7;">';

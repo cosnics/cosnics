@@ -12,7 +12,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Lynx\Manager\Manager :: context(),
+            \Chamilo\Core\Lynx\Manager\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

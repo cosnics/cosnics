@@ -12,7 +12,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: importer.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- *
+ * 
  * @package user.lib.user_manager.component
  */
 class ImporterComponent extends Manager
@@ -24,34 +24,34 @@ class ImporterComponent extends Manager
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
-
+        
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-
+        
         $form = new UserImportForm(UserImportForm::TYPE_IMPORT, $this->get_url(), $this->get_user());
-
+        
         if ($form->validate())
         {
             $success = $form->import_users();
             $message = Translation::get(
-                ($success ? 'CsvUsersProcessed' : 'CsvUsersNotProcessed'),
+                ($success ? 'CsvUsersProcessed' : 'CsvUsersNotProcessed'), 
                 array('COUNT' => $form->count_failed_items()));
             $this->redirect(
-                $message . '<br />' . $form->get_failed_csv(),
-                ($success ? false : true),
+                $message . '<br />' . $form->get_failed_csv(), 
+                ($success ? false : true), 
                 array(Application::PARAM_ACTION => self::ACTION_IMPORT_USERS));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -59,14 +59,14 @@ class ImporterComponent extends Manager
     public function display_extra_information()
     {
         $html = array();
-
+        
         $html[] = '<p>' . Translation::get('CSVMustLookLike') . ' (' . Translation::get('MandatoryFields') . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
         $text = '<b>action</b>;<b>lastname</b>;<b>firstname</b>;<b>username</b>;';
-
+        
         $requireEmail = Configuration::getInstance()->get_setting(array(self::context(), 'require_email'));
-
+        
         if ($requireEmail)
         {
             $text .= '<b>email</b>;';
@@ -75,12 +75,12 @@ class ImporterComponent extends Manager
         {
             $text .= 'email;';
         }
-
+        
         $text .= 'language;status;active;<b>official_code</b>;phone;activation_date;expiration_date;auth_source;password';
         $html[] = $text;
-
+        
         $text = '<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;';
-
+        
         if ($requireEmail)
         {
             $text .= '<b>xxx</b>;';
@@ -89,12 +89,12 @@ class ImporterComponent extends Manager
         {
             $text .= 'xxx;';
         }
-
+        
         $text .= 'xxx;1/5;1/0;<b>xxx</b>;xxx;date/0;date/0;platform/ldap;xxx';
         $html[] = $text;
         $html[] = '</pre>';
         $html[] = '</blockquote>';
-
+        
         $html[] = '<p>' . Translation::get('XMLMustLookLike') . ' (' . Translation::get('MandatoryFields') . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
@@ -108,7 +108,7 @@ class ImporterComponent extends Manager
         $html[] = '        <b>&lt;username&gt;xxx&lt;/username&gt;</b>';
         $html[] = '';
         $html[] = '        &lt;password&gt;xxx&lt;/password&gt;';
-
+        
         if ($requireEmail)
         {
             $html[] = '        <b>&lt;email&gt;xxx&lt;/email&gt;</b>';
@@ -117,7 +117,7 @@ class ImporterComponent extends Manager
         {
             $html[] = '        &lt;email&gt;xxx&lt;/email&gt;';
         }
-
+        
         $html[] = '        &lt;language&gt;xxx&lt;/language&gt;';
         $html[] = '';
         $html[] = '        &lt;status&gt;1/5&lt;/status&gt;';
@@ -135,7 +135,7 @@ class ImporterComponent extends Manager
         $html[] = '&lt;/Contacts&gt;';
         $html[] = '</pre>';
         $html[] = '</blockquote>';
-
+        
         $html[] = '<p>' . Translation::get('Details') . '</p>';
         $html[] = '<blockquote>';
         $html[] = '<u><b>' . Translation::get('Action') . '</u></b>';
@@ -151,7 +151,7 @@ class ImporterComponent extends Manager
         $html[] = '<br />0 ' . Translation::get('NotTakenIntoAccount');
         $html[] = '<br />YYYY-MM-DD HH:MM:SS';
         $html[] = '</blockquote>';
-
+        
         return implode($html, "\n");
     }
 

@@ -1,34 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="user">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="lastname" type="text" length="60" />
-		<property name="firstname" type="text" length="60" />
-		<property name="username" type="text" length="60" notnull="1" default="" />
-		<property name="password" type="text" length="150" notnull="1" default="" />
-		<property name="auth_source" type="text" length="50" default="Platform" />
-		<property name="external_uid" type="text" length="50" />
-		<property name="email" type="text" length="100" />
-		<property name="status" type="integer" length="1" notnull="1" default="5" />
-		<property name="admin" type="boolean" default="0" />
-		<property name="official_code" type="text" length="40" />
-		<property name="phone" type="text" length="30" />
-		<property name="picture_uri" type="text" length="250" />
-		<property name="creator_id" type="integer" unsigned="1" />
-		<property name="disk_quota" type="integer" unsigned="1" notnull="1" default="209715200" />
-		<property name="database_quota" type="integer" unsigned="1" notnull="1" default="10000" />
-		<property name="activation_date" type="integer" unsigned="1" notnull="1" default="0" />
-		<property name="expiration_date" type="integer" unsigned="1" notnull="1" default="0" />
-		<property name="registration_date" type="integer" unsigned="1" notnull="1" default="0" />
-		<property name="active" type="boolean" default="1" />
-		<property name="security_token" type="text" length="40" default="" />
-		<property name="approved" type="boolean" default="1" />
-		<property name="terms_date" type="integer" unsigned="1" notnull="0" default="0" />
-	</properties>
-	<index name="username" type="unique">
-		<indexproperty name="username" />
-	</index>
-	<index name="official_code">
-		<indexproperty name="official_code" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="lastname"
+            type="text"
+            length="60" />
+        <property
+            name="firstname"
+            type="text"
+            length="60" />
+        <property
+            name="username"
+            type="text"
+            length="60"
+            notnull="1"
+            default="" />
+        <property
+            name="password"
+            type="text"
+            length="150"
+            notnull="1"
+            default="" />
+        <property
+            name="auth_source"
+            type="text"
+            length="50"
+            default="Platform" />
+        <property
+            name="external_uid"
+            type="text"
+            length="50" />
+        <property
+            name="email"
+            type="text"
+            length="100" />
+        <property
+            name="status"
+            type="integer"
+            length="1"
+            notnull="1"
+            default="5" />
+        <property
+            name="admin"
+            type="boolean"
+            default="0" />
+        <property
+            name="official_code"
+            type="text"
+            length="40" />
+        <property
+            name="phone"
+            type="text"
+            length="30" />
+        <property
+            name="picture_uri"
+            type="text"
+            length="250" />
+        <property
+            name="creator_id"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="disk_quota"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="209715200" />
+        <property
+            name="database_quota"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="10000" />
+        <property
+            name="activation_date"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+        <property
+            name="expiration_date"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+        <property
+            name="registration_date"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+        <property
+            name="active"
+            type="boolean"
+            default="1" />
+        <property
+            name="security_token"
+            type="text"
+            length="40"
+            default="" />
+        <property
+            name="approved"
+            type="boolean"
+            default="1" />
+        <property
+            name="terms_date"
+            type="integer"
+            unsigned="1"
+            notnull="0"
+            default="0" />
+    </properties>
+    <index
+        name="username"
+        type="unique">
+        <indexproperty name="username" />
+    </index>
+    <index name="official_code">
+        <indexproperty name="official_code" />
+    </index>
 </object>

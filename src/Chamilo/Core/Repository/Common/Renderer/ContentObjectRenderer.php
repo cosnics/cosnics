@@ -49,12 +49,12 @@ abstract class ContentObjectRenderer implements TableSupport
 
     public static function factory($type, $repository_browser)
     {
-        $class = __NAMESPACE__ . '\Type\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\Type\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'ContentObjectRenderer';
         
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('ContentObjectRendererTypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('ContentObjectRendererTypeDoesNotExist', array('type' => $type)));
         }
         
         return new $class($repository_browser);
@@ -66,14 +66,14 @@ abstract class ContentObjectRenderer implements TableSupport
     {
         $parameters = $this->get_repository_browser()->get_parameters();
         
-        $selected_types = TypeSelector :: get_selection();
+        $selected_types = TypeSelector::get_selection();
         
         if (is_array($selected_types) && count($selected_types))
         {
-            $parameters[TypeSelector :: PARAM_SELECTION] = $selected_types;
+            $parameters[TypeSelector::PARAM_SELECTION] = $selected_types;
         }
         
-        $parameters[ActionBarSearchForm :: PARAM_SIMPLE_SEARCH_QUERY] = $this->get_repository_browser()->getButtonToolbarRenderer()->getSearchForm()->getQuery();
+        $parameters[ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY] = $this->get_repository_browser()->getButtonToolbarRenderer()->getSearchForm()->getQuery();
         
         return $parameters;
     }
@@ -90,7 +90,7 @@ abstract class ContentObjectRenderer implements TableSupport
 
     public function count_content_objects($condition)
     {
-        return DataManager :: count_active_content_objects(ContentObject :: class_name(), $condition);
+        return DataManager::count_active_content_objects(ContentObject::class_name(), $condition);
     }
 
     public function count_categories($conditions = null)
@@ -121,7 +121,7 @@ abstract class ContentObjectRenderer implements TableSupport
     {
         $actions = array();
         
-        $rightsService = RightsService :: getInstance();
+        $rightsService = RightsService::getInstance();
         
         $canEditContentObject = $rightsService->canEditContentObject(
             $this->get_user(), 
@@ -146,19 +146,19 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canEditContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_repository_browser()->get_content_object_editing_url($content_object), 
-                ToolbarItem :: DISPLAY_ICON);
+                ToolbarItem::DISPLAY_ICON);
         }
         
         if ($canCopyContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Duplicate'), 
-                Theme :: getInstance()->getCommonImagePath('Action/Copy'), 
+                Translation::get('Duplicate'), 
+                Theme::getInstance()->getCommonImagePath('Action/Copy'), 
                 $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()), 
-                ToolbarItem :: DISPLAY_ICON);
+                ToolbarItem::DISPLAY_ICON);
         }
         
         if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
@@ -166,45 +166,45 @@ abstract class ContentObjectRenderer implements TableSupport
             if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
             {
                 $actions[] = new ToolbarItem(
-                    Translation :: get('Remove', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBin'), 
+                    Translation::get('Remove', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/RecycleBin'), 
                     $url, 
-                    ToolbarItem :: DISPLAY_ICON, 
+                    ToolbarItem::DISPLAY_ICON, 
                     true);
             }
             else
             {
                 $actions[] = new ToolbarItem(
-                    Translation :: get('RemoveNotAvailable', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/RecycleBinNa'), 
+                    Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/RecycleBinNa'), 
                     null, 
-                    ToolbarItem :: DISPLAY_ICON);
+                    ToolbarItem::DISPLAY_ICON);
             }
         }
         
-        if (DataManager :: workspace_has_categories($this->get_repository_browser()->getWorkspace()))
+        if (DataManager::workspace_has_categories($this->get_repository_browser()->getWorkspace()))
         {
             if ($canEditContentObject)
             {
                 $actions[] = new ToolbarItem(
-                    Translation :: get('Move', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Move'), 
+                    Translation::get('Move', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Move'), 
                     $this->get_repository_browser()->get_content_object_moving_url($content_object), 
-                    ToolbarItem :: DISPLAY_ICON);
+                    ToolbarItem::DISPLAY_ICON);
             }
         }
         
         if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Share', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Rights'), 
+                Translation::get('Share', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Rights'), 
                 $this->get_repository_browser()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_WORKSPACE, 
-                        Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
-                        \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_SHARE)), 
-                ToolbarItem :: DISPLAY_ICON);
+                        Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE, 
+                        Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                        \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE)), 
+                ToolbarItem::DISPLAY_ICON);
         }
         else
         {
@@ -212,15 +212,15 @@ abstract class ContentObjectRenderer implements TableSupport
             {
                 $url = $this->get_repository_browser()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_WORKSPACE, 
-                        \Chamilo\Core\Repository\Workspace\Manager :: PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager :: ACTION_UNSHARE, 
-                        Manager :: PARAM_CONTENT_OBJECT_ID => $content_object->getId()));
+                        Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE, 
+                        \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE, 
+                        Manager::PARAM_CONTENT_OBJECT_ID => $content_object->getId()));
                 
                 $actions[] = new ToolbarItem(
-                    Translation :: get('Unshare', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Unshare'), 
+                    Translation::get('Unshare', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Unshare'), 
                     $url, 
-                    ToolbarItem :: DISPLAY_ICON, 
+                    ToolbarItem::DISPLAY_ICON, 
                     true);
             }
         }
@@ -228,19 +228,19 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($canCopyContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Export'), 
+                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Export'), 
                 $this->get_repository_browser()->get_content_object_exporting_url($content_object), 
-                ToolbarItem :: DISPLAY_ICON);
+                ToolbarItem::DISPLAY_ICON);
         }
         
         if ($canUseContentObject)
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Publish', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Publish'), 
+                Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Publish'), 
                 $this->get_repository_browser()->get_publish_content_object_url($content_object), 
-                ToolbarItem :: DISPLAY_ICON);
+                ToolbarItem::DISPLAY_ICON);
         }
         
         // $actions[] = new ToolbarItem(
@@ -254,22 +254,22 @@ abstract class ContentObjectRenderer implements TableSupport
         
         if ($content_object instanceof ComplexContentObjectSupport)
         {
-            if (\Chamilo\Core\Repository\Builder\Manager :: exists($content_object->package()))
+            if (\Chamilo\Core\Repository\Builder\Manager::exists($content_object->package()))
             {
                 if ($canEditContentObject)
                 {
                     $actions[] = new ToolbarItem(
-                        Translation :: get('BuildComplexObject', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Build'), 
+                        Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Build'), 
                         $this->get_repository_browser()->get_browse_complex_content_object_url($content_object), 
-                        ToolbarItem :: DISPLAY_ICON);
+                        ToolbarItem::DISPLAY_ICON);
                 }
                 
                 $actions[] = new ToolbarItem(
-                    Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Preview'), 
+                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), 
+                    Theme::getInstance()->getCommonImagePath('Action/Preview'), 
                     $preview_url, 
-                    ToolbarItem :: DISPLAY_ICON, 
+                    ToolbarItem::DISPLAY_ICON, 
                     false, 
                     $onclick, 
                     '_blank');
@@ -279,10 +279,10 @@ abstract class ContentObjectRenderer implements TableSupport
                 if ($canEditContentObject)
                 {
                     $actions[] = new ToolbarItem(
-                        Translation :: get('BuildPreview', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/BuildPreview'), 
+                        Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/BuildPreview'), 
                         $preview_url, 
-                        ToolbarItem :: DISPLAY_ICON, 
+                        ToolbarItem::DISPLAY_ICON, 
                         false, 
                         $onclick, 
                         '_blank');
@@ -290,10 +290,10 @@ abstract class ContentObjectRenderer implements TableSupport
                 else
                 {
                     $actions[] = new ToolbarItem(
-                        Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Preview'), 
+                        Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), 
+                        Theme::getInstance()->getCommonImagePath('Action/Preview'), 
                         $preview_url, 
-                        ToolbarItem :: DISPLAY_ICON, 
+                        ToolbarItem::DISPLAY_ICON, 
                         false, 
                         $onclick, 
                         '_blank');
@@ -303,10 +303,10 @@ abstract class ContentObjectRenderer implements TableSupport
         else
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Preview', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Preview'), 
+                Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Preview'), 
                 $preview_url, 
-                ToolbarItem :: DISPLAY_ICON, 
+                ToolbarItem::DISPLAY_ICON, 
                 false, 
                 $onclick, 
                 '_blank');
@@ -315,12 +315,12 @@ abstract class ContentObjectRenderer implements TableSupport
         if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
         {
             $actions[] = new ToolbarItem(
-                Translation :: get('Download', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Download'), 
+                Translation::get('Download', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Download'), 
                 $this->get_repository_browser()->get_document_downloader_url(
                     $content_object->get_id(), 
                     $content_object->calculate_security_code()), 
-                ToolbarItem :: DISPLAY_ICON);
+                ToolbarItem::DISPLAY_ICON);
         }
         
         return $actions;

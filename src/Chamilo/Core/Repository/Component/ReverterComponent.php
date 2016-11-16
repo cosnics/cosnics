@@ -29,9 +29,9 @@ class ReverterComponent extends Manager
      */
     public function run()
     {
-        $ids = Request :: get(self :: PARAM_CONTENT_OBJECT_ID);
-        $this->set_parameter(self :: PARAM_CONTENT_OBJECT_ID, $ids);
-
+        $ids = Request::get(self::PARAM_CONTENT_OBJECT_ID);
+        $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $ids);
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
@@ -41,17 +41,17 @@ class ReverterComponent extends Manager
             $failures = 0;
             foreach ($ids as $object_id)
             {
-                $object = DataManager :: retrieve_by_id(ContentObject :: class_name(), $object_id);
-
-                if (! RightsService :: getInstance()->canEditContentObject(
-                    $this->get_user(),
-                    $object,
+                $object = DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+                
+                if (! RightsService::getInstance()->canEditContentObject(
+                    $this->get_user(), 
+                    $object, 
                     $this->getWorkspace()))
                 {
                     throw new NotAllowedException();
                 }
-
-                if (\Chamilo\Core\Repository\Storage\DataManager :: content_object_revert_allowed($object))
+                
+                if (\Chamilo\Core\Repository\Storage\DataManager::content_object_revert_allowed($object))
                 {
                     $object->version();
                 }
@@ -60,34 +60,34 @@ class ReverterComponent extends Manager
                     $failures ++;
                 }
             }
-
+            
             if ($failures)
             {
-                $message = Translation :: get(
-                    'ObjectNotReverted',
-                    array('OBJECT' => Translation :: get('ContentObject')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectNotReverted', 
+                    array('OBJECT' => Translation::get('ContentObject')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             else
             {
-                $message = Translation :: get(
-                    'ObjectReverted',
-                    array('OBJECT' => Translation :: get('ContentObject')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectReverted', 
+                    array('OBJECT' => Translation::get('ContentObject')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             $this->redirect(
-                $message,
-                ($failures ? true : false),
-                array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS));
+                $message, 
+                ($failures ? true : false), 
+                array(Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('ContentObject')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('ContentObject')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 
@@ -95,8 +95,8 @@ class ReverterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation :: get('BrowserComponent')));
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)), 
+                Translation::get('BrowserComponent')));
         $breadcrumbtrail->add_help('repository_reverter');
     }
 }

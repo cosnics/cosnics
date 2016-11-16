@@ -41,37 +41,37 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
 
     public function run()
     {
-        $trail = BreadcrumbTrail :: getInstance();
+        $trail = BreadcrumbTrail::getInstance();
         $trail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)), 
                 $this->get_root_content_object()->get_title()));
-        $trail->add(new Breadcrumb($this->get_url(array()), Translation :: get('MergeAssessment')));
+        $trail->add(new Breadcrumb($this->get_url(array()), Translation::get('MergeAssessment')));
         $trail->add_help('repository assessment builder');
         $assessment = $this->get_root_content_object();
         
-        if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
+        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager :: context(), 
+                \Chamilo\Core\Repository\Viewer\Manager::context(), 
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
-            $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager :: SELECT_SINGLE);
+            $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
             $component->set_parameter(
-                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID, 
-                Request :: get(\Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID));
+                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID, 
+                Request::get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ID));
             
             return $component->run();
         }
         else
         {
-            $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                Assessment :: class_name(), 
-                \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects());
-            $display = ContentObjectRenditionImplementation :: launch(
+            $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                Assessment::class_name(), 
+                \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+            $display = ContentObjectRenditionImplementation::launch(
                 $selected_assessment, 
-                ContentObjectRendition :: FORMAT_HTML, 
-                ContentObjectRendition :: VIEW_FULL, 
+                ContentObjectRendition::FORMAT_HTML, 
+                ContentObjectRendition::VIEW_FULL, 
                 $this);
             
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($selected_assessment);
@@ -82,11 +82,11 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
             $html[] = $display;
             $html[] = '<br />';
             $html[] = $this->buttonToolbarRenderer->render();
-            $html[] = '<h3>' . Translation :: get('SelectQuestions') . '</h3>';
+            $html[] = '<h3>' . Translation::get('SelectQuestions') . '</h3>';
             
             $params = array(
-                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => Request :: get(
-                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID));
+                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID));
             $table = new ObjectTable($this);
             
             $html[] = $table->as_html();
@@ -100,18 +100,18 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
     {
         $sub_condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_PARENT), 
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_PARENT), 
             new StaticConditionVariable($selected_assessment->get_id()));
         $condition = new SubselectCondition(
             
-            new PropertyConditionVariable(ContentObject :: class_name(), ContentObject :: PROPERTY_ID), 
+            new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID), 
             new PropertyConditionVariable(
-                ComplexContentObjectItem :: class_name(), 
-                ComplexContentObjectItem :: PROPERTY_REF), 
-            ComplexContentObjectItem :: get_table_name(), 
+                ComplexContentObjectItem::class_name(), 
+                ComplexContentObjectItem::PROPERTY_REF), 
+            ComplexContentObjectItem::get_table_name(), 
             $sub_condition, 
-            ContentObject :: get_table_name());
+            ContentObject::get_table_name());
         
         return $condition;
     }
@@ -120,11 +120,11 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
     {
         return $this->get_url(
             array(
-                self :: PARAM_ACTION => self :: ACTION_SELECT_QUESTIONS, 
-                self :: PARAM_QUESTION_ID => $question_id, 
-                self :: PARAM_ASSESSMENT_ID => $assessment_id, 
-                \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID => Request :: get(
-                    \Chamilo\Core\Repository\Viewer\Manager :: PARAM_ID)));
+                self::PARAM_ACTION => self::ACTION_SELECT_QUESTIONS, 
+                self::PARAM_QUESTION_ID => $question_id, 
+                self::PARAM_ASSESSMENT_ID => $assessment_id, 
+                \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID => Request::get(
+                    \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID)));
     }
 
     public function getButtonToolbarRenderer($selected_assessment)
@@ -135,8 +135,8 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
             $commonActions = new ButtonGroup();
             $commonActions->addButton(
                 new Button(
-                    Translation :: get('AddAllQuestions'), 
-                    Theme :: getInstance()->getCommonImagePath('Action/Add'), 
+                    Translation::get('AddAllQuestions'), 
+                    Theme::getInstance()->getCommonImagePath('Action/Add'), 
                     $this->get_question_selector_url(null, $selected_assessment->get_id())));
             
             $buttonToolbar->addButtonGroup($commonActions);
@@ -148,14 +148,14 @@ class AssessmentMergerComponent extends Manager implements \Chamilo\Core\Reposit
 
     public function get_allowed_content_object_types()
     {
-        return array(Assessment :: class_name());
+        return array(Assessment::class_name());
     }
 
     public function get_table_condition($table_class_name)
     {
-        $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-            Assessment :: class_name(), 
-            \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects());
+        $selected_assessment = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+            Assessment::class_name(), 
+            \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
         return $this->get_condition($selected_assessment);
     }
 }

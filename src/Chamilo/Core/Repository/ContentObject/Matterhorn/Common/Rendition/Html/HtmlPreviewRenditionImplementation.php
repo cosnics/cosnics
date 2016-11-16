@@ -14,14 +14,14 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
     {
         $object = $this->get_object();
         
-        $settings = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting :: get(
+        $settings = \Chamilo\Core\Repository\Instance\Storage\DataClass\Setting::get(
             'url', 
             $object->get_external_repository_id());
         
         $html = array();
         
-        $html[] = ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
                  'Plugin/Projekktor/projekktor.js');
         
         $width = 620;
@@ -122,8 +122,8 @@ class HtmlPreviewRenditionImplementation extends HtmlRenditionImplementation
         {
             $audio = array();
             
-            $audio[] = ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
+            $audio[] = ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\Implementation\Matterhorn', true) .
                      'Plugin/jquery.jplayer.js');
             $audio[] = '<script type="text/javascript">
 $(document).ready(function(){
@@ -146,16 +146,14 @@ $(document).ready(function(){
 		keyEnabled: true,
 		remainingDuration: true,
 		toggleDuration: true,
-        cssSelectorAncestor: "#jp_container_' .
-                 $this->get_content_object()->get_id() . '"
+        cssSelectorAncestor: "#jp_container_' . $this->get_content_object()->get_id() . '"
 	});
 });
 </script>';
             
             $audio[] = ' <div id="jquery_jplayer_' . $this->get_content_object()->get_id() . '" class="jp-jplayer"></div>
 
-		<div id="jp_container_' .
-                 $this->get_content_object()->get_id() . '" class="jp-audio">
+		<div id="jp_container_' . $this->get_content_object()->get_id() . '" class="jp-audio">
 			<div class="jp-type-single">
 				<div class="jp-gui jp-interface">
 					<ul class="jp-controls">

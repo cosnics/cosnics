@@ -16,22 +16,22 @@ abstract class QuestionDisplay extends \Chamilo\Core\Repository\ContentObject\Su
         
         $attributes = $this->complex_content_object_path_node->getDataAttributes();
         $dataAttributeString = " ";
-        foreach ($attributes as $key => $value){
-            $dataAttributeString = $dataAttributeString.$key.'="'.$value.'" ';
+        foreach ($attributes as $key => $value)
+        {
+            $dataAttributeString = $dataAttributeString . $key . '="' . $value . '" ';
         }
-       
         
-        $class_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($content_object);
+        $class_name = ClassnameUtilities::getInstance()->getClassnameFromObject($content_object);
         
         $visible = $this->complex_content_object_path_node->isVisible($this->getAnswerService());
         
         if (! $visible)
         {
-            $html[] = '<div  class="question ' . $class_name . '" ' . $dataAttributeString .'" style="display: none;">';
+            $html[] = '<div  class="question ' . $class_name . '" ' . $dataAttributeString . '" style="display: none;">';
         }
         else
         {
-            $html[] = '<div  class="question ' . $class_name . '" ' . $dataAttributeString .'>';
+            $html[] = '<div  class="question ' . $class_name . '" ' . $dataAttributeString . '>';
         }
         
         $header = implode(PHP_EOL, $html);
@@ -52,10 +52,9 @@ abstract class QuestionDisplay extends \Chamilo\Core\Repository\ContentObject\Su
 
     private function addJavascript()
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromObject($this);
-        return ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath($namespace, true) .
-                 'ProcessAnswer.js');
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromObject($this);
+        return ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath($namespace, true) . 'ProcessAnswer.js');
     }
 }
 ?>

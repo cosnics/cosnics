@@ -10,23 +10,20 @@ class ExporterComponent extends Manager
 
     public function export_external_repository_object($object)
     {
-        $success = parent :: export_external_repository_object($object);
+        $success = parent::export_external_repository_object($object);
         if ($success)
         {
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_BROWSE_EXTERNAL_REPOSITORY;
-            $this->redirect(
-                Translation :: get('ObjectExported', null, Utilities :: COMMON_LIBRARIES),
-                false,
-                $parameters);
+            $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
+            $this->redirect(Translation::get('ObjectExported', null, Utilities::COMMON_LIBRARIES), false, $parameters);
         }
         else
         {
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_EXPORT_EXTERNAL_REPOSITORY;
+            $parameters[self::PARAM_ACTION] = self::ACTION_EXPORT_EXTERNAL_REPOSITORY;
             $this->redirect(
-                Translation :: get('ObjectFailedExported', null, Utilities :: COMMON_LIBRARIES),
-                true,
+                Translation::get('ObjectFailedExported', null, Utilities::COMMON_LIBRARIES), 
+                true, 
                 $parameters);
         }
     }

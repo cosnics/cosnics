@@ -6,14 +6,15 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
  * Repository to manage the data of roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface RoleRepositoryInterface
 {
+
     /**
      * Returns a role by a given name
-     *
+     * 
      * @param string $roleName
      *
      * @return Role
@@ -22,7 +23,7 @@ interface RoleRepositoryInterface
 
     /**
      * Retrieves the roles
-     *
+     * 
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -34,7 +35,7 @@ interface RoleRepositoryInterface
 
     /**
      * Counts the roles
-     *
+     * 
      * @param Condition $condition
      *
      * @return int

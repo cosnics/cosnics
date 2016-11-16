@@ -33,7 +33,7 @@ class DummyBlockRenditionImplementation extends AbstractBlockRenditionImplementa
      */
     public function __construct($context, ReportingBlock $block, $format, $view)
     {
-        parent :: __construct($context, $block);
+        parent::__construct($context, $block);
         $this->format = $format;
         $this->view = $view;
     }
@@ -44,7 +44,7 @@ class DummyBlockRenditionImplementation extends AbstractBlockRenditionImplementa
      */
     public function render()
     {
-        return BlockRendition :: launch($this);
+        return BlockRendition::launch($this);
     }
 
     /**

@@ -37,7 +37,7 @@ class TrackStream extends Stream
     public function __construct(Application $application, ExternalObject $external_object, $track_id)
     {
         $this->track_id = $track_id;
-        parent :: __construct($application, $external_object);
+        parent::__construct($application, $external_object);
     }
 
     /**

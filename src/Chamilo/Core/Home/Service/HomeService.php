@@ -67,7 +67,7 @@ class HomeService
 
     /**
      * Returns a home element by an identifier
-     *
+     * 
      * @param int $elementIdentifier
      *
      * @return Element
@@ -107,9 +107,9 @@ class HomeService
     {
         $defaultElementResultSet = $this->getElementsByUserIdentifier(0);
         $defaultElements = array();
-
+        
         $elementIdentifierMap = array();
-
+        
         while ($defaultElement = $defaultElementResultSet->next_result())
         {
             if ($this->elementRightsService->canUserViewElement($user, $defaultElement))
@@ -117,28 +117,28 @@ class HomeService
                 $defaultElements[$defaultElement->get_type()][$defaultElement->getParentId()][] = $defaultElement;
             }
         }
-
+        
         // Process tabs
         $this->createDefaultElementsByUserIdentifier(
-            Tab::class_name(),
-            $defaultElements,
-            $elementIdentifierMap,
+            Tab::class_name(), 
+            $defaultElements, 
+            $elementIdentifierMap, 
             $user->getId());
-
+        
         // Process columns
         $this->createDefaultElementsByUserIdentifier(
-            Column::class_name(),
-            $defaultElements,
-            $elementIdentifierMap,
+            Column::class_name(), 
+            $defaultElements, 
+            $elementIdentifierMap, 
             $user->getId());
-
+        
         // Process blocks
         $this->createDefaultElementsByUserIdentifier(
-            Block::class_name(),
-            $defaultElements,
-            $elementIdentifierMap,
+            Block::class_name(), 
+            $defaultElements, 
+            $elementIdentifierMap, 
             $user->getId());
-
+        
         return true;
     }
 
@@ -149,7 +149,7 @@ class HomeService
      * @param integer[] $elementIdentifierMap
      * @param integer $userIdentifier
      */
-    private function createDefaultElementsByUserIdentifier($elementType, $defaultElements, &$elementIdentifierMap,
+    private function createDefaultElementsByUserIdentifier($elementType, $defaultElements, &$elementIdentifierMap, 
         $userIdentifier)
     {
         foreach ($defaultElements[$elementType] as $typeParentId => $typeElements)
@@ -162,30 +162,30 @@ class HomeService
                 }
             }
         }
-
+        
         return true;
     }
 
     private function createDefaultElementByUserIdentifier(&$elementIdentifierMap, Element $element, $userIdentifier)
     {
         $originalIdentifier = $element->getId();
-
+        
         $element->setUserId($userIdentifier);
-
+        
         if (! $element->isOnTopLevel())
         {
             $element->setParentId($elementIdentifierMap[$element->getParentId()]);
         }
-
+        
         $result = $element->create();
-
+        
         $elementIdentifierMap[$originalIdentifier] = $element->get_id();
-
+        
         if (! $result)
         {
             throw new \Exception(Translation::get('HomepageDefaultCreationFailed'));
         }
-
+        
         return true;
     }
 
@@ -201,7 +201,7 @@ class HomeService
         {
             $homeUserIdentifier = $this->determineHomeUserIdentifier($user);
             $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
-
+            
             if ($userHomeAllowed && $user instanceof User)
             {
                 if ($this->countElementsByUserIdentifier($homeUserIdentifier) == 0)
@@ -209,15 +209,15 @@ class HomeService
                     $this->createDefaultHomeByUserIdentifier($user);
                 }
             }
-
+            
             $elementsResultSet = $this->getElementsByUserIdentifier($homeUserIdentifier);
-
+            
             while ($element = $elementsResultSet->next_result())
             {
                 $this->elements[$element->get_type()][$element->getParentId()][] = $element;
             }
         }
-
+        
         if (isset($this->elements[$type]) && isset($this->elements[$type][$parentIdentifier]))
         {
             return $this->elements[$type][$parentIdentifier];
@@ -239,7 +239,7 @@ class HomeService
         {
             $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
             $generalMode = \Chamilo\Libraries\Platform\Session\Session::retrieve('Chamilo\Core\Home\General');
-
+            
             // Get user id
             if ($user instanceof User && $generalMode && $user->is_platform_admin())
             {
@@ -254,7 +254,7 @@ class HomeService
                 $this->homeUserIdentifier = 0;
             }
         }
-
+        
         return $this->homeUserIdentifier;
     }
 

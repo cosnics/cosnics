@@ -30,12 +30,12 @@ class DenierComponent extends Manager
 
     public function run()
     {
-        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->quota_is_allowed())
+        if (! \Chamilo\Core\Repository\Quota\Rights\Rights::getInstance()->quota_is_allowed())
         {
             throw new NotAllowedException();
         }
         
-        $ids = $this->getRequest()->get(self :: PARAM_REQUEST_ID);
+        $ids = $this->getRequest()->get(self::PARAM_REQUEST_ID);
         
         if (! empty($ids))
         {
@@ -54,17 +54,17 @@ class DenierComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectNotDenied';
-                    $parameter = array('OBJECT' => Translation :: get('Request'));
+                    $parameter = array('OBJECT' => Translation::get('Request'));
                 }
                 elseif (count($ids) > $failures)
                 {
                     $message = 'SomeObjectsNotDenied';
-                    $parameter = array('OBJECTS' => Translation :: get('Requests'));
+                    $parameter = array('OBJECTS' => Translation::get('Requests'));
                 }
                 else
                 {
                     $message = 'ObjectsNotDenied';
-                    $parameter = array('OBJECTS' => Translation :: get('Requests'));
+                    $parameter = array('OBJECTS' => Translation::get('Requests'));
                 }
             }
             else
@@ -72,36 +72,36 @@ class DenierComponent extends Manager
                 if (count($ids) == 1)
                 {
                     $message = 'ObjectDenied';
-                    $parameter = array('OBJECT' => Translation :: get('Request'));
+                    $parameter = array('OBJECT' => Translation::get('Request'));
                 }
                 else
                 {
                     $message = 'ObjectsDenied';
-                    $parameter = array('OBJECTS' => Translation :: get('Requests'));
+                    $parameter = array('OBJECTS' => Translation::get('Requests'));
                 }
             }
             
             $this->redirect(
-                Translation :: get($message, $parameter, Utilities :: COMMON_LIBRARIES), 
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), 
                 ($failures ? true : false), 
-                array(self :: PARAM_ACTION => self :: ACTION_BROWSE));
+                array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
+                    Translation::get(
                         'NoObjectSelected', 
-                        array('OBJECT' => Translation :: get('Request')), 
-                        Utilities :: COMMON_LIBRARIES)));
+                        array('OBJECT' => Translation::get('Request')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 
     public function single_deny($id)
     {
-        $request = DataManager :: retrieve_by_id(Request :: class_name(), (int) $id);
+        $request = DataManager::retrieve_by_id(Request::class_name(), (int) $id);
         
-        if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->is_target_user(
+        if (! \Chamilo\Core\Repository\Quota\Rights\Rights::getInstance()->is_target_user(
             $this->get_user(), 
             $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
         {
@@ -113,16 +113,16 @@ class DenierComponent extends Manager
         $form = new RequestForm(
             $request, 
             $this->get_url(
-                array(self :: PARAM_ACTION => self :: ACTION_DENY, self :: PARAM_REQUEST_ID => $request->get_id())));
+                array(self::PARAM_ACTION => self::ACTION_DENY, self::PARAM_REQUEST_ID => $request->get_id())));
         
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         if ($form->validate())
         {
             $values = $form->exportValues();
             
-            $request->set_decision(Request :: DECISION_DENIED);
+            $request->set_decision(Request::DECISION_DENIED);
             $request->set_decision_date(time());
-            $request->set_decision_motivation($values[Request :: PROPERTY_DECISION_MOTIVATION]);
+            $request->set_decision_motivation($values[Request::PROPERTY_DECISION_MOTIVATION]);
             
             if (! $request->update())
             {
@@ -137,7 +137,7 @@ class DenierComponent extends Manager
         }
         else
         {
-            $form->freeze(array('quota_step', Request :: PROPERTY_QUOTA, Request :: PROPERTY_MOTIVATION));
+            $form->freeze(array('quota_step', Request::PROPERTY_QUOTA, Request::PROPERTY_MOTIVATION));
             
             $html = array();
             
@@ -156,9 +156,9 @@ class DenierComponent extends Manager
         
         foreach ($ids as $id)
         {
-            $request = DataManager :: retrieve(Request :: class_name(), (int) $id);
+            $request = DataManager::retrieve(Request::class_name(), (int) $id);
             
-            if (! \Chamilo\Core\Repository\Quota\Rights\Rights :: getInstance()->is_target_user(
+            if (! \Chamilo\Core\Repository\Quota\Rights\Rights::getInstance()->is_target_user(
                 $this->get_user(), 
                 $request->get_user_id()) && ! $this->get_user()->is_platform_admin())
             {
@@ -172,7 +172,7 @@ class DenierComponent extends Manager
                 }
                 else
                 {
-                    $request->set_decision(Request :: DECISION_DENIED);
+                    $request->set_decision(Request::DECISION_DENIED);
                     $request->set_decision_date(time());
                     
                     if (! $request->update())
@@ -196,11 +196,11 @@ class DenierComponent extends Manager
         
         $recipient = $request->get_user();
         
-        $title = Translation :: get(
+        $title = Translation::get(
             'RequestDeniedMailTitle', 
             array(
-                'PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
-                'QUOTA' => Filesystem :: format_file_size($request->get_quota())));
+                'PLATFORM' => Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')), 
+                'QUOTA' => Filesystem::format_file_size($request->get_quota())));
         
         if (strlen($request->get_decision_motivation()) > 0)
         {
@@ -211,19 +211,19 @@ class DenierComponent extends Manager
             $variable = 'RequestDeniedMailBodySimple';
         }
         
-        $body = Translation :: get(
+        $body = Translation::get(
             $variable, 
             array(
                 'USER' => $recipient->get_fullname(), 
-                'PLATFORM' => Configuration :: getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')),
-                'QUOTA' => Filesystem :: format_file_size($request->get_quota()), 
+                'PLATFORM' => Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'site_name')), 
+                'QUOTA' => Filesystem::format_file_size($request->get_quota()), 
                 'MOTIVATION' => $request->get_decision_motivation()));
-
+        
         $mail = new Mail($title, $body, $recipient->get_email());
-
+        
         $mailerFactory = new MailerFactory(Configuration::getInstance());
         $mailer = $mailerFactory->getActiveMailer();
-
+        
         try
         {
             $mailer->sendMail($mail);
@@ -242,32 +242,34 @@ class DenierComponent extends Manager
             $commonActions = new ButtonGroup();
             $toolActions = new ButtonGroup();
             
-            $allow_upgrade = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'allow_upgrade'));
-            $maximum_user_disk_space = Configuration :: getInstance()->get_setting(array('Chamilo\Core\Repository', 'maximum_user'));
+            $allow_upgrade = Configuration::getInstance()->get_setting(
+                array('Chamilo\Core\Repository', 'allow_upgrade'));
+            $maximum_user_disk_space = Configuration::getInstance()->get_setting(
+                array('Chamilo\Core\Repository', 'maximum_user'));
             
             if ($calculator->upgradeAllowed())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('UpgradeQuota'), 
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'), 
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_UPGRADE))));
+                        Translation::get('UpgradeQuota'), 
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Upgrade'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))));
             }
             
             if ($calculator->requestAllowed())
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation :: get('RequestUpgrade'), 
-                        Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'), 
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_CREATE))));
+                        Translation::get('RequestUpgrade'), 
+                        Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Request'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))));
             }
             
             $toolActions->addButton(
                 new Button(
-                    Translation :: get('BackToOverview'), 
-                    Theme :: getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Browser'), 
-                    $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE))));
+                    Translation::get('BackToOverview'), 
+                    Theme::getInstance()->getImagePath('Chamilo\Core\Repository\Quota', 'Action/Browser'), 
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))));
             
             $buttonToolbar->addButtonGroup($commonActions);
             

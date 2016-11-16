@@ -12,8 +12,8 @@ class SourceComponent extends Manager implements DelegateComponent
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Lynx\Source\Manager :: context(),
-           new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            \Chamilo\Core\Lynx\Source\Manager::context(), 
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }
 }

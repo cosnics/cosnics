@@ -20,35 +20,34 @@ class AdminUserTable extends DataClassTable implements TableFormActionsSupport
     public function get_implemented_form_actions()
     {
         $actions = new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
-
+        
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_USER)),
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DELETE_USER)), 
                 Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)));
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE)),
-                Translation::get('ActivateSelected', null, Utilities::COMMON_LIBRARIES),
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE)), 
+                Translation::get('ActivateSelected', null, Utilities::COMMON_LIBRARIES), 
                 false));
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE)),
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE)), 
                 Translation::get('DeactivateSelected', null, Utilities::COMMON_LIBRARIES)));
         $actions->add_form_action(
             new TableFormAction(
-                $this->get_component()->get_url(
-                    array(Manager::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD_MULTI)),
+                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_RESET_PASSWORD_MULTI)), 
                 Translation::get('ResetPassword')));
-
+        
         if (Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'active_online_email_editor')))
         {
             $actions->add_form_action(
                 new TableFormAction(
-                    $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_EMAIL)),
-                    Translation::get('EmailSelected'),
+                    $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_EMAIL)), 
+                    Translation::get('EmailSelected'), 
                     false));
         }
-
+        
         return $actions;
     }
 }

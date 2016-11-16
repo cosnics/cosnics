@@ -1,12 +1,11 @@
 <?php
-
 namespace Chamilo\Core\Rights\Structure\Storage\DataClass;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Defines a structure location
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class StructureLocation extends DataClass
@@ -16,7 +15,7 @@ class StructureLocation extends DataClass
 
     /**
      * Get the default properties of all data classes.
-     *
+     * 
      * @param string[] $extended_property_names
      *
      * @return string[]
@@ -25,11 +24,12 @@ class StructureLocation extends DataClass
     {
         $extended_property_names[] = self::PROPERTY_CONTEXT;
         $extended_property_names[] = self::PROPERTY_ACTION;
-
+        
         return parent::get_default_property_names($extended_property_names);
     }
 
     /**
+     *
      * @return string
      */
     public function getContext()
@@ -38,6 +38,7 @@ class StructureLocation extends DataClass
     }
 
     /**
+     *
      * @param string $context
      *
      * @return $this
@@ -45,11 +46,12 @@ class StructureLocation extends DataClass
     public function setContext($context)
     {
         $this->set_default_property(self::PROPERTY_CONTEXT, $context);
-
+        
         return $this;
     }
 
     /**
+     *
      * @return string
      */
     public function getAction()
@@ -58,6 +60,7 @@ class StructureLocation extends DataClass
     }
 
     /**
+     *
      * @param string $action
      *
      * @return $this
@@ -65,7 +68,7 @@ class StructureLocation extends DataClass
     public function setAction($action)
     {
         $this->set_default_property(self::PROPERTY_ACTION, $action);
-
+        
         return $this;
     }
 }

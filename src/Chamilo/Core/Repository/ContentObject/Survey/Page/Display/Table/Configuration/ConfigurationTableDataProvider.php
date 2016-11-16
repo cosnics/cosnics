@@ -17,17 +17,17 @@ class ConfigurationTableDataProvider extends DataClassTableDataProvider
         $order = array(
             new OrderBy(
                 new PropertyConditionVariable(
-                    Configuration :: class_name(),
-                    Configuration :: PROPERTY_DISPLAY_ORDER,
+                    Configuration::class_name(), 
+                    Configuration::PROPERTY_DISPLAY_ORDER, 
                     SORT_ASC)));
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order);
-        return DataManager :: retrieves(Configuration :: class_name(), new DataClassRetrievesParameters($condition));
+        return DataManager::retrieves(Configuration::class_name(), new DataClassRetrievesParameters($condition));
     }
 
     function count_data($condition)
     {
         $parameters = new DataClassCountParameters($condition);
-        return DataManager :: count(Configuration :: class_name(), $parameters);
+        return DataManager::count(Configuration::class_name(), $parameters);
     }
 }
 ?>

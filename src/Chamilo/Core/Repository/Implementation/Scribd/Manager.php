@@ -25,7 +25,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function __construct($external_repository, $application)
     {
-        parent :: __construct($external_repository, $application);
+        parent::__construct($external_repository, $application);
     }
 
     /*
@@ -33,9 +33,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function validate_settings($external_repository)
     {
-        $username = Setting :: get('username', $external_repository->get_id());
-        $password = Setting :: get('password', $external_repository->get_id());
-
+        $username = Setting::get('username', $external_repository->get_id());
+        $password = Setting::get('password', $external_repository->get_id());
+        
         if (! $username || ! $password)
         {
             return false;
@@ -59,9 +59,9 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_object_viewing_url($object)
     {
         $parameters = array();
-        $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_EXTERNAL_REPOSITORY;
-        $parameters[self :: PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
-
+        $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
+        $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
+        
         return $this->get_url($parameters);
     }
 
@@ -71,7 +71,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_menu_items()
     {
         $menu_items = array();
-
+        
         return $menu_items;
     }
 
@@ -80,34 +80,34 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_actions()
     {
-        $actions = array(self :: ACTION_BROWSE_EXTERNAL_REPOSITORY, self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY);
-
+        $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY, self::ACTION_UPLOAD_EXTERNAL_REPOSITORY);
+        
         return $actions;
     }
 
     public function get_external_repository_object_actions(ExternalObject $object)
     {
-        $actions = parent :: get_external_repository_object_actions($object);
-        if (in_array(self :: ACTION_IMPORT_EXTERNAL_REPOSITORY, array_keys($actions)))
+        $actions = parent::get_external_repository_object_actions($object);
+        if (in_array(self::ACTION_IMPORT_EXTERNAL_REPOSITORY, array_keys($actions)))
         {
-            unset($actions[self :: ACTION_IMPORT_EXTERNAL_REPOSITORY]);
+            unset($actions[self::ACTION_IMPORT_EXTERNAL_REPOSITORY]);
             $download_formats = $object->get_download_formats();
-
+            
             foreach ($download_formats as $download_format)
             {
                 $actions[$download_format] = new ToolbarItem(
-                    Translation :: get(
-                        'Import' . StringUtilities :: getInstance()->createString($download_format)->upperCamelize()),
-                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Download/' . $download_format),
+                    Translation::get(
+                        'Import' . StringUtilities::getInstance()->createString($download_format)->upperCamelize()), 
+                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'Download/' . $download_format), 
                     $this->get_url(
                         array(
-                            self :: PARAM_ACTION => self :: ACTION_IMPORT_EXTERNAL_REPOSITORY,
-                            self :: PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(),
-                            self :: PARAM_DOWNLOAD_FORMAT => $download_format)),
-                    ToolbarItem :: DISPLAY_ICON);
+                            self::PARAM_ACTION => self::ACTION_IMPORT_EXTERNAL_REPOSITORY, 
+                            self::PARAM_EXTERNAL_REPOSITORY_ID => $object->get_id(), 
+                            self::PARAM_DOWNLOAD_FORMAT => $download_format)), 
+                    ToolbarItem::DISPLAY_ICON);
             }
         }
-
+        
         return $actions;
     }
 
@@ -116,7 +116,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_available_renderers()
     {
-        return array(Renderer :: TYPE_GALLERY, Renderer :: TYPE_SLIDESHOW, Renderer :: TYPE_TABLE);
+        return array(Renderer::TYPE_GALLERY, Renderer::TYPE_SLIDESHOW, Renderer::TYPE_TABLE);
     }
 
     /*
@@ -133,6 +133,6 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_repository_type()
     {
-        return self :: REPOSITORY_TYPE;
+        return self::REPOSITORY_TYPE;
     }
 }

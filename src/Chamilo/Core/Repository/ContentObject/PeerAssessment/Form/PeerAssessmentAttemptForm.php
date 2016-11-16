@@ -28,15 +28,15 @@ class PeerAssessmentAttemptForm extends FormValidator
 
     /**
      * Constructor
-     *
+     * 
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
     public function __construct($viewer)
     {
         $this->viewer = $viewer;
-
+        
         parent::__construct(self::FORM_NAME, 'post', $this->viewer->get_url());
-
+        
         $this->add_general();
         $this->add_buttons();
     }
@@ -44,21 +44,21 @@ class PeerAssessmentAttemptForm extends FormValidator
     private function add_general()
     {
         $this->add_textfield(self::PARAM_TITLE, Translation::get('Title', null, Utilities::COMMON_LIBRARIES));
-
+        
         $value = Configuration::getInstance()->get_setting(
             array(\Chamilo\Core\Repository\Manager::context(), 'description_required'));
-
+        
         $required = ($value == 1) ? true : false;
         $name = Translation::get('Description', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(self::PARAM_DESCRIPTION, $name, $required);
-
+        
         $this->add_timewindow(
-            self::PARAM_START_DATE,
-            self::PARAM_END_DATE,
-            Translation::get('StartDate'),
-            Translation::get('EndDate'),
+            self::PARAM_START_DATE, 
+            self::PARAM_END_DATE, 
+            Translation::get('StartDate'), 
+            Translation::get('EndDate'), 
             false);
-
+        
         // only display weight when scores are given
         $root_content_object = $this->viewer->get_root_content_object();
         $assessment_type = $root_content_object->get_assessment_type();
@@ -70,7 +70,7 @@ class PeerAssessmentAttemptForm extends FormValidator
         {
             $this->addElement('hidden', self::PARAM_WEIGHT, 0);
         }
-
+        
         $this->addElement('hidden', 'id');
         $this->addElement('hidden', 'publication_id');
     }
@@ -78,8 +78,8 @@ class PeerAssessmentAttemptForm extends FormValidator
     private function add_buttons()
     {
         $this->addElement(
-            'style_submit_button',
-            FormValidator::PARAM_SUBMIT,
+            'style_submit_button', 
+            FormValidator::PARAM_SUBMIT, 
             Translation::get('Submit', null, Utilities::COMMON_LIBRARIES));
     }
 }

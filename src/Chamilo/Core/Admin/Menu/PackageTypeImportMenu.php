@@ -20,12 +20,12 @@ class PackageTypeImportMenu extends HtmlMenu
     public function __construct($current_type, $format)
     {
         $this->format = $format;
-
-        parent :: __construct(
+        
+        parent::__construct(
             array(
                 $this->get_items(
-                    \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list())));
-
+                    \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list())));
+        
         $this->array_renderer = new HtmlMenuArrayRenderer();
         $this->forceCurrentUrl($this->get_url($current_type));
     }
@@ -34,18 +34,18 @@ class PackageTypeImportMenu extends HtmlMenu
     {
         $item = array();
         $item['class'] = 'category';
-
+        
         if (! is_null($package_list->get_type_icon()))
         {
             $item['style'] = 'background-image: url(' . $package_list->get_type_icon() . ')';
         }
-
+        
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
-        $item[OptionsMenuRenderer :: KEY_ID] = $package_list->get_type();
-
+        $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
+        
         $sub_items = array();
-
+        
         foreach ($package_list->get_children() as $child)
         {
             $children = $this->get_items($child);
@@ -54,33 +54,33 @@ class PackageTypeImportMenu extends HtmlMenu
                 $sub_items[] = $children;
             }
         }
-
+        
         if (count($sub_items) > 0)
         {
             $item['sub'] = $sub_items;
         }
-
+        
         $has_links = false;
         $packages = $package_list->get_packages();
-
+        
         foreach ($packages as $package)
         {
-            $registration = \Chamilo\Configuration\Configuration :: registration($package->get_context());
-
-            if (! empty($registration) && $registration[Registration :: PROPERTY_STATUS])
+            $registration = \Chamilo\Configuration\Configuration::registration($package->get_context());
+            
+            if (! empty($registration) && $registration[Registration::PROPERTY_STATUS])
             {
                 $manager_class = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
-
+                
                 if (class_exists($manager_class) &&
                      is_subclass_of($manager_class, 'Chamilo\Core\Admin\ImportActionsInterface', true))
                 {
                     $has_links = true;
-
+                    
                     break;
                 }
             }
         }
-
+        
         if ($has_links || (count($sub_items) > 0))
         {
             if (! $has_links)
@@ -89,7 +89,7 @@ class PackageTypeImportMenu extends HtmlMenu
             }
             return $item;
         }
-
+        
         return false;
     }
 
@@ -100,7 +100,7 @@ class PackageTypeImportMenu extends HtmlMenu
 
     public function get_breadcrumbs()
     {
-        $trail = BreadcrumbTrail :: getInstance();
+        $trail = BreadcrumbTrail::getInstance();
         // $this->render($this->array_renderer, 'urhere');
         // $breadcrumbs = $this->array_renderer->toArray();
         // foreach ($breadcrumbs as $crumb)
@@ -115,7 +115,7 @@ class PackageTypeImportMenu extends HtmlMenu
 
     public function render_as_tree()
     {
-        $renderer = new TreeMenuRenderer(ClassnameUtilities :: getInstance()->getClassNameFromNamespace(__CLASS__, true));
+        $renderer = new TreeMenuRenderer(ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true));
         $this->render($renderer, 'sitemap');
         return $renderer->toHTML();
     }

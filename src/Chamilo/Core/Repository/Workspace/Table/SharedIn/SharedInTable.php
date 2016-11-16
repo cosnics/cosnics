@@ -6,6 +6,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableFormActionsSupport;
 
 class SharedInTable extends ShareTable implements TableFormActionsSupport
 {
+
     public function get_implemented_form_actions()
     {
         return null;

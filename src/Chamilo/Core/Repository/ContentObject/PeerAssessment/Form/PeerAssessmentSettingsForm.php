@@ -29,24 +29,24 @@ class PeerAssessmentSettingsForm extends FormValidator
 
     /**
      * Constructor
-     *
+     * 
      * @param PeerAssessmentDisplayViewerComponent $viewer
      */
     public function __construct($viewer)
     {
         $this->viewer = $viewer;
-
-        parent :: __construct(self :: FORM_NAME, 'post', $this->viewer->get_url());
-
+        
+        parent::__construct(self::FORM_NAME, 'post', $this->viewer->get_url());
+        
         $this->add_elements();
     }
 
     function setDefaults($defaultValues = null, $filter = null)
     {
-        $defaultValues[self :: PARAM_SUBSCRIPTION_DEADLINE] = date(
-            'Y-m-d',
-            $defaultValues[self :: PARAM_SUBSCRIPTION_DEADLINE]);
-        parent :: setDefaults($defaultValues, $filter);
+        $defaultValues[self::PARAM_SUBSCRIPTION_DEADLINE] = date(
+            'Y-m-d', 
+            $defaultValues[self::PARAM_SUBSCRIPTION_DEADLINE]);
+        parent::setDefaults($defaultValues, $filter);
     }
 
     private function add_elements()
@@ -79,34 +79,34 @@ class PeerAssessmentSettingsForm extends FormValidator
         // );
         // }
         $this->addElement(
-            'checkbox',
-            self :: PARAM_ANONYMOUS_FEEDBACK,
-            Translation :: get(
-                (string) StringUtilities :: getInstance()->createString(self :: PARAM_ANONYMOUS_FEEDBACK)->upperCamelize()));
-
+            'checkbox', 
+            self::PARAM_ANONYMOUS_FEEDBACK, 
+            Translation::get(
+                (string) StringUtilities::getInstance()->createString(self::PARAM_ANONYMOUS_FEEDBACK)->upperCamelize()));
+        
         $this->addElement(
-            'checkbox',
-            self :: PARAM_ENABLE_USER_RESULT_EXPORT,
-            Translation :: get(
-                (string) StringUtilities :: getInstance()->createString(self :: PARAM_ENABLE_USER_RESULT_EXPORT)->upperCamelize()));
-
+            'checkbox', 
+            self::PARAM_ENABLE_USER_RESULT_EXPORT, 
+            Translation::get(
+                (string) StringUtilities::getInstance()->createString(self::PARAM_ENABLE_USER_RESULT_EXPORT)->upperCamelize()));
+        
         // //TODO add filter group
         // $this->addElement(
         // 'checkbox',
         // self :: PARAM_FILTER_MIN_MAX,
         // Translation :: get('FilterMinMaxScores')
         // );
-        $this->addElement('checkbox', self :: PARAM_FILTER_SELF, Translation :: get('FilterSelfAssessment'));
-
+        $this->addElement('checkbox', self::PARAM_FILTER_SELF, Translation::get('FilterSelfAssessment'));
+        
         $this->addElement(
-            'style_submit_button',
-            FormValidator :: PARAM_SUBMIT,
-            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
-
+            'style_submit_button', 
+            FormValidator::PARAM_SUBMIT, 
+            Translation::get('Submit', null, Utilities::COMMON_LIBRARIES));
+        
         $this->addElement(
-            'html',
-            ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PeerAssessment', true) .
+            'html', 
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PeerAssessment', true) .
                      'Settings.js'));
     }
 }

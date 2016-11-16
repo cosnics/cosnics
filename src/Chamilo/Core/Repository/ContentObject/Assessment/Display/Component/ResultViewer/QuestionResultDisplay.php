@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * $Id: question_result_display.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.assessment.component.result_viewer
  */
 class QuestionResultDisplay
@@ -34,7 +34,7 @@ class QuestionResultDisplay
 
     private $can_change;
 
-    public function __construct($results_viewer, &$form, $complex_content_object_question, $question_nr, $answers,
+    public function __construct($results_viewer, &$form, $complex_content_object_question, $question_nr, $answers, 
         $score, $hints, $feedback, $can_change)
     {
         $this->complex_content_object_question = $complex_content_object_question;
@@ -92,25 +92,25 @@ class QuestionResultDisplay
     public function render()
     {
         $this->render_header();
-
+        
         if ($this->add_borders())
         {
             $header = array();
             $header[] = '<div class="with_borders">';
-
+            
             $this->form->addElement('html', implode(PHP_EOL, $header));
         }
-
-        $display = AssessmentQuestionResultDisplay :: factory(
-            $this->results_viewer,
-            $this->complex_content_object_question,
-            $this->question_nr,
-            $this->answers,
-            $this->score,
+        
+        $display = AssessmentQuestionResultDisplay::factory(
+            $this->results_viewer, 
+            $this->complex_content_object_question, 
+            $this->question_nr, 
+            $this->answers, 
+            $this->score, 
             $this->hints);
-
+        
         $this->form->addElement('html', $display->get_question_result());
-
+        
         if ($this->add_borders())
         {
             $footer = array();
@@ -118,16 +118,16 @@ class QuestionResultDisplay
             $footer[] = '</div>';
             $this->form->addElement('html', implode(PHP_EOL, $footer));
         }
-
+        
         $this->display_feedback();
-
+        
         $this->form->addElement('html', $this->render_footer());
     }
 
     public function render_header()
     {
         $html = array();
-
+        
         $html[] = '<div class="question">';
         $html[] = '<div class="title">';
         $html[] = '<div class="number">';
@@ -136,24 +136,24 @@ class QuestionResultDisplay
         $html[] = '</div>';
         $html[] = '</div>';
         $html[] = '<div class="text">';
-
+        
         $html[] = '<div class="bevel" style="float: left;">';
         $html[] = $this->question->get_title();
         $html[] = '</div>';
         $html[] = '<div class="bevel" style="text-align: right;">';
         $this->form->addElement('html', implode(PHP_EOL, $html));
         $html = array();
-
+        
         if ($this->hints > 0)
         {
             $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
-            $label = Translation :: get($variable, array('COUNT' => $this->hints));
-
-            $html[] = '<img style="float: none; vertical-align: baseline;" src="' . Theme :: getInstance()->getImagePath(
-                'Chamilo\Core\Repository\ContentObject\Assessment\Display',
+            $label = Translation::get($variable, array('COUNT' => $this->hints));
+            
+            $html[] = '<img style="float: none; vertical-align: baseline;" src="' . Theme::getInstance()->getImagePath(
+                'Chamilo\Core\Repository\ContentObject\Assessment\Display', 
                 'Buttons/ButtonHint') . '" alt="' . $label . '" title="' . htmlentities($label) . '" />&nbsp;&nbsp;';
         }
-
+        
         if (! $this->can_change)
         {
             if ($this->get_results_viewer()->get_configuration()->show_score())
@@ -172,37 +172,37 @@ class QuestionResultDisplay
             {
                 $score[$i] = $i;
             }
-
+            
             $renderer = $this->form->defaultRenderer();
-
+            
             $this->form->addElement('select', $this->complex_content_object_question->get_id() . '_score', '', $score);
             $renderer->setElementTemplate('{element}', $this->complex_content_object_question->get_id() . '_score');
             $defaults[$this->complex_content_object_question->get_id() . '_score'] = $this->get_score();
             $this->form->setDefaults($defaults);
         }
-
+        
         $html[] = '</div>';
-
+        
         $html[] = '</div>';
         $html[] = '<div class="clear"></div>';
         $html[] = '</div>';
         $html[] = '<div class="answer">';
-
+        
         $description = $this->question->get_description();
-
+        
         if ($this->question->has_description())
         {
             $html[] = '<div class="description">';
-
+            
             $renderer = new ContentObjectResourceRenderer($this, $description);
             $html[] = $renderer->run();
-
+            
             $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
         }
-
+        
         $html[] = '<div class="clear"></div>';
-
+        
         $this->form->addElement('html', implode(PHP_EOL, $html));
     }
 
@@ -211,12 +211,12 @@ class QuestionResultDisplay
         if (! $this->can_change)
         {
             $html[] = '<div class="splitter">';
-            $html[] = Translation :: get('CourseAdministratorFeedback');
+            $html[] = Translation::get('CourseAdministratorFeedback');
             $html[] = '</div>';
             $html[] = '<div class="with_borders">';
             if (! $this->feedback)
             {
-                $html[] = '<div class="warning-message">' . Translation :: get('NotYetRatedWarning') . '</div>';
+                $html[] = '<div class="warning-message">' . Translation::get('NotYetRatedWarning') . '</div>';
             }
             $this->form->addElement('html', implode(PHP_EOL, $html));
             $html = array();
@@ -230,22 +230,22 @@ class QuestionResultDisplay
         else
         {
             $html[] = '<div class="splitter">';
-            $html[] = Translation :: get('CourseAdministratorFeedback');
+            $html[] = Translation::get('CourseAdministratorFeedback');
             $html[] = '</div>';
             $html[] = '<div class="with_borders">';
-
+            
             if (! $this->feedback)
             {
-                $html[] = '<div class="warning-message">' . Translation :: get('NotYetRatedWarning') . '</div>';
+                $html[] = '<div class="warning-message">' . Translation::get('NotYetRatedWarning') . '</div>';
             }
-
+            
             $this->form->addElement('html', implode(PHP_EOL, $html));
             $html = array();
-
+            
             $this->form->add_html_editor($this->complex_content_object_question->get_id() . '_feedback', '', false);
             $defaults[$this->complex_content_object_question->get_id() . '_feedback'] = $this->get_feedback();
             $this->form->setDefaults($defaults);
-
+            
             $html[] = '</div>';
             $this->form->addElement('html', implode(PHP_EOL, $html));
         }
@@ -255,7 +255,7 @@ class QuestionResultDisplay
     {
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         $footer = implode(PHP_EOL, $html);
         return $footer;
     }

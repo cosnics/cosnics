@@ -11,7 +11,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: importer.class.php 224 2009-11-13 14:40:30Z kariboe $
- *
+ * 
  * @package group.lib.group_manager.component
  */
 class ImporterComponent extends Manager
@@ -26,27 +26,27 @@ class ImporterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
+        
         $form = new GroupImportForm($this->get_url());
-
+        
         if ($form->validate())
         {
             $success = $form->import_groups();
             $this->redirect(
-                Translation :: get($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
-                     $form->get_failed_elements(),
-                    ($success ? false : true),
-                    array(Application :: PARAM_ACTION => self :: ACTION_IMPORT));
+                Translation::get($success ? 'GroupXMLProcessed' : 'GroupXMLNotProcessed') . '<br />' .
+                     $form->get_failed_elements(), 
+                    ($success ? false : true), 
+                    array(Application::PARAM_ACTION => self::ACTION_IMPORT));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->display_extra_information();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }
@@ -54,7 +54,7 @@ class ImporterComponent extends Manager
     public function display_extra_information()
     {
         $html = array();
-        $html[] = '<p>' . Translation :: get('XMLMustLookLike') . ' (' . Translation :: get('MandatoryFields') . ')</p>';
+        $html[] = '<p>' . Translation::get('XMLMustLookLike') . ' (' . Translation::get('MandatoryFields') . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';
         $html[] = '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;';
@@ -77,14 +77,14 @@ class ImporterComponent extends Manager
         $html[] = '&lt;/groups&gt;';
         $html[] = '</pre>';
         $html[] = '</blockquote>';
-        $html[] = '<p>' . Translation :: get('Details') . '</p>';
+        $html[] = '<p>' . Translation::get('Details') . '</p>';
         $html[] = '<blockquote>';
-        $html[] = '<u><b>' . Translation :: get('Action') . '</u></b>';
-        $html[] = '<br />A: ' . Translation :: get('Add', null, Utilities :: COMMON_LIBRARIES);
-        $html[] = '<br />U: ' . Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES);
-        $html[] = '<br />D: ' . Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES);
+        $html[] = '<u><b>' . Translation::get('Action') . '</u></b>';
+        $html[] = '<br />A: ' . Translation::get('Add', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '<br />U: ' . Translation::get('Update', null, Utilities::COMMON_LIBRARIES);
+        $html[] = '<br />D: ' . Translation::get('Delete', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</blockquote>';
-
+        
         return implode($html, "\n");
     }
 

@@ -22,8 +22,8 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_ATTEMPT_ID;
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_ATTEMPT_ID;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -32,7 +32,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function get_attempt_id()
     {
-        return $this->get_default_property(self :: PROPERTY_ATTEMPT_ID);
+        return $this->get_default_property(self::PROPERTY_ATTEMPT_ID);
     }
 
     /**
@@ -41,7 +41,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function set_attempt_id($attempt_id)
     {
-        $this->set_default_property(self :: PROPERTY_ATTEMPT_ID, $attempt_id);
+        $this->set_default_property(self::PROPERTY_ATTEMPT_ID, $attempt_id);
     }
 
     /**
@@ -50,7 +50,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function update()
     {
-        return PreviewStorage :: getInstance()->update_assessment_question_attempt($this);
+        return PreviewStorage::getInstance()->update_assessment_question_attempt($this);
     }
 
     /**
@@ -59,8 +59,8 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function create()
     {
-        $this->set_id(UUID :: v4());
-        return PreviewStorage :: getInstance()->create_assessment_question_attempt($this);
+        $this->set_id(UUID::v4());
+        return PreviewStorage::getInstance()->create_assessment_question_attempt($this);
     }
 
     /**
@@ -69,6 +69,6 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function delete()
     {
-        return PreviewStorage :: getInstance()->delete_assessment_question_attempt($this);
+        return PreviewStorage::getInstance()->delete_assessment_question_attempt($this);
     }
 }

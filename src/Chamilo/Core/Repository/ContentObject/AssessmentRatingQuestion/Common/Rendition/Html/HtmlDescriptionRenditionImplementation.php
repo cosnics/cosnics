@@ -11,7 +11,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function render()
     {
-        return ContentObjectRendition :: launch($this);
+        return ContentObjectRendition::launch($this);
     }
 
     public function get_description()
@@ -34,8 +34,8 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</select>';
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(
                 'Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion', 
                 true) . 'AssessmentRatingQuestion.js');
         

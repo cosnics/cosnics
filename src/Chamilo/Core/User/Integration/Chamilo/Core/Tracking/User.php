@@ -14,6 +14,6 @@ abstract class User extends AggregateTracker
 
     public static function get_table_name()
     {
-        return DataManager :: PREFIX . 'user';
+        return DataManager::PREFIX . 'user';
     }
 }

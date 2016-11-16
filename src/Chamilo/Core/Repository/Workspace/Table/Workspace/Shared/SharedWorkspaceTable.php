@@ -20,6 +20,6 @@ class SharedWorkspaceTable extends WorkspaceTable
      */
     public function get_implemented_form_actions()
     {
-        return new TableFormActions(__NAMESPACE__, self :: TABLE_IDENTIFIER);
+        return new TableFormActions(__NAMESPACE__, self::TABLE_IDENTIFIER);
     }
 }

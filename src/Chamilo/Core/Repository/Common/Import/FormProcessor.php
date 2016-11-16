@@ -140,22 +140,22 @@ abstract class FormProcessor
     public function determineCategoryIdentifier()
     {
         $formValues = $this->getFormValues();
-
-        $parentIdentifier = $formValues[ContentObject :: PROPERTY_PARENT_ID];
-        $newCategoryName = $formValues[ContentObjectImportForm :: NEW_CATEGORY];
-
-        if (! StringUtilities :: getInstance()->isNullOrEmpty($newCategoryName, true))
+        
+        $parentIdentifier = $formValues[ContentObject::PROPERTY_PARENT_ID];
+        $newCategoryName = $formValues[ContentObjectImportForm::NEW_CATEGORY];
+        
+        if (! StringUtilities::getInstance()->isNullOrEmpty($newCategoryName, true))
         {
             $newCategory = new RepositoryCategory();
-
+            
             $newCategory->set_name($newCategoryName);
             $newCategory->set_parent($parentIdentifier);
             $newCategory->set_type_id($this->getWorkspace()->getId());
             $newCategory->set_type($this->getWorkspace()->getWorkspaceType());
-
+            
             if (! $newCategory->create())
             {
-                throw new \Exception(Translation :: get('CategoryCreationFailed'));
+                throw new \Exception(Translation::get('CategoryCreationFailed'));
             }
             else
             {
@@ -166,7 +166,7 @@ abstract class FormProcessor
         {
             $categoryIdentifier = $parentIdentifier;
         }
-
+        
         return $categoryIdentifier;
     }
 
@@ -189,7 +189,7 @@ abstract class FormProcessor
         $fileProperties->set_type($file->getMimeType());
         $fileProperties->set_size($file->getSize());
         $fileProperties->set_path($file->getRealPath());
-
+        
         return $fileProperties;
     }
 
@@ -204,13 +204,14 @@ abstract class FormProcessor
     }
 
     /**
+     *
      * @param string $fileName
      * @return \Chamilo\Libraries\File\Properties\FileProperties|NULL
      */
     public function getFile($fileName = ContentObjectImportForm :: IMPORT_FILE_NAME)
     {
         $file = $this->getFileByName($fileName);
-
+        
         if ($file instanceof UploadedFile)
         {
             return $this->getFileProperties($file);

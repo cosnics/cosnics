@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * $Id: package_manager.class.php 126 2009-11-09 13:11:05Z vanpouckesven $
- *
+ * 
  * @package admin.lib.package_manager
  * @author Hans De Bisschop
  */
@@ -28,5 +28,5 @@ abstract class Manager extends Application
     const ACTION_REMOVE = 'Remover';
     const ACTION_UPGRADE = 'Upgrader';
     const ACTION_VIEW = 'Viewer';
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 }

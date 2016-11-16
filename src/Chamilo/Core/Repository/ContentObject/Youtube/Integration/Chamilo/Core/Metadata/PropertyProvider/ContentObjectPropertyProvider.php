@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\Youtube\Storage\DataClass\Youtube;
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return Youtube :: class_name();
+        return Youtube::class_name();
     }
 }

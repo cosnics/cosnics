@@ -20,14 +20,14 @@ use Chamilo\Libraries\Platform\Translation;
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
-    const PARAM_PUBLICATION = \Chamilo\Core\Repository\Publication\Manager :: PARAM_PUBLICATION_ID;
+    const PARAM_PUBLICATION = \Chamilo\Core\Repository\Publication\Manager::PARAM_PUBLICATION_ID;
     const PARAM_ATTEMPT = 'attempt';
     const PARAM_GROUP = 'group';
     const PARAM_INDICATOR = 'indicator';
     const PARAM_USER = 'user';
     const PARAM_GROUP_USERS = 'group_users';
     const PARAM_EXPORT_TYPE = 'export_type';
-    const ACTION_TAKE_PEER_ASSESSMENT = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+    const ACTION_TAKE_PEER_ASSESSMENT = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
     const ACTION_CLOSE_USER_ATTEMPT = 'UserAttemptCloser';
     const ACTION_TOGGLE_CLOSE_USER_ATTEMPT = 'UserAttemptClosedToggler';
     const ACTION_CLOSE_ATTEMPT = 'AttemptCloser';
@@ -54,7 +54,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     const VIEW_RIGHT = 1;
     const EDIT_RIGHT = 2;
-    const DEFAULT_ACTION = self :: ACTION_VIEW_USER_ATTEMPT_STATUS;
+    const DEFAULT_ACTION = self::ACTION_VIEW_USER_ATTEMPT_STATUS;
 
     /**
      *
@@ -230,7 +230,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         if (is_null($image))
         {
-            $image = Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Logo/22');
+            $image = Theme::getInstance()->getImagePath(__NAMESPACE__, 'Logo/22');
         }
         
         $html = array();
@@ -268,52 +268,52 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonToolbar = new ButtonToolBar();
             $toolActions = new ButtonGroup();
             
-            $display_action = Request :: get(self :: PARAM_ACTION);
+            $display_action = Request::get(self::PARAM_ACTION);
             
             if (! is_null($display_action))
             {
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('PeerAssessmentComplexDisplayUserAttemptStatusViewerComponent'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Browser'), 
-                        $this->get_url(array(self :: PARAM_ACTION => null))));
+                        Translation::get('PeerAssessmentComplexDisplayUserAttemptStatusViewerComponent'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Browser'), 
+                        $this->get_url(array(self::PARAM_ACTION => null))));
             }
-            if ($this->is_allowed(self :: EDIT_RIGHT))
+            if ($this->is_allowed(self::EDIT_RIGHT))
             /**
              *
              * @todo should not be weblcmsright
              */
             {
                 
-                if ($display_action != self :: ACTION_OVERVIEW_STATUS)
+                if ($display_action != self::ACTION_OVERVIEW_STATUS)
                     $toolActions->addButton(
                         new Button(
-                            Translation :: get('PeerAssessmentComplexDisplayStatusViewerComponent'), 
-                            Theme :: getInstance()->getCommonImagePath('Action/Reporting'), 
-                            $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_STATUS))));
+                            Translation::get('PeerAssessmentComplexDisplayStatusViewerComponent'), 
+                            Theme::getInstance()->getCommonImagePath('Action/Reporting'), 
+                            $this->get_url(array(self::PARAM_ACTION => self::ACTION_OVERVIEW_STATUS))));
                 
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('ToolComplexBuilder'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Build'), 
+                        Translation::get('ToolComplexBuilder'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Build'), 
                         $this->get_url($this->get_builder_params())));
             }
             
-            if ($display_action != self :: ACTION_OVERVIEW_RESULTS)
+            if ($display_action != self::ACTION_OVERVIEW_RESULTS)
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('PeerAssessmentComplexDisplayResultsViewerComponent'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/ViewResults'), 
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_OVERVIEW_RESULTS))));
+                        Translation::get('PeerAssessmentComplexDisplayResultsViewerComponent'), 
+                        Theme::getInstance()->getCommonImagePath('Action/ViewResults'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_OVERVIEW_RESULTS))));
             $settings = $this->get_settings($this->get_publication_id());
             
-            if ($display_action != self :: ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE &&
+            if ($display_action != self::ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE &&
                  $settings->get_direct_subscribe_available())
                 $toolActions->addButton(
                     new Button(
-                        Translation :: get('PeerAssessmentComplexDisplayDirectGroupSubscribeBrowserComponent'), 
-                        Theme :: getInstance()->getCommonImagePath('Action/Group'), 
-                        $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE))));
+                        Translation::get('PeerAssessmentComplexDisplayDirectGroupSubscribeBrowserComponent'), 
+                        Theme::getInstance()->getCommonImagePath('Action/Group'), 
+                        $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_DIRECT_GROUP_SUBSCRIBE))));
             
             $buttonToolbar->addButtonGroup($toolActions);
             $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
@@ -421,7 +421,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_VIEW_USER_ATTEMPT_STATUS)), 
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_USER_ATTEMPT_STATUS)), 
                 $peer_assessment->get_title()));
     }
 

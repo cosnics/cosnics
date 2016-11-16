@@ -12,20 +12,20 @@ class ImporterComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $id = Request :: get(\Chamilo\Core\Repository\External\Manager :: PARAM_EXTERNAL_REPOSITORY_ID);
+        $id = Request::get(\Chamilo\Core\Repository\External\Manager::PARAM_EXTERNAL_REPOSITORY_ID);
         $object = $this->retrieve_external_repository_object($id);
         $succes = $this->import_external_repository_object($object);
         
         $params = array();
-        $params[\Chamilo\Core\Repository\External\Manager :: PARAM_ACTION] = '';
+        $params[\Chamilo\Core\Repository\External\Manager::PARAM_ACTION] = '';
         
         if ($succes)
         {
-            $this->redirect(Translation :: get('Succes', null, Utilities :: COMMON_LIBRARIES), false, $params);
+            $this->redirect(Translation::get('Succes', null, Utilities::COMMON_LIBRARIES), false, $params);
         }
         else
         {
-            $this->redirect(Translation :: get('Failed', null, Utilities :: COMMON_LIBRARIES), true, $params);
+            $this->redirect(Translation::get('Failed', null, Utilities::COMMON_LIBRARIES), true, $params);
         }
     }
 }

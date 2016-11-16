@@ -26,7 +26,7 @@ class Instance extends CompositeDataClass
 
     /**
      * Contains a list of already required export types Allow to spare some business logic processing
-     *
+     * 
      * @var array
      */
     private static $already_required_types = array();
@@ -35,7 +35,7 @@ class Instance extends CompositeDataClass
     {
         if (isset($title) && strlen($title) > 0)
         {
-            $this->set_default_property(self :: PROPERTY_TITLE, $title);
+            $this->set_default_property(self::PROPERTY_TITLE, $title);
         }
     }
 
@@ -45,14 +45,14 @@ class Instance extends CompositeDataClass
      */
     public function get_title()
     {
-        return $this->get_default_property(self :: PROPERTY_TITLE);
+        return $this->get_default_property(self::PROPERTY_TITLE);
     }
 
     public function set_implementation($implementation)
     {
         if (isset($implementation) && strlen($implementation) > 0)
         {
-            $this->set_default_property(self :: PROPERTY_IMPLEMENTATION, $implementation);
+            $this->set_default_property(self::PROPERTY_IMPLEMENTATION, $implementation);
         }
     }
 
@@ -62,14 +62,14 @@ class Instance extends CompositeDataClass
      */
     public function get_implementation()
     {
-        return $this->get_default_property(self :: PROPERTY_IMPLEMENTATION);
+        return $this->get_default_property(self::PROPERTY_IMPLEMENTATION);
     }
 
     public function set_enabled($enabled)
     {
         if (isset($enabled) && is_bool($enabled))
         {
-            $this->set_default_property(self :: PROPERTY_ENABLED, $enabled);
+            $this->set_default_property(self::PROPERTY_ENABLED, $enabled);
         }
     }
 
@@ -79,7 +79,7 @@ class Instance extends CompositeDataClass
      */
     public function get_enabled()
     {
-        return $this->get_default_property(self :: PROPERTY_ENABLED, false);
+        return $this->get_default_property(self::PROPERTY_ENABLED, false);
     }
 
     public function is_enabled()
@@ -91,37 +91,37 @@ class Instance extends CompositeDataClass
     {
         if (isset($created))
         {
-            $this->set_default_property(self :: PROPERTY_CREATED, $created);
+            $this->set_default_property(self::PROPERTY_CREATED, $created);
         }
     }
 
     public function get_creation_date()
     {
-        return $this->get_default_property(self :: PROPERTY_CREATED);
+        return $this->get_default_property(self::PROPERTY_CREATED);
     }
 
     public function set_modification_date($modified)
     {
         if (isset($modified))
         {
-            $this->set_default_property(self :: PROPERTY_MODIFIED, $modified);
+            $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
         }
     }
 
     public function get_modification_date()
     {
-        return $this->get_default_property(self :: PROPERTY_MODIFIED);
+        return $this->get_default_property(self::PROPERTY_MODIFIED);
     }
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_TITLE;
-        $extended_property_names[] = self :: PROPERTY_IMPLEMENTATION;
-        $extended_property_names[] = self :: PROPERTY_ENABLED;
-        $extended_property_names[] = self :: PROPERTY_CREATED;
-        $extended_property_names[] = self :: PROPERTY_MODIFIED;
-
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_TITLE;
+        $extended_property_names[] = self::PROPERTY_IMPLEMENTATION;
+        $extended_property_names[] = self::PROPERTY_ENABLED;
+        $extended_property_names[] = self::PROPERTY_CREATED;
+        $extended_property_names[] = self::PROPERTY_MODIFIED;
+        
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -130,42 +130,42 @@ class Instance extends CompositeDataClass
      */
     public function create()
     {
-        if (! parent :: create())
+        if (! parent::create())
         {
             return false;
         }
         else
         {
-            if (! Setting :: initialize($this))
+            if (! Setting::initialize($this))
             {
                 return false;
             }
         }
-
-        $succes = Rights :: getInstance()->create_location_in_external_instances_subtree(
-            $this->get_id(),
-            Rights :: getInstance()->get_external_instances_subtree_root_id());
+        
+        $succes = Rights::getInstance()->create_location_in_external_instances_subtree(
+            $this->get_id(), 
+            Rights::getInstance()->get_external_instances_subtree_root_id());
         if (! $succes)
         {
             return false;
         }
-
+        
         return true;
     }
 
     public function delete()
     {
-        if (! parent :: delete())
+        if (! parent::delete())
         {
             return false;
         }
         else
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
+                new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID), 
                 new StaticConditionVariable($this->get_id()));
-            $settings = DataManager :: retrieves(Setting :: class_name(), new DataClassRetrievesParameters($condition));
-
+            $settings = DataManager::retrieves(Setting::class_name(), new DataClassRetrievesParameters($condition));
+            
             while ($setting = $settings->next_result())
             {
                 if (! $setting->delete())
@@ -174,9 +174,8 @@ class Instance extends CompositeDataClass
                 }
             }
         }
-
-        $location = Rights :: getInstance()->get_location_by_identifier_from_external_instances_subtree(
-            $this->get_id());
+        
+        $location = Rights::getInstance()->get_location_by_identifier_from_external_instances_subtree($this->get_id());
         if ($location)
         {
             if (! $location->delete())
@@ -184,7 +183,7 @@ class Instance extends CompositeDataClass
                 return false;
             }
         }
-
+        
         return true;
     }
 
@@ -201,33 +200,33 @@ class Instance extends CompositeDataClass
     public function has_settings()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID), 
             new StaticConditionVariable($this->get_id()));
-
-        $settings = DataManager :: count(Setting :: class_name(), $condition);
-
+        
+        $settings = DataManager::count(Setting::class_name(), $condition);
+        
         return $settings > 0;
     }
 
     public function get_setting($variable)
     {
-        return DataManager :: retrieve_setting_from_variable_name($variable, $this->get_id());
+        return DataManager::retrieve_setting_from_variable_name($variable, $this->get_id());
     }
 
     public function get_user_setting($user_id, $variable)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE), 
             new StaticConditionVariable($variable));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_USER_ID), 
             new StaticConditionVariable($user_id));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_EXTERNAL_ID),
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_EXTERNAL_ID), 
             new StaticConditionVariable($this->get_id()));
         $condition = new AndCondition($conditions);
-
-        return DataManager :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return DataManager::retrieve(Setting::class_name(), new DataClassRetrieveParameters($condition));
     }
 }

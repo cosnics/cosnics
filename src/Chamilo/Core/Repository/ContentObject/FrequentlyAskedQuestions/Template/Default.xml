@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template context="Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestions">
-	<properties>
-		<name>Default</name>
-	</properties>
-	<translations>
-		<variable value="TypeName">
-			<translation language="en">FAQ</translation>
-			<translation language="nl">FAQ</translation>
-			<translation language="fr">FAQ</translation>
-			<translation language="de">FAQ</translation>
-		</variable>
-	</translations>
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">FAQ</translation>
+            <translation language="nl">FAQ</translation>
+            <translation language="fr">FAQ</translation>
+            <translation language="de">FAQ</translation>
+        </variable>
+    </translations>
 </template>

@@ -20,13 +20,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\ConditionFilterRenderer
 {
+
     /*
      * (non-PHPdoc) @see \core\repository\FilterRenderer::render()
      */
     public function render()
     {
         $filter_data = $this->get_filter_data();
-        $general_condition = parent :: render();
+        $general_condition = parent::render();
         
         $conditions = array();
         
@@ -35,51 +36,51 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             $conditions[] = $general_condition;
         }
         
-        if ($filter_data->has_filter_property(FilterData :: FILTER_FILESIZE))
+        if ($filter_data->has_filter_property(FilterData::FILTER_FILESIZE))
         {
-            $format = $filter_data->get_filter_property(FilterData :: FILTER_FORMAT);
-            $filesize = $filter_data->get_filter_property(FilterData :: FILTER_FILESIZE);
+            $format = $filter_data->get_filter_property(FilterData::FILTER_FORMAT);
+            $filesize = $filter_data->get_filter_property(FilterData::FILTER_FILESIZE);
             $filesize_bytes = $filesize * pow(1024, $format);
-            $compare = $filter_data->get_filter_property(FilterData :: FILTER_COMPARE);
+            $compare = $filter_data->get_filter_property(FilterData::FILTER_COMPARE);
             
-            if ($compare == ComparisonCondition :: EQUAL)
+            if ($compare == ComparisonCondition::EQUAL)
             {
                 $equality_conditions = array();
                 $equality_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILESIZE), 
-                    InequalityCondition :: GREATER_THAN_OR_EQUAL, 
+                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILESIZE), 
+                    InequalityCondition::GREATER_THAN_OR_EQUAL, 
                     new StaticConditionVariable($filesize_bytes * 0.9));
                 $equality_conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILESIZE), 
-                    InequalityCondition :: LESS_THAN_OR_EQUAL, 
+                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILESIZE), 
+                    InequalityCondition::LESS_THAN_OR_EQUAL, 
                     new StaticConditionVariable($filesize_bytes * 1.1));
                 $conditions[] = new AndCondition($equality_conditions);
             }
             else
             {
                 $conditions[] = new InequalityCondition(
-                    new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILESIZE), 
+                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILESIZE), 
                     $compare, 
                     new StaticConditionVariable($filesize_bytes));
             }
         }
         
-        if ($filter_data->has_filter_property(FilterData :: FILTER_EXTENSION))
+        if ($filter_data->has_filter_property(FilterData::FILTER_EXTENSION))
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILENAME), 
-                '*.' . $filter_data->get_filter_property(FilterData :: FILTER_EXTENSION));
+                new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
+                '*.' . $filter_data->get_filter_property(FilterData::FILTER_EXTENSION));
         }
-        elseif ($filter_data->has_filter_property(FilterData :: FILTER_EXTENSION_TYPE))
+        elseif ($filter_data->has_filter_property(FilterData::FILTER_EXTENSION_TYPE))
         {
-            $extension_type = $filter_data->get_filter_property(FilterData :: FILTER_EXTENSION_TYPE);
-            $extensions = FileType :: get_type_extensions($extension_type);
+            $extension_type = $filter_data->get_filter_property(FilterData::FILTER_EXTENSION_TYPE);
+            $extensions = FileType::get_type_extensions($extension_type);
             $extension_conditions = array();
             
             foreach ($extensions as $extension)
             {
                 $extension_conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(File :: class_name(), File :: PROPERTY_FILENAME), 
+                    new PropertyConditionVariable(File::class_name(), File::PROPERTY_FILENAME), 
                     '*.' . $extension);
             }
             

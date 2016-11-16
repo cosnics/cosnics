@@ -12,24 +12,23 @@ class ApplicationUpgraderComponent extends UpgraderComponent implements NoAuthen
 
     public function initialize()
     {
-        $application_registrations = \Chamilo\Configuration\Configuration :: registrations_by_type(
-            'Chamilo\Application');
-
+        $application_registrations = \Chamilo\Configuration\Configuration::registrations_by_type('Chamilo\Application');
+        
         foreach ($application_registrations as $application_registration)
         {
-            $this->add_package($application_registration[Registration :: PROPERTY_CONTEXT]);
+            $this->add_package($application_registration[Registration::PROPERTY_CONTEXT]);
         }
     }
 
     public function upgrade_successfull()
     {
-        $image = Theme :: getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/Finished');
-        $title = Translation :: get('PlatformUpgraded');
-
-        $redirect = new Redirect(array(self :: PARAM_CONTEXT => null));
-
-        $result = Translation :: get('ApplicationsUpgraded', array('URL' => $redirect->getUrl()));
-
+        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Lynx', 'PackageAction/Finished');
+        $title = Translation::get('PlatformUpgraded');
+        
+        $redirect = new Redirect(array(self::PARAM_CONTEXT => null));
+        
+        $result = Translation::get('ApplicationsUpgraded', array('URL' => $redirect->getUrl()));
+        
         return $this->render_upgrade_step($image, $title, $result);
     }
 }

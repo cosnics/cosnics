@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="content_object_attachment">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="content_object_id" type="integer" unsigned="1" notnull="1" />
-		<property name="attachment_id" type="integer" unsigned="1" notnull="1" />
-		<property name="type" type="text" length="20" notnull="1" default="normal" />
-	</properties>
-	<index name="content_object_id">
-		<indexproperty name="content_object_id" />
-	</index>
-	<index name="attachment_id">
-		<indexproperty name="attachment_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="content_object_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="attachment_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="type"
+            type="text"
+            length="20"
+            notnull="1"
+            default="normal" />
+    </properties>
+    <index name="content_object_id">
+        <indexproperty name="content_object_id" />
+    </index>
+    <index name="attachment_id">
+        <indexproperty name="attachment_id" />
+    </index>
 </object>

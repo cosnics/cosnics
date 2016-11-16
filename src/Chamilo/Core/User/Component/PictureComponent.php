@@ -29,9 +29,9 @@ class PictureComponent extends ProfileComponent implements NoContextComponent
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageAccount');
-
+        
         $this->form = new PictureForm($this->get_user(), $this->get_url());
-
+        
         if ($this->form->validate())
         {
             $success = $this->form->update();
@@ -51,11 +51,11 @@ class PictureComponent extends ProfileComponent implements NoContextComponent
                 $neg_message = 'UserProfileNotUpdated';
                 $pos_message = 'UserProfileUpdated';
             }
-
+            
             $this->redirect(
-                Translation :: get($success ? $pos_message : $neg_message),
-                ($success ? false : true),
-                array(Application :: PARAM_ACTION => self :: ACTION_CHANGE_PICTURE));
+                Translation::get($success ? $pos_message : $neg_message), 
+                ($success ? false : true), 
+                array(Application::PARAM_ACTION => self::ACTION_CHANGE_PICTURE));
         }
         else
         {

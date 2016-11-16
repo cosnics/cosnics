@@ -18,7 +18,7 @@ class CategoryItemForm extends ItemForm
     public function get_parents()
     {
         $item_options = array();
-        $item_options[0] = Translation :: get('Root', null, Utilities :: COMMON_LIBRARIES);
+        $item_options[0] = Translation::get('Root', null, Utilities::COMMON_LIBRARIES);
         
         return $item_options;
     }

@@ -36,21 +36,21 @@ class Manager implements PublicationInterface
      */
     public static function any_content_object_is_published($object_ids)
     {
-        return DataManager :: any_content_object_is_published($object_ids);
+        return DataManager::any_content_object_is_published($object_ids);
     }
 
     /*
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::get_content_object_publication_attributes()
      */
-    public static function get_content_object_publication_attributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
+    public static function get_content_object_publication_attributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null, 
         $offset = null, $order_properties = null)
     {
-        return DataManager :: get_content_object_publication_attributes(
-            $object_id,
-            $type,
-            $type,
-            $offset,
-            $count,
+        return DataManager::get_content_object_publication_attributes(
+            $object_id, 
+            $type, 
+            $type, 
+            $offset, 
+            $count, 
             $order_properties);
     }
 
@@ -59,7 +59,7 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_attribute($publication_id)
     {
-        return DataManager :: get_content_object_publication_attribute($publication_id);
+        return DataManager::get_content_object_publication_attribute($publication_id);
     }
 
     /*
@@ -67,7 +67,7 @@ class Manager implements PublicationInterface
      */
     public static function count_publication_attributes($attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null)
     {
-        return DataManager :: count_publication_attributes($attributes_type, $identifier, $condition);
+        return DataManager::count_publication_attributes($attributes_type, $identifier, $condition);
     }
 
     /*
@@ -75,7 +75,7 @@ class Manager implements PublicationInterface
      */
     public static function delete_content_object_publications($object_id)
     {
-        return DataManager :: delete_content_object_publications($object_id);
+        return DataManager::delete_content_object_publications($object_id);
     }
 
     /*
@@ -83,7 +83,7 @@ class Manager implements PublicationInterface
      */
     public static function delete_content_object_publication($publication_id)
     {
-        return DataManager :: delete_content_object_publication($publication_id);
+        return DataManager::delete_content_object_publication($publication_id);
     }
 
     /*
@@ -91,29 +91,29 @@ class Manager implements PublicationInterface
      */
     public static function get_content_object_publication_locations($content_object, $user = null)
     {
-        $applicationContext = \Chamilo\Core\Admin\Announcement\Manager :: context();
-
-        $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-            \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
-            (int) \Chamilo\Libraries\Platform\Session\Session :: get_user_id());
-
+        $applicationContext = \Chamilo\Core\Admin\Announcement\Manager::context();
+        
+        $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+            \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
+            (int) \Chamilo\Libraries\Platform\Session\Session::get_user_id());
+        
         $locations = new Locations(__NAMESPACE__);
-
+        
         if ($user->is_platform_admin())
         {
-            $allowed_types = array(SystemAnnouncement :: class_name());
-
+            $allowed_types = array(SystemAnnouncement::class_name());
+            
             $type = $content_object->get_type();
-
+            
             if (in_array($type, $allowed_types))
             {
                 $locations->add_location(
                     new Location(
-                        $applicationContext,
-                        Translation :: get('SystemAnnouncements', null, $applicationContext)));
+                        $applicationContext, 
+                        Translation::get('SystemAnnouncements', null, $applicationContext)));
             }
         }
-
+        
         return $locations;
     }
 
@@ -121,13 +121,13 @@ class Manager implements PublicationInterface
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::publish_content_object()
      */
     public static function publish_content_object(
-        \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location,
+        \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object, LocationSupport $location, 
         $options = array())
     {
         $publication = new Publication();
         $publication->set_content_object_id($content_object->get_id());
         $publication->set_publisher($content_object->get_owner_id());
-
+        
         if (! $publication->create())
         {
             return false;

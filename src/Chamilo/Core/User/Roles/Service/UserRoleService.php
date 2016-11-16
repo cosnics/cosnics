@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\User\Roles\Service;
 
 use Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface;
@@ -10,24 +9,27 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Manages roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class UserRoleService implements UserRoleServiceInterface
 {
+
     /**
+     *
      * @var RoleServiceInterface
      */
     protected $roleService;
 
     /**
+     *
      * @var UserRoleRepositoryInterface
      */
     protected $userRoleRepository;
 
     /**
      * UserRoleService constructor.
-     *
+     * 
      * @param RoleServiceInterface $roleService
      * @param UserRoleRepositoryInterface $userRoleRepository
      */
@@ -39,7 +41,7 @@ class UserRoleService implements UserRoleServiceInterface
 
     /**
      * Returns the roles for a given user
-     *
+     * 
      * @param User $user
      *
      * @return Role[]
@@ -47,23 +49,23 @@ class UserRoleService implements UserRoleServiceInterface
     public function getRolesForUser(User $user)
     {
         $userRoles = $this->userRoleRepository->findRolesForUser($user->getId());
-
-        if(empty($userRoles))
+        
+        if (empty($userRoles))
         {
             $userRoles = array($this->roleService->getOrCreateRoleByName('ROLE_DEFAULT_USER'));
         }
-
-        if($user->is_platform_admin())
+        
+        if ($user->is_platform_admin())
         {
             $userRoles[] = $this->roleService->getOrCreateRoleByName('ROLE_ADMINISTRATOR');
         }
-
+        
         return $userRoles;
     }
 
     /**
      * Checks whether or not a user matches one of the requested roles
-     *
+     * 
      * @param User $user
      * @param Role[] $rolesToMatch
      *
@@ -73,26 +75,26 @@ class UserRoleService implements UserRoleServiceInterface
     {
         $userRoles = $this->getRolesForUser($user);
         $userRoleIds = array();
-
-        foreach($userRoles as $userRole)
+        
+        foreach ($userRoles as $userRole)
         {
             $userRoleIds[] = $userRole->getId();
         }
-
-        foreach($rolesToMatch as $roleToMatch)
+        
+        foreach ($rolesToMatch as $roleToMatch)
         {
-            if(in_array($roleToMatch->getId(), $userRoleIds))
+            if (in_array($roleToMatch->getId(), $userRoleIds))
             {
                 return true;
             }
         }
-
+        
         return false;
     }
 
     /**
      * Returns the users that are attached to a given role
-     *
+     * 
      * @param string $roleName
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -105,7 +107,7 @@ class UserRoleService implements UserRoleServiceInterface
 
     /**
      * Adds a role to a given user by a given role name
-     *
+     * 
      * @param User $user
      * @param string $roleName
      *
@@ -114,13 +116,13 @@ class UserRoleService implements UserRoleServiceInterface
     public function addRoleForUser(User $user, $roleName)
     {
         $role = $this->roleService->getOrCreateRoleByName($roleName);
-
+        
         $userRoleRelation = new RoleRelation();
-
+        
         $userRoleRelation->setRoleId($role->getId());
         $userRoleRelation->setUserId($user->getId());
-
-        if(!$userRoleRelation->create())
+        
+        if (! $userRoleRelation->create())
         {
             throw new \Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }
@@ -128,7 +130,7 @@ class UserRoleService implements UserRoleServiceInterface
 
     /**
      * Removes a role by a given name from a given user
-     *
+     * 
      * @param User $user
      * @param string $roleName
      *
@@ -140,21 +142,19 @@ class UserRoleService implements UserRoleServiceInterface
         {
             $role = $this->roleService->getRoleByName($roleName);
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return;
         }
-
-        $userRoleRelation = $this->userRoleRepository->findUserRoleRelationByRoleAndUser(
-            $role->getId(), $user->getId()
-        );
-
-        if(!$userRoleRelation)
+        
+        $userRoleRelation = $this->userRoleRepository->findUserRoleRelationByRoleAndUser($role->getId(), $user->getId());
+        
+        if (! $userRoleRelation)
         {
             return;
         }
-
-        if(!$userRoleRelation->delete())
+        
+        if (! $userRoleRelation->delete())
         {
             throw new \Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }

@@ -29,62 +29,62 @@ class SorterComponent extends Manager implements DelegateComponent
         
         if ($this->canEditComplexContentObjectPathNode($this->get_current_node()))
         {
-            $direction = Request :: get(self :: PARAM_SORT, self :: SORT_UP);
+            $direction = Request::get(self::PARAM_SORT, self::SORT_UP);
             $selected_complex_content_object_item = $this->get_current_complex_content_object_item();
             $content_object = $this->get_current_content_object();
-
-            if ($direction == self :: SORT_UP && $this->get_current_node()->is_first_child() ||
-                 $direction == self :: SORT_DOWN && $this->get_current_node()->is_last_child())
+            
+            if ($direction == self::SORT_UP && $this->get_current_node()->is_first_child() ||
+                 $direction == self::SORT_DOWN && $this->get_current_node()->is_last_child())
             {
                 $success = false;
             }
             else
             {
                 $display_order = $selected_complex_content_object_item->get_display_order();
-                $new_place = ($display_order + ($direction == self :: SORT_UP ? - 1 : 1));
+                $new_place = ($display_order + ($direction == self::SORT_UP ? - 1 : 1));
                 $selected_complex_content_object_item->set_display_order($new_place);
-
+                
                 $succes = $selected_complex_content_object_item->update();
-
+                
                 if ($succes)
                 {
                     $new_content_object_ids_path = $this->get_current_node()->get_parents_content_object_ids(true, true);
-
+                    
                     $this->get_root_content_object()->get_complex_content_object_path()->reset();
                     $new_node = $this->get_root_content_object()->get_complex_content_object_path()->follow_path_by_content_object_ids(
                         $new_content_object_ids_path);
-
-                    Event :: trigger(
-                        'Activity',
-                        \Chamilo\Core\Repository\Manager :: context(),
+                    
+                    Event::trigger(
+                        'Activity', 
+                        \Chamilo\Core\Repository\Manager::context(), 
                         array(
-                            Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_UPDATED,
-                            Activity :: PROPERTY_USER_ID => $this->get_user_id(),
-                            Activity :: PROPERTY_DATE => time(),
-                            Activity :: PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(),
-                            Activity :: PROPERTY_CONTENT => $content_object->get_title()));
+                            Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED, 
+                            Activity::PROPERTY_USER_ID => $this->get_user_id(), 
+                            Activity::PROPERTY_DATE => time(), 
+                            Activity::PROPERTY_CONTENT_OBJECT_ID => $content_object->get_id(), 
+                            Activity::PROPERTY_CONTENT => $content_object->get_title()));
                 }
             }
-
+            
             $message = htmlentities(
-                Translation :: get(
-                    ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                    array('OBJECT' => Translation :: get('ContentObject')),
-                    Utilities :: COMMON_LIBRARIES));
-
+                Translation::get(
+                    ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'), 
+                    array('OBJECT' => Translation::get('ContentObject')), 
+                    Utilities::COMMON_LIBRARIES));
+            
             $parameters = array();
-
+            
             if ($succes)
             {
-                $parameters[self :: PARAM_STEP] = $new_node->get_id();
+                $parameters[self::PARAM_STEP] = $new_node->get_id();
             }
             else
             {
-                $parameters[self :: PARAM_STEP] = $this->get_current_node()->get_id();
+                $parameters[self::PARAM_STEP] = $this->get_current_node()->get_id();
             }
-
-            $parameters[self :: PARAM_ACTION] = self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
-
+            
+            $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
+            
             $this->redirect($message, (! $succes), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
         }
         else
@@ -95,6 +95,6 @@ class SorterComponent extends Manager implements DelegateComponent
 
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP, self :: PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
+        return array(self::PARAM_STEP, self::PARAM_FULL_SCREEN, self::PARAM_CONTENT_OBJECT_ID);
     }
 }

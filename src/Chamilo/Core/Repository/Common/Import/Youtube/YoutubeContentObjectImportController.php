@@ -25,13 +25,13 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
     public function run()
     {
         $url = $this->get_parameters()->get_url();
-
-        if (self :: is_available())
+        
+        if (self::is_available())
         {
             $url_parts = parse_url($url);
-
+            
             parse_str($url_parts['query'], $url_query);
-
+            
             if (strpos($url_parts['host'], 'youtu.be') !== false)
             {
                 $external_id = substr($url_parts['path'], 1);
@@ -42,83 +42,83 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
             }
             else
             {
-                $this->add_message(Translation :: get('ObjectNotImported'), self :: TYPE_ERROR);
+                $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
             }
-
-            if (! $this->has_messages(self :: TYPE_ERROR))
+            
+            if (! $this->has_messages(self::TYPE_ERROR))
             {
                 $conditions = array();
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_TYPE),
-                    new StaticConditionVariable(self :: REPOSITORY_TYPE));
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
+                    new StaticConditionVariable(self::REPOSITORY_TYPE));
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_ENABLED),
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
                     new StaticConditionVariable(1));
                 $condition = new AndCondition($conditions);
-
-                $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
+                
+                $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
                     new DataClassRetrievesParameters($condition));
-
+                
                 $external_repository = $external_repositories->next_result();
-                $youtube_connector = DataConnector :: getInstance($external_repository);
+                $youtube_connector = DataConnector::getInstance($external_repository);
                 $external_object = $youtube_connector->retrieve_external_repository_object($external_id);
-
-                $youtube = ContentObject :: factory(Youtube :: class_name());
+                
+                $youtube = ContentObject::factory(Youtube::class_name());
                 $youtube->set_title($external_object->get_title());
                 $youtube->set_description($external_object->get_description());
                 $youtube->set_owner_id($this->get_parameters()->get_user());
                 $youtube->set_parent_id($this->determine_parent_id());
-
+                
                 if ($youtube->create())
                 {
                     $this->process_workspace($youtube);
-
-                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData :: quicksave(
-                        $youtube,
-                        $external_object,
+                    
+                    \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData::quicksave(
+                        $youtube, 
+                        $external_object, 
                         $external_repository->get_id());
-                    $this->add_message(Translation :: get('ObjectImported'), self :: TYPE_CONFIRM);
+                    $this->add_message(Translation::get('ObjectImported'), self::TYPE_CONFIRM);
                     return array($youtube->get_id());
                 }
                 else
                 {
-                    $this->add_message(Translation :: get('ObjectNotImported'), self :: TYPE_ERROR);
+                    $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
                 }
             }
         }
         else
         {
-            $this->add_message(Translation :: get('YouTubeObjectNotAvailable'), self :: TYPE_WARNING);
+            $this->add_message(Translation::get('YouTubeObjectNotAvailable'), self::TYPE_WARNING);
         }
     }
 
     public static function is_available()
     {
-        $youtube_object_available = in_array(self :: FORMAT, DataManager :: get_registered_types(true));
-
+        $youtube_object_available = in_array(self::FORMAT, DataManager::get_registered_types(true));
+        
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_TYPE),
-            new StaticConditionVariable(self :: REPOSITORY_TYPE));
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_TYPE), 
+            new StaticConditionVariable(self::REPOSITORY_TYPE));
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
-                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: PROPERTY_ENABLED),
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
+                \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ENABLED), 
             new StaticConditionVariable(1));
         $condition = new AndCondition($conditions);
-
-        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager :: retrieves(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance :: class_name(),
+        
+        $external_repositories = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
             new DataClassRetrievesParameters($condition));
         $youtube_connector_available = $external_repositories->size() == 1;
-
+        
         return $youtube_object_available && $youtube_connector_available;
     }
 
@@ -148,8 +148,8 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
         {
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
-                $this->get_parameters()->getWorkspace()->getId(),
-                $contentObject->getId(),
+                $this->get_parameters()->getWorkspace()->getId(), 
+                $contentObject->getId(), 
                 $this->get_parameters()->get_category());
         }
     }

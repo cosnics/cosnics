@@ -9,7 +9,7 @@ class CpoImportImplementation extends ImportImplementation
 
     public function import()
     {
-        $content_object = ContentObjectImport :: launch($this);
+        $content_object = ContentObjectImport::launch($this);
         $data_path = $this->get_controller()->get_data_path();
         $content_object->set_temporary_file_path($data_path . $content_object->get_hash());
         return $content_object;

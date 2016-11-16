@@ -30,28 +30,28 @@ class VocabularyTableCellRenderer extends DataClassTableCellRenderer implements 
     {
         switch ($column->get_name())
         {
-            case VocabularyTableColumnModel :: COLUMN_DEFAULT :
+            case VocabularyTableColumnModel::COLUMN_DEFAULT :
                 $image = 'Action/Default';
                 $image .= $result->isDefault() ? '' : 'Na';
                 
                 $translationVariable = 'Default';
                 $translationVariable .= $result->isDefault() ? '' : 'Na';
                 
-                return Theme :: getInstance()->getImage(
+                return Theme::getInstance()->getImage(
                     $image, 
                     'png', 
-                    Translation :: get($translationVariable, null, $this->get_component()->package()), 
+                    Translation::get($translationVariable, null, $this->get_component()->package()), 
                     $this->get_component()->get_url(
                         array(
-                            \Chamilo\Core\Metadata\Vocabulary\Manager :: PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager :: ACTION_DEFAULT, 
-                            Manager :: PARAM_VOCABULARY_ID => $result->get_id())), 
-                    ToolbarItem :: DISPLAY_ICON, 
+                            \Chamilo\Core\Metadata\Vocabulary\Manager::PARAM_ACTION => \Chamilo\Core\Metadata\Vocabulary\Manager::ACTION_DEFAULT, 
+                            Manager::PARAM_VOCABULARY_ID => $result->get_id())), 
+                    ToolbarItem::DISPLAY_ICON, 
                     false, 
                     $this->get_component()->package());
                 break;
         }
         
-        return parent :: render_cell($column, $result);
+        return parent::render_cell($column, $result);
     }
 
     /**
@@ -63,27 +63,27 @@ class VocabularyTableCellRenderer extends DataClassTableCellRenderer implements 
      */
     public function get_actions($result)
     {
-        $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
+        $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
         
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Edit', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Edit'), 
+                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_UPDATE, 
-                        Manager :: PARAM_VOCABULARY_ID => $result->get_id())), 
-                ToolbarItem :: DISPLAY_ICON));
+                        Manager::PARAM_ACTION => Manager::ACTION_UPDATE, 
+                        Manager::PARAM_VOCABULARY_ID => $result->get_id())), 
+                ToolbarItem::DISPLAY_ICON));
         
         $toolbar->add_item(
             new ToolbarItem(
-                Translation :: get('Delete', null, Utilities :: COMMON_LIBRARIES), 
-                Theme :: getInstance()->getCommonImagePath('Action/Delete'), 
+                Translation::get('Delete', null, Utilities::COMMON_LIBRARIES), 
+                Theme::getInstance()->getCommonImagePath('Action/Delete'), 
                 $this->get_component()->get_url(
                     array(
-                        Manager :: PARAM_ACTION => Manager :: ACTION_DELETE, 
-                        Manager :: PARAM_VOCABULARY_ID => $result->get_id())), 
-                ToolbarItem :: DISPLAY_ICON, 
+                        Manager::PARAM_ACTION => Manager::ACTION_DELETE, 
+                        Manager::PARAM_VOCABULARY_ID => $result->get_id())), 
+                ToolbarItem::DISPLAY_ICON, 
                 true));
         return $toolbar->as_html();
     }

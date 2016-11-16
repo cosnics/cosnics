@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: updater.class.php 211 2009-11-13 13:28:39Z vanpouckesven $
- *
+ * 
  * @package user.lib.user_manager.component
  */
 class UpdaterComponent extends Manager
@@ -30,38 +30,38 @@ class UpdaterComponent extends Manager
         {
             throw new NotAllowedException();
         }
-
-        $id = Request :: get(self :: PARAM_USER_USER_ID);
-        $this->set_parameter(self :: PARAM_USER_USER_ID, $id);
-
+        
+        $id = Request::get(self::PARAM_USER_USER_ID);
+        $this->set_parameter(self::PARAM_USER_USER_ID, $id);
+        
         if ($id)
         {
-            $user = \Chamilo\Core\User\Storage\DataManager :: retrieve_by_id(
-                \Chamilo\Core\User\Storage\DataClass\User :: class_name(),
+            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
                 (int) $id);
-
+            
             $form = new UserForm(
-                UserForm :: TYPE_EDIT,
-                $user,
-                $this->get_user(),
-                $this->get_url(array(self :: PARAM_USER_USER_ID => $id)));
-
+                UserForm::TYPE_EDIT, 
+                $user, 
+                $this->get_user(), 
+                $this->get_url(array(self::PARAM_USER_USER_ID => $id)));
+            
             if ($form->validate())
             {
                 $success = $form->update_user();
                 $this->redirect(
-                    Translation :: get($success ? 'UserUpdated' : 'UserNotUpdated'),
-                    ($success ? false : true),
-                    array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_USERS));
+                    Translation::get($success ? 'UserUpdated' : 'UserNotUpdated'), 
+                    ($success ? false : true), 
+                    array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
             }
             else
             {
                 $html = array();
-
+                
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
                 $html[] = $this->render_footer();
-
+                
                 return implode(PHP_EOL, $html);
             }
         }
@@ -69,10 +69,10 @@ class UpdaterComponent extends Manager
         {
             return $this->display_error_page(
                 htmlentities(
-                    Translation :: get(
-                        'NoObjectSelected',
-                        array('OBJECT' => Translation :: get('User')),
-                        Utilities :: COMMON_LIBRARIES)));
+                    Translation::get(
+                        'NoObjectSelected', 
+                        array('OBJECT' => Translation::get('User')), 
+                        Utilities::COMMON_LIBRARIES)));
         }
     }
 
@@ -80,8 +80,8 @@ class UpdaterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(self :: PARAM_ACTION => self :: ACTION_BROWSE_USERS)),
-                Translation :: get('AdminUserBrowserComponent')));
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)), 
+                Translation::get('AdminUserBrowserComponent')));
         $breadcrumbtrail->add_help('user_updater');
     }
 }

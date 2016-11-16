@@ -11,7 +11,7 @@ class ViewerComponent extends Manager
     public function run()
     {
         $factory = new ApplicationFactory(
-            \Chamilo\Core\Repository\Builder\Action\Manager :: context(),
+            \Chamilo\Core\Repository\Builder\Action\Manager::context(), 
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
         return $factory->run();
     }

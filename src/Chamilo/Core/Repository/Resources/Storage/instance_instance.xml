@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="instance_instance">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="type" type="text" length="255" notnull="1" />
-		<property name="title" notnull="1" type="text" length="50" />
-		<property name="implementation" notnull="1" type="text" length="255" />
-		<property name="enabled" notnull="1" type="integer" unsigned="1" />
-		<property name="created" type="integer" unsigned="1" notnull="1" />
-		<property name="modified" type="integer" unsigned="1" notnull="1" />
-	</properties>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="type"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="title"
+            notnull="1"
+            type="text"
+            length="50" />
+        <property
+            name="implementation"
+            notnull="1"
+            type="text"
+            length="255" />
+        <property
+            name="enabled"
+            notnull="1"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="created"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="modified"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
 </object>

@@ -14,15 +14,15 @@ class GroupRelUserTableDataProvider extends DataClassTableDataProvider
     {
         $order_property = array();
         $order_property[] = new OrderBy(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_LASTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME), 
             SORT_ASC, 
-            \Chamilo\Core\User\Storage\DataManager :: get_alias(User :: get_table_name()));
+            \Chamilo\Core\User\Storage\DataManager::get_alias(User::get_table_name()));
         $order_property[] = new OrderBy(
-            new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_FIRSTNAME), 
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME), 
             SORT_ASC, 
-            \Chamilo\Core\User\Storage\DataManager :: get_alias(User :: get_table_name()));
+            \Chamilo\Core\User\Storage\DataManager::get_alias(User::get_table_name()));
         
-        return DataManager :: retrieve_group_rel_users_with_user_join($condition, $offset, $count, $order_property);
+        return DataManager::retrieve_group_rel_users_with_user_join($condition, $offset, $count, $order_property);
     }
 
     public function count_data($condition)

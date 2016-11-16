@@ -34,18 +34,18 @@ class QuickLanguageComponent extends Manager
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ChangeLanguage');
-
+        
         if ($this->isAllowedToChangeLanguage())
         {
             $choice = Request::get(self::PARAM_CHOICE);
             $languages = array_keys($this->getLanguages());
-
+            
             if ($choice && in_array($choice, $languages))
             {
                 LocalSetting::getInstance()->create('platform_language', $choice);
             }
         }
-
+        
         $response = new RedirectResponse(Request::get(self::PARAM_REFER));
         $response->send();
     }

@@ -34,16 +34,16 @@ abstract class Manager extends Application
     const PARAM_IMPORTED_CONTENT_OBJECT_IDS = 'imported_content_object_ids';
     const PARAM_WORKSPACE_ID = 'workspace_id';
     const PARAM_IN_WORKSPACES = 'in_workspaces';
-
+    
     // Actions
     const ACTION_CREATOR = 'Creator';
     const ACTION_BROWSER = 'Browser';
     const ACTION_VIEWER = 'Viewer';
     const ACTION_IMPORTER = 'Importer';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_CREATOR;
-
+    const DEFAULT_ACTION = self::ACTION_CREATOR;
+    
     // Configuration
     const SETTING_TABS_DISABLED = 'tabs_disabled';
     const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
@@ -69,17 +69,17 @@ abstract class Manager extends Application
     private $tabs;
 
     private $creation_defaults;
-
+    
     /**
      * Allow selection of multiple content objects in the viewer
-     *
+     * 
      * @var int
      */
     const SELECT_MULTIPLE = 0;
-
+    
     /**
      * Allow selection of just one content object in the viewer
-     *
+     * 
      * @var int
      */
     const SELECT_SINGLE = 1;
@@ -90,67 +90,67 @@ abstract class Manager extends Application
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
-        $this->maximum_select = self :: SELECT_MULTIPLE;
+        parent::__construct($applicationConfiguration);
+        $this->maximum_select = self::SELECT_MULTIPLE;
         $this->default_content_objects = array();
         $this->parameters = array();
         $this->excluded_objects = array();
-
-        $this->set_actions(array(self :: ACTION_CREATOR, self :: ACTION_BROWSER, self :: ACTION_IMPORTER));
+        
+        $this->set_actions(array(self::ACTION_CREATOR, self::ACTION_BROWSER, self::ACTION_IMPORTER));
         $this->set_parameter(
-            self :: PARAM_ACTION,
-            (Request :: get(self :: PARAM_ACTION) ? Request :: get(self :: PARAM_ACTION) : self :: ACTION_CREATOR));
+            self::PARAM_ACTION, 
+            (Request::get(self::PARAM_ACTION) ? Request::get(self::PARAM_ACTION) : self::ACTION_CREATOR));
     }
 
     public function render_header()
     {
         if ($this->areTabsDisabled())
         {
-            return parent :: render_header();
+            return parent::render_header();
         }
-
+        
         $html = array();
-
-        $html[] = parent :: render_header();
-
-        $current_action = $this->get_parameter(self :: PARAM_ACTION);
-
+        
+        $html[] = parent::render_header();
+        
+        $current_action = $this->get_parameter(self::PARAM_ACTION);
+        
         $actions = $this->get_actions();
-
-        if ($current_action == self :: ACTION_VIEWER)
+        
+        if ($current_action == self::ACTION_VIEWER)
         {
-            $actions[] = self :: ACTION_VIEWER;
+            $actions[] = self::ACTION_VIEWER;
         }
-
+        
         $this->tabs = new DynamicVisualTabsRenderer('viewer');
-
+        
         foreach ($actions as $viewer_action)
         {
             $selected = ($current_action == $viewer_action ? true : false);
-
+            
             $parameters = $this->get_parameters();
-            $parameters[self :: PARAM_ACTION] = $viewer_action;
-
-            if ($viewer_action == self :: ACTION_VIEWER)
+            $parameters[self::PARAM_ACTION] = $viewer_action;
+            
+            if ($viewer_action == self::ACTION_VIEWER)
             {
-                $parameters[self :: PARAM_ID] = Request :: get(self :: PARAM_ID);
+                $parameters[self::PARAM_ID] = Request::get(self::PARAM_ID);
             }
-
-            $label = Translation :: get(
-                (string) StringUtilities :: getInstance()->createString($viewer_action)->upperCamelize() . 'Title');
+            
+            $label = Translation::get(
+                (string) StringUtilities::getInstance()->createString($viewer_action)->upperCamelize() . 'Title');
             $link = $this->get_url($parameters);
             $this->tabs->add_tab(
                 new DynamicVisualTab(
-                    $viewer_action,
-                    $label,
-                    Theme :: getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . $viewer_action),
-                    $link,
+                    $viewer_action, 
+                    $label, 
+                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'Tab/' . $viewer_action), 
+                    $link, 
                     $selected));
         }
-
+        
         $html[] = $this->tabs->header();
         $html[] = $this->tabs->body_header();
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -158,15 +158,15 @@ abstract class Manager extends Application
     {
         if ($this->areTabsDisabled())
         {
-            return parent :: render_footer();
+            return parent::render_footer();
         }
-
+        
         $html = array();
-
+        
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
-        $html[] = parent :: render_footer();
-
+        $html[] = parent::render_footer();
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -190,7 +190,7 @@ abstract class Manager extends Application
 
     /**
      * Returns the types of content object that the viewer can use.
-     *
+     * 
      * @return multitype:string
      */
     public function get_types()
@@ -240,7 +240,7 @@ abstract class Manager extends Application
      */
     public function any_object_selected()
     {
-        return ! is_null(self :: get_selected_objects());
+        return ! is_null(self::get_selected_objects());
     }
 
     /**
@@ -249,19 +249,19 @@ abstract class Manager extends Application
      */
     public static function get_selected_objects()
     {
-        $requestedObjects = Request :: get(self :: PARAM_ID);
-
+        $requestedObjects = Request::get(self::PARAM_ID);
+        
         if (! $requestedObjects)
         {
-            $requestedObjects = Request :: post(self :: PARAM_ID);
+            $requestedObjects = Request::post(self::PARAM_ID);
         }
-
+        
         return $requestedObjects;
     }
 
     public function isReadyToBePublished()
     {
-        return $this->getRequest()->get(self :: PARAM_ID);
+        return $this->getRequest()->get(self::PARAM_ID);
     }
 
     /**
@@ -270,7 +270,7 @@ abstract class Manager extends Application
      */
     public static function is_ready_to_be_published()
     {
-        return (self :: any_object_selected());
+        return (self::any_object_selected());
     }
 
     /**
@@ -279,8 +279,8 @@ abstract class Manager extends Application
      */
     public function areTabsDisabled()
     {
-        return $this->getApplicationConfiguration()->get(self :: SETTING_TABS_DISABLED) === true ||
-            !$this->isAuthorized(\Chamilo\Core\Repository\Manager::context());
+        return $this->getApplicationConfiguration()->get(self::SETTING_TABS_DISABLED) === true ||
+             ! $this->isAuthorized(\Chamilo\Core\Repository\Manager::context());
     }
 
     /**
@@ -289,12 +289,12 @@ abstract class Manager extends Application
      */
     public function areBreadcrumbsDisabled()
     {
-        return $this->getApplicationConfiguration()->get(self :: SETTING_BREADCRUMBS_DISABLED) === true;
+        return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
     }
 
     /**
      * Returns the breadcrumb generator
-     *
+     * 
      * @return BreadcrumbGenerator
      */
     public function get_breadcrumb_generator()

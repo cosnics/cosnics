@@ -19,7 +19,7 @@ abstract class ContentObjectRemover extends \Chamilo\Configuration\Package\Actio
      */
     public function __construct($values)
     {
-        parent :: __construct($values, DataManager :: getInstance());
+        parent::__construct($values, DataManager::getInstance());
     }
 
     /**
@@ -29,10 +29,10 @@ abstract class ContentObjectRemover extends \Chamilo\Configuration\Package\Actio
      */
     public function extra()
     {
-        $context = self :: context();
-        $class = $context . '\\' . ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($context, true);
+        $context = self::context();
+        $class = $context . '\\' . ClassnameUtilities::getInstance()->getPackageNameFromNamespace($context, true);
         
-        $content_objects = DataManager :: retrieve_content_objects($class :: class_name());
+        $content_objects = DataManager::retrieve_content_objects($class::class_name());
         
         while ($content_object = $content_objects->next_result())
         {

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: truncater.class.php 224 2009-11-13 14:40:30Z kariboe $
- *
+ * 
  * @package group.lib.group_manager.component
  */
 class TruncaterComponent extends Manager
@@ -25,24 +25,24 @@ class TruncaterComponent extends Manager
     public function run()
     {
         $user = $this->get_user();
-
+        
         if (! $this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
-
-        $ids = $this->getRequest()->get(self :: PARAM_GROUP_ID);
-        $this->set_parameter(self :: PARAM_GROUP_ID, $ids);
-
+        
+        $ids = $this->getRequest()->get(self::PARAM_GROUP_ID);
+        $this->set_parameter(self::PARAM_GROUP_ID, $ids);
+        
         $failures = 0;
-
+        
         if (! empty($ids))
         {
             if (! is_array($ids))
             {
                 $ids = array($ids);
             }
-
+            
             foreach ($ids as $id)
             {
                 $group = $this->retrieve_group($id);
@@ -52,15 +52,15 @@ class TruncaterComponent extends Manager
                 }
                 else
                 {
-                    Event :: trigger(
-                        'Truncate',
-                        Manager :: context(),
+                    Event::trigger(
+                        'Truncate', 
+                        Manager::context(), 
                         array(
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change :: PROPERTY_REFERENCE_ID => $group->get_id(),
-                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change :: PROPERTY_USER_ID => $user->get_id()));
+                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_REFERENCE_ID => $group->get_id(), 
+                            \Chamilo\Core\Group\Integration\Chamilo\Core\Tracking\Storage\DataClass\Change::PROPERTY_USER_ID => $user->get_id()));
                 }
             }
-
+            
             if ($failures)
             {
                 if (count($ids) == 1)
@@ -83,22 +83,22 @@ class TruncaterComponent extends Manager
                     $message = 'SelectedGroupsEmptied';
                 }
             }
-
+            
             if (count($ids) == 1)
                 $this->redirect(
-                    Translation :: get($message),
-                    ($failures ? true : false),
-                    array(Application :: PARAM_ACTION => self :: ACTION_VIEW_GROUP, self :: PARAM_GROUP_ID => $ids[0]));
+                    Translation::get($message), 
+                    ($failures ? true : false), 
+                    array(Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $ids[0]));
             else
                 $this->redirect(
-                    Translation :: get($message),
-                    ($failures ? true : false),
-                    array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS));
+                    Translation::get($message), 
+                    ($failures ? true : false), 
+                    array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS));
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation :: get('NoObjectSelected', null, Utilities :: COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)));
         }
     }
 
@@ -106,15 +106,15 @@ class TruncaterComponent extends Manager
     {
         $breadcrumbtrail->add(
             new Breadcrumb(
-                $this->get_url(array(Application :: PARAM_ACTION => self :: ACTION_BROWSE_GROUPS)),
-                Translation :: get('BrowserComponent')));
+                $this->get_url(array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS)), 
+                Translation::get('BrowserComponent')));
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        Application :: PARAM_ACTION => self :: ACTION_VIEW_GROUP,
-                        self :: PARAM_GROUP_ID => Request :: get(self :: PARAM_GROUP_ID))),
-                Translation :: get('ViewerComponent')));
+                        Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, 
+                        self::PARAM_GROUP_ID => Request::get(self::PARAM_GROUP_ID))), 
+                Translation::get('ViewerComponent')));
         $breadcrumbtrail->add_help('group general');
     }
 }

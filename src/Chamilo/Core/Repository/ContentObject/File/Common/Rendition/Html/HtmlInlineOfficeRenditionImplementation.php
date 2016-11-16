@@ -21,7 +21,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     // View type
     const VIEW_TYPE_FULL = 'full';
     const VIEW_TYPE_EMBED = 'embed';
-
+    
     // Viewer URL
     const VIEWER_URL_FULL = 'https://view.officeapps.live.com/op/view.aspx?src=';
     const VIEWER_URL_EMBED = 'https://view.officeapps.live.com/op/embed.aspx?src=';
@@ -32,13 +32,13 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function getViewerType()
     {
-        $viewerType = Configuration :: getInstance()->get_setting(array(File :: package(), 'office_viewer_type'));
-
+        $viewerType = Configuration::getInstance()->get_setting(array(File::package(), 'office_viewer_type'));
+        
         if (is_null($viewerType))
         {
-            return self :: VIEW_TYPE_FULL;
+            return self::VIEW_TYPE_FULL;
         }
-
+        
         return $viewerType;
     }
 
@@ -50,11 +50,11 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     {
         switch ($this->getViewerType())
         {
-            case self :: VIEW_TYPE_FULL :
-                return self :: VIEWER_URL_FULL;
+            case self::VIEW_TYPE_FULL :
+                return self::VIEWER_URL_FULL;
                 break;
-            case self :: VIEW_TYPE_EMBED :
-                return self :: VIEWER_URL_EMBED;
+            case self::VIEW_TYPE_EMBED :
+                return self::VIEWER_URL_EMBED;
                 break;
         }
     }
@@ -75,46 +75,46 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function render($parameters)
     {
         $html = array();
-
+        
         if ($this->canBeDisplayed())
         {
             $html[] = '<div class="office-viewer-container">';
-
+            
             $html[] = '<div class="office-viewer-content">';
             $html[] = '<div class="alert alert-info office-viewer-sidebar center-block">';
-
+            
             $alertText = array();
-
+            
             $alertText[] = '<span class="glyphicon glyphicon-lock"></span>';
             $alertText[] = '<span class="office-viewer-full-screen-message">' .
-                 Translation :: get('OfficeViewerFullScreen') . '</span>';
+                 Translation::get('OfficeViewerFullScreen') . '</span>';
             $alertText[] = '<a class="btn btn-default btn-office-viewer-minimize">' .
-                 Translation :: get('OfficeViewerExitFullScreen') . '</a>';
-
+                 Translation::get('OfficeViewerExitFullScreen') . '</a>';
+            
             $html[] = implode(' ', $alertText);
             $html[] = '</div>';
-
+            
             $html[] = '<iframe class="' . implode(' ', $this->getViewerFrameClasses()) . '" data-url="' .
                  $this->getIFrameSource() . '">';
             $html[] = '</iframe>';
-
+            
             $html[] = '</div>';
-
+            
             $html[] = $this->renderActions();
-
+            
             $html[] = '</div>';
-
-            $html[] = ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(File :: package(), true) . 'OfficeViewer.js');
-            $html[] = ResourceManager :: getInstance()->get_resource_html(
-                Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+            
+            $html[] = ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(File::package(), true) . 'OfficeViewer.js');
+            $html[] = ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                      'Plugin/Jquery/jquery.fullscreen.min.js');
         }
         else
         {
             $html[] = $this->getErrorMessage();
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -125,12 +125,12 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function getViewerFrameClasses()
     {
         $classes = array('office-viewer-frame');
-
-        if ($this->getViewerType() == self :: VIEW_TYPE_EMBED)
+        
+        if ($this->getViewerType() == self::VIEW_TYPE_EMBED)
         {
             $classes[] = 'office-viewer-frame-embed';
         }
-
+        
         return $classes;
     }
 
@@ -140,7 +140,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function allowsFullScreen()
     {
-        return $this->getViewerType() != self :: VIEW_TYPE_EMBED;
+        return $this->getViewerType() != self::VIEW_TYPE_EMBED;
     }
 
     /**
@@ -150,20 +150,20 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function getButtonToolbar($classes = '')
     {
-        $buttonToolBar = parent :: getButtonToolBar($classes);
-
+        $buttonToolBar = parent::getButtonToolBar($classes);
+        
         if ($this->allowsFullScreen())
         {
             $buttonToolBar->addItem(
                 new Button(
-                    Translation :: get('ViewFullScreen'),
-                    new BootstrapGlyph('fullscreen'),
-                    '#',
-                    Button :: DISPLAY_ICON_AND_LABEL,
-                    false,
+                    Translation::get('ViewFullScreen'), 
+                    new BootstrapGlyph('fullscreen'), 
+                    '#', 
+                    Button::DISPLAY_ICON_AND_LABEL, 
+                    false, 
                     'btn-office-viewer-full-screen'));
         }
-
+        
         return $buttonToolBar;
     }
 
@@ -175,14 +175,14 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
     public function getErrorMessage()
     {
         $html = array();
-
+        
         $html[] = '<div class="alert alert-info">';
-        $html[] = '<h4>' . Translation :: get('LiveViewNotSupportedTitle') . '</h4>';
-        $html[] = Translation :: get('LiveViewNotSupported');
+        $html[] = '<h4>' . Translation::get('LiveViewNotSupportedTitle') . '</h4>';
+        $html[] = Translation::get('LiveViewNotSupported');
         $html[] = '<br />';
         $html[] = $this->renderActions('btn-info');
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 

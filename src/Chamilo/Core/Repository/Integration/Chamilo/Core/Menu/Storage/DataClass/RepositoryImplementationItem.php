@@ -19,47 +19,47 @@ class RepositoryImplementationItem extends Item
 
     public function __construct($default_properties = array(), $additional_properties = null)
     {
-        parent :: __construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
     }
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name());
     }
 
     public function get_implementation()
     {
-        return $this->get_additional_property(self :: PROPERTY_IMPLEMENTATION);
+        return $this->get_additional_property(self::PROPERTY_IMPLEMENTATION);
     }
 
     public function set_implementation($implementation)
     {
-        return $this->set_additional_property(self :: PROPERTY_IMPLEMENTATION, $implementation);
+        return $this->set_additional_property(self::PROPERTY_IMPLEMENTATION, $implementation);
     }
 
     public function get_instance_id()
     {
-        return $this->get_additional_property(self :: PROPERTY_INSTANCE_ID);
+        return $this->get_additional_property(self::PROPERTY_INSTANCE_ID);
     }
 
     public function set_instance_id($instance_id)
     {
-        return $this->set_additional_property(self :: PROPERTY_INSTANCE_ID, $instance_id);
+        return $this->set_additional_property(self::PROPERTY_INSTANCE_ID, $instance_id);
     }
 
     public function get_name()
     {
-        return $this->get_additional_property(self :: PROPERTY_NAME);
+        return $this->get_additional_property(self::PROPERTY_NAME);
     }
 
     public function set_name($name)
     {
-        return $this->set_additional_property(self :: PROPERTY_NAME, $name);
+        return $this->set_additional_property(self::PROPERTY_NAME, $name);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_IMPLEMENTATION, self :: PROPERTY_INSTANCE_ID, self :: PROPERTY_NAME);
+        return array(self::PROPERTY_IMPLEMENTATION, self::PROPERTY_INSTANCE_ID, self::PROPERTY_NAME);
     }
 }

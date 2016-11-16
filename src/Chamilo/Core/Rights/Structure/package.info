@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <packages>
-	<package>
-		<name>Structure Rights Management</name>
-		<code>StructureRights</code>
-		<context>Chamilo\Core\Rights\Structure</context>
-		<type>Chamilo\Core\Rights</type>
-		<category>core</category>
-		<authors />
-		<version>5.0.0</version>
-		<description />
-		<pre-depends>
-			<dependencies operator="1">
-				<dependency type="registration">
-					<id>Chamilo\Core\Rights</id>
-					<version operator="4">5.0.0</version>
-				</dependency>
-			</dependencies>
-		</pre-depends>
-		<extra>
-			<core-install>1</core-install>
-		</extra>
-	</package>
+    <package>
+        <name>Structure Rights Management</name>
+        <code>StructureRights</code>
+        <context>Chamilo\Core\Rights\Structure</context>
+        <type>Chamilo\Core\Rights</type>
+        <category>core</category>
+        <authors />
+        <version>5.0.0</version>
+        <description />
+        <pre-depends>
+            <dependencies operator="1">
+                <dependency type="registration">
+                    <id>Chamilo\Core\Rights</id>
+                    <version operator="4">5.0.0</version>
+                </dependency>
+            </dependencies>
+        </pre-depends>
+        <extra>
+            <core-install>1</core-install>
+        </extra>
+    </package>
 </packages>

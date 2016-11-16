@@ -87,21 +87,21 @@ abstract class ContentObjectImport
 
     public static function launch($import_implementation)
     {
-        return self :: factory($import_implementation)->import();
+        return self::factory($import_implementation)->import();
     }
 
     public static function post_process($import_implementation, $content_object)
     {
-        return self :: factory($import_implementation)->post_import($content_object);
+        return self::factory($import_implementation)->post_import($content_object);
     }
 
     public static function factory($import_implementation)
     {
-        $class_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($import_implementation, true);
+        $class_name = ClassnameUtilities::getInstance()->getClassnameFromObject($import_implementation, true);
         $class_name_parts = explode('_', $class_name);
         $class = __NAMESPACE__ . '\\' .
-             (string) StringUtilities :: getInstance()->createString($class_name_parts[0])->upperCamelize() . '\\' .
-             (string) StringUtilities :: getInstance()->createString($class_name_parts[0])->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($class_name_parts[0])->upperCamelize() . '\\' .
+             (string) StringUtilities::getInstance()->createString($class_name_parts[0])->upperCamelize() .
              'ContentObjectImport';
         return new $class($import_implementation);
     }

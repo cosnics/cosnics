@@ -85,18 +85,18 @@ abstract class ContentObjectRendition
 
     public static function launch($rendition_implementation)
     {
-        return self :: factory($rendition_implementation)->render();
+        return self::factory($rendition_implementation)->render();
     }
 
     public static function factory($rendition_implementation)
     {
         $class = __NAMESPACE__ . '\\' .
-             (string) StringUtilities :: getInstance()->createString($rendition_implementation->get_format())->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($rendition_implementation->get_format())->upperCamelize() .
              '\Type\\' .
-             (string) StringUtilities :: getInstance()->createString($rendition_implementation->get_format())->upperCamelize() .
-             (string) StringUtilities :: getInstance()->createString($rendition_implementation->get_view())->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($rendition_implementation->get_format())->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($rendition_implementation->get_view())->upperCamelize() .
              'ContentObjectRendition';
-               
+        
         return new $class($rendition_implementation);
     }
 }

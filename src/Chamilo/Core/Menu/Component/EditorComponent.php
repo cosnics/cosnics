@@ -30,40 +30,40 @@ class EditorComponent extends Manager implements DelegateComponent
     public function run()
     {
         $this->check_allowed();
-        $item = DataManager :: retrieve_by_id(Item :: class_name(), (int) Request :: get(Manager :: PARAM_ITEM));
-
-        BreadcrumbTrail :: getInstance()->add(
+        $item = DataManager::retrieve_by_id(Item::class_name(), (int) Request::get(Manager::PARAM_ITEM));
+        
+        BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
-                null,
-                Translation :: get('ManagerEditor', array('NAME' => $item->get_titles()->get_current_translation()))));
-
-        $item_form = ItemForm :: factory(
-            ItemForm :: TYPE_EDIT,
-            $item,
-            $this->get_url(array(Manager :: PARAM_ITEM => $item->get_id())));
-
+                null, 
+                Translation::get('ManagerEditor', array('NAME' => $item->get_titles()->get_current_translation()))));
+        
+        $item_form = ItemForm::factory(
+            ItemForm::TYPE_EDIT, 
+            $item, 
+            $this->get_url(array(Manager::PARAM_ITEM => $item->get_id())));
+        
         if ($item_form->validate())
         {
             $values = $item_form->exportValues();
-
+            
             foreach ($item->get_default_property_names() as $property)
             {
-                if(array_key_exists($property, $values))
+                if (array_key_exists($property, $values))
                 {
                     $item->set_default_property($property, $values[$property]);
                 }
             }
-
+            
             foreach ($item->get_additional_property_names() as $property)
             {
                 $item->set_additional_property($property, $values[$property]);
             }
-
+            
             $titles = $item->get_titles();
             $item_titles = new ItemTitles();
-            foreach ($values[ItemTitle :: PROPERTY_TITLE] as $isocode => $title)
+            foreach ($values[ItemTitle::PROPERTY_TITLE] as $isocode => $title)
             {
-                if (! StringUtilities :: getInstance()->isNullOrEmpty($title, true))
+                if (! StringUtilities::getInstance()->isNullOrEmpty($title, true))
                 {
                     $item_title = $titles->get_title_by_isocode($isocode);
                     if (! $item_title instanceof ItemTitle)
@@ -76,41 +76,41 @@ class EditorComponent extends Manager implements DelegateComponent
                     $item_titles->add($item_title);
                 }
             }
-
+            
             $item->set_titles($item_titles);
             $success = $item->update();
-
+            
             if ($success)
             {
-                $message = Translation :: get(
-                    'ObjectCreated',
-                    array('OBJECT' => Translation :: get('ManagerItem')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectCreated', 
+                    array('OBJECT' => Translation::get('ManagerItem')), 
+                    Utilities::COMMON_LIBRARIES);
             }
             else
             {
-                $message = Translation :: get(
-                    'ObjectNotCreated',
-                    array('OBJECT' => Translation :: get('ManagerItem')),
-                    Utilities :: COMMON_LIBRARIES);
+                $message = Translation::get(
+                    'ObjectNotCreated', 
+                    array('OBJECT' => Translation::get('ManagerItem')), 
+                    Utilities::COMMON_LIBRARIES);
             }
-
+            
             $itemService = new ItemService(new ItemRepository());
             $itemService->resetCache();
-
+            
             $this->redirect(
-                $message,
-                ($success ? false : true),
-                array(Manager :: PARAM_ACTION => Manager :: ACTION_BROWSE, Manager :: PARAM_ITEM => $item->get_parent()));
+                $message, 
+                ($success ? false : true), 
+                array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->get_parent()));
         }
         else
         {
             $html = array();
-
+            
             $html[] = $this->render_header();
             $html[] = $item_form->toHtml();
             $html[] = $this->render_footer();
-
+            
             return implode(PHP_EOL, $html);
         }
     }

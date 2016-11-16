@@ -29,7 +29,7 @@ abstract class ComplexContentObjectItemForm extends FormValidator
      */
     public function __construct(ComplexContentObjectItem $complex_content_object_item, $action = null, $method = 'post')
     {
-        parent :: __construct('complex_content_object_item_form', $method, $action);
+        parent::__construct('complex_content_object_item_form', $method, $action);
         $this->complex_content_object_item = $complex_content_object_item;
     }
 
@@ -66,12 +66,12 @@ abstract class ComplexContentObjectItemForm extends FormValidator
             return null;
         }
         
-        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname(
+        $contentObjectNamespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname(
             $complex_content_object_item->class_name());
-        $contentObjectNamespace = ClassnameUtilities :: getInstance()->getNamespaceParent($contentObjectNamespace, 2);
-        $objectName = ClassnameUtilities :: getInstance()->getClassnameFromObject($complex_content_object_item);
+        $contentObjectNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($contentObjectNamespace, 2);
+        $objectName = ClassnameUtilities::getInstance()->getClassnameFromObject($complex_content_object_item);
         
-        $class = $contentObjectNamespace . '\Form\\'.$objectName.'Form';
+        $class = $contentObjectNamespace . '\Form\\' . $objectName . 'Form';
         
         return new $class($complex_content_object_item, $action, $method);
     }

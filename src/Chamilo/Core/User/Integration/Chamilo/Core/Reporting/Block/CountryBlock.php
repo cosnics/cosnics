@@ -17,19 +17,19 @@ class CountryBlock extends Block
         $tracker = new \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country();
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country :: class_name(),
-                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country :: PROPERTY_TYPE),
+                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country::class_name(), 
+                \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Country::PROPERTY_TYPE), 
             new StaticConditionVariable('country'));
-        $description[0] = Translation :: get('Countries');
-
-        $data = Block :: array_from_tracker($tracker, $condition, $description);
+        $description[0] = Translation::get('Countries');
+        
+        $data = Block::array_from_tracker($tracker, $condition, $description);
         $keys = array_keys($data);
         $reporting_data->set_categories($keys);
-        $reporting_data->set_rows(array(Translation :: get('Countries')));
-
+        $reporting_data->set_rows(array(Translation::get('Countries')));
+        
         foreach ($keys as $key => $name)
         {
-            $reporting_data->add_data_category_row($name, Translation :: get('Countries'), $data[$name]);
+            $reporting_data->add_data_category_row($name, Translation::get('Countries'), $data[$name]);
         }
         return $reporting_data;
     }
@@ -41,11 +41,6 @@ class CountryBlock extends Block
 
     public function get_views()
     {
-        return array(
-            Html :: VIEW_TABLE,
-            Html :: VIEW_PIE,
-            Html :: VIEW_CSV,
-            Html :: VIEW_XLSX,
-            Html :: VIEW_XML);
+        return array(Html::VIEW_TABLE, Html::VIEW_PIE, Html::VIEW_CSV, Html::VIEW_XLSX, Html::VIEW_XML);
     }
 }

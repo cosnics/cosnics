@@ -24,8 +24,8 @@ class LogoutItem extends MenuItem
     {
         $redirect = new Redirect(
             array(
-                Application :: PARAM_CONTEXT => Manager :: context(),
-                Application :: PARAM_ACTION => Manager :: ACTION_LOGOUT));
+                Application::PARAM_CONTEXT => Manager::context(), 
+                Application::PARAM_ACTION => Manager::ACTION_LOGOUT));
         return $redirect->getUrl();
     }
 }

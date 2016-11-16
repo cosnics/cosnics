@@ -20,10 +20,10 @@ class AssessmentResultViewerForm extends FormValidator
 
     public function __construct(AssessmentResultProcessor $assessment_result_processor, $method = 'post', $action = null)
     {
-        parent :: __construct('assessment_result_viewer_form', $method, $action);
-
+        parent::__construct('assessment_result_viewer_form', $method, $action);
+        
         $this->assessment_result_processor = $assessment_result_processor;
-
+        
         $this->add_general();
         $this->add_buttons();
         $this->add_results();
@@ -42,19 +42,19 @@ class AssessmentResultViewerForm extends FormValidator
 
     public function add_general()
     {
-        $current_page = self :: PAGE_NUMBER . '-' . $this->get_page_number();
+        $current_page = self::PAGE_NUMBER . '-' . $this->get_page_number();
         $this->addElement('hidden', $current_page, $this->get_page_number());
-
-        $start_time = Request :: post('start_time');
+        
+        $start_time = Request::post('start_time');
         $start_time = $start_time ? $start_time : 0;
-
+        
         $this->addElement('hidden', 'start_time', $start_time, array('id' => 'start_time'));
     }
 
     public function add_buttons()
     {
         $finished = $this->assessment_result_processor->is_finished();
-
+        
         if (! $finished && $this->get_page_number() != ($this->get_total_pages() + 1))
         {
             // $progress = round(($this->get_page_number() / $this->get_total_pages()) * 100);
@@ -62,35 +62,35 @@ class AssessmentResultViewerForm extends FormValidator
             // TODO: Temporary fix
             $this->get_page_number();
             $this->get_total_pages();
-
+            
             // $this->addElement('html', '<div style="float: left; padding: 7px; font-weight: bold; line-height:
             // 100%;">' . Translation :: get('PageNumberOfTotal', array(
             // 'CURRENT' => $this->get_page_number(),
             // 'TOTAL' => $this->get_total_pages())) . '</div>');
         }
-
+        
         if (! $finished &&
              ($this->get_page_number() < $this->assessment_result_processor->get_assessment_viewer()->get_total_pages()))
         {
             $buttons[] = $this->createElement(
-                'style_button',
-                'next',
-                Translation :: get('Next', null, Utilities :: COMMON_LIBRARIES),
-                null,
-                null,
+                'style_button', 
+                'next', 
+                Translation::get('Next', null, Utilities::COMMON_LIBRARIES), 
+                null, 
+                null, 
                 'chevron-right');
         }
         elseif (! $finished &&
              $this->get_page_number() == $this->assessment_result_processor->get_assessment_viewer()->get_total_pages())
         {
-
+            
             if ($this->assessment_result_processor->get_assessment_viewer()->get_configuration()->show_score())
             {
-                $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('SeeResults'));
+                $buttons[] = $this->createElement('style_submit_button', 'submit', Translation::get('SeeResults'));
             }
             else
             {
-                $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('ViewResults'));
+                $buttons[] = $this->createElement('style_submit_button', 'submit', Translation::get('ViewResults'));
             }
         }
         elseif ($finished || $this->get_page_number() == ($this->get_total_pages() + 1))
@@ -98,43 +98,43 @@ class AssessmentResultViewerForm extends FormValidator
             $back_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_back_url();
             $continue_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_continue_url();
             $current_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_current_url();
-
+            
             if ($this->assessment_result_processor->get_assessment_viewer()->get_root_content_object()->has_unlimited_attempts())
             {
                 $buttons[] = $this->createElement(
-                    'static',
-                    null,
-                    null,
+                    'static', 
+                    null, 
+                    null, 
                     '<a href="' . $current_url .
                          '" class="btn btn-default" target="_parent"><span class="glyphicon glyphicon-refresh"></span> ' .
-                         Translation :: get('DoAssessmentAgain') . '</a>');
+                         Translation::get('DoAssessmentAgain') . '</a>');
             }
-
-            if (! StringUtilities :: getInstance()->isNullOrEmpty($back_url))
+            
+            if (! StringUtilities::getInstance()->isNullOrEmpty($back_url))
             {
                 $buttons[] = $this->createElement(
-                    'static',
-                    null,
-                    null,
+                    'static', 
+                    null, 
+                    null, 
                     '<a href="' . $back_url .
                          '" class="btn btn-danger" target="_parent"><span class="glyphicon glyphicon-stop"></span> ' .
-                         Translation :: get('Finish') . '</a>');
+                         Translation::get('Finish') . '</a>');
             }
-
-            if (! StringUtilities :: getInstance()->isNullOrEmpty($continue_url))
+            
+            if (! StringUtilities::getInstance()->isNullOrEmpty($continue_url))
             {
                 $buttons[] = $this->createElement(
-                    'static',
-                    null,
-                    null,
+                    'static', 
+                    null, 
+                    null, 
                     '<a href="' . $continue_url .
                          '" class="btn btn-default" target="_parent"><span class="glyphicon glyphicon-ok"></span> ' .
-                         Translation :: get('ContinueSession') . '</a>');
+                         Translation::get('ContinueSession') . '</a>');
             }
         }
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-
+        
         $renderer = $this->defaultRenderer();
         $renderer->setElementTemplate('<div style="float: right;">{element}</div><br /><br />', 'buttons');
         $renderer->setGroupElementTemplate('{element}', 'buttons');

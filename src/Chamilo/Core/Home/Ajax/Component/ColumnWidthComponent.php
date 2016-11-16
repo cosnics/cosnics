@@ -20,7 +20,7 @@ class ColumnWidthComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_COLUMN, self :: PARAM_WIDTH);
+        return array(self::PARAM_COLUMN, self::PARAM_WIDTH);
     }
 
     /*
@@ -28,33 +28,33 @@ class ColumnWidthComponent extends \Chamilo\Core\Home\Ajax\Manager
      */
     public function run()
     {
-        $userId = DataManager :: determine_user_id();
-
+        $userId = DataManager::determine_user_id();
+        
         if ($userId === false)
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
-
-        $columnId = $this->getPostDataValue(self :: PARAM_COLUMN);
-        $columnWidth = $this->getPostDataValue(self :: PARAM_WIDTH);
-
-        $column = DataManager :: retrieve_by_id(Column :: class_name(), $columnId);
-
+        
+        $columnId = $this->getPostDataValue(self::PARAM_COLUMN);
+        $columnWidth = $this->getPostDataValue(self::PARAM_WIDTH);
+        
+        $column = DataManager::retrieve_by_id(Column::class_name(), $columnId);
+        
         if ($column->getUserId() == $userId)
         {
             $column->setWidth((int) $columnWidth);
             if ($column->update())
             {
-                JsonAjaxResult :: success();
+                JsonAjaxResult::success();
             }
             else
             {
-                JsonAjaxResult :: error(409, Translation :: get('ColumnNotUpdated'));
+                JsonAjaxResult::error(409, Translation::get('ColumnNotUpdated'));
             }
         }
         else
         {
-            JsonAjaxResult :: not_allowed();
+            JsonAjaxResult::not_allowed();
         }
     }
 }

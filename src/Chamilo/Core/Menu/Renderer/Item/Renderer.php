@@ -58,13 +58,13 @@ abstract class Renderer
      */
     public static function factory($menuRenderer, $item, $parentRenderer = null)
     {
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceFromClassname($item->get_type());
-        $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent($namespace, 2);
-
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($item->get_type());
+        $namespace = ClassnameUtilities::getInstance()->getNamespaceParent($namespace, 2);
+        
         $class = $namespace . '\Renderer\Item\\' .
-             (string) StringUtilities :: getInstance()->createString($menuRenderer :: TYPE)->upperCamelize() . '\Item\\' .
-             ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($item->get_type());
-
+             (string) StringUtilities::getInstance()->createString($menuRenderer::TYPE)->upperCamelize() . '\Item\\' .
+             ClassnameUtilities::getInstance()->getPackageNameFromNamespace($item->get_type());
+        
         return new $class($menuRenderer, $item, $parentRenderer);
     }
 
@@ -77,12 +77,12 @@ abstract class Renderer
      */
     public static function toHtml($menuRenderer, $item, $parentRenderer = null)
     {
-        return self :: factory($menuRenderer, $item, $parentRenderer)->render();
+        return self::factory($menuRenderer, $item, $parentRenderer)->render();
     }
 
     /**
      * Renders the menu
-     *
+     * 
      * @return string
      */
     abstract public function render();

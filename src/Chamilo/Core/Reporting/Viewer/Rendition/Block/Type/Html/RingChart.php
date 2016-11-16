@@ -84,7 +84,7 @@ class RingChart extends Chart
             /* Set the default font properties */
             $chart_canvas->setFontProperties(
                 array(
-                    'FontName' => Path :: getInstance()->getVendorPath() .
+                    'FontName' => Path::getInstance()->getVendorPath() .
                          'szymach/c-pchart/src/Resources/fonts/verdana.ttf', 
                         'FontSize' => 8, 
                         'R' => 80, 
@@ -121,18 +121,19 @@ class RingChart extends Chart
             /* Write the legend */
             $chart_canvas->setFontProperties(
                 array(
-                    'FontName' => Path :: getInstance()->getVendorPath() .
+                    'FontName' => Path::getInstance()->getVendorPath() .
                          'szymach/c-pchart/src/Resources/fonts/verdana.ttf', 
                         'FontSize' => 6));
             $chart_canvas->setShadow(TRUE, array('X' => 1, 'Y' => 1, 'R' => 0, 'G' => 0, 'B' => 0, 'Alpha' => 20));
-
+            
             /* Write the legend box */
             $chart_canvas->setFontProperties(
                 array(
-                    'FontName' => Path :: getInstance()->getVendorPath() . 'szymach/c-pchart/src/Resources/fonts/verdana.ttf',
-                    'R' => 0,
-                    'G' => 0,
-                    'B' => 0));
+                    'FontName' => Path::getInstance()->getVendorPath() .
+                         'szymach/c-pchart/src/Resources/fonts/verdana.ttf', 
+                        'R' => 0, 
+                        'G' => 0, 
+                        'B' => 0));
             $pie_chart->drawPieLegend(
                 20, 
                 26, 

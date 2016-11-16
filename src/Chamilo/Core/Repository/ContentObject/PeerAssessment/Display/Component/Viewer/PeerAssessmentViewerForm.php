@@ -41,7 +41,7 @@ class PeerAssessmentViewerForm extends FormValidator
      */
     function __construct(ViewerComponent $viewer)
     {
-        parent :: __construct(self :: FORM_NAME, 'post', $viewer->get_url());
+        parent::__construct(self::FORM_NAME, 'post', $viewer->get_url());
         
         $this->viewer = $viewer;
         
@@ -62,34 +62,34 @@ class PeerAssessmentViewerForm extends FormValidator
     {
         $this->addElement(
             'style_submit_button', 
-            FormValidator :: PARAM_SUBMIT, 
-            Translation :: get('Submit', null, Utilities :: COMMON_LIBRARIES));
+            FormValidator::PARAM_SUBMIT, 
+            Translation::get('Submit', null, Utilities::COMMON_LIBRARIES));
     }
 
     private function render_overview($assessment_type)
     {
         // there should be users and indicators, otherwise don't render
-        $params = array(Manager :: PARAM_ACTION => Manager :: ACTION_VIEW_USER_ATTEMPT_STATUS);
+        $params = array(Manager::PARAM_ACTION => Manager::ACTION_VIEW_USER_ATTEMPT_STATUS);
         
-        if (count($this->indicators) === 0 && $assessment_type != PeerAssessment :: TYPE_FEEDBACK)
-            $this->viewer->redirect(Translation :: get('NoIndicators'), 1, $params);
+        if (count($this->indicators) === 0 && $assessment_type != PeerAssessment::TYPE_FEEDBACK)
+            $this->viewer->redirect(Translation::get('NoIndicators'), 1, $params);
         if (count($this->users) <= 1)
-            $this->viewer->redirect(Translation :: get('OnlyOneUser'), 1, $params);
+            $this->viewer->redirect(Translation::get('OnlyOneUser'), 1, $params);
             
             // TODO check for scores/feedback/both
             // TODO display images on tabs
         
         $tabs = new DynamicFormTabsRenderer('', $this);
         
-        if ($assessment_type == PeerAssessment :: TYPE_SCORES || $assessment_type == PeerAssessment :: TYPE_BOTH)
+        if ($assessment_type == PeerAssessment::TYPE_SCORES || $assessment_type == PeerAssessment::TYPE_BOTH)
         { // render the scores tab
-            $tabs->add_tab(new DynamicFormTab('scores', Translation :: get('Scores'), null, 'render_scores_matrix'));
+            $tabs->add_tab(new DynamicFormTab('scores', Translation::get('Scores'), null, 'render_scores_matrix'));
         }
-        if ($assessment_type == PeerAssessment :: TYPE_FEEDBACK || $assessment_type == PeerAssessment :: TYPE_BOTH)
+        if ($assessment_type == PeerAssessment::TYPE_FEEDBACK || $assessment_type == PeerAssessment::TYPE_BOTH)
         {
             // render the feedback tab
             $tabs->add_tab(
-                new DynamicFormTab('feedback', Translation :: get('Feedback'), null, 'render_feedback_matrix'));
+                new DynamicFormTab('feedback', Translation::get('Feedback'), null, 'render_feedback_matrix'));
         }
         $tabs->render();
     }
@@ -113,8 +113,8 @@ class PeerAssessmentViewerForm extends FormValidator
         // loop over the indicators to build the header cells
         foreach ($this->indicators as $i)
         {
-            $table_header[] = '<th title="' . trim(htmlentities(strip_tags($i->get_description()))) . '" style="word-wrap: break-all">' .
-                 $i->get_title() . '</th>';
+            $table_header[] = '<th title="' . trim(htmlentities(strip_tags($i->get_description()))) .
+                 '" style="word-wrap: break-all">' . $i->get_title() . '</th>';
         }
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
@@ -176,7 +176,7 @@ class PeerAssessmentViewerForm extends FormValidator
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
         $table_header[] = '<th></th>'; // upper left cell is empty
-        $table_header[] = '<th>' . Translation :: get('feedback') . '</th>';
+        $table_header[] = '<th>' . Translation::get('feedback') . '</th>';
         $table_header[] = '</tr>';
         $table_header[] = '</thead>';
         $table_header[] = '<tbody>';
@@ -210,7 +210,7 @@ class PeerAssessmentViewerForm extends FormValidator
     {
         $success = true;
         $vals = $this->getSubmitValues();
-        $error_message = Translation :: get('ErrorWrongScoreValue');
+        $error_message = Translation::get('ErrorWrongScoreValue');
         
         $this->get_indicators();
         $allowed_scores = $this->processor->get_allowed_scores();
@@ -228,29 +228,29 @@ class PeerAssessmentViewerForm extends FormValidator
                 
                 if ((! $numeric || $float) && ! empty($score))
                 {
-                    $this->validation_errors[] = $error_message . Translation :: get('WrongValue') . ' ' .
-                         $this->users[$user_id]->get_firstname() . ' ' . Translation :: get('And') . ' ' .
+                    $this->validation_errors[] = $error_message . Translation::get('WrongValue') . ' ' .
+                         $this->users[$user_id]->get_firstname() . ' ' . Translation::get('And') . ' ' .
                          $this->indicators[$indicator_id]->get_title() . "<br/>";
                     $success = false;
                 }
                 
                 if ($highest_allowed < $score)
                 {
-                    $this->validation_errors[] = $error_message . Translation :: get('ScoreTooHigh') . ' ' .
-                         $this->users[$user_id]->get_firstname() . ' ' . Translation :: get('And') . ' ' .
+                    $this->validation_errors[] = $error_message . Translation::get('ScoreTooHigh') . ' ' .
+                         $this->users[$user_id]->get_firstname() . ' ' . Translation::get('And') . ' ' .
                          $this->indicators[$indicator_id]->get_title() . "<br/>";
                     $success = false;
                 }
                 elseif ($score < $lowest_allowed)
                 {
-                    $this->validation_errors[] = $error_message . Translation :: get('ScoreTooLow') . ' ' .
-                         $this->users[$user_id]->get_firstname() . ' ' . Translation :: get('And') . ' ' .
+                    $this->validation_errors[] = $error_message . Translation::get('ScoreTooLow') . ' ' .
+                         $this->users[$user_id]->get_firstname() . ' ' . Translation::get('And') . ' ' .
                          $this->indicators[$indicator_id]->get_title() . "<br/>";
                     $success = false;
                 }
             }
         }
-        $success &= parent :: validate();
+        $success &= parent::validate();
         
         return $success;
     }

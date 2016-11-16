@@ -13,12 +13,13 @@ use Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\Ext
  */
 class ContentObjectPropertyProvider extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Metadata\PropertyProvider\ContentObjectPropertyProvider
 {
+
     /**
      *
      * @see \Chamilo\Core\Metadata\Provider\PropertyProviderInterface::getEntityType()
      */
     public function getEntityType()
     {
-        return ExternalCalendar :: class_name();
+        return ExternalCalendar::class_name();
     }
 }

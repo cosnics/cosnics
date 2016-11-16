@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 abstract class ReportingBlock
 {
     use \Chamilo\Libraries\Architecture\Traits\ClassContext;
-
+    
     // Constants
     const PARAM_DISPLAY_MODE = "display_mode";
 
@@ -47,7 +47,7 @@ abstract class ReportingBlock
 
     public function get_title()
     {
-        return Translation :: get(static :: get_name(), null, static :: context());
+        return Translation::get(static::get_name(), null, static::context());
     }
 
     public function get_id()
@@ -62,7 +62,7 @@ abstract class ReportingBlock
 
     public function get_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(static :: class_name());
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class_name());
     }
 
     abstract public function get_views();
@@ -100,7 +100,8 @@ abstract class ReportingBlock
     }
 
     /**
-     * @brief Return block style containing properties such as title font size or title color. Default implementation
+     * @brief Return block style containing properties such as title font size or title color.
+     * Default implementation
      * retrieves values from the cental configuration. See src/Chamilo/Core/Reporting/Resources/Settings/settings.xml.
      * Blocks can override this function and return a ReportingBlockStyle object with custom properties.
      */
@@ -115,6 +116,6 @@ abstract class ReportingBlock
      */
     public static function package()
     {
-        return static :: context();
+        return static::context();
     }
 }

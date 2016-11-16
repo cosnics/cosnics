@@ -30,19 +30,19 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         {
             throw new NotAllowedException();
         }
-
-        $template = \Chamilo\Core\Repository\Configuration :: registration_default_by_type(
-            ClassnameUtilities :: getInstance()->getNamespaceParent(FrequentlyAskedQuestions :: context(), 2));
-
-        $selected_template_id = TypeSelector :: get_selection();
-
-        BreadcrumbTrail :: getInstance()->add(new Breadcrumb($this->get_url(), Translation :: get('Add')));
-
-        if (! \Chamilo\Core\Repository\Viewer\Manager :: is_ready_to_be_published())
+        
+        $template = \Chamilo\Core\Repository\Configuration::registration_default_by_type(
+            ClassnameUtilities::getInstance()->getNamespaceParent(FrequentlyAskedQuestions::context(), 2));
+        
+        $selected_template_id = TypeSelector::get_selection();
+        
+        BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get('Add')));
+        
+        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $exclude = $this->detemine_excluded_content_object_ids($this->get_current_content_object()->get_id());
             $factory = new ApplicationFactory(
-                \Chamilo\Core\Repository\Viewer\Manager :: context(),
+                \Chamilo\Core\Repository\Viewer\Manager::context(), 
                 new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
             $component = $factory->getComponent();
             $component->set_excluded_objects($exclude);
@@ -50,13 +50,13 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         }
         else
         {
-            $object_ids = \Chamilo\Core\Repository\Viewer\Manager :: get_selected_objects();
+            $object_ids = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
             if (! is_array($object_ids))
             {
                 $object_ids = array($object_ids);
             }
             $failures = 0;
-
+            
             foreach ($object_ids as $object_id)
             {
                 if ($this->get_current_node()->forms_cycle_with($object_id))
@@ -64,17 +64,17 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                     $failures ++;
                     continue;
                 }
-
-                $object = \Chamilo\Core\Repository\Storage\DataManager :: retrieve_by_id(
-                    ContentObject :: class_name(),
+                
+                $object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
+                    ContentObject::class_name(), 
                     $object_id);
-
+                
                 if (! $object instanceof FrequentlyAskedQuestions)
                 {
-                    $new_object = ContentObject :: factory(FrequentlyAskedQuestionsItem :: class_name());
+                    $new_object = ContentObject::factory(FrequentlyAskedQuestionsItem::class_name());
                     $new_object->set_owner_id($this->get_user_id());
-                    $new_object->set_title(FrequentlyAskedQuestionsItem :: get_type_name());
-                    $new_object->set_description(FrequentlyAskedQuestionsItem :: get_type_name());
+                    $new_object->set_title(FrequentlyAskedQuestionsItem::get_type_name());
+                    $new_object->set_description(FrequentlyAskedQuestionsItem::get_type_name());
                     $new_object->set_parent_id(0);
                     $new_object->set_reference($object_id);
                     $new_object->create();
@@ -83,7 +83,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 {
                     $new_object = $object;
                 }
-
+                
                 if ($new_object instanceof FrequentlyAskedQuestions)
                 {
                     $wrapper = new ComplexFrequentlyAskedQuestions();
@@ -92,55 +92,55 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                 {
                     $wrapper = new \Chamilo\Core\Repository\ContentObject\FrequentlyAskedQuestionsItem\Storage\DataClass\ComplexFrequentlyAskedQuestionsItem();
                 }
-
+                
                 $wrapper->set_ref($new_object->get_id());
                 $wrapper->set_parent($this->get_current_content_object()->get_id());
                 $wrapper->set_user_id($this->get_user_id());
                 $wrapper->set_display_order(
-                    \Chamilo\Core\Repository\Storage\DataManager :: select_next_display_order(
+                    \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order(
                         $this->get_current_content_object()->get_id()));
-
+                
                 if (! $wrapper->create())
                 {
                     $failures ++;
                 }
                 else
                 {
-                    Event :: trigger(
-                        'Activity',
-                        \Chamilo\Core\Repository\Manager :: context(),
+                    Event::trigger(
+                        'Activity', 
+                        \Chamilo\Core\Repository\Manager::context(), 
                         array(
-                            Activity :: PROPERTY_TYPE => Activity :: ACTIVITY_ADD_ITEM,
-                            Activity :: PROPERTY_USER_ID => $this->get_user_id(),
-                            Activity :: PROPERTY_DATE => time(),
-                            Activity :: PROPERTY_CONTENT_OBJECT_ID => $this->get_current_node()->get_content_object()->get_id(),
-                            Activity :: PROPERTY_CONTENT => $this->get_current_node()->get_content_object()->get_title() .
+                            Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM, 
+                            Activity::PROPERTY_USER_ID => $this->get_user_id(), 
+                            Activity::PROPERTY_DATE => time(), 
+                            Activity::PROPERTY_CONTENT_OBJECT_ID => $this->get_current_node()->get_content_object()->get_id(), 
+                            Activity::PROPERTY_CONTENT => $this->get_current_node()->get_content_object()->get_title() .
                                  ' > ' . $object->get_title()));
                 }
             }
-
+            
             if (count($object_ids) > 0 && ! $failures)
             {
                 $current_parents_content_object_ids = $this->get_current_node()->get_parents_content_object_ids(
-                    true,
+                    true, 
                     true);
-
+                
                 if (count($object_ids) == 1)
                 {
                     $current_parents_content_object_ids[] = $object_ids[0];
                 }
-
+                
                 $this->get_root_content_object()->get_complex_content_object_path()->reset();
                 $new_node = $this->get_root_content_object()->get_complex_content_object_path()->follow_path_by_content_object_ids(
                     $current_parents_content_object_ids);
-
+                
                 $next_step = $new_node->get_id();
             }
             else
             {
                 $next_step = $this->get_current_step();
             }
-
+            
             if ($failures)
             {
                 if (count($object_ids) == 1)
@@ -163,16 +163,16 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
                     $message = 'ObjectsAdded';
                 }
             }
-
+            
             $this->redirect(
-                Translation :: get(
-                    $message,
-                    array('OBJECT' => Translation :: get('Item'), 'OBJECTS' => Translation :: get('Items')),
-                    Utilities :: COMMON_LIBRARIES),
-                ($failures ? true : false),
-                array(self :: PARAM_ACTION => self :: ACTION_VIEW_COMPLEX_CONTENT_OBJECT),
-                array(),
-                false,
+                Translation::get(
+                    $message, 
+                    array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')), 
+                    Utilities::COMMON_LIBRARIES), 
+                ($failures ? true : false), 
+                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT), 
+                array(), 
+                false, 
                 'faq-item-' . $object_id);
         }
     }
@@ -180,19 +180,19 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
     private function detemine_excluded_content_object_ids()
     {
         $excluded_items = array();
-
+        
         $current_node = $this->get_current_node();
-
+        
         foreach ($current_node->get_children() as $child_node)
         {
             $excluded_items[] = $child_node->get_content_object()->get_id();
         }
-
+        
         foreach ($current_node->get_parents(true) as $parent_node)
         {
             $excluded_items[] = $parent_node->get_content_object()->get_id();
         }
-
+        
         return $excluded_items;
     }
 
@@ -202,7 +202,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
      */
     public function get_additional_parameters()
     {
-        return array(self :: PARAM_STEP);
+        return array(self::PARAM_STEP);
     }
 
     /**

@@ -24,67 +24,65 @@ class DeleterComponent extends Manager
     public function run()
     {
         $workspaceIdentifiers = $this->getRequest()->get(
-            \Chamilo\Core\Repository\Workspace\Manager :: PARAM_WORKSPACE_ID);
-
+            \Chamilo\Core\Repository\Workspace\Manager::PARAM_WORKSPACE_ID);
+        
         try
         {
             if (empty($workspaceIdentifiers))
             {
-                throw new NoObjectSelectedException(Translation :: get('Workspace'));
+                throw new NoObjectSelectedException(Translation::get('Workspace'));
             }
-
+            
             if (! is_array($workspaceIdentifiers))
             {
                 $workspaceIdentifiers = array($workspaceIdentifiers);
             }
-
+            
             $favouriteService = new FavouriteService(new FavouriteRepository());
-
+            
             foreach ($workspaceIdentifiers as $workspaceIdentifier)
             {
                 $success = $favouriteService->deleteWorkspaceByUserAndWorkspaceIdentifier(
-                    $this->get_user(),
+                    $this->get_user(), 
                     $workspaceIdentifier);
-
+                
                 if (! $success)
                 {
                     throw new \Exception(
-                        Translation :: get(
-                            'ObjectNotDeleted',
-                            array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
-                            Utilities :: COMMON_LIBRARIES));
+                        Translation::get(
+                            'ObjectNotDeleted', 
+                            array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 
+                            Utilities::COMMON_LIBRARIES));
                 }
             }
-
+            
             $success = true;
-            $message = Translation :: get(
-                'ObjectDeleted',
-                array('OBJECT' => Translation :: get('WorkspaceUserFavourite')),
-                Utilities :: COMMON_LIBRARIES);
+            $message = Translation::get(
+                'ObjectDeleted', 
+                array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 
+                Utilities::COMMON_LIBRARIES);
         }
         catch (\Exception $ex)
         {
             $success = false;
             $message = $ex->getMessage();
         }
-
+        
         $action = $this->getRequest()->get(\Chamilo\Core\Repository\Workspace\Manager::PARAM_BROWSER_SOURCE);
-        if(!isset($action))
+        if (! isset($action))
         {
-            $this->redirect($message, ! $success, array(self :: PARAM_ACTION => $action));
+            $this->redirect($message, ! $success, array(self::PARAM_ACTION => $action));
         }
         else
         {
             $this->redirect(
-                Translation:: get(
-                    'ObjectDeleted',
-                    array('OBJECT' => Translation:: get('WorkspaceUserFavourite')),
-                    Utilities :: COMMON_LIBRARIES
-                ),
-                false,
-                array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action),
-                array(self::PARAM_ACTION)
-            );
+                Translation::get(
+                    'ObjectDeleted', 
+                    array('OBJECT' => Translation::get('WorkspaceUserFavourite')), 
+                    Utilities::COMMON_LIBRARIES), 
+                false, 
+                array(\Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => $action), 
+                array(self::PARAM_ACTION));
         }
     }
 }

@@ -18,7 +18,7 @@ class LinkTable extends DataClassTable
     public function __construct($component, $type)
     {
         $this->type = $type;
-        parent :: __construct($component);
+        parent::__construct($component);
     }
 
     public function get_type()

@@ -22,8 +22,8 @@ class DummyAttempt extends AbstractAttempt
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        $extended_property_names[] = self :: PROPERTY_CONTENT_OBJECT_ID;
-        return parent :: get_default_property_names($extended_property_names);
+        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        return parent::get_default_property_names($extended_property_names);
     }
 
     /**
@@ -32,7 +32,7 @@ class DummyAttempt extends AbstractAttempt
      */
     public function get_content_object_id()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTENT_OBJECT_ID);
+        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -41,7 +41,7 @@ class DummyAttempt extends AbstractAttempt
      */
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self :: PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     /**
@@ -50,7 +50,7 @@ class DummyAttempt extends AbstractAttempt
      */
     public function update()
     {
-        return PreviewStorage :: getInstance()->update_learning_path_attempt($this);
+        return PreviewStorage::getInstance()->update_learning_path_attempt($this);
     }
 
     /**
@@ -59,8 +59,8 @@ class DummyAttempt extends AbstractAttempt
      */
     public function create()
     {
-        $this->set_id(UUID :: v4());
-        return PreviewStorage :: getInstance()->create_learning_path_attempt($this);
+        $this->set_id(UUID::v4());
+        return PreviewStorage::getInstance()->create_learning_path_attempt($this);
     }
 
     /**
@@ -69,6 +69,6 @@ class DummyAttempt extends AbstractAttempt
      */
     public function delete()
     {
-        return PreviewStorage :: getInstance()->delete_learning_path_attempt($this);
+        return PreviewStorage::getInstance()->delete_learning_path_attempt($this);
     }
 }

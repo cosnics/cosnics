@@ -6,7 +6,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 
 /**
  * $Id: assessment_display.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.complex_display.assessment
  */
 
@@ -18,13 +18,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     // Actions
     const ACTION_VIEW_ASSESSMENT = 'AssessmentViewer';
     const ACTION_VIEW_ASSESSMENT_RESULT = 'ResultsViewer';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_VIEW_ASSESSMENT;
+    const DEFAULT_ACTION = self::ACTION_VIEW_ASSESSMENT;
 
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
-        parent :: __construct($applicationConfiguration);
+        parent::__construct($applicationConfiguration);
         $this->register_parameters();
     }
 
@@ -91,7 +91,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         foreach ($this->get_parent()->get_assessment_parameters() as $parameter)
         {
-            $this->set_parameter($parameter, Request :: get($parameter));
+            $this->set_parameter($parameter, Request::get($parameter));
         }
     }
 }

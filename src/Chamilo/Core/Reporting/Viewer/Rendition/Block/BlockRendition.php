@@ -84,7 +84,7 @@ abstract class BlockRendition
      */
     public static function launch($rendition_implementation)
     {
-        return self :: factory($rendition_implementation)->render();
+        return self::factory($rendition_implementation)->render();
     }
 
     /**
@@ -95,19 +95,19 @@ abstract class BlockRendition
     public static function factory($rendition_implementation)
     {
         $class = __NAMESPACE__ . '\Type\\' .
-             (string) StringUtilities :: getInstance()->createString($rendition_implementation->get_format())->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($rendition_implementation->get_format())->upperCamelize() .
              '\\' .
-             StringUtilities :: getInstance()->createString($rendition_implementation->get_view())->upperCamelize();
+             StringUtilities::getInstance()->createString($rendition_implementation->get_view())->upperCamelize();
         return new $class($rendition_implementation);
     }
 
     public static function get_format()
     {
-        return static :: FORMAT;
+        return static::FORMAT;
     }
 
     public static function get_view()
     {
-        return static :: VIEW;
+        return static::VIEW;
     }
 }

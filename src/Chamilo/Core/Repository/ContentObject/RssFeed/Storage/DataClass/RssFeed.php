@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 
 /**
  * $Id: rss_feed.class.php 200 2009-11-13 12:30:04Z kariboe $
- *
+ * 
  * @package repository.lib.content_object.rss_feed
  */
 class RssFeed extends ContentObject implements Versionable, Includeable
@@ -18,36 +18,36 @@ class RssFeed extends ContentObject implements Versionable, Includeable
 
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     public function get_url()
     {
-        return $this->get_additional_property(self :: PROPERTY_URL);
+        return $this->get_additional_property(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        return $this->set_additional_property(self :: PROPERTY_URL, $url);
+        return $this->set_additional_property(self::PROPERTY_URL, $url);
     }
 
     public function get_number_of_entries()
     {
-        return $this->get_additional_property(self :: PROPERTY_NUMBER_OF_ENTRIES);
+        return $this->get_additional_property(self::PROPERTY_NUMBER_OF_ENTRIES);
     }
 
     public function set_number_of_entries($numberOfEntries)
     {
-        $this->set_additional_property(self :: PROPERTY_NUMBER_OF_ENTRIES, $numberOfEntries);
+        $this->set_additional_property(self::PROPERTY_NUMBER_OF_ENTRIES, $numberOfEntries);
     }
 
     public static function get_additional_property_names()
     {
-        return array(self :: PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES);
+        return array(self::PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES);
     }
 
     public static function get_searchable_property_names()
     {
-        return array(self :: PROPERTY_URL);
+        return array(self::PROPERTY_URL);
     }
 }

@@ -5,14 +5,15 @@ use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * Manages roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface UserRoleServiceInterface
 {
+
     /**
      * Returns the roles for a given user
-     *
+     * 
      * @param User $user
      *
      * @return Role[]
@@ -21,7 +22,7 @@ interface UserRoleServiceInterface
 
     /**
      * Returns the users that are attached to a given role
-     *
+     * 
      * @param string $roleName
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
@@ -30,7 +31,7 @@ interface UserRoleServiceInterface
 
     /**
      * Adds a role to a given user by a given role name
-     *
+     * 
      * @param User $user
      * @param string $roleName
      *
@@ -40,7 +41,7 @@ interface UserRoleServiceInterface
 
     /**
      * Removes a role by a given name from a given user
-     *
+     * 
      * @param User $user
      * @param string $roleName
      *
@@ -50,7 +51,7 @@ interface UserRoleServiceInterface
 
     /**
      * Checks whether or not a user matches one of the requested roles
-     *
+     * 
      * @param User $user
      * @param Role[] $rolesToMatch
      *

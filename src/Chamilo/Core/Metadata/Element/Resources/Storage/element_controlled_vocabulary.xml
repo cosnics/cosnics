@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <object name="element_controlled_vocabulary">
-	<properties>
-		<property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
-		<property name="element_id" type="integer" length="10" notnull="1" />
-		<property name="controlled_vocabulary_id" type="integer" length="10" notnull="1" />
-	</properties>
-	<index name="element_id">
-		<indexproperty name="element_id" />
-	</index>
-	<index name="controlled_vocabulary_id">
-		<indexproperty name="controlled_vocabulary_id" />
-	</index>
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="element_id"
+            type="integer"
+            length="10"
+            notnull="1" />
+        <property
+            name="controlled_vocabulary_id"
+            type="integer"
+            length="10"
+            notnull="1" />
+    </properties>
+    <index name="element_id">
+        <indexproperty name="element_id" />
+    </index>
+    <index name="controlled_vocabulary_id">
+        <indexproperty name="controlled_vocabulary_id" />
+    </index>
 </object>

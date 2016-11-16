@@ -13,15 +13,15 @@ class UserGroupSubscriberComponent extends Manager
      */
     public function run()
     {
-        if (! is_null(Request :: get(self :: PARAM_GROUP)))
+        if (! is_null(Request::get(self::PARAM_GROUP)))
         {
-            $success = $this->add_user_to_group($this->get_user_id(), Request :: get(self :: PARAM_GROUP));
-            $message = $success ? Translation :: get('GroupSubscriptionSucceeded') : Translation :: get(
+            $success = $this->add_user_to_group($this->get_user_id(), Request::get(self::PARAM_GROUP));
+            $message = $success ? Translation::get('GroupSubscriptionSucceeded') : Translation::get(
                 'NoGroupSubscription');
             $this->redirect(
                 $message, 
                 ! $success, 
-                array(self :: PARAM_ACTION => self :: ACTION_VIEW_USER_ATTEMPT_STATUS));
+                array(self::PARAM_ACTION => self::ACTION_VIEW_USER_ATTEMPT_STATUS));
         }
     }
 }

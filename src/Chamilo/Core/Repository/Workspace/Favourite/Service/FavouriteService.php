@@ -57,24 +57,24 @@ class FavouriteService
     public function createWorkspaceUserFavourite(User $user, $workspaceIdentifier)
     {
         $existingWorkspaceUserFavorite = $this->getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(
-            $user, $workspaceIdentifier
-        );
-
-        if($existingWorkspaceUserFavorite)
+            $user, 
+            $workspaceIdentifier);
+        
+        if ($existingWorkspaceUserFavorite)
         {
             return $existingWorkspaceUserFavorite;
         }
-
+        
         $workspaceUserFavourite = new WorkspaceUserFavourite();
-
+        
         $workspaceUserFavourite->set_user_id($user->getId());
         $workspaceUserFavourite->set_workspace_id($workspaceIdentifier);
-
+        
         if (! $workspaceUserFavourite->create())
         {
             return false;
         }
-
+        
         return $workspaceUserFavourite;
     }
 
@@ -89,7 +89,7 @@ class FavouriteService
         {
             return false;
         }
-
+        
         return true;
     }
 
@@ -102,7 +102,7 @@ class FavouriteService
     public function getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(User $user, $workspaceIdentifier)
     {
         return $this->getFavouriteRepository()->findWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(
-            $user,
+            $user, 
             $workspaceIdentifier);
     }
 
@@ -115,9 +115,9 @@ class FavouriteService
     public function deleteWorkspaceByUserAndWorkspaceIdentifier(User $user, $workspaceIdentifier)
     {
         $workspaceUserFavourite = $this->getWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(
-            $user,
+            $user, 
             $workspaceIdentifier);
-
+        
         if (! $workspaceUserFavourite instanceof WorkspaceUserFavourite)
         {
             return false;

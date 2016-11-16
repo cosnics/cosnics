@@ -24,13 +24,9 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function extra()
     {
-        $rights_utilities = Rights :: getInstance();
-        $location = $rights_utilities->create_subtree_root_location(
-            static :: package(),
-            0,
-            Rights :: TREE_TYPE_ROOT,
-            true);
-
+        $rights_utilities = Rights::getInstance();
+        $location = $rights_utilities->create_subtree_root_location(static::package(), 0, Rights::TREE_TYPE_ROOT, true);
+        
         if (! $location instanceof RightsLocation)
         {
             return false;
@@ -38,16 +34,16 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         else
         {
             $this->add_message(
-                self :: TYPE_NORMAL,
-                Translation :: get(
-                    'ObjectCreated',
-                    array('OBJECT' => Translation :: get('RightsTree')),
-                    Utilities :: COMMON_LIBRARIES));
+                self::TYPE_NORMAL, 
+                Translation::get(
+                    'ObjectCreated', 
+                    array('OBJECT' => Translation::get('RightsTree')), 
+                    Utilities::COMMON_LIBRARIES));
         }
-
+        
         $languageItem = new LanguageCategoryItem();
-        $languageItem->set_display(Item :: DISPLAY_TEXT);
-
+        $languageItem->set_display(Item::DISPLAY_TEXT);
+        
         if (! $languageItem->create())
         {
             return false;
@@ -55,16 +51,16 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         else
         {
             $itemTitle = new ItemTitle();
-            $itemTitle->set_title(Translation :: get('ChangeLanguage'));
-            $itemTitle->set_isocode(Translation :: getInstance()->getLanguageIsocode());
+            $itemTitle->set_title(Translation::get('ChangeLanguage'));
+            $itemTitle->set_isocode(Translation::getInstance()->getLanguageIsocode());
             $itemTitle->set_item_id($languageItem->get_id());
-
+            
             if (! $itemTitle->create())
             {
                 return false;
             }
         }
-
+        
         return true;
     }
 }

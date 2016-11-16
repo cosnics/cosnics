@@ -17,12 +17,12 @@ class ContentObjectTableColumnModel extends DataClassTableColumnModel implements
     public function initialize_columns()
     {
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TYPE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TYPE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_TITLE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_TITLE));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject :: PROPERTY_DESCRIPTION));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION));
         $this->add_column(
-            new DataClassPropertyTableColumn(ContentObject :: class_name(), ContentObject::PROPERTY_MODIFICATION_DATE));
+            new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_MODIFICATION_DATE));
     }
 }

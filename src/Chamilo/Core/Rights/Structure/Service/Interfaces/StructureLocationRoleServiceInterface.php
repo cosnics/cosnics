@@ -6,14 +6,15 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
 
 /**
  * Manages structure location roles
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface StructureLocationRoleServiceInterface
 {
+
     /**
      * Adds a role to a given structure location
-     *
+     * 
      * @param StructureLocation $structureLocation
      * @param string $roleName
      *
@@ -25,7 +26,7 @@ interface StructureLocationRoleServiceInterface
 
     /**
      * Removes a role from a given structure location
-     *
+     * 
      * @param StructureLocation $structureLocation
      * @param string $roleName
      *
@@ -35,7 +36,7 @@ interface StructureLocationRoleServiceInterface
 
     /**
      * Returns a list of roles for a given structure location
-     *
+     * 
      * @param StructureLocation $structureLocation
      *
      * @return Role[]
@@ -44,7 +45,7 @@ interface StructureLocationRoleServiceInterface
 
     /**
      * Returns a list of roles for a given structure location identified by given context and comnponent
-     *
+     * 
      * @param string $context
      * @param string $action
      *

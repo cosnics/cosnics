@@ -10,11 +10,11 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 
 /**
  * Portfolio constent object
- *
+ * 
  * @package repository\content_object\portfolio$Portfolio
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class FrequentlyAskedQuestions extends ContentObject implements ComplexContentObjectSupport,
+class FrequentlyAskedQuestions extends ContentObject implements ComplexContentObjectSupport, 
     ComplexContentObjectDisclosure
 {
 
@@ -24,7 +24,7 @@ class FrequentlyAskedQuestions extends ContentObject implements ComplexContentOb
      */
     public static function get_type_name()
     {
-        return ClassnameUtilities :: getInstance()->getClassNameFromNamespace(self :: class_name(), true);
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
     }
 
     /**
@@ -33,29 +33,29 @@ class FrequentlyAskedQuestions extends ContentObject implements ComplexContentOb
      */
     public function get_allowed_types()
     {
-        $classNameUtilities = ClassnameUtilities :: getInstance();
-        $configuration = Configuration :: getInstance();
-
-        $registrations = $configuration->getIntegrationRegistrations(self :: package());
+        $classNameUtilities = ClassnameUtilities::getInstance();
+        $configuration = Configuration::getInstance();
+        
+        $registrations = $configuration->getIntegrationRegistrations(self::package());
         $types = array();
-
+        
         foreach ($registrations as $registration)
         {
-            $type = $registration[Registration :: PROPERTY_TYPE];
+            $type = $registration[Registration::PROPERTY_TYPE];
             $parentContext = $classNameUtilities->getNamespaceParent($type);
             $parentRegistration = $configuration->get_registration($parentContext);
-
-            if ($parentRegistration[Registration :: PROPERTY_TYPE] ==
-                 \Chamilo\Core\Repository\Manager :: context() . '\ContentObject')
+            
+            if ($parentRegistration[Registration::PROPERTY_TYPE] ==
+                 \Chamilo\Core\Repository\Manager::context() . '\ContentObject')
             {
-                $namespace = ClassnameUtilities :: getInstance()->getNamespaceParent(
-                    $registration[Registration :: PROPERTY_CONTEXT],
+                $namespace = ClassnameUtilities::getInstance()->getNamespaceParent(
+                    $registration[Registration::PROPERTY_CONTEXT], 
                     6);
                 $types[] = $namespace . '\Storage\DataClass\\' .
-                     ClassnameUtilities :: getInstance()->getPackageNameFromNamespace($namespace);
+                     ClassnameUtilities::getInstance()->getPackageNameFromNamespace($namespace);
             }
         }
-
+        
         return $types;
     }
 }

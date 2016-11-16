@@ -24,8 +24,8 @@ class VimeoImportParameters extends ImportParameters
      */
     public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {
-        parent :: __construct($type, $user, $workspace, $category);
-        $this->url = $values[VimeoContentObjectImportForm :: PROPERTY_URL];
+        parent::__construct($type, $user, $workspace, $category);
+        $this->url = $values[VimeoContentObjectImportForm::PROPERTY_URL];
     }
 
     /**

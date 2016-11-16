@@ -9,7 +9,7 @@ use DOMXPath;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TemplateConfiguration extends \Chamilo\Core\Repository\Common\Template\TemplateConfiguration implements
+class TemplateConfiguration extends \Chamilo\Core\Repository\Common\Template\TemplateConfiguration implements 
     TemplateConfigurationParser
 {
 

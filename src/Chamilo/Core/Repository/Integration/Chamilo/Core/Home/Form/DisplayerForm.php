@@ -12,21 +12,24 @@ use Chamilo\Libraries\Platform\Translation;
 
 class DisplayerForm extends ConfigurationForm
 {
+
     /**
+     *
      * @var ContentObjectPublicationService
      */
     protected $contentObjectPublicationService;
 
     /**
+     *
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
      * @param boolean $hasStaticTitle
      */
     public function __construct(Block $block, $hasStaticTitle)
     {
-        $this->contentObjectPublicationService =
-            new ContentObjectPublicationService(new ContentObjectPublicationRepository(new PublicationRepository()));
-
-        parent :: __construct($block, $hasStaticTitle);
+        $this->contentObjectPublicationService = new ContentObjectPublicationService(
+            new ContentObjectPublicationRepository(new PublicationRepository()));
+        
+        parent::__construct($block, $hasStaticTitle);
     }
 
     /**
@@ -36,27 +39,26 @@ class DisplayerForm extends ConfigurationForm
     public function addSettings()
     {
         $connector = new Connector();
-
+        
         $this->addElement(
-            'select',
-            Displayer :: CONFIGURATION_OBJECT_ID,
-            Translation :: get('UseObject'),
+            'select', 
+            Displayer::CONFIGURATION_OBJECT_ID, 
+            Translation::get('UseObject'), 
             $connector->getDisplayerObjects());
     }
 
     public function setDefaults()
     {
         $defaults = array();
-
+        
         $contentObjectPublication = $this->contentObjectPublicationService->getFirstContentObjectPublicationForElement(
-            $this->getBlock()
-        );
-
-        if($contentObjectPublication)
+            $this->getBlock());
+        
+        if ($contentObjectPublication)
         {
-            $defaults[Displayer :: CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
+            $defaults[Displayer::CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
         }
-
-        parent :: setDefaults($defaults);
+        
+        parent::setDefaults($defaults);
     }
 }

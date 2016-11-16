@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * $Id: group_export_form.class.php 224 2009-11-13 14:40:30Z kariboe $
- *
+ * 
  * @package groups.lib.forms
  */
 class GroupExportForm extends FormValidator
@@ -29,11 +29,11 @@ class GroupExportForm extends FormValidator
      */
     public function __construct($form_type, $action)
     {
-        parent :: __construct('group_export', 'post', $action, '_blank');
-
+        parent::__construct('group_export', 'post', $action, '_blank');
+        
         $this->form_type = $form_type;
         $this->failedcsv = array();
-        if ($this->form_type == self :: TYPE_EXPORT)
+        if ($this->form_type == self::TYPE_EXPORT)
         {
             $this->build_exporting_form();
         }
@@ -42,21 +42,21 @@ class GroupExportForm extends FormValidator
     public function build_exporting_form()
     {
         $this->addElement(
-            'select',
-            'file_type',
-            Translation :: get('OutputFileType', null, Utilities :: COMMON_LIBRARIES),
-            Export :: get_supported_filetypes(array('ical', 'csv', 'pdf')));
-
+            'select', 
+            'file_type', 
+            Translation::get('OutputFileType', null, Utilities::COMMON_LIBRARIES), 
+            Export::get_supported_filetypes(array('ical', 'csv', 'pdf')));
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Export', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Export', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'export');
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
-
+        
         $this->setDefaults(array('file_type' => 'xml'));
     }
 }

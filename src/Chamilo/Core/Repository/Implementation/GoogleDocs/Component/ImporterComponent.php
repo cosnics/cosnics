@@ -21,20 +21,20 @@ class ImporterComponent extends Manager
     {
         if ($external_object->is_importable())
         {
-
+            
             $export_format = Request::get(Manager::PARAM_EXPORT_FORMAT);
-
+            
             if (! in_array($export_format, $external_object->get_export_types()))
             {
                 throw new \RuntimeException('Invalid export type selected');
             }
-
+            
             $document = ContentObject::factory(File::class_name());
             $document->set_title($external_object->get_title());
-
+            
             $descriptionRequired = Configuration::getInstance()->get_setting(
                 array(\Chamilo\Core\Repository\Manager::context(), 'description_required'));
-
+            
             if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty(
                 $external_object->get_description()))
             {
@@ -44,28 +44,28 @@ class ImporterComponent extends Manager
             {
                 $document->set_description($external_object->get_description());
             }
-
+            
             $mimeTypeExtensionParser = new MimeTypeExtensionParser();
             $exportTypeExtension = $mimeTypeExtensionParser->getExtensionForMimeType($export_format);
-
+            
             $document->set_owner_id($this->get_user_id());
             $document->set_filename(
                 Filesystem::create_safe_name($external_object->get_title()) . '.' . $exportTypeExtension);
-
+            
             $document->set_in_memory_file($external_object->get_content_data($export_format));
-
+            
             if ($document->create())
             {
                 SynchronizationData::quicksave($document, $external_object, $this->get_external_repository()->get_id());
-
+                
                 $parameters = $this->get_parameters();
                 $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Repository\Manager::context();
                 $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Repository\Manager::ACTION_VIEW_CONTENT_OBJECTS;
                 $parameters[\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID] = $document->get_id();
-
+                
                 $this->redirect(
-                    Translation::get('ObjectImported', null, Utilities::COMMON_LIBRARIES),
-                    false,
+                    Translation::get('ObjectImported', null, Utilities::COMMON_LIBRARIES), 
+                    false, 
                     $parameters);
             }
             else
@@ -74,8 +74,8 @@ class ImporterComponent extends Manager
                 $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_EXTERNAL_REPOSITORY;
                 $parameters[Manager::PARAM_EXTERNAL_REPOSITORY_ID] = $external_object->get_id();
                 $this->redirect(
-                    Translation::get('ObjectFailedImported', null, Utilities::COMMON_LIBRARIES),
-                    true,
+                    Translation::get('ObjectFailedImported', null, Utilities::COMMON_LIBRARIES), 
+                    true, 
                     $parameters);
             }
         }

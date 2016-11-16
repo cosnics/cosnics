@@ -25,40 +25,42 @@ class ActionsGenerator extends NavigationGenerator
     public function run()
     {
         $actions = array();
-
+        
         $application = $this->getApplication();
         $baseParameters = $this->getBaseParameters();
-
+        
         if ($application instanceof FeedbackNotificationSupport)
         {
             if ($this->isAllowedToViewFeedback())
             {
                 if ($this->hasNotification())
                 {
-                    $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_UNSUBSCRIBER;
-
+                    $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_UNSUBSCRIBER;
+                    
                     $actions[] = new Button(
-                        Translation:: get('StopReceivingNotifications'),
-                        new BootstrapGlyph('remove'),
-                        $application->get_url($baseParameters),
-                        Button::DISPLAY_ICON_AND_LABEL, false, 'btn-receive-feedback'
-                    );
+                        Translation::get('StopReceivingNotifications'), 
+                        new BootstrapGlyph('remove'), 
+                        $application->get_url($baseParameters), 
+                        Button::DISPLAY_ICON_AND_LABEL, 
+                        false, 
+                        'btn-receive-feedback');
                 }
                 else
                 {
                     $baseParameters = $this->getBaseParameters();
-                    $baseParameters[Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBER;
-
+                    $baseParameters[Manager::PARAM_ACTION] = Manager::ACTION_SUBSCRIBER;
+                    
                     $actions[] = new Button(
-                        Translation:: get('ReceiveNotifications'),
-                        new FontAwesomeGlyph('envelope'),
-                        $application->get_url($baseParameters),
-                        Button::DISPLAY_ICON_AND_LABEL, false, 'btn-receive-feedback'
-                    );
+                        Translation::get('ReceiveNotifications'), 
+                        new FontAwesomeGlyph('envelope'), 
+                        $application->get_url($baseParameters), 
+                        Button::DISPLAY_ICON_AND_LABEL, 
+                        false, 
+                        'btn-receive-feedback');
                 }
             }
         }
-
+        
         return $actions;
     }
 }

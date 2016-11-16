@@ -19,7 +19,7 @@ abstract class Manager extends Application
     const PARAM_BLOCK_ID = 'block_id';
     const ACTION_VIEW = 'Viewer';
     const ACTION_SAVE = 'Saver';
-    const DEFAULT_ACTION = self :: ACTION_VIEW;
+    const DEFAULT_ACTION = self::ACTION_VIEW;
 
     /**
      *
@@ -60,7 +60,7 @@ abstract class Manager extends Application
      */
     public function show_all()
     {
-        $show_all = Request :: get(self :: PARAM_SHOW_ALL);
+        $show_all = Request::get(self::PARAM_SHOW_ALL);
         return $show_all == 1 ? true : false;
     }
 
@@ -70,7 +70,7 @@ abstract class Manager extends Application
      */
     public function get_current_block()
     {
-        return Request :: get(self :: PARAM_BLOCK_ID);
+        return Request::get(self::PARAM_BLOCK_ID);
     }
 
     /**
@@ -79,6 +79,6 @@ abstract class Manager extends Application
      */
     public function get_current_view()
     {
-        return Request :: get(self :: PARAM_VIEWS);
+        return Request::get(self::PARAM_VIEWS);
     }
 }

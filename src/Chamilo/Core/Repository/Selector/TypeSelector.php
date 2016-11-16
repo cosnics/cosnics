@@ -7,7 +7,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * A collection of TypeSelectorCategory instances in a TypeSelector
- *
+ * 
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class TypeSelector
@@ -76,8 +76,8 @@ class TypeSelector
                 return $category;
             }
         }
-
-        throw new ObjectNotExistException(Translation :: get('TypeSelectorCategory'));
+        
+        throw new ObjectNotExistException(Translation::get('TypeSelectorCategory'));
     }
 
     /**
@@ -86,11 +86,12 @@ class TypeSelector
     public function sort()
     {
         usort(
-            $this->categories,
-            function ($category_a, $category_b) {
+            $this->categories, 
+            function ($category_a, $category_b)
+            {
                 return strcmp($category_a->get_name(), $category_b->get_name());
             });
-
+        
         foreach ($this->categories as $category)
         {
             $category->sort();
@@ -99,29 +100,29 @@ class TypeSelector
 
     /**
      * Convert the TypeSelector to an array type tree
-     *
+     * 
      * @return string[]
      */
     public function as_tree()
     {
         $type_options = array();
-        $type_options[] = '-- ' . Translation :: get('SelectAContentObjectType') . ' --';
-
+        $type_options[] = '-- ' . Translation::get('SelectAContentObjectType') . ' --';
+        
         $prefix = (count($this->categories) > 1 ? '&mdash; ' : '');
-
+        
         foreach ($this->categories as $category)
         {
             if (count($this->categories) > 1)
             {
                 $type_options[$category->get_type()] = $category->get_name();
             }
-
+            
             foreach ($category->get_options() as $option)
             {
                 $type_options[$option->get_template_registration_id()] = $prefix . $option->get_name();
             }
         }
-
+        
         return $type_options;
     }
 
@@ -137,12 +138,12 @@ class TypeSelector
     public function count_options()
     {
         $total = 0;
-
+        
         foreach ($this->get_categories() as $category)
         {
             $total += $category->count();
         }
-
+        
         return $total;
     }
 
@@ -153,31 +154,31 @@ class TypeSelector
     public function get_unique_content_object_template_ids()
     {
         $types = array();
-
+        
         foreach ($this->get_categories() as $category)
         {
             $types = array_merge($types, $category->get_unique_content_object_template_ids());
         }
-
+        
         return array_unique($types);
     }
 
     /**
      * Get the selected content object type template id from either the POST or GET variables
-     *
+     * 
      * @return int
      */
     public static function get_selection()
     {
-        $post_variable = Request :: post(self :: PARAM_SELECTION);
-
+        $post_variable = Request::post(self::PARAM_SELECTION);
+        
         if ($post_variable)
         {
             return $post_variable;
         }
         else
         {
-            return Request :: get(self :: PARAM_SELECTION);
+            return Request::get(self::PARAM_SELECTION);
         }
     }
 }

@@ -19,13 +19,13 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\AssessmentSel
      * @var ComplexContentObjectItem
      */
     private $complex_content_object_item;
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::required_parameters()
      */
     public function getRequiredPostParameters()
     {
-        return array(self :: PARAM_HINT_IDENTIFIER);
+        return array(self::PARAM_HINT_IDENTIFIER);
     }
 
     /**
@@ -37,14 +37,14 @@ class HintComponent extends \Chamilo\Core\Repository\ContentObject\AssessmentSel
     {
         $this->complex_content_object_item = $complex_content_object_item;
     }
-    
+
     /*
      * (non-PHPdoc) @see common\libraries.AjaxManager::run()
      */
     public function run()
     {
         $result = new JsonAjaxResult(200);
-        $result->set_property(self :: PROPERTY_HINT, $this->complex_content_object_item->get_ref_object()->get_hint());
+        $result->set_property(self::PROPERTY_HINT, $this->complex_content_object_item->get_ref_object()->get_hint());
         $result->display();
     }
 }

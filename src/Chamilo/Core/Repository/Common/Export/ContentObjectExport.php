@@ -80,18 +80,18 @@ abstract class ContentObjectExport
 
     public static function launch($export_implementation)
     {
-        return self :: factory($export_implementation)->render();
+        return self::factory($export_implementation)->render();
     }
 
     public static function factory($export_implementation)
     {
-        $class_name = ClassnameUtilities :: getInstance()->getClassnameFromObject($export_implementation, true);
+        $class_name = ClassnameUtilities::getInstance()->getClassnameFromObject($export_implementation, true);
         $class_name_parts = explode('_', $class_name);
         
         $class = __NAMESPACE__ . '\\' .
-             (string) StringUtilities :: getInstance()->createString($class_name_parts[0])->upperCamelize() . '\Type\\' .
-             (string) StringUtilities :: getInstance()->createString($class_name_parts[0])->upperCamelize() .
-             (string) StringUtilities :: getInstance()->createString($class_name_parts[1])->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($class_name_parts[0])->upperCamelize() . '\Type\\' .
+             (string) StringUtilities::getInstance()->createString($class_name_parts[0])->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($class_name_parts[1])->upperCamelize() .
              'ContentObjectExport';
         
         return new $class($export_implementation);
@@ -99,6 +99,6 @@ abstract class ContentObjectExport
 
     public static function get_types()
     {
-        return array(self :: FORMAT_CPO, self :: FORMAT_ICAL, self :: FORMAT_ZIP, self :: FORMAT_HTML);
+        return array(self::FORMAT_CPO, self::FORMAT_ICAL, self::FORMAT_ZIP, self::FORMAT_HTML);
     }
 }

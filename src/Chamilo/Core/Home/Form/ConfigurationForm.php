@@ -38,11 +38,11 @@ abstract class ConfigurationForm extends FormValidator
      */
     public function __construct(Block $block, $hasStaticTitle)
     {
-        parent :: __construct('block', 'post', '');
-
+        parent::__construct('block', 'post', '');
+        
         $this->block = $block;
         $this->hasStaticTitle = $hasStaticTitle;
-
+        
         $this->buildForm();
         $this->setDefaults();
     }
@@ -69,32 +69,36 @@ abstract class ConfigurationForm extends FormValidator
     {
         if (! $this->hasStaticTitle)
         {
-            $this->addElement('text', Block :: PROPERTY_TITLE, Translation :: get('Title'), array('class' => 'form-control'));
+            $this->addElement(
+                'text', 
+                Block::PROPERTY_TITLE, 
+                Translation::get('Title'), 
+                array('class' => 'form-control'));
         }
-
+        
         $this->addSettings();
-
-        $this->addElement('hidden', Block :: PROPERTY_ID, $this->getBlock()->get_id());
-
+        
+        $this->addElement('hidden', Block::PROPERTY_ID, $this->getBlock()->get_id());
+        
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'submit',
-            Translation :: get('Save', null, Utilities :: COMMON_LIBRARIES),
-            null,
-            null,
+            'style_submit_button', 
+            'submit', 
+            Translation::get('Save', null, Utilities::COMMON_LIBRARIES), 
+            null, 
+            null, 
             'save');
         $buttons[] = $this->createElement(
-            'style_reset_button',
-            'reset',
-            Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES));
+            'style_reset_button', 
+            'reset', 
+            Translation::get('Reset', null, Utilities::COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
-            'style_submit_button',
-            'cancel',
-            Translation :: get('Cancel', null, Utilities :: COMMON_LIBRARIES),
-            array('class' => 'btn-danger'),
-            null,
+            'style_submit_button', 
+            'cancel', 
+            Translation::get('Cancel', null, Utilities::COMMON_LIBRARIES), 
+            array('class' => 'btn-danger'), 
+            null, 
             'remove');
-
+        
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
@@ -108,9 +112,9 @@ abstract class ConfigurationForm extends FormValidator
     {
         if (! $this->hasStaticTitle)
         {
-            $defaults[Block :: PROPERTY_TITLE] = $this->getBlock()->getTitle();
+            $defaults[Block::PROPERTY_TITLE] = $this->getBlock()->getTitle();
         }
-
-        parent :: setDefaults($defaults);
+        
+        parent::setDefaults($defaults);
     }
 }
