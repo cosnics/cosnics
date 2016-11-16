@@ -140,7 +140,7 @@ var dropzoneCallbacks = {};
                     maxFiles : settings.maxFiles,
                     previewTemplate : previewTemplate,
                     previewsContainer : "#" + settings.name + "-previews",
-                    clickable : ".file-upload .panel-body",
+                    clickable : "#" + settings.name + "-upload .panel-body",
                     maxFilesize : settings.maxFilesize,
                     filesizeBase : 1024,
                     thumbnailWidth : settings.thumbnailWidth,
