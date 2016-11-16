@@ -13,7 +13,7 @@ class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
 
     /**
      * Attempts to establish a connection with the underlying driver.
-     *
+     * 
      * @param string[] $params
      * @param string $username
      * @param string $password
@@ -27,7 +27,7 @@ class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
 
     /**
      * Constructs the MsSql PDO DSN.
-     *
+     * 
      * @return string The DSN.
      */
     private function _constructPdoDsn(array $params)
@@ -39,12 +39,12 @@ class MsSqlDoctrineDriver implements \Doctrine\DBAL\Driver
             {
                 $dsn .= 'host=' . $params['host'] . '; ';
             }
-
+            
             if (isset($params['dbname']))
             {
                 $dsn .= 'dbname=' . $params['dbname'] . ';';
             }
-
+            
             if (isset($params['charset']))
             {
                 $dsn .= 'charset=' . $params['charset'] . ';';

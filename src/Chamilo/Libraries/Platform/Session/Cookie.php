@@ -5,7 +5,7 @@ use Chamilo\Libraries\File\Path;
 
 /**
  * $Id: cookie.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
+ * 
  * @package common.session
  */
 class Cookie
@@ -13,7 +13,7 @@ class Cookie
 
     public function register($variable, $value, $expiration = '900')
     {
-        setcookie($variable, $value, time() + $expiration, "", Path :: getInstance()->getBasePath(true));
+        setcookie($variable, $value, time() + $expiration, "", Path::getInstance()->getBasePath(true));
         $_COOKIE[$variable] = $value;
     }
 
@@ -41,6 +41,6 @@ class Cookie
 
     public function get_user_id()
     {
-        return self :: retrieve('_uid');
+        return self::retrieve('_uid');
     }
 }

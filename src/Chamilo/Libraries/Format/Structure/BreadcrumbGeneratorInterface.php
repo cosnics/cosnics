@@ -5,7 +5,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  * This class defines the basic layout of the BreadcrumbGenerator class.
- *
+ * 
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -14,7 +14,7 @@ interface BreadcrumbGeneratorInterface
 
     /**
      * Constructor
-     *
+     * 
      * @param Application $component
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -25,7 +25,7 @@ interface BreadcrumbGeneratorInterface
      * Generate functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Automatically generates the breadcrumbs based on the given component
      */

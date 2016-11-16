@@ -31,7 +31,7 @@ class ConfigurationLoaderFactory
      * @param \Chamilo\Configuration\Service\FileConfigurationLoader $fileConfigurationLoader
      * @param \Chamilo\Configuration\Service\StorageConfigurationLoader $storageConfigurationLoader
      */
-    public function __construct(FileConfigurationLoader $fileConfigurationLoader,
+    public function __construct(FileConfigurationLoader $fileConfigurationLoader, 
         StorageConfigurationLoader $storageConfigurationLoader)
     {
         $this->fileConfigurationLoader = $fileConfigurationLoader;
@@ -83,7 +83,7 @@ class ConfigurationLoaderFactory
         $dataLoaders = array();
         $dataLoaders[] = $this->getFileConfigurationLoader();
         $dataLoaders[] = $this->getStorageConfigurationLoader();
-
+        
         return new CacheableAggregatedDataLoader($dataLoaders);
     }
 }

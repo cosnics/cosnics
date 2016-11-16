@@ -16,8 +16,8 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->parsed_url =\Chamilo\ParseUrl(self :: URL);
-
+        $this->parsed_url = \Chamilo\ParseUrl(self::URL);
+        
         $_SERVER['PHP_SELF'] = $this->parsed_url['path'];
         $_SERVER['QUERY_STRING'] = $this->parsed_url['query'];
         $_SERVER['PATH_INFO'] = '/path/info';
@@ -40,7 +40,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = array('greets' => 'Hi', 'bad word' => '******');
         $filters = array('bad word');
-
+        
         $redirect = new Redirect($parameters, $filters);
         $return_value = $redirect->getUrl();
         $this->assertEquals($_SERVER['PHP_SELF'] . '?greets=Hi', $return_value);
@@ -50,18 +50,18 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $redirect = new Redirect();
         $return_value = $redirect->getCurrentUrl();
-        $this->assertEquals(self :: URL, $return_value);
+        $this->assertEquals(self::URL, $return_value);
     }
 
     public function test_get_web_link_add_parameters_to_url()
     {
         $params = array('extraparam1' => 'extraValue1', 'extraparam2' => array('array1', 'array2', 'array3'));
-
+        
         $expected = $params + array('arg' => "value", 'arg2' => "value2");
-
+        
         $redirect = new Redirect($params);
         $return_value = $redirect->getUrl();
-
+        
         $this->assertURLQueryContainsExactly($expected, $return_value);
     }
 
@@ -76,36 +76,36 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $parameters = array('greets' => 'Hi', 'bad word' => '******');
         $filters = array('bad word');
-
+        
         $redirect = new Redirect($parameters, $filters);
         $return_value = $redirect->getUrl();
-
+        
         $expected = array('application' => "customApplication", 'greets' => "Hi");
-
+        
         $this->assertURLQueryContainsExactly($expected, $return_value);
     }
 
     public function test_get_web_link_encode_entities_when_specified()
     {
         $params = array('test' => "un script nécessitant d'être encodé & including <different> entities");
-
+        
         $redirect = new Redirect($params, array(), false);
         $unencoded_return_value = $redirect->getUrl();
-
+        
         $redirect = new Redirect($params, array(), true);
         $encoded_return_value = $redirect->getUrl();
-
+        
         $this->assertEquals($url, $unencoded_return_value);
-        $this->assertEquals($url,\Chamilo\HtmlEntityDecode($encoded_return_value));
+        $this->assertEquals($url, \Chamilo\HtmlEntityDecode($encoded_return_value));
     }
 
     private function assertURLQueryContains(array $expected, $url)
     {
         $parsed_return_value = parse_url(urldecode($return_value));
         parse_str($parsed_return_value['query'], $parsed_return_query);
-
+        
         $not_found = array_diff($expected, $parsed_return_query);
-
+        
         $this->assertEquals(array(), $not_found);
     }
 
@@ -113,7 +113,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     {
         $parsed_return_value = parse_url(urldecode($url));
         parse_str($parsed_return_value['query'], $parsed_return_query);
-
+        
         $this->assertEquals($expected, $parsed_return_query);
     }
 }

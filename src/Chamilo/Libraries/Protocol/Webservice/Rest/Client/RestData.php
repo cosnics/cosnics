@@ -26,7 +26,7 @@ abstract class RestData
     public static function factory($content_type, $data)
     {
         $rest_data__class = __NAMESPACE__ . '\Data\\' .
-             (string) StringUtilities :: getInstance()->createString($content_type)->upperCamelize();
+             (string) StringUtilities::getInstance()->createString($content_type)->upperCamelize();
         return new $rest_data__class($data);
     }
 

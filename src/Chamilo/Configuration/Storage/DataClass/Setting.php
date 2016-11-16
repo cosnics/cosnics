@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Setting extends DataClass
 {
-
+    
     /**
      *
      * @deprecated Use PROPERTY_CONTEXT instead
@@ -28,17 +28,13 @@ class Setting extends DataClass
 
     /**
      * Get the default properties of all settings.
-     *
+     * 
      * @return array The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
-            array(
-                self :: PROPERTY_CONTEXT,
-                self :: PROPERTY_VARIABLE,
-                self :: PROPERTY_VALUE,
-                self :: PROPERTY_USER_SETTING));
+        return parent::get_default_property_names(
+            array(self::PROPERTY_CONTEXT, self::PROPERTY_VARIABLE, self::PROPERTY_VALUE, self::PROPERTY_USER_SETTING));
     }
 
     /**
@@ -46,12 +42,12 @@ class Setting extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: getInstance();
+        return DataManager::getInstance();
     }
 
     /**
      * Returns the application of this setting object
-     *
+     * 
      * @return string The setting application
      * @deprecated Use get_context instead
      */
@@ -62,32 +58,32 @@ class Setting extends DataClass
 
     public function get_context()
     {
-        return $this->get_default_property(self :: PROPERTY_CONTEXT);
+        return $this->get_default_property(self::PROPERTY_CONTEXT);
     }
 
     /**
      * Returns the variable of this setting object
-     *
+     * 
      * @return string the variable
      */
     public function get_variable()
     {
-        return $this->get_default_property(self :: PROPERTY_VARIABLE);
+        return $this->get_default_property(self::PROPERTY_VARIABLE);
     }
 
     /**
      * Returns the value of this setting object
-     *
+     * 
      * @return string the value
      */
     public function get_value()
     {
-        return $this->get_default_property(self :: PROPERTY_VALUE);
+        return $this->get_default_property(self::PROPERTY_VALUE);
     }
 
     /**
      * Sets the application of this setting.
-     *
+     * 
      * @param $application string the setting application.
      * @deprecated Use set_context instead
      */
@@ -98,52 +94,52 @@ class Setting extends DataClass
 
     public function set_context($context)
     {
-        $this->set_default_property(self :: PROPERTY_CONTEXT, $context);
+        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
     }
 
     /**
      * Sets the variable of this setting.
-     *
+     * 
      * @param $variable string the variable.
      */
     public function set_variable($variable)
     {
-        $this->set_default_property(self :: PROPERTY_VARIABLE, $variable);
+        $this->set_default_property(self::PROPERTY_VARIABLE, $variable);
     }
 
     /**
      * Sets the value of this setting.
-     *
+     * 
      * @param $value string the value.
      */
     public function set_value($value)
     {
-        $this->set_default_property(self :: PROPERTY_VALUE, $value);
+        $this->set_default_property(self::PROPERTY_VALUE, $value);
     }
 
     /**
      * Returns the user_setting of this setting object
-     *
+     * 
      * @return string the user_setting
      */
     public function get_user_setting()
     {
-        return $this->get_default_property(self :: PROPERTY_USER_SETTING);
+        return $this->get_default_property(self::PROPERTY_USER_SETTING);
     }
 
     /**
      * Sets the user_setting of this setting.
-     *
+     * 
      * @param $user_setting string the user_setting.
      */
     public function set_user_setting($user_setting)
     {
-        $this->set_default_property(self :: PROPERTY_USER_SETTING, $user_setting);
+        $this->set_default_property(self::PROPERTY_USER_SETTING, $user_setting);
     }
 
     public function delete()
     {
-        if (! parent :: delete())
+        if (! parent::delete())
         {
             return false;
         }
@@ -152,9 +148,9 @@ class Setting extends DataClass
             if ($this->get_user_setting())
             {
                 $condition = new EqualityCondition(
-                    new PropertyConditionVariable(UserSetting :: class_name(), UserSetting :: PROPERTY_SETTING_ID),
+                    new PropertyConditionVariable(UserSetting::class_name(), UserSetting::PROPERTY_SETTING_ID), 
                     new StaticConditionVariable($this->get_id()));
-                if (! \Chamilo\Core\User\Storage\DataManager :: deletes(UserSetting :: class_name(), $condition))
+                if (! \Chamilo\Core\User\Storage\DataManager::deletes(UserSetting::class_name(), $condition))
                 {
                     return false;
                 }
@@ -174,12 +170,12 @@ class Setting extends DataClass
 
     public function create()
     {
-        return $this->on_change(parent :: create());
+        return $this->on_change(parent::create());
     }
 
     public function update()
     {
-        return $this->on_change(parent :: update());
+        return $this->on_change(parent::update());
     }
 
     protected function on_change($success = true)
@@ -188,8 +184,8 @@ class Setting extends DataClass
         {
             return $success;
         }
-
-        \Chamilo\Configuration\Configuration :: getInstance()->reset();
+        
+        \Chamilo\Configuration\Configuration::getInstance()->reset();
         return $success;
     }
 }

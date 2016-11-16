@@ -53,15 +53,15 @@ class DayRenderer extends FullTableRenderer
      * @param integer $endHour
      * @param boolean $hideOtherHours
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, 
         $viewActions = array(), $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
     {
         $this->hourStep = $hourStep;
         $this->startHour = $startHour;
         $this->endHour = $endHour;
         $this->hideOtherHours = $hideOtherHours;
-
-        parent :: __construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
+        
+        parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
     }
 
     /**
@@ -143,11 +143,11 @@ class DayRenderer extends FullTableRenderer
     public function initializeCalendar()
     {
         return new DayCalendar(
-            $this->getDisplayTime(),
-            $this->getHourStep(),
-            $this->getStartHour(),
-            $this->getEndHour(),
-            $this->getHideOtherHours(),
+            $this->getDisplayTime(), 
+            $this->getHourStep(), 
+            $this->getStartHour(), 
+            $this->getEndHour(), 
+            $this->getHideOtherHours(), 
             array('table-calendar-day'));
     }
 
@@ -158,25 +158,25 @@ class DayRenderer extends FullTableRenderer
     public function renderFullCalendar()
     {
         $calendar = $this->getCalendar();
-
+        
         $fromDate = $calendar->getStartTime();
         $toDate = $calendar->getEndTime();
-
+        
         $events = $this->getEvents($fromDate, $toDate);
-
+        
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
         $tableDate = $startTime;
-
+        
         while ($tableDate <= $endTime)
         {
             $nextTableDate = strtotime('+' . $this->getHourStep() . ' Hours', $tableDate);
-
+            
             foreach ($events as $index => $event)
             {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
-
+                
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                      $tableDate < $endDate && $endDate < $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
@@ -184,16 +184,16 @@ class DayRenderer extends FullTableRenderer
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
                     $configuration->setHourStep($this->getHourStep());
-
+                    
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
-
+                    
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
-
+            
             $tableDate = $nextTableDate;
         }
-
+        
         return $calendar->render();
     }
 

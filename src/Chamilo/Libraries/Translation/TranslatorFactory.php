@@ -14,7 +14,7 @@ use Chamilo\Configuration\Configuration;
 
 /**
  * Builds the symfony translator
- *
+ * 
  * @package Chamilo\Libraries\Translation
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -24,59 +24,55 @@ class TranslatorFactory
 
     /**
      * Builds and returns the Symfony Translator
-     *
+     * 
      * @param string $locale
      *
      * @return \Symfony\Component\Translation\Translator
      */
     public function createTranslator($locale = null)
     {
-        if (!$locale)
+        if (! $locale)
         {
             $isoCode = Translation::getInstance()->getLanguageIsocode();
             $locale = $isoCode . '_' . strtoupper($isoCode);
         }
-
+        
         $translator = new Translator($locale);
-
+        
         $translator->addLoader('optimized', new OptimizedTranslationsPhpFileLoader());
         $this->addOptimizedTranslationResources($translator);
-
+        
         $translator->setFallbackLocales(array('en_EN', 'nl_NL'));
-
+        
         return $translator;
     }
 
     /**
      * Adds the optimized translation resources to the translator
-     *
+     * 
      * @param Translator $translator
      */
     protected function addOptimizedTranslationResources(Translator $translator)
     {
         $translationCachePath = Path::getInstance()->getCachePath(__NAMESPACE__);
-
-        if (!is_dir($translationCachePath))
+        
+        if (! is_dir($translationCachePath))
         {
             Filesystem::create_dir($translationCachePath);
         }
-
+        
         $packageNamespaces = Configuration::getInstance()->get_registration_contexts();
-
+        
         $translationResourcesOptimizer = new TranslationResourcesOptimizer(
-            array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()),
+            array('xliff' => new XliffFileLoader(), 'ini' => new IniFileLoader()), 
             new PackagesTranslationResourcesFinder(
                 new PackagesFilesFinder(
-                    new PathBuilder(
-                        ClassnameUtilities::getInstance()
-                    ), $packageNamespaces
-                )
-            ),
-            $translationCachePath
-        );
-
+                    new PathBuilder(ClassnameUtilities::getInstance()), 
+                    $packageNamespaces)), 
+            $translationCachePath);
+        
         $resources = $translationResourcesOptimizer->getOptimizedTranslationResources();
-
+        
         foreach ($resources as $locale => $resource)
         {
             $translator->addResource('optimized', $resource, $locale);

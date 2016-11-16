@@ -52,12 +52,12 @@ class AggregatedDataLoader implements DataLoaderInterface
     public function getData()
     {
         $data = array();
-
+        
         foreach ($this->getDataLoaders() as $dataLoader)
         {
             $data = array_merge_recursive($data, $dataLoader->getData());
         }
-
+        
         return $data;
     }
 }

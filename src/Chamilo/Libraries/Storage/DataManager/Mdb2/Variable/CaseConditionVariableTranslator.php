@@ -13,7 +13,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
-     * 
+     *
      * @see \Chamilo\Libraries\Storage\Query\Variable\ConditionVariableTranslator::translate()
      */
     public function translate()
@@ -24,7 +24,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         
         foreach ($this->get_condition_variable()->get_case_elements() as $case_element)
         {
-            $strings[] = static :: render($case_element);
+            $strings[] = static::render($case_element);
         }
         
         $strings[] = ' END';
@@ -37,7 +37,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         {
             $value = implode(' ', $strings);
         }
-
+        
         return $value;
     }
 }

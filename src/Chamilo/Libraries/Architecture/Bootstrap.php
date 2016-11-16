@@ -36,29 +36,29 @@ class Bootstrap
     public function __construct()
     {
         $this->initialize();
-
-        $this->request = \Symfony\Component\HttpFoundation\Request :: createFromGlobals();
-        $this->configuration = \Chamilo\Configuration\Configuration :: getInstance();
+        
+        $this->request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+        $this->configuration = \Chamilo\Configuration\Configuration::getInstance();
     }
 
     /**
      * Return 'this' as singleton
-     *
+     * 
      * @return \Chamilo\Libraries\Architecture\Bootstrap
      */
     static public function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
-            self :: $instance = new static();
+            self::$instance = new static();
         }
-
-        return static :: $instance;
+        
+        return static::$instance;
     }
 
     /**
      * Include the composer autoloader which also handles the autoloading of the Chamilo codebase
-     *
+     * 
      * @return \Chamilo\Libraries\Architecture\Bootstrap
      */
     private function initialize()
@@ -68,7 +68,7 @@ class Bootstrap
         {
             require_once $autoload_file;
         }
-
+        
         return $this;
     }
 
@@ -92,31 +92,31 @@ class Bootstrap
 
     /**
      * Check if the system has been installed, if not display message accordingly
-     *
+     * 
      * @return \Chamilo\Libraries\Architecture\Bootstrap
      */
     private function checkInstallation()
     {
         if (! $this->getConfiguration()->is_available())
         {
-            $this->request->query->set(Application :: PARAM_CONTEXT, 'Chamilo\Core\Install');
-            Request :: set_get(Application :: PARAM_CONTEXT, 'Chamilo\Core\Install');
+            $this->request->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
+            Request::set_get(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
             return $this;
         }
-
+        
         if (! $this->getConfiguration()->is_connectable())
         {
-            throw new \Exception(Translation :: get('DatabaseConnectionNotAvailable'));
+            throw new \Exception(Translation::get('DatabaseConnectionNotAvailable'));
         }
-
+        
         return $this;
     }
 
     private function startSession()
     {
         // Start session
-        Session :: start(true);
-
+        Session::start(true);
+        
         return $this;
     }
 
@@ -126,6 +126,6 @@ class Bootstrap
      */
     public static function setup()
     {
-        return self :: getInstance()->checkInstallation()->startSession();
+        return self::getInstance()->checkInstallation()->startSession();
     }
 }

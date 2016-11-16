@@ -24,12 +24,12 @@ class CategoryTableColumnModel extends DataClassTableColumnModel implements Tabl
 
     public function initialize_columns()
     {
-        $this->add_column(new StaticTableColumn(Translation :: get(self :: CATEGORY)));
+        $this->add_column(new StaticTableColumn(Translation::get(self::CATEGORY)));
         $this->add_column(
-            new DataClassPropertyTableColumn(PlatformCategory :: class_name(), PlatformCategory :: PROPERTY_NAME));
+            new DataClassPropertyTableColumn(PlatformCategory::class_name(), PlatformCategory::PROPERTY_NAME));
         if ($this->get_component()->get_subcategories_allowed())
         {
-            $this->add_column(new StaticTableColumn(Translation :: get(self :: SUBCATEGORIES)));
+            $this->add_column(new StaticTableColumn(Translation::get(self::SUBCATEGORIES)));
         }
     }
 }

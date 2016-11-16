@@ -37,7 +37,7 @@ class SessionUtilities
      * @param \Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
      * @param string $securityKey
      */
-    public function __construct(FileConfigurationLocator $fileConfigurationLocator,
+    public function __construct(FileConfigurationLocator $fileConfigurationLocator, 
         SessionHandler $sessionHandler = null, $securityKey = null)
     {
         $this->fileConfigurationLocator = $fileConfigurationLocator;
@@ -105,7 +105,7 @@ class SessionUtilities
          * Disables PHP automatically provided cache headers
          */
         session_cache_limiter('');
-
+        
         if ($this->getFileConfigurationLocator()->isAvailable())
         {
             try
@@ -113,21 +113,21 @@ class SessionUtilities
                 if ($this->getSessionHandler() instanceof SessionHandler)
                 {
                     session_set_save_handler(
-                        array($this->getSessionHandler(), 'open'),
-                        array($this->getSessionHandler(), 'close'),
-                        array($this->getSessionHandler(), 'read'),
-                        array($this->getSessionHandler(), 'write'),
-                        array($this->getSessionHandler(), 'destroy'),
+                        array($this->getSessionHandler(), 'open'), 
+                        array($this->getSessionHandler(), 'close'), 
+                        array($this->getSessionHandler(), 'read'), 
+                        array($this->getSessionHandler(), 'write'), 
+                        array($this->getSessionHandler(), 'destroy'), 
                         array($this->getSessionHandler(), 'garbage'));
                 }
-
+                
                 $sessionKey = $this->getSecurityKey();
-
+                
                 if (is_null($sessionKey))
                 {
                     $sessionKey = 'dk_sid';
                 }
-
+                
                 session_name($sessionKey);
                 session_start();
             }
@@ -150,7 +150,7 @@ class SessionUtilities
     public function registerIfNotSet($variable, $value)
     {
         $sessionValue = $this->retrieve($variable);
-
+        
         if (is_null($sessionValue))
         {
             $this->register($variable, $value);

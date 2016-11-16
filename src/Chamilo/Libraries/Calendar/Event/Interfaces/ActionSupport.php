@@ -13,7 +13,7 @@ interface ActionSupport
 
     /**
      * Get the actions available in the renderer for the given event
-     *
+     * 
      * @param \Chamilo\Libraries\Calendar\Event\Event $event
      * @return \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */

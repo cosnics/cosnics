@@ -29,7 +29,7 @@ class DataClassCountGroupedCache extends DataClassCache
         {
             throw new Exception('Illegal parameters passed to the DataClassCountGroupedCache');
         }
-
+        
         if (! is_array($counts))
         {
             $type = is_object($counts) ? get_class($counts) : gettype($counts);
@@ -37,12 +37,12 @@ class DataClassCountGroupedCache extends DataClassCache
                 'The DataClassCountGroupedCache cache only allows for caching of integer arrays. Currently trying to add: ' .
                      $type . '.');
         }
-
+        
         if (! DataClassCache::exists($class, $parameters))
         {
             DataClassCache::set_cache($class, $parameters->hash(), $counts);
         }
-
+        
         return true;
     }
 }

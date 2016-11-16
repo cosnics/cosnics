@@ -2,7 +2,7 @@
 
 /**
  * Extension on the HTML Quickform Checkbox element to support returnable values if the checkbox is not selected
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
@@ -10,14 +10,14 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
 
     /**
      * The return value if the checkbox is not selected
-     *
+     * 
      * @var mixed
      */
     private $return_value;
 
     /**
      * Class constructor
-     *
+     * 
      * @param string $elementName (optional)Input field name attribute
      * @param string $elementLabel (optional)Input field value
      * @param string $text (optional)Checkbox display text
@@ -29,11 +29,11 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
      * @access public
      * @return void
      */
-    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null,
-        $value = 1, $return_value = null)
+    public function __construct($elementName = null, $elementLabel = null, $text = '', $attributes = null, $value = 1, 
+        $return_value = null)
     {
-        HTML_QuickForm_checkbox :: __construct($elementName, $elementLabel, $text, $attributes);
-
+        HTML_QuickForm_checkbox::__construct($elementName, $elementLabel, $text, $attributes);
+        
         if ($value && ! is_null($value))
         {
             $this->setValue($value);
@@ -42,24 +42,24 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         {
             $this->setValue(1);
         }
-
+        
         $this->return_value = $return_value;
     }
 
     /**
      * Return true if the checkbox is checked, or the return value if it is not checked (getValue() returns false)
-     *
+     * 
      * @return mixed
      */
     public function exportValue(&$submitValues, $assoc = false)
     {
         $value = $this->_findValue($submitValues);
-
+        
         if (null === $value)
         {
             $value = $this->getChecked() ? true : $this->return_value;
         }
-
+        
         return $this->_prepareValue($value, $assoc);
     }
 
@@ -75,7 +75,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
 
     /**
      * Sets the value of the form element
-     *
+     * 
      * @param string $value Default value of the form element
      * @since 1.0
      * @access public
@@ -88,7 +88,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
 
     /**
      * Returns the value of the form element
-     *
+     * 
      * @since 1.0
      * @access public
      * @return bool
@@ -101,7 +101,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     /**
      * This method had to be overwritten because the default Quickform code only allows for 5 arguments, whereas we need
      * 6 in this case
-     *
+     * 
      * @see HTML_QuickForm_checkbox::onQuickFormEvent()
      */
     function onQuickFormEvent($event, $arg, &$caller)
@@ -187,10 +187,10 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
         return true;
     }
     // end func onQuickFormEvent
-
+    
     /**
      * Returns the radio element in HTML
-     *
+     * 
      * @since 1.0
      * @access public
      * @return string
@@ -198,14 +198,14 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     function toHtml()
     {
         $html = array();
-
+        
         $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
-        $html[] = HTML_QuickForm_input :: toHtml();
+        $html[] = HTML_QuickForm_input::toHtml();
         $html[] = '<label>';
         $html[] = $this->_text;
         $html[] = '</label>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 

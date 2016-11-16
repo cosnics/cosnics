@@ -53,7 +53,7 @@ class SourceCodeTestGenerator
     public function process(PackageList $package_list)
     {
         $this->write_source_code_test($package_list->get_type());
-
+        
         if ($package_list->has_children())
         {
             foreach ($package_list->get_children() as $child_list)
@@ -70,7 +70,7 @@ class SourceCodeTestGenerator
      */
     public function get_folder($context)
     {
-        return Path :: getInstance()->namespaceToFullPath($context) . 'test/php/source/';
+        return Path::getInstance()->namespaceToFullPath($context) . 'test/php/source/';
     }
 
     /**
@@ -80,7 +80,7 @@ class SourceCodeTestGenerator
     public function write_source_code_test($context)
     {
         $manager_class_name = $context . '\Manager';
-
+        
         if (class_exists($manager_class_name) &&
              is_subclass_of($manager_class_name, '\Chamilo\Libraries\Architecture\Application\Application'))
         {
@@ -113,22 +113,22 @@ class CheckSourceCodeTest extends \libraries\architecture\test\source\CheckSourc
 {
 }';
         }
-
+        
         $path = $this->get_folder($context) . 'check_source_code_test.class.php';
-        $php_class_path = Path :: getInstance()->namespaceToFullPath($context) . 'php/';
-
+        $php_class_path = Path::getInstance()->namespaceToFullPath($context) . 'php/';
+        
         if (! file_exists($path) && is_dir($php_class_path))
         {
             echo $context . "\n";
-            Filesystem :: write_to_file($path, $content, false);
+            Filesystem::write_to_file($path, $content, false);
         }
     }
 }
 
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
-\Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
+\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
 
-$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles :: getInstance()->get_package_list();
+$package_list = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_package_list();
 
 $generator = new SourceCodeTestGenerator($package_list);
 $generator->run();

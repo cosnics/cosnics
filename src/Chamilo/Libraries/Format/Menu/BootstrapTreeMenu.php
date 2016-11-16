@@ -48,7 +48,7 @@ abstract class BootstrapTreeMenu
      * @param string $treeMenuUrl
      * @param string $menuName
      */
-    public function __construct(Application $application, ComplexContentObjectPath $complexContentObjectPath,
+    public function __construct(Application $application, ComplexContentObjectPath $complexContentObjectPath, 
         $treeMenuUrl, $menuName = 'bootstrap-tree-menu')
     {
         $this->application = $application;
@@ -136,7 +136,7 @@ abstract class BootstrapTreeMenu
      */
     public function getNodeUrl($nodeIdentifier)
     {
-        return str_replace(self :: NODE_PLACEHOLDER, $nodeIdentifier, $this->getTreeMenuUrl());
+        return str_replace(self::NODE_PLACEHOLDER, $nodeIdentifier, $this->getTreeMenuUrl());
     }
 
     /**
@@ -158,12 +158,12 @@ abstract class BootstrapTreeMenu
     public function render()
     {
         $currentNodeId = $this->getCurrentNodeId();
-
+        
         $html = array();
-
+        
         $html[] = '<div id="' . $this->getMenuName() . '">';
         $html[] = '</div>';
-
+        
         $html[] = "<script>
             $(function()
             {
@@ -195,15 +195,15 @@ abstract class BootstrapTreeMenu
                 });
             });
         </script>";
-
-        $html[] = ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+        
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.js');
-
-        $html[] = ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath(Utilities :: COMMON_LIBRARIES, true) .
+        
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath(Utilities::COMMON_LIBRARIES, true) .
                  'Plugin/Bootstrap/treeview/dist/bootstrap-treeview.min.css');
-
+        
         return implode(PHP_EOL, $html);
     }
 }

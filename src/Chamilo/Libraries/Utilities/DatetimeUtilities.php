@@ -8,7 +8,7 @@ use DateTimeZone;
 
 /**
  * $Id: datetime_utilities.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
- *
+ * 
  * @package common.datetime
  */
 class DatetimeUtilities
@@ -20,7 +20,7 @@ class DatetimeUtilities
      * and the current year. e.g. with default $years_difference_for_century value of 20: - calling the function in 2009
      * with a given $year value of 19 return 2019 - calling the function in 2009 with a given $year value of 75 return
      * 1975
-     *
+     * 
      * @param $years_difference_for_century The maximum difference of years between the current year and the given year
      *        to return the current century
      * @return integer A year number
@@ -53,7 +53,7 @@ class DatetimeUtilities
 
     /**
      * formats the date according to the locale settings
-     *
+     * 
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Christophe Gesch� <gesche@ipm.ucl.ac.be> originally inspired from from PhpMyAdmin
      * @param string $formatOfDate date pattern
@@ -64,41 +64,41 @@ class DatetimeUtilities
     {
         if (! $dateFormat)
         {
-            $dateFormat = self :: default_date_time_format();
+            $dateFormat = self::default_date_time_format();
         }
-
-        $DaysShort = self :: get_days_short(); // Defining the shorts for the days
-        $DaysLong = self :: get_days_long(); // Defining the days of the week to allow translation of the days
-        $MonthsShort = self :: get_month_short(); // Defining the shorts for the months
-        $MonthsLong = self :: get_month_long(); // Defining the months of the year to allow translation of the months
+        
+        $DaysShort = self::get_days_short(); // Defining the shorts for the days
+        $DaysLong = self::get_days_long(); // Defining the days of the week to allow translation of the days
+        $MonthsShort = self::get_month_short(); // Defining the shorts for the months
+        $MonthsLong = self::get_month_long(); // Defining the months of the year to allow translation of the months
                                                 // with the ereg we replace %aAbB of date format
                                                 // (they can be done by the system when locale date aren't aivailable
-
+        
         $date = preg_replace('/%[A]/', $DaysLong[(int) strftime('%w', $timeStamp)], $dateFormat);
         $date = preg_replace('/%[a]/', $DaysShort[(int) strftime('%w', $timeStamp)], $date);
         $date = preg_replace('/%[B]/', $MonthsLong[(int) strftime('%m', $timeStamp) - 1], $date);
         $date = preg_replace('/%[b]/', $MonthsShort[(int) strftime('%m', $timeStamp) - 1], $date);
-
+        
         if ($timeStamp == - 1)
         {
             $timeStamp = time();
         }
-
+        
         return strftime($date, $timeStamp);
     }
 
     private static function default_date_time_format()
     {
-        $translator = Translation :: getInstance();
-        $short_date = $translator->getTranslation('DateFormatShort', null, Utilities :: COMMON_LIBRARIES);
-        $time = $translator->getTranslation('TimeNoSecFormat', null, Utilities :: COMMON_LIBRARIES);
+        $translator = Translation::getInstance();
+        $short_date = $translator->getTranslation('DateFormatShort', null, Utilities::COMMON_LIBRARIES);
+        $time = $translator->getTranslation('TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES);
         $dateFormat = "{$short_date},  {$time}";
         return $dateFormat;
     }
 
     /**
      * Convert the given date to the selected timezone
-     *
+     * 
      * @param String $date The date
      * @param String $timezone The selected timezone
      */
@@ -106,30 +106,30 @@ class DatetimeUtilities
     {
         if (! $format)
         {
-            $format = self :: default_date_time_format();
+            $format = self::default_date_time_format();
         }
-
+        
         if (! $timezone)
         {
-            $timezone = LocalSetting :: getInstance()->get('platform_timezone');
+            $timezone = LocalSetting::getInstance()->get('platform_timezone');
             if (! $timezone)
             {
-                return self :: format_locale_date($format, $date);
+                return self::format_locale_date($format, $date);
             }
         }
-
+        
         $date_time_zone = new DateTimeZone($timezone);
         $gmt_time_zone = new DateTimeZone('GMT');
-
+        
         $date_time = new DateTime($date, $gmt_time_zone);
         $offset = $date_time_zone->getOffset($date_time);
-
-        return self :: format_locale_date($format, $date_time->format('U') + $offset);
+        
+        return self::format_locale_date($format, $date_time->format('U') + $offset);
     }
 
     /**
      * Convert the seconds to h:m:s or m:s or s
-     *
+     * 
      * @param String $time
      */
     public static function convert_seconds_to_hours($time)
@@ -163,7 +163,7 @@ class DatetimeUtilities
     /**
      * Defining the shorts for the days.
      * Memoized.
-     *
+     * 
      * @return array
      */
     public static function get_days_short()
@@ -173,23 +173,23 @@ class DatetimeUtilities
         {
             return $result;
         }
-
-        $translator = Translation :: getInstance();
-
+        
+        $translator = Translation::getInstance();
+        
         return $result = array(
-            $translator->getTranslation('SundayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('MondayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('TuesdayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('WednesdayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('ThursdayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('FridayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('SaturdayShort', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('SundayShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('MondayShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('TuesdayShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('WednesdayShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('ThursdayShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('FridayShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('SaturdayShort', null, Utilities::COMMON_LIBRARIES));
     }
 
     /**
      * Defining the days of the week to allow translation of the days.
      * Memoized.
-     *
+     * 
      * @return array
      */
     public static function get_days_long()
@@ -199,22 +199,22 @@ class DatetimeUtilities
         {
             return $result;
         }
-        $translator = Translation :: getInstance();
-
+        $translator = Translation::getInstance();
+        
         return $result = array(
-            $translator->getTranslation('SundayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('MondayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('TuesdayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('WednesdayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('ThursdayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('FridayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('SaturdayLong', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('SundayLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('MondayLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('TuesdayLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('WednesdayLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('ThursdayLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('FridayLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('SaturdayLong', null, Utilities::COMMON_LIBRARIES));
     }
 
     /**
      * Defining the shorts for the months.
      * Memoized.
-     *
+     * 
      * @return array
      */
     public static function get_month_short()
@@ -224,28 +224,28 @@ class DatetimeUtilities
         {
             return $result;
         }
-
-        $translator = Translation :: getInstance();
-
+        
+        $translator = Translation::getInstance();
+        
         return $result = array(
-            $translator->getTranslation('JanuaryShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('FebruaryShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('MarchShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('AprilShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('MayShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('JuneShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('JulyShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('AugustShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('SeptemberShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('OctoberShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('NovemberShort', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('DecemberShort', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('JanuaryShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('FebruaryShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('MarchShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('AprilShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('MayShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('JuneShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('JulyShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('AugustShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('SeptemberShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('OctoberShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('NovemberShort', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('DecemberShort', null, Utilities::COMMON_LIBRARIES));
     }
 
     /**
      * Defining the shorts for the months.
      * Memoized.
-     *
+     * 
      * @return array
      */
     public static function get_month_long()
@@ -255,27 +255,27 @@ class DatetimeUtilities
         {
             return $result;
         }
-
-        $translator = Translation :: getInstance();
-
+        
+        $translator = Translation::getInstance();
+        
         return $result = array(
-            $translator->getTranslation('JanuaryLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('FebruaryLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('MarchLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('AprilLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('MayLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('JuneLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('JulyLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('AugustLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('SeptemberLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('OctoberLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('NovemberLong', null, Utilities :: COMMON_LIBRARIES),
-            $translator->getTranslation('DecemberLong', null, Utilities :: COMMON_LIBRARIES));
+            $translator->getTranslation('JanuaryLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('FebruaryLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('MarchLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('AprilLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('MayLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('JuneLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('JulyLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('AugustLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('SeptemberLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('OctoberLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('NovemberLong', null, Utilities::COMMON_LIBRARIES), 
+            $translator->getTranslation('DecemberLong', null, Utilities::COMMON_LIBRARIES));
     }
 
     /**
      * Converts a date/time value retrieved from a FormValidator datepicker element to the corresponding UNIX itmestamp.
-     *
+     * 
      * @param $string string The date/time value.
      * @return int The UNIX timestamp.
      */
@@ -285,18 +285,18 @@ class DatetimeUtilities
         $yearMonthDday = explode('-', $dateTime[0]);
         $hoursMinutesSeconds = explode(':', $dateTime[1]);
         return mktime(
-            $hoursMinutesSeconds[0],
-            $hoursMinutesSeconds[1],
-            $hoursMinutesSeconds[2],
-            $yearMonthDday[1],
-            $yearMonthDday[2],
+            $hoursMinutesSeconds[0], 
+            $hoursMinutesSeconds[1], 
+            $hoursMinutesSeconds[2], 
+            $yearMonthDday[1], 
+            $yearMonthDday[2], 
             $yearMonthDday[0]);
     }
 
     /**
      * Converts a date/time value retrieved from a FormValidator datepicker without timepicker element to the
      * corresponding UNIX itmestamp.
-     *
+     * 
      * @param $string string The date/time value.
      * @return int The UNIX timestamp.
      */
@@ -310,20 +310,20 @@ class DatetimeUtilities
     {
         $hours = floor($seconds / 3600);
         $rest = $seconds % 3600;
-
+        
         $minutes = floor($rest / 60);
         $seconds = $rest % 60;
-
+        
         if ($minutes < 10)
         {
             $minutes = '0' . $minutes;
         }
-
+        
         if ($seconds < 10)
         {
             $seconds = '0' . $seconds;
         }
-
+        
         return $hours . ':' . $minutes . ':' . $seconds;
     }
 
@@ -331,17 +331,17 @@ class DatetimeUtilities
     {
         $minutes = floor($seconds / 60);
         $seconds = $seconds % 60;
-
+        
         if ($minutes < 10)
         {
             $minutes = '0' . $minutes;
         }
-
+        
         if ($seconds < 10)
         {
             $seconds = '0' . $seconds;
         }
-
+        
         return $minutes . ':' . $seconds;
     }
 }

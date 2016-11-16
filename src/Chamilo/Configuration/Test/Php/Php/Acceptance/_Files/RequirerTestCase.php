@@ -8,7 +8,7 @@ class RequirerTestCase extends \PHPUnit_Framework_TestCase
 
     public function __construct($class_file)
     {
-        parent :: __construct("class_file_should_pass_compilation");
+        parent::__construct("class_file_should_pass_compilation");
         $this->class_file = $class_file;
     }
 

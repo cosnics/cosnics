@@ -12,6 +12,6 @@ class HTML_QuickForm_Rule_NumberCompare extends HTML_QuickForm_Rule_Compare
     public function validate($fields, $operator = null, $value)
     {
         $field = $fields[0];
-        return parent :: validate(array($field, $value), $operator);
+        return parent::validate(array($field, $value), $operator);
     }
 }

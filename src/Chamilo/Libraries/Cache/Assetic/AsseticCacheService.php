@@ -79,7 +79,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             $this->filesystemCache = new FilesystemCache($this->getCachePath());
         }
-
+        
         return $this->filesystemCache;
     }
 
@@ -114,7 +114,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             $this->assetCollection = new AssetCollection($this->getAssets(), $this->getAssetFilters());
         }
-
+        
         return $this->assetCollection;
     }
 
@@ -128,7 +128,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             $this->assetCache = new AssetCache($this->getAssetCollection(), $this->getFilesystemCache());
         }
-
+        
         return $this->assetCache;
     }
 
@@ -155,7 +155,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
      */
     public function clear()
     {
-        return Filesystem :: remove($this->getCachePath());
+        return Filesystem::remove($this->getCachePath());
     }
 
     /**
@@ -168,7 +168,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             return false;
         }
-
+        
         return $this->warmUp();
     }
 
@@ -183,16 +183,16 @@ abstract class AsseticCacheService implements CacheResetterInterface
 
     /**
      * Returns the last modification time of the resource
-     *
+     * 
      * @return int
      */
     public function getLastModificationTime()
     {
-        if(!file_exists($this->getCachePath()))
+        if (! file_exists($this->getCachePath()))
         {
             return 0;
         }
-
+        
         return filemtime($this->getCachePath());
     }
 }

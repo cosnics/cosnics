@@ -63,7 +63,7 @@ class DataCacheLoader extends DoctrinePhpFileCacheService implements DataLoaderI
     public function loadData()
     {
         return $this->getCacheProvider()->save(
-            $this->getCacheableDataLoader()->getIdentifier(),
+            $this->getCacheableDataLoader()->getIdentifier(), 
             $this->getCacheableDataLoader()->getData());
     }
 

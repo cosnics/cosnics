@@ -104,10 +104,10 @@ class ThemeCopier
     {
         $this->setHeader();
         $packageNamespaces = $this->getPackageNamespaces();
-
-        $basePath = Path :: getInstance()->getBasePath();
+        
+        $basePath = Path::getInstance()->getBasePath();
         $baseWebPath = realpath($basePath . '..') . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR;
-
+        
         // Copy the resources
         foreach ($packageNamespaces as $packageNamespace)
         {
@@ -127,7 +127,7 @@ class ThemeCopier
      */
     public function getPackageNamespaces()
     {
-        $resourceBundles = new ResourceBundles(PackageList :: ROOT);
+        $resourceBundles = new ResourceBundles(PackageList::ROOT);
         return $resourceBundles->getPackageNamespaces();
     }
 
@@ -137,7 +137,7 @@ class ThemeCopier
      */
     public function processType($packageNamespace, $folderType)
     {
-        $basePath = Path :: getInstance()->getResourcesPath($packageNamespace) . $folderType . DIRECTORY_SEPARATOR;
+        $basePath = Path::getInstance()->getResourcesPath($packageNamespace) . $folderType . DIRECTORY_SEPARATOR;
         $this->processContent($basePath);
     }
 
@@ -149,37 +149,37 @@ class ThemeCopier
     {
         $sourceResourcePath = $basePath . $this->getSourceTheme() . DIRECTORY_SEPARATOR;
         $targetResourcePath = $basePath . $this->getTargetTheme() . DIRECTORY_SEPARATOR;
-
-        $sourceFilePaths = Filesystem :: get_directory_content($sourceResourcePath, Filesystem :: LIST_FILES);
-
+        
+        $sourceFilePaths = Filesystem::get_directory_content($sourceResourcePath, Filesystem::LIST_FILES);
+        
         foreach ($sourceFilePaths as $sourceFilePath)
         {
             $targetFilePath = str_replace($sourceResourcePath, $targetResourcePath, $sourceFilePath);
             $fileExists = file_exists($targetFilePath);
-
+            
             if (! $fileExists || $this->getOverwriteExisting())
             {
                 $targetFileFolderPath = dirname($targetFilePath);
-
+                
                 if (! file_exists($targetFileFolderPath) || ! is_dir($targetFileFolderPath))
                 {
-                    Filesystem :: create_dir($targetFileFolderPath);
+                    Filesystem::create_dir($targetFileFolderPath);
                     echo 'FOLDER CREATED: ' .
-                         str_replace(Path :: getInstance()->getBasePath(), '', $targetFileFolderPath) . PHP_EOL;
+                         str_replace(Path::getInstance()->getBasePath(), '', $targetFileFolderPath) . PHP_EOL;
                 }
-
-                Filesystem :: copy_file($sourceFilePath, $targetFilePath, $this->getOverwriteExisting());
-
+                
+                Filesystem::copy_file($sourceFilePath, $targetFilePath, $this->getOverwriteExisting());
+                
                 $actionPrefix = $this->getOverwriteExisting() && $fileExists ? 'REPLACED' : 'COPIED';
                 echo 'FILE ' . $actionPrefix . ': ' .
-                     str_replace(Path :: getInstance()->getBasePath(), '', $targetFilePath) . PHP_EOL;
+                     str_replace(Path::getInstance()->getBasePath(), '', $targetFilePath) . PHP_EOL;
             }
         }
     }
 }
 
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
-\Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
+\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
 
 $themeCopier = new ThemeCopier('Aqua', 'Ruby');
 $themeCopier->run();

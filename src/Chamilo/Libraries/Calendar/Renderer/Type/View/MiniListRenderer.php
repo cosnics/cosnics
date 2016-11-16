@@ -27,17 +27,17 @@ class MiniListRenderer extends ListRenderer
     public function render()
     {
         $html = array();
-
+        
         $html[] = '<h4>';
         $html[] = $this->renderTitle();
         $html[] = '</h4>';
-
+        
         $html[] = $this->renderFullCalendar();
-
+        
         $html[] = $this->getLegend()->render();
-
+        
         $html[] = '<div class="clearfix"></div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }

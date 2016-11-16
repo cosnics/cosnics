@@ -68,7 +68,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 
     /**
      * Sets the value of a protected / private property of a class with use of reflection
-     *
+     * 
      * @param mixed $object
      * @param string $property_name
      * @param mixed $value
@@ -78,7 +78,7 @@ abstract class Test extends \PHPUnit_Framework_TestCase
     protected function set_property_value($object, $property_name, $value)
     {
         $reflection_property = $this->get_property(get_class($object), $property_name);
-
+        
         return $reflection_property->setValue($object, $value);
     }
 

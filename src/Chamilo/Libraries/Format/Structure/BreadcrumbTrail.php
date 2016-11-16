@@ -17,7 +17,7 @@ class BreadcrumbTrail
 
     /**
      * Singleton
-     *
+     * 
      * @var BreadcrumbTrail
      */
     private static $instance;
@@ -56,7 +56,7 @@ class BreadcrumbTrail
         {
             self::$instance = new BreadcrumbTrail(true, 'container-fluid');
         }
-
+        
         return self::$instance;
     }
 
@@ -69,14 +69,14 @@ class BreadcrumbTrail
         $this->breadcrumbtrail = array();
         $this->extra_items = array();
         $this->containerMode = $containerMode;
-
+        
         if ($include_main_index)
         {
             $this->add(
                 new Breadcrumb(
-                    Path::getInstance()->getBasePath(true) . 'index.php',
-                    $this->get_setting('site_name', 'Chamilo\Core\Admin'),
-                    null,
+                    Path::getInstance()->getBasePath(true) . 'index.php', 
+                    $this->get_setting('site_name', 'Chamilo\Core\Admin'), 
+                    null, 
                     'home'));
         }
     }
@@ -151,7 +151,7 @@ class BreadcrumbTrail
         {
             $breadcrumb_index = count($this->breadcrumbtrail) + $breadcrumb_index;
         }
-
+        
         unset($this->breadcrumbtrail[$breadcrumb_index]);
         $this->breadcrumbtrail = array_values($this->breadcrumbtrail);
     }
@@ -175,7 +175,7 @@ class BreadcrumbTrail
         {
             $this->add(
                 new Breadcrumb(
-                    Path::getInstance()->getBasePath(true) . 'index.php',
+                    Path::getInstance()->getBasePath(true) . 'index.php', 
                     $this->get_setting('site_name', 'Chamilo\Core\Admin')));
         }
     }
@@ -187,13 +187,13 @@ class BreadcrumbTrail
     public function render()
     {
         $html = array();
-
+        
         $html[] = '<div class="container-breadcrumb">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
         $html[] = $this->render_breadcrumbs();
         $html[] = '</div>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -205,17 +205,17 @@ class BreadcrumbTrail
     {
         $html = array();
         $html[] = '<ol class="breadcrumb">';
-
+        
         $breadcrumbtrail = $this->breadcrumbtrail;
         if (is_array($breadcrumbtrail) && count($breadcrumbtrail) > 0)
         {
             foreach ($breadcrumbtrail as $breadcrumb)
             {
                 $breadCrumbHtml = array();
-
+                
                 $breadCrumbHtml[] = '<li>';
                 $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
-
+                
                 if ($breadcrumb->getImage())
                 {
                     $breadCrumbHtml[] = '<img src="' . $breadcrumb->getImage() . '" title="' .
@@ -229,16 +229,16 @@ class BreadcrumbTrail
                 {
                     $breadCrumbHtml[] = StringUtilities::getInstance()->truncate($breadcrumb->get_name(), 50, true);
                 }
-
+                
                 $breadCrumbHtml[] = '</a>';
                 $breadCrumbHtml[] = '</li>';
-
+                
                 $html[] = implode('', $breadCrumbHtml);
             }
         }
-
+        
         $html[] = '</ol>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -250,11 +250,11 @@ class BreadcrumbTrail
     {
         $html = array();
         $help_item = $this->help_item;
-
+        
         if (is_array($help_item) && count($help_item) == 2)
         {
             $item = \Chamilo\Core\Help\Manager::get_tool_bar_help_item($help_item);
-
+            
             if ($item instanceof ToolbarItem)
             {
                 $html[] = '<div id="help_item">';
@@ -265,7 +265,7 @@ class BreadcrumbTrail
                 $html[] = '</div>';
             }
         }
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -277,19 +277,19 @@ class BreadcrumbTrail
     {
         $html = array();
         $extra_items = $this->extra_items;
-
+        
         $html[] = '<div id="extra_item">';
         $toolbar = new Toolbar();
-
+        
         if (is_array($extra_items) && count($extra_items) > 0)
         {
             $toolbar->add_items($extra_items);
             $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
         }
-
+        
         $html[] = $toolbar->as_html();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 

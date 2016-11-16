@@ -17,11 +17,11 @@ class BootstrapGlyph extends InlineGlyph
      */
     public function getBaseClassNames()
     {
-        $baseClassNames = parent :: getBaseClassNames();
-
+        $baseClassNames = parent::getBaseClassNames();
+        
         $baseClassNames[] = 'glyphicon';
         $baseClassNames[] = 'glyphicon-' . $this->getType();
-
+        
         return $baseClassNames;
     }
 }

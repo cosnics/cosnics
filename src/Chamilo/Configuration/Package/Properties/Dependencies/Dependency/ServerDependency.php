@@ -47,7 +47,7 @@ class ServerDependency extends Dependency
         {
             case 'php' :
                 $parameters['CURRENT'] = phpversion();
-                $result = Version :: compare(
+                $result = Version::compare(
                     $this->get_version()->get_operator(), 
                     $this->get_version()->get_release(), 
                     phpversion());
@@ -62,7 +62,7 @@ class ServerDependency extends Dependency
         }
         else
         {
-            $this->logger->add_message(Translation :: get('CurrentServerDependency', $parameters));
+            $this->logger->add_message(Translation::get('CurrentServerDependency', $parameters));
         }
         
         return $result;
@@ -85,12 +85,12 @@ class ServerDependency extends Dependency
         $parameters['OPERATOR'] = $this->get_version()->get_operator_name();
         $parameters['VERSION'] = $this->get_version()->get_release();
         
-        return Translation :: get('ServerDependency', $parameters);
+        return Translation::get('ServerDependency', $parameters);
     }
 
     public static function dom_node($dom_xpath, $dom_node)
     {
-        $dependency = parent :: dom_node($dom_xpath, $dom_node);
+        $dependency = parent::dom_node($dom_xpath, $dom_node);
         
         $version_node = $dom_xpath->query('version', $dom_node)->item(0);
         $version = new Version($version_node->nodeValue, $version_node->getAttribute('operator'));

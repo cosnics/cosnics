@@ -85,30 +85,30 @@ class RegistrationLoader implements CacheableDataLoaderInterface
     {
         $registrationRecords = $this->getRegistrationRepository()->findRegistrationsAsRecords();
         $registrations = array();
-
+        
         foreach ($registrationRecords as $registrationRecord)
         {
             $registrations[self::REGISTRATION_TYPE][$registrationRecord[Registration::PROPERTY_TYPE]][$registrationRecord[Registration::PROPERTY_CONTEXT]] = $registrationRecord;
             $registrations[self::REGISTRATION_CONTEXT][$registrationRecord[Registration::PROPERTY_CONTEXT]] = $registrationRecord;
-
+            
             $contextStringUtilities = $this->getStringUtilities()->createString(
                 $registrationRecord[Registration::PROPERTY_CONTEXT]);
             $isIntegration = $contextStringUtilities->contains('\Integration\\');
-
+            
             if ($isIntegration)
             {
                 /**
                  * Take last occurrence of integration instead of first
                  */
                 $lastIntegrationIndex = $contextStringUtilities->indexOfLast('\Integration\\');
-
+                
                 $integrationContext = $contextStringUtilities->substr($lastIntegrationIndex + 13)->__toString();
                 $rootContext = $contextStringUtilities->substr(0, $lastIntegrationIndex)->__toString();
-
+                
                 $registrations[self::REGISTRATION_INTEGRATION][$integrationContext][$rootContext] = $registrationRecord;
             }
         }
-
+        
         return $registrations;
     }
 

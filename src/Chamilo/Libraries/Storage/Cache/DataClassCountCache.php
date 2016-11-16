@@ -29,7 +29,7 @@ class DataClassCountCache extends DataClassCache
         {
             throw new Exception('Illegal parameters passed to the DataClassCountCache');
         }
-
+        
         if (! is_integer($count))
         {
             $type = is_object($count) ? get_class($count) : gettype($count);
@@ -37,12 +37,12 @@ class DataClassCountCache extends DataClassCache
                 'The DataClassCountCache cache only allows for caching of integers. Currently trying to add: ' . $type .
                      '.');
         }
-
+        
         if (! DataClassCache::exists($class, $parameters))
         {
             DataClassCache::set_cache($class, $parameters->hash(), $count);
         }
-
+        
         return true;
     }
 }

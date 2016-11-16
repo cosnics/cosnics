@@ -123,21 +123,21 @@ class RegistrationConsulter extends DataConsulter
     {
         $registrations = $this->getRegistrations();
         $integrationRegistrations = $registrations[RegistrationLoader::REGISTRATION_INTEGRATION][$integration];
-
+        
         if ($root)
         {
             $rootIntegrationRegistrations = array();
-
+            
             foreach ($integrationRegistrations as $rootContext => $registration)
             {
                 $rootContextStringUtilities = $this->getStringUtilities()->createString($rootContext);
-
+                
                 if ($rootContextStringUtilities->startsWith($root))
                 {
                     $rootIntegrationRegistrations[$rootContext] = $registration;
                 }
             }
-
+            
             return $rootIntegrationRegistrations;
         }
         else

@@ -27,7 +27,7 @@ abstract class Dependency
 
     public function __construct()
     {
-        $this->logger = MessageLogger :: getInstance($this);
+        $this->logger = MessageLogger::getInstance($this);
     }
 
     public function get_id()
@@ -52,14 +52,14 @@ abstract class Dependency
      */
     public static function factory($type)
     {
-        $class = __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
+        $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
              'Dependency';
-
+        
         if (! class_exists($class))
         {
-            throw new Exception(Translation :: get('TypeDoesNotExist', array('type' => $type)));
+            throw new Exception(Translation::get('TypeDoesNotExist', array('type' => $type)));
         }
-
+        
         return new $class();
     }
 
@@ -76,22 +76,22 @@ abstract class Dependency
     {
         switch ($type)
         {
-            case self :: COMPARE_EQUAL :
+            case self::COMPARE_EQUAL :
                 return ($reference == $value);
                 break;
-            case self :: COMPARE_NOT_EQUAL :
+            case self::COMPARE_NOT_EQUAL :
                 return ($reference != $value);
                 break;
-            case self :: COMPARE_GREATER_THEN :
+            case self::COMPARE_GREATER_THEN :
                 return ($value > $reference);
                 break;
-            case self :: COMPARE_GREATER_THEN_OR_EQUAL :
+            case self::COMPARE_GREATER_THEN_OR_EQUAL :
                 return ($value >= $reference);
                 break;
-            case self :: COMPARE_LESS_THEN :
+            case self::COMPARE_LESS_THEN :
                 return ($value < $reference);
                 break;
-            case self :: COMPARE_LESS_THEN_OR_EQUAL :
+            case self::COMPARE_LESS_THEN_OR_EQUAL :
                 return ($value <= $reference);
                 break;
             default :
@@ -102,20 +102,19 @@ abstract class Dependency
 
     public static function from_dom_node($dom_xpath, $dom_node)
     {
-        $class = self :: type($dom_node->getAttribute('type'));
-        return $class :: dom_node($dom_xpath, $dom_node);
+        $class = self::type($dom_node->getAttribute('type'));
+        return $class::dom_node($dom_xpath, $dom_node);
     }
 
     public static function dom_node($dom_xpath, $dom_node)
     {
-        $dependency = self :: factory($dom_node->getAttribute('type'));
+        $dependency = self::factory($dom_node->getAttribute('type'));
         $dependency->set_id(trim($dom_xpath->query('id', $dom_node)->item(0)->nodeValue));
         return $dependency;
     }
 
     public static function type($type)
     {
-        return __NAMESPACE__ . '\\' . StringUtilities :: getInstance()->createString($type)->upperCamelize() .
-             'Dependency';
+        return __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . 'Dependency';
     }
 }

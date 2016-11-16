@@ -5,7 +5,7 @@ use Chamilo\Configuration\Package\Storage\DataClass\Package;
 
 /**
  * Class to store a recursive structure of package types, associated packages and possible subpackages
- *
+ * 
  * @author Hans De Bisschop
  * @author Magali Gillard
  */
@@ -13,7 +13,7 @@ class PackageList
 {
     // A constant to represent the root namespace
     const ROOT = '__ROOT__';
-
+    
     // Different modes of interpreting a PackageList's available packages
     const MODE_ALL = 1;
     const MODE_INSTALLED = 2;
@@ -21,42 +21,42 @@ class PackageList
 
     /**
      * The type of the PackageList
-     *
+     * 
      * @var string
      */
     private $type;
 
     /**
      * The type name of the PackageList
-     *
+     * 
      * @var string
      */
     private $type_name;
 
     /**
      * The type icon of the PackageList
-     *
+     * 
      * @var string
      */
     private $type_icon;
 
     /**
      * The packages of this specific type
-     *
+     * 
      * @var multitype:string
      */
     private $packages;
 
     /**
      * The list of PackageList objects for the sub-types of this type
-     *
+     * 
      * @var multitype:\configuration\package\storage\data_class\PackageList
      */
     private $children;
 
     /**
      * Property to cache the available types
-     *
+     * 
      * @var multitype:boolean:string
      */
     private $types;
@@ -83,7 +83,7 @@ class PackageList
 
     /**
      * Get the type
-     *
+     * 
      * @return string
      */
     public function get_type()
@@ -93,7 +93,7 @@ class PackageList
 
     /**
      * Set the type
-     *
+     * 
      * @param $type string
      */
     public function set_type($type)
@@ -103,7 +103,7 @@ class PackageList
 
     /**
      * Get the type name
-     *
+     * 
      * @return string
      */
     public function get_type_name()
@@ -113,7 +113,7 @@ class PackageList
 
     /**
      * Set the type name
-     *
+     * 
      * @param $type_name string
      */
     public function set_type_name($type_name)
@@ -123,7 +123,7 @@ class PackageList
 
     /**
      * Get the type icon
-     *
+     * 
      * @return string
      */
     public function get_type_icon()
@@ -133,7 +133,7 @@ class PackageList
 
     /**
      * Set the type icon
-     *
+     * 
      * @param $type_icon string
      */
     public function set_type_icon($type_icon)
@@ -143,7 +143,7 @@ class PackageList
 
     /**
      * Get the type packages
-     *
+     * 
      * @return multitype:string
      */
     public function get_packages()
@@ -153,7 +153,7 @@ class PackageList
 
     /**
      * Returns whether the type has packages
-     *
+     * 
      * @return boolean
      */
     public function has_packages()
@@ -163,7 +163,7 @@ class PackageList
 
     /**
      * Set the type packages
-     *
+     * 
      * @param $packages multitype:string
      */
     public function set_packages($packages)
@@ -173,7 +173,7 @@ class PackageList
 
     /**
      * Get the list of PackageList objects for the sub-types of this type
-     *
+     * 
      * @return multitype:\configuration\package\storage\data_class\PackageList
      */
     public function get_children()
@@ -183,7 +183,7 @@ class PackageList
 
     /**
      * Returns whether the type has children
-     *
+     * 
      * @return boolean
      */
     public function has_children()
@@ -203,7 +203,7 @@ class PackageList
 
     /**
      * Set the list of PackageList objects for the sub-types of this type
-     *
+     * 
      * @param $children multitype:\configuration\package\storage\data_class\PackageList
      */
     public function set_children($children)
@@ -213,7 +213,7 @@ class PackageList
 
     /**
      * Add a child to the list of subtypes
-     *
+     * 
      * @param $child PackageList
      */
     public function add_child(PackageList $child)
@@ -223,7 +223,7 @@ class PackageList
 
     /**
      * Add a package to the list of packages
-     *
+     * 
      * @param $package string
      */
     public function add_package(Package $package)
@@ -243,7 +243,7 @@ class PackageList
 
     /**
      * Get all distinct types defined in the PackageList and - if requested - it's children
-     *
+     * 
      * @param $recursive boolean
      */
     public function get_types($recursive = true)
@@ -251,12 +251,12 @@ class PackageList
         if (! isset($this->types[$recursive]))
         {
             $this->types[$recursive] = array();
-
+            
             if (count($this->get_packages()) > 0)
             {
                 $this->types[$recursive][] = $this->get_type();
             }
-
+            
             foreach ($this->get_children() as $child)
             {
                 if ($recursive)
@@ -269,7 +269,7 @@ class PackageList
                 }
             }
         }
-
+        
         return $this->types[$recursive];
     }
 
@@ -278,21 +278,21 @@ class PackageList
         if (! isset($this->all_packages[$recursive]))
         {
             $this->all_packages[$recursive] = array();
-
+            
             if (count($this->get_packages()) > 0)
             {
                 $this->all_packages[$recursive][$this->get_type()] = $this->get_packages();
             }
-
+            
             foreach ($this->get_children() as $child)
             {
                 if ($recursive)
                 {
                     $child_packages = $child->get_all_packages($recursive);
-
+                    
                     if (count($child_packages) > 0)
                     {
-
+                        
                         $this->all_packages[$recursive] = array_merge($this->all_packages[$recursive], $child_packages);
                     }
                 }
@@ -305,7 +305,7 @@ class PackageList
                 }
             }
         }
-
+        
         return $this->all_packages[$recursive];
     }
 
@@ -314,21 +314,21 @@ class PackageList
         if (! isset($this->list[$recursive]))
         {
             $this->list[$recursive] = array();
-
+            
             if (count($this->get_packages()) > 0)
             {
                 $this->list[$recursive] = $this->get_packages();
             }
-
+            
             foreach ($this->get_children() as $child)
             {
                 if ($recursive)
                 {
                     $child_packages = $child->get_list($recursive);
-
+                    
                     if (count($child_packages) > 0)
                     {
-
+                        
                         $this->list[$recursive] = array_merge($this->list[$recursive], $child_packages);
                     }
                 }
@@ -341,7 +341,7 @@ class PackageList
                 }
             }
         }
-
+        
         return $this->list[$recursive];
     }
 }

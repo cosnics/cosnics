@@ -23,8 +23,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_setting_contexts(Condition $condition = null)
     {
-        $parameters = new DataClassDistinctParameters($condition, Setting :: PROPERTY_CONTEXT);
-        return self :: distinct(Setting :: class_name(), $parameters);
+        $parameters = new DataClassDistinctParameters($condition, Setting::PROPERTY_CONTEXT);
+        return self::distinct(Setting::class_name(), $parameters);
     }
 
     /**
@@ -37,23 +37,23 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_CONTEXT),
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_CONTEXT), 
             new StaticConditionVariable($context));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Setting :: class_name(), Setting :: PROPERTY_VARIABLE),
+            new PropertyConditionVariable(Setting::class_name(), Setting::PROPERTY_VARIABLE), 
             new StaticConditionVariable($variable));
         $condition = new AndCondition($conditions);
-
-        return self :: retrieve(Setting :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return self::retrieve(Setting::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     public static function retrieveRegistrationByContext($context)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
+            new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_CONTEXT), 
             new StaticConditionVariable($context));
-
-        return self :: retrieve(Registration :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return self::retrieve(Registration::class_name(), new DataClassRetrieveParameters($condition));
     }
 
     /**
@@ -66,22 +66,22 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
         $conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
+            new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_CONTEXT), 
             '*\\\Integration\\' . $integration);
-
+        
         if ($root)
         {
             $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_CONTEXT),
+                new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_CONTEXT), 
                 $root . '*');
         }
-
+        
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Registration :: class_name(), Registration :: PROPERTY_STATUS),
+            new PropertyConditionVariable(Registration::class_name(), Registration::PROPERTY_STATUS), 
             new StaticConditionVariable(1));
-
+        
         $condition = new AndCondition($conditions);
-
-        return self :: retrieves(Registration :: class_name(), new DataClassRetrievesParameters($condition))->as_array();
+        
+        return self::retrieves(Registration::class_name(), new DataClassRetrievesParameters($condition))->as_array();
     }
 }

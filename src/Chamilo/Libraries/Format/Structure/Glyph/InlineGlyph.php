@@ -112,7 +112,7 @@ abstract class InlineGlyph
     public function getBaseClassNames()
     {
         $baseClassNames[] = 'inline-glyph';
-
+        
         return $baseClassNames;
     }
 

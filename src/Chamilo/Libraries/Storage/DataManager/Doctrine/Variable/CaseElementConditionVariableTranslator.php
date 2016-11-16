@@ -23,9 +23,9 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $strings = array();
-
+        
         $condition_variable = $this->get_condition_variable();
-
+        
         if ($condition_variable->get_condition() instanceof Condition)
         {
             $strings[] = 'WHEN ';
@@ -36,9 +36,9 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
         {
             $strings[] = ' ELSE ';
         }
-
+        
         $strings[] = $condition_variable->get_statement();
-
+        
         return implode('', $strings);
     }
 }

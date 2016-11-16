@@ -21,6 +21,6 @@ class CssFileAsset extends FileAsset
      */
     public function __construct(Path $pathUtilities, $stylesheetPath)
     {
-        parent :: __construct($pathUtilities, $stylesheetPath, array(new CssRewriteFilter()));
+        parent::__construct($pathUtilities, $stylesheetPath, array(new CssRewriteFilter()));
     }
 }

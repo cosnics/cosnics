@@ -102,18 +102,18 @@ abstract class EventRenderer
     public function getEventClasses()
     {
         $eventClasses = 'event-container';
-
+        
         if (! $this->getRenderer()->isSourceVisible($this->getEvent()->getSource()))
         {
             $eventClasses .= ' event-container-hidden';
         }
-
+        
         return $eventClasses;
     }
 
     /**
      * Gets an html representation of an event for the renderer
-     *
+     * 
      * @return string
      */
     abstract public function render();

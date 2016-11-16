@@ -66,18 +66,18 @@ class Theme
             $pathBuilder = new PathBuilder($classnameUtilities);
             $fileConfigurationConsulter = new ConfigurationConsulter(
                 new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
-
+            
             $theme = $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'general', 'theme'));
-
+            
             self::$instance = new static($theme, $classnameUtilities, $pathBuilder);
         }
-
+        
         return static::$instance;
     }
 
     /**
      * Constructor
-     *
+     * 
      * @param string $theme
      * @param ClassnameUtilities $classnameUtilities
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
@@ -155,14 +155,14 @@ class Theme
     public function getCssPath($namespace = null, $web = true, $includeTheme = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
-
+        
         $cssPath = $this->getPathBuilder()->getResourcesPath($namespace, $web) . 'Css' . $directory_separator;
-
+        
         if ($includeTheme)
         {
             $cssPath .= $this->getTheme() . $directory_separator;
         }
-
+        
         return $cssPath;
     }
 
@@ -179,7 +179,7 @@ class Theme
 
     /**
      * Backwards compatible legacy method to get the main stylesheet path
-     *
+     * 
      * @param boolean $web
      * @return string
      * @deprecated Use getStylesheetPath now in combination with a valid namespace
@@ -198,14 +198,14 @@ class Theme
     public function getImagesPath($context = null, $web = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
-
+        
         if (! $context)
         {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $calledClass = $backtrace[1]['class'];
             $context = $this->getClassnameUtilities()->getNamespaceFromClassname($calledClass);
         }
-
+        
         return $this->getPathBuilder()->getResourcesPath($context, $web) . 'Images' . $directory_separator .
              $this->getTheme() . $directory_separator;
     }
@@ -231,10 +231,10 @@ class Theme
     public function getAvailableThemes()
     {
         $options = array();
-
+        
         $path = $this->getCssPath('Chamilo\Configuration', false, false);
         $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
-
+        
         foreach ($directories as $index => & $directory)
         {
             if (substr($directory, 0, 1) != '.')
@@ -242,7 +242,7 @@ class Theme
                 $options[$directory] = (string) $this->stringUtilities->createString($directory)->upperCamelize();
             }
         }
-
+        
         return $options;
     }
 
@@ -256,7 +256,7 @@ class Theme
      * @param boolean $confirmation
      * @param string $context
      */
-    public function getImage($image, $extension = 'png', $label = null, $href = null,
+    public function getImage($image, $extension = 'png', $label = null, $href = null, 
         $display = ToolbarItem :: DISPLAY_ICON_AND_LABEL, $confirmation = false, $context = null)
     {
         if (! $context)
@@ -265,12 +265,12 @@ class Theme
             $calledClass = $backtrace[1]['class'];
             $context = $this->getClassnameUtilities()->getNamespaceFromClassname($calledClass);
         }
-
+        
         $icon = new ToolbarItem(
-            $label,
-            $this->getImagePath($context, $image, $extension),
-            $href,
-            $display,
+            $label, 
+            $this->getImagePath($context, $image, $extension), 
+            $href, 
+            $display, 
             $confirmation);
         return $icon->as_html();
     }
@@ -284,7 +284,7 @@ class Theme
      * @param int $display
      * @param boolean $confirmation
      */
-    public function getCommonImage($image, $extension = 'png', $label = null, $href = null,
+    public function getCommonImage($image, $extension = 'png', $label = null, $href = null, 
         $display = ToolbarItem :: DISPLAY_ICON_AND_LABEL, $confirmation = false)
     {
         return $this->getImage($image, $extension, $label, $href, $display, $confirmation, 'Chamilo\Configuration');
@@ -318,14 +318,14 @@ class Theme
     public function getTemplatePath($namespace = null, $web = true, $includeTheme = true)
     {
         $directory_separator = ($web ? '/' : DIRECTORY_SEPARATOR);
-
+        
         $cssPath = $this->getPathBuilder()->getResourcesPath($namespace, $web) . 'Templates' . $directory_separator;
-
+        
         if ($includeTheme)
         {
             $cssPath .= $this->getTheme() . $directory_separator;
         }
-
+        
         return $cssPath;
     }
 }

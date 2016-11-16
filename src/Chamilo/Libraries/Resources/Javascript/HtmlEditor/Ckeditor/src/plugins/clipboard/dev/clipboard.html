@@ -5,19 +5,19 @@ For licensing, see LICENSE.md or http://ckeditor.com/license
 -->
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Clipboard playground &ndash; CKEditor Sample</title>
-	<script src="../../../ckeditor.js"></script>
-	<link href="../../../samples/sample.css" rel="stylesheet">
-	<style>
+<meta charset="utf-8">
+<title>Clipboard playground &ndash; CKEditor Sample</title>
+<script src="../../../ckeditor.js"></script>
+<link href="../../../samples/sample.css" rel="stylesheet">
+<style>
 body {
 	margin: 0;
 }
 
-#editables, #console
-{
+#editables, #console {
 	width: 48%;
 }
+
 #editable {
 	padding: 5px 10px;
 }
@@ -30,7 +30,8 @@ body {
 	border: solid 3px #555;
 	overflow: auto;
 }
-#console > p {
+
+#console>p {
 	border-bottom: solid 1px #555;
 	margin: 0;
 	padding: 0 5px;
@@ -41,27 +42,33 @@ body {
 	-ms-transition: background-color 1s;
 	transition: background-color 1s;
 }
-#console > p.old {
+
+#console>p.old {
 	background: rgba(0, 0, 0, 0);
 }
+
 #console time, #console .prompt {
 	padding: 0 5px;
 	display: inline-block;
 }
+
 #console time {
 	background: #999;
-	background: rgba(0, 0, 0, 0.5 );
+	background: rgba(0, 0, 0, 0.5);
 	color: #FFF;
 	margin-left: -5px;
 }
+
 #console .prompt {
 	background: #DDD;
-	background: rgba(0, 0, 0, 0.1 );
+	background: rgba(0, 0, 0, 0.1);
 	min-width: 200px;
 }
+
 .someClass {
 	color: blue;
 }
+
 .specChar {
 	color: #777;
 	background-color: #EEE;
@@ -70,47 +77,43 @@ body {
 	border-radius: 2px;
 	padding: 1px;
 }
-	</style>
+</style>
 </head>
 <body>
-	<h1 class="samples">
-		CKEditor Sample &mdash; clipboard plugin playground
-	</h1>
-	<div id="editables">
-		<p>
-			<label for="editor1">
-				Editor 1:</label>
-			<textarea cols="80" id="editor1" name="editor1" rows="10">&lt;p&gt;This is some &lt;strong&gt;sample text&lt;/strong&gt;. You are using &lt;a href="http://ckeditor.com/"&gt;CKEditor&lt;/a&gt;.&lt;/p&gt;</textarea>
-		</p>
-		<p>
-			<label for="editor2">
-				Editor 2:</label>
-			<textarea cols="80" id="editor2" name="editor2" rows="10">&lt;p&gt;This is more &lt;strong class="MsoNormal"&gt;sample text&lt;/strong&gt;.&lt;/p&gt;</textarea>
-		</p>
-		<p>
-			<label for="editor3">
-				Editor 3:</label>
-			<textarea cols="80" id="editor3" name="editor3" rows="10">&lt;p&gt;This editor &lt;strong&gt;forces pasting in text mode&lt;/strong&gt; by listening for "beforePaste" event.&lt;/p&gt;</textarea>
-		</p>
-		<p>
-			<label for="editor4">
-				Editor 4:</label>
-			<textarea cols="80" id="editor4" name="editor4" rows="10">&lt;p&gt;This editor &lt;strong&gt;forces pasting in text mode&lt;/strong&gt; by "forcePasteAsPlainText" config option.&lt;/p&gt;</textarea>
-		</p>
-		<p>
-			<label for="editor5">
-				Editor 5:</label>
-			<textarea cols="80" id="editor5" name="editor5" rows="10">Editor with autoParagraphing set to off.</textarea>
-		</p>
-		<div id="editor6" contenteditable="true" style="font-family: Georgia; font-size: 14px">
-			<h1>Editor 6</h1>
-			<p>Content content content.</p>
-			<p class="someClass">Styled by <code>.someClass</code>.</p>
-		</div>
-	</div>
-	<div id="console">
-	</div>
-	<script>
+    <h1 class="samples">CKEditor Sample &mdash; clipboard plugin playground</h1>
+    <div id="editables">
+        <p>
+            <label for="editor1"> Editor 1:</label>
+            <textarea cols="80" id="editor1" name="editor1" rows="10">&lt;p&gt;This is some &lt;strong&gt;sample text&lt;/strong&gt;. You are using &lt;a href="http://ckeditor.com/"&gt;CKEditor&lt;/a&gt;.&lt;/p&gt;</textarea>
+        </p>
+        <p>
+            <label for="editor2"> Editor 2:</label>
+            <textarea cols="80" id="editor2" name="editor2" rows="10">&lt;p&gt;This is more &lt;strong class="MsoNormal"&gt;sample text&lt;/strong&gt;.&lt;/p&gt;</textarea>
+        </p>
+        <p>
+            <label for="editor3"> Editor 3:</label>
+            <textarea cols="80" id="editor3" name="editor3" rows="10">&lt;p&gt;This editor &lt;strong&gt;forces pasting in text mode&lt;/strong&gt; by listening for "beforePaste" event.&lt;/p&gt;</textarea>
+        </p>
+        <p>
+            <label for="editor4"> Editor 4:</label>
+            <textarea cols="80" id="editor4" name="editor4" rows="10">&lt;p&gt;This editor &lt;strong&gt;forces pasting in text mode&lt;/strong&gt; by "forcePasteAsPlainText" config option.&lt;/p&gt;</textarea>
+        </p>
+        <p>
+            <label for="editor5"> Editor 5:</label>
+            <textarea cols="80" id="editor5" name="editor5" rows="10">Editor with autoParagraphing set to off.</textarea>
+        </p>
+        <div id="editor6" contenteditable="true" style="font-family: Georgia; font-size: 14px">
+            <h1>Editor 6</h1>
+            <p>Content content content.</p>
+            <p class="someClass">
+                Styled by
+                <code>.someClass</code>
+                .
+            </p>
+        </div>
+    </div>
+    <div id="console"></div>
+    <script>
 ( function()
 {
 	'use strict';

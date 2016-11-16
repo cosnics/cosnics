@@ -5,7 +5,7 @@ namespace Chamilo\Libraries\Storage\ResultSet;
  * Defines an empty resultset
  * Must be used when you know that the result from the query will be empty and thus the resultset will be empty.
  * Never use "return null or false".
- *
+ * 
  * @package Chamilo\Libraries\Storage\ResultSet
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -18,7 +18,7 @@ class EmptyResultSet extends ResultSet
 
     /**
      * Retrieves next item from this result set
-     *
+     * 
      * @param boolean $map_to_object
      * @return mixed
      */
@@ -29,7 +29,7 @@ class EmptyResultSet extends ResultSet
 
     /**
      * Retrieves the number of items in this result set.
-     *
+     * 
      * @return integer
      */
     public function size()

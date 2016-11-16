@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-	<services>
-		<service id="chamilo.libraries.console" class="Symfony\Component\Console\Application">
-			<argument type="string">Chamilo Console</argument>
-			<argument type="string">1.1</argument>
-			<call method="setHelperSet">
-				<argument type="service" id="chamilo.libraries.console.helper_set" />
-			</call>
-		</service>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.libraries.console"
+            class="Symfony\Component\Console\Application">
+            <argument type="string">Chamilo Console</argument>
+            <argument type="string">1.1</argument>
+            <call method="setHelperSet">
+                <argument
+                    type="service"
+                    id="chamilo.libraries.console.helper_set" />
+            </call>
+        </service>
 
-		<service id="chamilo.libraries.console.helper_set" class="Symfony\Component\Console\Helper\HelperSet">
-			<factory service="chamilo.libraries.console" method="getHelperSet" />
-		</service>
+        <service
+            id="chamilo.libraries.console.helper_set"
+            class="Symfony\Component\Console\Helper\HelperSet">
+            <factory
+                service="chamilo.libraries.console"
+                method="getHelperSet" />
+        </service>
 
-		<service id="chamilo.libraries.console.command.clear_cache" class="Chamilo\Libraries\Console\Command\ClearCacheCommand">
-			<argument type="service" id="symfony.component.translation.translator" />
-			<argument type="service" id="chamilo.libraries.cache.cache_director" />
-			<tag name="chamilo.libraries.console.command" />
-		</service>
-	</services>
+        <service
+            id="chamilo.libraries.console.command.clear_cache"
+            class="Chamilo\Libraries\Console\Command\ClearCacheCommand">
+            <argument
+                type="service"
+                id="symfony.component.translation.translator" />
+            <argument
+                type="service"
+                id="chamilo.libraries.cache.cache_director" />
+            <tag name="chamilo.libraries.console.command" />
+        </service>
+    </services>
 </container>

@@ -29,7 +29,7 @@ class RecordResultSetCache extends RecordCache
         {
             throw new Exception('Illegal parameters passed to the RecordResultSetCache');
         }
-
+        
         if (! $result_set instanceof RecordResultSet)
         {
             $type = is_object($result_set) ? get_class($result_set) : gettype($result_set);
@@ -37,12 +37,12 @@ class RecordResultSetCache extends RecordCache
                 'The RecordResultSetCache cache only allows for caching of ResultSet objects. Currently trying to add: ' .
                      $type . '.');
         }
-
+        
         if (! self::get($className, $parameters))
         {
             self::set_cache($className, $parameters->hash(), $result_set);
         }
-
+        
         return true;
     }
 }

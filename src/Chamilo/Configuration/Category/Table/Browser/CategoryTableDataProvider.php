@@ -23,8 +23,8 @@ class CategoryTableDataProvider extends DataClassTableDataProvider
         $category_class_name = get_class($this->get_component()->get_parent()->get_category());
         $order_property[] = new OrderBy(
             new PropertyConditionVariable(
-                $category_class_name :: class_name(), 
-                $category_class_name :: PROPERTY_DISPLAY_ORDER));
+                $category_class_name::class_name(), 
+                $category_class_name::PROPERTY_DISPLAY_ORDER));
         return $this->get_component()->get_parent()->retrieve_categories($condition, $offset, $count, $order_property);
     }
 

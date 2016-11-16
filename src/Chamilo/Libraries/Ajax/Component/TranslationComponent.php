@@ -12,18 +12,18 @@ class TranslationComponent extends \Chamilo\Libraries\Ajax\Manager
     {
         $application = $_POST['application'];
         $string = $_POST['string'];
-
-        $string = (string) StringUtilities :: getInstance()->createString($string)->upperCamelize();
-
+        
+        $string = (string) StringUtilities::getInstance()->createString($string)->upperCamelize();
+        
         if ($application && $application != 'undefined')
         {
             $namespace = $application;
         }
         else
         {
-            $namespace = Utilities :: COMMON_LIBRARIES;
+            $namespace = Utilities::COMMON_LIBRARIES;
         }
-
-        echo Translation :: get($string, null, $namespace);
+        
+        echo Translation::get($string, null, $namespace);
     }
 }

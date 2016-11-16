@@ -21,12 +21,12 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $strings = array();
-
+        
         $strings[] = '(';
         $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
+            $this->getDataClassDatabase(), 
             $this->getConditionVariable()->get_left());
-
+        
         switch ($this->getConditionVariable()->get_operator())
         {
             case OperationConditionVariable::ADDITION :
@@ -48,12 +48,12 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
                 $strings[] = '|';
                 break;
         }
-
+        
         $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
+            $this->getDataClassDatabase(), 
             $this->getConditionVariable()->get_right());
         $strings[] = ')';
-
+        
         return implode(' ', $strings);
     }
 }

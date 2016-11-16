@@ -18,7 +18,7 @@ class MiniDayCalendar extends DayCalendar
      */
     public function __construct($displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false)
     {
-        parent :: __construct($displayTime, $hourStep, $startHour, $endHour, $hideOtherHours);
+        parent::__construct($displayTime, $hourStep, $startHour, $endHour, $hideOtherHours);
         $this->updateAttributes('class="calendar_table mini_calendar"');
     }
 
@@ -33,7 +33,7 @@ class MiniDayCalendar extends DayCalendar
 
     public function getNavigationClasses()
     {
-        return parent :: getNavigationClasses() . ' mini_calendar';
+        return parent::getNavigationClasses() . ' mini_calendar';
     }
 
     /**

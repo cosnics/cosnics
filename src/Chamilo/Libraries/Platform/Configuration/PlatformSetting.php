@@ -22,7 +22,7 @@ class PlatformSetting
      */
     public static function get($variable, $application = 'Chamilo\Core\Admin')
     {
-        return \Chamilo\Configuration\Configuration :: get($application, $variable);
+        return \Chamilo\Configuration\Configuration::get($application, $variable);
     }
 
     /**
@@ -35,7 +35,7 @@ class PlatformSetting
      */
     public function set($variable, $value, $application = 'Chamilo\Core\Admin')
     {
-        \Chamilo\Configuration\Configuration :: getInstance()->set(array($application, $variable), $value);
+        \Chamilo\Configuration\Configuration::getInstance()->set(array($application, $variable), $value);
     }
 
     /**
@@ -46,6 +46,6 @@ class PlatformSetting
      */
     public static function application_has_settings($application)
     {
-        return \Chamilo\Configuration\Configuration :: getInstance()->has_settings($application);
+        return \Chamilo\Configuration\Configuration::getInstance()->has_settings($application);
     }
 }

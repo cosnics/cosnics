@@ -24,33 +24,33 @@ class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements No
 
     public function run()
     {
-        $theme = Request :: get('theme');
+        $theme = Request::get('theme');
         $assets = array();
-
-        $contentObjectTypes = \Chamilo\Core\Repository\Storage\DataManager :: get_registered_types();
-
-        $pathUtilities = Path :: getInstance();
-        $classnameUtilities = ClassnameUtilities :: getInstance();
-        $themeUtilities = new Theme($theme, StringUtilities :: getInstance(), $classnameUtilities, $pathUtilities);
-
+        
+        $contentObjectTypes = \Chamilo\Core\Repository\Storage\DataManager::get_registered_types();
+        
+        $pathUtilities = Path::getInstance();
+        $classnameUtilities = ClassnameUtilities::getInstance();
+        $themeUtilities = new Theme($theme, StringUtilities::getInstance(), $classnameUtilities, $pathUtilities);
+        
         foreach ($contentObjectTypes as $contentObjectType)
         {
-
+            
             $relativeEditorPath = '/HtmlEditor/Ckeditor/Stylesheet.css';
             $namespace = $classnameUtilities->getNamespaceFromClassname($contentObjectType);
             $namespace = $classnameUtilities->getNamespaceParent($namespace, 2);
-
+            
             $stylesheetPath = $themeUtilities->getCssPath($namespace, false) . $relativeEditorPath;
-
+            
             if (file_exists($stylesheetPath))
             {
                 $asset = new CssFileAsset($pathUtilities, $stylesheetPath);
                 $assets[] = $asset;
             }
         }
-
+        
         $asset_collection = new AssetCollection($assets, array(new CssImportFilter()));
-
+        
         $response = new Response();
         $response->setContent($asset_collection->dump());
         $response->headers->set('Content-Type', 'text/css');

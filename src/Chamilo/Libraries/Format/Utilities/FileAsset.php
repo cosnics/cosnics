@@ -23,6 +23,6 @@ class FileAsset extends \Assetic\Asset\FileAsset
     {
         $stylesheetPath = strtr($stylesheetPath, DIRECTORY_SEPARATOR, '/');
         $basePath = strtr(realpath($pathUtilities->getBasePath()), DIRECTORY_SEPARATOR, '/');
-        parent :: __construct($stylesheetPath, $filters, $basePath);
+        parent::__construct($stylesheetPath, $filters, $basePath);
     }
 }

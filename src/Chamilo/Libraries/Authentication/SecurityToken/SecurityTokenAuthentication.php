@@ -14,22 +14,22 @@ use Chamilo\Libraries\Authentication\QueryAuthentication;
  */
 class SecurityTokenAuthentication extends QueryAuthentication
 {
+
     /**
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      *
      * @throws AuthenticationException
      */
     public function login()
     {
-        $securityToken = $this->getRequest()->query->get(User :: PROPERTY_SECURITY_TOKEN);
-
+        $securityToken = $this->getRequest()->query->get(User::PROPERTY_SECURITY_TOKEN);
+        
         if ($securityToken)
         {
             return $this->retrieveUserBySecurityToken($securityToken);
-
         }
-
+        
         return null;
     }
-
 }

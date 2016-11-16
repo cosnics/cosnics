@@ -77,7 +77,7 @@ class RecurrenceRules
      * @param integer[] $byMonth
      * @param integer[] $byWeekNumber
      */
-    public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(),
+    public function __construct($frequency = self :: FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(), $byMonthDay = array(), 
         $byMonth = array(), $byWeekNumber = array())
     {
         $this->frequency = $frequency;
@@ -250,6 +250,6 @@ class RecurrenceRules
      */
     public function hasRecurrence()
     {
-        return $this->getFrequency() != self :: FREQUENCY_NONE;
+        return $this->getFrequency() != self::FREQUENCY_NONE;
     }
 }

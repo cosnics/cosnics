@@ -6,7 +6,7 @@ use Chamilo\Libraries\Cache\Interfaces\UserBasedCacheInterface;
 
 /**
  * Cache director to clear and / or warmup caches
- *
+ * 
  * @package Chamilo\Libraries\Cache
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -16,7 +16,7 @@ class CacheDirector
 
     /**
      * The cache services which have the possibility to be reset (clear and warmup)
-     *
+     * 
      * @var CacheResetterInterface[]
      */
     protected $cacheServices;
@@ -31,7 +31,7 @@ class CacheDirector
 
     /**
      * Adds a cache service to the list of cache warmers
-     *
+     * 
      * @param string $alias
      * @param CacheResetterInterface $cacheService
      */
@@ -42,7 +42,7 @@ class CacheDirector
 
     /**
      * Returns a list of cache service aliases
-     *
+     * 
      * @return string[]
      */
     public function getCacheServiceAliases()
@@ -52,7 +52,7 @@ class CacheDirector
 
     /**
      * Returns the cache warmers
-     *
+     * 
      * @return CacheResetterInterface[]
      */
     public function getCacheServices()
@@ -66,7 +66,7 @@ class CacheDirector
     public function clear($cacheServiceAliases = array())
     {
         $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
-
+        
         foreach ($cacheServices as $cacheService)
         {
             $cacheService->clear();
@@ -79,7 +79,7 @@ class CacheDirector
     public function warmUp($cacheServiceAliases = array())
     {
         $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
-
+        
         foreach ($cacheServices as $cacheService)
         {
             if (! $cacheService instanceof UserBasedCacheInterface)
@@ -92,7 +92,7 @@ class CacheDirector
     /**
      * Retrieves cache services by a given array of aliasses, throws an exception if an alias is used that does not
      * exist
-     *
+     * 
      * @param array $cacheServiceAliases
      *
      * @return \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
@@ -103,9 +103,9 @@ class CacheDirector
         {
             return $this->cacheServices;
         }
-
+        
         $cacheServices = array();
-
+        
         foreach ($cacheServiceAliases as $cacheServiceAlias)
         {
             if (! array_key_exists($cacheServiceAlias, $this->cacheServices))
@@ -113,10 +113,10 @@ class CacheDirector
                 throw new \InvalidArgumentException(
                     sprintf('The given cache service alias %s does not exist', $cacheServiceAlias));
             }
-
+            
             $cacheServices[$cacheServiceAlias] = $this->cacheServices[$cacheServiceAlias];
         }
-
+        
         return $cacheServices;
     }
 }

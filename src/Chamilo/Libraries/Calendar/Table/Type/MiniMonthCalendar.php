@@ -32,7 +32,7 @@ class MiniMonthCalendar extends MonthCalendar
         $day = $this->getStartTime();
         $row = 0;
         $maxRows = $this->getRowCount();
-
+        
         while ($row < $maxRows)
         {
             for ($col = 0; $col < 7; $col ++)
@@ -43,7 +43,7 @@ class MiniMonthCalendar extends MonthCalendar
                 $this->setCellContents($row, $col, $content);
                 $day = strtotime('+24 Hours', $day);
             }
-
+            
             $row ++;
         }
     }
@@ -56,28 +56,28 @@ class MiniMonthCalendar extends MonthCalendar
     {
         $events = $this->getEventsToShow();
         $cellMapping = $this->getCellMapping();
-
+        
         foreach ($events as $time => $items)
         {
             $cellMappingKey = date('Ymd', $time);
-
+            
             $row = $cellMapping[$cellMappingKey][0];
             $column = $cellMapping[$cellMappingKey][1];
-
-            if(is_null($row) || is_null($column))
+            
+            if (is_null($row) || is_null($column))
             {
                 continue;
             }
-
+            
             $tooltip = htmlentities(implode("\n", $items));
-
+            
             if (date('Ymd', $time) != date('Ymd'))
             {
                 try
                 {
                     $this->setCellContents(
-                        $row,
-                        $column,
+                        $row, 
+                        $column, 
                         '<span class="badge" data-toggle="tooltip" data-placement="top" data-content="' . $tooltip . '">' .
                              $this->getCellContents($row, $column) . '</span>');
                 }
@@ -95,7 +95,7 @@ class MiniMonthCalendar extends MonthCalendar
     public function render()
     {
         $this->addEvents();
-
+        
         return $this->toHtml();
     }
 
@@ -108,13 +108,13 @@ class MiniMonthCalendar extends MonthCalendar
     protected function determineCellContent($tableDate)
     {
         $cellContent = parent::determineCellContent($tableDate);
-
+        
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))
         {
             $cellContent = '<span class="badge">' . $cellContent . '</span>';
         }
-
+        
         return $cellContent;
     }
 }

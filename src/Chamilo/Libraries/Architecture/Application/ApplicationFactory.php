@@ -129,13 +129,13 @@ class ApplicationFactory
     private function getManagerClass()
     {
         $managerClass = $this->getContext() . '\Manager';
-
+        
         if (! class_exists($managerClass))
         {
             throw new \Exception(
-                Translation :: get('NoManagerFound', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries'));
+                Translation::get('NoManagerFound', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries'));
         }
-
+        
         return $managerClass;
     }
 
@@ -146,7 +146,7 @@ class ApplicationFactory
     private function getActionParameter()
     {
         $managerClass = $this->getManagerClass();
-        return $managerClass :: PARAM_ACTION;
+        return $managerClass::PARAM_ACTION;
     }
 
     /**
@@ -160,25 +160,25 @@ class ApplicationFactory
         {
             $action = $this->getAction();
         }
-
+        
         $class = $this->getClassName();
-
+        
         $component = new $class($this->getApplicationConfiguration());
-
+        
         $component->set_parameter($this->getActionParameter(), $action);
-
+        
         if (! $this->getApplication() instanceof Application)
         {
-            $component->set_parameter(Application :: PARAM_CONTEXT, $this->getContext());
+            $component->set_parameter(Application::PARAM_CONTEXT, $this->getContext());
         }
-
+        
         $parameters = $component->get_additional_parameters();
-
+        
         foreach ($parameters as $parameter)
         {
             $component->set_parameter($parameter, $this->getRequest()->get($parameter));
         }
-
+        
         return $component;
     }
 
@@ -192,7 +192,7 @@ class ApplicationFactory
         $managerClass = $this->getManagerClass();
         $level = $this->determineLevel();
         $actions = $this->getRequestedAction($actionParameter);
-
+        
         if (is_array($actions))
         {
             if (isset($actions[$level]))
@@ -202,14 +202,14 @@ class ApplicationFactory
             else
             {
                 // TODO: Catch the fact that there might not be a default action
-                $action = $managerClass :: DEFAULT_ACTION;
+                $action = $managerClass::DEFAULT_ACTION;
             }
         }
         else
         {
             $action = $actions;
         }
-
+        
         return $action;
     }
 
@@ -226,10 +226,10 @@ class ApplicationFactory
         }
         else
         {
-
+            
             $level = 0;
         }
-
+        
         return $level;
     }
 
@@ -242,16 +242,16 @@ class ApplicationFactory
     private function getRequestedAction($actionParameter)
     {
         $getAction = $this->getRequest()->query->get($actionParameter);
-
+        
         if (! $getAction)
         {
             $postAction = $this->getRequest()->request->get($actionParameter);
-
+            
             if (! $postAction)
             {
                 // TODO: Catch the fact that there might not be a default action
                 $managerClass = $this->getManagerClass();
-                return $managerClass :: DEFAULT_ACTION;
+                return $managerClass::DEFAULT_ACTION;
             }
             else
             {
@@ -275,29 +275,29 @@ class ApplicationFactory
         {
             $action = $this->getAction();
         }
-
+        
         return $this->buildClassName($action);
     }
 
     private function buildClassName($action)
     {
         $classname = $this->getContext() . '\Component\\' . $action . 'Component';
-
+        
         if (! class_exists($classname))
         {
             // TODO: Temporary fallback for backwards compatibility
             $classname = $this->getContext() . '\Component\\' .
-                 (string) StringUtilities :: getInstance()->createString($action)->upperCamelize() . 'Component';
-
+                 (string) StringUtilities::getInstance()->createString($action)->upperCamelize() . 'Component';
+            
             if (! class_exists($classname))
             {
-                $trail = BreadcrumbTrail :: getInstance();
-                $trail->add(new Breadcrumb('#', Translation :: get($classname)));
-
+                $trail = BreadcrumbTrail::getInstance();
+                $trail->add(new Breadcrumb('#', Translation::get($classname)));
+                
                 throw new ClassNotExistException($classname);
             }
         }
-
+        
         return $classname;
     }
 }

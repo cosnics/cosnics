@@ -87,7 +87,7 @@ class SortableTable extends HtmlTable
     public function setTableFormActions(TableFormActions $actions = null)
     {
         parent::setTableFormActions($actions);
-
+        
         if ($actions instanceof TableFormActions && $actions->has_form_actions())
         {
             $columnHeaderHtml = '<div class="checkbox checkbox-primary"><input class="styled styled-primary sortableTableSelectToggle" type="checkbox" name="sortableTableSelectToggle" /><label></label></div>';
@@ -96,7 +96,7 @@ class SortableTable extends HtmlTable
         {
             $columnHeaderHtml = '';
         }
-
+        
         $this->setColumnHeader(0, $columnHeaderHtml, false);
     }
 
@@ -108,7 +108,7 @@ class SortableTable extends HtmlTable
     {
         $hasActions = $this->getTableFormActions() instanceof TableFormActions &&
              $this->getTableFormActions()->has_form_actions();
-
+        
         if ($hasActions)
         {
             if (strlen($row[0]) > 0)
@@ -116,7 +116,7 @@ class SortableTable extends HtmlTable
                 $row[0] = $this->getCheckboxHtml($row[0]);
             }
         }
-
+        
         foreach ($row as $index => & $value)
         {
             if (! is_numeric($value) && empty($value))
@@ -124,7 +124,7 @@ class SortableTable extends HtmlTable
                 $value = '-';
             }
         }
-
+        
         return $row;
     }
 }

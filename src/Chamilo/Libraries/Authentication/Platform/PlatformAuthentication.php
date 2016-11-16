@@ -25,14 +25,14 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
      */
     public function login($password)
     {
-        if ($this->getUser() instanceof User && $this->getUser()->get_password() == Hashing :: hash($password))
+        if ($this->getUser() instanceof User && $this->getUser()->get_password() == Hashing::hash($password))
         {
-
+            
             return true;
         }
         else
         {
-            throw new AuthenticationException(Translation :: get('UsernameOrPasswordIncorrect'));
+            throw new AuthenticationException(Translation::get('UsernameOrPasswordIncorrect'));
         }
     }
 
@@ -51,27 +51,27 @@ class PlatformAuthentication extends CredentialsAuthentication implements Change
         {
             return false;
         }
-
+        
         // Check whether the current password is different from the new password
         if ($oldPassword == $newPassword)
         {
             return false;
         }
-
+        
         // Verify that the entered old password matches the stored password
-        if (Hashing :: hash($oldPassword) != $user->get_password())
+        if (Hashing::hash($oldPassword) != $user->get_password())
         {
             return false;
         }
-
+        
         // Set the password
-        $user->set_password(Hashing :: hash($newPassword));
-
+        $user->set_password(Hashing::hash($newPassword));
+        
         return $user->update();
     }
 
     public function getPasswordRequirements()
     {
-        return Translation :: get('GeneralPasswordRequirements');
+        return Translation::get('GeneralPasswordRequirements');
     }
 }

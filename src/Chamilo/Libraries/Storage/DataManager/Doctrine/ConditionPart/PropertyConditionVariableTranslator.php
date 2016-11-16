@@ -20,7 +20,7 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         return $this->getDataClassDatabase()->escapeColumnName(
-            $this->getConditionVariable()->get_property(),
+            $this->getConditionVariable()->get_property(), 
             $this->getConditionVariable()->get_alias());
     }
 }

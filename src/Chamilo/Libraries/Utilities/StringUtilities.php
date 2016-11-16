@@ -52,28 +52,28 @@ class StringUtilities
 
     /**
      * Create a \Stringy\Stringy instance with the given string and return it
-     *
+     * 
      * @param string $string
      * @return \Stringy\Stringy
      */
     public function createString($string)
     {
-        return \Stringy\Stringy :: create($string, $this->encoding);
+        return \Stringy\Stringy::create($string, $this->encoding);
     }
 
     /**
      * Get an instance of StringUtilities
-     *
+     * 
      * @return \Chamilo\Libraries\Utilities\StringUtilities
      */
     public static function getInstance()
     {
-        if (is_null(static :: $instance))
+        if (is_null(static::$instance))
         {
-            self :: $instance = new static();
+            self::$instance = new static();
         }
-
-        return static :: $instance;
+        
+        return static::$instance;
     }
 
     /**
@@ -99,22 +99,22 @@ class StringUtilities
         {
             return true;
         }
-
+        
         if (! is_string($string))
         {
             return false;
         }
-
+        
         if ($forHumans)
         {
             $string = trim(str_replace('&nbsp;', '', strip_tags($string)));
         }
-
+        
         if (strlen($string) === 0)
         {
             return true;
         }
-
+        
         return false;
     }
 
@@ -175,7 +175,7 @@ class StringUtilities
         {
             $string = strip_tags($string);
         }
-
+        
         return (string) $this->createString($string)->truncate($length, $character);
     }
 }

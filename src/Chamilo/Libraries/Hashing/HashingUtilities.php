@@ -31,10 +31,10 @@ abstract class HashingUtilities
     public function get_available_types()
     {
         return array(
-            'Haval256' => 'HAVAL-256',
-            'Md5' => 'MD5',
-            'Sha1' => 'SHA-1',
-            'Sha512' => 'SHA-512',
+            'Haval256' => 'HAVAL-256', 
+            'Md5' => 'MD5', 
+            'Sha1' => 'SHA-1', 
+            'Sha512' => 'SHA-512', 
             'Whirlpool' => 'Whirlpool');
     }
 }

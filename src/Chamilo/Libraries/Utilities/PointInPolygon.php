@@ -65,7 +65,7 @@ class PointInPolygon
         // Check if the point sits exactly on a vertex
         if ($this->vertex_check === true && $this->point_is_on_vertex($point, $vertices) === true)
         {
-            return self :: POINT_VERTEX;
+            return self::POINT_VERTEX;
         }
         
         // Check if the point is inside the polygon or on the boundary
@@ -78,34 +78,32 @@ class PointInPolygon
             $vertex2 = $vertices[$i];
             
             // Check if point is on an horizontal polygon boundary
-            if ($vertex1[self :: POLYGON_Y_INDEX] == $vertex2[self :: POLYGON_Y_INDEX] &&
-                 $vertex1[self :: POLYGON_Y_INDEX] == $point[self :: POLYGON_Y_INDEX] &&
-                 $point[self :: POLYGON_X_INDEX] >
-                 min($vertex1[self :: POLYGON_X_INDEX], $vertex2[self :: POLYGON_X_INDEX]) && $point[self :: POLYGON_X_INDEX] <
-                 max($vertex1[self :: POLYGON_X_INDEX], $vertex2[self :: POLYGON_X_INDEX]))
+            if ($vertex1[self::POLYGON_Y_INDEX] == $vertex2[self::POLYGON_Y_INDEX] &&
+                 $vertex1[self::POLYGON_Y_INDEX] == $point[self::POLYGON_Y_INDEX] &&
+                 $point[self::POLYGON_X_INDEX] >
+                 min($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]) && $point[self::POLYGON_X_INDEX] <
+                 max($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]))
             {
-                return self :: POINT_BOUNDARY;
+                return self::POINT_BOUNDARY;
             }
-            if ($point[self :: POLYGON_Y_INDEX] >
-                 min($vertex1[self :: POLYGON_Y_INDEX], $vertex2[self :: POLYGON_Y_INDEX]) &&
-                 $point[self :: POLYGON_Y_INDEX] <=
-                 max($vertex1[self :: POLYGON_Y_INDEX], $vertex2[self :: POLYGON_Y_INDEX]) && $point[self :: POLYGON_X_INDEX] <=
-                 max($vertex1[self :: POLYGON_X_INDEX], $vertex2[self :: POLYGON_X_INDEX]) &&
-                 $vertex1[self :: POLYGON_Y_INDEX] != $vertex2[self :: POLYGON_Y_INDEX])
+            if ($point[self::POLYGON_Y_INDEX] > min($vertex1[self::POLYGON_Y_INDEX], $vertex2[self::POLYGON_Y_INDEX]) &&
+                 $point[self::POLYGON_Y_INDEX] <=
+                 max($vertex1[self::POLYGON_Y_INDEX], $vertex2[self::POLYGON_Y_INDEX]) && $point[self::POLYGON_X_INDEX] <=
+                 max($vertex1[self::POLYGON_X_INDEX], $vertex2[self::POLYGON_X_INDEX]) &&
+                 $vertex1[self::POLYGON_Y_INDEX] != $vertex2[self::POLYGON_Y_INDEX])
             {
-                $xinters = ($point[self :: POLYGON_Y_INDEX] - $vertex1[self :: POLYGON_Y_INDEX]) *
-                 ($vertex2[self :: POLYGON_X_INDEX] - $vertex1[self :: POLYGON_X_INDEX]) /
-                 ($vertex2[self :: POLYGON_Y_INDEX] - $vertex1[self :: POLYGON_Y_INDEX]) +
-                 $vertex1[self :: POLYGON_X_INDEX];
+                $xinters = ($point[self::POLYGON_Y_INDEX] - $vertex1[self::POLYGON_Y_INDEX]) *
+                 ($vertex2[self::POLYGON_X_INDEX] - $vertex1[self::POLYGON_X_INDEX]) /
+                 ($vertex2[self::POLYGON_Y_INDEX] - $vertex1[self::POLYGON_Y_INDEX]) + $vertex1[self::POLYGON_X_INDEX];
             
             // Check if point is on the polygon boundary (other than horizontal)
-            if ($xinters == $point[self :: POLYGON_X_INDEX])
+            if ($xinters == $point[self::POLYGON_X_INDEX])
             {
-                return self :: POINT_BOUNDARY;
+                return self::POINT_BOUNDARY;
             }
             
-            if ($vertex1[self :: POLYGON_X_INDEX] == $vertex2[self :: POLYGON_X_INDEX] ||
-                 $point[self :: POLYGON_X_INDEX] <= $xinters)
+            if ($vertex1[self::POLYGON_X_INDEX] == $vertex2[self::POLYGON_X_INDEX] ||
+                 $point[self::POLYGON_X_INDEX] <= $xinters)
             {
                 $intersections ++;
             }
@@ -114,11 +112,11 @@ class PointInPolygon
     // If the number of edges we passed through is even, then it's in the polygon.
     if ($intersections % 2 != 0)
     {
-        return self :: POINT_INSIDE;
+        return self::POINT_INSIDE;
     }
     else
     {
-        return self :: POINT_OUTSIDE;
+        return self::POINT_OUTSIDE;
     }
 }
 

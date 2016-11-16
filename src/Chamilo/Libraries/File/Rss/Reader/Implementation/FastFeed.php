@@ -17,7 +17,7 @@ class FastFeed extends RssReader
 
     /**
      * Parses a url and returns the rss items
-     *
+     * 
      * @param string $url
      * @param int $number_of_items
      *
@@ -25,21 +25,21 @@ class FastFeed extends RssReader
      */
     public function parse_url($url, $number_of_items = 5)
     {
-        $fastFeed = Factory :: create();
+        $fastFeed = Factory::create();
         $fastFeed->addFeed('default', $url);
         $fastFeed->pushProcessor(new LimitProcessor($number_of_items));
-
+        
         // Process items
         $items = array();
-
+        
         foreach ($fastFeed->fetch() as $fastFeedItem)
         {
             $items[] = array(
-                'title' => $fastFeedItem->getName(),
-                'description' => $fastFeedItem->getContent(),
+                'title' => $fastFeedItem->getName(), 
+                'description' => $fastFeedItem->getContent(), 
                 'link' => $fastFeedItem->getSource());
         }
-
+        
         return $items;
     }
 }

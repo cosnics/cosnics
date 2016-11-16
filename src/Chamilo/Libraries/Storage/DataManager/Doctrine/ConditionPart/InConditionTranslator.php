@@ -19,7 +19,7 @@ class InConditionTranslator extends ConditionTranslator
     public function translate()
     {
         $values = $this->getCondition()->get_values();
-
+        
         if (! is_array($values))
         {
             if (is_scalar($values))
@@ -36,32 +36,32 @@ class InConditionTranslator extends ConditionTranslator
                     'An InCondition only accepts an array or a scalar as input for the values');
             }
         }
-
+        
         if (count($values) > 0)
         {
             $where_clause = array();
-
+            
             $where_clause[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
+                $this->getDataClassDatabase(), 
                 $this->getCondition()->get_name()) . ' IN (';
-
+            
             $placeholders = array();
-
+            
             foreach ($values as $value)
             {
                 $placeholders[] = $this->getDataClassDatabase()->quote($value);
             }
-
+            
             $where_clause[] = implode(',', $placeholders);
             $where_clause[] = ')';
-
+            
             $value = implode('', $where_clause);
         }
         else
         {
             $value = 'true = false';
         }
-
+        
         return $value;
     }
 }

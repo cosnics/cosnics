@@ -24,8 +24,8 @@ class ButtonGroup extends AbstractButtonToolBarItem
      */
     public function __construct($buttons = array(), $classes = array())
     {
-        parent :: __construct($classes);
-
+        parent::__construct($classes);
+        
         $this->buttons = $buttons;
     }
 

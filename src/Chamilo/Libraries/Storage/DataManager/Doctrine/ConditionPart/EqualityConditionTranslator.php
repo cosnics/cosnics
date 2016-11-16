@@ -21,14 +21,14 @@ class EqualityConditionTranslator extends ConditionTranslator
         if (is_null($this->getCondition()->get_value()))
         {
             return $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
+                $this->getDataClassDatabase(), 
                 $this->getCondition()->get_name()) . ' IS NULL';
         }
-
+        
         return $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
+            $this->getDataClassDatabase(), 
             $this->getCondition()->get_name()) . ' = ' . $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
+            $this->getDataClassDatabase(), 
             $this->getCondition()->get_value());
     }
 }

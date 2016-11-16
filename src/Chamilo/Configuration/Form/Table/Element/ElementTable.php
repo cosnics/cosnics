@@ -13,5 +13,5 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTable;
  */
 class ElementTable extends DataClassTable
 {
-    const TABLE_IDENTIFIER = Manager :: PARAM_DYNAMIC_FORM_ID;
+    const TABLE_IDENTIFIER = Manager::PARAM_DYNAMIC_FORM_ID;
 }

@@ -5,7 +5,7 @@ use Chamilo\Libraries\Format\Table\Extension\GalleryTable\GalleryTableDataProvid
 
 /**
  * This class represents a data provider for a DataClass gallery table
- *
+ * 
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Hans De Bisschop <hans.de.bisschop>
  */

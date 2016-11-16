@@ -18,27 +18,21 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
      * @param string $value
      * @param string $glyph
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null,
-        $glyph = 'trash')
+    public function __construct($elementName = null, $elementLabel = null, $attributes = null, $value = null, $glyph = 'trash')
     {
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
         if (! isset($glyph))
         {
             $glyph = 'trash';
         }
-
-        HTML_QuickForm_stylebutton :: __construct(
-            $elementName,
-            $elementLabel,
-            $attributes,
-            $value,
-            $glyph);
-
+        
+        HTML_QuickForm_stylebutton::__construct($elementName, $elementLabel, $attributes, $value, $glyph);
+        
         $this->setType('reset');
-
+        
         $defaultAttributes = array();
         $defaultAttributes[] = $this->getAttribute('class');
-
+        
         $this->setAttribute('class', implode(' ', $defaultAttributes));
     }
 

@@ -10,7 +10,7 @@ use Chamilo\Libraries\File\PathBuilder;
 
 /**
  * Utilities function for javascript manipulation
- *
+ * 
  * @package libraries
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
@@ -73,7 +73,7 @@ abstract class ResourceUtilities
      * @param ClassnameUtilities $classnameUtilities
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct($serverType = 'production', $context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities,
+    public function __construct($serverType = 'production', $context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities, 
         ClassnameUtilities $classnameUtilities, \Symfony\Component\HttpFoundation\Request $request)
     {
         $this->serverType = $serverType;
@@ -214,35 +214,35 @@ abstract class ResourceUtilities
     static public function launch(\Symfony\Component\HttpFoundation\Request $request)
     {
         $type = Request::get(self::PARAM_TYPE, null);
-
+        
         if ($type)
         {
             $classname = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() .
                  'Utilities';
-
+            
             if (class_exists($classname))
             {
                 $theme = Request::get(self::PARAM_THEME);
                 $serverType = Request::get(self::PARAM_SERVER_TYPE, 'production');
                 $context = Request::get(self::PARAM_CONTEXT, __NAMESPACE__);
-
+                
                 $classnameUtilities = ClassnameUtilities::getInstance();
-
+                
                 $themeUtilities = new Theme(
-                    $theme,
-                    ClassnameUtilities::getInstance(),
+                    $theme, 
+                    ClassnameUtilities::getInstance(), 
                     new PathBuilder($classnameUtilities));
-
+                
                 $pathUtilities = Path::getInstance();
-
+                
                 $utilities = new $classname(
-                    $serverType,
-                    $context,
-                    $themeUtilities,
-                    $pathUtilities,
-                    $classnameUtilities,
+                    $serverType, 
+                    $context, 
+                    $themeUtilities, 
+                    $pathUtilities, 
+                    $classnameUtilities, 
                     $request);
-
+                
                 $utilities->run();
             }
         }

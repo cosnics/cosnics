@@ -5,7 +5,7 @@ use HTML_Table;
 
 /**
  * A tabular representation of a calendar
- *
+ * 
  * @package libraries\calendar\table
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
@@ -40,9 +40,9 @@ abstract class Calendar extends HTML_Table
             $this->displayTime = $displayTime;
         }
         $this->eventsToShow = array();
-
+        
         array_unshift($classes, 'table-calendar');
-
+        
         parent::__construct(array('class' => implode(' ', $classes), 'cellspacing' => 0));
     }
 
@@ -66,7 +66,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Add an event to the calendar
-     *
+     * 
      * @param integer $time A time in the day on which the event should be displayed
      * @param string $content The html content to insert in the month calendar
      */
@@ -77,7 +77,7 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Gets the list of events to show sorted by their starting time
-     *
+     * 
      * @return array
      */
     public function getEventsToShow()
@@ -93,14 +93,14 @@ abstract class Calendar extends HTML_Table
 
     /**
      * Gets the first date which will be displayed by this calendar.
-     *
+     * 
      * @return integer
      */
     abstract public function getStartTime();
 
     /**
      * Gets the end date which will be displayed by this calendar.
-     *
+     * 
      * @return integer
      */
     abstract public function getEndTime();

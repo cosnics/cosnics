@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Compiler pass to add commands to the console runner
- *
+ * 
  * @package Chamilo\Libraries\DependencyInjection
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -17,7 +17,7 @@ class ConsoleCompilerPass implements CompilerPassInterface
 
     /**
      * You can modify the container here before it is dumped to PHP code.
-     *
+     * 
      * @param ContainerBuilder $container
      *
      * @throws \Exception @api
@@ -28,18 +28,18 @@ class ConsoleCompilerPass implements CompilerPassInterface
         {
             $taggedServices = $container->findTaggedServiceIds('chamilo.libraries.console.command');
             $consoleDefinition = $container->getDefinition('chamilo.libraries.console');
-
+            
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
                 $consoleDefinition->addMethodCall('add', array(new Reference($taggedServiceId)));
             }
         }
-
+        
         if ($container->hasDefinition('chamilo.libraries.console.helper_set'))
         {
             $taggedServices = $container->findTaggedServiceIds('chamilo.libraries.console.helper');
             $helperSetDefinition = $container->getDefinition('chamilo.libraries.console.helper_set');
-
+            
             foreach ($taggedServices as $taggedServiceId => $tags)
             {
                 $helperSetDefinition->addMethodCall('set', array(new Reference($taggedServiceId), $tags[0]['alias']));

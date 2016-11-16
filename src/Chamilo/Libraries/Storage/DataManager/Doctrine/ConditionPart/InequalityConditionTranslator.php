@@ -36,12 +36,11 @@ class InequalityConditionTranslator extends ConditionTranslator
             default :
                 die('Unknown operator for inequality condition');
         }
-
+        
         return $this->getConditionPartTranslatorService()->translateConditionPart(
-            $this->getDataClassDatabase(),
-            $this->getCondition()->get_name()) . ' ' . $operator . ' ' .
-             $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
-                $this->getCondition()->get_value());
+            $this->getDataClassDatabase(), 
+            $this->getCondition()->get_name()) . ' ' . $operator . ' ' . $this->getConditionPartTranslatorService()->translateConditionPart(
+            $this->getDataClassDatabase(), 
+            $this->getCondition()->get_value());
     }
 }

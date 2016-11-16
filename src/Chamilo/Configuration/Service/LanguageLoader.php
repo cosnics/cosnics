@@ -55,12 +55,12 @@ class LanguageLoader implements CacheableDataLoaderInterface
     {
         $languages = array();
         $languageRecords = $this->getLanguageRepository()->findLanguagesAsRecords();
-
+        
         foreach ($languageRecords as $languageRecord)
         {
             $languages[$languageRecord[Language::PROPERTY_ISOCODE]] = $languageRecord[Language::PROPERTY_ORIGINAL_NAME];
         }
-
+        
         return $languages;
     }
 

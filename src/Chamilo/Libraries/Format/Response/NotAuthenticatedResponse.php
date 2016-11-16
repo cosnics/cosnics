@@ -22,95 +22,92 @@ class NotAuthenticatedResponse extends Response
      */
     public function __construct()
     {
-        $page = Page :: getInstance();
-
+        $page = Page::getInstance();
+        
         $html = array();
         $html[] = $page->getHeader()->toHtml();
         $html[] = $this->renderPanel();
         $html[] = $page->getFooter()->toHtml();
-
-        parent :: __construct(implode(PHP_EOL, $html));
+        
+        parent::__construct(implode(PHP_EOL, $html));
     }
 
     /**
      * Renders the panel with the not authenticated message and the login form
-     *
+     * 
      * @return string
      */
     public function renderPanel()
     {
         $html = array();
-
+        
         $html[] = '<div class="panel panel-danger panel-not-authenticated">';
         $html[] = '<div class="panel-heading">';
-        $html[] = Translation :: getInstance()->getTranslation('NotAuthenticated', array(), Utilities :: COMMON_LIBRARIES);
+        $html[] = Translation::getInstance()->getTranslation('NotAuthenticated', array(), Utilities::COMMON_LIBRARIES);
         $html[] = '</div>';
         $html[] = '<div class="panel-body">';
         $html[] = $this->displayLoginForm();
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays the login form
-     *
+     * 
      * @return string
      */
     public function displayLoginForm()
     {
-        $translator = Translation :: getInstance();
+        $translator = Translation::getInstance();
         $redirect = new Redirect();
-
+        
         $form = new FormValidator('formLogin', 'post', $redirect->getCurrentUrl());
-
+        
         $form->get_renderer()->setElementTemplate('{element}');
-
+        
         $form->setRequiredNote(null);
-
+        
         $form->addElement('html', '<div class="form-group">');
         $form->addElement('html', '<div class="input-group">');
-
+        
         $form->addElement(
-            'html',
+            'html', 
             '<div class="input-group-addon">' . $translator->getTranslation('Username') . '</div>');
-
+        
         $form->addElement(
-            'text',
-            'login',
-            Translation :: get('UserName'),
+            'text', 
+            'login', 
+            Translation::get('UserName'), 
             array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
-
+        
         $form->addElement('html', '</div>');
         $form->addElement('html', '</div>');
-
+        
         $form->addElement('html', '<div class="form-group">');
         $form->addElement('html', '<div class="input-group">');
-
+        
         $form->addElement(
-            'html',
+            'html', 
             '<div class="input-group-addon">' . $translator->getTranslation('Password') . '</div>');
-
+        
         $form->addElement(
-            'password',
-            'password',
-            Translation :: get('Pass'),
+            'password', 
+            'password', 
+            Translation::get('Pass'), 
             array('size' => 20, 'onclick' => 'this.value=\'\';', 'class' => 'form-control'));
-
+        
         $form->addElement('html', '</div>');
         $form->addElement('html', '</div>');
-
+        
         $form->addElement('html', '<div class="form-group text-right">');
-        $form->addElement('style_submit_button', 'submitAuth', Translation :: get('Login'), null, null, 'log-in');
+        $form->addElement('style_submit_button', 'submitAuth', Translation::get('Login'), null, null, 'log-in');
         $form->addElement('html', '</div>');
-
-        $form->addRule('password', Translation :: get('ThisFieldIsRequired'), 'required');
-
-        $form->addRule(
-            'login',
-            Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES),
-            'required');
-
+        
+        $form->addRule('password', Translation::get('ThisFieldIsRequired'), 'required');
+        
+        $form->addRule('login', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required');
+        
         return $form->toHtml();
     }
 }

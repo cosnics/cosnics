@@ -71,7 +71,7 @@ class FileLogger
 
     public function call_trace($trace)
     {
-        $logfile = Path :: getInstance()->getLogPath() . '/call_errors.log';
+        $logfile = Path::getInstance()->getLogPath() . '/call_errors.log';
         $logger = new self($logfile, true);
         
         $i = 0;

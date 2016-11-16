@@ -29,7 +29,7 @@ class InternationalizationBundles extends BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $i18nPath = Path :: getInstance()->getI18nPath($folderNamespace);
+        $i18nPath = Path::getInstance()->getI18nPath($folderNamespace);
         return file_exists($i18nPath) && is_dir($i18nPath);
     }
 }

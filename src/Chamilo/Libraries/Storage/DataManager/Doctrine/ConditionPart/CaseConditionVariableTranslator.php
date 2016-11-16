@@ -21,18 +21,18 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
     public function translate()
     {
         $strings = array();
-
+        
         $strings[] = 'CASE ';
-
+        
         foreach ($this->getConditionVariable()->get_case_elements() as $caseElement)
         {
             $strings[] = $this->getConditionPartTranslatorService()->translateConditionPart(
-                $this->getDataClassDatabase(),
+                $this->getDataClassDatabase(), 
                 $caseElement);
         }
-
+        
         $strings[] = ' END';
-
+        
         if ($this->getConditionVariable()->get_alias())
         {
             $value = implode(' ', $strings) . ' AS ' . $this->getConditionVariable()->get_alias();
@@ -41,7 +41,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
         {
             $value = implode(' ', $strings);
         }
-
+        
         return $value;
     }
 }

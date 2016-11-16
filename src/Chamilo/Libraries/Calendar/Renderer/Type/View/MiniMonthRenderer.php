@@ -26,7 +26,7 @@ class MiniMonthRenderer extends ViewRenderer
     /**
      * One of 3 possible values (or null): MiniMonthCalendar :: PERIOD_MONTH, MiniMonthCalendar :: PERIOD_WEEK,
      * MiniMonthCalendar :: PERIOD_DAY;
-     *
+     * 
      * @var integer
      */
     private $markPeriod;
@@ -38,12 +38,12 @@ class MiniMonthRenderer extends ViewRenderer
      * @param string $linkTarget
      * @param int $markPeriod
      */
-    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
+    public function __construct(CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, 
         $viewActions = array(), $linkTarget = '', $markPeriod = null)
     {
         $this->markPeriod = $markPeriod;
-
-        parent :: __construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
+        
+        parent::__construct($dataProvider, $legend, $displayTime, $viewActions, $linkTarget);
     }
 
     /**
@@ -80,17 +80,17 @@ class MiniMonthRenderer extends ViewRenderer
     public function render()
     {
         $html = array();
-
+        
         $html[] = '<div class="panel panel-default">';
         $html[] = $this->renderNavigation();
-
+        
         $html[] = '<div class="table-calendar-mini-container">';
         $html[] = $this->renderCalendar();
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
-
+        
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
@@ -101,63 +101,63 @@ class MiniMonthRenderer extends ViewRenderer
     public function renderCalendar()
     {
         $calendar = $this->getCalendar();
-
+        
         $startTime = $calendar->getStartTime();
         $endTime = $calendar->getEndTime();
-
+        
         $events = $this->getEvents($startTime, $endTime);
         $tableDate = $startTime;
-
+        
         while ($tableDate <= $endTime)
         {
             $nextTableDate = strtotime('+1 Day', $tableDate);
-
+            
             foreach ($events as $index => $event)
             {
                 $startDate = $event->getStartDate();
                 $endDate = $event->getEndDate();
-
+                
                 if ($tableDate < $startDate && $startDate < $nextTableDate ||
                      $tableDate < $endDate && $endDate <= $nextTableDate ||
                      $startDate <= $tableDate && $nextTableDate <= $endDate)
                 {
                     $this->getLegend()->addSource($event->getSource());
-
+                    
                     $configuration = new \Chamilo\Libraries\Calendar\Renderer\Event\Configuration();
                     $configuration->setStartDate($tableDate);
-
+                    
                     $eventRendererFactory = new EventRendererFactory($this, $event, $configuration);
                     $calendar->addEvent($tableDate, $eventRendererFactory->render());
                 }
             }
-
+            
             $tableDate = $nextTableDate;
         }
-
+        
         $calendar->addNavigationLinks($this->determineNavigationUrl());
-
+        
         $html = array();
-
+        
         $html[] = '<div class="table-calendar-mini-container">';
         $html[] = $calendar->render();
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
-
-        $html[] = ResourceManager :: getInstance()->get_resource_html(
-            Path :: getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
-
+        
+        $html[] = ResourceManager::getInstance()->get_resource_html(
+            Path::getInstance()->getJavascriptPath('Chamilo\Libraries\Calendar\Renderer', true) . 'EventTooltip.js');
+        
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Adds a navigation bar to the calendar
-     *
+     * 
      * @param string $urlFormat The *TIME* in this string will be replaced by a timestamp
      */
     public function renderNavigation()
     {
         $html = array();
-
+        
         $html[] = '<div class="panel-heading table-calendar-mini-navigation">';
         $html[] = $this->renderPreviousMonthNavigation();
         $html[] = $this->renderNextMonthNavigation();
@@ -165,13 +165,13 @@ class MiniMonthRenderer extends ViewRenderer
         $html[] = $this->renderTitle();
         $html[] = '</h4>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 
     public function renderTitle()
     {
-        return Translation :: get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities :: COMMON_LIBRARIES) . ' ' .
+        return Translation::get(date('F', $this->getDisplayTime()) . 'Long', null, Utilities::COMMON_LIBRARIES) . ' ' .
              date('Y', $this->getDisplayTime());
     }
 
@@ -179,8 +179,8 @@ class MiniMonthRenderer extends ViewRenderer
     {
         $urlFormat = $this->determineNavigationUrl();
         $previousTime = strtotime('-1 Month', $this->getDisplayTime());
-        $previousUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $previousTime, $urlFormat);
-
+        $previousUrl = str_replace(Calendar::TIME_PLACEHOLDER, $previousTime, $urlFormat);
+        
         return '<a href="' . $previousUrl . '"><span class="glyphicon glyphicon-chevron-left pull-left"></span></a>';
     }
 
@@ -188,8 +188,8 @@ class MiniMonthRenderer extends ViewRenderer
     {
         $urlFormat = $this->determineNavigationUrl();
         $nextTime = strtotime('+1 Month', $this->getDisplayTime());
-        $nextUrl = str_replace(Calendar :: TIME_PLACEHOLDER, $nextTime, $urlFormat);
-
+        $nextUrl = str_replace(Calendar::TIME_PLACEHOLDER, $nextTime, $urlFormat);
+        
         return '<a href="' . $nextUrl . '"><span class="glyphicon glyphicon-chevron-right pull-right"></span></a>';
     }
 }

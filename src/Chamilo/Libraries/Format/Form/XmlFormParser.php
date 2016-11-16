@@ -6,7 +6,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * This class parsers xml files which describe a dynamic form and builds the elements
- *
+ * 
  * @package \libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -18,49 +18,49 @@ class XmlFormParser
      * Properties *
      * **************************************************************************************************************
      */
-
+    
     /**
      * The Formvalidator object which builds the form elements
-     *
+     * 
      * @var FormValidator
      */
     private $form_builder;
 
     /**
      * The Xml Form Parser Result object that stores the result of this parsed form
-     *
+     * 
      * @var XmlFormParserResult
      */
     private $xml_form_parser_result;
 
     /**
      * The XPath object to search in the xml structure
-     *
+     * 
      * @var \DOMXPath
      */
     private $dom_xpath;
 
     /**
      * The connector class to retrieve the form element options
-     *
+     * 
      * @var Object
      */
     private $connector_class;
 
     /**
      * The context of the form elements, used for translations
-     *
+     * 
      * @param String
      */
     private $context;
 
     /**
      * The prefix for the elements
-     *
+     * 
      * @var String
      */
     private $prefix;
-
+    
     /**
      * **************************************************************************************************************
      * Form Element Types *
@@ -81,7 +81,7 @@ class XmlFormParser
      * Main functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Constructor Initializes the form builder
      */
@@ -92,7 +92,7 @@ class XmlFormParser
 
     /**
      * Parses an xml file to an array of form elements
-     *
+     * 
      * @param String $file_path - The path to the xml file
      * @param String $context - [OPTIONAL] The context - Default common\libraries
      * @param Object $connector_class - [OPTIONAL] The connector class to retrieve the dynamic options
@@ -105,23 +105,23 @@ class XmlFormParser
         {
             throw new \Exception(Translation::get('PathToXmlFileDoesNotExist'));
         }
-
+        
         if (! $context)
         {
             $context = __NAMESPACE__;
         }
-
+        
         $this->set_context($context);
         $this->set_connector_class($connector_class);
         $this->set_prefix($prefix);
-
+        
         $dom_document = new \DOMDocument();
         $dom_document->load($file_path);
-
+        
         $this->set_dom_xpath(new \DOMXPath($dom_document));
-
+        
         $this->parse_categories();
-
+        
         return $this->get_xml_form_parser_result();
     }
 
@@ -130,7 +130,7 @@ class XmlFormParser
      * Parser functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Parses the categories in the xml file
      */
@@ -145,24 +145,24 @@ class XmlFormParser
 
     /**
      * Handles a single category node
-     *
+     * 
      * @param \DOMElement $category_node
      */
     protected function parse_category_node(\DOMElement $category_node)
     {
         $category_name = $category_node->getAttribute('name');
         $category_name = $this->translate($category_name);
-
+        
         $this->create_and_add_element('category', $category_name);
-
+        
         $this->parse_elements_for_category($category_node);
-
+        
         $this->create_and_add_element('category');
     }
 
     /**
      * Parses the elements in the xml file for a given category
-     *
+     * 
      * @param \DOMElement $category_node
      */
     protected function parse_elements_for_category(\DOMElement $category_node)
@@ -176,7 +176,7 @@ class XmlFormParser
 
     /**
      * Parses a single element node
-     *
+     * 
      * @param \DOMElement $element_node
      */
     protected function parse_element_node(\DOMElement $element_node)
@@ -185,14 +185,14 @@ class XmlFormParser
         $element_title = $this->translate($element_name);
         $element_type = $element_node->getAttribute('field');
         $default_value = $element_node->getAttribute('default');
-
+        
         $prefix = $this->get_prefix();
-
+        
         if ($prefix)
         {
             $element_name = $this->get_prefix() . '[' . $element_name . ']';
         }
-
+        
         switch ($element_type)
         {
             case self::ELEMENT_TYPE_SELECT :
@@ -214,15 +214,15 @@ class XmlFormParser
                 $this->create_and_add_element($element_type, $element_name, $element_title);
                 break;
         }
-
+        
         $this->get_xml_form_parser_result()->add_default_value($element_name, $default_value);
-
+        
         $this->parse_validation_rules($element_node, $element_name);
     }
 
     /**
      * Creates a text element on the form
-     *
+     * 
      * @param \DOMElement $element_node
      * @param String $element_name
      * @param Strings $element_title
@@ -234,15 +234,15 @@ class XmlFormParser
         {
             $element_size = 50;
         }
-
+        
         $attributes = array('size' => $element_size);
-
+        
         $this->create_and_add_element(self::ELEMENT_TYPE_TEXT, $element_name, $element_title, $attributes);
     }
 
     /**
      * Creates a select element on the form
-     *
+     * 
      * @param \DOMElement $element_node
      * @param String $element_name
      * @param String $element_title
@@ -255,7 +255,7 @@ class XmlFormParser
 
     /**
      * Creates a radio buttons element on the form
-     *
+     * 
      * @param \DOMElement $element_node
      * @param String $element_name
      * @param String $element_title
@@ -263,31 +263,31 @@ class XmlFormParser
     protected function create_radio_element($element_node, $element_name, $element_title)
     {
         $element_options = $this->parse_element_options($element_node);
-
+        
         $group_elements = array();
-
+        
         foreach ($element_options as $option_value => $option_name)
         {
             $group_elements[] = $this->form_builder->createElement(
-                self::ELEMENT_TYPE_RADIO,
-                $element_name,
-                null,
-                $option_name,
+                self::ELEMENT_TYPE_RADIO, 
+                $element_name, 
+                null, 
+                $option_name, 
                 $option_value);
         }
-
+        
         $this->create_and_add_element(
-            self::ELEMENT_TYPE_GROUP,
-            $element_name,
-            $element_title,
-            $group_elements,
-            '',
+            self::ELEMENT_TYPE_GROUP, 
+            $element_name, 
+            $element_title, 
+            $group_elements, 
+            '', 
             false);
     }
 
     /**
      * Creates a checkbox element on the form
-     *
+     * 
      * @param \DOMElement $element_node
      * @param string $element_name
      * @param string $element_title
@@ -299,7 +299,7 @@ class XmlFormParser
 
     /**
      * Creates a toggle element on the form
-     *
+     * 
      * @param \DOMElement $element_node
      * @param string $element_name
      * @param string $element_title
@@ -311,7 +311,7 @@ class XmlFormParser
 
     /**
      * Parses the options for a given element node
-     *
+     * 
      * @param \DOMElement $element_node
      *
      * @return String[String] - The options
@@ -323,10 +323,10 @@ class XmlFormParser
         {
             return;
         }
-
+        
         $options_node = $options_node_list->item(0);
         $options_type = $options_node->getAttribute('type');
-
+        
         if ($options_type == 'dynamic')
         {
             $source = $options_node->getAttribute('source');
@@ -335,23 +335,23 @@ class XmlFormParser
         else
         {
             $options = array();
-
+            
             $option_node_list = $this->get_dom_xpath()->query('option', $options_node);
             foreach ($option_node_list as $option_node)
             {
                 $option_name = $option_node->getAttribute('name');
                 $option_value = $option_node->getAttribute('value');
-
+                
                 $options[$option_value] = $this->translate($option_name);
             }
         }
-
+        
         return $options;
     }
 
     /**
      * Parses the validation rules for an element node
-     *
+     * 
      * @param \DOMElement $element_node
      * @param String $element_name
      */
@@ -362,13 +362,13 @@ class XmlFormParser
         {
             $this->create_and_add_validation_rule($element_name, Translation::get('ThisFieldIsRequired'), 'required');
         }
-
+        
         $validation_node_list = $this->get_dom_xpath()->query('validations/validation', $element_node);
         foreach ($validation_node_list as $validation_node)
         {
             $type = $validation_node->getAttribute('rule');
             $message = $validation_node->getAttribute('message');
-
+            
             $this->create_and_add_validation_rule($element_name, $message, $type);
         }
     }
@@ -378,25 +378,25 @@ class XmlFormParser
      * Helper functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Creates an element and adds it to the elements list
-     *
+     * 
      * @param Dynamic Arguments List - Same arguments as in createElement for quickform
      * @return HTML_QuickForm_element
      */
     protected function create_and_add_element()
     {
         $element = call_user_func_array(array($this->form_builder, 'createElement'), func_get_args());
-
+        
         $this->get_xml_form_parser_result()->add_element($element);
-
+        
         return $element;
     }
 
     /**
      * Creates a validation rule with the given parameters and adds it to the result
-     *
+     * 
      * @param String $element - The form element name
      * @param String $message - The message to display
      * @param String $type - The validation rule type
@@ -405,23 +405,23 @@ class XmlFormParser
      * @param boolean $reset - [OPTIONAL] Whether or not to reset the elements on client validation error
      * @param boolean $force - [OPTIONAL] Forces the rule to be applied, even if the element does not exist yet
      */
-    protected function create_and_add_validation_rule($element, $message, $type, $format = null, $validation = 'server',
+    protected function create_and_add_validation_rule($element, $message, $type, $format = null, $validation = 'server', 
         $reset = false, $force = false)
     {
         $validation_rule = new XmlFormParserValidationRule(
-            $element,
-            $message,
-            $type,
-            $format,
-            $validation,
-            $reset,
+            $element, 
+            $message, 
+            $type, 
+            $format, 
+            $validation, 
+            $reset, 
             $force);
         $this->get_xml_form_parser_result()->add_validation_rule($validation_rule);
     }
 
     /**
      * Translates a variable with the global context variable
-     *
+     * 
      * @param String $translation_variable
      * @param String[] $parameters
      *
@@ -435,7 +435,7 @@ class XmlFormParser
 
     /**
      * Returns a new result object
-     *
+     * 
      * @return XmlFormParserResult
      */
     protected function create_new_xml_form_parser_result()
@@ -448,10 +448,10 @@ class XmlFormParser
      * Getters and setters *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the xml_form_parser_result object
-     *
+     * 
      * @return XmlFormParserResult
      */
     public function get_xml_form_parser_result()
@@ -465,7 +465,7 @@ class XmlFormParser
 
     /**
      * Sets the xml_form_parser_result object
-     *
+     * 
      * @param XmlFormParserResult $xml_form_parser_result
      */
     public function set_xml_form_parser_result(XmlFormParserResult $xml_form_parser_result)
@@ -475,7 +475,7 @@ class XmlFormParser
 
     /**
      * Returns the form_builder object
-     *
+     * 
      * @return FormValidator
      */
     public function get_form_builder()
@@ -485,7 +485,7 @@ class XmlFormParser
 
     /**
      * Sets the form_builder object
-     *
+     * 
      * @param FormValidator $form_builder
      */
     public function set_form_builder(FormValidator $form_builder)
@@ -495,7 +495,7 @@ class XmlFormParser
 
     /**
      * Returns the dom_xpath object
-     *
+     * 
      * @return \DOM_XPath
      */
     public function get_dom_xpath()
@@ -505,7 +505,7 @@ class XmlFormParser
 
     /**
      * Sets the dom_xpath object
-     *
+     * 
      * @param \DOM_XPath $dom_xpath
      */
     public function set_dom_xpath($dom_xpath)
@@ -515,7 +515,7 @@ class XmlFormParser
 
     /**
      * Returns the connector_class object
-     *
+     * 
      * @return Object
      */
     public function get_connector_class()
@@ -525,7 +525,7 @@ class XmlFormParser
 
     /**
      * Sets the connector_class object
-     *
+     * 
      * @param Object $connector_class
      */
     public function set_connector_class($connector_class)
@@ -535,7 +535,7 @@ class XmlFormParser
 
     /**
      * Returns the context
-     *
+     * 
      * @return String
      */
     public function get_context()
@@ -545,7 +545,7 @@ class XmlFormParser
 
     /**
      * Sets the context
-     *
+     * 
      * @param Strings $context
      */
     public function set_context($context)
@@ -555,7 +555,7 @@ class XmlFormParser
 
     /**
      * Returns the prefix
-     *
+     * 
      * @return String
      */
     public function get_prefix()
@@ -565,7 +565,7 @@ class XmlFormParser
 
     /**
      * Sets the prefix
-     *
+     * 
      * @param Strings $prefix
      */
     public function set_prefix($prefix)

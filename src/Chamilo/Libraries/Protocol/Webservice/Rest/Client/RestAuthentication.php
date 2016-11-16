@@ -19,8 +19,8 @@ abstract class RestAuthentication
     {
         $mode = $client->get_mode();
         $rest_authentication_class = __NAMESPACE__ . '\Authentication\\' .
-             (string) StringUtilities :: getInstance()->createString($mode)->upperCamelize() . '\\' .
-             (string) StringUtilities :: getInstance()->createString($type)->upperCamelize();
+             (string) StringUtilities::getInstance()->createString($mode)->upperCamelize() . '\\' .
+             (string) StringUtilities::getInstance()->createString($type)->upperCamelize();
         return new $rest_authentication_class($client);
     }
 

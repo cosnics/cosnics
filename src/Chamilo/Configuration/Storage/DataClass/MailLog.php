@@ -22,7 +22,7 @@ class MailLog extends DataClass
      */
     public function get_sender()
     {
-        return $this->get_default_property(self :: PROPERTY_SENDER);
+        return $this->get_default_property(self::PROPERTY_SENDER);
     }
 
     /**
@@ -31,7 +31,7 @@ class MailLog extends DataClass
      */
     public function set_sender($sender)
     {
-        $this->set_default_property(self :: PROPERTY_SENDER, $sender);
+        $this->set_default_property(self::PROPERTY_SENDER, $sender);
     }
 
     /**
@@ -40,7 +40,7 @@ class MailLog extends DataClass
      */
     public function get_recipient()
     {
-        return $this->get_default_property(self :: PROPERTY_RECIPIENT);
+        return $this->get_default_property(self::PROPERTY_RECIPIENT);
     }
 
     /**
@@ -49,7 +49,7 @@ class MailLog extends DataClass
      */
     public function set_recipient($recipient)
     {
-        $this->set_default_property(self :: PROPERTY_RECIPIENT, $recipient);
+        $this->set_default_property(self::PROPERTY_RECIPIENT, $recipient);
     }
 
     /**
@@ -58,7 +58,7 @@ class MailLog extends DataClass
      */
     public function get_date()
     {
-        return $this->get_default_property(self :: PROPERTY_DATE);
+        return $this->get_default_property(self::PROPERTY_DATE);
     }
 
     /**
@@ -67,7 +67,7 @@ class MailLog extends DataClass
      */
     public function set_date($date)
     {
-        $this->set_default_property(self :: PROPERTY_DATE, $date);
+        $this->set_default_property(self::PROPERTY_DATE, $date);
     }
 
     /**
@@ -76,7 +76,7 @@ class MailLog extends DataClass
      */
     public function get_subject()
     {
-        return $this->get_default_property(self :: PROPERTY_SUBJECT);
+        return $this->get_default_property(self::PROPERTY_SUBJECT);
     }
 
     /**
@@ -85,7 +85,7 @@ class MailLog extends DataClass
      */
     public function set_subject($subject)
     {
-        $this->set_default_property(self :: PROPERTY_SUBJECT, $subject);
+        $this->set_default_property(self::PROPERTY_SUBJECT, $subject);
     }
 
     /**
@@ -94,7 +94,7 @@ class MailLog extends DataClass
      */
     public function get_state()
     {
-        return $this->get_default_property(self :: PROPERTY_STATE);
+        return $this->get_default_property(self::PROPERTY_STATE);
     }
 
     /**
@@ -103,7 +103,7 @@ class MailLog extends DataClass
      */
     public function set_state($state)
     {
-        $this->set_default_property(self :: PROPERTY_STATE, $state);
+        $this->set_default_property(self::PROPERTY_STATE, $state);
     }
 
     /**
@@ -112,7 +112,7 @@ class MailLog extends DataClass
      */
     public function get_message()
     {
-        return $this->get_default_property(self :: PROPERTY_MESSAGE);
+        return $this->get_default_property(self::PROPERTY_MESSAGE);
     }
 
     /**
@@ -121,7 +121,7 @@ class MailLog extends DataClass
      */
     public function set_message($message)
     {
-        $this->set_default_property(self :: PROPERTY_MESSAGE, $message);
+        $this->set_default_property(self::PROPERTY_MESSAGE, $message);
     }
 
     /**
@@ -130,7 +130,7 @@ class MailLog extends DataClass
      */
     public function get_host()
     {
-        return $this->get_default_property(self :: PROPERTY_HOST);
+        return $this->get_default_property(self::PROPERTY_HOST);
     }
 
     /**
@@ -139,20 +139,20 @@ class MailLog extends DataClass
      */
     public function set_host($host)
     {
-        $this->set_default_property(self :: PROPERTY_HOST, $host);
+        $this->set_default_property(self::PROPERTY_HOST, $host);
     }
 
     public static function get_default_property_names($extended_property_names = array())
     {
-        return parent :: get_default_property_names(
+        return parent::get_default_property_names(
             array(
-                self :: PROPERTY_SENDER,
-                self :: PROPERTY_RECIPIENT,
-                self :: PROPERTY_DATE,
-                self :: PROPERTY_SUBJECT,
-                self :: PROPERTY_STATE,
-                self :: PROPERTY_MESSAGE,
-                self :: PROPERTY_HOST));
+                self::PROPERTY_SENDER, 
+                self::PROPERTY_RECIPIENT, 
+                self::PROPERTY_DATE, 
+                self::PROPERTY_SUBJECT, 
+                self::PROPERTY_STATE, 
+                self::PROPERTY_MESSAGE, 
+                self::PROPERTY_HOST));
     }
 
     /**
@@ -161,6 +161,6 @@ class MailLog extends DataClass
      */
     public function get_data_manager()
     {
-        return DataManager :: getInstance();
+        return DataManager::getInstance();
     }
 }

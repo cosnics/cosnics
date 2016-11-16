@@ -53,7 +53,7 @@ class FileConfigurationLocator
     public function isAvailable()
     {
         $file = $this->getFilePathName();
-
+        
         if (is_file($file) && is_readable($file))
         {
             return true;

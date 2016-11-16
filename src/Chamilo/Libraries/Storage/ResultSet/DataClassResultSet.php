@@ -17,27 +17,27 @@ class DataClassResultSet extends ArrayResultSet
 
     /**
      * The DataClass class name
-     *
+     * 
      * @var string
      */
     private $class_name;
 
     /**
      * Constructor
-     *
+     * 
      * @param string $class_name
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function __construct($class_name, $objects)
     {
         parent::__construct($objects);
-
+        
         $this->class_name = $class_name;
     }
 
     /**
      * Get the DataClass class name
-     *
+     * 
      * @return string
      */
     public function get_class_name()
@@ -49,10 +49,10 @@ class DataClassResultSet extends ArrayResultSet
     {
         $compositeDataClassName = CompositeDataClass::class_name();
         $className = $this->get_class_name();
-
+        
         $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
         $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
-
+        
         if ($isCompositeDataClass && $isExtensionClass)
         {
             return $className::parent_class_name();
@@ -65,7 +65,7 @@ class DataClassResultSet extends ArrayResultSet
 
     /**
      * Convert the record to a DataClass object
-     *
+     * 
      * @param string $class_name
      * @param string[] $record
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass

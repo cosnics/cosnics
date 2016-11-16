@@ -3,10 +3,10 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 
 require_once __DIR__ . '/../../Architecture/Bootstrap.php';
-\Chamilo\Libraries\Architecture\Bootstrap :: getInstance()->setup();
+\Chamilo\Libraries\Architecture\Bootstrap::getInstance()->setup();
 
-$packages = \Chamilo\Configuration\Storage\DataManager :: retrieves(
-    \Chamilo\Configuration\Storage\DataClass\Registration :: class_name(),
+$packages = \Chamilo\Configuration\Storage\DataManager::retrieves(
+    \Chamilo\Configuration\Storage\DataClass\Registration::class_name(), 
     new DataClassRetrievesParameters())->as_array();
 
 // July 1, 2013 00:00:00
@@ -22,37 +22,37 @@ $changed_tables = array();
 foreach ($packages as $package)
 {
     $context = $package->get_context();
-    $folder = \Chamilo\Libraries\File\Path :: getInstance()->namespaceToFullPath($context);
+    $folder = \Chamilo\Libraries\File\Path::getInstance()->namespaceToFullPath($context);
     $package_folder = $folder . 'php' . DIRECTORY_SEPARATOR . 'package' . DIRECTORY_SEPARATOR;
-
+    
     $package_info_path = $package_folder . 'package.info';
-
+    
     $command = $base_command . $package_info_path;
     exec('cd ' . $folder . ' && ' . $command, $result);
-
+    
     $date = (int) array_shift(explode(' ', array_pop($result)));
-
+    
     if ($date > $unix_timestamp)
     {
         $new_packages[] = $package->get_context();
     }
-
+    
     $xml_folder = $package_folder . 'install' . DIRECTORY_SEPARATOR;
-
-    foreach (Filesystem :: get_directory_content($xml_folder, Filesystem :: LIST_FILES) as $file_path)
+    
+    foreach (Filesystem::get_directory_content($xml_folder, Filesystem::LIST_FILES) as $file_path)
     {
         $path_parts = pathinfo($file_path);
-
+        
         if ($path_parts['extension'] == 'xml')
         {
             $command = $base_command . $file_path;
             exec('cd ' . $folder . ' && ' . $command, $result);
-
+            
             $dates = explode(' ', array_pop($result));
-
+            
             $first_date = (int) array_shift($dates);
             $last_date = (int) array_pop($dates);
-
+            
             if ($first_date > $unix_timestamp)
             {
                 $new_tables[$package->get_context()][] = $path_parts['basename'];

@@ -38,7 +38,7 @@ class InequalityConditionTranslator extends ConditionTranslator
             default :
                 die('Unknown operator for inequality condition');
         }
-
+        
         return ConditionVariableTranslator::render($this->get_condition()->get_name()) . ' ' . $operator . ' ' . ConditionVariableTranslator::render(
             $this->get_condition()->get_value());
     }

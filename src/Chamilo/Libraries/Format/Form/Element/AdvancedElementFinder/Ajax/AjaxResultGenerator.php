@@ -8,7 +8,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * Helper class to build an ajax result for an advanced element finder ajax feed
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class AjaxResultGenerator
@@ -36,7 +36,7 @@ class AjaxResultGenerator
 
     /**
      * AdvancedElementFinderAjaxResultGenerator constructor.
-     *
+     * 
      * @param AjaxResultDataProviderInterface $ajaxResultDataProvider
      * @param string $searchQuery
      * @param int $offset
@@ -52,14 +52,14 @@ class AjaxResultGenerator
     public function generateAjaxResult()
     {
         $result = new JsonAjaxResult();
-
+        
         $elements = new AdvancedElementFinderElements();
         $this->ajaxResultDataProvider->generateElements($elements);
         $elements = $elements->as_array();
-
+        
         $result->set_property(self::PROPERTY_ELEMENTS, $elements);
         $result->set_property(self::PROPERTY_TOTAL_ELEMENTS, $this->ajaxResultDataProvider->getTotalNumberOfElements());
-
+        
         return $result;
     }
 
@@ -72,12 +72,12 @@ class AjaxResultGenerator
     public function getSearchCondition($searchProperties = array())
     {
         $condition = null;
-
+        
         if (! empty($this->searchQuery))
         {
             $condition = Utilities::query_to_condition($this->searchQuery, $searchProperties);
         }
-
+        
         return $condition;
     }
 
@@ -93,9 +93,9 @@ class AjaxResultGenerator
         {
             $offset = 0;
         }
-
+        
         $this->offset = $offset;
-
+        
         return $this;
     }
 
@@ -117,7 +117,7 @@ class AjaxResultGenerator
     public function setSearchQuery($searchQuery)
     {
         $this->searchQuery = $searchQuery;
-
+        
         return $this;
     }
 

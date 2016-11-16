@@ -15,8 +15,8 @@ class CodeUtilities
 
     public static function remove_comments($content)
     {
-        $content = preg_replace(self :: INLINE_COMMENT_PATTERN, '', $content);
-        $content = preg_replace(self :: MULTILINE_COMMENT_PATTERN, '', $content);
+        $content = preg_replace(self::INLINE_COMMENT_PATTERN, '', $content);
+        $content = preg_replace(self::MULTILINE_COMMENT_PATTERN, '', $content);
         return $content;
     }
 
@@ -29,7 +29,7 @@ class CodeUtilities
     public static function get_classes($content)
     {
         $result = array();
-        $class_pattern = self :: CLASS_PATTERN;
+        $class_pattern = self::CLASS_PATTERN;
         $matches = array();
         if (preg_match_all($class_pattern, $content, $matches))
         {
@@ -59,7 +59,7 @@ class CodeUtilities
 
     public static function get_namespace($content)
     {
-        $namespace_pattern = self :: NAMESPACE_PATTERN;
+        $namespace_pattern = self::NAMESPACE_PATTERN;
         if (preg_match($namespace_pattern, $content, $matches))
         {
             return end($matches);

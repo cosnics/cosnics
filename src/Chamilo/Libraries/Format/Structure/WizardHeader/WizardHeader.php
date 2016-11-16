@@ -1,24 +1,24 @@
 <?php
-
 namespace Chamilo\Libraries\Format\Structure\WizardHeader;
 
 /**
  * Describes a header for a wizard
- *
+ * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class WizardHeader
 {
+
     /**
      * The titles of steps in the wizard
-     *
+     * 
      * @var string[]
      */
     private $stepTitles;
 
     /**
      * The index of the selected step
-     *
+     * 
      * @var int
      */
     private $selectedStepIndex;
@@ -30,6 +30,7 @@ class WizardHeader
     }
 
     /**
+     *
      * @return \string[]
      */
     public function getStepTitles()
@@ -38,6 +39,7 @@ class WizardHeader
     }
 
     /**
+     *
      * @param \string[] $stepTitles
      */
     public function setStepTitles($stepTitles)
@@ -46,6 +48,7 @@ class WizardHeader
     }
 
     /**
+     *
      * @return int
      */
     public function getSelectedStepIndex()
@@ -54,6 +57,7 @@ class WizardHeader
     }
 
     /**
+     *
      * @param int $selectedStepIndex
      */
     public function setSelectedStepIndex($selectedStepIndex)
@@ -63,7 +67,7 @@ class WizardHeader
 
     /**
      * Checks whether or not the given step index is currently selected
-     *
+     * 
      * @param int $stepIndex
      *
      * @return bool
@@ -75,7 +79,7 @@ class WizardHeader
 
     /**
      * Adds a step title
-     *
+     * 
      * @param string $stepTitle
      */
     public function addStepTitle($stepTitle)

@@ -16,10 +16,10 @@ class StaticTableColumn extends TableColumn
      * Constructor *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Constructor
-     *
+     * 
      * @param string $name
      * @param string $title - [OPTIONAL] default null - translation of the column name
      * @param string $headerCssClasses
@@ -27,6 +27,6 @@ class StaticTableColumn extends TableColumn
      */
     public function __construct($name, $title = null, $headerCssClasses = null, $contentCssClasses = null)
     {
-        parent :: __construct($name, $title, false, $headerCssClasses, $contentCssClasses);
+        parent::__construct($name, $title, false, $headerCssClasses, $contentCssClasses);
     }
 }

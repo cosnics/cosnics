@@ -9,7 +9,7 @@
  * http://www.php.net/license/3_01.txt If you did not receive a copy of
  * the PHP License and are unable to obtain it through the web, please
  * send a note to license@php.net so we can mail you a copy immediately.
- *
+ * 
  * @category HTML
  * @package HTML_QuickForm
  * @author Adam Daniel <adaniel1@eesus.jnj.com>
@@ -25,7 +25,7 @@
  */
 /**
  * HTML class for a radio type element
- *
+ * 
  * @category HTML
  * @package HTML_QuickForm
  * @author Adam Daniel <adaniel1@eesus.jnj.com>
@@ -38,7 +38,7 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
 
     /**
      * Class constructor
-     *
+     * 
      * @param string Input field name attribute
      * @param mixed Label(s) for a field
      * @param string Text to display near the radio
@@ -50,12 +50,12 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
      */
     function __construct($elementName = null, $elementLabel = null, $text = null, $value = null, $attributes = null)
     {
-        parent :: __construct($elementName, $elementLabel, $text, $value, $attributes);
+        parent::__construct($elementName, $elementLabel, $text, $value, $attributes);
     }
 
     /**
      * Returns the radio element in HTML
-     *
+     * 
      * @since 1.0
      * @access public
      * @return string
@@ -63,14 +63,14 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
     function toHtml()
     {
         $html = array();
-
+        
         $html[] = '<div class="radio">';
-        $html[] = HTML_QuickForm_input :: toHtml();
+        $html[] = HTML_QuickForm_input::toHtml();
         $html[] = '<label>';
         $html[] = $this->_text;
         $html[] = '</label>';
         $html[] = '</div>';
-
+        
         return implode(PHP_EOL, $html);
     }
 }
