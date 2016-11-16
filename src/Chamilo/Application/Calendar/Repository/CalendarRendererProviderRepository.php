@@ -28,13 +28,13 @@ class CalendarRendererProviderRepository
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Visibility :: class_name(), Visibility :: PROPERTY_USER_ID),
+            new PropertyConditionVariable(Visibility::class_name(), Visibility::PROPERTY_USER_ID), 
             new StaticConditionVariable($userIdentifier));
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(Visibility :: class_name(), Visibility :: PROPERTY_SOURCE),
+            new PropertyConditionVariable(Visibility::class_name(), Visibility::PROPERTY_SOURCE), 
             new StaticConditionVariable($source));
         $condition = new AndCondition($conditions);
-
-        return DataManager :: retrieve(Visibility :: class_name(), new DataClassRetrieveParameters($condition));
+        
+        return DataManager::retrieve(Visibility::class_name(), new DataClassRetrieveParameters($condition));
     }
 }

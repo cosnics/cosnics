@@ -17,15 +17,15 @@ abstract class Manager extends Application
     const PARAM_TIME = 'time';
     const PARAM_VIEW = 'view';
     const PARAM_DOWNLOAD = 'download';
-
+    
     // Actions
     const ACTION_BROWSE = 'Browser';
     const ACTION_AVAILABILITY = 'Availability';
     const ACTION_ICAL = 'ICal';
     const ACTION_PRINT = 'Printer';
-
+    
     // Default action
-    const DEFAULT_ACTION = self :: ACTION_BROWSE;
+    const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
      *
@@ -46,7 +46,7 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-
+        
         $this->checkAuthorization(Manager::context());
     }
 
@@ -56,22 +56,22 @@ abstract class Manager extends Application
      */
     public function getCurrentRendererType()
     {
-        $rendererType = $this->getRequest()->query->get(ViewRenderer :: PARAM_TYPE);
-
+        $rendererType = $this->getRequest()->query->get(ViewRenderer::PARAM_TYPE);
+        
         if (! $rendererType)
         {
-            $rendererType = LocalSetting :: getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
-
-            if($rendererType == ViewRenderer::TYPE_MONTH)
+            $rendererType = LocalSetting::getInstance()->get('default_view', 'Chamilo\Libraries\Calendar');
+            
+            if ($rendererType == ViewRenderer::TYPE_MONTH)
             {
                 $detect = new \Mobile_Detect();
-                if($detect->isMobile() && !$detect->isTablet() )
+                if ($detect->isMobile() && ! $detect->isTablet())
                 {
                     $rendererType = ViewRenderer::TYPE_LIST;
                 }
             }
         }
-
+        
         return $rendererType;
     }
 
@@ -83,9 +83,9 @@ abstract class Manager extends Application
     {
         if (! isset($this->currentTime))
         {
-            $this->currentTime = $this->getRequest()->query->get(ViewRenderer :: PARAM_TIME, time());
+            $this->currentTime = $this->getRequest()->query->get(ViewRenderer::PARAM_TIME, time());
         }
-
+        
         return $this->currentTime;
     }
 
