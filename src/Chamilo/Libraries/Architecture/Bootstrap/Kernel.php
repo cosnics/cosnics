@@ -16,7 +16,6 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\Response;
-use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  *
@@ -68,12 +67,6 @@ class Kernel
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    private $sessionUtilities;
-
-    /**
-     *
      * @var string
      */
     private $context;
@@ -90,13 +83,11 @@ class Kernel
      */
     private $user;
 
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, SessionUtilities $sessionUtilities,
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request,
         FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter,
         ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, User $user = null)
     {
         $this->request = $request;
-
-        $this->sessionUtilities = $sessionUtilities;
 
         $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->configurationConsulter = $configurationConsulter;
@@ -196,24 +187,6 @@ class Kernel
     public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
     {
         $this->exceptionLogger = $exceptionLogger;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Platform\Session\SessionUtilities
-     */
-    public function getSessionUtilities()
-    {
-        return $this->sessionUtilities;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
-     */
-    public function setSessionUtilities(SessionUtilities $sessionUtilities)
-    {
-        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
