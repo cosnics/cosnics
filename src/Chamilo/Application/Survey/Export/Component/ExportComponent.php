@@ -5,11 +5,11 @@ use Chamilo\Application\Survey\Cron\Storage\DataClass\ExportJob;
 use Chamilo\Application\Survey\Export\Manager;
 use Chamilo\Application\Survey\Export\Storage\DataClass\Export;
 use Chamilo\Application\Survey\Export\Storage\DataManager;
+use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
-use Chamilo\Libraries\Platform\Configuration\PlatformSetting;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -23,8 +23,8 @@ class ExportComponent extends Manager
      */
     function run()
     {
-        $publication_id = Request :: get(Manager :: PARAM_PUBLICATION_ID);
-        $ids = Request :: get(self :: PARAM_EXPORT_TEMPLATE_ID);
+        $publication_id = Request::get(Manager::PARAM_PUBLICATION_ID);
+        $ids = Request::get(self::PARAM_EXPORT_TEMPLATE_ID);
         $error = false;
 
         if (! empty($ids))
@@ -36,42 +36,40 @@ class ExportComponent extends Manager
 
             foreach ($ids as $id)
             {
-                $cron_enabled = PlatformSetting :: get('enable_export_cron_job', 'Chamilo\Application\Survey');
+                $cron_enabled = Configuration::getInstance()->get_setting(
+                    array('Chamilo\Application\Survey', 'enable_export_cron_job'));
 
-                $export_template = DataManager :: retrieve_export_template_by_id($id);
+                $export_template = DataManager::retrieve_export_template_by_id($id);
 
                 $args = array();
-                $args[Export :: PROPERTY_EXPORT_REGISTRATION_ID] = $export_template->get_export_registration_id();
-                $args[Export :: PROPERTY_USER_ID] = $this->get_user_id();
-                $args[Export :: PROPERTY_TEMPLATE_NAME] = $export_template->get_name();
-                $args[Export :: PROPERTY_TEMPLATE_DESCRIPTION] = $export_template->get_description();
-                $args[Export :: PROPERTY_SURVEY_PUBLICATION_ID] = $export_template->get_publication_id();
-                $args[Export :: PROPERTY_STATUS] = Export :: STATUS_EXPORT_NOT_CREATED;
-                $args[Export :: PROPERTY_FINISHED] = 0;
-                $args[Export :: PROPERTY_EXPORT_JOB_ID] = 0;
+                $args[Export::PROPERTY_EXPORT_REGISTRATION_ID] = $export_template->get_export_registration_id();
+                $args[Export::PROPERTY_USER_ID] = $this->get_user_id();
+                $args[Export::PROPERTY_TEMPLATE_NAME] = $export_template->get_name();
+                $args[Export::PROPERTY_TEMPLATE_DESCRIPTION] = $export_template->get_description();
+                $args[Export::PROPERTY_SURVEY_PUBLICATION_ID] = $export_template->get_publication_id();
+                $args[Export::PROPERTY_STATUS] = Export::STATUS_EXPORT_NOT_CREATED;
+                $args[Export::PROPERTY_FINISHED] = 0;
+                $args[Export::PROPERTY_EXPORT_JOB_ID] = 0;
 
-                $export_trackers = Event :: trigger(
-                    Export :: REGISTER_PUBLICATION_EXPORT_EVENT,
-                    Manager :: package(),
-                    $args);
+                $export_trackers = Event::trigger(Export::REGISTER_PUBLICATION_EXPORT_EVENT, Manager::package(), $args);
                 $export_tracker = $export_trackers[0];
 
                 if (! $cron_enabled)
                 {
 
                     $export_type = 'xlsx';
-                    $export = Exporter :: factory($export_template, $publication_id);
+                    $export = Exporter::factory($export_template, $publication_id);
                     $file = $export->save();
 
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        Registration :: PROPERTY_TYPE,
-                        Registration :: TYPE_CONTENT_OBJECT);
-                    $conditions[] = new EqualityCondition(Registration :: PROPERTY_NAME, File :: get_type_name());
-                    $conditions[] = new EqualityCondition(Registration :: PROPERTY_STATUS, true);
+                        Registration::PROPERTY_TYPE,
+                        Registration::TYPE_CONTENT_OBJECT);
+                    $conditions[] = new EqualityCondition(Registration::PROPERTY_NAME, File::get_type_name());
+                    $conditions[] = new EqualityCondition(Registration::PROPERTY_STATUS, true);
                     $condition = new AndCondition($conditions);
 
-                    $registration = \Chamilo\Core\Admin\Storage\DataManager :: count_registrations($condition);
+                    $registration = \Chamilo\Core\Admin\Storage\DataManager::count_registrations($condition);
                     if ($registration > 0)
                     {
                         $html_object = new File();
@@ -85,7 +83,7 @@ class ExportComponent extends Manager
 
                         if (! $html_object->create())
                         {
-                            $export_tracker->set_status(Export :: STATUS_EXPORT_NOT_CREATED);
+                            $export_tracker->set_status(Export::STATUS_EXPORT_NOT_CREATED);
                             $export_tracker->set_finished(time());
                             $export_tracker->update();
                             $message = 'ObjectNotCreated';
@@ -94,7 +92,7 @@ class ExportComponent extends Manager
                         else
                         {
 
-                            $export_tracker->set_status(Export :: STATUS_EXPORT_CREATED);
+                            $export_tracker->set_status(Export::STATUS_EXPORT_CREATED);
                             $export_tracker->set_finished(time());
                             $export_tracker->update();
                             $message = 'SavedToRepository';
@@ -103,14 +101,14 @@ class ExportComponent extends Manager
                     }
                     else
                     {
-                        $export_tracker->set_status(Export :: STATUS_EXPORT_NOT_CREATED);
+                        $export_tracker->set_status(Export::STATUS_EXPORT_NOT_CREATED);
                         $export_tracker->set_finished(time());
                         $export_tracker->update();
                         $message = 'DocumentNotAvailable';
                         $error = true;
                     }
 
-                    $tab = BrowserComponent :: TAB_EXPORT_TEMPLATES;
+                    $tab = BrowserComponent::TAB_EXPORT_TEMPLATES;
                 }
                 else
                 {
@@ -118,13 +116,13 @@ class ExportComponent extends Manager
                     $export_job->set_user_id($this->get_user_id());
                     $export_job->set_publication_id($publication_id);
                     $export_job->set_export_template_id($id);
-                    $export_job->set_status(ExportJob :: STATUS_NEW);
-                    $export_job->set_export_type(ExportJob :: EXPORT_TYPE_TEMPLATE_EXPORT);
+                    $export_job->set_status(ExportJob::STATUS_NEW);
+                    $export_job->set_export_type(ExportJob::EXPORT_TYPE_TEMPLATE_EXPORT);
                     $export_job->set_UUID(0);
 
                     if (! $export_job->create())
                     {
-                        $export_tracker->set_status(Export :: STATUS_EXPORT_NOT_CREATED);
+                        $export_tracker->set_status(Export::STATUS_EXPORT_NOT_CREATED);
 
                         $export_tracker->update();
                         $message = 'ExportJobNotCreated';
@@ -132,7 +130,7 @@ class ExportComponent extends Manager
                     }
                     else
                     {
-                        $export_tracker->set_status(Export :: STATUS_EXPORT_IN_QUEUE);
+                        $export_tracker->set_status(Export::STATUS_EXPORT_IN_QUEUE);
                         $export_tracker->set_export_job_id($export_job->get_id());
                         $export_tracker->update();
                         $message = 'ExportJobCreated';
@@ -140,19 +138,19 @@ class ExportComponent extends Manager
                     }
                 }
 
-                $tab = BrowserComponent :: TAB_EXPORT_TACKERS;
+                $tab = BrowserComponent::TAB_EXPORT_TACKERS;
             }
             $this->redirect(
-                Translation :: get($message),
+                Translation::get($message),
                 $error,
                 array(
-                    self :: PARAM_ACTION => self :: ACTION_BROWSE,
-                    Manager :: PARAM_PUBLICATION_ID => $publication_id,
-                    DynamicTabsRenderer :: PARAM_SELECTED_TAB => $tab));
+                    self::PARAM_ACTION => self::ACTION_BROWSE,
+                    Manager::PARAM_PUBLICATION_ID => $publication_id,
+                    DynamicTabsRenderer::PARAM_SELECTED_TAB => $tab));
         }
         else
         {
-            $this->display_error_page(htmlentities(Translation :: get('NoExportTemplateSelected')));
+            $this->display_error_page(htmlentities(Translation::get('NoExportTemplateSelected')));
         }
     }
 }
