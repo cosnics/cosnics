@@ -28,7 +28,9 @@ class LearningPathAttemptsTemplate extends ReportingTemplate
         $this->publication_id = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION);
         $this->tool = Request :: get(\Chamilo\Application\Weblcms\Manager :: PARAM_TOOL);
         $this->add_reporting_block(new LearningPathAttemptsBlock($this));
-        
+
+        $parent->set_parameter(\Chamilo\Application\Weblcms\Manager :: PARAM_PUBLICATION, $this->publication_id);
+
         $lp = \Chamilo\Application\Weblcms\Storage\DataManager :: retrieve_by_id(
             ContentObjectPublication :: class_name(), 
             $this->publication_id)->get_content_object();

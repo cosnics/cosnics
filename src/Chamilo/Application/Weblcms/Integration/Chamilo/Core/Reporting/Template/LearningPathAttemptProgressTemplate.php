@@ -40,6 +40,8 @@ class LearningPathAttemptProgressTemplate extends ReportingTemplate
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = LearningPathAttemptsTemplate :: class_name();
             $params[\Chamilo\Application\Weblcms\Manager :: PARAM_USERS] = null;
             $params[\Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager :: PARAM_ATTEMPT_ID] = null;
+            $params[\Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID] = null;
+            $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->publication_id;
 
             $custom_breadcrumbs = array();
             $custom_breadcrumbs[] = new Breadcrumb($this->get_url($params), $lp->get_title());

@@ -142,3 +142,6 @@ IpAddress = "IP Adres"
 SubmittedBy = "Ingezonden door"
 SubmissionsOverview = "Overzicht inzendingen"
 AssignmentSubmissionsTemplate = "assignment_submissions"
+
+LearningPathAttemptProgressInformationBlock = "Information over de voortgang binnen het leerpad"
+LearningPathAttemptProgressBlock = "Voortgang voor individuele stappen binnen het leerpad"

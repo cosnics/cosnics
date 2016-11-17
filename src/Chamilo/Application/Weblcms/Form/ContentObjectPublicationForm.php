@@ -226,10 +226,13 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
             if ($this->collaborate_possible && !$force_collaborate)
             {
-                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = LocalSetting:: getInstance()->get(
+                $collaborateDefault = LocalSetting:: getInstance()->get(
                     'collaborate_default',
                     Manager:: package()
                 );
+
+                $defaults[ContentObjectPublication :: PROPERTY_ALLOW_COLLABORATION] = $first_publication->is_identified() ?
+                    $first_publication->get_allow_collaboration() : $collaborateDefault;
             }
             else
             {
