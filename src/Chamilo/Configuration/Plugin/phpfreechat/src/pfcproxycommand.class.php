@@ -21,7 +21,7 @@ require_once dirname(__FILE__) . "/pfccommand.class.php";
 
 /**
  * pfcProxyCommand is an abstract class (interface) which must be inherited by each concrete proxy commands
- * 
+ *
  * @author Stephane Gully <stephane.gully@gmail.com>
  */
 class pfcProxyCommand extends pfcCommand
@@ -45,9 +45,9 @@ class pfcProxyCommand extends pfcCommand
         pfcCommand :: __construct();
     }
 
-    function linkTo(&$cmd)
+    function linkTo($cmd)
     {
-        $this->next = & $cmd;
+        $this->next = $cmd;
     }
 }
 

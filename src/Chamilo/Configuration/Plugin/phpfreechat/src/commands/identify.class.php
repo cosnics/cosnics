@@ -28,7 +28,7 @@ class pfcCommand_identify extends pfcCommand
 
     var $usage = "/identify {password}";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -36,8 +36,8 @@ class pfcCommand_identify extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $password = trim($param);
         $isadmin = false;
@@ -53,7 +53,7 @@ class pfcCommand_identify extends pfcCommand
         if ($isadmin)
         {
             // ok the current user is an admin, just save the isadmin flag in the metadata
-            $ct = & pfcContainer :: Instance();
+            $ct = pfcContainer :: Instance();
             $ct->setUserMeta($u->nickid, 'isadmin', $isadmin);
             $this->forceWhoisReload($u->nickid);
             

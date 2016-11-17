@@ -29,7 +29,7 @@ require_once dirname(__FILE__) . "/../pfcproxycommand.class.php";
 class pfcProxyCommand_checktimeout extends pfcProxyCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -39,9 +39,9 @@ class pfcProxyCommand_checktimeout extends pfcProxyCommand
         
         if ($this->name == 'update' || $this->name == 'connect')
         {
-            $c = & pfcGlobalConfig :: Instance();
-            $u = & pfcUserConfig :: Instance();
-            $ct = & pfcContainer :: Instance();
+            $c = pfcGlobalConfig :: Instance();
+            $u = pfcUserConfig :: Instance();
+            $ct = pfcContainer :: Instance();
             
             // disconnect users from channels when they timeout
             $disconnected_users = $ct->removeObsoleteNick($c->timeout);
@@ -61,7 +61,7 @@ class pfcProxyCommand_checktimeout extends pfcProxyCommand
                             $cmdp["flag"] = 2;
                             $cmdp["recipient"] = $chan;
                             $cmdp["recipientid"] = md5($chan); // @todo: clean the recipient/recipientid notion
-                            $cmd = & pfcCommand :: Factory("notice");
+                            $cmd = pfcCommand :: Factory("notice");
                             $cmd->run($xml_reponse, $cmdp);
                         }
                     }

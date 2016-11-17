@@ -101,7 +101,7 @@ class pfcContainer_File extends pfcContainerInterface
 
     function setMeta($group, $subgroup, $leaf, $leafvalue = NULL)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         // create directories
         $dir_base = $c->container_cfg_server_dir;
@@ -134,7 +134,7 @@ class pfcContainer_File extends pfcContainerInterface
 
     function getMeta($group, $subgroup = null, $leaf = null, $withleafvalue = false)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         // read data from metadata file
         $ret = array();
@@ -195,7 +195,7 @@ class pfcContainer_File extends pfcContainerInterface
 
     function incMeta($group, $subgroup, $leaf)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         // create directories
         $dir_base = $c->container_cfg_server_dir;
@@ -250,7 +250,7 @@ class pfcContainer_File extends pfcContainerInterface
 
     function rmMeta($group, $subgroup = null, $leaf = null)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         $dir = $c->container_cfg_server_dir;
         

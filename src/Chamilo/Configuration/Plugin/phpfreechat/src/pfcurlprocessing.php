@@ -15,7 +15,7 @@ require_once dirname(__FILE__) . '/pfcglobalconfig.class.php';
  */
 function pfc_make_hyperlink($text)
 {
-    $c = & pfcGlobalConfig :: Instance();
+    $c = pfcGlobalConfig :: Instance();
     $openlinknewwindow = $c->openlinknewwindow;
     
     if ($openlinknewwindow)
@@ -85,7 +85,7 @@ function pfc_undo_make_hyperlink($text)
 
 function pfc_shorten_url($url)
 {
-    $c = & pfcGlobalConfig :: Instance();
+    $c = pfcGlobalConfig :: Instance();
     
     if (! $c->short_url)
         return $url;

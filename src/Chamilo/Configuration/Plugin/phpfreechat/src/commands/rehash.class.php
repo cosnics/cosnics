@@ -12,7 +12,7 @@ class pfcCommand_rehash extends pfcCommand
 
     var $desc = "This command deletes the cached configuration. Uses it to take into account new parameters.";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -20,7 +20,7 @@ class pfcCommand_rehash extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         // just destroy the cache
         // do not synchronizeWithCache() because it will reload the same parameters as the current one
         // the right way is to wait for the next page reload and the new parameters will be taken into account

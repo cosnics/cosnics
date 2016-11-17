@@ -29,7 +29,7 @@ require_once dirname(__FILE__) . "/../../lib/utf8/utf8_strlen.php";
 class pfcProxyCommand_noflood extends pfcProxyCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -37,13 +37,13 @@ class pfcProxyCommand_noflood extends pfcProxyCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $cmdtocheck = array("send", "nick", "me");
         if (in_array($this->name, $cmdtocheck))
         {
-            $container = & pfcContainer :: Instance();
+            $container = pfcContainer :: Instance();
             $nickid = $u->nickid;
             $isadmin = $container->getUserMeta($nickid, 'isadmin');
             $lastfloodtime = $container->getUserMeta($nickid, 'floodtime');
@@ -78,7 +78,7 @@ class pfcProxyCommand_noflood extends pfcProxyCommand
                 $cmdp["params"][0] = "ch";
                 $cmdp["params"][1] = $u->channels[$recipientid]["name"];
                 $cmdp["params"][2] .= _pfc("kicked from %s by %s", $u->channels[$recipientid]["name"], "noflood");
-                $cmd = & pfcCommand :: Factory("leave");
+                $cmd = pfcCommand :: Factory("leave");
                 $cmd->run($xml_reponse, $cmdp);
                 return false;
             }

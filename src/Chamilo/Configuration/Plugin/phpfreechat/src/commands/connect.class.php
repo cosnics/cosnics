@@ -3,7 +3,7 @@ require_once dirname(__FILE__) . '/../pfccommand.class.php';
 class pfcCommand_connect extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -13,19 +13,19 @@ class pfcCommand_connect extends pfcCommand
         $recipientid = $p["recipientid"];
         $getoldmsg = isset($p["getoldmsg"]) ? $p["getoldmsg"] : true;
         $joinoldchan = isset($p["joinoldchan"]) ? $p["joinoldchan"] : true;
-        
+
         // nickname must be given to be able to connect to the chat
         $nick = $params[0];
-        
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
-        
+
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
+
         // reset the message id indicator (see getnewmsg.class.php)
         // i.e. be ready to re-get all last posted messages
         if ($getoldmsg)
             $this->_resetChannelIdentifier($clientid);
-            
+
             // check if the user is alone on the server, and give it the admin status if yes
         $isadmin = $ct->getUserMeta($u->nickid, 'isadmin');
         if ($isadmin == NULL)
@@ -37,7 +37,7 @@ class pfcCommand_connect extends pfcCommand
                  (count($users["nickid"]) == 0 || (count($users["nickid"]) == 1 && $users["nickid"][0] == $u->nickid)))
                 $isadmin = true;
         }
-        
+
         // create the nickid and setup some user meta
         $nickid = $u->nickid;
         $ct->joinChan($nickid, NULL); // join the server
@@ -51,11 +51,11 @@ class pfcCommand_connect extends pfcCommand
         // store the customized nick metadata
         foreach ($c->nickmeta as $k => $v)
             $ct->setUserMeta($nickid, $k, $v);
-            
+
             // run the /nick command to assign the user nick
         $cmdp = array();
         $cmdp["param"] = $nick;
-        $cmd = & pfcCommand :: Factory('nick');
+        $cmd = pfcCommand :: Factory('nick');
         $ret = $cmd->run($xml_reponse, $cmdp);
         if ($ret)
         {
@@ -64,19 +64,19 @@ class pfcCommand_connect extends pfcCommand
             {
                 $cmdp = array();
                 $cmdp["param"] = $chanlist[$i];
-                $cmd = & pfcCommand :: Factory($i < count($chanlist) - 1 || ! $joinoldchan ? 'join2' : 'join');
+                $cmd = pfcCommand :: Factory($i < count($chanlist) - 1 || ! $joinoldchan ? 'join2' : 'join');
                 $cmd->run($xml_reponse, $cmdp);
             }
-            
+
             $pvlist = (count($u->privmsg) == 0) ? $c->privmsg : $u->getPrivMsgNames();
             for ($i = 0; $i < count($pvlist); $i ++)
             {
                 $cmdp = array();
                 $cmdp["param"] = $pvlist[$i];
-                $cmd = & pfcCommand :: Factory($i < count($pvlist) - 1 || ! $joinoldchan ? 'privmsg2' : 'privmsg');
+                $cmd = pfcCommand :: Factory($i < count($pvlist) - 1 || ! $joinoldchan ? 'privmsg2' : 'privmsg');
                 $cmd->run($xml_reponse, $cmdp);
             }
-            
+
             $xml_reponse->script("pfc.handleResponse('" . $this->name . "', 'ok', Array('" . addslashes($nick) . "'));");
         }
         else
@@ -90,10 +90,10 @@ class pfcCommand_connect extends pfcCommand
      */
     function _resetChannelIdentifier($clientid)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
-        
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
+
         // reset the channel identifiers
         require_once (dirname(__FILE__) . "/join.class.php");
         $channels = array();

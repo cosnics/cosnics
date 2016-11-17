@@ -21,7 +21,7 @@ require_once dirname(__FILE__) . '/pfccontainer.class.php';
 
 /**
  * pfcGlobalConfig stock configuration data into sessions and initialize some stuff
- * 
+ *
  * @author Stephane Gully <stephane.gully@gmail.com>
  */
 class pfcGlobalConfig
@@ -29,7 +29,7 @@ class pfcGlobalConfig
     // ------------------
     // public parameters
     // ------------------
-    
+
     /**
      * <p>This is the only mandatory parameter used to identify the chat server.
      * You can compare it to the server ip/host like on an IRC server.
@@ -228,9 +228,9 @@ class pfcGlobalConfig
      * TODO: explain the possible values for each proxies.</p>
      */
     var $proxies_cfg = array(
-        "auth" => array(), 
-        "noflood" => array("charlimit" => 450, "msglimit" => 10, "delay" => 5), 
-        "censor" => array("words" => array("fuck", "sex", "bitch"), "replaceby" => "*", "regex" => false), 
+        "auth" => array(),
+        "noflood" => array("charlimit" => 450, "msglimit" => 10, "delay" => 5),
+        "censor" => array("words" => array("fuck", "sex", "bitch"), "replaceby" => "*", "regex" => false),
         "log" => array("path" => ""));
 
     /**
@@ -435,21 +435,21 @@ class pfcGlobalConfig
      * (Default value: contains an array of basic colors: '#FFFFFF', '#000000', ...)</p>
      */
     var $bbcode_colorlist = array(
-        '#FFFFFF', 
-        '#000000', 
-        '#000055', 
-        '#008000', 
-        '#FF0000', 
-        '#800000', 
-        '#800080', 
-        '#FF5500', 
-        '#FFFF00', 
-        '#00FF00', 
-        '#008080', 
-        '#00FFFF', 
-        '#0000FF', 
-        '#FF00FF', 
-        '#7F7F7F', 
+        '#FFFFFF',
+        '#000000',
+        '#000055',
+        '#008000',
+        '#FF0000',
+        '#800000',
+        '#800080',
+        '#FF5500',
+        '#FFFF00',
+        '#00FF00',
+        '#008080',
+        '#00FFFF',
+        '#0000FF',
+        '#FF00FF',
+        '#7F7F7F',
         '#D2D2D2');
 
     /**
@@ -457,21 +457,21 @@ class pfcGlobalConfig
      * (Default value: contains an array of basic colors: '#CCCCCC','#000000')</p>
      */
     var $nickname_colorlist = array(
-        '#CCCCCC', 
-        '#000000', 
-        '#3636B2', 
-        '#2A8C2A', 
-        '#C33B3B', 
-        '#C73232', 
-        '#80267F', 
-        '#66361F', 
-        '#D9A641', 
-        '#3DCC3D', 
-        '#1A5555', 
-        '#2F8C74', 
-        '#4545E6', 
-        '#B037B0', 
-        '#4C4C4C', 
+        '#CCCCCC',
+        '#000000',
+        '#3636B2',
+        '#2A8C2A',
+        '#C33B3B',
+        '#C73232',
+        '#80267F',
+        '#66361F',
+        '#D9A641',
+        '#3DCC3D',
+        '#1A5555',
+        '#2F8C74',
+        '#4545E6',
+        '#B037B0',
+        '#4C4C4C',
         '#959595');
 
     /**
@@ -620,7 +620,7 @@ class pfcGlobalConfig
      * (Default value: array())</p>
      */
     var $dyn_params = array();
-    
+
     // ------------------
     // private parameters
     // ------------------
@@ -639,16 +639,16 @@ class pfcGlobalConfig
     var $_sys_proxies = array("lock", "checktimeout", "checknickchange", "auth", "noflood", "censor", "log");
 
     var $_dyn_params = array(
-        "nick", 
-        "isadmin", 
-        "islocked", 
-        "admins", 
-        "frozen_channels", 
-        "channels", 
-        "privmsg", 
-        "nickmeta", 
-        "time_offset", 
-        "date_format", 
+        "nick",
+        "isadmin",
+        "islocked",
+        "admins",
+        "frozen_channels",
+        "channels",
+        "privmsg",
+        "nickmeta",
+        "time_offset",
+        "date_format",
         "time_format");
 
     var $_params_type = array();
@@ -661,18 +661,18 @@ class pfcGlobalConfig
         $GLOBALS['serverid'] = isset($params['serverid']) ? $params['serverid'] : '_serverid_';
         // setup the locales for the translated messages
         pfcI18N :: Init(isset($params['language']) ? $params['language'] : '');
-        
+
         // check the serverid is really defined
         if (! isset($params["serverid"]))
             $this->errors[] = _pfc("'%s' parameter is mandatory by default use '%s' value", "serverid", "md5(__FILE__)");
         $this->serverid = $params["serverid"];
-        
+
         // setup data_private_path because _GetCacheFile needs it
         if (! isset($params["data_private_path"]))
             $this->data_private_path = dirname(__FILE__) . "/../data/private";
         else
             $this->data_private_path = $params["data_private_path"];
-            
+
             // check if a cached configuration already exists
             // don't load parameters if the cache exists
         $cachefile = $this->_GetCacheFile();
@@ -680,24 +680,24 @@ class pfcGlobalConfig
         {
             // first of all, save our current state in order to be able to check for variable types later
             $this->_saveParamsTypes();
-            
+
             if (! isset($params["data_public_path"]))
                 $this->data_public_path = dirname(__FILE__) . "/../data/public";
             else
                 $this->data_public_path = $params["data_public_path"];
-                
+
                 // if the user didn't specify the server_script_url, then remember it and
                 // append QUERY_STRING to it
             if (! isset($params['server_script_url']))
                 $this->_query_string = isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '' ? '?' .
                      $_SERVER['QUERY_STRING'] : '';
-                
+
                 // load users container or keep default one
             if (isset($params["container_type"]))
                 $this->container_type = $params["container_type"];
-                
+
                 // load default container's config
-            $ct = & pfcContainer :: Instance($this->container_type, true);
+            $ct = pfcContainer :: Instance($this->container_type, true);
             $ct_cfg = $ct->getDefaultConfig();
             foreach ($ct_cfg as $k => $v)
             {
@@ -705,17 +705,17 @@ class pfcGlobalConfig
                 if (! isset($this->$attr))
                     $this->$attr = $v;
             }
-            
+
             // load all user's parameters which will override default ones
             foreach ($params as $k => $v)
             {
                 if (! isset($this->$k))
                     $this->errors[] = _pfc(
-                        "Error: undefined or obsolete parameter '%s', please correct or remove this parameter", 
+                        "Error: undefined or obsolete parameter '%s', please correct or remove this parameter",
                         $k);
                 if (preg_match('/^_/', $k))
                     $this->errors[] = _pfc("Error: '%s' is a private parameter, you are not allowed to change it", $k);
-                
+
                 if ($k == "proxies_cfg")
                 {
                     // don't replace all the proxy_cfg parameters, just replace the specified ones
@@ -732,36 +732,36 @@ class pfcGlobalConfig
                     $this->$k = $v;
             }
         }
-        
+
         // load dynamic parameter even if the config exists in the cache
         if (isset($params['dyn_params']) && is_array($params['dyn_params']))
             $this->_dyn_params = array_merge($this->_dyn_params, $params['dyn_params']);
         foreach ($this->_dyn_params as $dp)
             if (isset($params[$dp]))
                 $this->$dp = $params[$dp];
-            
+
             // 'channels' is now a dynamic parameter, just check if I need to initialize it or not
         if (is_array($this->channels) && count($this->channels) == 0 && ! isset($params['channels']))
             $this->channels = array(_pfc("My room"));
-            
+
             // now load or save the configuration in the cache
         $this->synchronizeWithCache();
-        
+
         // to be sure the container instance is initialized
-        $ct = & pfcContainer :: Instance($this->container_type, true);
-        
+        $ct = pfcContainer :: Instance($this->container_type, true);
+
         // This is a dirty workaround which fix a infinite loop when:
         // 'frozen_nick' is true
         // 'nick' length is > 'max_nick_len'
         $this->nick = $this->filterNickname($this->nick);
     }
 
-    function &Instance($params = array(), $destroy_instance = false)
+    function Instance($params = array(), $destroy_instance = false)
     {
         static $i;
         if ($destroy_instance)
             $i = NULL;
-        else 
+        else
             if (! isset($i))
                 $i = new pfcGlobalConfig($params);
         return $i;
@@ -777,13 +777,13 @@ class pfcGlobalConfig
         {
             if (is_string($v))
                 $this->_params_type["string"][] = $k;
-            else 
+            else
                 if (is_bool($v))
                     $this->_params_type["bool"][] = $k;
-                else 
+                else
                     if (is_array($v))
                         $this->_params_type["array"][] = $k;
-                    else 
+                    else
                         if (is_int($v) && $v > 0)
                             $this->_params_type["positivenumeric"][] = $k;
                         else
@@ -798,7 +798,7 @@ class pfcGlobalConfig
     function init()
     {
         $ok = true;
-        
+
         // check the parameters types
         $array_params = $this->_params_type["array"];
         foreach ($array_params as $ap)
@@ -824,10 +824,10 @@ class pfcGlobalConfig
             if (! is_string($this->$sp))
                 $this->errors[] = _pfc("'%s' parameter must be a charatere string", $sp);
         }
-        
+
         if ($this->title == "")
             $this->title = _pfc("My Chat");
-            
+
             // first of all, check the used functions
         $f_list["file_get_contents"] = _pfc("You need %s", "PHP 4 >= 4.3.0 or PHP 5");
         $err_session_x = "You need PHP 4 or PHP 5";
@@ -845,13 +845,13 @@ class pfcGlobalConfig
         $f_list["ob_end_clean"] = $err_ob_x;
         $f_list["get_object_vars"] = _pfc("You need %s", "PHP 4 or PHP 5");
         $this->errors = array_merge($this->errors, check_functions_exist($f_list));
-        
+
         // $this->errors = array_merge($this->errors, @test_writable_dir($this->data_public_path, "data_public_path"));
         $this->errors = array_merge($this->errors, @test_writable_dir($this->data_private_path, "data_private_path"));
         $this->errors = array_merge(
-            $this->errors, 
+            $this->errors,
             @test_writable_dir($this->data_private_path . "/cache", "data_private_path/cache"));
-        
+
         // install the public directory content
         $dir = dirname(__FILE__) . "/../data/public/js";
         $dh = opendir($dir);
@@ -872,13 +872,13 @@ class pfcGlobalConfig
                 $this->errors[] = _pfc("%s doesn't exist, data_public_path cannot be installed", $f_dst);
         }
         closedir($dh);
-        
+
         // ---
         // test client script
         // try to find the path into server configuration
         if ($this->client_script_path == '')
             $this->client_script_path = pfc_GetScriptFilename();
-        
+
         if ($this->server_script_url == '' && $this->server_script_path == '')
         {
             $filetotest = $this->client_script_path;
@@ -889,14 +889,14 @@ class pfcGlobalConfig
                 $this->errors[] = _pfc("%s doesn't exist", $filetotest);
             $this->server_script_url = './' . basename($filetotest) . $this->_query_string;
         }
-        
+
         // calculate datapublic url
 //         if ($this->data_public_url == "")
 //             $this->data_public_url = pfc_RelativePath($this->client_script_path, $this->data_public_path);
-        
+
         if ($this->server_script_path == '')
             $this->server_script_path = $this->client_script_path;
-            
+
             // ---
             // test server script
         if ($this->server_script_url == '')
@@ -910,13 +910,13 @@ class pfcGlobalConfig
             $this->server_script_url = pfc_RelativePath($this->client_script_path, $this->server_script_path) . '/' .
                  basename($filetotest) . $this->_query_string;
         }
-        
+
         // check if the theme_path parameter are correctly setup
         if ($this->theme_default_path == '' || ! is_dir($this->theme_default_path))
             $this->theme_default_path = dirname(__FILE__) . '/../themes';
         if ($this->theme_path == '' || ! is_dir($this->theme_path))
             $this->theme_path = $this->theme_default_path;
-            
+
             // If the user didn't give any theme_default_url value,
             // copy the default theme resources in a public directory
         if ($this->theme_default_url == '')
@@ -929,8 +929,8 @@ class pfcGlobalConfig
                 $ret = copy_r(dirname(__FILE__) . '/../themes/default', $this->data_public_path . '/themes/default');
                 if (! $ret)
                     $this->errors[] = _pfc(
-                        "cannot copy %s in %s", 
-                        dirname(__FILE__) . '/../themes/default', 
+                        "cannot copy %s in %s",
+                        dirname(__FILE__) . '/../themes/default',
                         $this->data_public_path . '/themes/default');
             }
             $this->theme_default_url = $this->data_public_url . '/themes';
@@ -943,35 +943,35 @@ class pfcGlobalConfig
             else
             {
                 $ret = copy_r(
-                    $this->theme_path . '/' . $this->theme, 
+                    $this->theme_path . '/' . $this->theme,
                     $this->data_public_path . '/themes/' . $this->theme);
                 if (! $ret)
                     $this->errors[] = _pfc(
-                        "cannot copy %s in %s", 
-                        $this->theme_path . '/' . $this->theme, 
+                        "cannot copy %s in %s",
+                        $this->theme_path . '/' . $this->theme,
                         $this->data_public_path . '/themes/' . $this->theme);
             }
             $this->theme_url = $this->theme_default_url;
         }
-        
+
         // if the user do not have an existing prototype.js library, we use the embeded one
         if ($this->prototypejs_url == '')
             $this->prototypejs_url = $this->data_public_url . '/js/prototype.js';
-            
+
             // ---
             // run specific container initialisation
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         $ct_errors = $ct->init($this);
         $this->errors = array_merge($this->errors, $ct_errors);
-        
+
         // check the language is known
         $lg_list = pfcI18N :: GetAcceptedLanguage();
         if ($this->language != "" && ! in_array($this->language, $lg_list))
             $this->errors[] = _pfc(
-                "'%s' parameter is not valid. Available values are : '%s'", 
-                "language", 
+                "'%s' parameter is not valid. Available values are : '%s'",
+                "language",
                 implode(", ", $lg_list));
-            
+
             // calculate the proxies chaine
         $this->proxies = array();
         foreach ($this->pre_proxies as $px)
@@ -996,18 +996,18 @@ class pfcGlobalConfig
             $this->errors[] = _pfc("'%s' directory doesn't exist", $this->proxies_path);
         if ($this->proxies_path == '')
             $this->proxies_path = $this->proxies_path_default;
-            
+
             // save the commands path
         $this->cmd_path_default = dirname(__FILE__) . '/commands';
         if ($this->cmd_path == '')
             $this->cmd_path = $this->cmd_path_default;
-            
+
             // load smileys from file
         $this->loadSmileyTheme();
-        
+
         // load version number from file
         $this->version = trim(file_get_contents(dirname(__FILE__) . "/../version.txt"));
-        
+
         $this->is_init = (count($this->errors) == 0);
     }
 
@@ -1016,7 +1016,7 @@ class pfcGlobalConfig
         return $this->is_init;
     }
 
-    function &getErrors()
+    function getErrors()
     {
         return $this->errors;
     }
@@ -1030,7 +1030,7 @@ class pfcGlobalConfig
             $line = trim($line);
             if (preg_match("/^#.*/", $line))
                 continue;
-            else 
+            else
                 if (preg_match("/([a-z_\-0-9\.]+)(.*)$/i", $line, $res))
                 {
                     $smiley_file = 'smileys/' . $res[1];
@@ -1069,7 +1069,7 @@ class pfcGlobalConfig
         $cachefile_lock = $cachefile . "_lock";
         if (file_exists($cachefile_lock))
             @unlink($cachefile_lock);
-            
+
             // destroy the cache file
         return @unlink($cachefile);
     }
@@ -1082,19 +1082,19 @@ class pfcGlobalConfig
     {
         $cachefile = $this->_GetCacheFile();
         $cachefile_lock = $cachefile . "_lock";
-        
+
         if (file_exists($cachefile))
         {
             // if a cache file exists, remove the lock file because config has been succesfully stored
             if (file_exists($cachefile_lock))
                 @unlink($cachefile_lock);
-            
+
             include $cachefile;
             foreach ($pfc_conf as $key => $val)
                 // the dynamics parameters must not be cached
                 if (! in_array($key, $this->_dyn_params))
                     $this->$key = $val;
-            
+
             return true; // synchronized
         }
         else
@@ -1110,7 +1110,7 @@ class pfcGlobalConfig
             }
             else
                 @touch($cachefile_lock); // create the lockfile
-            
+
             if (! $this->isInit())
                 $this->init();
             $errors = & $this->getErrors();
@@ -1129,20 +1129,20 @@ class pfcGlobalConfig
     {
         $cachefile = $this->_GetCacheFile();
         $data = '<?php ';
-        
+
         $conf = get_object_vars($this);
         $keys = array_keys($conf);
         foreach ($keys as $k)
             if (preg_match('/^_.*/', $k))
                 unset($conf[$k]);
-            
+
             // remove dynamic parameters
         foreach ($this->_dyn_params as $k)
             unset($conf[$k]);
-        
+
         $data .= '$pfc_conf = ' . var_export($conf, true) . ";\n";
         $data .= '?>';
-        
+
         file_put_contents($cachefile, $data/*serialize(get_object_vars($this))*/);
     }
 
@@ -1157,7 +1157,7 @@ class pfcGlobalConfig
     {
         if (file_exists($this->theme_path . "/" . $this->theme . "/" . $file))
             return $this->theme_path . "/" . $this->theme . "/" . $file;
-        else 
+        else
             if (file_exists($this->theme_default_path . "/default/" . $file))
                 return $this->theme_default_path . "/default/" . $file;
             else
@@ -1165,9 +1165,9 @@ class pfcGlobalConfig
                 $this->destroyCache();
                 die(
                     _pfc(
-                        "Error: '%s' could not be found, please check your themepath '%s' and your theme '%s' are correct", 
-                        $file, 
-                        $this->theme_path, 
+                        "Error: '%s' could not be found, please check your themepath '%s' and your theme '%s' are correct",
+                        $file,
+                        $this->theme_path,
                         $this->theme));
             }
     }
@@ -1176,7 +1176,7 @@ class pfcGlobalConfig
     {
         if (file_exists($this->theme_path . '/' . $this->theme . '/' . $file))
             return $this->theme_url . '/' . $this->theme . '/' . $file;
-        else 
+        else
             if (file_exists($this->theme_default_path . '/default/' . $file))
                 return $this->theme_default_url . '/default/' . $file;
             else

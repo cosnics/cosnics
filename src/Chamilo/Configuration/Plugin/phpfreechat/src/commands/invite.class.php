@@ -32,7 +32,7 @@ class pfcCommand_invite extends pfcCommand
 
     var $usage = "/invite {nickname to invite} [ {target channel} ]";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -41,9 +41,9 @@ class pfcCommand_invite extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance(); // pfcGlobalConfig
-        $u = & pfcUserConfig :: Instance(); // pfcUserConfig
-        $ct = & pfcContainer :: Instance(); // Connection to the chatbackend
+        $c = pfcGlobalConfig :: Instance(); // pfcGlobalConfig
+        $u = pfcUserConfig :: Instance(); // pfcUserConfig
+        $ct = pfcContainer :: Instance(); // Connection to the chatbackend
         
         $nicktoinvite = isset($params[0]) ? $params[0] : '';
         $channeltarget = isset($params[1]) ? $params[1] : $u->channels[$recipientid]["name"]; // Default: current
@@ -56,7 +56,7 @@ class pfcCommand_invite extends pfcCommand
             $cmdp["params"] = array();
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return;
         }
@@ -67,7 +67,7 @@ class pfcCommand_invite extends pfcCommand
             $cmdp = $p;
             $cmdp["params"] = array();
             $cmdp["param"] = _pfc("You must join %s to invite users in this channel", $channeltarget);
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return;
         }
@@ -86,7 +86,7 @@ class pfcCommand_invite extends pfcCommand
         $cmdp["flag"] = 1;
         $cmdp["recipient"] = pfcCommand_join :: GetRecipient($channeltarget);
         $cmdp["recipientid"] = pfcCommand_join :: GetRecipientId($channeltarget);
-        $cmd = & pfcCommand :: Factory("notice");
+        $cmd = pfcCommand :: Factory("notice");
         $cmd->run($xml_reponse, $cmdp);
     }
 }

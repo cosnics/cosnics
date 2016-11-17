@@ -36,8 +36,8 @@ class pfcProxyCommand_lock extends pfcProxyCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         // check if the chat is locked
         if ($c->islocked)

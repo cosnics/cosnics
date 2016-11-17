@@ -3,7 +3,7 @@ require_once (dirname(__FILE__) . "/../pfccommand.class.php");
 class pfcCommand_quit extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -11,9 +11,9 @@ class pfcCommand_quit extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         
         $nick = $ct->getNickname($u->nickid);
         
@@ -25,7 +25,7 @@ class pfcCommand_quit extends pfcCommand
                 $cmdp["param"] = $id;
                 $cmdp["recipient"] = $chandetail["recipient"];
                 $cmdp["recipientid"] = $id;
-                $cmd = & pfcCommand :: Factory("leave");
+                $cmd = pfcCommand :: Factory("leave");
                 $cmd->run($xml_reponse, $cmdp);
             }
             
@@ -37,7 +37,7 @@ class pfcCommand_quit extends pfcCommand
                 $cmdp["param"] = $id;
                 $cmdp["recipient"] = $pvdetail["recipient"];
                 $cmdp["recipientid"] = $id;
-                $cmd = & pfcCommand :: Factory("leave");
+                $cmd = pfcCommand :: Factory("leave");
                 $cmd->run($xml_reponse, $cmdp);
             }
             

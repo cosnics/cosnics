@@ -22,7 +22,7 @@ require_once dirname(__FILE__) . "/pfcuserconfig.class.php";
  * pfcCommand is an abstract class (interface) which must be inherited by each concrete commands
  * Commands examples : /nick /me /update .
  * ..
- * 
+ *
  * @example ../demo/demo27_customized_command.php
  * @author Stephane Gully <stephane.gully@gmail.com>
  */
@@ -51,38 +51,38 @@ class pfcCommand
      * $tag is the command name : "nick", "me", "update" .
      * ..
      */
-    function &Factory($name)
+    function Factory($name)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        
+        $c = pfcGlobalConfig :: Instance();
+
         // instanciate the real command
         $cmd = NULL;
         $cmd_name = $name;
         $cmd_classname = "pfcCommand_" . $name;
-        
+
         $cmd_filename = $c->cmd_path_default . '/' . $cmd_name . '.class.php';
         if (file_exists($cmd_filename))
             require_once ($cmd_filename);
         $cmd_filename = $c->cmd_path . '/' . $cmd_name . '.class.php';
         if (file_exists($cmd_filename))
             require_once ($cmd_filename);
-        
+
         if (! class_exists($cmd_classname))
         {
             $tmp = NULL;
             return $tmp;
         }
-        
-        $cmd = & new $cmd_classname();
+
+        $cmd = new $cmd_classname();
         $cmd->name = $cmd_name;
-        
+
         // instanciate the proxies chaine
         $firstproxy = & $cmd;
         for ($i = count($c->proxies) - 1; $i >= 0; $i --)
         {
             $proxy_name = $c->proxies[$i];
             $proxy_classname = "pfcProxyCommand_" . $proxy_name;
-            
+
             // try to include the proxy class file from the default path or from the customized path
             $proxy_filename = $c->proxies_path_default . '/' . $proxy_name . ".class.php";
             if (file_exists($proxy_filename))
@@ -90,23 +90,23 @@ class pfcCommand
             $proxy_filename = $c->proxies_path . '/' . $proxy_name . ".class.php";
             if (file_exists($proxy_filename))
                 require_once ($proxy_filename);
-            
+
             if (! class_exists($proxy_classname))
                 return $firstproxy;
-                
+
                 // instanciate the proxy
-            $proxy = & new $proxy_classname();
+            $proxy = new $proxy_classname();
             $proxy->name = $cmd_name;
             $proxy->proxyname = $proxy_name;
             $proxy->linkTo($firstproxy);
             $firstproxy = & $proxy;
         }
-        
+
         /*
          * $tmp = ''; $cur = $firstproxy; while($cur) { $tmp .= (isset($cur->proxyname)?$cur->proxyname:$cur->name).'|';
          * $cur = $cur->next; } $tmp .= var_export($firstproxy,true); file_put_contents('/tmp/debug1',$tmp);
          */
-        
+
         // return the proxy, not the command (the proxy will forward the request to the real command)
         return $firstproxy;
     }
@@ -123,7 +123,7 @@ class pfcCommand
      * Virtual methode which must be implemented by concrete commands
      * It is called by the phpFreeChat::HandleRequest function to execute the wanted command
      */
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         die(_pfc("%s must be implemented", get_class($this) . "::" . __FUNCTION__));
     }
@@ -133,10 +133,10 @@ class pfcCommand
      */
     function forceWhoisReload($nickid)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
-        
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
+
         // list the users in the same channel as $nickid
         $channels = $ct->getMeta("nickid-to-channelid", $nickid);
         $channels = $channels['value'];
@@ -147,7 +147,7 @@ class pfcCommand
             $ret = $ct->getOnlineNick($ct->decode($chan));
             $otherids = array_merge($otherids, $ret['nickid']);
         }
-        
+
         // alert them that $nickid user info just changed
         foreach ($otherids as $otherid)
         {
@@ -155,7 +155,7 @@ class pfcCommand
             $cmdp = array();
             $cmdp['params'] = array($nickid);
             pfcCommand :: AppendCmdToPlay($otherid, $cmdstr, $cmdp);
-            
+
             /*
              * $cmdtoplay = $ct->getUserMeta($otherid, 'cmdtoplay'); $cmdtoplay = ($cmdtoplay == NULL) ? array() :
              * unserialize($cmdtoplay); $cmdtmp = array("whois2", // cmdname $nicktorewhois, // param NULL, // sender
@@ -167,7 +167,7 @@ class pfcCommand
 
     /**
      * Add command to be played onto command stack
-     * 
+     *
      * @param $nickid is the user that entered the command
      * @param $cmdstr is the command
      * @param $cmdp is the command's parameters
@@ -175,46 +175,46 @@ class pfcCommand
      */
     function AppendCmdToPlay($nickid, $cmdstr, $cmdp)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        
-        $ct = & pfcContainer :: Instance();
-        
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+
+        $ct = pfcContainer :: Instance();
+
         // check for empty nickid
         if ($nickid == "")
             return false;
-            
+
             // get new command id
         $cmdtoplay_id = $ct->incMeta("nickid-to-cmdtoplayid", $nickid, 'cmdtoplayid');
         if (count($cmdtoplay_id["value"]) == 0)
             $cmdtoplay_id = 0;
         else
             $cmdtoplay_id = $cmdtoplay_id["value"][0];
-            
+
             // create command array
         $cmdtoplay = array();
         $cmdtoplay['cmdstr'] = $cmdstr;
         $cmdtoplay['params'] = $cmdp;
-        
+
         // store command to play
         $ct->setCmdMeta($nickid, $cmdtoplay_id, serialize($cmdtoplay));
-        
+
         return true;
     }
 
     /**
      * Run all commands to be played for a user
-     * 
+     *
      * @param $nickid is the user that entered the command
      * @param $context
      * @param $xml_reponse
      */
-    function RunPendingCmdToPlay($nickid, $context, &$xml_reponse)
+    function RunPendingCmdToPlay($nickid, $context, $xml_reponse)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
-        
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
+
         // Get all queued commands to be played
         $cmdtoplay_ids = $ct->getCmdMeta($nickid);
         // process each command and parse content
@@ -223,9 +223,9 @@ class pfcCommand
             // take a command from the list
             $cmdtoplay = $ct->getCmdMeta($nickid, $cid);
             $cmdtoplay = ($cmdtoplay == NULL || count($cmdtoplay) == 0) ? array() : unserialize($cmdtoplay[0]);
-            
+
             // play the command
-            $cmd = & pfcCommand :: Factory($cmdtoplay['cmdstr']);
+            $cmd = pfcCommand :: Factory($cmdtoplay['cmdstr']);
             $cmdp = $cmdtoplay['params'];
             if (! isset($cmdp['param']))
                 $cmdp['param'] = '';
@@ -242,13 +242,13 @@ class pfcCommand
                 $cmd->run($xml_reponse, $cmdp);
             else
                 @$cmd->run($xml_reponse, $cmdp);
-                
+
                 // delete command when complete
             $ct->rmMeta("nickid-to-cmdtoplay", $nickid, $cid);
         }
     }
 
-    function trace(&$xml_reponse, $msg, $data = NULL)
+    function trace($xml_reponse, $msg, $data = NULL)
     {
         if ($data != NULL)
         {
@@ -268,7 +268,7 @@ class pfcCommand
         $pattern_noquote = '/([^"\s]+)/';
         $pattern_command = '/^\/([a-z0-9]+)\s*([a-z0-9]+)\s*([a-z0-9]+)\s*(.*)/';
         $result = array();
-        
+
         // parse the command name (ex: '/invite')
         if (preg_match($pattern_command, $cmd_str, $res))
         {
@@ -276,7 +276,7 @@ class pfcCommand
             $clientid = $res[2];
             $recipientid = $res[3];
             $params_str = $res[4];
-            
+
             // don't parse multiple parameters for special commands with only one parameter
             // this make possible to send double quotes (") in these commands
             if ($one_parameter || $cmd == 'send' || $cmd == 'notice' || $cmd == 'me')
@@ -286,7 +286,7 @@ class pfcCommand
                 $result['params'] = array($clientid, $recipientid, $params_str);
                 return $result;
             }
-            
+
             // parse the quotted parameters (ex: '/invite "nickname with spaces"')
             preg_match_all($pattern_quote, $params_str, $res1, PREG_OFFSET_CAPTURE);
             $params_res = $res1[1];
@@ -302,7 +302,7 @@ class pfcCommand
                     $params_res[] = $p2;
                 }
             }
-            
+
             // order the array by offset
             $params = array();
             foreach ($params_res as $p)
@@ -311,14 +311,14 @@ class pfcCommand
             $params = array_values($params);
             $params = array_map("trim", $params);
             $params = array_merge(array($clientid, $recipientid), $params);
-            
+
             $result['cmdstr'] = $cmd_str;
             $result['cmdname'] = $cmd;
             $result['params'] = $params;
         }
         return $result;
     }
-    
+
     /*
      * // THIS IS ANOTHER WAY TO PARSE THE PARAMETERS // IT'S NOT SIMPLIER BUT MAYBE FASTER // @todo : take the faster
      * methode function ParseCommand($cmd_str, $one_parameter = false) { $pattern_command =
