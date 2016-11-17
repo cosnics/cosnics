@@ -143,3 +143,6 @@ SubmissionsOverview = "Submissions overview"
 AssignmentSubmissionsTemplate = "assignment_submissions"
 AssignmentUserInformationBlock = "Information about the user"
 AssignmentSubmitterSubmissionsBlock = "Submissions of the user"
+
+LearningPathAttemptProgressInformationBlock = "Information about the learning path progress"
+LearningPathAttemptProgressBlock = "Learning path item progress"
