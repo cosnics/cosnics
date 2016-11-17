@@ -28,7 +28,7 @@ require_once dirname(__FILE__) . "/../pfcproxycommand.class.php";
 class pfcProxyCommand_log extends pfcProxyCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $cmdtocheck = array("send", "me", "notice");
         if (in_array($this->name, $cmdtocheck))
@@ -38,8 +38,8 @@ class pfcProxyCommand_log extends pfcProxyCommand
             $sender = $p["sender"];
             $recipient = $p["recipient"];
             $recipientid = $p["recipientid"];
-            $c = & pfcGlobalConfig :: Instance();
-            $u = & pfcUserConfig :: Instance();
+            $c = pfcGlobalConfig :: Instance();
+            $u = pfcUserConfig :: Instance();
             
             $logpath = ($c->proxies_cfg[$this->proxyname]["path"] == "" ? $c->data_private_path . "/logs" : $c->proxies_cfg[$this->proxyname]["path"]);
             $logpath .= "/" . $c->getId();

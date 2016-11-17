@@ -5,11 +5,11 @@ class pfcCommand_deop extends pfcCommand
 
     var $usage = "/deop {nickname}";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         
         if (trim($p["param"]) == "")
         {
@@ -17,7 +17,7 @@ class pfcCommand_deop extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return;
         }

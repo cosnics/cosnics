@@ -55,7 +55,7 @@ if (! function_exists('is_a'))
  * - Reloading the class for each run
  * - Stopping the test in progress
  * To use simply intantiate the class and call main()
- * $gtk =& new PHPUnit_GUI_Gtk;
+ * $gtk =new PHPUnit_GUI_Gtk;
  * $gtk->main();
  * Once the window has finished loading, you can enter the name of
  * a class that has been loaded (include/require some where in your
@@ -213,12 +213,12 @@ class PHPUnit_GUI_Gtk
     function _createUI()
     {
         // Create a window.
-        $window = & new GtkWindow();
+        $window = new GtkWindow();
         $window->set_title('PHPUnit Gtk');
         $window->set_usize(400, - 1);
         
         // Create the main box.
-        $mainBox = & new GtkVBox();
+        $mainBox = new GtkVBox();
         $window->add($mainBox);
         
         // Start with the menu.
@@ -259,23 +259,23 @@ class PHPUnit_GUI_Gtk
     function &_createMenu()
     {
         // Create the menu bar.
-        $menuBar = & new GtkMenuBar();
+        $menuBar = new GtkMenuBar();
         
         // Create the main (only) menu item.
-        $phpHeader = & new GtkMenuItem('PHPUnit');
+        $phpHeader = new GtkMenuItem('PHPUnit');
         
         // Add the menu item to the menu bar.
         $menuBar->append($phpHeader);
         
         // Create the PHPUnit menu.
-        $phpMenu = & new GtkMenu();
+        $phpMenu = new GtkMenu();
         
         // Add the menu items
-        $about = & new GtkMenuItem('About...');
+        $about = new GtkMenuItem('About...');
         $about->connect('activate', array(&$this, 'about'));
         $phpMenu->append($about);
         
-        $exit = & new GtkMenuItem('Exit');
+        $exit = new GtkMenuItem('Exit');
         $exit->connect_object('activate', array('gtk', 'main_quit'));
         $phpMenu->append($exit);
         
@@ -298,20 +298,20 @@ class PHPUnit_GUI_Gtk
     function &_createSuiteEntry()
     {
         // Create the outermost box.
-        $outerBox = & new GtkVBox();
+        $outerBox = new GtkVBox();
         
         // Create the suite label, box, and field.
-        $suiteLabel = & new GtkLabel('Test class name:');
-        $suiteBox = & new GtkHBox();
-        $this->suiteField = & new GtkEntry();
+        $suiteLabel = new GtkLabel('Test class name:');
+        $suiteBox = new GtkHBox();
+        $this->suiteField = new GtkEntry();
         $this->suiteField->set_text($suiteName != NULL ? $suiteName : '');
         
         // Create the button the user will use to start the test.
-        $runButton = & new GtkButton('Run');
+        $runButton = new GtkButton('Run');
         $runButton->connect_object('clicked', array(&$this, 'run'));
         
         // Create the check box that lets the user show only failures.
-        $this->showPassed = & new GtkCheckButton('Show passed tests');
+        $this->showPassed = new GtkCheckButton('Show passed tests');
         
         // Add the components to their respective boxes.
         $suiteLabel->set_alignment(0, 0);
@@ -339,19 +339,19 @@ class PHPUnit_GUI_Gtk
     function &_createReportLabels()
     {
         // Create a box to hold everything.
-        $labelBox = & new GtkHBox();
+        $labelBox = new GtkHBox();
         
         // Create the non-updated labels.
-        $numberOfRuns = & new GtkLabel('Runs:');
-        $numberOfErrors = & new GtkLabel('Errors:');
-        $numberOfFailures = & new GtkLabel('Failures:');
+        $numberOfRuns = new GtkLabel('Runs:');
+        $numberOfErrors = new GtkLabel('Errors:');
+        $numberOfFailures = new GtkLabel('Failures:');
         
         // Create the labels that will be updated.
         // These are asssigned to members to make it easier to
         // set their values later.
-        $this->numberOfRuns = & new GtkLabel(0);
-        $this->numberOfErrors = & new GtkLabel(0);
-        $this->numberOfFailures = & new GtkLabel(0);
+        $this->numberOfRuns = new GtkLabel(0);
+        $this->numberOfErrors = new GtkLabel(0);
+        $this->numberOfFailures = new GtkLabel(0);
         
         // Pack everything in.
         $labelBox->pack_start($numberOfRuns);
@@ -378,7 +378,7 @@ class PHPUnit_GUI_Gtk
     function &_createProgressBar()
     {
         // Create the progress bar.
-        $this->progress = & new GtkProgressBar(new GtkAdjustment(0, 0, 1, .1, 1, 0));
+        $this->progress = new GtkProgressBar(new GtkAdjustment(0, 0, 1, .1, 1, 0));
         
         // Set the progress bar to print the percentage.
         $this->progress->set_show_text(true);
@@ -399,15 +399,15 @@ class PHPUnit_GUI_Gtk
     function &_createReportAreas()
     {
         // Create the containing box.
-        $reportBox = & new GtkVBox();
+        $reportBox = new GtkVBox();
         
         // Create the identification label
-        $reportLabel = & new GtkLabel('Errors and Failures:');
+        $reportLabel = new GtkLabel('Errors and Failures:');
         $reportLabel->set_alignment(0, 0);
         
         // Create the scrolled windows for the text areas.
-        $reportScroll = & new GtkScrolledWindow();
-        $dumpScroll = & new GtkScrolledWindow();
+        $reportScroll = new GtkScrolledWindow();
+        $dumpScroll = new GtkScrolledWindow();
         
         // Make the scroll areas big enough.
         $reportScroll->set_usize(- 1, 150);
@@ -419,8 +419,8 @@ class PHPUnit_GUI_Gtk
         $dumpScroll->set_policy(GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
         
         // Create the text areas.
-        $this->reportArea = & new GtkText();
-        $this->dumpArea = & new GtkText();
+        $this->reportArea = new GtkText();
+        $this->dumpArea = new GtkText();
         
         // Don't let words get broken.
         $this->reportArea->set_word_wrap(true);
@@ -449,7 +449,7 @@ class PHPUnit_GUI_Gtk
     function &_createStatusLine()
     {
         // Create the status label.
-        $this->statusLine = & new GtkLabel('');
+        $this->statusLine = new GtkLabel('');
         $this->statusLine->set_alignment(0, 0);
         
         return $this->statusLine;
@@ -468,20 +468,20 @@ class PHPUnit_GUI_Gtk
     function about()
     {
         // Create the new window.
-        $about = & new GtkWindow();
+        $about = new GtkWindow();
         $about->set_title('About PHPUnit GUI Gtk');
         $about->set_usize(250, - 1);
         
         // Put two vboxes in the hbox.
-        $vBox = & new GtkVBox();
+        $vBox = new GtkVBox();
         $about->add($vBox);
         
         // Create the labels.
-        $version = & new GtkLabel(" Version: 1.0");
-        $license = & new GtkLabel(" License: PHP License v3.0");
-        $where = & new GtkLabel(" Download from: http://pear.php.net/PHPUnit/");
-        $unitAuth = & new GtkLabel(" PHPUnit Author: Sebastian Bergman");
-        $gtkAuth = & new GtkLabel(" Gtk GUI Author: Scott Mattocks");
+        $version = new GtkLabel(" Version: 1.0");
+        $license = new GtkLabel(" License: PHP License v3.0");
+        $where = new GtkLabel(" Download from: http://pear.php.net/PHPUnit/");
+        $unitAuth = new GtkLabel(" PHPUnit Author: Sebastian Bergman");
+        $gtkAuth = new GtkLabel(" Gtk GUI Author: Scott Mattocks");
         
         // Align everything to the left
         $where->set_alignment(0, .5);

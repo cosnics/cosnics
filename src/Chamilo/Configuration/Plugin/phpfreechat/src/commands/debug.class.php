@@ -3,10 +3,10 @@ require_once (dirname(__FILE__) . "/../pfccommand.class.php");
 class pfcCommand_debug extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         if ($p["param"] == "userconfig")
         {

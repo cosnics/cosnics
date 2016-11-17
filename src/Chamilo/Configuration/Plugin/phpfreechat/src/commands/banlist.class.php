@@ -11,12 +11,12 @@ class pfcCommand_banlist extends pfcCommand
 
     var $desc = "This command list the banished users on the given channel";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         $banlist = $ct->getChanMeta($p["recipient"], 'banlist_nickid');
         
         if ($banlist == NULL)

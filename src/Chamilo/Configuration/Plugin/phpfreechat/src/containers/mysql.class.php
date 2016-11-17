@@ -139,7 +139,7 @@ class pfcContainer_Mysql extends pfcContainerInterface
         if (! $this->_db)
         {
             if ($c == null)
-                $c = & pfcGlobalConfig :: Instance();
+                $c = pfcGlobalConfig :: Instance();
             $this->_db = mysql_pconnect(
                 $c->container_cfg_mysql_host . ':' . $c->container_cfg_mysql_port, 
                 $c->container_cfg_mysql_username, 
@@ -151,7 +151,7 @@ class pfcContainer_Mysql extends pfcContainerInterface
 
     function setMeta($group, $subgroup, $leaf, $leafvalue = NULL)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         $server = $c->serverid;
         $db = $this->_connect();
@@ -190,7 +190,7 @@ class pfcContainer_Mysql extends pfcContainerInterface
 
     function getMeta($group, $subgroup = null, $leaf = null, $withleafvalue = false)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         $ret = array();
         $ret["timestamp"] = array();
@@ -253,7 +253,7 @@ class pfcContainer_Mysql extends pfcContainerInterface
 
     function incMeta($group, $subgroup, $leaf)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         $server = $c->serverid;
         $db = $this->_connect();
@@ -291,7 +291,7 @@ class pfcContainer_Mysql extends pfcContainerInterface
 
     function rmMeta($group, $subgroup = null, $leaf = null)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         
         $server = $c->serverid;
         $db = $this->_connect();

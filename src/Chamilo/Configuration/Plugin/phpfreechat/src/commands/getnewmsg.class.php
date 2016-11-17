@@ -19,7 +19,7 @@ require_once (dirname(__FILE__) . "/../pfccommand.class.php");
 class pfcCommand_getnewmsg extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -27,7 +27,7 @@ class pfcCommand_getnewmsg extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         // do nothing if the recipient is not defined
         if ($recipient == "")
             return;
@@ -47,7 +47,7 @@ class pfcCommand_getnewmsg extends pfcCommand
         $_SESSION["pfc_lock_readnewmsg_" . $c->getId() . "_" . $clientid] = time();
         
         // read the last from_id value
-        $container = & pfcContainer :: Instance();
+        $container = pfcContainer :: Instance();
         $from_id_sid = "pfc_from_id_" . $c->getId() . "_" . $clientid . "_" . $recipientid;
         
         $from_id = 0;

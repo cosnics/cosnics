@@ -5,7 +5,7 @@ class pfcCommand_kick extends pfcCommand
 
     var $usage = "/kick {nickname} [ {reason} ]";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -14,8 +14,8 @@ class pfcCommand_kick extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $nick = isset($params[0]) ? $params[0] : '';
         $reason = isset($params[1]) ? $params[1] : '';
@@ -33,13 +33,13 @@ class pfcCommand_kick extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return;
         }
         
         // kicking a user just add a command to play to the aimed user metadata.
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         $otherid = $ct->getNickId($nick);
         $channame = $u->channels[$recipientid]["name"];
         $cmdstr = 'leave';

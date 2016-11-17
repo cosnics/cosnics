@@ -3,9 +3,9 @@ require_once (dirname(__FILE__) . "/../pfccommand.class.php");
 class pfcCommand_error extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         $errors = $p["param"];
         if (is_array($errors))
         {

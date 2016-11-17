@@ -5,7 +5,7 @@ class pfcCommand_nick extends pfcCommand
 
     var $usage = "/nick {newnickname}";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -13,9 +13,9 @@ class pfcCommand_nick extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         
         if (trim($param) == '')
         {
@@ -23,7 +23,7 @@ class pfcCommand_nick extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return false;
         }
@@ -50,7 +50,7 @@ class pfcCommand_nick extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("%s changes his nickname to %s", $oldnick, $newnick);
             $cmdp["flag"] = 1;
-            $cmd = & pfcCommand :: Factory("notice");
+            $cmd = pfcCommand :: Factory("notice");
             foreach ($u->channels as $id => $chan)
             {
                 $cmdp["recipient"] = $chan["recipient"];

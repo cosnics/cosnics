@@ -16,22 +16,22 @@ class pfcUserConfig
     var $nickid;
 
     var $serverid;
-    
+
     // var $is_init = false; // used internaly to know if the chat config is initialized
     // var $errors = array();
     function __construct()
     {
-        $c = & pfcGlobalConfig :: Instance();
-        
+        $c = pfcGlobalConfig :: Instance();
+
         // start the session : session is used for locking purpose and cache purpose
         session_name("phpfreechat");
         if (session_id() == "")
             session_start();
-            
+
             // the nickid is a public identifier shared between all the chatters
             // this is why the session_id must not be assigned directly to the nickid
         $this->nickid = sha1(session_id());
-        
+
         // user parameters are cached in sessions
         $this->_getParam("nick");
         if (! isset($this->nick))
@@ -50,10 +50,10 @@ class pfcUserConfig
             $this->_setParam("serverid", $c->serverid);
     }
 
-    function &Instance()
+    function Instance()
     {
         static $i;
-        
+
         if (! isset($i))
         {
             $i = new pfcUserConfig();
@@ -61,11 +61,11 @@ class pfcUserConfig
         return $i;
     }
 
-    function &_getParam($p)
+    function _getParam($p)
     {
         if (! isset($this->$p))
         {
-            $c = & pfcGlobalConfig :: Instance();
+            $c = pfcGlobalConfig :: Instance();
             $nickid = "pfcuserconfig_" . $c->getId();
             $nickid_param = $nickid . "_" . $p;
             if (isset($_SESSION[$nickid_param]))
@@ -76,7 +76,7 @@ class pfcUserConfig
 
     function _setParam($p, $v)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         $nickid_param = "pfcuserconfig_" . $c->getId() . "_" . $p;
         $_SESSION[$nickid_param] = $v;
         $this->$p = $v;
@@ -84,7 +84,7 @@ class pfcUserConfig
 
     function _rmParam($p)
     {
-        $c = & pfcGlobalConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
         $nickid_param = "pfcuserconfig_" . $c->getId() . "_" . $p;
         unset($_SESSION[$nickid_param]);
         unset($this->$p);
@@ -104,8 +104,8 @@ class pfcUserConfig
     function saveInCache()
     {
         // echo "saveInCache()<br>";
-        $c = & pfcGlobalConfig :: Instance();
-        
+        $c = pfcGlobalConfig :: Instance();
+
         // do not save anything as long as nickname is not assigned
         // if ($this->active && $this->nick != "")
         {
@@ -119,7 +119,7 @@ class pfcUserConfig
 
     function isOnline()
     {
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         $online = $ct->isNickOnline(NULL, $this->nickid);
         return $online;
     }
@@ -128,7 +128,7 @@ class pfcUserConfig
     {
         if ($this->nick != '')
             return $this->nick;
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         return $ct->getNickname($this->nickid);
     }
 
