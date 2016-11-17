@@ -12,23 +12,23 @@ use phpFreeChat;
  *
  * @package application.lib.weblcms.tool.chat.component
  */
-//require_once Path:: getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
+require_once Path:: getInstance()->getPluginPath() . '/phpfreechat/src/phpfreechat.class.php';
 
 class ViewerComponent extends Manager
 {
 
     public function run()
     {
-        $html = array();
-
-        $html[] = $this->render_header();
-        $html[] = '<div class="alert alert-danger">' . Translation::getInstance()->getTranslation(
-            'ChatNotWorking', null, Manager::context()
-        );
-
-        $html[] = $this->render_footer();
-
-        return implode(PHP_EOL, $html);
+//        $html = array();
+//
+//        $html[] = $this->render_header();
+//        $html[] = '<div class="alert alert-danger">' . Translation::getInstance()->getTranslation(
+//            'ChatNotWorking', null, Manager::context()
+//        );
+//
+//        $html[] = $this->render_footer();
+//
+//        return implode(PHP_EOL, $html);
 
         $course = $this->get_course();
         $user = $this->get_user();
