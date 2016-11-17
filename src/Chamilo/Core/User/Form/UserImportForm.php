@@ -403,7 +403,8 @@ class UserImportForm extends FormValidator
     {
         $this->users = array();
         if ($file_type == 'text/x-csv' || $file_type == 'text/csv' || $file_type == 'application/vnd.ms-excel' ||
-            $file_type == 'application/octet-stream' || $file_type == 'application/force-download'
+            $file_type == 'application/octet-stream' || $file_type == 'application/force-download' ||
+            $file_type = 'text/comma-separated-values'
         )
         {
             $this->users = Import:: csv_to_array($file_name);
