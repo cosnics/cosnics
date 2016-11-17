@@ -60,6 +60,7 @@ class LearningPathAttemptsBlock extends ToolBlock
         $count = 1;
         $params = $this->get_parent()->get_parameters();
         $params[\Chamilo\Application\Weblcms\Manager :: PARAM_TEMPLATE_ID] = LearningPathAttemptProgressTemplate :: class_name();
+        
         $img = '<img src="' . Theme :: getInstance()->getCommonImagePath('Action/Reporting') . '" title="' .
              Translation :: get('Details') . '" />';
 
