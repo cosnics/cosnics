@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+    <package>
+        <name>Peer Assessment</name>
+        <code>PeerAssessment</code>
+        <context>Chamilo\Application\Weblcms\Tool\Implementation\PeerAssessment</context>
+        <type>Chamilo\Application\Weblcms\Tool</type>
+        <category>education</category>
+        <authors>
+            <author>
+                <name>Renaat De Muynck</name>
+                <email>renaat.demuynck@arteveldehs.be</email>
+                <company>Arteveldehogeschool</company>
+            </author>
+            <author>
+                <name>Jens Vanderheyden</name>
+                <email>jevdheyd@vub.ac.be</email>
+                <company>Vrije Universiteit Brussel</company>
+            </author>
+        </authors>
+        <version>5.0.0</version>
+        <description>A tool for the weblcms application where peer assessment
+            content objects can be published.
+        </description>
+        <pre-depends>
+            <dependencies operator="1">
+                <dependency type="registration">
+                    <id>Chamilo\Application\Weblcms</id>
+                    <version operator="4">5.0.0</version>
+                </dependency>
+            </dependencies>
+        </pre-depends>
+        <course_section>tool</course_section>
+    </package>
+</packages>

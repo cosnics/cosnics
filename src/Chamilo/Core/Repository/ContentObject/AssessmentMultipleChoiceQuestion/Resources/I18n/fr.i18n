@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_multiple_choice_question
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Question à choix multiples"
+SwitchToCheckboxes = "Autoriser des réponses multiples"
+SwitchToRadioButtons = "Ne permettre qu'une seule réponse"
+AddMultipleChoiceOption = "Ajouter une option"
+Answer = "Réponse"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Corriger"
+SelectAtLeastOneCorrectAnswer = "Sélectionnez au moins une bonne réponse"
+SelectACorrectAnswer = "Sélectionnez la bonne réponse"
+Weight = "Poids"
+Options = "Options"
+Title = "Titre"
+Description = "Description"
+Hint = "Aide"

@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Core\Repository\Feedback
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Feedback"
+BrowserComponent = "Feedback"
+AddFeedback = "Voeg feedback toe"
+Feedback = "Bestaande feedback"
+Comment = "Commentaar"
+NoFeedbackYet = "Er is nog geen feedback beschikbaar"
+StopReceivingNotifications = "Ontvang feedback niet langer via e-mail"
+ReceiveNotifications = "Ontvang nieuwe feedback via e-mail"

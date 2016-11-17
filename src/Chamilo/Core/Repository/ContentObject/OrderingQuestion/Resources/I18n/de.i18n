@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\ordering_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Frage bestellen"
+Weight = "Gewicht"
+PutAnswersCorrectOrder = "Bringen Sie die Antworten in die richtige Reihenfolge"
+Items = "Punkte"
+AddItem = "Punkt hinzufügen"
+Item = "Punkt"
+Order = "Auftrag"
+Rank = "Tabelle"
+Title = "Titel"
+Description = "Beschreibung"
+Hint = ""

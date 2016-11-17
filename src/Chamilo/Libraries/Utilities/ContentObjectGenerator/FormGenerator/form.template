@@ -1,0 +1,73 @@
+<?php
+/**
+ * This class describes the form for a {OBJECT_CLASS} object.
+ * @package repository.lib.content_object.link
+ * @author {AUTHOR}
+ **/
+ 
+require_once dirname(__FILE__) . '/{TYPE}.class.php';
+ 
+class {OBJECT_CLASS}Form extends ContentObjectForm
+{
+	
+    protected function build_creation_form()
+    {
+        parent :: build_creation_form();
+        $this->addElement('category', Translation :: get('Properties'));
+        $this->build_default_form();
+        $this->addElement('category');
+    }
+
+    protected function build_editing_form()
+    {
+        parent :: build_editing_form();
+        $this->addElement('category', Translation :: get('Properties'));
+        $this->build_default_form();
+        $this->addElement('category');
+    }
+    
+    private function build_default_form()
+    {
+		<!-- BEGIN PROPERTIES -->
+		$this->addElement('text', {OBJECT_CLASS} :: {PROPERTIES.PROPERTY}, Translation :: get('{PROPERTIES.PROPERTY_CAMEL_CASE}'));
+		$this->addRule({OBJECT_CLASS} :: {PROPERTIES.PROPERTY}, Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 'required');
+
+		<!-- END PROPERTIES -->
+    }
+
+    function setDefaults($defaults = array ())
+    {
+        $content_object = $this->get_content_object();
+        if (isset($content_object))
+        {
+        	<!-- BEGIN PROPERTIES -->
+        	$defaults[{OBJECT_CLASS} :: {PROPERTIES.PROPERTY}] = $content_object->get_{PROPERTIES.PROPERTY_LOWER_CASE}();
+        	<!-- END PROPERTIES -->
+        }
+        parent :: setDefaults($defaults);
+    }
+
+    function create_content_object()
+    {
+        $object = new {OBJECT_CLASS}();
+        $this->fill_properties($object);
+        parent :: set_content_object($object);
+        return parent :: create_content_object();
+    }
+
+    function update_content_object()
+    {
+        $object = $this->get_content_object();
+        $this->fill_properties($object);
+        parent :: set_content_object($object);
+        return parent :: update_content_object();
+    }
+
+    private function fill_properties($object)
+    {
+    	<!-- BEGIN PROPERTIES -->
+    	$object->set_{PROPERTIES.PROPERTY_LOWER_CASE}($this->exportValue({OBJECT_CLASS} :: {PROPERTIES.PROPERTY}));
+ 		<!-- END PROPERTIES -->
+    }
+}
+?>

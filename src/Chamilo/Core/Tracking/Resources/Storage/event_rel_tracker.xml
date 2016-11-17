@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="event_rel_tracker">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="event_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="tracker_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="active"
+            type="boolean"
+            notnull="1"
+            default="1" />
+    </properties>
+    <index name="active">
+        <indexproperty name="active" />
+    </index>
+</object>

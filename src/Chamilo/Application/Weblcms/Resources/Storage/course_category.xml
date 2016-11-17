@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_category">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="name"
+            type="text"
+            length="100"
+            notnull="1"
+            default="" />
+        <property
+            name="parent_id"
+            type="integer"
+            notnull="1"
+            default="0" />
+        <property
+            name="display_order"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="code"
+            type="text"
+            length="25"
+            default="" />
+        <property
+            name="state"
+            type="integer"
+            notnull="1"
+            default="0" />
+    </properties>
+    <index name="parent_id">
+        <indexproperty name="parent_id" />
+    </index>
+    <index name="display_order">
+        <indexproperty name="display_order" />
+    </index>
+</object>
