@@ -119,7 +119,7 @@ class PHPUnit_GUI_SetupDecorator
             
             if (class_exists($className))
             {
-                $suites[] = & new PHPUnit_TestSuite($className);
+                $suites[] = new PHPUnit_TestSuite($className);
             }
             else
             {

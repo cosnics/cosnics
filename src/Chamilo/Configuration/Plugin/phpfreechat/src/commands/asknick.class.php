@@ -3,7 +3,7 @@ require_once (dirname(__FILE__) . "/../pfccommand.class.php");
 class pfcCommand_asknick extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -11,8 +11,8 @@ class pfcCommand_asknick extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $nicktochange = phpFreeChat :: FilterNickname($param);
         
@@ -21,7 +21,7 @@ class pfcCommand_asknick extends pfcCommand
             // assign a random nick
             $cmdp = $p;
             $cmdp["param"] = $nicktochange . "" . rand(1, 1000);
-            $cmd = & pfcCommand :: Factory("nick");
+            $cmd = pfcCommand :: Factory("nick");
             $cmd->run($xml_reponse, $cmdp);
         }
         else

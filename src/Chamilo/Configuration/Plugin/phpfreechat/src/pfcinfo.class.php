@@ -26,7 +26,7 @@ class pfcInfo
         $params = array();
         $params["serverid"] = $serverid;
         $params["data_private_path"] = $data_private_path;
-        $this->c = & pfcGlobalConfig :: Instance($params);
+        $this->c = pfcGlobalConfig :: Instance($params);
     }
 
     function free()
@@ -64,7 +64,7 @@ class pfcInfo
         if ($this->hasErrors())
             return array();
         
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         
         if ($channel != NULL)
             $channel = pfcCommand_join :: GetRecipient($channel);
@@ -99,7 +99,7 @@ class pfcInfo
             // @todo must use another function to get a private message last messages
         $channel = pfcCommand_join :: GetRecipient($channel);
         
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         $lastmsg_id = $ct->getLastId($channel);
         $lastmsg_raw = $ct->read($channel, $lastmsg_id - $nb);
         return $lastmsg_raw;

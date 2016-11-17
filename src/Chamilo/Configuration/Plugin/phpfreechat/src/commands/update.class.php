@@ -3,7 +3,7 @@ require_once (dirname(__FILE__) . "/../pfccommand.class.php");
 class pfcCommand_update extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -11,14 +11,14 @@ class pfcCommand_update extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         // check the user has not been disconnected from the server by timeout
         // if he has been disconnected, then I reconnect him with /connect command
         if ($u->nick != '' && ! $u->isOnline())
         {
-            $cmd = & pfcCommand :: Factory("connect");
+            $cmd = pfcCommand :: Factory("connect");
             $cmdp = $p;
             $cmdp['params'] = array($u->nick);
             $cmdp['getoldmsg'] = false;
@@ -32,13 +32,13 @@ class pfcCommand_update extends pfcCommand
             $cmdp = $p;
             
             // update the user nickname timestamp on the server
-            $cmd = & pfcCommand :: Factory("updatemynick");
+            $cmd = pfcCommand :: Factory("updatemynick");
             $cmdp["recipient"] = NULL;
             $cmdp["recipientid"] = NULL;
             $cmd->run($xml_reponse, $cmdp);
             
             // get other online users on each channels
-            $cmd = & pfcCommand :: Factory("who2");
+            $cmd = pfcCommand :: Factory("who2");
             foreach ($u->channels as $id => $chan)
             {
                 $cmdp["recipient"] = $chan["recipient"];
@@ -55,7 +55,7 @@ class pfcCommand_update extends pfcCommand
             }
             
             // get new message posted on each channels
-            $cmd = & pfcCommand :: Factory("getnewmsg");
+            $cmd = pfcCommand :: Factory("getnewmsg");
             foreach ($u->channels as $id => $chan)
             {
                 $cmdp["recipient"] = $chan["recipient"];

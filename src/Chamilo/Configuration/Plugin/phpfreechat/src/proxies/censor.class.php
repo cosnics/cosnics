@@ -28,7 +28,7 @@ require_once dirname(__FILE__) . "/../pfcproxycommand.class.php";
 class pfcProxyCommand_censor extends pfcProxyCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -36,8 +36,8 @@ class pfcProxyCommand_censor extends pfcProxyCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $cmdtocheck = array("send", "nick", "me");
         if (in_array($this->name, $cmdtocheck))

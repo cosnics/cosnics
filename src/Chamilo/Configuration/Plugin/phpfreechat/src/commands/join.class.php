@@ -5,7 +5,7 @@ class pfcCommand_join extends pfcCommand
 
     var $usage = "/join {channelname}";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -13,8 +13,8 @@ class pfcCommand_join extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $channame = trim($param);
         $chanrecip = pfcCommand_join :: GetRecipient($channame);
@@ -25,7 +25,7 @@ class pfcCommand_join extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return;
         }
@@ -49,12 +49,12 @@ class pfcCommand_join extends pfcCommand
             $cmdp["recipient"] = $chanrecip;
             $cmdp["recipientid"] = $chanid;
             $cmdp["flag"] = 2;
-            $cmd = & pfcCommand :: Factory("notice");
+            $cmd = pfcCommand :: Factory("notice");
             $cmd->run($xml_reponse, $cmdp);
         }
         
         // register the user (and his metadata) in the channel
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         // $ct->createNick($chanrecip, $u->nick, $u->nickid);
         $ct->joinChan($u->nickid, $chanrecip);
         $this->forceWhoisReload($u->nickid);

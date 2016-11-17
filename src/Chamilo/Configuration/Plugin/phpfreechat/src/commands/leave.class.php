@@ -6,7 +6,7 @@ class pfcCommand_leave extends pfcCommand
 
     var $usage = "/leave [ch|pv [[{channel|nickname}] {reason}]]";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $params = $p["params"];
@@ -14,9 +14,9 @@ class pfcCommand_leave extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         
         $type = isset($params[0]) ? $params[0] : '';
         $name = isset($params[1]) ? $params[1] : '';
@@ -28,7 +28,7 @@ class pfcCommand_leave extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return;
         }
@@ -97,7 +97,7 @@ class pfcCommand_leave extends pfcCommand
                 $cmdp["param"] = _pfc("%s quit", $u->getNickname());
                 if ($reason != "")
                     $cmdp["param"] .= " (" . $reason . ")";
-                $cmd = & pfcCommand :: Factory("notice");
+                $cmd = pfcCommand :: Factory("notice");
                 $cmd->run($xml_reponse, $cmdp);
             }
             
@@ -120,7 +120,7 @@ class pfcCommand_leave extends pfcCommand
             {
                 $cmdp = $p;
                 $cmdp["param"] = $reason;
-                $cmd = & pfcCommand :: Factory("error");
+                $cmd = pfcCommand :: Factory("error");
                 $cmd->run($xml_reponse, $cmdp);
             }
             
@@ -134,7 +134,7 @@ class pfcCommand_leave extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
         }
     }

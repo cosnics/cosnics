@@ -5,7 +5,7 @@ class pfcCommand_version extends pfcCommand
 
     var $usage = "/version";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -13,8 +13,8 @@ class pfcCommand_version extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $xml_reponse->script("pfc.handleResponse('" . $this->name . "', 'ok', '" . $c->version . "');");
     }

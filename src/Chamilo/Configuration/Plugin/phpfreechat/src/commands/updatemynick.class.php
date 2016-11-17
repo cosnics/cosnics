@@ -3,7 +3,7 @@ require_once (dirname(__FILE__) . "/../pfccommand.class.php");
 class pfcCommand_updatemynick extends pfcCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -11,9 +11,9 @@ class pfcCommand_updatemynick extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         
         $ct->updateNick($u->nickid);
     }

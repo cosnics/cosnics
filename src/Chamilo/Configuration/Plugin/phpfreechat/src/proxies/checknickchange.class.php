@@ -27,7 +27,7 @@ require_once dirname(__FILE__) . "/../pfcproxycommand.class.php";
 class pfcProxyCommand_checknickchange extends pfcProxyCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -35,9 +35,9 @@ class pfcProxyCommand_checknickchange extends pfcProxyCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         $owner = isset($p["owner"]) ? $p["owner"] : '';
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         
         $newnick = phpFreeChat :: FilterNickname($param);
         $oldnick = $ct->getNickname($u->nickid);
@@ -90,7 +90,7 @@ class pfcProxyCommand_checknickchange extends pfcProxyCommand
             $cmdp = $p;
             $cmdp["param"] = $c->nick;
             $cmdp["owner"] = $this->proxyname;
-            $cmd = & pfcCommand :: Factory("nick");
+            $cmd = pfcCommand :: Factory("nick");
             return $cmd->run($xml_reponse, $cmdp);
         }
         
@@ -100,8 +100,8 @@ class pfcProxyCommand_checknickchange extends pfcProxyCommand
 
     function _checkNickIsUsed($newnick, $oldnickid)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         $nick_in_use = false;
         $online_users = $ct->getOnlineNick(NULL);
         if (isset($online_users["nickid"]))

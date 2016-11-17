@@ -19,7 +19,7 @@ require_once (dirname(__FILE__) . "/who.class.php");
 class pfcCommand_who2 extends pfcCommand_who
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -27,8 +27,8 @@ class pfcCommand_who2 extends pfcCommand_who
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         if ($param != "")
         {
