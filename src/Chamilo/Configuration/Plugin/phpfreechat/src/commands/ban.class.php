@@ -5,7 +5,7 @@ class pfcCommand_ban extends pfcCommand
 
     var $usage = "/ban {nickname} [ {reason} ]";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -14,8 +14,8 @@ class pfcCommand_ban extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         $nick = isset($params[0]) ? $params[0] : '';
         $reason = isset($params[1]) ? $params[1] : '';
@@ -35,19 +35,19 @@ class pfcCommand_ban extends pfcCommand
             $cmdp = $p;
             $cmdp["param"] = _pfc("Missing parameter");
             $cmdp["param"] .= " (" . $this->usage . ")";
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return;
         }
         
-        $ct = & pfcContainer :: Instance();
+        $ct = pfcContainer :: Instance();
         $nickidtoban = $ct->getNickId($nick);
         
         // notify all the channel
         $cmdp = $p;
         $cmdp["param"] = _pfc("%s banished from %s by %s", $nick, $channame, $sender);
         $cmdp["flag"] = 1;
-        $cmd = & pfcCommand :: Factory("notice");
+        $cmd = pfcCommand :: Factory("notice");
         $cmd->run($xml_reponse, $cmdp);
         
         // kick the user (maybe in the future, it will be dissociate in a /kickban command)
@@ -55,7 +55,7 @@ class pfcCommand_ban extends pfcCommand
         $cmdp["params"] = array();
         $cmdp["params"][] = $nick; // nickname to kick
         $cmdp["params"][] = $reason; // reason
-        $cmd = & pfcCommand :: Factory("kick");
+        $cmd = pfcCommand :: Factory("kick");
         $cmd->run($xml_reponse, $cmdp);
         
         // update the recipient banlist

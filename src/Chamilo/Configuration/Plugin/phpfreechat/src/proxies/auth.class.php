@@ -27,7 +27,7 @@ require_once dirname(__FILE__) . "/../pfcproxycommand.class.php";
 class pfcProxyCommand_auth extends pfcProxyCommand
 {
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -35,15 +35,15 @@ class pfcProxyCommand_auth extends pfcProxyCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         // do not allow someone to run a command if he is not online
         if (! $u->isOnline() && $this->name != 'error' && $this->name != 'connect' && $this->name != 'update')
         {
             $cmdp = $p;
             $cmdp["param"] = _pfc("Your must be connected to send a message");
-            $cmd = & pfcCommand :: Factory("error");
+            $cmd = pfcCommand :: Factory("error");
             $cmd->run($xml_reponse, $cmdp);
             return false;
         }
@@ -52,7 +52,7 @@ class pfcProxyCommand_auth extends pfcProxyCommand
         $admincmd = array("kick", "ban", "unban", "op", "deop", "debug", "rehash");
         if (in_array($this->name, $admincmd))
         {
-            $container = & pfcContainer :: Instance();
+            $container = pfcContainer :: Instance();
             $nickid = $u->nickid;
             $isadmin = $container->getUserMeta($nickid, 'isadmin');
             if (! $isadmin)
@@ -66,7 +66,7 @@ class pfcProxyCommand_auth extends pfcProxyCommand
         // channels protection
         if ($this->name == "join" || $this->name == "join2")
         {
-            $container = & pfcContainer :: Instance();
+            $container = pfcContainer :: Instance();
             $channame = $param;
             
             // check the user is not listed in the banished channel list

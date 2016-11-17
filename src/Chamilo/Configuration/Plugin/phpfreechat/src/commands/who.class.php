@@ -21,7 +21,7 @@ class pfcCommand_who extends pfcCommand
 
     var $usage = "/who channel";
 
-    function run(&$xml_reponse, $p)
+    function run($xml_reponse, $p)
     {
         $clientid = $p["clientid"];
         $param = $p["param"];
@@ -29,8 +29,8 @@ class pfcCommand_who extends pfcCommand
         $recipient = $p["recipient"];
         $recipientid = $p["recipientid"];
         
-        $c = & pfcGlobalConfig :: Instance();
-        $u = & pfcUserConfig :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $u = pfcUserConfig :: Instance();
         
         if ($param != "")
         {
@@ -46,8 +46,8 @@ class pfcCommand_who extends pfcCommand
 
     function _getChanMeta($recipient, $recipientid)
     {
-        $c = & pfcGlobalConfig :: Instance();
-        $ct = & pfcContainer :: Instance();
+        $c = pfcGlobalConfig :: Instance();
+        $ct = pfcContainer :: Instance();
         $chanmeta = array();
         $chanmeta['chan'] = $recipient;
         $chanmeta['chanid'] = $recipientid;
