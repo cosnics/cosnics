@@ -1,6 +1,6 @@
 /*global $, window, handleResize, getWindowHeight, reinit, document, jQuery, destroy, setTimeout, clearTimeout */
 
-$(function() {
+(function($) {
     var windowHeight = getWindowHeight(), resizeTimer = null;
     var cdaMatchRegExp = /\[CDA context=\{([^"]*?)\}\](.*?)\[\/CDA\]/gi;
     var attributeReplacement = "$2";
@@ -112,4 +112,4 @@ $(function() {
 
     });
 
-});
+}(jQuery));
