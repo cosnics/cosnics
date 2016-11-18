@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="assessment_open_question">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="question_type"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="1" />
+        <property
+            name="feedback"
+            type="text" />
+        <property
+            name="hint"
+            type="text" />
+    </properties>
+    <index
+        name="id"
+        type="primary">
+        <indexproperty name="id" />
+    </index>
+    <index name="question_type">
+        <indexproperty name="question_type" />
+    </index>
+</object>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+    <package>
+        <name>Microsoft Office 365</name>
+        <code>Office365</code>
+        <type>Chamilo\Core\Repository\Implementation</type>
+        <context>Chamilo\Core\Repository\Implementation\Office365</context>
+        <category>Document</category>
+        <authors>
+            <author>
+                <name>Andras Zolnay</name>
+                <email>a.zolnay@edufiles.nl</email>
+                <company>edufiles</company>
+            </author>
+        </authors>
+        <version>5.0.0</version>
+        <description>
+            "Office 365" refers to subscription plans that include access to Office applications plus other productivity services that are enabled
+            over the Internet (cloud services). Office 365 includes plans for use at home and for business. Learn about Office 365 for use at
+            home. Office 365 plans for business include services such as Skype for Business web conferencing and Exchange Online hosted email for
+            business, and additional online storage with OneDrive for Business.
+        </description>
+        <pre-depends>
+            <dependency type="registration">
+                <id>Chamilo\Core\Repository</id>
+                <version operator="4">5.0.0</version>
+            </dependency>
+        </pre-depends>
+    </package>
+</packages>

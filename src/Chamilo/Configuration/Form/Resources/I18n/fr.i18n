@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\dynamic_form_manager
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+AddElement = "Ajouter un élément"
+Checkbox = "Checkbox"
+HtmlEditor = "éditeur Html"
+Name = "Nom"
+OptionName = "Nom de l'option"
+Options = "Options"
+RadioButtons = "Les boutons radio"
+SelectBox = "Sélectionnez la case"
+Textbox = "Textbox"
+UpdateElement = "Mise à jour des éléments"
+TypeName = "Dynamic Form Manager"

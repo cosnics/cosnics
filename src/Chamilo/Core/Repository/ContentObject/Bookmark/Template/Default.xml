@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Bookmark">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Bookmark</translation>
+            <translation language="nl">Bladwijzer</translation>
+            <translation language="fr">Nom</translation>
+            <translation language="de">Bookmark</translation>
+        </variable>
+    </translations>
+</template>

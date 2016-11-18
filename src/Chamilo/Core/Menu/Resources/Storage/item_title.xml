@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="item_title">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="title"
+            type="text"
+            length="255"
+            unsigned="1"
+            notnull="0" />
+        <property
+            name="isocode"
+            type="text"
+            length="10"
+            unsigned="1"
+            notnull="0" />
+        <property
+            name="item_id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+        <property
+            name="sort"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+    </properties>
+</object>

@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_rating_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Rating question"
+TypeCategory = "Content Objects"
+Properties = "Properties"
+Percentage = "Percentage"
+Rating = "Rating"
+CorrectValue = "Correct value"
+Weight = "Weight"
+Title = "Question"
+Description = "Extra instructions"
+Hint = "Hint"
+FeedbackAnswer = "Only show feedback for wrong answers"
+InstructionsText = ""
+AddHint = "Configure hint"

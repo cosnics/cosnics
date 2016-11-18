@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Application\Weblcms">
+    <settings>
+        <category name="general">
+            <setting
+                name="show_subscribe_button_on_course_home"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="show_subscribe_button_on_course_home"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="allow_course_creation_without_coursetype"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="allow_course_creation_without_coursetype"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="allow_download_page"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="allow_download_page"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="allow_view_as_user"
+                field="toggle"
+                default="1">
+                <options type="static">
+                    <option
+                        name="allow_view_as_user"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="excluded_course_types"
+                field="text"
+                default="" />
+        </category>
+        <category name="viewer">
+            <setting
+                name="view_state"
+                field="radio"
+                default="0"
+                user_setting="1">
+                <options type="static">
+                    <option
+                        name="open_and_closed_mixed"
+                        value="0" />
+                    <option
+                        name="open_and_closed_seperated"
+                        value="1" />
+                    <option
+                        name="open_only"
+                        value="2" />
+                </options>
+            </setting>
+        </category>
+        <category name="publication">
+            <setting
+                name="display_publication_screen"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="display_publication_screen"
+                        value="1" />
+                    <option
+                        name="quick_publication"
+                        value="2" />
+                    <option
+                        name="both"
+                        value="3" />
+                </options>
+            </setting>
+            <setting
+                name="force_collaborate"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="force_collaborate"
+                        value="1" />
+                </options>
+            </setting>
+
+            <setting
+                name="collaborate_default"
+                field="toggle"
+                default="1"
+                user_setting="1">
+                <options type="static">
+                    <option
+                        name="collaborate_default"
+                        value="1" />
+                </options>
+            </setting>
+
+            <setting
+                name="log_mails"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="log_mails"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="tool_dependent_publish_button"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="tool_dependent_publish_button"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
+    </settings>
+</package>

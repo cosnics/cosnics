@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="application\weblcms\tool\peer_assessment">
+    <settings>
+        <!-- <category name="general"> <setting name="allow_self_subscribe" field="checkbox" default="0"/> </category> -->
+    </settings>
+</package>
