@@ -24,7 +24,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class Manager extends Application
 {
     // Parameters
-    const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
+    const PARAM_CONTENT_OBJECT_ID = 'preview_content_object_id';
     const PARAM_FORMAT = 'format';
     const PARAM_VIEW = 'view';
     
