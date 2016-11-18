@@ -69,13 +69,11 @@
 	margin: 0;
 }
 
-.navbar-chamilo ul.navbar-nav li a img.chamilo-menu-item-icon:not (.chamilo-menu-item-image-with-label
-	) {
+.navbar-chamilo ul.navbar-nav li a img.chamilo-menu-item-icon:not(.chamilo-menu-item-image-with-label) {
 	padding-top: 14px;
 }
 
-.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label:not (.chamilo-menu-item-label-with-image
-	):before {
+.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label:not(.chamilo-menu-item-label-with-image):before {
 	content: " ";
 	display: inline-block;
 	height: 100%;
@@ -84,8 +82,7 @@
 	/* Just in case the text wrapps, you shouldn't notice it */
 }
 
-.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label:not (.chamilo-menu-item-label-with-image
-	):first-child {
+.navbar-chamilo ul.navbar-nav li a div.chamilo-menu-item-label:not(.chamilo-menu-item-label-with-image):first-child {
 	display: inline-block;
 	vertical-align: middle;
 	max-width: 99.999%;
@@ -145,8 +142,7 @@
 	border-bottom: 1px solid #c7d6eb;
 }
 
-.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a div.chamilo-menu-item-label:not
-	(.chamilo-menu-item-label-with-image ) {
+.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a div.chamilo-menu-item-label:not(.chamilo-menu-item-label-with-image ) {
 	height: auto;
 	padding: 10px;
 }
@@ -231,8 +227,7 @@
 		padding: 15px 15px 15px 0;
 		display: inline-block;
 	}
-	.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a div.chamilo-menu-item-label:not
-		(.chamilo-menu-item-label-with-image ) {
+	.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a div.chamilo-menu-item-label:not(.chamilo-menu-item-label-with-image ) {
 		padding: 15px 15px 15px 55px;
 	}
 	.navbar-chamilo ul.navbar-nav li ul.dropdown-menu li a img.chamilo-menu-item-icon
