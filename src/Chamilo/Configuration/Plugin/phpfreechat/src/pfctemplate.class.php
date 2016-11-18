@@ -61,7 +61,7 @@ class pfcTemplate
         $vars = get_object_vars($obj);
         foreach ($vars as $v_name => $v_val)
             $this->vars[$v_name] = $v_val;
-        $this->vars[$name] = & $obj; // assigne also the whole object
+        $this->vars[$name] = $obj; // assigne also the whole object
     }
 }
 

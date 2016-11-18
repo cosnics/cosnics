@@ -15,6 +15,8 @@ require_once dirname(__FILE__) . '/pfcglobalconfig.class.php';
  */
 function pfc_make_hyperlink($text)
 {
+    return $text;
+    
     $c = pfcGlobalConfig :: Instance();
     $openlinknewwindow = $c->openlinknewwindow;
     

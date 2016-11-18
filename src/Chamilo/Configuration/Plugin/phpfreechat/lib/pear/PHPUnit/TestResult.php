@@ -150,7 +150,7 @@ class PHPUnit_TestResult
     {
         if (is_object($listener) && is_a($listener, 'PHPUnit_TestListener'))
         {
-            $this->_listeners[] = &$listener;
+            $this->_listeners[] =$listener;
         }
     }
 
@@ -162,7 +162,7 @@ class PHPUnit_TestResult
      */
     function addPassedTest(&$test)
     {
-        $this->_passedTests[] = &$test;
+        $this->_passedTests[] =$test;
     }
 
     /**

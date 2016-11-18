@@ -41,13 +41,13 @@ class csstidy_optimise
      */
     function __construct(&$css)
     {
-        $this->parser = & $css;
-        $this->css = & $css->css;
-        $this->sub_value = & $css->sub_value;
-        $this->at = & $css->at;
-        $this->selector = & $css->selector;
-        $this->property = & $css->property;
-        $this->value = & $css->value;
+        $this->parser = $css;
+        $this->css = $css->css;
+        $this->sub_value = $css->sub_value;
+        $this->at = $css->at;
+        $this->selector = $css->selector;
+        $this->property = $css->property;
+        $this->value = $css->value;
     }
 
     /**
@@ -103,7 +103,7 @@ class csstidy_optimise
      */
     function value()
     {
-        $shorthands = & $GLOBALS['csstidy']['shorthands'];
+        $shorthands = $GLOBALS['csstidy']['shorthands'];
         
         // optimise shorthand properties
         if (isset($shorthands[$this->property]))
@@ -134,7 +134,7 @@ class csstidy_optimise
      */
     function shorthands()
     {
-        $shorthands = & $GLOBALS['csstidy']['shorthands'];
+        $shorthands = $GLOBALS['csstidy']['shorthands'];
         
         if (! $this->parser->get_cfg('optimise_shorthands') || $this->parser->get_cfg('preserve_css'))
         {
@@ -170,7 +170,7 @@ class csstidy_optimise
      */
     function subvalue()
     {
-        $replace_colors = & $GLOBALS['csstidy']['replace_colors'];
+        $replace_colors = $GLOBALS['csstidy']['replace_colors'];
         
         $this->sub_value = trim($this->sub_value);
         if ($this->sub_value == '') // caution : '0'
@@ -327,7 +327,7 @@ class csstidy_optimise
      */
     function cut_color($color)
     {
-        $replace_colors = & $GLOBALS['csstidy']['replace_colors'];
+        $replace_colors = $GLOBALS['csstidy']['replace_colors'];
         
         // rgb(0,0,0) -> #000000 (or #000 in this case later)
         if (strtolower(substr($color, 0, 4)) == 'rgb(')
@@ -423,9 +423,9 @@ class csstidy_optimise
      */
     function compress_numbers($subvalue)
     {
-        $units = & $GLOBALS['csstidy']['units'];
-        $number_values = & $GLOBALS['csstidy']['number_values'];
-        $color_values = & $GLOBALS['csstidy']['color_values'];
+        $units = $GLOBALS['csstidy']['units'];
+        $number_values = $GLOBALS['csstidy']['number_values'];
+        $color_values = $GLOBALS['csstidy']['color_values'];
         
         // for font:1em/1em sans-serif...;
         if ($this->property == 'font')
@@ -544,7 +544,7 @@ class csstidy_optimise
      */
     function dissolve_4value_shorthands($property, $value)
     {
-        $shorthands = & $GLOBALS['csstidy']['shorthands'];
+        $shorthands = $GLOBALS['csstidy']['shorthands'];
         if (! is_array($shorthands[$property]))
         {
             $return[$property] = $value;
@@ -660,7 +660,7 @@ class csstidy_optimise
     function merge_4value_shorthands($array)
     {
         $return = $array;
-        $shorthands = & $GLOBALS['csstidy']['shorthands'];
+        $shorthands = $GLOBALS['csstidy']['shorthands'];
         
         foreach ($shorthands as $key => $value)
         {
@@ -701,7 +701,7 @@ class csstidy_optimise
      */
     function dissolve_short_bg($str_value)
     {
-        $background_prop_default = & $GLOBALS['csstidy']['background_prop_default'];
+        $background_prop_default = $GLOBALS['csstidy']['background_prop_default'];
         $repeat = array('repeat', 'repeat-x', 'repeat-y', 'no-repeat', 'space');
         $attachment = array('scroll', 'fixed', 'local');
         $clip = array('border', 'padding');
@@ -804,7 +804,7 @@ class csstidy_optimise
      */
     function merge_bg($input_css)
     {
-        $background_prop_default = & $GLOBALS['csstidy']['background_prop_default'];
+        $background_prop_default = $GLOBALS['csstidy']['background_prop_default'];
         // Max number of background images. CSS3 not yet fully implemented
         $number_of_values = @max(
             count(csstidy_optimise :: explode_ws(',', $input_css['background-image'])), 

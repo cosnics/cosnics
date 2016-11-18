@@ -65,13 +65,13 @@ class csstidy_print
      */
     function __construct(&$css)
     {
-        $this->parser = & $css;
-        $this->css = & $css->css;
-        $this->template = & $css->template;
-        $this->tokens = & $css->tokens;
-        $this->charset = & $css->charset;
-        $this->import = & $css->import;
-        $this->namespace = & $css->namespace;
+        $this->parser = $css;
+        $this->css = $css->css;
+        $this->template = $css->template;
+        $this->tokens = $css->tokens;
+        $this->charset = $css->charset;
+        $this->import = $css->import;
+        $this->namespace = $css->namespace;
     }
 
     /**
@@ -132,7 +132,7 @@ class csstidy_print
             $this->_convert_raw_css();
         }
         
-        $template = & $this->template;
+        $template = $this->template;
         
         if ($plain)
         {
@@ -164,7 +164,7 @@ class csstidy_print
         
         $output .= $template[13];
         $in_at_out = '';
-        $out = & $output;
+        $out = $output;
         
         foreach ($this->tokens as $key => $token)
         {
@@ -172,7 +172,7 @@ class csstidy_print
             {
                 case AT_START :
                     $out .= $template[0] . $this->_htmlsp($token[1], $plain) . $template[1];
-                    $out = & $in_at_out;
+                    $out = $in_at_out;
                     break;
                 
                 case SEL_START :
@@ -210,7 +210,7 @@ class csstidy_print
                     break;
                 
                 case AT_END :
-                    $out = & $output;
+                    $out = $output;
                     $out .= $template[10] . str_replace("\n", "\n" . $template[10], $in_at_out);
                     $in_at_out = '';
                     $out .= $template[9];

@@ -77,7 +77,7 @@ class pfcCommand
         $cmd->name = $cmd_name;
 
         // instanciate the proxies chaine
-        $firstproxy = & $cmd;
+        $firstproxy = $cmd;
         for ($i = count($c->proxies) - 1; $i >= 0; $i --)
         {
             $proxy_name = $c->proxies[$i];
@@ -99,7 +99,7 @@ class pfcCommand
             $proxy->name = $cmd_name;
             $proxy->proxyname = $proxy_name;
             $proxy->linkTo($firstproxy);
-            $firstproxy = & $proxy;
+            $firstproxy = $proxy;
         }
 
         /*
