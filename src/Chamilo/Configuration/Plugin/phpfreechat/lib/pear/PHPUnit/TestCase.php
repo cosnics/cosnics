@@ -158,7 +158,7 @@ class PHPUnit_TestCase extends PHPUnit_Assert
      */
     function run(&$result)
     {
-        $this->_result = &$result;
+        $this->_result =$result;
         $this->_result->run($this);
         
         return $this->_result;

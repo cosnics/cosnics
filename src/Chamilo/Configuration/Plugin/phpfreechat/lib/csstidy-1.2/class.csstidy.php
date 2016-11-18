@@ -379,7 +379,7 @@ class csstidy
     {
         ++ $i;
         $add = '';
-        $tokens = & $GLOBALS['csstidy']['tokens'];
+        $tokens = $GLOBALS['csstidy']['tokens'];
         $replaced = false;
         
         while ($i < strlen($string) && (ctype_xdigit($string{$i}) || ctype_space($string{$i})) && strlen($add) < 6)
@@ -434,7 +434,7 @@ class csstidy
      */
     function load_template($content, $from_file = true)
     {
-        $predefined_templates = & $GLOBALS['csstidy']['predefined_templates'];
+        $predefined_templates = $GLOBALS['csstidy']['predefined_templates'];
         if ($content == 'high_compression' || $content == 'default' || $content == 'highest_compression' ||
              $content == 'low_compression')
         {
@@ -477,7 +477,7 @@ class csstidy
      */
     function is_token(&$string, $i)
     {
-        $tokens = & $GLOBALS['csstidy']['tokens'];
+        $tokens = $GLOBALS['csstidy']['tokens'];
         return (strpos($tokens, $string{$i}) !== false && ! csstidy :: escaped($string, $i));
     }
 
@@ -496,8 +496,8 @@ class csstidy
         $this->print = new csstidy_print($this);
         $this->optimise = new csstidy_optimise($this);
         
-        $all_properties = & $GLOBALS['csstidy']['all_properties'];
-        $at_rules = & $GLOBALS['csstidy']['at_rules'];
+        $all_properties = $GLOBALS['csstidy']['all_properties'];
+        $at_rules = $GLOBALS['csstidy']['at_rules'];
         
         $this->css = array();
         $this->print->input_css = $string;
@@ -1030,7 +1030,7 @@ class csstidy
      */
     function property_is_next($istring, $pos)
     {
-        $all_properties = & $GLOBALS['csstidy']['all_properties'];
+        $all_properties = $GLOBALS['csstidy']['all_properties'];
         $istring = substr($istring, $pos, strlen($istring) - $pos);
         $pos = strpos($istring, ':');
         if ($pos === false)
@@ -1056,7 +1056,7 @@ class csstidy
      */
     function property_is_valid($property)
     {
-        $all_properties = & $GLOBALS['csstidy']['all_properties'];
+        $all_properties = $GLOBALS['csstidy']['all_properties'];
         return (isset($all_properties[$property]) &&
              strpos($all_properties[$property], strtoupper($this->get_cfg('css_level'))) !== false);
     }

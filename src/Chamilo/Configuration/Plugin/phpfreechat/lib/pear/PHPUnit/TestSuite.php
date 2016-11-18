@@ -113,7 +113,7 @@ class PHPUnit_TestSuite
      */
     function addTest(&$test)
     {
-        $this->_tests[] = &$test;
+        $this->_tests[] =$test;
     }
 
     /**

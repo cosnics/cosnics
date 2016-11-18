@@ -243,7 +243,7 @@ class PHPUnit_GUI_Gtk
         $window->connect_object('destroy', array('gtk', 'main_quit'));
         
         // Assign the member.
-        $this->gui = & $window;
+        $this->gui = $window;
     }
 
     /**
@@ -622,7 +622,7 @@ class PHPUnit_GUI_Gtk
     function run()
     {
         // Load the test suite.
-        $this->suite = & $this->loadTest($this->suiteField->get_text());
+        $this->suite = $this->loadTest($this->suiteField->get_text());
         
         // Check to make sure the suite was loaded properly.
         if (! is_object($this->suite))
@@ -683,7 +683,7 @@ class PHPUnit_GUI_Gtk
             }
             else
             {
-                $this->suite = & $this->loadTest($suite);
+                $this->suite = $this->loadTest($suite);
             }
             
             // Set the suite field.

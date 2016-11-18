@@ -51,7 +51,7 @@ class phpFreeChat
             if ($function && method_exists($this, $function))
             {
                 require_once dirname(__FILE__) . '/pfcresponse.class.php';
-                $r = & $this->$function($cmd);
+                $r = $this->$function($cmd);
             }
             echo $r->getOutput();
             die();

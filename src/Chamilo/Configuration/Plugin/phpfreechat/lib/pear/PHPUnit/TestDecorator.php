@@ -84,7 +84,7 @@ class PHPUnit_TestDecorator
         if (is_object($test) && (is_a($test, 'PHPUnit_TestCase') || is_a($test, 'PHPUnit_TestSuite')))
         {
             
-            $this->_test = &$test;
+            $this->_test =$test;
         }
     }
 

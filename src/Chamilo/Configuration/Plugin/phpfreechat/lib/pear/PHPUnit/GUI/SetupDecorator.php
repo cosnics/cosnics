@@ -79,7 +79,7 @@ class PHPUnit_GUI_SetupDecorator
      */
     function __construct(&$gui)
     {
-        $this->_gui = &$gui;
+        $this->_gui =$gui;
     }
 
     /**

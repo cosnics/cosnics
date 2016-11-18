@@ -1042,7 +1042,7 @@ class pfcGlobalConfig
                         $result[$smiley_file][] = htmlspecialchars(addslashes($str));
                 }
         }
-        $this->smileys = & $result;
+        $this->smileys = $result;
     }
 
     function getId()
@@ -1113,7 +1113,7 @@ class pfcGlobalConfig
 
             if (! $this->isInit())
                 $this->init();
-            $errors = & $this->getErrors();
+            $errors = $this->getErrors();
             if (count($errors) == 0)
             {
                 // save the validated config in cache

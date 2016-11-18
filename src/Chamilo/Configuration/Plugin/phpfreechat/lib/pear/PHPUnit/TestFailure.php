@@ -78,8 +78,8 @@ class PHPUnit_TestFailure
      */
     function __construct(&$failedTest, &$thrownException)
     {
-        $this->_failedTest = &$failedTest;
-        $this->_thrownException = &$thrownException;
+        $this->_failedTest =$failedTest;
+        $this->_thrownException =$thrownException;
     }
 
     /**
