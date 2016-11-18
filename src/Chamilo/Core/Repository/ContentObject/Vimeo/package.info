@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<packages>
+    <package>
+        <name>Vimeo Video</name>
+        <code>Vimeo</code>
+        <context>Chamilo\Core\Repository\ContentObject\Vimeo</context>
+        <type>Chamilo\Core\Repository\ContentObject</type>
+        <category>Media</category>
+        <authors>
+            <author>
+                <name>Shoira Mukhsinova</name>
+                <email>-</email>
+                <company>Erasmushogeschool Brussel</company>
+            </author>
+            <author>
+                <name>Magali Gillard</name>
+                <email>magali.gillard@ehb.be</email>
+                <company>Erasmushogeschool Brussel</company>
+            </author>
+        </authors>
+        <version>5.0.0</version>
+        <description />
+        <pre-depends>
+            <dependency type="registration">
+                <id>Chamilo\Core\Repository</id>
+                <version operator="4">5.0.0</version>
+            </dependency>
+        </pre-depends>
+    </package>
+</packages>

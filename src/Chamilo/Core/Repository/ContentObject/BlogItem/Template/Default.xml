@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\BlogItem">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Blog item</translation>
+            <translation language="nl">Blog item</translation>
+            <translation language="fr">Elément du blog</translation>
+            <translation language="de">Blog-Punkt</translation>
+        </variable>
+    </translations>
+</template>

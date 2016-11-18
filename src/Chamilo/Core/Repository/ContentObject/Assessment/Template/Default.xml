@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Assessment">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Assessment</translation>
+            <translation language="nl">Oefening</translation>
+            <translation language="fr">Évaluation</translation>
+            <translation language="de">Beurteilung</translation>
+        </variable>
+    </translations>
+</template>

@@ -1,0 +1,15 @@
+<phpunit
+    bootstrap="./TestBootstrap.php"
+    colors="true"
+    syntaxCheck="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    backupGlobals="false"
+    backupStaticAttributes="false">
+    <testsuite name="common_libraries">
+        <directory>./unit</directory>
+        <directory>./acceptance</directory>
+    </testsuite>
+
+</phpunit>

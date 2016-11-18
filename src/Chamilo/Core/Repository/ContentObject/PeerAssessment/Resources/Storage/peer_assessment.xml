@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="peer_assessment">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <!-- valid types: 1=scores, 2=feedback, 3=both -->
+        <property
+            name="assessment_type"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="3" />
+        <!-- valid scales: "dochy", "lickert", ... -->
+        <property
+            name="scale"
+            type="text"
+            length="20"
+            fixed="true"
+            notnull="1" />
+    </properties>
+    <index
+        name="id"
+        type="primary">
+        <indexproperty name="id" />
+    </index>
+</object>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Select question</translation>
+            <translation language="nl">Selectie vraag</translation>
+            <translation language="fr">Sélectionnez une question</translation>
+            <translation language="de">Frage auswählen</translation>
+        </variable>
+    </translations>
+</template>
