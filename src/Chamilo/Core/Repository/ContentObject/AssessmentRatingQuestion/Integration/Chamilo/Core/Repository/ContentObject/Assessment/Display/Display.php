@@ -91,10 +91,12 @@ class Display extends QuestionDisplay
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
 
+            $html[] = '<div class="panel-body">';
             $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
             $html[] = '<div class="with_borders"><a id="' . $hint_name .
                  '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
                  Translation :: get('GetAHint') . '</a></div>';
+            $html[] = '</div>';
 
             $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
