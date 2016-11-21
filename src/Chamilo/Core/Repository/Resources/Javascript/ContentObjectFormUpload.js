@@ -1,4 +1,9 @@
 if(typeof dropzoneCallbacks != 'undefined') {
+
+	if(typeof dropzoneCallbacks.chamilo.core === 'undefined') {
+		dropzoneCallbacks.chamilo.core = {'repository': {}};
+	}
+
 	dropzoneCallbacks.chamilo.core.repository.importAttachment = {
 		processUploadedFile: function (environment, file, serverResponse) {
 			dropzoneCallbacks.chamilo.core.repository.importWithElementFinder.processUploadedFile(
