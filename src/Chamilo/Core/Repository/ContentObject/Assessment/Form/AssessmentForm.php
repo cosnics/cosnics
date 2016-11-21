@@ -63,7 +63,7 @@ class AssessmentForm extends ContentObjectForm
             'radio',
             self :: UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('Unlimited'),
+            Translation :: get('UnlimitedAttempts'),
             0,
             array(
                 'onclick' => 'javascript:window_hide(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
@@ -72,7 +72,7 @@ class AssessmentForm extends ContentObjectForm
             'radio',
             self :: UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('Limited'),
+            Translation :: get('LimitedAttempts'),
             1,
             array(
                 'onclick' => 'javascript:window_show(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
@@ -140,7 +140,7 @@ class AssessmentForm extends ContentObjectForm
             'radio',
             self :: RANDOM_QUESTIONS,
             '',
-            Translation :: get('AllQuestions'),
+            Translation :: get('NoRandomization'),
             0,
             array(
                 'onclick' => 'javascript:window_hide(\'' . self :: RANDOM_QUESTIONS . '_window\')',
@@ -240,7 +240,7 @@ class AssessmentForm extends ContentObjectForm
             'radio',
             self :: UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('Unlimited'),
+            Translation :: get('UnlimitedAttempts'),
             0,
             array(
                 'onclick' => 'javascript:window_hide(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
@@ -249,7 +249,7 @@ class AssessmentForm extends ContentObjectForm
             'radio',
             self :: UNLIMITED_ATTEMPTS,
             '',
-            Translation :: get('Limited'),
+            Translation :: get('LimitedAttempts'),
             1,
             array(
                 'onclick' => 'javascript:window_show(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
@@ -317,7 +317,7 @@ class AssessmentForm extends ContentObjectForm
             'radio',
             self :: RANDOM_QUESTIONS,
             '',
-            Translation :: get('AllQuestions'),
+            Translation :: get('NoRandomization'),
             0,
             array(
                 'onclick' => 'javascript:window_hide(\'' . self :: RANDOM_QUESTIONS . '_window\')',

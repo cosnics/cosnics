@@ -80,7 +80,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      *
-     * @return \core\repository\content_object\assessment\display\Configuration
+     * @return Configuration
      */
     public function get_configuration()
     {

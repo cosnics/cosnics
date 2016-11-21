@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assessment\Display\Component\Viewer\As
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -96,16 +97,8 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $html = array();
-
-                $html[] = $this->render_header();
-                $html[] = Display :: message(
-                    Display :: MESSAGE_TYPE_CONFIRM,
-                    Translation :: get('AssessmentFinished', array('URL' => $this->get_assessment_back_url())),
-                    true);
-                $html[] = $this->render_footer();
-
-                return implode(PHP_EOL, $html);
+                $redirect = new Redirect();
+                $redirect->writeHeader($this->get_assessment_back_url());
             }
         }
 

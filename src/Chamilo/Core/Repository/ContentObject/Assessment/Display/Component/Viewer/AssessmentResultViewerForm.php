@@ -53,6 +53,11 @@ class AssessmentResultViewerForm extends FormValidator
 
     public function add_buttons()
     {
+        $assessmentViewer = $this->assessment_result_processor->get_assessment_viewer();
+        $assesmentConfiguration = $assessmentViewer->get_configuration();
+
+        $back_url = $assessmentViewer->get_assessment_back_url();
+
         $finished = $this->assessment_result_processor->is_finished();
 
         if (! $finished && $this->get_page_number() != ($this->get_total_pages() + 1))
@@ -84,18 +89,30 @@ class AssessmentResultViewerForm extends FormValidator
              $this->get_page_number() == $this->assessment_result_processor->get_assessment_viewer()->get_total_pages())
         {
 
-            if ($this->assessment_result_processor->get_assessment_viewer()->get_configuration()->show_score())
+            if($assesmentConfiguration->show_feedback_summary())
             {
-                $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('SeeResults'));
+                if ($assesmentConfiguration->show_score())
+                {
+                    $buttons[] = $this->createElement('style_submit_button', 'submit', Translation:: get('SeeResults'));
+                }
+                else
+                {
+                    $buttons[] =
+                        $this->createElement('style_submit_button', 'submit', Translation:: get('ViewResults'));
+                }
             }
             else
             {
-                $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('ViewResults'));
+                $buttons[] = $this->createElement('style_submit_button', 'submit',
+                    Translation :: get('Finish'),
+                    array('class' => 'btn-danger'),
+                    null,
+                    'stop'
+                );
             }
         }
         elseif ($finished || $this->get_page_number() == ($this->get_total_pages() + 1))
         {
-            $back_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_back_url();
             $continue_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_continue_url();
             $current_url = $this->assessment_result_processor->get_assessment_viewer()->get_assessment_current_url();
 

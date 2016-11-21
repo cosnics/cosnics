@@ -48,8 +48,8 @@ class AssessmentResultProcessor
         }
         else
         {
-            $question_number = ($results_page_number *
-                 $this->assessment_viewer->get_root_content_object()->get_questions_per_page());
+            $question_number = (($results_page_number - 1) *
+                 $this->assessment_viewer->get_root_content_object()->get_questions_per_page()) + 1;
         }
 
         $values = $_POST;

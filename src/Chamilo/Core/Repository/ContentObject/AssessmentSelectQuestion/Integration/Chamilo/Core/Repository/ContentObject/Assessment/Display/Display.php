@@ -56,6 +56,8 @@ class Display extends QuestionDisplay
 
         $question_name = $question_id . '_0';
 
+        $formvalidator->addElement('html', '<div class="panel-body">');
+
         if ($type == AssessmentSelectQuestion :: ANSWER_TYPE_CHECKBOX)
         {
             $advanced_select = $formvalidator->createElement(
@@ -80,9 +82,16 @@ class Display extends QuestionDisplay
             'html',
             ResourceManager :: get_instance()->get_resource_html(
                 Path :: getInstance()->getJavascriptPath(Assessment :: package(), true) . 'GiveHint.js'));
+
+        $formvalidator->addElement('html', '</div>');
     }
 
     public function add_borders()
+    {
+        return true;
+    }
+
+    public function needsDescriptionBorder()
     {
         return true;
     }
@@ -121,10 +130,12 @@ class Display extends QuestionDisplay
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
 
+            $html[] = '<div class="panel-body">';
             $html[] = '<div class="splitter">' . Translation :: get('Hint') . '</div>';
             $html[] = '<div class="with_borders"><a id="' . $hint_name .
                  '" class="btn btn-default hint_button"><span class="glyphicon glyphicon-gift"></span> ' .
                  Translation :: get('GetAHint') . '</a></div>';
+            $html[] = '</div>';
 
             $footer = implode(PHP_EOL, $html);
             $formvalidator->addElement('html', $footer);
