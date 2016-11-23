@@ -33,6 +33,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     const PROPERTY_FILESIZE = 'filesize';
     const PROPERTY_HASH = 'hash';
     const PROPERTY_EXTENSION = 'extension';
+    const PROPERTY_SHOW_INLINE = 'show_inline';
 
     // Filetype groups
     const TYPE_AUDIO = 1;
@@ -515,7 +516,9 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             self :: PROPERTY_FILESIZE,
             self :: PROPERTY_PATH,
             self :: PROPERTY_HASH,
-            self :: PROPERTY_STORAGE_PATH);
+            self :: PROPERTY_STORAGE_PATH,
+            self::PROPERTY_SHOW_INLINE
+        );
     }
 
     /**
@@ -794,4 +797,26 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     {
         return array(self :: PROPERTY_FILENAME);
     }
+
+    /**
+     * Returns whether or not the file must be shown inline
+     *
+     * @return bool
+     */
+    public function getShowInline()
+    {
+        return $this->get_additional_property(self::PROPERTY_SHOW_INLINE);
+    }
+
+    /**
+     * Sets whether or not the file must be shown inline
+     *
+     * @param bool $showInline
+     */
+    public function setShowInline($showInline)
+    {
+        return $this->set_additional_property(self::PROPERTY_SHOW_INLINE, $showInline);
+    }
+
+
 }

@@ -82,3 +82,6 @@ ALTER TABLE `menu_application_item`
 /* Perspectief */
 
 INSERT INTO `configuration_setting` (`id`, `context`, `variable`, `value`, `user_setting`) VALUES(NULL, 'Chamilo\\Core\\Admin', 'google_analytics_tracking_id', '', 0);
+
+ALTER TABLE `chamilo_install_test`.`repository_file`
+  ADD COLUMN `show_inline` INT(3) NOT NULL DEFAULT 1 AFTER `hash`;
