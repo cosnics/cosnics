@@ -161,7 +161,7 @@ class FileForm extends ContentObjectForm
             $object->set_temporary_file_path($temporaryFilePath);
         }
 
-        $object->setShowInline($this->exportValue(File::PROPERTY_SHOW_INLINE));
+        $object->setShowInline((bool) $this->exportValue(File::PROPERTY_SHOW_INLINE));
 
         $this->set_content_object($object);
 
@@ -198,7 +198,7 @@ class FileForm extends ContentObjectForm
             }
         }
 
-        $document->setShowInline($this->exportValue(File::PROPERTY_SHOW_INLINE));
+        $document->setShowInline((bool) $this->exportValue(File::PROPERTY_SHOW_INLINE));
 
         if ((isset($values['version']) && $values['version'] == 0) || !isset($values['version']))
         {
