@@ -138,9 +138,11 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
         $cookie = new Cookie(md5('anonymous_authentication'), $user->get_security_token());
         
         $parameters = Session::get('requested_url_parameters');
-        
+
         if (empty($parameters) || ($parameters[self::PARAM_CONTEXT] == self::context() &&
-             $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY))
+             $parameters[self::PARAM_ACTION] == self::ACTION_ACCESS_ANONYMOUSLY) ||
+            $parameters[self::PARAM_CONTEXT] == 'Chamilo\Core\Home'
+        )
         {
             $parameters = array(
                 self::PARAM_CONTEXT => Configuration::getInstance()->get_setting(
