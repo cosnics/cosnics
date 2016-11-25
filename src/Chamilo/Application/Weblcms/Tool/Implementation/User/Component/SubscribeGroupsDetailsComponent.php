@@ -77,7 +77,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $html[] = '<h5>' . $this->getTranslation('Users') . '</h5>';
         $html[] = '</div>';
 
-        $html[] = '<div>' . $this->buttonToolbarRenderer->render() . '</div>';
+        $html[] = '<div>' . $this->tabButtonToolbarRenderer->render() . '</div>';
         $html[] = $table->as_html();
 
         return implode($html, "\n");
@@ -98,7 +98,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
             $this->get_course_id()
         );
 
-        if (!in_array($group->getId(), $this->subscribedGroups) && ($this->getUser()->is_platform_admin() || $isAllowed))
+        if (!$this->isGroupSubscribed($group->getId()) && ($this->getUser()->is_platform_admin() || $isAllowed))
         {
             $buttonToolbar->addItem(
                 new Button(
@@ -140,7 +140,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $conditionProperties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_USERNAME);
         $conditionProperties[] = new PropertyConditionVariable(User :: class_name(), User :: PROPERTY_EMAIL);
 
-        $searchCondition = $this->buttonToolbarRenderer->getConditions($conditionProperties);
+        $searchCondition = $this->tabButtonToolbarRenderer->getConditions($conditionProperties);
         if ($searchCondition)
         {
             $conditions[] = $searchCondition;

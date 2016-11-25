@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Cache\DataClassCache;
 
 /**
  * $Id: subscribe.class.php 218 2009-11-13 14:21:26Z kariboe $
@@ -17,6 +18,7 @@ use Chamilo\Libraries\Platform\Translation;
  */
 class GroupSubscribeComponent extends Manager
 {
+    const PARAM_RETURN_TO_COMPONENT = 'return';
 
     /**
      * Runs this component and displays its output.
@@ -48,6 +50,12 @@ class GroupSubscribeComponent extends Manager
 
                 foreach ($group_ids as $group_id)
                 {
+                    if($this->isGroupSubscribed($group_id))
+                    {
+                        $failures++;
+                        continue;
+                    }
+
                     if (! $this->get_user()->is_platform_admin() && ! $course_management_rights->is_allowed_for_platform_group(
                         CourseManagementRights :: TEACHER_DIRECT_SUBSCRIBE_RIGHT,
                         $group_id,
@@ -72,6 +80,8 @@ class GroupSubscribeComponent extends Manager
                             $group_id);
                         $parent_group_id = $group->get_parent_id();
                     }
+
+                    DataClassCache::truncate(CourseEntityRelation::class_name());
                 }
 
                 if ($failures == 0)
@@ -106,11 +116,14 @@ class GroupSubscribeComponent extends Manager
                     $message = 'PartialGroupsNotSubscribedToCourse';
                 }
 
+                $returnAction = $this->getRequest()->get(self::PARAM_RETURN_TO_COMPONENT);
+                $returnAction = !empty($returnAction) ? $returnAction : self::ACTION_SUBSCRIBE_GROUP_DETAILS;
+
                 $this->redirect(
                     Translation :: get($message),
                     ($success ? false : true),
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS,
+                        \Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION => $returnAction,
                         \Chamilo\Application\Weblcms\Manager :: PARAM_GROUP => $parent_group_id));
             }
             else

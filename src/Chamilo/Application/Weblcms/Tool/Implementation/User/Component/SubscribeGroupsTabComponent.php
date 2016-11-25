@@ -6,8 +6,10 @@ use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\PlatformgroupMenuRenderer;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\Glyph\BootstrapGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
@@ -26,12 +28,15 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 abstract class SubscribeGroupsTabComponent extends Manager implements TableSupport
 {
-
     /**
-     *
      * @var ButtonToolBarRenderer
      */
-    protected $buttonToolbarRenderer;
+    protected $rootButtonToolbarRenderer;
+
+    /**
+     * @var ButtonToolBarRenderer
+     */
+    protected $tabButtonToolbarRenderer;
 
     /**
      * The currently selected group id
@@ -78,7 +83,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -86,12 +91,15 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         $this->translator = Translation::getInstance();
 
         $this->subscribedGroups = $this->get_subscribed_platformgroup_ids($this->get_course_id());
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
+        $this->rootButtonToolbarRenderer = $this->getRootButtonToolbarRenderer();
+        $this->tabButtonToolbarRenderer = $this->getTabButtonToolbarRenderer();
 
         $html = array();
 
         $html[] = $this->render_header();
         $html[] = $this->renderInformationMessage();
+
+        $html[] = $this->rootButtonToolbarRenderer->render();
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-4 col-md-3" style="margin-bottom: 20px;">';
@@ -153,7 +161,9 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
                 $this->getCurrentGroup()->get_name(),
                 $theme->getCommonImagePath('Action/Details'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS)),
-                get_class($this) == SubscribeGroupsDetailsComponent::class_name()));
+                get_class($this) == SubscribeGroupsDetailsComponent::class_name()
+            )
+        );
 
         $tabs->add_tab(
             new DynamicVisualTab(
@@ -161,7 +171,9 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
                 $this->getTranslation('BrowseChildren'),
                 $theme->getCommonImagePath('Action/Browser'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER)),
-                get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class_name()));
+                get_class($this) == SubscribeGroupsBrowseSubgroupsComponent::class_name()
+            )
+        );
 
         return $tabs->render();
     }
@@ -180,19 +192,49 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     }
 
     /**
-     * Builds and returns the toolbar renderer
+     * Builds and returns the tab toolbar renderer
      *
      * @return ButtonToolBarRenderer
      */
-    protected function getButtonToolbarRenderer()
+    protected function getTabButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->tabButtonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
-            $this->buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+            $this->tabButtonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
         }
 
-        return $this->buttonToolbarRenderer;
+        return $this->tabButtonToolbarRenderer;
+    }
+
+    /**
+     * Builds and returns the root toolbar renderer
+     *
+     * @return ButtonToolBarRenderer
+     */
+    protected function getRootButtonToolbarRenderer()
+    {
+        if (!isset($this->rootButtonToolbarRenderer))
+        {
+            $buttonToolbar = new ButtonToolBar();
+
+            $buttonToolbar->addItem(
+                new Button(
+                    Translation::getInstance()->getTranslation(
+                        'SubscribeGroupsSearcherComponent', null, Manager::context()
+                    ),
+                    new BootstrapGlyph('search'),
+                    $this->get_url(array(self::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUPS_SEARCHER)),
+                    Button::DISPLAY_ICON_AND_LABEL,
+                    false,
+                    'pull-right'
+                )
+            );
+
+            $this->rootButtonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
+        }
+
+        return $this->rootButtonToolbarRenderer;
     }
 
     /**
@@ -202,15 +244,16 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     protected function getCurrentGroup()
     {
-        if (! isset($this->currentGroup))
+        if (!isset($this->currentGroup))
         {
             $groupId = $this->getGroupId();
-            if (! $groupId)
+            if (!$groupId)
             {
                 return null;
             }
 
-            $this->currentGroup = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
+            $this->currentGroup =
+                \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
         }
 
         return $this->currentGroup;
@@ -223,11 +266,11 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     protected function getGroupId()
     {
-        if (! $this->groupId)
+        if (!$this->groupId)
         {
             $this->groupId = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
 
-            if (! $this->groupId)
+            if (!$this->groupId)
             {
                 $this->groupId = $this->getRootGroup()->get_id();
             }
@@ -243,14 +286,17 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      */
     public function getRootGroup()
     {
-        if (! $this->rootGroup)
+        if (!$this->rootGroup)
         {
             $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
                 Group::class_name(),
                 new DataClassRetrieveParameters(
                     new EqualityCondition(
                         new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
-                        new StaticConditionVariable(0))));
+                        new StaticConditionVariable(0)
+                    )
+                )
+            );
             $this->rootGroup = $group;
         }
 

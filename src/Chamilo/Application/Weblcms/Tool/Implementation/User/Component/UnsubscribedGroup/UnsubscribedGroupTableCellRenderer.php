@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component\Unsubsc
 
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\GroupSubscribeComponent;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Component\SubSubscribedGroup\SubSubscribedPlatformGroupTableColumnModel;
 use Chamilo\Application\Weblcms\Tool\Implementation\User\Manager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -56,6 +57,11 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
 
     public function get_actions($group_with_subscription_status)
     {
+        if($this->get_component()->isGroupSubscribed($group_with_subscription_status->getId()))
+        {
+            return null;
+        }
+
         // construct
         $toolbar = new Toolbar(Toolbar :: TYPE_HORIZONTAL);
 
@@ -89,6 +95,7 @@ class UnsubscribedGroupTableCellRenderer extends DataClassTableCellRenderer impl
             $parameters[\Chamilo\Application\Weblcms\Tool\Manager :: PARAM_ACTION] = Manager :: ACTION_SUBSCRIBE_GROUPS;
             $parameters[Manager :: PARAM_TAB] = Request :: get(Manager :: PARAM_TAB);
             $parameters[Manager :: PARAM_OBJECTS] = $group_with_subscription_status->get_id();
+            $parameters[GroupSubscribeComponent::PARAM_RETURN_TO_COMPONENT] = $this->get_component()->get_action();
 
             $toolbar->add_item(
                 new ToolbarItem(
