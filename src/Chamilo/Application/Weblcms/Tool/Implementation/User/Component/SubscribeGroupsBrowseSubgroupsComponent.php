@@ -30,10 +30,10 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
     protected function renderTabContent()
     {
         $table = new UnsubscribedGroupTable($this);
-        $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
+        $table->setSearchForm($this->tabButtonToolbarRenderer->getSearchForm());
 
         $html = array();
-        $html[] = $this->buttonToolbarRenderer->render();
+        $html[] = $this->tabButtonToolbarRenderer->render();
         $html[] = $table->as_html();
         return implode(PHP_EOL, $html);
     }
@@ -60,7 +60,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
                     $this->subscribedGroups));
         }
 
-        $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
+        $query = $this->tabButtonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
             $conditions2[] = new PatternMatchCondition(

@@ -370,3 +370,4 @@ FailedUsersNotAllowed = "De volgende gebruikers konden niet worden ingeschreven 
 FailedUsersCanOnlyBeRequested = "De volgende gebruikers werden niet ingeschreven omdat ze enkel kunnen ingeschreven worden met een aanvraag"
 RequestUsers = "Vraag deze gebruikers aan"
 SubscribeComponent = "Schrijf gebruikers in in deze cursus"
+SubscribeGroupsSearcherComponent = "Zoeken binnen alle beschikbare platformgroepen"

@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
+use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -26,6 +27,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     const ACTION_SUBSCRIBE_USER_BROWSER = 'SubscribeBrowser';
     const ACTION_SUBSCRIBE_GROUP_DETAILS = 'SubscribeGroupsDetails';
     const ACTION_SUBSCRIBE_GROUP_SUBGROUP_BROWSER = 'SubscribeGroupsBrowseSubgroups';
+    const ACTION_SUBSCRIBE_GROUPS_SEARCHER = 'SubscribeGroupsSearcher';
     const ACTION_UNSUBSCRIBE_BROWSER = 'UnsubscribeBrowser';
     const ACTION_UNSUBSCRIBE = 'Unsubscribe';
     const ACTION_SUBSCRIBE = 'Subscribe';
@@ -119,6 +121,30 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager :: distinct(
             CourseEntityRelation :: class_name(),
             new DataClassDistinctParameters(new AndCondition($conditions), CourseEntityRelation :: PROPERTY_ENTITY_ID));
+    }
+
+    /**
+     * @param int $groupId
+     *
+     * @return bool
+     */
+    public function isGroupSubscribed($groupId)
+    {
+        /** @var Group $group */
+        $group = \Chamilo\Core\Group\Storage\DataManager::retrieve_by_id(Group::class_name(), $groupId);
+        $parents = $group->get_ancestors();
+
+        $subscribedPlatformGroupIds = $this->get_subscribed_platformgroup_ids($this->get_course_id());
+
+        while($parent = $parents->next_result())
+        {
+            if(in_array($parent->getId(), $subscribedPlatformGroupIds))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
