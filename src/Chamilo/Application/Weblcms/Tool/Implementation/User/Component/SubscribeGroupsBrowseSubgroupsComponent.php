@@ -51,15 +51,6 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
             new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->getGroupId()));
 
-        // filter already subscribed groups
-        if ($this->subscribedGroups)
-        {
-            $conditions[] = new NotCondition(
-                new InCondition(
-                    new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
-                    $this->subscribedGroups));
-        }
-
         $query = $this->tabButtonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
