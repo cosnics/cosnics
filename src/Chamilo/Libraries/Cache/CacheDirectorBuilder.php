@@ -8,6 +8,7 @@ use Chamilo\Configuration\Package\Service\PackageBundlesCacheService;
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\DataCacheLoader;
 use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Configuration\Service\LanguageLoader;
 use Chamilo\Configuration\Service\RegistrationLoader;
 use Chamilo\Configuration\Service\StorageConfigurationLoader;
@@ -110,22 +111,20 @@ class CacheDirectorBuilder
         $classnameUtilities = new ClassnameUtilities($stringUtilities);
         
         $configurationConsulter = new ConfigurationConsulter(
-            new FileConfigurationLoader(new PathBuilder($classnameUtilities)));
+            new FileConfigurationLoader(new FileConfigurationLocator(new PathBuilder($classnameUtilities))));
         $exceptionLoggerFactory = new ExceptionLoggerFactory($configurationConsulter);
         $dataSourceName = new DataSourceName(
             $configurationConsulter->getSetting(array('Chamilo\Configuration', 'database')));
         $connectionFactory = new ConnectionFactory($dataSourceName);
         
         $dataClassRepository = new DataClassRepository(
-            $configurationConsulter, 
-            new DataClassRepositoryCache(), 
+            new DataClassRepositoryCache(),
             new DataClassDatabase(
                 $connectionFactory->getConnection(), 
                 new StorageAliasGenerator($classnameUtilities), 
                 $exceptionLoggerFactory->createExceptionLogger(), 
                 new ConditionPartTranslatorService(
-                    $configurationConsulter, 
-                    new ConditionPartTranslatorFactory($classnameUtilities), 
+                    new ConditionPartTranslatorFactory($classnameUtilities),
                     new ConditionPartCache()), 
                 new RecordProcessor()), 
             new DataClassFactory());
