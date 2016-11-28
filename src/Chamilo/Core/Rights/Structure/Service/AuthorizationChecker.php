@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Rights\Structure\Service;
 
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -22,7 +23,7 @@ class AuthorizationChecker implements AuthorizationCheckerInterface
 
     /**
      *
-     * @var StructureLocationRoleService
+     * @var StructureLocationRoleServiceInterface
      */
     protected $structureLocationRoleService;
 
@@ -30,10 +31,10 @@ class AuthorizationChecker implements AuthorizationCheckerInterface
      * AuthorizationChecker constructor.
      * 
      * @param UserRoleServiceInterface $userRoleService
-     * @param StructureLocationRoleService $structureLocationRoleService
+     * @param StructureLocationRoleServiceInterface $structureLocationRoleService
      */
     public function __construct(UserRoleServiceInterface $userRoleService, 
-        StructureLocationRoleService $structureLocationRoleService)
+        StructureLocationRoleServiceInterface $structureLocationRoleService)
     {
         $this->userRoleService = $userRoleService;
         $this->structureLocationRoleService = $structureLocationRoleService;
