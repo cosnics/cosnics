@@ -25,6 +25,14 @@ if (! \Chamilo\Configuration\Configuration::get('Chamilo\Configuration', 'debug'
     $errorHandler->registerErrorHandlers();
 }
 
-$console = $container->get('chamilo.libraries.console');
-$console->setHelperSet($container->get('chamilo.libraries.console.helper_set'));
-$console->run();
+try
+{
+    $console = $container->get('chamilo.libraries.console');
+    $console->setHelperSet($container->get('chamilo.libraries.console.helper_set'));
+    $console->run();
+}
+catch(\Throwable $ex)
+{
+    echo $ex->getMessage() . "\n\n";
+    echo $ex->getTraceAsString() . "\n\n";
+}
