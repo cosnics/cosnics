@@ -7,7 +7,7 @@
 		<property name="filename" type="text" length="255" notnull="1" />
 		<property name="filesize" type="integer" unsigned="1" notnull="1" />
 		<property name="hash" type="text" length="50" notnull="1" />
-		<property name="show_inline" type="tinyint" length="3" notnull="1" default="1" />
+		<property name="show_inline" type="boolean" notnull="1" default="1" />
 	</properties>
 	<index name="id" type="primary">
 		<indexproperty name="id" />
