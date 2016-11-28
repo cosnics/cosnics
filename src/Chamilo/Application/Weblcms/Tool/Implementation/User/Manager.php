@@ -51,6 +51,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
     const PARAM_OBJECTS = 'objects';
     const PARAM_STATUS = 'status';
     const PARAM_TAB = 'tab';
+    const PARAM_GROUP = 'group';
 
     public function get_status_changer_url($user, $status)
     {
