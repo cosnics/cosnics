@@ -120,3 +120,4 @@ CREATE TABLE `user_role_relation` (
 INSERT INTO `configuration_registration` VALUES (NULL, 'Chamilo\\Core\\Rights\\Structure', 'Chamilo\\Core\\Rights', 'Core', 'StructureRights', '1', '5.0.0');
 INSERT INTO `configuration_registration` VALUES (NULL, 'Chamilo\\Core\\User\\Roles', 'Chamilo\\Core\\User', 'Core', 'UserRoles', '1', '5.0.0');
 INSERT INTO `configuration_registration` VALUES (NULL, 'Chamilo\\Application\\Weblcms\\Course\\OpenCourse', 'Chamilo\\Application\\Weblcms\\Course', 'Application', 'OpenCourses', '1', '5.0.0');
+INSERT INTO `configuration_setting` VALUES (NULL, 'Chamilo\\Core\\Admin', 'enableAnonymousAuthentication', '0', '0');
