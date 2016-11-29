@@ -6,6 +6,8 @@ use Chamilo\Core\User\Roles\Storage\DataClass\RoleRelation;
 use Chamilo\Core\User\Roles\Storage\DataManager;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\UserRoleRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -20,9 +22,8 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UserRoleRepository implements UserRoleRepositoryInterface
+class UserRoleRepository extends DataManagerRepository implements UserRoleRepositoryInterface
 {
-
     /**
      * Returns a user role relation for a given role id and user id
      * 

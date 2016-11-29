@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Rights\Structure\Service;
 
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;
+use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationServiceInterface;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
@@ -23,7 +24,7 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
 
     /**
      *
-     * @var StructureLocationService
+     * @var StructureLocationServiceInterface
      */
     protected $structureLocationService;
 
@@ -37,10 +38,10 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
      * StructureLocationRoleService constructor.
      * 
      * @param RoleServiceInterface $roleService
-     * @param StructureLocationService $structureLocationService
+     * @param StructureLocationServiceInterface $structureLocationService
      * @param StructureLocationRoleRepositoryInterface $structureLocationRoleRepository
      */
-    public function __construct(RoleServiceInterface $roleService, StructureLocationService $structureLocationService, 
+    public function __construct(RoleServiceInterface $roleService, StructureLocationServiceInterface $structureLocationService,
         StructureLocationRoleRepositoryInterface $structureLocationRoleRepository)
     {
         $this->roleService = $roleService;
@@ -67,7 +68,7 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
         $structureLocationRole->setRoleId($role->getId());
         $structureLocationRole->setStructureLocationId($structureLocation->getId());
         
-        if (! $structureLocationRole->create())
+        if (! $this->structureLocationRoleRepository->create($structureLocationRole))
         {
             throw new \Exception(
                 'The structure location role for context ' . $structureLocation->getContext() . ', action ' .
@@ -100,12 +101,12 @@ class StructureLocationRoleService implements StructureLocationRoleServiceInterf
             $structureLocation->getId(), 
             $role->getId());
         
-        if (! $structureLocationRole)
+        if (! $structureLocationRole instanceof StructureLocationRole)
         {
             return;
         }
         
-        if (! $structureLocationRole->delete())
+        if (! $this->structureLocationRoleRepository->delete($structureLocationRole))
         {
             throw new \Exception(
                 'The structure location role for context ' . $structureLocation->getContext() . ', action ' .

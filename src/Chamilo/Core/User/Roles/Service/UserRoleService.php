@@ -122,9 +122,9 @@ class UserRoleService implements UserRoleServiceInterface
         $userRoleRelation->setRoleId($role->getId());
         $userRoleRelation->setUserId($user->getId());
         
-        if (! $userRoleRelation->create())
+        if (! $this->userRoleRepository->create($userRoleRelation))
         {
-            throw new \Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);
+            throw new \Exception('User role not created for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }
     }
 
@@ -154,7 +154,7 @@ class UserRoleService implements UserRoleServiceInterface
             return;
         }
         
-        if (! $userRoleRelation->delete())
+        if (!$this->userRoleRepository->delete($userRoleRelation))
         {
             throw new \Exception('User role not deleted for user ' . $user->get_fullname() . ' with role ' . $roleName);
         }
