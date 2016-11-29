@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Rights\Structure\Test\Service;
+namespace Chamilo\Core\Rights\Structure\Test\Unit\Service;
 
 use Chamilo\Core\Rights\Structure\Service\AuthorizationChecker;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\StructureLocationRoleServiceInterface;

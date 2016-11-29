@@ -2,13 +2,16 @@
 namespace Chamilo\Core\User\Roles\Storage\Repository\Interfaces;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
 
 /**
  * Repository to manage the data for the relations between users and roles
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-interface UserRoleRepositoryInterface
+interface UserRoleRepositoryInterface extends DataManagerRepositoryInterface
 {
 
     /**

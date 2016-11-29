@@ -14,7 +14,6 @@ class StructureLocationService implements StructureLocationServiceInterface
 {
 
     /**
-     *
      * @var StructureLocationRepositoryInterface
      */
     protected $structureLocationRepository;
@@ -46,7 +45,7 @@ class StructureLocationService implements StructureLocationServiceInterface
         $structureLocation->setContext($context);
         $structureLocation->setAction($action);
         
-        if (! $structureLocation->create())
+        if (! $this->structureLocationRepository->create($structureLocation))
         {
             throw new \Exception(
                 'The structure location with context ' . $context . ' and action ' . $action . ' could not be created');
@@ -64,7 +63,7 @@ class StructureLocationService implements StructureLocationServiceInterface
      */
     public function deleteStructureLocation(StructureLocation $structureLocation)
     {
-        if (! $structureLocation->delete())
+        if (! $this->structureLocationRepository->delete($structureLocation))
         {
             throw new \Exception(
                 'The structure location with context ' . $structureLocation->getContext() . ' and action ' .
