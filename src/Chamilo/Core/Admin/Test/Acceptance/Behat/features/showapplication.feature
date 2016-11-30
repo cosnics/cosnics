@@ -12,17 +12,17 @@ Feature: chamilo.core.admin.showapplication
   Scenario: Show administration setting
     When I go to application "Chamilo\Core\Admin" and do action "configurer"
 
-  Scenario: Show administration importer
-    When I go to application "Chamilo\Core\Admin" and do action "importer"
+#  Scenario: Show administration importer
+#    When I go to application "Chamilo\Core\Admin" and do action "importer"
 
-  Scenario: Show administration system announcement
-    When I go to application "Chamilo\Core\Admin" and do action "announcer"
+#  Scenario: Show administration system announcement
+#    When I go to application "Chamilo\Core\Admin" and do action "announcer"
 
-  Scenario: Show administration translations
-    When I go to application "Chamilo\Core\Admin" and do action "language"
+#  Scenario: Show administration translations
+#    When I go to application "Chamilo\Core\Admin" and do action "language"
 
-  Scenario: Show administration diagnose
-    When I go to application "Chamilo\Core\Admin" and do action "diagnoser"
+#  Scenario: Show administration diagnose
+#    When I go to application "Chamilo\Core\Admin" and do action "diagnoser"
 
-  Scenario: Show administration log viewer
-    When I go to application "Chamilo\Core\Admin" and do action "log_viewer"
+#  Scenario: Show administration log viewer
+#    When I go to application "Chamilo\Core\Admin" and do action "log_viewer"
