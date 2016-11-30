@@ -127,15 +127,11 @@ class RightsEditorComponent extends Manager
                     $info[] .= ' > ';
                 }
                 
-                // tool link (only displayed if tool is not the Rights tool)
-                $tool = Translation::get(
-                    (string) StringUtilities::getInstance()->createString(
-                        Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL))->upperCamelize());
-                
-                $context = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool;
+                $selectedTool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
+
+                $context = 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $selectedTool;
                 $tool = Translation::getInstance()->getTranslation('TypeName', null, $context);
                 
-                $selectedTool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
                 if ($selectedTool && $selectedTool != 'Rights')
                 {
                     $info[] = '<a href="' . $this->get_tool_rights_editor_url() . '">';
