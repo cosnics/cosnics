@@ -38,9 +38,21 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('configuration.xml');
         $xmlFileLoader->load('registration.xml');
         $xmlFileLoader->load('language.xml');
-        
-        $xmlFileLoader = new XmlFileLoader($container, new FileLocator($pathBuilder->getStoragePath() . 'configuration'));
-        $xmlFileLoader->load('configuration.xml');
+
+        try
+        {
+            $configurationXmlFileLoader =
+                new XmlFileLoader($container, new FileLocator($pathBuilder->getStoragePath() . 'configuration'));
+            $configurationXmlFileLoader->load('configuration.xml');
+        }
+        catch(\Exception $ex)
+        {
+            $defaultConfigurationXmlFileLoader = new XmlFileLoader(
+                $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Configuration'))
+            );
+
+            $xmlFileLoader->load('bootstrap_configuration.xml');
+        }
     }
 
     /**
