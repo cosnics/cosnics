@@ -7,7 +7,7 @@ use Chamilo\Libraries\File\ConfigurablePathBuilder;
 
 /**
  * Manages the cache for the symfony dependency injection
- * 
+ *
  * @package Chamilo\Libraries\DependencyInjection
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
@@ -56,20 +56,21 @@ class DependencyInjectionCacheService extends FileBasedCacheService
         $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
         $dependencyInjectionContainerBuilder->clearContainerInstance();
         $dependencyInjectionContainerBuilder->createContainer();
-        
+
         return $this;
     }
 
     /**
      * Returns the path to the cache directory or file
-     * 
+     *
      * @return string
      */
     function getCachePath()
     {
         $configurablePathBuilder = new ConfigurablePathBuilder(
-            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage')));
-        
-        return $configurablePathBuilder->getCachePath($this->getCachePathNamespace());
+            $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'storage'))
+        );
+
+        return $configurablePathBuilder->getCachePath(__NAMESPACE__);
     }
 }
