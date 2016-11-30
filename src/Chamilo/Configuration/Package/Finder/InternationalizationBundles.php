@@ -1,7 +1,8 @@
 <?php
 namespace Chamilo\Configuration\Package\Finder;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -29,7 +30,9 @@ class InternationalizationBundles extends BasicBundles
      */
     protected function verifyPackage($folderNamespace)
     {
-        $i18nPath = Path::getInstance()->getI18nPath($folderNamespace);
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+
+        $i18nPath = $pathBuilder->getI18nPath($folderNamespace);
         return file_exists($i18nPath) && is_dir($i18nPath);
     }
 }

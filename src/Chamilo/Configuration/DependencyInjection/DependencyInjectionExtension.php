@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 
 /**
  *
@@ -21,7 +22,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
     /**
      * Loads a specific configuration.
-     * 
+     *
      * @param array $config An array of configuration values
      * @param ContainerBuilder $container A ContainerBuilder instance
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
@@ -30,35 +31,36 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function load(array $config, ContainerBuilder $container)
     {
         $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-        
+
         $xmlFileLoader = new XmlFileLoader(
-            $container, 
+            $container,
             new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Configuration') . 'DependencyInjection'));
-        
+
         $xmlFileLoader->load('configuration.xml');
         $xmlFileLoader->load('registration.xml');
         $xmlFileLoader->load('language.xml');
 
-        try
-        {
-            $configurationXmlFileLoader =
-                new XmlFileLoader($container, new FileLocator($pathBuilder->getStoragePath() . 'configuration'));
-            $configurationXmlFileLoader->load('configuration.xml');
-        }
-        catch(\Exception $ex)
-        {
-            $defaultConfigurationXmlFileLoader = new XmlFileLoader(
-                $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Configuration'))
-            );
+        $fileConfigurationLocator = new FileConfigurationLocator($pathBuilder);
 
-            $defaultConfigurationXmlFileLoader->load('configuration.default.xml');
+        if ($fileConfigurationLocator->isAvailable())
+        {
+            $configurationFilePath = $fileConfigurationLocator->getFilePath();
+            $configurationFileName = $fileConfigurationLocator->getFileName();
         }
+        else
+        {
+            $configurationFilePath = $fileConfigurationLocator->getDefaultFilePath();
+            $configurationFileName = $fileConfigurationLocator->getDefaultFileName();
+        }
+
+        $configurationXmlFileLoader = new XmlFileLoader($container, new FileLocator($configurationFilePath));
+        $configurationXmlFileLoader->load($configurationFileName);
     }
 
     /**
      * Returns the recommended alias to use in XML.
      * This alias is also the mandatory prefix to use when using YAML.
-     * 
+     *
      * @return string The alias
      *         @api
      */

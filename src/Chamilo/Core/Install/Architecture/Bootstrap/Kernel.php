@@ -1,32 +1,24 @@
 <?php
-namespace Chamilo\Libraries\Architecture\Bootstrap;
+namespace Chamilo\Core\Install\Architecture\Bootstrap;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
-use Chamilo\Libraries\Authentication\AuthenticationValidator;
-use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
 use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\Response;
 
 /**
  *
- * @package Chamilo\Libraries\Architecture\Bootstrap$Kernel
+ * @package Chamilo\Core\Install\Architecture\Bootstrap
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class Kernel
 {
-    const PARAM_CODE = 'code';
-    const PARAM_STATE = 'state';
-    const PARAM_SESSION_STATE = 'session_state';
 
     /**
      *
@@ -48,12 +40,6 @@ class Kernel
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    private $configurationConsulter;
-
-    /**
-     *
      * @var string
      */
     private $context;
@@ -64,21 +50,12 @@ class Kernel
      */
     private $application;
 
-    /**
-     *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
-     */
-    private $user;
-
     public function __construct(\Symfony\Component\HttpFoundation\Request $request,
-        ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        ExceptionLoggerInterface $exceptionLogger, User $user = null)
+        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger)
     {
         $this->request = $request;
-        $this->configurationConsulter = $configurationConsulter;
         $this->applicationFactory = $applicationFactory;
         $this->exceptionLogger = $exceptionLogger;
-        $this->user = $user;
     }
 
     /**
@@ -119,24 +96,6 @@ class Kernel
 
     /**
      *
-     * @return \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    public function getConfigurationConsulter()
-    {
-        return $this->configurationConsulter;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
-     */
-    public function setConfigurationConsulter(ConfigurationConsulter $configurationConsulter)
-    {
-        $this->configurationConsulter = $configurationConsulter;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
     public function getExceptionLogger()
@@ -151,24 +110,6 @@ class Kernel
     public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
     {
         $this->exceptionLogger = $exceptionLogger;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     */
-    public function setUser(User $user)
-    {
-        $this->user = $user;
     }
 
     /**
@@ -211,7 +152,7 @@ class Kernel
     {
         try
         {
-            $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
+            $this->configureContext()->buildApplication()->runApplication();
         }
         catch (NotAuthenticatedException $exception)
         {
@@ -239,7 +180,7 @@ class Kernel
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return \Chamilo\Core\Install\Architecture\Bootstrap\Kernel
      */
     protected function configureContext()
     {
@@ -287,7 +228,7 @@ class Kernel
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return \Chamilo\Core\Install\Architecture\Bootstrap\Kernel
      */
     protected function buildApplication()
     {
@@ -310,7 +251,7 @@ class Kernel
      */
     protected function getApplicationConfiguration()
     {
-        return new ApplicationConfiguration($this->getRequest(), $this->getUser());
+        return new ApplicationConfiguration($this->getRequest(), null);
     }
 
     /**
@@ -333,123 +274,5 @@ class Kernel
         }
 
         $response->send();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     */
-    protected function setup()
-    {
-        return $this->registerErrorHandlers()->configureTimezone();
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     */
-    protected function configureTimezone()
-    {
-        date_default_timezone_set(
-            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'platform_timezone')));
-
-        return $this;
-    }
-
-    /**
-     * Redirects response of Microsoft OAuth 2.0 Authorization workflow to the component which have called
-     * MicrosoftClientService::login(...).
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     *
-     * @see MicrosoftClientService::login(...)
-     */
-    public function handleOAuth2()
-    {
-        $code = $this->getRequest()->query->get(self::PARAM_CODE);
-        $state = $this->getRequest()->query->get(self::PARAM_STATE);
-        $session_state = $this->getRequest()->query->get(self::PARAM_SESSION_STATE); // Not provided in OAUTH2 v2.0
-
-        if ($code && $state)
-        {
-            $stateParameters = (array) unserialize(base64_decode($state));
-            $stateParameters[self::PARAM_CODE] = $code;
-            if ($session_state)
-            {
-                $stateParameters[self::PARAM_SESSION_STATE] = $session_state;
-            }
-
-            $redirect = new Redirect($stateParameters);
-            $redirect->toUrl();
-        }
-
-        return $this;
-    }
-
-    /**
-     *
-     * @throws NotAuthenticatedException
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     */
-    protected function checkAuthentication()
-    {
-        $applicationClassName = $this->getApplicationFactory()->getClassName(
-            $this->getContext(),
-            $this->getApplicationConfiguration());
-        $applicationRequiresAuthentication = ! is_subclass_of(
-            $applicationClassName,
-            'Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport');
-
-        $authenticationValidator = new AuthenticationValidator($this->getRequest(), $this->getConfigurationConsulter());
-
-        if ($applicationRequiresAuthentication)
-        {
-            if (! $authenticationValidator->validate())
-            {
-                throw new NotAuthenticatedException(true);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
-     */
-    protected function traceVisit()
-    {
-        $applicationClassName = $this->getApplicationFactory()->getClassName(
-            $this->getContext(),
-            $this->getApplicationConfiguration());
-        $applicationRequiresTracing = ! is_subclass_of(
-            $applicationClassName,
-            'Chamilo\Libraries\Architecture\Interfaces\NoVisitTraceComponentInterface');
-
-        if ($applicationRequiresTracing)
-        {
-            if ($this->getUser() instanceof User)
-            {
-                Event::trigger(
-                    'Online',
-                    \Chamilo\Core\Admin\Manager::context(),
-                    array('user' => $this->getUser()->get_id()));
-
-                $requestUri = $this->getRequest()->server->get('REQUEST_URI');
-
-                if ($this->getRequest()->query->get(Application::PARAM_CONTEXT) != 'Chamilo\Core\User\Ajax' &&
-                     $this->getRequest()->query->get(Application::PARAM_ACTION) != 'LeaveComponent')
-                {
-                    $return = Event::trigger(
-                        'Enter',
-                        \Chamilo\Core\User\Manager::context(),
-                        array(
-                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_LOCATION => $_SERVER['REQUEST_URI'],
-                            \Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit::PROPERTY_USER_ID => $this->getUser()->get_id()));
-                }
-            }
-        }
-
-        return $this;
     }
 }
