@@ -2,7 +2,6 @@
 namespace Chamilo\Libraries\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
-use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -28,12 +27,6 @@ class Kernel
     const PARAM_CODE = 'code';
     const PARAM_STATE = 'state';
     const PARAM_SESSION_STATE = 'session_state';
-
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    private $fileConfigurationLocator;
 
     /**
      *
@@ -78,37 +71,14 @@ class Kernel
     private $user;
 
     public function __construct(\Symfony\Component\HttpFoundation\Request $request,
-        FileConfigurationLocator $fileConfigurationLocator, ConfigurationConsulter $configurationConsulter,
-        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, User $user = null)
+        ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
+        ExceptionLoggerInterface $exceptionLogger, User $user = null)
     {
         $this->request = $request;
-
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
         $this->configurationConsulter = $configurationConsulter;
-
         $this->applicationFactory = $applicationFactory;
-
         $this->exceptionLogger = $exceptionLogger;
-
         $this->user = $user;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Configuration\Service\FileConfigurationLocator
-     */
-    public function getFileConfigurationLocator()
-    {
-        return $this->fileConfigurationLocator;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
-     */
-    public function setFileConfigurationLocator(FileConfigurationLocator $fileConfigurationLocator)
-    {
-        $this->fileConfigurationLocator = $fileConfigurationLocator;
     }
 
     /**
@@ -241,14 +211,7 @@ class Kernel
     {
         try
         {
-            if (! $this->getFileConfigurationLocator()->isAvailable())
-            {
-                $this->configureContext()->buildApplication()->runApplication();
-            }
-            else
-            {
-                $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
-            }
+            $this->configureTimeZone()->configureContext()->handleOAuth2()->checkAuthentication()->buildApplication()->traceVisit()->runApplication();
         }
         catch (NotAuthenticatedException $exception)
         {

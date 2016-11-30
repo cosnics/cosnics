@@ -6,25 +6,16 @@
     <services>
         <service
             id="chamilo.core.install.architecture.bootstrap.kernel"
-            class="Chamilo\Libraries\Architecture\Bootstrap\Kernel">
+            class="Chamilo\Core\Install\Architecture\Bootstrap\Kernel">
             <argument
                 type="service"
                 id="symfony.component.http_foundation.request" />
-            <argument
-                type="service"
-                id="chamilo.configuration.service.file_configuration_locator" />
-            <argument
-                type="service"
-                id="chamilo.configuration.service.configuration_consulter" />
             <argument
                 type="service"
                 id="chamilo.libraries.architecture.factory.application_factory" />
             <argument
                 type="service"
                 id="chamilo.libraries.architecture.error_handler.exception_logger" />
-            <argument
-                type="service"
-                id="chamilo.core.user.user" />
         </service>
     </services>
 </container>
