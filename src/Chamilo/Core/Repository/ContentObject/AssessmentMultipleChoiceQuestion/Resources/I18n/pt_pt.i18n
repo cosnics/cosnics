@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_multiple_choice_question
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Multiple choice question"
+SwitchToCheckboxes = "Allow multiple answers"
+SwitchToRadioButtons = "Only allow one answer"
+AddMultipleChoiceOption = "Add an option"
+Answer = "Answer"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Correct"
+SelectAtLeastOneCorrectAnswer = "Select at least one correct answer"
+SelectACorrectAnswer = "Select the correct answer"
+Weight = "Weight"
+Options = ""
+Title = ""
+Description = ""
+Hint = ""

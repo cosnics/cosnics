@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\metadata\schema
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Metadata Schema Manager"
+BrowserComponent = "Beheer schema's"
+CreatorComponent = "Maak schema"
+UpdaterComponent = "Update schema"
+DeleterComponent = "Verwijder schema"
+Namespace = "Namespace"
+Name = "Naam"
+Url = "URL"

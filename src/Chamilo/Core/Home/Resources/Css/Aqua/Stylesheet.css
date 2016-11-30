@@ -1,0 +1,111 @@
+.portal-action {
+	margin: 0px 3px;
+	color: black;
+	opacity: 0.5;
+	text-decoration: none;
+}
+
+.portal-nav-tabs {
+	margin-left: -15px;
+	margin-right: -15px;
+	padding-left: 15px;
+	padding-right: 15px;
+	background-color: #F5F5F5;
+	margin-bottom: 15px;
+}
+
+.portal-nav-tabs li.active a {
+	border-radius: 0px;
+	border-top: 1px solid white;
+}
+
+.portal-block .panel-title {
+	color: #555555;
+}
+
+.portal-nav-tabs .btn-action-toolbar {
+	margin-bottom: 0px;
+}
+
+.portal-nav-tabs .btn-action-toolbar .btn {
+	border: 0px solid #F5F5F5;
+	background-color: transparent;
+	padding: 10px 15px;
+	color: black;
+	text-decoration: none;
+}
+
+.portal-nav-tabs .btn-action-toolbar .btn.dropdown-toggle {
+	padding: 10px 0px;
+}
+
+.portal-nav-tabs .btn-action-toolbar .btn.dropdown-toggle:hover {
+	background-color: transparent;
+}
+
+.portal-action-tab-delete {
+	opacity: 0.75;
+	margin-left: 10px;
+	font-size: 11px;
+	display: inline-block;
+}
+
+.portal-action.portal-package-hide, .portal-tab-panel .portal-tab-panel-hide
+	{
+	color: white;
+}
+
+.portal-tab-panel .portal-tab-panel-hide {
+	opacity: 0.5;
+	text-decoration: none;
+}
+
+.portal-package-blocks a.btn {
+	overflow: hidden;
+	text-align: left;
+}
+
+.portal-package-blocks a.btn img {
+	margin-right: 5px;
+}
+
+#portal-package-context img {
+	margin-right: 15px;
+}
+
+#portal-package-context option {
+	padding: 5px;
+}
+
+.package-search {
+	margin-bottom: 5px;
+}
+
+.portal-package-blocks a.btn {
+	margin-top: 10px;
+	text-decoration: none;
+}
+
+.portal-action-tab-delete.show {
+	display: inline-block !important;
+}
+
+.portal-tabs .panel-heading-without-content {
+	border-bottom: 0px solid white;
+	border-radius: 3px;
+}
+
+.ui-state-highlight, .portal-block-sortable-helper,
+	.portal-tab-sortable-helper {
+	border: 1px dashed #c0c0c0 !important;
+	background-color: #F2F2F2 !important;
+}
+
+.portal-block-sortable-helper {
+	margin-bottom: 20px;
+}
+
+.panel-heading+.portal-block-form.hidden+.list-group .list-group-item:first-child
+	{
+	border-top-width: 0
+}

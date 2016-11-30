@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\glossary\display
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Display"
+CreateItem = "Create an item"
+Title = "Title"
+Description = "Description"
+GlossaryToolBrowserComponent = "Browser"
+GlossaryToolEvaluateComponent = "Evaluate"
+GlossaryToolIntroductionPublisherComponent = "Publish introduction text"
+GlossaryToolMoverComponent = "Move"
+GlossaryToolPublisherComponent = "Publish"
+GlossaryToolUpdaterComponent = "Edit"
+GlossaryToolViewerComponent = "Show"
