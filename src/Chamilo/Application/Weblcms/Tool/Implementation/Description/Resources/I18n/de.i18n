@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\description
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Beschreibung"
+BrowserComponent = "Beschreibungen durchsuchen"
+ViewerComponent = "Beschreibungen ansehen"
+EvaluateComponent = "Beschreibungen auswerten"
+IntroductionPublisherComponent = "Vorstellung veröffentlichen"
+MoverComponent = "Beschreibung verschieben"
+PublisherComponent = "Beschreibung veröffentlichen"
+UpdaterComponent = "Beschreibung aktualisieren"

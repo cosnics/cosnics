@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <!-- Database -->
+        <parameter
+            key="chamilo.configuration.database"
+            type="collection">
+            <parameter key="driver"></parameter>
+            <parameter key="username"></parameter>
+            <parameter key="password"></parameter>
+            <parameter key="host"></parameter>
+            <parameter key="name"></parameter>
+            <parameter key="charset"></parameter>
+        </parameter>
+
+        <!-- Storage -->
+        <parameter
+            key="chamilo.configuration.storage"
+            type="collection">
+            <parameter key="archive_path">./../files/archive/</parameter>
+            <parameter key="cache_path">./../files/cache/</parameter>
+            <parameter key="garbage_path">./../files/garbage/</parameter>
+            <parameter key="hotpotatoes_path">./../files/hotpotatoes/</parameter>
+            <parameter key="logs_path">./../files/logs/</parameter>
+            <parameter key="repository_path">./../files/repository/</parameter>
+            <parameter key="scorm_path">./../files/scorm/</parameter>
+            <parameter key="temp_path">./../files/temp/</parameter>
+            <parameter key="userpictures_path">./../files/userpictures/</parameter>
+        </parameter>
+
+        <parameter key="chamilo.configuration.general.security_key"></parameter>
+        <parameter key="chamilo.configuration.general.hashing_algorithm">Sha1</parameter>
+        <parameter key="chamilo.configuration.general.install_date"></parameter>
+        <parameter key="chamilo.configuration.general.language">en</parameter>
+        <parameter key="chamilo.configuration.general.theme">aqua</parameter>
+        <parameter key="chamilo.configuration.debug.show_errors">0</parameter>
+        <parameter key="chamilo.configuration.debug.enable_query_cache">1</parameter>
+        <parameter key="chamilo.configuration.session.session_handler"></parameter>
+        <parameter key="chamilo.configuration.kernel.service">chamilo.libraries.architecture.bootstrap.kernel</parameter>
+    </parameters>
+</container>

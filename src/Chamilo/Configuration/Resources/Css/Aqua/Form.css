@@ -1,0 +1,897 @@
+div.column {
+	float: left;
+	margin-right: 10px;
+}
+
+.form-category {
+	border-bottom: 1px solid #dddddd;
+	padding-bottom: 5px;
+	margin-bottom: 15px;
+}
+
+.form-category:not (:first-of-type ) {
+	margin-top: 35px;
+}
+
+/****************
+ *  FORM STYLES *
+ ****************/
+form div.form-row {
+	margin-bottom: 5px;
+}
+
+form div.form-row div.form_header {
+	white-space: nowrap;
+	padding: 2px;
+	background-color: #E5EDF9;
+	border: 1px solid #4271B5;
+}
+
+form div.form-row div.form-label {
+	text-align: right;
+	overflow: hidden;
+	font-weight: bold;
+	color: #565656;
+}
+
+form div.form-row div.formw {
+	text-align: left;
+}
+
+form div.formw input[type=text], form div.form-row div.formw input[type=password],
+	form div.form-row div.formw select { /*
+	background-image: url(../../Images/Aqua/Buttons/Link.png);
+	background-repeat: no-repeat;
+	background-position: 2px center;
+	padding-left: 20px;
+	*/
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	background-repeat: no-repeat;
+	background-position: 4px 50%;
+}
+
+form div.formw input[type=text]:hover, form div.form-row div.formw input[type=text]:focus,
+	form div.form-row div.formw input[type=password]:hover, form div.form-row div.formw input[type=password]:focus,
+	form div.form-row div.formw select:hover, form div.form-row div.formw select:focus
+form div.form-row div.formw textarea:hover, form div.form-row div.formw textarea:focus
+	{
+	background-color: #f7fbfd;
+	border-color: #4171B5;
+}
+
+form div.formw input[type=text].input_conflict, form div.form-row div.formw input[type=password].input_conflict,
+	form div.form-row div.formw select.input_conflict
+		form div.formw input[type=text].input_conflict:hover, form div.form-row div.formw input[type=password].input_conflict:hover,
+	form div.form-row div.formw select.input_conflict:hover, form div.formw input[type=text].input_conflict:focus,
+	form div.form-row div.formw input[type=password].input_conflict:focus,
+	form div.form-row div.formw select.input_conflict:focus {
+	background-image: url('../../Images/Aqua/Status/ErrorMini.png');
+	background-color: #FFD1D1 !important;
+	border: 1px solid #ff9b9d !important;
+	color: #b40404 !important;
+	padding-left: 24px;
+}
+
+form div.formw input[type=text].input_valid, form div.form-row div.formw input[type=password].input_valid,
+	form div.form-row div.formw select.input_valid, form div.formw input[type=text].input_valid:hover,
+	form div.form-row div.formw input[type=password].input_valid:hover,
+	form div.form-row div.formw select.input_valid:hover, form div.formw input[type=text].input_valid:focus,
+	form div.form-row div.formw input[type=password].input_valid:focus,
+	form div.form-row div.formw select.input_valid:focus {
+	background-image: url('../../Images/Aqua/Status/ConfirmMini.png');
+	border: 1px solid #339900 !important;
+	background-color: #ddffaa !important;
+	color: #006600 !important;
+	padding-left: 24px;
+}
+
+form div.formw input[type=text].input_warning, form div.form-row div.formw input[type=password].input_warning,
+	form div.form-row div.formw select.input_warning
+		form div.formw input[type=text].input_warning:hover, form div.form-row div.formw input[type=password].input_warning:hover,
+	form div.form-row div.formw select.input_warning:hover, form div.formw input[type=text].input_warning:focus,
+	form div.form-row div.formw input[type=password].input_warning:focus,
+	form div.form-row div.formw select.input_warning:focus {
+	background-image: url('../../Images/Aqua/Status/WarningMini.png');
+	border: 1px solid #ffd89b !important;
+	background-color: #fff8aa !important;
+	color: #996900 !important;
+	padding-left: 24px;
+}
+
+form div.dynamic_search_action {
+	padding: 15px 0px;
+}
+
+form div.dynamic_search_action input[type=text], form div.dynamic_search_action div.form-row div.formw input[type=password],
+	form div.dynamic_search_action div.form-row div.formw select { /*
+	background-image: url(../../Images/Aqua/Buttons/Link.png);
+	background-repeat: no-repeat;
+	background-position: 2px center;
+	padding-left: 20px;
+	*/
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	padding: 6px;
+	position: relative;
+	top: 2px;
+	margin-right: 10px;
+}
+
+form div.form-row div.formwa, form div.form-row div.formwa_no_margin,
+	form div.form-row div.formc, form div.form-row div.formc_no_margin,
+	form div.form-row div.forme, form div.form-row div.forme_no_margin {
+	margin-left: 20%;
+}
+
+form div.form-row div.forme h2, form div.form-row div.forme_no_margin h2,
+	form div.form-row div.formwa h2, form div.form-row div.formwa_no_margin h2,
+	form div.form-row div.formc h2, form div.form-row div.formc_no_margin h2
+	{
+	padding: 0px 0px 5px 0px;
+	margin: 0px;
+	font-weight: bold;
+}
+
+form div.form-row div.forme_no_margin, form div.form-row div.formwa_no_margin,
+	form div.form-row div.formc_no_margin {
+	margin-left: 0px;
+}
+
+@media ( max-width : 768px) {
+	form div.form-row div.form-label {
+		text-align: left;
+		text-overflow: ellipsis;
+	}
+}
+
+form div.form-row div.feedback {
+	position: relative;
+}
+
+form span.form_required {
+	color: #f00;
+}
+
+form span.form_required>img {
+	margin-top: -5px;
+}
+
+form span.form_error {
+	color: #f00;
+	font-size: x-small;
+	margin: 2px;
+}
+
+/* Form elements - some general styling */
+form select, textarea {
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+}
+
+form input[type=text], form input[type=password] {
+	margin: 0px;
+	padding: 2px 4px 2px 4px;
+	border: 1px solid #4171B5;
+}
+
+form input[type=color], form input.colour-selection {
+	width: 30px;
+	padding: 0px;
+}
+
+/* Normal submit button */
+form input.mainoption {
+	font-weight: bold;
+}
+
+/* None-bold submit button */
+form input.liteoption {
+	font-weight: normal;
+}
+
+form select, form input[type=button], input[type=submit] {
+	cursor: pointer;
+	font-size: 12px;
+}
+
+form input[text] {
+	font-size: 12px;
+}
+
+form textarea {
+	padding: 2px 2px 2px 2px;
+}
+
+form textarea.answer {
+	width: 651px;
+}
+
+form .input_numeric {
+	text-align: right;
+}
+
+form input.rating_question_low_value, form input.rating_question_high_value
+	{
+	background-image: url(../../Images/Aqua/Buttons/Low.png);
+	background-position: 4px center;
+	background-repeat: no-repeat;
+	padding-left: 24px;
+}
+
+form input.rating_question_high_value {
+	background-image: url(../../Images/Aqua/Buttons/High.png);
+}
+
+form .select_question {
+	width: 150px;
+}
+
+form .advanced_select_question select {
+	width: 150px;
+	height: 150px;
+}
+
+form .advanced_select_question input {
+	margin: 0px;
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	font-size: 0px;
+	line-height: 100%;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	height: 24px;
+	width: 30px;
+	overflow: visible;
+	padding: 4px 7px 4px 7px;
+	vertical-align: middle;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+form .advanced_select_question input:hover {
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+form .advanced_select_question input.add {
+	background-image: url('../../Images/Aqua/Buttons/ActivateElement.png');
+}
+
+form .advanced_select_question input.remove {
+	background-image: url('../../Images/Aqua/Buttons/DeactivateElement.png');
+}
+
+a.button {
+	background-color: #f5f5f5;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	outline-style: none;
+	line-height: 100%;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	width: auto;
+	overflow: visible;
+	padding: 7px 10px 7px 36px;
+	vertical-align: middle;
+}
+
+a.button {
+	padding-top: 8px;
+	padding-bottom: 8px;
+	display: inline-block;
+}
+
+a.last_button {
+	margin: 0px;
+}
+
+a.positive_button {
+	background-image: url(../../Images/Ruby/Buttons/Confirm.png);
+	color: #529214;
+}
+
+a.positive_button:hover {
+	background-color: #E6EFC2;
+	border: 1px solid #C6D880;
+	color: #529214;
+}
+
+a.positive_button:active {
+	background-color: #5ca54d;
+	border: 1px solid #5ca54d;
+	color: #ffffff;
+}
+
+a.negative_button {
+	background-image: url(../../Images/Ruby/Buttons/Cancel.png);
+	color: #d12f19;
+}
+
+a.negative_button:hover {
+	background-color: #fbe3e4;
+	border: 1px solid #fbc2c4;
+	color: #d12f19;
+}
+
+a.negative_button:active {
+	background-color: #bf382b;
+	border: 1px solid #bf382b;
+	color: #ffffff;
+}
+
+a.normal_button {
+	background-image: url(../../Images/Ruby/Buttons/Next.png);
+}
+
+a.normal_button:hover {
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+a.normal_button:active {
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #ffffff;
+}
+
+a.alert_button {
+	background-image: url(../../Images/Ruby/Buttons/Warning.png);
+	color: #996900;
+}
+
+a.alert_button:hover {
+	border: 1px solid #ffd89b;
+	background-color: #fff8aa;
+	color: #996900;
+}
+
+a.mini_button, a.mini_button:hover, a.mini_button:active {
+	background-position: center center;
+	padding: 0px;
+	margin: -3px 0px 0px -3px;
+	line-height: 16px;
+	height: 22px;
+	vertical-align: middle;
+	font-size: 0px;
+	width: 22px;
+	overflow: hidden;
+	background-color: transparent !important;
+	border: 0px solid white !important;
+}
+
+a.mini_button {
+	border: 1px solid #dedede;
+}
+
+/*IE-fix to avoid adding unwanted margins to the form*/
+div.simple_search form {
+	margin: 0;
+	padding: 0;
+}
+
+div.configuration_form {
+	clear: both;
+	margin: 20px 2px 2px 2px;
+	padding: 10px;
+	border: 1px solid #ebebeb;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-radius-topright: 10px;
+	border-radius-bottomleft: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+}
+
+div.form_splitter {
+	clear: both;
+	margin: 20px -10px 0px -10px;
+	padding: 6px 10px;
+	border-top: 1px solid #ebebeb;
+	height: 0px;
+}
+
+div.configuration_form span.category, div.form_splitter span.category {
+	position: relative;
+	top: -20px;
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #4271B5;
+	padding: 0px 5px 0px 5px;
+}
+
+div.form_splitter span.category {
+	top: -16px;
+}
+
+/*********************************************
+ * QUICKFORM ELEMENT FINDER STYLES           *
+ * ----------------------------------------- *
+ * Don't change unless you have a death wish *
+ *********************************************/
+.element_finder_inactive {
+	margin-right: 5px;
+}
+
+.active_elements, .inactive_elements {
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	padding: 2px 4px 2px 4px;
+	/*****************
+	 * width: 294px; *
+	 *****************/
+	width: 310px;
+}
+
+.active_elements:hover, .active_elements:focus, .inactive_elements:hover,
+	.inactive_elements:focus {
+	background-color: #f7fbfd;
+	border: 1px solid #4171B5;
+}
+
+input[type=text].element_query { /*****************
+	 * width: 278px; *
+	 *****************/
+	width: 276px;
+	background-image: url('../../Images/Aqua/Buttons/Search.png');
+	background-repeat: no-repeat;
+	background-position: 2px 2px;
+	padding: 2px 4px 2px 20px;
+	margin-right: 5px;
+}
+
+input[type=button].activate_elements, input[type=button].deactivate_elements
+	{
+	background-color: #f5f5f5;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 1px solid #dedede;
+	border-top: 1px solid #eeeeee;
+	border-left: 1px solid #eeeeee;
+	text-decoration: none;
+	font-weight: bold;
+	color: #565656;
+	cursor: pointer;
+	padding: 0px;
+	width: 32px;
+	height: 29px;
+	margin: 2px 0px 2px -5px;
+}
+
+input[type=button].activate_elements {
+	background-image: url('../../Images/Aqua/Buttons/ActivateElement.png');
+}
+
+input[type=button].activate_elements.disabled {
+	cursor: default;
+	background-image: url('../../Images/Aqua/Buttons/ActivateElementNa.png');
+}
+
+input[type=button].deactivate_elements {
+	background-image: url('../../Images/Aqua/Buttons/DeactivateElement.png');
+}
+
+input[type=button].activate_elements:not (.disabled ):hover, input[type=button].deactivate_elements:hover
+	{
+	background-color: #dff4ff;
+	border: 1px solid #c2e1ef;
+	color: #336699;
+}
+
+input[type=button].activate_elements:not (.disabled ):active, input[type=button].deactivate_elements:active
+	{
+	background-color: #6299c5;
+	border: 1px solid #6299c5;
+	color: #ffffff;
+}
+
+div.element_finder {
+	margin: 0px;
+	padding: 0px;
+}
+
+div.element_finder_search {
+	margin-bottom: 5px;
+}
+
+div.element_finder_active, div.element_finder_buttons, div.element_finder_inactive
+	{
+	float: left;
+}
+
+div.element_finder_buttons {
+	padding: 3px 0px 3px 0px;
+}
+
+div.element_finder_buttons_container {
+	margin: -31px 10px 0 10px;
+	position: relative;
+	top: 50%;
+}
+
+div.element_finder_types, div.element_finder_container {
+	float: left;
+	margin-right: 10px;
+}
+
+div.element_finder_types div.filter_box {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+div.element_finder button.hide {
+	float: right;
+}
+
+#selected_image {
+	border: 1px solid #dedede;
+	margin-bottom: 5px;
+}
+
+div.element_finder div.inactive_elements div.previous_elements {
+	height: 20px;
+	border-bottom: 1px solid #B9D0EF;
+	background: url('../../Images/Aqua/Action/Up.png') center center
+		no-repeat #E5EDF9;
+	margin: -2px -4px 5px -4px;
+	cursor: pointer;
+}
+
+div.element_finder div.inactive_elements div.next_elements {
+	height: 20px;
+	border-top: 1px solid #B9D0EF;
+	background: url('../../Images/Aqua/Action/Down.png') center center
+		no-repeat #E5EDF9;
+	margin: 5px -4px -2px -4px;
+	cursor: pointer;
+}
+
+/**********************
+ * FILTER FORM STYLES *
+ **********************/
+div.filter_form {
+	clear: both;
+	float: right;
+	padding-top: 4px;
+}
+
+div.filter_form div.form-row {
+	clear: none;
+	float: left;
+	padding: 0px;
+	margin-left: 10px;
+}
+
+div.filter_form div.form-row div.formw {
+	float: none;
+	width: auto;
+}
+
+div.filter_form div.form-row div.formw button {
+	margin-top: -4px;
+}
+
+/**********************
+ * ADVANCED FILTER FORM STYLES *
+ **********************/
+div.advanced_filter_form {
+	clear: both;
+	padding-top: 4px;
+	font-size: 11px !important;
+}
+
+div.advanced_filter_form div.configuration_form {
+	clear: both;
+	margin: 0px -10px 10px -10px;
+	padding: 0px 10px 0px 10px;
+	border: 0px solid #000000 !important;
+}
+
+div.advanced_filter_form div.configuration_form span.category {
+	clear: both;
+	position: relative;
+	top: 0px !important;
+	font-weight: bold;
+	padding: 0px 10px 0px 10px;
+	margin-bottom: 5px;
+	margin-left: -10px;
+	margin-right: -10px;
+	margin-top: 0px;
+	display: block;
+	border-bottom: 1px solid #999999;
+}
+
+div.advanced_filter_form a.calendar_button:hover, div.advanced_filter_form a.calendar_button
+	{
+	margin: 0;
+	background-position: center center;
+	width: 16px;
+	height: 16px;
+	padding: 2px;
+	position: relative;
+	top: -2px;
+}
+
+div.advanced_filter_form div.form-row {
+	clear: both;
+	padding: 0px;
+	width: 100%;
+}
+
+div.advanced_filter_form div.form-row input, div.advanced_filter_form div.form-row select
+	{
+	background-color: #f5f5f5;
+	border: 1px solid #dedede;
+	height: 16px;
+	font-size: 11px !important;
+}
+
+div.advanced_filter_form div.form-row select {
+	margin: 0;
+	padding: 2px 2px;
+	height: 22px;
+}
+
+div.advanced_filter_form div.form-row input.full, div.advanced_filter_form div.form-row select.full
+	{
+	width: 100%;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	height: 20px;
+}
+
+/**********************
+ * JUMP FORM STYLES *
+ **********************/
+#personal_calendar_jump_form select {
+	width: 100%;
+}
+
+div.jump_form {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+div.jump_form div.form-row {
+	clear: both;
+	padding: 0px;
+}
+
+div.jump_form div.form-row div.formw {
+	float: none;
+	width: 100%;
+}
+
+input.search_query {
+	background: url(../../Images/Aqua/Action/Search.png) 1px 50% no-repeat;
+	padding: 0 0 0 21px;
+}
+
+input.search_query_no_icon {
+	padding: 0px 0px 0px 0px;
+}
+
+input#attachments_expand_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Attachment.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#attachments_expand_button :hover {
+	color: red;
+}
+
+input#attachments_collapse_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Attachment.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#attachments_collapse_button :hover {
+	color: red;
+}
+
+input#rights_templates_expand_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Rights.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#rights_templates_expand_button :hover {
+	color: red;
+}
+
+input#rights_templates_collapse_button {
+	border: 0;
+	background: transparent;
+	background-image: url(../../Images/Aqua/Action/Rights.png);
+	background-position: 0 50%;
+	background-repeat: no-repeat;
+	padding: 0 0 0 18px;
+	height: 16px;
+	font-weight: bold;
+	font-family: Ubuntu, arial, verdana, helvetica, sans-serif;
+	font-size: 12px;
+	color: #4171b5;
+	cursor: pointer;
+}
+
+input#rights_templates_collapse_button :hover {
+	color: red;
+}
+
+input.link_alike {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #4171b5;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+
+input.link_alike:hover {
+	background-color: #FFFFFF;
+	border-width: 0px;
+	color: #FF0000;
+	font-weight: bold;
+	text-align: left;
+	padding: 0px;
+	margin: 0px;
+}
+
+form br {
+	clear: both;
+}
+
+/**************************
+ * ACTION BAR SEARCH FORM *
+ **************************/
+div.search_form {
+	background-color: white;
+	border: 1px solid grey;
+	height: 18px;
+	overflow: hidden;
+}
+
+div.search_form input.search_query {
+	border: 0px solid white;
+	background-image: none;
+	padding: 0px 2px 0px 2px;
+	height: 18px;
+}
+
+div.search_form button.search, div.search_form button.clear {
+	background-color: white;
+	border: 0px solid white;
+	width: 18px;
+	height: 18px;
+	/*	background-image: none;*/
+	background-position: center center;
+	padding: 0px;
+	margin: 0px;
+	vertical-align: top;
+	text-align: center;
+}
+
+div.search_form button.search img, div.search_form button.clear img {
+	padding: 0px;
+	margin: 1px 2px 0px 2px;
+}
+
+input.visual_input {
+	background-image: url(../../Images/Aqua/Buttons/Right.png);
+	background-repeat: no-repeat;
+	background-position: 4px 50%;
+	padding-left: 24px;
+}
+
+input.width {
+	background-image: url(../../Images/Aqua/Buttons/Width.png);
+}
+
+input.height {
+	background-image: url(../../Images/Aqua/Buttons/Height.png);
+}
+
+/*
+ * Collapsible
+*/
+div .expanded a {
+	background-image: url(../../Images/Aqua/Action/ToggleShow.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 16px;
+}
+
+div .collapsed {
+	padding-bottom: 0px;
+	height: 10px;
+}
+
+div .collapsed .row {
+	display: none;
+}
+
+div .collapsed a {
+	background-image: url(../../Images/Ruby/Action/ToggleHide.png);
+	background-position: right center;
+	background-repeat: no-repeat;
+	padding-right: 10px;
+}
+
+div .collapsed div {
+	display: none;
+}
+
+fieldset {
+	clear: both;
+	margin: 5px;
+	padding: 5px;
+	border: 1px solid #ebebeb;
+	-moz-border-radius-topright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-radius-topright: 10px;
+	border-radius-bottomleft: 10px;
+	-webkit-border-top-right-radius: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+}
+
+fieldset legend {
+	background-color: #FFFFFF;
+	font-weight: bold;
+	color: #4271B5;
+	padding: 0px 5px 0px 5px;
+	margin-right: 10px;
+}
+
+div.ui-datepicker {
+	background-color: #F7FBFD !important;
+	border: 1px solid #d7e6ed !important;
+	padding: 10px;
+	margin: 2px;
+}
+
+div.ui-datepicker div.ui-datepicker-header {
+	background-color: #264269 !important;
+}

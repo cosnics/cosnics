@@ -1,0 +1,31 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_multiple_choice_question
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Meerkeuze vraag"
+SwitchToCheckboxes = "Sta meerdere antwoorden toe"
+SwitchToRadioButtons = "Sta een antwoord toe"
+AddMultipleChoiceOption = "Voeg  optie toe"
+Answer = "Antwoord"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Correct"
+SelectAtLeastOneCorrectAnswer = "Selecteer minstens een correct antwoord"
+SelectACorrectAnswer = "Selecteer het juiste antwoord"
+Weight = "Gewicht"
+Options = "Opties"
+Title = "Vraag"
+Description = "Extra instructies"
+Hint = "Hint"
+InstructionsText = "<b>Meerkeuzevraag</b><ol><li>Geef een titel aan de vraag.</li><li>Bepaal de Categorie waarin je de vraag (het object) gaat opslaan.</li><li>Geef onder Beschrijving  de opdracht/vraag in, b.v.: Kies de correcte optie. Wie volgde in België koning Boudewijn op?</li><li>Geef onder Opties de mogelijke antwoorden op.</li><li>Voeg desnoods opties toe, of verwijder er d.m.v. het rode kruisje.</li><li>Geef d.m.v. de radioknop in de eerste kolom van de Opties aan welk antwoord het correcte is.</li><li>Geef mogelijke feedback in onder Feedback.</li><li>Bepaal de score per juist/verkeerd antwoord.</li><li>Geef indien gewenst een hint in.</li><li>Klik op Maak.<br /></li></ol><b>Meerantwoordenvraag</b><ol><li>Geef een titel aan de vraag.</li><li>Bepaal de Categorie waarin je de vraag (het object) gaat opslaan.</li><li>Geef onder Beschrijving  de opdracht/vraag in, b.v.: Kies de correcte optie(s). In welke steden kun je in België universitaire studies beginnen?</li><li>Geef onder Opties de mogelijke antwoorden op.</li><li>Voeg desnoods opties toe, of verwijder er d.m.v. het rode kruisje.</li><li>Vink 'Sta meerdere antwoorden toe' aan.</li><li>Geef d.m.v. de aanvinkknop(pen) in de eerste kolom van de Opties aan welke antwoorden de correcte zijn.</li><li>Geef mogelijke feedback in.</li><li>Bepaal de score per juist/verkeerd antwoord.</li><li>Geef indien gewenst een hint in.</li><li>Klik op Maak.</li></ol>"
+RecalculateWeight = "Herbereken gewicht"
+RandomizeOptions = "Randomiseer opties"
+FeedbackOptions = "Toon feedback voor"
+FeedbackOptionsAll = "Alle antwoorden"
+FeedbackOptionsSelected = "Geselecteerde antwoorden"
+FeedbackAnswer = "Enkel feedback bij fout antwoord"
+AddHint = "Stel hint in"
+ConfirmOptionDelete = "Ben je zeker dat je dit antwoord wil verwijderen?"
+SelectCorrectAnswer = "Selecteer het juiste antwoord"
+SelectCorrectAnswers = "Selecteer de juiste antwoorden"

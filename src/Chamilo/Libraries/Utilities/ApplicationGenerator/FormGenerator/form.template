@@ -1,0 +1,112 @@
+<?php
+
+namespace {NAMESPACE};
+
+use common\libraries\FormValidator;
+use common\libraries\Utilities;
+use common\libraries\Translation;
+
+/**
+ * This class describes the form for a {OBJECT_CLASS} object.
+ * @author Sven Vanpoucke
+ * @author {AUTHOR}
+ **/
+class {OBJECT_CLASS}Form extends FormValidator 
+{	
+    const TYPE_CREATE = 1;
+    const TYPE_EDIT = 2;
+
+    private ${L_OBJECT_CLASS};
+    private $user;
+
+    function {OBJECT_CLASS}Form($form_type, ${L_OBJECT_CLASS}, $action, $user) 
+    {
+    	parent :: __construct('{L_OBJECT_CLASS}_settings', 'post', $action);
+    	
+    	$this->{L_OBJECT_CLASS} = ${L_OBJECT_CLASS};
+    	$this->user = $user;
+        $this->form_type = $form_type;
+
+        if ($this->form_type == self :: TYPE_EDIT)
+        {
+                $this->build_editing_form();
+        }
+        elseif ($this->form_type == self :: TYPE_CREATE)
+        {
+                $this->build_creation_form();
+        }
+
+        $this->setDefaults();
+    }
+    
+    function build_basic_form()
+    {
+        <!-- BEGIN PROPERTIES -->
+        $this->addElement('text', {OBJECT_CLASS} :: {PROPERTIES.PROPERTY}, Translation :: get('{PROPERTIES.PROPERTY_C}'));
+        $this->addRule({OBJECT_CLASS} :: {PROPERTIES.PROPERTY}, Translation :: get('ThisFieldIsRequired', null, Utilities :: COMMON_LIBRARIES), 'required');
+
+        <!-- END PROPERTIES -->
+    }
+    
+    function build_editing_form()
+    {	
+    	$this->build_basic_form();
+    	
+    	//$this->addElement('hidden', {OBJECT_CLASS} :: PROPERTY_ID);
+    	
+        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('Update', null, Utilities :: COMMON_LIBRARIES), array('class' => 'positive update'));
+        $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), array('class' => 'normal empty'));
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+    
+    function build_creation_form()
+    {
+    	$this->build_basic_form();
+    	
+        $buttons[] = $this->createElement('style_submit_button', 'submit', Translation :: get('Create', null, Utilities :: COMMON_LIBRARIES), array('class' => 'positive'));
+        $buttons[] = $this->createElement('style_reset_button', 'reset', Translation :: get('Reset', null, Utilities :: COMMON_LIBRARIES), array('class' => 'normal empty'));
+
+        $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
+    }
+    
+    function update_{L_OBJECT_CLASS}()
+    {
+    	${L_OBJECT_CLASS} = $this->{L_OBJECT_CLASS};
+    	$values = $this->exportValues();
+    	
+    	<!-- BEGIN PROPERTIES -->
+    	${L_OBJECT_CLASS}->set_{PROPERTIES.PROPERTY_L}($values[{OBJECT_CLASS} :: {PROPERTIES.PROPERTY}]);
+        <!-- END PROPERTIES -->
+ 		
+    	return ${L_OBJECT_CLASS}->update();
+    }
+    
+    function create_{L_OBJECT_CLASS}()
+    {
+    	${L_OBJECT_CLASS} = $this->{L_OBJECT_CLASS};
+    	$values = $this->exportValues();
+    	
+    	<!-- BEGIN PROPERTIES -->
+    	${L_OBJECT_CLASS}->set_{PROPERTIES.PROPERTY_L}($values[{OBJECT_CLASS} :: {PROPERTIES.PROPERTY}]);
+        <!-- END PROPERTIES -->
+
+        return ${L_OBJECT_CLASS}->create();
+    }
+    
+    /**
+     * Sets default values.
+     * @param array $defaults Default values for this form's parameters.
+     */
+    function setDefaults($defaults = array ())
+    {
+        ${L_OBJECT_CLASS} = $this->{L_OBJECT_CLASS};
+
+        <!-- BEGIN PROPERTIES -->
+        $defaults[{OBJECT_CLASS} :: {PROPERTIES.PROPERTY}] = ${L_OBJECT_CLASS}->get_{PROPERTIES.PROPERTY_L}();
+        <!-- END PROPERTIES -->
+
+        parent :: setDefaults($defaults);
+    }
+}
+?>

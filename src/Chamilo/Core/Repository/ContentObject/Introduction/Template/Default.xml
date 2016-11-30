@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Introduction">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Introduction</translation>
+            <translation language="nl">Introductie</translation>
+            <translation language="fr">Introduction</translation>
+            <translation language="de">Einleitung</translation>
+        </variable>
+    </translations>
+</template>

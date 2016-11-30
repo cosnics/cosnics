@@ -1,0 +1,25 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\personal_calendar
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Persönlicher Kalender"
+Jump = "Springen"
+ComponentFailedToLoad = "Laden fehlgeschlagen"
+File = "Datei"
+Stacktrace = "Stacktrace"
+PersonalCalendarEventParser = "Parser"
+PersonalCalendarManagerBrowserComponent = "Browser"
+PersonalCalendarManagerViewerComponent = "Viewer"
+PersonalCalenderPublication = "Kalenderpublikation"
+ImportIcal = "iCal importieren"
+PersonalCalendarPublication = "Publikation"
+PersonalCalendarPublications = "Publikationen"
+PersonalCalendar = "Persönlicher Kalender"
+IcalImported = "Das iCal wurde erfolgreich importiert"
+OnlyIcsAllowed = "Nur ICS Dateien sind zulässig"
+ExportIcal = "iCal exportieren"
+MyAgenda = "Meine Agenda"
+PersonalCalendarManagerPublisherComponent = "Veröffentlichen"
+Day = "Tag"
+Month = "Monat"
