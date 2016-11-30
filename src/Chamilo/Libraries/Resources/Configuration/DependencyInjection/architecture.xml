@@ -30,9 +30,6 @@
                 id="symfony.component.http_foundation.request" />
             <argument
                 type="service"
-                id="chamilo.configuration.service.file_configuration_locator" />
-            <argument
-                type="service"
                 id="chamilo.configuration.service.configuration_consulter" />
             <argument
                 type="service"
