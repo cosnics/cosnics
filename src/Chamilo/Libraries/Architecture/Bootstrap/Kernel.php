@@ -61,12 +61,6 @@ class Kernel
 
     /**
      *
-     * @var \Chamilo\Libraries\Platform\Translation
-     */
-    private $translationUtilities;
-
-    /**
-     *
      * @var string
      */
     private $context;
