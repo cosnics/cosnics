@@ -29,8 +29,8 @@ class CreateComponent extends Manager
             try
             {
                 $this->getOpenCourseService()->attachRolesToCoursesByIds(
-                    $exportValues['roles']['role'], 
-                    $exportValues['courses']['course']);
+                    $this->getUser(), $exportValues['courses']['course'], $exportValues['roles']['role']
+                );
                 
                 $success = true;
                 $messageVariable = 'OpenCoursesAdded';
