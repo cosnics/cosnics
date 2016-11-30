@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Course\OpenCourse\Course\Test\Source;
+namespace Chamilo\Application\Weblcms\Course\OpenCourse\Test\Source;
 
 use Chamilo\Libraries\Architecture\Test\TestApplication;
 
@@ -10,5 +10,4 @@ use Chamilo\Libraries\Architecture\Test\TestApplication;
  */
 class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\Source\CheckSourceCodeTest
 {
-    use TestApplication;
 }

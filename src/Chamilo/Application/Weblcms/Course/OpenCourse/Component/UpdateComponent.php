@@ -8,7 +8,7 @@ use Chamilo\Libraries\Platform\Translation;
 
 /**
  * Component to update the roles that can access a course
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class UpdateComponent extends Manager
@@ -20,23 +20,25 @@ class UpdateComponent extends Manager
     public function run()
     {
         $this->checkAuthorization(Manager::context(), 'ManageOpenCourses');
-        
+
         $courseIds = $this->getCourseIdsFromRequest();
-        
+
         $course = new Course();
         $course->setId($courseIds[0]);
-        
+
         $form = new OpenCourseForm(OpenCourseForm::FORM_TYPE_EDIT, $this->get_url(), Translation::getInstance());
         $form->setDefaultRoles($this->getOpenCourseService()->getRolesForOpenCourse($course)->as_array());
-        
+
         if ($form->validate())
         {
             $exportValues = $form->exportValues();
-            
+
             try
             {
-                $this->getOpenCourseService()->updateRolesForCourses($exportValues['roles']['role'], $courseIds);
-                
+                $this->getOpenCourseService()->updateRolesForCourses(
+                    $this->getUser(), $courseIds, $exportValues['roles']['role']
+                );
+
                 $success = true;
                 $messageVariable = 'OpenCoursesUpdated';
             }
@@ -45,25 +47,26 @@ class UpdateComponent extends Manager
                 $success = false;
                 $messageVariable = 'OpenCoursesUpdated';
             }
-            
+
             $this->redirect(
-                Translation::getInstance()->getTranslation($messageVariable, null, Manager::context()), 
-                ! $success, 
-                array(self::PARAM_ACTION => self::ACTION_BROWSE));
+                Translation::getInstance()->getTranslation($messageVariable, null, Manager::context()),
+                !$success,
+                array(self::PARAM_ACTION => self::ACTION_BROWSE)
+            );
         }
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $form->toHtml();
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Returns the list of additional parameters that need to be registered
-     * 
+     *
      * @return string[]
      */
     public function get_additional_parameters()
