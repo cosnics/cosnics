@@ -2,6 +2,7 @@
 namespace Chamilo\Core\User\Roles\Storage\Repository\Interfaces;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -9,7 +10,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-interface RoleRepositoryInterface
+interface RoleRepositoryInterface extends DataManagerRepositoryInterface
 {
 
     /**

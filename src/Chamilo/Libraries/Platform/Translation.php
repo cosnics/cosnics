@@ -289,6 +289,6 @@ class Translation
      */
     private function loadCache($language)
     {
-        $this->strings[$language] = $this->getCacheService()->getForIdentifier($language);
+        $this->strings[$language] = $this->getTranslationCacheService()->getForIdentifier($language);
     }
 }

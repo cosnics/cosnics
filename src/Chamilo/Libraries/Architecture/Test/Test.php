@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Test;
 
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+
 /**
  * This abstract test case is used as a base for all chamilo tests
  * 
@@ -37,9 +39,11 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 
     /**
      * Returns a reflection property for the usage of the protected / private properties
-     * 
+     *
      * @param string $class_name
-     * @param string $property
+     * @param string $property_name
+     *
+     * @return \ReflectionProperty
      */
     protected function get_property($class_name, $property_name)
     {
@@ -84,9 +88,11 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 
     /**
      * Counts the constants of a class with optionally a given prefix
-     * 
+     *
      * @param DataClass $object
      * @param string $prefix - [OPTIONAL]
+     *
+     * @return int
      */
     protected function count_constants($object, $prefix = null)
     {
@@ -95,9 +101,11 @@ abstract class Test extends \PHPUnit_Framework_TestCase
 
     /**
      * Retrieves the constants of a class with optionally a given prefix
-     * 
+     *
      * @param DataClass $object
      * @param string $prefix - [OPTIONAL]
+     *
+     * @return array
      */
     protected function get_constants($object, $prefix)
     {

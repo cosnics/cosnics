@@ -10,5 +10,4 @@ use Chamilo\Libraries\Architecture\Test\TestApplication;
  */
 class CheckSourceCodeTest extends \Chamilo\Libraries\Architecture\Test\Source\CheckSourceCodeTest
 {
-    use TestApplication;
 }

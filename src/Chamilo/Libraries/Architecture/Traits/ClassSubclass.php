@@ -27,12 +27,11 @@ trait ClassSubClass
             return false;
         }
         
-        $class_name = $this->get_classname_from_php_file($file);
-        $fully_qualified_class_name = $this->determine_package_namespace() . '\\' . $class_name;
-        
+        $class_name = $this->getClassNameFromPHPFile($file);
+
         foreach ($super_classes as $super_class)
         {
-            if (is_subclass_of($fully_qualified_class_name, $super_class))
+            if (is_subclass_of($class_name, $super_class))
             {
                 return true;
             }

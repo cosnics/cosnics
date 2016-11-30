@@ -4,6 +4,7 @@ namespace Chamilo\Core\User\Roles\Storage\Repository;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Core\User\Roles\Storage\DataManager;
 use Chamilo\Core\User\Roles\Storage\Repository\Interfaces\RoleRepositoryInterface;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class RoleRepository implements RoleRepositoryInterface
+class RoleRepository extends DataManagerRepository implements RoleRepositoryInterface
 {
 
     /**
