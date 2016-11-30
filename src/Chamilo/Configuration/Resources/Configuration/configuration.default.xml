@@ -8,7 +8,7 @@
         <parameter
             key="chamilo.configuration.database"
             type="collection">
-            <parameter key="driver"></parameter>
+            <parameter key="driver">mysql</parameter>
             <parameter key="username"></parameter>
             <parameter key="password"></parameter>
             <parameter key="host"></parameter>
@@ -40,5 +40,20 @@
         <parameter key="chamilo.configuration.debug.enable_query_cache">1</parameter>
         <parameter key="chamilo.configuration.session.session_handler"></parameter>
         <parameter key="chamilo.configuration.kernel.service">chamilo.libraries.architecture.bootstrap.kernel</parameter>
+
+        <parameter
+                key="chamilo.configuration.error_handling"
+                type="collection">
+            <parameter
+                    key="exception_logger"
+                    type="collection">
+                <parameter key="file">Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLogger</parameter>
+            </parameter>
+            <parameter
+                    key="exception_logger_builder"
+                    type="collection">
+                <parameter key="file">Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\FileExceptionLoggerBuilder</parameter>
+            </parameter>
+        </parameter>
     </parameters>
 </container>
