@@ -40,7 +40,7 @@ class ApplicationFactory
      * @param \Chamilo\Libraries\Utilities\StringUtilities $stringUtilities
      * @param \Chamilo\Libraries\Platform\Translation $translation
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, StringUtilities $stringUtilities, 
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request, StringUtilities $stringUtilities,
         Translation $translation)
     {
         $this->request = $request;
@@ -125,7 +125,7 @@ class ApplicationFactory
         {
             $action = $this->getAction($context, $applicationConfiguration);
         }
-        
+
         return $this->buildClassName($context, $action);
     }
 
@@ -143,23 +143,23 @@ class ApplicationFactory
     {
         $action = $this->getAction($context, $applicationConfiguration);
         $className = $this->getClassName($context, $applicationConfiguration, $action);
-        
+
         $application = new $className($applicationConfiguration);
-        
+
         $application->set_parameter($this->getActionParameter($context), $action);
-        
+
         if (! $this->getParentApplication($applicationConfiguration) instanceof Application)
         {
             $application->set_parameter(Application::PARAM_CONTEXT, $context);
         }
-        
+
         $parameters = $application->get_additional_parameters();
-        
+
         foreach ($parameters as $parameter)
         {
             $application->set_parameter($parameter, $this->getRequest()->get($parameter));
         }
-        
+
         return $application;
     }
 
@@ -174,7 +174,7 @@ class ApplicationFactory
         $managerClass = $this->getManagerClass($context);
         $level = $this->determineLevel($applicationConfiguration->getApplication());
         $actions = $this->getRequestedAction($actionParameter, $context);
-        
+
         if (is_array($actions))
         {
             if (isset($actions[$level]))
@@ -191,7 +191,7 @@ class ApplicationFactory
         {
             $action = $actions;
         }
-        
+
         return $action;
     }
 
@@ -215,16 +215,16 @@ class ApplicationFactory
     protected function getManagerClass($context)
     {
         $managerClass = $context . '\Manager';
-        
+
         if (! class_exists($managerClass))
         {
             throw new \Exception(
                 $this->getTranslation()->getTranslation(
-                    'NoManagerFound', 
-                    array('CONTEXT' => $this->getContext()), 
+                    'NoManagerFound',
+                    array('CONTEXT' => $this->getContext()),
                     'Chamilo\Libraries'));
         }
-        
+
         return $managerClass;
     }
 
@@ -242,10 +242,10 @@ class ApplicationFactory
         }
         else
         {
-            
+
             $level = 0;
         }
-        
+
         return $level;
     }
 
@@ -258,13 +258,13 @@ class ApplicationFactory
     protected function getRequestedAction($actionParameter, $context)
     {
         $request = $this->getRequest();
-        
+
         $getAction = $request->query->get($actionParameter);
-        
+
         if (! $getAction)
         {
             $postAction = $request->request->get($actionParameter);
-            
+
             if (! $postAction)
             {
                 $managerClass = $this->getManagerClass($context);
@@ -284,23 +284,23 @@ class ApplicationFactory
     private function buildClassName($context, $action)
     {
         $className = $context . '\Component\\' . $action . 'Component';
-        
+
         if (! class_exists($className))
         {
             // TODO: Temporary fallback for backwards compatibility
             $componentName = (string) $this->getStringUtilities()->createString($action)->upperCamelize();
             $className = $context . '\Component\\' . $componentName . 'Component';
-            
+
             if (! class_exists($className))
             {
                 // TODO: Do we still need this
                 // $trail = BreadcrumbTrail::getInstance();
                 // $trail->add(new Breadcrumb('#', Translation::get($classname)));
-                
+
                 throw new ClassNotExistException($className);
             }
         }
-        
+
         return $className;
     }
 }
