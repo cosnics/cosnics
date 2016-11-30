@@ -23,7 +23,7 @@ class DeleteComponent extends Manager
         
         try
         {
-            $this->getOpenCourseService()->removeCoursesAsOpenCourse($courseIds);
+            $this->getOpenCourseService()->removeCoursesAsOpenCourse($this->getUser(), $courseIds);
             $success = true;
             $redirectMessageVariable = 'CoursesRemovedFromOpenCourseList';
         }

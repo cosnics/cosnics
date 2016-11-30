@@ -1,11 +1,13 @@
 <?php
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository;
 
+use Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository\Interfaces\OpenCourseRepositoryInterface;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -18,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -28,7 +31,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * 
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class OpenCourseRepository
+class OpenCourseRepository extends DataManagerRepository implements OpenCourseRepositoryInterface
 {
 
     /**
@@ -74,7 +77,7 @@ class OpenCourseRepository
      * @param null $count
      * @param array $orderBy
      *
-     * @return bool
+     * @return RecordIterator
      */
     protected function findOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
     {
