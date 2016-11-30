@@ -11,7 +11,7 @@ use Chamilo\Libraries\Platform\Translation;
  * Standard breadcrumb generator.
  * Generates a breadcrumb based on the package and component name. Includes the
  * possibility to add additional breadcrumbs between the package breadcrumb and the component breadcrumb
- * 
+ *
  * @package common\libraries
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -20,21 +20,21 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 
     /**
      * The application component
-     * 
+     *
      * @var Application
      */
     protected $component;
 
     /**
      * The breadcrumb trail instance
-     * 
+     *
      * @var BreadcrumbTrail
      */
     protected $breadcrumb_trail;
 
     /**
      * Constructor
-     * 
+     *
      * @param Application $component
      * @param BreadcrumbTrail $breadcrumb_trail
      */
@@ -49,7 +49,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
      * Generate functionality *
      * **************************************************************************************************************
      */
-    
+
     /**
      * Automatically generates the breadcrumbs based on the given component
      */
@@ -57,20 +57,20 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     {
         $component = $this->component;
         $context = $component->package();
-        
+
         if (! $component instanceof NoContextComponent && ! $component->get_application() instanceof Application)
         {
             $this->generate_package_breadcrumb();
         }
-        
+
         $component->add_additional_breadcrumbs($this->breadcrumb_trail);
-        
+
         if (! $component instanceof DelegateComponent)
         {
             $this->breadcrumb_trail->add_help(
-                $context, 
+                $context,
                 ClassnameUtilities::getInstance()->getClassnameFromObject($component, true));
-            
+
             $this->generate_component_breadcrumb();
         }
     }
@@ -82,10 +82,10 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     {
         $component = $this->component;
         $context = $component->package();
-        
+
         $filter_parameters = $component->get_additional_parameters();
         $filter_parameters[] = $component::PARAM_ACTION;
-        
+
         $this->breadcrumb_trail->add(
             new Breadcrumb($component->get_url(array(), $filter_parameters), Translation::get('TypeName', null, $context)));
     }
@@ -96,7 +96,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
     protected function generate_component_breadcrumb()
     {
         $variable = ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($this->component));
-        
+
         $this->breadcrumb_trail->add(
             new Breadcrumb($this->component->get_url(), Translation::get($variable, null, $this->component->package())));
     }
@@ -106,7 +106,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
      * Getters & Setters *
      * **************************************************************************************************************
      */
-    
+
     /**
      *
      * @param \libraries\format\BreadcrumbTrail $breadcrumb_trail

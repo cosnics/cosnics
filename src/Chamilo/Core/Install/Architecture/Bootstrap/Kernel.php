@@ -180,7 +180,7 @@ class Kernel
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return \Chamilo\Core\Install\Architecture\Bootstrap\Kernel
      */
     protected function configureContext()
     {
@@ -228,7 +228,7 @@ class Kernel
 
     /**
      *
-     * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
+     * @return \Chamilo\Core\Install\Architecture\Bootstrap\Kernel
      */
     protected function buildApplication()
     {

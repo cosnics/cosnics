@@ -38,38 +38,38 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     public function run()
     {
         $this->checkInstallationAllowed();
-        
+
         $this->current_step = "";
         $this->counter = 0;
         $this->optional_application_counter = 0;
         $this->optional = false;
-        
+
         $this->installer = $this->build_installer();
         $this->installer->add_observer($this);
-        
+
         $wizardProcess = $this;
-        
+
         session_write_close();
-        
+
         $response = new StreamedResponse();
         $response->setCallback(
             function () use ($wizardProcess)
             {
                 echo $wizardProcess->render_header();
                 flush();
-                
+
                 $wizardProcess->getInstaller()->perform_install();
                 flush();
-                
+
                 echo $wizardProcess->render_footer();
                 flush();
-                
+
                 session_start();
                 Session::unregister(self::PARAM_SETTINGS);
                 Session::unregister(self::PARAM_LANGUAGE);
                 session_write_close();
             });
-        
+
         $response->send();
     }
 
@@ -88,7 +88,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $values = unserialize(Session::retrieve(self::PARAM_SETTINGS));
         $url_append = str_replace('/install/index.php', '', $_SERVER['REQUEST_URI']);
         $values['url_append'] = $url_append;
-        
+
         $factory = new Factory();
         $installer = $factory->build_installer_from_array($values);
         unset($values);
@@ -98,38 +98,38 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     public function render_header()
     {
         $html = array();
-        
+
         $html[] = parent::render_header();
-        
+
         $html[] = ResourceManager::getInstance()->get_resource_html(
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'InstallProcess.js');
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function process_result($title, $result, $message, $image)
     {
         $html = array();
-        
+
         $html[] = $this->display_install_block_header($title, $result, $image);
         $html[] = $message;
         $html[] = $this->display_install_block_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function display_install_block_header($title, $result, $image)
     {
         $counter = $this->counter;
-        
+
         $result_class = ($result ? 'installation-step-successful' : 'installation-step-failed');
-        
+
         $html = array();
         $html[] = '<div class="installation-step installation-step-collapsed ' . $result_class .
              '" style="background-image: url(' . $image . ');">';
         $html[] = '<div class="title">' . $title . '</div>';
         $html[] = '<div class="description">';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -149,9 +149,9 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Folder');
         return $this->process_result(
-            Translation::get('Folders'), 
-            $result->get_success(), 
-            implode('<br />' . "\n", $result->get_messages()), 
+            Translation::get('Folders'),
+            $result->get_success(),
+            implode('<br />' . "\n", $result->get_messages()),
             $image);
     }
 
@@ -190,11 +190,11 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         $image = Theme::getInstance()->getImagePath($result->get_context(), 'Logo/22');
         $title = Translation::get('TypeName', null, $result->get_context()) . ' (' . $result->get_context() . ')';
-        
+
         return $this->process_result(
-            $title, 
-            $result->get_success(), 
-            implode('<br />' . "\n", $result->get_messages()), 
+            $title,
+            $result->get_success(),
+            implode('<br />' . "\n", $result->get_messages()),
             $image);
     }
 
@@ -207,9 +207,9 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Config');
         return $this->process_result(
-            Translation::get('Configuration'), 
-            $result->get_success(), 
-            implode('<br />' . "\n", $result->get_messages()), 
+            Translation::get('Configuration'),
+            $result->get_success(),
+            implode('<br />' . "\n", $result->get_messages()),
             $image);
     }
 
@@ -217,9 +217,9 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Database');
         return $this->process_result(
-            Translation::get('Database'), 
-            $result->get_success(), 
-            implode('<br />' . "\n", $result->get_messages()), 
+            Translation::get('Database'),
+            $result->get_success(),
+            implode('<br />' . "\n", $result->get_messages()),
             $image);
     }
 }

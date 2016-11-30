@@ -53,7 +53,7 @@ class Page
 
     /**
      * Return 'this' as singleton
-     * 
+     *
      * @return \Chamilo\Libraries\Format\Structure\Page
      */
     static public function getInstance()
@@ -61,15 +61,15 @@ class Page
         if (is_null(static::$instance))
         {
             $header = new Header(
-                self::VIEW_MODE_FULL, 
-                'container-fluid', 
-                Translation::getInstance()->getLanguageIsocode(), 
+                self::VIEW_MODE_FULL,
+                'container-fluid',
+                Translation::getInstance()->getLanguageIsocode(),
                 'ltr');
             $footer = new Footer(self::VIEW_MODE_FULL);
-            
+
             self::$instance = new static(self::VIEW_MODE_FULL, 'container-fluid', $header, $footer);
         }
-        
+
         return static::$instance;
     }
 
@@ -102,7 +102,7 @@ class Page
     public function setViewMode($viewMode)
     {
         $this->viewMode = $viewMode;
-        
+
         $this->getHeader()->setViewMode($this->viewMode);
         $this->getFooter()->setViewMode($this->viewMode);
     }
@@ -123,7 +123,7 @@ class Page
     public function setContainerMode($containerMode)
     {
         $this->containerMode = $containerMode;
-        
+
         $this->getHeader()->setContainerMode($this->containerMode);
         $this->getFooter()->setContainerMode($this->containerMode);
     }
@@ -162,7 +162,7 @@ class Page
     public function setApplication($application)
     {
         $this->application = $application;
-        
+
         $this->getHeader()->setApplication($this->application);
         $this->getFooter()->setApplication($this->application);
     }

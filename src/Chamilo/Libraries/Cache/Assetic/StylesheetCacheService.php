@@ -68,22 +68,22 @@ class StylesheetCacheService extends AsseticCacheService
     protected function getAssets()
     {
         $packages = \Chamilo\Configuration\Package\PlatformPackageBundles::getInstance()->get_type_packages();
-        
+
         $assets = array();
-        
+
         foreach ($packages as $category => $namespaces)
         {
             foreach ($namespaces as $namespace => $package)
             {
                 $stylesheetPath = $this->getThemeUtilities()->getStylesheetPath($namespace, false);
-                
+
                 if (file_exists($stylesheetPath))
                 {
                     $assets[] = new CssFileAsset($this->getPathUtilities(), $stylesheetPath);
                 }
             }
         }
-        
+
         return $assets;
     }
 

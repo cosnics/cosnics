@@ -13,7 +13,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response
 
     /**
      * Constructor
-     * 
+     *
      * @param string $content The response content
      * @param int $status The response status code
      * @param array $headers An array of response headers
@@ -23,7 +23,7 @@ class Response extends \Symfony\Component\HttpFoundation\Response
         $headers['Content-Type'] = 'text/html';
         $headers['X-Powered-By'] = 'Chamilo Connect ' .
              \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'version');
-        
+
         parent::__construct($content, $status, $headers);
     }
 }
