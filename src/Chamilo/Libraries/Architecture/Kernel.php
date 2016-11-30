@@ -281,7 +281,7 @@ class Kernel
      */
     protected function registerErrorHandlers()
     {
-        $errorHandler = new ErrorHandler($this->getExceptionLogger(), Translation::getInstance());
+        $errorHandler = new ErrorHandler($this->getExceptionLogger(), Translation::getInstance(), Theme::getInstance());
         $errorHandler->registerErrorHandlers();
     }
 

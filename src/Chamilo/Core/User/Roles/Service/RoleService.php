@@ -45,7 +45,7 @@ class RoleService implements RoleServiceInterface
         $role = new Role();
         $role->setRole($roleName);
         
-        if (! $role->create())
+        if (! $this->roleRepository->create($role))
         {
             throw new \Exception('The role with name ' . $roleName . ' could not be created');
         }
@@ -62,7 +62,7 @@ class RoleService implements RoleServiceInterface
      */
     public function deleteRole(Role $role)
     {
-        if (! $role->delete())
+        if (! $this->roleRepository->delete($role))
         {
             $roleName = $role->getRole();
             throw new \Exception('The role with name ' . $roleName . ' could not be deleted');
