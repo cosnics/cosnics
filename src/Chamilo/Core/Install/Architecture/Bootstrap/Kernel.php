@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Architecture\Bootstrap;
+namespace Chamilo\Core\Install\Architecture\Bootstrap;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
