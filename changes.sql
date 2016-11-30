@@ -91,7 +91,7 @@ CREATE TABLE `rights_structure_location` (
   `context` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `action` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `rsl_location` (`context`,`component`)
+  UNIQUE KEY `rsl_location` (`context`,`action`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `rights_structure_location_role` (

@@ -52,7 +52,7 @@ class BrowseComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $this->checkComponentAutorization();
+        $this->checkComponentAuthorization();
         
         $html = array();
         
