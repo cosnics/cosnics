@@ -18,7 +18,6 @@ abstract class ResourceUtilities
 {
     const PARAM_TYPE = 'type';
     const PARAM_THEME = 'theme';
-    const PARAM_SERVER_TYPE = 'serverType';
     const PARAM_CONTEXT = 'context';
     const DEFAULT_CHARSET = 'utf-8';
 
@@ -26,19 +25,7 @@ abstract class ResourceUtilities
      *
      * @var string
      */
-    private $serverType;
-
-    /**
-     *
-     * @var string
-     */
     private $context;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $cachingEnabled;
 
     /**
      *
@@ -66,32 +53,20 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @param string $serverType
      * @param string $context
      * @param Theme $themeUtilities
      * @param Path $pathUtilities
      * @param ClassnameUtilities $classnameUtilities
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct($serverType = 'production', $context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities,
+    public function __construct($context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities,
         ClassnameUtilities $classnameUtilities, \Symfony\Component\HttpFoundation\Request $request)
     {
-        $this->serverType = $serverType;
         $this->context = $context;
-        $this->cachingEnabled = $this->serverType == 'production';
         $this->themeUtilities = $themeUtilities;
         $this->pathUtilities = $pathUtilities;
         $this->classnameUtilities = $classnameUtilities;
         $this->request = $request;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getServerType()
-    {
-        return $this->serverType;
     }
 
     /**
@@ -105,15 +80,6 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @return boolean
-     */
-    public function getCachingEnabled()
-    {
-        return $this->cachingEnabled;
-    }
-
-    /**
-     *
      * @return \Chamilo\Libraries\Format\Theme
      */
     public function getThemeUtilities()
@@ -123,29 +89,11 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @param string $serverType
-     */
-    public function setServerType($serverType)
-    {
-        $this->serverType = $serverType;
-    }
-
-    /**
-     *
      * @param string $context
      */
     public function setContext($context)
     {
         $this->context = $context;
-    }
-
-    /**
-     *
-     * @param boolean $cachingEnabled
-     */
-    public function setCachingEnabled($cachingEnabled)
-    {
-        $this->cachingEnabled = $cachingEnabled;
     }
 
     /**
@@ -223,7 +171,6 @@ abstract class ResourceUtilities
             if (class_exists($classname))
             {
                 $theme = Request::get(self::PARAM_THEME);
-                $serverType = Request::get(self::PARAM_SERVER_TYPE, 'production');
                 $context = Request::get(self::PARAM_CONTEXT, __NAMESPACE__);
 
                 $classnameUtilities = ClassnameUtilities::getInstance();
@@ -234,13 +181,10 @@ abstract class ResourceUtilities
                     ClassnameUtilities::getInstance(),
                     new PathBuilder($classnameUtilities));
 
-                $pathUtilities = Path::getInstance();
-
                 $utilities = new $classname(
-                    $serverType,
                     $context,
                     $themeUtilities,
-                    $pathUtilities,
+                    Path::getInstance(),
                     $classnameUtilities,
                     $request);
 
