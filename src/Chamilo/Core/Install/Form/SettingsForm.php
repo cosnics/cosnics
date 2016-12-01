@@ -150,12 +150,6 @@ class SettingsForm extends FormValidator
             'platform_language',
             Translation::get("MainLang"),
             $this->getApplication()->getLanguages());
-        $this->addElement('text', 'platform_url', Translation::get("ChamiloURL"), array('size' => '40'));
-        $this->addRule(
-            'platform_url',
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
-            'required');
-        $this->addRule('platform_url', 'AddTrailingSlash', 'regex', '/^.*\/$/');
         $this->addElement('category');
 
         $this->addElement('category', Translation::get('Administrator'));
@@ -539,8 +533,6 @@ class SettingsForm extends FormValidator
             // General settings
 
             $defaults['platform_language'] = Translation::getInstance()->getLanguageIsocode();
-            $urlAppendPath = str_replace('/index.php', '', $_SERVER['PHP_SELF']);
-            $defaults['platform_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $urlAppendPath . '/';
             $defaults['admin_email'] = $_SERVER['SERVER_ADMIN'];
             $email_parts = explode('@', $defaults['admin_email']);
             if ($email_parts[1] == 'localhost')

@@ -16,8 +16,6 @@ $values['database_username'] = 'root';
 $values['database_password'] = '';
 
 $values['platform_language'] = 'en';
-$values['platform_url'] = 'http://localhost/chamilo/web/';
-$values['url_append'] = '/chamilo/web/index.php';
 
 $values['admin_email'] = '';
 $values['admin_surname'] = '';
