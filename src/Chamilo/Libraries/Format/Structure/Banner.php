@@ -114,10 +114,12 @@ class Banner
         if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), Session::get_user_id());
+            $userFullName = $this->getApplication()->getUser()->get_fullname();
         }
         else
         {
             $user = null;
+            $userFullName = '';
         }
 
         if (! is_null(Session::get('_as_admin')))
@@ -129,10 +131,11 @@ class Banner
             $link = $redirect->getUrl();
 
             $html[] = '<div class="warning-banner bg-warning text-warning">' .
-                 Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' .
-                 $this->getApplication()->getUser()->get_fullname() . ' <a href="' . $link . '">' .
-                 Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a></div>';
+                Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' .
+                 $userFullName. ' <a href="' . $link . '">' .
+                Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a></div>';
         }
+
 
         $html[] = '<a name="top"></a>';
 
