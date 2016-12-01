@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Core\Install\Test\Integration\Service;
 
 use Chamilo\Core\Install\Configuration;
@@ -13,24 +12,24 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * Test the class
- *
  * Chamilo\Core\Install\Service\ConfigurationWriter
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class ConfigurationWriterTest extends Test
 {
+
     /**
+     *
      * @var ConfigurationWriterInterface
      */
     protected $configurationWriter;
 
     public function setUp()
     {
-        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities())); var_dump($pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl');
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
         $this->configurationWriter = new ConfigurationWriter(
-            $pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl'
-        );
+            $pathBuilder->getResourcesPath('Chamilo\Core\Install') . 'Templates/configuration.xml.tpl');
     }
 
     public function tearDown()

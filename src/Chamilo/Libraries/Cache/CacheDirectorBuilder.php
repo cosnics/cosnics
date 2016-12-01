@@ -30,7 +30,6 @@ use Chamilo\Libraries\Cache\Assetic\JavascriptCacheService;
 use Chamilo\Libraries\Cache\Assetic\StylesheetCacheService;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionCacheService;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Configuration\Cache\LocalSettingCacheService;

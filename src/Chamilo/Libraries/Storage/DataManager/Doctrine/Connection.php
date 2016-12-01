@@ -17,7 +17,7 @@ class Connection
 
     /**
      * Instance of this class for the singleton pattern.
-     * 
+     *
      * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Connection
      */
     private static $instance;
@@ -39,14 +39,14 @@ class Connection
             $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName::get_from_config('Doctrine');
             $configuration = new \Doctrine\DBAL\Configuration();
             $connection_parameters = array(
-                'dbname' => $data_source_name->get_database(), 
-                'user' => $data_source_name->get_username(), 
-                'password' => $data_source_name->get_password(), 
-                'host' => $data_source_name->get_host(), 
-                'driverClass' => $data_source_name->get_driver(true), 
+                'dbname' => $data_source_name->get_database(),
+                'user' => $data_source_name->get_username(),
+                'password' => $data_source_name->get_password(),
+                'host' => $data_source_name->get_host(),
+                'driverClass' => $data_source_name->get_driver(true),
                 'charset' => 'UTF8');
             $this->connection = DriverManager::getConnection($connection_parameters, $configuration);
-            
+
             try
             {
                 $this->connection->connect();
@@ -65,7 +65,7 @@ class Connection
 
     /**
      * Returns the instance of this class.
-     * 
+     *
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Connection
      */
     public static function getInstance()
@@ -88,7 +88,7 @@ class Connection
 
     /**
      * Gets the database connection.
-     * 
+     *
      * @return \Doctrine\DBAL\Connection
      */
     public function get_connection()

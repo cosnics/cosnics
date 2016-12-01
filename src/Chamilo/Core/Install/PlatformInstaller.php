@@ -9,6 +9,10 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Chamilo\Core\Install\Service\ConfigurationWriter;
+use Chamilo\Libraries\File\PathBuilder;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  *
@@ -61,7 +65,7 @@ class PlatformInstaller
         $this->configuration = $configuration;
         $this->dataManager = $dataManager;
 
-        $this->configurationFilePath = Path::getInstance()->getStoragePath() . 'configuration/configuration.ini';
+        $this->configurationFilePath = Path::getInstance()->getStoragePath() . 'configuration/configuration.xml';
         $this->packages = array();
     }
 
@@ -156,6 +160,9 @@ class PlatformInstaller
         echo $this->performPreProduction();
         flush();
 
+        echo $this->performConfiguration();
+        flush();
+
         try
         {
             $this->installPackages();
@@ -169,9 +176,6 @@ class PlatformInstaller
 
             return;
         }
-
-        // echo $this->performConfiguration();
-        // flush();
 
         echo $this->installerObserver->afterInstallation();
         flush();
@@ -212,71 +216,33 @@ class PlatformInstaller
 
     private function writeConfigurationFile()
     {
-        $configuration = array();
-        $configuration['general']['security_key'] = md5(uniqid(rand() . time()));
-        $configuration['general']['hashing_algorithm'] = $this->configuration->get_crypt_algorithm();
-        $configuration['general']['install_date'] = time();
-        $configuration['database']['driver'] = $this->configuration->get_db_driver();
-        $configuration['database']['username'] = $this->configuration->get_db_username();
-        $configuration['database']['password'] = $this->configuration->get_db_password();
-        $configuration['database']['host'] = $this->configuration->get_db_host();
-        $configuration['database']['name'] = $this->configuration->get_db_name();
-        $configuration['debug']['show_errors'] = false;
-        $configuration['debug']['enable_query_cache'] = true;
-        $configuration['storage']['archive_path'] = $this->configuration->get_archive_path();
-        $configuration['storage']['cache_path'] = $this->configuration->get_cache_path();
-        $configuration['storage']['garbage_path'] = $this->configuration->get_garbage_path();
-        $configuration['storage']['hotpotatoes_path'] = $this->configuration->get_hotpotatoes_path();
-        $configuration['storage']['logs_path'] = $this->configuration->get_logs_path();
-        $configuration['storage']['repository_path'] = $this->configuration->get_repository_path();
-        $configuration['storage']['scorm_path'] = $this->configuration->get_scorm_path();
-        $configuration['storage']['temp_path'] = $this->configuration->get_temp_path();
-        $configuration['storage']['userpictures_path'] = $this->configuration->get_userpictures_path();
+        $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
 
-        $content = array();
-
-        $content[] = ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;';
-        $content[] = '; The chamilo base configuration file.            ;';
-        $content[] = '; Values were entered during installation,        ;';
-        $content[] = '; don\'t change unless you know what you\'re doing. ;';
-        $content[] = ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;';
-
-        foreach ($configuration as $section => $settings)
+        try
         {
-            $content[] = '[' . $section . ']';
+            $configurationTemplatePath = $pathBuilder->getTemplatesPath('Chamilo\Core\Install') . 'configuration.xml.tpl';
 
-            foreach ($settings as $name => $value)
-            {
-                if (is_numeric($value))
-                {
-                    $content[] = $name . ' = ' . $value;
-                }
-                else
-                {
-                    $content[] = $name . ' = "' . $value . '"';
-                }
-            }
+            $configurationWriter = new ConfigurationWriter($configurationTemplatePath);
+            $configurationWriter->writeConfiguration($this->configuration, $this->configurationFilePath);
 
-            $content[] = '';
+            $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
+            $dependencyInjectionContainerBuilder->clearContainerInstance();
+            $dependencyInjectionContainerBuilder->createContainer();
+
+            $result = true;
+        }
+        catch (\Exception $exception)
+        {
+            $result = false;
         }
 
-        $write_status = Filesystem::write_to_file($this->config_file_destination, implode(PHP_EOL, $content));
-
-        if ($write_status === false)
-        {
-            throw new \Exception(Translation::get('ConfigWriteFailed'));
-        }
-
-        \Chamilo\Configuration\Configuration::getInstance()->reset();
-
-        return new StepResult(true, Translation::get('ConfigWriteSuccess'));
+        return new StepResult($result, Translation::get($result ? 'ConfigWriteSuccess' : 'ConfigWriteFailed'));
     }
 
     private function installPackages()
     {
         $this->addPackages($this->configuration->get_packages());
         $this->orderPackages();
-
         $html = array();
 
         echo $this->installerObserver->beforePackagesInstallation();

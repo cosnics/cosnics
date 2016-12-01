@@ -52,8 +52,8 @@ class Bootstrap
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
-    public function __construct(\Symfony\Component\HttpFoundation\Request $request, 
-        FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities, 
+    public function __construct(\Symfony\Component\HttpFoundation\Request $request,
+        FileConfigurationLocator $fileConfigurationLocator, SessionUtilities $sessionUtilities,
         ErrorHandler $errorHandler, $showErrors = false)
     {
         $this->request = $request;
@@ -155,7 +155,7 @@ class Bootstrap
 
     /**
      * Check if the system has been installed, if not display message accordingly
-     * 
+     *
      * @return \Chamilo\Libraries\Architecture\Bootstrapper
      */
     protected function checkInstallation()
@@ -168,20 +168,20 @@ class Bootstrap
             Request::set_get(Application::PARAM_CONTEXT, 'Chamilo\Core\Install');
             return $this;
         }
-        
+
         return $this;
     }
 
     protected function startSession()
     {
         $this->getSessionUtilities()->start();
-        
+
         return $this;
     }
 
     /**
      * Registers the error handler by using the error handler manager
-     * 
+     *
      * @return \Chamilo\Libraries\Architecture\Bootstrap\Kernel
      */
     protected function registerErrorHandlers()
@@ -190,7 +190,7 @@ class Bootstrap
         {
             $this->getErrorHandler()->registerErrorHandlers();
         }
-        
+
         return $this;
     }
 
