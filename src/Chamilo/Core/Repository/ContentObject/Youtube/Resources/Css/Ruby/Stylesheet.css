@@ -1,0 +1,9 @@
+@import
+url
+(
+'../Aqua'
+);
+ul.tree-menu li div a.youtube, ul.tree-menu li div a.type_youtube, ul.tree-menu li div a.type_youtube_default
+	{
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}

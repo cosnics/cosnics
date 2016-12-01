@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\rss_feed
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Flux RSS"
+Description = "Description"
+Properties = "Propriétés"
+URL = "URI"
+NoFeedsFound = "Aucun feed retrouvé"
+Feeder = "RSS"
+Title = "Titre"
+Newsfeed = "Feed de nouvelles"

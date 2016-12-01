@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_section">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="course_id"
+            type="integer"
+            notnull="1" />
+        <property
+            name="name"
+            type="text"
+            length="40"
+            notnull="1" />
+        <property
+            name="type"
+            type="integer"
+            length="1"
+            notnull="1" />
+        <property
+            name="visible"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="1" />
+        <property
+            name="display_order"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+    </properties>
+    <index
+        name="key"
+        type="unique">
+        <indexproperty name="course_id" />
+        <indexproperty name="name" />
+    </index>
+    <index name="course_id">
+        <indexproperty name="course_id" />
+    </index>
+</object>

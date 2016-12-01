@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_select_question
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Select question"
+SelectAtLeastOneCorrectAnswer = "Select at least one correct answer"
+SelectACorrectAnswer = "Select the correct answer"
+SwitchToMultipleSelect = "Allow multiple answers"
+SwitchToSingleSelect = "Allow only one answer"
+AddSelectOption = "Add an option"
+Answer = "Answer"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Correct"
+Weight = "Weight"
+Title = ""
+Description = ""
+Options = ""
+Hint = ""

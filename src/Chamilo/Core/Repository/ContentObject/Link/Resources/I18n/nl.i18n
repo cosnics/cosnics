@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\link
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Link"
+Properties = "Eigenschappen"
+URL = "URI"
+ShowInIframe = "Toon in frame"
+Linker = "Linker"
+Title = "Titel"
+Description = "Beschrijving"
+ShowInIFrame = "Toon in frame"
+DeleteSelected = "Verwijder geselecteerde"
+LinkToolBrowserComponent = "Doorblader links"
+LinkToolIntroductionPublisherComponent = "Publiceer introductie"
+LinkToolMoverComponent = "Verplaats link"
+LinkToolPublisherComponent = "Publiceer link"
+LinkToolUpdaterComponent = "Update link"
+LinkToolViewerComponent = "Bekijk link"
+IFrameNotAllowed = "Omwille van veiligheidsredenen is het niet mogelijk om de optie 'Toon in iFrame' te gebruiken met een HTTP link. Gelieve een HTTPS link te gebruiken of de optie 'Toon in iFrame' af te zetten."

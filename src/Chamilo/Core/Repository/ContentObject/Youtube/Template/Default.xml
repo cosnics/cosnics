@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Youtube">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">YouTube</translation>
+            <translation language="nl">YouTube</translation>
+            <translation language="fr">YouTube</translation>
+            <translation language="de">YouTube</translation>
+        </variable>
+    </translations>
+</template>

@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\repository\publication
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "My publications"
+LocationSelection = "Select location"
+LocationSelectionInfo = "Select the locations where you want to publish these objects"
+LocationSelectionsInfo = "Select the locations where you want to publish the content objects"
+NoLocationsFound = "No locations found"
+SelectedObject = "Selected object"
+SelectedObjects = "Selected objects"
+Result = "Result"
+GoBack = "Go back to your repository"
+ContentObject = "Content object"
+PublicationCreated = "Content object successfuly published"
+PublicationFailed = "Content object publication failed"
+ViewPublication = "View publication"
+PublishInformationMessage = "The selected objects where published in the following locations. Click the green arrow to view a specific publication."

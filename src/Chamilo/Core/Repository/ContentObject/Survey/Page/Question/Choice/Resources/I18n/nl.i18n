@@ -1,0 +1,7 @@
+TypeName = "Keuze vraag"
+Question = "Vraag"
+Instruction = "Instructie"
+Title = "Titel"
+Description = "Omschrijving"
+QuestionPreview = "Preview"
+EnterAnswer = "Schrijf uw antwoord" 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_type_user_category_rel_course">
+    <properties>
+        <property
+            name="course_type_user_category_id"
+            type="integer"
+            notnull="1" />
+        <property
+            name="course_id"
+            type="integer"
+            notnull="1" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            default="0" />
+        <property
+            name="sort"
+            type="integer"
+            length="3"
+            unsigned="1" />
+    </properties>
+    <index
+        name="primary_key"
+        type="primary">
+        <indexproperty name="course_type_user_category_id" />
+        <indexproperty name="course_id" />
+    </index>
+    <index name="course_type_user_category_id">
+        <indexproperty name="course_type_user_category_id" />
+    </index>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+</object>

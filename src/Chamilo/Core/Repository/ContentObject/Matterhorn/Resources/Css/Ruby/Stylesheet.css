@@ -1,0 +1,22 @@
+@import url('../Aqua/Stylesheet.css');
+
+@import
+	url(../../../../../Implementation/Matterhorn/Resources/Javascript/Plugin/Projekktor/themes/maccaco/projekktor.style.css)
+	;
+
+ul.tree-menu li div a.matterhorn, ul.tree-menu li div a.type_matterhorn,
+	ul.tree-menu li div a.type_matterhorn_default {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}
+
+/* prev, next, prevPage and nextPage buttons */
+a.scrollable-segments-browse {
+	background: url(../../Images/Ruby/Action/Scrollable.png) no-repeat;
+	display: block;
+	width: 30px;
+	height: 30px;
+	float: left;
+	margin: 70px 10px;
+	cursor: pointer;
+	font-size: 1px;
+}

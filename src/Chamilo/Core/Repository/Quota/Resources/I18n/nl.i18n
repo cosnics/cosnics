@@ -1,0 +1,103 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\quota
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Quotabeheer"
+AggregatedUserDiskQuotas = "Totale schijfruimte gebruikers"
+AllocatedDiskSpace = "Toegekende schijfruimte"
+BackToOverview = "Terug naar overzicht"
+BrowserComponent = "Doorblader aanvragen"
+ConfigureManagementRights = "Configureer toegangsrechten"
+CreationDate = "Aangevraagd op"
+CreatorComponent = "Vraag een verhoging aan"
+CurrentlyUsedDiskSpace = "Gebruikt"
+Decision = "Beslissing"
+DecisionGranted = "Aanvraag goedgekeurd"
+DecisionMotivation = "Motivatie"
+DecisionPending = "Aanvraag hangende"
+DecisionDenied = "Aanvraag geweigerd"
+DeniedRequests = "Geweigerde aanvragen"
+DenierComponent = "Weiger een aanvraag"
+Deny = "Weiger"
+Grant = "Keur goed"
+GrantedRequests = "Goedgekeurde aanvragen"
+GranterComponent = "Keur een aanvraag goed"
+MaximumUsedDiskSpace = "Max"
+Motivation = "Motivatie"
+NumberOfContentObjects = "Aantal objecten"
+PendingRequests = "Hangende aanvragen"
+Personal = "Persoonlijk quotum"
+Platform = "Platformquotum"
+Quota = "Quotum"
+QuotaStep = "Quotumverhoging (in MB)"
+QuotaUpgraded = "Je quotum werd succesvol verhoogd"
+Request = "Vraag aan"
+RequestUpgrade = "Vraag een verhoging aan"
+ReservedDiskSpace = "Gereserveerde schijfruimte"
+UpgradeQuota = "Verhoog je quotum"
+UpgraderComponent = "Verhoog je quotum"
+UsedDiskSpace = "Gebruikte schijfruimte"
+User = "Gebruiker"
+YourRequests = "Jouw aanvragen"
+GrantSelected = "Keur aanvragen goed"
+DenySelected = "Weiger aanvragen"
+DeleteSelected = "Verwijder aanvragen"
+RequestGrantedMailTitle = "Je {PLATFORM} repositoryquotum werd verhoogd met {ADDED_QUOTA}"
+RequestDeniedMailTitle = "Je {PLATFORM} aanvraag voor een verhoging van {QUOTA} van je repositoryquotum werd geweigerd"
+RequestGrantedMailBody = "Beste {USER},
+
+Het quotum van je {PLATFORM} repository werd zonet verhoogd met {ADDED_QUOTA}, waardoor je nu maximum {QUOTA} document kan bewaren in je repository. Indien dit nieuwe quotum nog steeds onvoldoende hoog is, aarzel dan niet om een bijkomende aanvraag te doen.
+
+Met vriendelijke groeten,
+Je {PLATFORM} team"
+RequestDeniedMailBody = "Beste {USER},
+
+De aanvraag die je recent verstuurde voor een quotumverhoging van {QUOTA} werd omwille van volgende reden geweigerd:
+{MOTIVATION}
+
+Neem contact op met je platformbeheerder voor meer informatie.
+
+Met vriendelijke groeten,
+Je {PLATFORM} team"
+RequestDeniedMailBodySimple = "Beste {USER},
+
+De aanvraag die je recent verstuurde voor een quotumverhoging van {QUOTA} werd geweigerd. Neem contact op met je platformbeheerder voor meer informatie.
+
+Met vriendelijke groeten,
+Je {PLATFORM} team"
+PackageTypeNameQuota = ""
+QuotaPolicy = "Quotum voor individuele gebruiker"
+QuotaPolicyUser = "Gebruikersquotum"
+QuotaPolicyGroupHighest = "Hoogste groepsquotum"
+QuotaPolicyGroupLowest = "Laagste groepsquotum"
+QuotaPolicyHighest = "Hoogste"
+QuotaPolicyLowest = "Laagste"
+QuotaFallback = "Terugvallen op gebruiker/groep indien groep/gebruiker nul is."
+QuotaFallbackUser = "Terugvallen op gebruikersquotum"
+QuotaFallbackUserGroupHighest = "Hoogste groepsquotum"
+QuotaFallbackUserGroupLowest = "Laagste groepsquotum"
+DiskQuota = "Schijfquotum"
+ResetTotal = "Herbereken totale gebruikersruimte"
+RepositoryStatistics = "Statistieken"
+AvailableDiskSpace = "Beschikbare schijfruimte"
+MostUsedContentObjectType = "Meest gebruikte type"
+OtherFrequentlyUsedContentObjectTypes = "Vaak gebruikte types"
+OldestContentObject = "Oudste object"
+RightsComponent = "Configureer toegangsrechten"
+PackageTypeNameQuota = ""
+General = "Algemeen"
+AllowUpgrade = "Sta upgrade toe"
+AllowRequest = "Sta verzoek toe"
+Step = "Stap"
+MaximumUser = "Maximaal gebruiker"
+QuotaCreatedMailTitle = "[{PLATFORM}] Nieuwe quotumverhoging-aanvraag"
+QuotaCreatedMailBody = "Beste {USER},<br />
+<br />
+Er werd een nieuwe aanvraag tot quotumverhoging ingediend. Gelieve deze wanneer mogelijk te evalueren op de daartoe bestemde beheerspagina. (Repository >> Quota >> Hangende aanvragen)<br />
+<br />
+Met vriendelijke groeten,<br />
+Je {PLATFORM} team"
+MaximumFileSizeUser = "Je hebt nog <b>{USER}</b> ter beschikking in je eigen repository voor het uploaden van documenten. Indien dit niet voldoende is, klik dan <a href="{URL}" target="_blank">hier</a> om je quotum te <a href="{URL}" target="_blank">verhogen</a>. De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{SERVER}</b>."
+MaximumFileSizeUserNoUpgrade = "Je hebt nog <b>{USER}</b> ter beschikking in je eigen repository voor het uploaden van documenten. De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{SERVER}</b>."
+MaximumFileSizeServer = "De maximale bestandsgrootte die door het platform toegestaan wordt, is op dit moment <b>{FILESIZE}</b>"

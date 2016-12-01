@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="provider_registration">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="entity_type"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="provider_class"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="property_name"
+            type="text"
+            length="255"
+            notnull="1" />
+    </properties>
+    <index name="entity_type">
+        <indexproperty name="entity_type" />
+    </index>
+    <index name="provider_class">
+        <indexproperty name="provider_class" />
+    </index>
+    <index name="property_name">
+        <indexproperty name="property_name" />
+    </index>
+</object>
