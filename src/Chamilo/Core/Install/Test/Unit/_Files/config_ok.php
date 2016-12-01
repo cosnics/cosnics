@@ -9,8 +9,6 @@ $values['database_username'] = 'db_user';
 $values['database_password'] = 'db_password';
 
 $values['platform_language'] = 'english';
-$values['platform_url'] = 'http://localhost/chamilo-test/';
-$values['url_append'] = '/chamilo-test';
 
 $values['admin_email'] = 'admin@localhost';
 $values['admin_surname'] = 'Doe';

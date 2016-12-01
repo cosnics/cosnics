@@ -109,7 +109,6 @@ class SettingsOverview
         $html = array();
 
         $html[] = $this->renderSetting(Translation::get('MainLang'), $this->getSettingValue('platform_language'));
-        $html[] = $this->renderSetting(Translation::get('ChamiloURL'), $this->getSettingValue('platform_url'));
 
         return implode(PHP_EOL, $html);
     }

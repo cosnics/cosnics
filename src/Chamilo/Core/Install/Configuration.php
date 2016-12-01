@@ -26,8 +26,6 @@ class Configuration
 
     private $platform_language = 'english';
 
-    private $base_url = 'http://localhost/chamilo/web';
-
     private $archive_path;
 
     private $cache_path;
@@ -90,7 +88,6 @@ class Configuration
         $values['database_password'] = $this->get_db_password();
 
         $values['platform_language'] = $this->get_platform_language();
-        $values['platform_url'] = $this->get_base_url();
         $values['archive_path'] = $this->get_archive_path();
         $values['cache_path'] = $this->get_cache_path();
         $values['garbage_path'] = $this->get_garbage_path();
@@ -168,10 +165,6 @@ class Configuration
 
         if (isset($values['platform_language']))
             $this->set_platform_language($values['platform_language']);
-        if (isset($values['platform_url']))
-            $this->set_base_url($values['platform_url']);
-        if (isset($values['url_append']))
-            $this->set_url_append($values['url_append']);
 
         if (isset($values['archive_path']))
             $this->set_archive_path($values['archive_path']);
@@ -313,16 +306,6 @@ class Configuration
     public function set_platform_language($platform_language)
     {
         $this->platform_language = $platform_language;
-    }
-
-    public function get_base_url()
-    {
-        return $this->base_url;
-    }
-
-    public function set_base_url($base_url)
-    {
-        $this->base_url = $base_url;
     }
 
     public function get_archive_path()
