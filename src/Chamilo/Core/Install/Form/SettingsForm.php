@@ -74,11 +74,11 @@ class SettingsForm extends FormValidator
     protected function buildForm()
     {
         $this->getTabsGenerator()->add_tab(
-            new DynamicFormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings'));
-        $this->getTabsGenerator()->add_tab(
             new DynamicFormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings'));
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings'));
+        $this->getTabsGenerator()->add_tab(
+            new DynamicFormTab('package', Translation::get('PackageComponentTitle'), null, 'addPackageSettings'));
 
         $this->getTabsGenerator()->render();
 
@@ -380,8 +380,7 @@ class SettingsForm extends FormValidator
                 $html[] = '<a class="' . $packageClasses . '"' . $disabled . '><img src="' . $iconSource . '"> ';
                 $this->addElement('html', implode(PHP_EOL, $html));
 
-                $checkbox_name = 'install_' .
-                     ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
+                $checkbox_name = 'install_' . ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
                 $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
                 $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
 

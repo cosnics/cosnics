@@ -58,11 +58,14 @@ abstract class Manager extends Application implements NoContextComponent
 
     protected function initialize()
     {
-        // PHP settings
         ini_set("memory_limit", "-1");
         ini_set("max_execution_time", "7200");
 
-        // Display language
+        $this->setLanguage();
+    }
+
+    protected function setLanguage()
+    {
         $language = $this->getRequest()->query->get(self::PARAM_LANGUAGE, 'en');
 
         if ($language)

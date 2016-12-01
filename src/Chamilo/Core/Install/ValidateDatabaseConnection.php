@@ -25,9 +25,7 @@ class ValidateDatabaseConnection extends HTML_QuickForm_Rule
             'name' => $parameters[4],
             'charset' => 'utf8');
 
-        $dataSourceName = new DataSourceName($settings);
-
-        $connectionFactory = new ConnectionFactory($dataSourceName);
+        $connectionFactory = new ConnectionFactory(new DataSourceName($settings));
 
         try
         {

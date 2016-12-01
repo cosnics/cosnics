@@ -22,14 +22,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class InstallerComponent extends Manager implements NoAuthenticationSupport, InstallerObserver
 {
 
-    private $current_step;
-
-    private $counter;
-
-    private $optional_application_counter;
-
-    private $optional;
-
     private $installer;
 
     /**
@@ -39,13 +31,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         $this->checkInstallationAllowed();
 
-        $this->current_step = "";
-        $this->counter = 0;
-        $this->optional_application_counter = 0;
-        $this->optional = false;
-
-        $this->installer = $this->build_installer();
-        $this->installer->add_observer($this);
+        $this->installer = $this->getInstaller($this);
 
         $wizardProcess = $this;
 
@@ -58,7 +44,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
                 echo $wizardProcess->render_header();
                 flush();
 
-                $wizardProcess->getInstaller()->perform_install();
+                $wizardProcess->getInstaller($this)->run();
                 flush();
 
                 echo $wizardProcess->render_footer();
@@ -73,28 +59,28 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         $response->send();
     }
 
-    public function getInstaller()
+    /**
+     *
+     * @return \Chamilo\Core\Install\PlatformInstaller
+     */
+    public function getInstaller(InstallerObserver $installerObserver)
     {
+        if (! isset($this->installer))
+        {
+            $values = unserialize(Session::retrieve(self::PARAM_SETTINGS));
+
+            $factory = new Factory();
+            $this->installer = $factory->getInstallerFromArray($installerObserver, $values);
+            unset($values);
+        }
+
         return $this->installer;
     }
 
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    private function build_installer($page)
-    {
-        $values = unserialize(Session::retrieve(self::PARAM_SETTINGS));
-        $url_append = str_replace('/install/index.php', '', $_SERVER['REQUEST_URI']);
-        $values['url_append'] = $url_append;
-
-        $factory = new Factory();
-        $installer = $factory->build_installer_from_array($values);
-        unset($values);
-        return $installer;
-    }
-
+    /**
+     *
+     * @see \Chamilo\Core\Install\Manager::render_header()
+     */
     public function render_header()
     {
         $html = array();
@@ -107,21 +93,34 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return implode(PHP_EOL, $html);
     }
 
-    public function process_result($title, $result, $message, $image)
+    /**
+     *
+     * @param string $title
+     * @param string $result
+     * @param string $message
+     * @param string $image
+     * @return string
+     */
+    public function renderResult($title, $result, $message, $image)
     {
         $html = array();
 
-        $html[] = $this->display_install_block_header($title, $result, $image);
+        $html[] = $this->renderResultHeader($title, $result, $image);
         $html[] = $message;
-        $html[] = $this->display_install_block_footer();
+        $html[] = $this->renderResultFooter();
 
         return implode(PHP_EOL, $html);
     }
 
-    public function display_install_block_header($title, $result, $image)
+    /**
+     *
+     * @param string $title
+     * @param string $result
+     * @param string $image
+     * @return string
+     */
+    public function renderResultHeader($title, $result, $image)
     {
-        $counter = $this->counter;
-
         $result_class = ($result ? 'installation-step-successful' : 'installation-step-failed');
 
         $html = array();
@@ -133,93 +132,147 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
         return implode(PHP_EOL, $html);
     }
 
-    public function display_install_block_footer()
+    /**
+     *
+     * @return string
+     */
+    public function renderResultFooter()
     {
         $html = array();
+
         $html[] = '</div>';
         $html[] = '</div>';
+
         return implode(PHP_EOL, $html);
     }
 
-    public function before_filesystem_prepared()
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforeInstallation()
+     */
+    public function beforeInstallation()
     {
     }
 
-    public function after_filesystem_prepared(StepResult $result)
-    {
-        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Folder');
-        return $this->process_result(
-            Translation::get('Folders'),
-            $result->get_success(),
-            implode('<br />' . "\n", $result->get_messages()),
-            $image);
-    }
-
-    public function after_preprod()
-    {
-        return '<div class="clear"></div>';
-    }
-
-    public function before_install()
-    {
-    }
-
-    public function after_install()
-    {
-        $message = '<a href="' . Path::getInstance()->getBasePath(true) . '">' .
-             Translation::get('GoToYourNewlyCreatedPortal') . '</a>';
-        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Finished');
-        return $this->process_result(Translation::get('InstallationFinished'), true, $message, $image);
-    }
-
-    public function before_preprod()
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePreProduction()
+     */
+    public function beforePreProduction()
     {
         return '<h3>' . Translation::get('PreProduction') . '</h3>';
     }
 
-    public function before_packages_install()
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProductionDatabaseCreated()
+     */
+    public function afterPreProductionDatabaseCreated(StepResult $result)
     {
-        return '<h3>' . Translation::get('Packages') . '</h3>';
-    }
-
-    public function before_package_install($context)
-    {
-    }
-
-    public function after_package_install(StepResult $result)
-    {
-        $image = Theme::getInstance()->getImagePath($result->get_context(), 'Logo/22');
-        $title = Translation::get('TypeName', null, $result->get_context()) . ' (' . $result->get_context() . ')';
-
-        return $this->process_result(
-            $title,
+        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Database');
+        return $this->renderResult(
+            Translation::get('Database'),
             $result->get_success(),
             implode('<br />' . "\n", $result->get_messages()),
             $image);
     }
 
-    public function after_packages_install()
-    {
-        return '<div class="clear"></div>';
-    }
-
-    public function preprod_config_file_written(StepResult $result)
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProductionConfigurationFileWritten()
+     */
+    public function afterPreProductionConfigurationFileWritten(StepResult $result)
     {
         $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Config');
-        return $this->process_result(
+        return $this->renderResult(
             Translation::get('Configuration'),
             $result->get_success(),
             implode('<br />' . "\n", $result->get_messages()),
             $image);
     }
 
-    public function preprod_db_created(StepResult $result)
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPreProduction()
+     */
+    public function afterPreProduction()
     {
-        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Database');
-        return $this->process_result(
-            Translation::get('Database'),
+        return '<div class="clear"></div>';
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePackagesInstallation()
+     */
+    public function beforePackagesInstallation()
+    {
+        return '<h3>' . Translation::get('Packages') . '</h3>';
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPackagesInstallation()
+     */
+    public function afterPackagesInstallation()
+    {
+        return '<div class="clear"></div>';
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforePackageInstallation()
+     */
+    public function beforePackageInstallation($context)
+    {
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterPackageInstallation()
+     */
+    public function afterPackageInstallation(StepResult $result)
+    {
+        $image = Theme::getInstance()->getImagePath($result->get_context(), 'Logo/22');
+        $title = Translation::get('TypeName', null, $result->get_context()) . ' (' . $result->get_context() . ')';
+
+        return $this->renderResult(
+            $title,
             $result->get_success(),
             implode('<br />' . "\n", $result->get_messages()),
             $image);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::beforeFilesystemPrepared()
+     */
+    public function beforeFilesystemPrepared()
+    {
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterFilesystemPrepared()
+     */
+    public function afterFilesystemPrepared(StepResult $result)
+    {
+        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Folder');
+        return $this->renderResult(
+            Translation::get('Folders'),
+            $result->get_success(),
+            implode('<br />' . "\n", $result->get_messages()),
+            $image);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Install\Observer\InstallerObserver::afterInstallation()
+     */
+    public function afterInstallation()
+    {
+        $message = '<a href="' . Path::getInstance()->getBasePath(true) . '">' .
+             Translation::get('GoToYourNewlyCreatedPortal') . '</a>';
+        $image = Theme::getInstance()->getImagePath('Chamilo\Core\Install', 'Place/Finished');
+        return $this->renderResult(Translation::get('InstallationFinished'), true, $message, $image);
     }
 }

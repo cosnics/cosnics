@@ -12,7 +12,7 @@
         </description>
         <pre-depends>
             <dependency type="registration">
-                <id>Chamilo\Application\Weblcms\Course</id>
+                <id>Chamilo\Application\Weblcms</id>
                 <version operator="4">5.0.0</version>
             </dependency>
         </pre-depends>

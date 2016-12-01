@@ -4,92 +4,108 @@ namespace Chamilo\Core\Install;
 use Chamilo\Configuration\Package\Sequencer;
 use Chamilo\Core\Install\Exception\InstallFailedException;
 use Chamilo\Core\Install\Observer\InstallerObserver;
-use Chamilo\Core\Install\Observer\Type\WebInterfaceInstaller;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
 
+/**
+ *
+ * @package Chamilo\Core\Install
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
+ */
 class PlatformInstaller
 {
 
     /**
      *
-     * @var Configuration $installer_config
+     * @var \Chamilo\Core\Install\Configuration
      */
-    private $installer_config;
+    private $configuration;
 
     /**
      *
-     * @var string where to write the new config file
+     * @var string
      */
-    private $config_file_destination;
+    private $configurationFilePath;
 
     /**
      *
-     * @var install\InstallerObservers list of the observers to be notified when performing the install
+     * @var \Chamilo\Core\Install\Observer\InstallerObserver
      */
-    private $observers;
+    private $installerObserver;
 
     /**
      *
      * @var install\DataManagerInterface the storage manager used to perform install
      */
-    private $data_manager;
+    private $dataManager;
 
     /**
      *
-     * @var multitype:string
+     * @var string[]
      */
     private $packages;
 
-    public function __construct(Configuration $installer_config, $data_manager)
+    /**
+     *
+     * @param \Chamilo\Core\Install\Observer\InstallerObserver $installerObserver
+     * @param \Chamilo\Core\Install\ $configuration
+     * @param unknown $dataManager
+     */
+    public function __construct(InstallerObserver $installerObserver, Configuration $configuration, $dataManager)
     {
-        $this->set_installer_config($installer_config);
-        $default_config_file = Path::getInstance()->getStoragePath() . 'configuration/configuration.ini';
-        $this->set_config_file_destination($default_config_file);
+        $this->installerObserver = $installerObserver;
+        $this->configuration = $configuration;
+        $this->dataManager = $dataManager;
 
-        $this->set_data_manager($data_manager);
-
+        $this->configurationFilePath = Path::getInstance()->getStoragePath() . 'configuration/configuration.ini';
         $this->packages = array();
-        $this->observers = new WebInterfaceInstaller();
-    }
-
-    public function set_data_manager($data_manager)
-    {
-        $this->data_manager = $data_manager;
-    }
-
-    public function set_installer_config($installer_config)
-    {
-        $this->installer_config = $installer_config;
-    }
-
-    public function set_config_file_destination($config_file_destination)
-    {
-        $this->config_file_destination = $config_file_destination;
-    }
-
-    public function add_observer(InstallerObserver $observer)
-    {
-        $this->observers->add_observer($observer);
     }
 
     /**
      *
-     * @return multitype:string
+     * @param unknown $dataManager
      */
-    public function get_packages()
+    public function setDataManager($dataManager)
+    {
+        $this->dataManager = $dataManager;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\Install\Configuration $configuration
+     */
+    public function setConfiguration(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     *
+     * @param string $configurationFilePath
+     */
+    public function setConfigurationFilePath($configurationFilePath)
+    {
+        $this->configurationFilePath = $configurationFilePath;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public function getPackages()
     {
         return $this->packages;
     }
 
     /**
      *
-     * @param multitype:string $packages
+     * @param string[] $packages
      */
-    public function set_packages($packages)
+    public function setPackages($packages)
     {
         $this->packages = $packages;
     }
@@ -98,24 +114,24 @@ class PlatformInstaller
      *
      * @param string $context
      */
-    public function add_package($context)
+    public function addPackage($context)
     {
         array_push($this->packages, $context);
     }
 
     /**
      *
-     * @param multitype:string $packages
+     * @param string[] $packages
      */
-    public function add_packages($packages)
+    public function addPackages($packages)
     {
         foreach ($packages as $package)
         {
-            $this->add_package($package);
+            $this->addPackage($package);
         }
     }
 
-    public function order_packages()
+    public function orderPackages()
     {
         $sequencer = new Sequencer($this->packages);
         $this->packages = $sequencer->run();
@@ -125,108 +141,97 @@ class PlatformInstaller
      *
      * @return string
      */
-    public function get_next_package()
+    public function getNextPackage()
     {
         return array_shift($this->packages);
     }
 
-    public function perform_install()
+    public function run()
     {
-        $this->initialize_install();
+        $this->initializeInstallation();
 
-        echo $this->observers->before_install();
+        echo $this->installerObserver->beforeInstallation();
         flush();
 
-        echo $this->perform_preprod();
+        echo $this->performPreProduction();
         flush();
 
         try
         {
-            $this->install_packages();
+            $this->installPackages();
         }
         catch (InstallFailedException $exception)
         {
-            $step_result = new StepResult(false, $exception->getMessage(), $exception->getPackage());
+            $stepResult = new StepResult(false, $exception->getMessage(), $exception->getPackage());
 
-            echo $this->observers->before_package_install($exception->getPackage());
-            echo $this->observers->after_package_install($step_result);
+            echo $this->installerObserver->beforePackageInstallation($exception->getPackage());
+            echo $this->installerObserver->afterPackageInstallation($stepResult);
 
             return;
         }
 
-        echo $this->perform_config();
-        flush();
+        // echo $this->performConfiguration();
+        // flush();
 
-        echo $this->observers->after_install();
+        echo $this->installerObserver->afterInstallation();
         flush();
     }
 
-    private function initialize_install()
+    private function initializeInstallation()
     {
-        Translation::getInstance()->setLanguageIsocode($this->installer_config->get_platform_language());
+        Translation::getInstance()->setLanguageIsocode($this->configuration->get_platform_language());
     }
 
-    private function perform_preprod()
+    /**
+     *
+     * @return string
+     */
+    private function performPreProduction()
     {
         $html = array();
 
-        $html[] = $this->observers->before_preprod();
+        $html[] = $this->installerObserver->beforePreProduction();
 
-        $configuration = \Chamilo\Configuration\Configuration::getInstance();
+        $result = new StepResult($this->dataManager->initializeStorage(), Translation::get('DatabaseCreated'));
 
-        $configuration->set(array('Chamilo\Configuration', 'general', 'data_manager'), 'mdb2');
-        $configuration->set(
-            array('Chamilo\Configuration', 'database', 'driver'),
-            $this->installer_config->get_db_driver());
-        $configuration->set(array('Chamilo\Configuration', 'database', 'host'), $this->installer_config->get_db_host());
-        $configuration->set(
-            array('Chamilo\Configuration', 'database', 'username'),
-            $this->installer_config->get_db_username());
-        $configuration->set(
-            array('Chamilo\Configuration', 'database', 'password'),
-            $this->installer_config->get_db_password());
-        $configuration->set(array('Chamilo\Configuration', 'database', 'name'), $this->installer_config->get_db_name());
-
-        $this->data_manager->init_storage_access();
-        $this->data_manager->init_storage_structure();
-
-        $result = new StepResult(true, Translation::get('DatabaseCreated'));
-
-        $html[] = $this->observers->preprod_db_created($result);
-        $html[] = $this->create_folders();
-        $html[] = $this->observers->after_preprod();
+        $html[] = $this->installerObserver->afterPreProductionDatabaseCreated($result);
+        $html[] = $this->createFolders();
+        $html[] = $this->installerObserver->afterPreProduction();
 
         return implode(PHP_EOL, $html);
     }
 
-    private function perform_config()
+    /**
+     *
+     * @return string
+     */
+    private function performConfiguration()
     {
-        $result_config = $this->write_config_file();
-        return $this->observers->preprod_config_file_written($result_config);
+        return $this->installerObserver->afterPreProductionConfigurationFileWritten($this->writeConfigurationFile());
     }
 
-    private function write_config_file()
+    private function writeConfigurationFile()
     {
         $configuration = array();
         $configuration['general']['security_key'] = md5(uniqid(rand() . time()));
-        $configuration['general']['hashing_algorithm'] = $this->installer_config->get_crypt_algorithm();
+        $configuration['general']['hashing_algorithm'] = $this->configuration->get_crypt_algorithm();
         $configuration['general']['install_date'] = time();
-        $configuration['database']['driver'] = $this->installer_config->get_db_driver();
-        $configuration['database']['username'] = $this->installer_config->get_db_username();
-        $configuration['database']['password'] = $this->installer_config->get_db_password();
-        $configuration['database']['host'] = $this->installer_config->get_db_host();
-        $configuration['database']['name'] = $this->installer_config->get_db_name();
+        $configuration['database']['driver'] = $this->configuration->get_db_driver();
+        $configuration['database']['username'] = $this->configuration->get_db_username();
+        $configuration['database']['password'] = $this->configuration->get_db_password();
+        $configuration['database']['host'] = $this->configuration->get_db_host();
+        $configuration['database']['name'] = $this->configuration->get_db_name();
         $configuration['debug']['show_errors'] = false;
         $configuration['debug']['enable_query_cache'] = true;
-        $configuration['storage']['archive_path'] = $this->installer_config->get_archive_path();
-        $configuration['storage']['cache_path'] = $this->installer_config->get_cache_path();
-        $configuration['storage']['garbage_path'] = $this->installer_config->get_garbage_path();
-        $configuration['storage']['hotpotatoes_path'] = $this->installer_config->get_hotpotatoes_path();
-        $configuration['storage']['logs_path'] = $this->installer_config->get_logs_path();
-        $configuration['storage']['repository_path'] = $this->installer_config->get_repository_path();
-        $configuration['storage']['scorm_path'] = $this->installer_config->get_scorm_path();
-        $configuration['storage']['temp_path'] = $this->installer_config->get_temp_path();
-        $configuration['storage']['userpictures_path'] = $this->installer_config->get_userpictures_path();
+        $configuration['storage']['archive_path'] = $this->configuration->get_archive_path();
+        $configuration['storage']['cache_path'] = $this->configuration->get_cache_path();
+        $configuration['storage']['garbage_path'] = $this->configuration->get_garbage_path();
+        $configuration['storage']['hotpotatoes_path'] = $this->configuration->get_hotpotatoes_path();
+        $configuration['storage']['logs_path'] = $this->configuration->get_logs_path();
+        $configuration['storage']['repository_path'] = $this->configuration->get_repository_path();
+        $configuration['storage']['scorm_path'] = $this->configuration->get_scorm_path();
+        $configuration['storage']['temp_path'] = $this->configuration->get_temp_path();
+        $configuration['storage']['userpictures_path'] = $this->configuration->get_userpictures_path();
 
         $content = array();
 
@@ -267,20 +272,20 @@ class PlatformInstaller
         return new StepResult(true, Translation::get('ConfigWriteSuccess'));
     }
 
-    private function install_packages()
+    private function installPackages()
     {
-        $this->add_packages($this->installer_config->get_packages());
-        $this->order_packages();
+        $this->addPackages($this->configuration->get_packages());
+        $this->orderPackages();
 
         $html = array();
 
-        echo $this->observers->before_packages_install();
+        echo $this->installerObserver->beforePackagesInstallation();
         flush();
 
-        while (($package = $this->get_next_package()) != null)
+        while (($package = $this->getNextPackage()) != null)
         {
 
-            $values = $this->installer_config->as_values_array();
+            $values = $this->configuration->as_values_array();
             $installer = \Chamilo\Configuration\Package\Action\Installer::factory($package, $values);
 
             $success = $installer->run();
@@ -297,26 +302,26 @@ class PlatformInstaller
 
                 if (! $isIntegrationPackage)
                 {
-                    echo $this->observers->before_package_install($package);
-                    $step_result = new StepResult($success, $installer->get_message(), $package);
-                    echo $this->observers->after_package_install($step_result);
+                    echo $this->installerObserver->beforePackageInstallation($package);
+                    echo $this->installerObserver->afterPackageInstallation(
+                        new StepResult($success, $installer->get_message(), $package));
 
                     flush();
                 }
             }
         }
 
-        echo $this->observers->after_packages_install();
+        echo $this->installerObserver->afterPackagesInstallation();
         flush();
     }
 
-    private function create_folders()
+    private function createFolders()
     {
         $html = array();
 
-        $html[] = $this->observers->before_filesystem_prepared();
+        $html[] = $this->installerObserver->beforeFilesystemPrepared();
 
-        $values = $this->installer_config->as_values_array();
+        $values = $this->configuration->as_values_array();
 
         $directories = array(
             $values['archive_path'],
@@ -347,8 +352,8 @@ class PlatformInstaller
             throw new \Exception(Translation::get('FoldersCreatedFailed'));
         }
 
-        $step_result = new StepResult(true, Translation::get('FoldersCreatedSuccess'));
-        $html[] = $this->observers->after_filesystem_prepared($step_result);
+        $html[] = $this->installerObserver->afterFilesystemPrepared(
+            new StepResult(true, Translation::get('FoldersCreatedSuccess')));
 
         return implode(PHP_EOL, $html);
     }
