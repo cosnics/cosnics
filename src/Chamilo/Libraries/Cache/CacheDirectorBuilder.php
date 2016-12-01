@@ -168,7 +168,7 @@ class CacheDirectorBuilder
         $configurablePathBuilder = new ConfigurablePathBuilder(
             $configurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
         );
-        
+
         $pathBuilder = new PathBuilder($classnameUtilities);
         $theme = Theme::getInstance();
 
