@@ -15,8 +15,11 @@ class CssUtilities extends ResourceUtilities
 
     public function run()
     {
-        $stylesheetCacheService = new StylesheetCacheService($this->getPathUtilities(), $this->getThemeUtilities());
-        
+        $stylesheetCacheService = new StylesheetCacheService(
+            $this->getPathBuilder(),
+            $this->getConfigurablePathBuilder(),
+            $this->getThemeUtilities());
+
         $response = new Response();
         $response->setContent($stylesheetCacheService->get());
         $response->setPublic();

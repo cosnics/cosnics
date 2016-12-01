@@ -2,7 +2,7 @@
 namespace Chamilo\Libraries\Format\Utilities;
 
 use Assetic\Filter\CssRewriteFilter;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -16,11 +16,11 @@ class CssFileAsset extends FileAsset
 
     /**
      *
-     * @param Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      * @param string $stylesheetPath
      */
-    public function __construct(Path $pathUtilities, $stylesheetPath)
+    public function __construct(PathBuilder $pathBuilder, $stylesheetPath)
     {
-        parent::__construct($pathUtilities, $stylesheetPath, array(new CssRewriteFilter()));
+        parent::__construct($pathBuilder, $stylesheetPath, array(new CssRewriteFilter()));
     }
 }

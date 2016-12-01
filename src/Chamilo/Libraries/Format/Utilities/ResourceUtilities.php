@@ -1,12 +1,15 @@
 <?php
 namespace Chamilo\Libraries\Format\Utilities;
 
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\File\PathBuilder;
 
 /**
  * Utilities function for javascript manipulation
@@ -35,9 +38,15 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
-    private $pathUtilities;
+    private $pathBuilder;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    private $configurablePathBuilder;
 
     /**
      *
@@ -55,16 +64,19 @@ abstract class ResourceUtilities
      *
      * @param string $context
      * @param Theme $themeUtilities
-     * @param Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param ClassnameUtilities $classnameUtilities
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function __construct($context = __NAMESPACE__, Theme $themeUtilities, Path $pathUtilities,
-        ClassnameUtilities $classnameUtilities, \Symfony\Component\HttpFoundation\Request $request)
+    public function __construct($context = __NAMESPACE__, Theme $themeUtilities, PathBuilder $pathBuilder,
+        ConfigurablePathBuilder $configurablePathBuilder, ClassnameUtilities $classnameUtilities,
+        \Symfony\Component\HttpFoundation\Request $request)
     {
         $this->context = $context;
         $this->themeUtilities = $themeUtilities;
-        $this->pathUtilities = $pathUtilities;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->pathBuilder = $pathBuilder;
         $this->classnameUtilities = $classnameUtilities;
         $this->request = $request;
     }
@@ -107,20 +119,38 @@ abstract class ResourceUtilities
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
      */
-    public function getPathUtilities()
+    public function getConfigurablePathBuilder()
     {
-        return $this->pathUtilities;
+        return $this->configurablePathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
-    public function setPathUtilities($pathUtilities)
+    public function setConfigurablePathBuilder($configurablePathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->configurablePathBuilder = $configurablePathBuilder;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\File\PathBuilder
+     */
+    public function getPathBuilder()
+    {
+        return $this->pathBuilder;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     */
+    public function setPathBuilder($pathBuilder)
+    {
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -173,18 +203,23 @@ abstract class ResourceUtilities
                 $theme = Request::get(self::PARAM_THEME);
                 $context = Request::get(self::PARAM_CONTEXT, __NAMESPACE__);
 
-                $classnameUtilities = ClassnameUtilities::getInstance();
+                $stringUtilities = new StringUtilities();
+                $classnameUtilities = new ClassnameUtilities($stringUtilities);
+                $pathBuilder = new PathBuilder($classnameUtilities);
 
-                $themeUtilities = new Theme(
-                    $theme,
-                    StringUtilities::getInstance(),
-                    ClassnameUtilities::getInstance(),
-                    new PathBuilder($classnameUtilities));
+                $fileConfigurationConsulter = new ConfigurationConsulter(
+                    new FileConfigurationLoader(new FileConfigurationLocator($pathBuilder)));
+
+                $configurablePathBuilder = new ConfigurablePathBuilder(
+                    $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
+
+                $themeUtilities = new Theme($theme, $stringUtilities, $classnameUtilities, $pathBuilder);
 
                 $utilities = new $classname(
                     $context,
                     $themeUtilities,
-                    Path::getInstance(),
+                    $pathBuilder,
+                    $configurablePathBuilder,
                     $classnameUtilities,
                     $request);
 

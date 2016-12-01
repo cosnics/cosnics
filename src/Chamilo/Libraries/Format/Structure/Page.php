@@ -169,6 +169,15 @@ class Page
 
     /**
      *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->getHeader()->setTitle($title);
+    }
+
+    /**
+     *
      * @return \Chamilo\Libraries\Format\Structure\Header
      */
     public function getHeader()

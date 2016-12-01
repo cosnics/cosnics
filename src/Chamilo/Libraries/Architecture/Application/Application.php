@@ -39,7 +39,7 @@ abstract class Application
      * @var \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
      */
     protected $applicationConfiguration;
-    
+
     // Parameters
     const PARAM_ACTION = 'go';
     const PARAM_MESSAGES = 'messages';
@@ -51,7 +51,7 @@ abstract class Application
     // references still exists and needs to be fixed first to avoid breaking functionality of an undefined number of
     // places
     const PARAM_CONTEXT = 'application';
-    
+
     // Result types
     const RESULT_TYPE_CREATED = 'Created';
     const RESULT_TYPE_UPDATED = 'Updated';
@@ -71,7 +71,7 @@ abstract class Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
-        
+
         $this->initializeContainer();
     }
 
@@ -88,7 +88,7 @@ abstract class Application
      * Helper function to call the authorization checker with the current logged in user.
      * Throws the
      * NotAllowedException when not valid.
-     * 
+     *
      * @param string $context
      * @param string $action
      *
@@ -102,7 +102,7 @@ abstract class Application
     /**
      * Helper function to call the authorization checker with the current logged in user, returns true or false
      * and can be used in if statements
-     * 
+     *
      * @param string $context
      * @param string $action
      *
@@ -115,7 +115,7 @@ abstract class Application
 
     /**
      * Get the parent application
-     * 
+     *
      * @return \libraries\architecture\application\Application
      * @deprecated User get_application() now
      */
@@ -126,7 +126,7 @@ abstract class Application
 
     /**
      * Get the parent application
-     * 
+     *
      * @return \libraries\architecture\application\Application
      */
     public function get_application()
@@ -139,7 +139,7 @@ abstract class Application
      * Optionally takes an associative array of name/value pairs
      * representing additional query string parameters; these will either be added to the parameters already present, or
      * override them if a value with the same name exists.
-     * 
+     *
      * @param multitype:string $parameters
      * @param multitype:string $filter
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
@@ -148,7 +148,7 @@ abstract class Application
     public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
     {
         $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
-        
+
         $redirect = new Redirect($parameters, $filter, $encode_entities);
         return $redirect->getUrl();
     }
@@ -156,7 +156,7 @@ abstract class Application
     /**
      * Redirect the end user to another location.
      * The current url will be used as the basis.
-     * 
+     *
      * @param multitype:string $parameters
      * @param multitype:string $filter
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
@@ -165,7 +165,7 @@ abstract class Application
     public function simple_redirect($parameters = array(), $filter = array(), $encodeEntities = false, $anchor = null)
     {
         $parameters = (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
-        
+
         $redirect = new Redirect($parameters, $filter, $encodeEntities, $anchor);
         $redirect->toUrl();
         exit();
@@ -175,7 +175,7 @@ abstract class Application
      * Redirect the end user to another location.
      * The current url will be used as the basis. This method allows passing
      * on messages directly instead of using the parameters array
-     * 
+     *
      * @param string $message
      * @param boolean $error_message
      * @param multitype:string $parameters
@@ -183,26 +183,26 @@ abstract class Application
      * @param boolean $encode_entities Whether or not to encode HTML entities. Defaults to false.
      * @param string $redirect_type
      */
-    public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false, 
+    public function redirect($message = '', $error_message = false, $parameters = array(), $filter = array(), $encode_entities = false,
         $anchor = null)
     {
         if ($message != null)
         {
-            
+
             $message_type = (! $error_message) ? \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_INFO : \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage::TYPE_DANGER;
-            
+
             $notificationMessageManager = new NotificationMessageManager();
-            
+
             $notificationMessageManager->addMessage(
                 new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage($message, $message_type));
         }
-        
+
         $this->simple_redirect($parameters, $filter, $encode_entities, $anchor);
     }
 
     /**
      * Returns the current URL parameters.
-     * 
+     *
      * @return string[]
      */
     public function get_parameters()
@@ -212,7 +212,7 @@ abstract class Application
 
     /**
      * Returns the value of the given URL parameter.
-     * 
+     *
      * @param string $name
      * @return string
      */
@@ -223,7 +223,7 @@ abstract class Application
 
     /**
      * Sets the value of a URL parameter.
-     * 
+     *
      * @param string $name
      * @param string $value
      */
@@ -234,7 +234,7 @@ abstract class Application
 
     /**
      * Displays the header
-     * 
+     *
      * @param string $pageTitle
      *
      * @return string
@@ -245,25 +245,26 @@ abstract class Application
         {
             $pageTitle = $this->renderPageTitle();
         }
-        
+
         if ($this->get_application())
         {
             return $this->get_application()->render_header($pageTitle);
         }
-        
+
         $breadcrumbtrail = BreadcrumbTrail::getInstance();
-        
+
         $page = Page::getInstance();
         $page->setApplication($this);
-        
+        $page->setTitle($this->getPageTitle());
+
         $html = array();
-        
+
         $html[] = $page->getHeader()->toHtml();
-        
+
         if ($page->isFullPage())
         {
             $html[] = '<div class="row">';
-            
+
             // If there is an application-wide menu, show it
             if ($this->has_menu())
             {
@@ -276,71 +277,81 @@ abstract class Application
             {
                 $html[] = '<div class="col-xs-12">';
             }
-            
+
             $html[] = $pageTitle;
             $html[] = '<div class="clearfix"></div>';
         }
-        
+
         $maintenanceMode = Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'maintenance_mode'));
-        
+
         if ($maintenanceMode)
         {
             $html[] = Display::error_message(Translation::get('MaintenanceModeMessage'));
         }
-        
+
         // Display messages
         $messages = Session::retrieve(self::PARAM_MESSAGES);
-        
+
         Session::unregister(self::PARAM_MESSAGES);
         if (is_array($messages))
         {
             $html[] = $this->display_messages($messages[self::PARAM_MESSAGE], $messages[self::PARAM_MESSAGE_TYPE]);
         }
-        
+
         $notificationMessageManager = new NotificationMessageManager();
         $html[] = $notificationMessageManager->renderMessages();
-        
+
         // DEPRECATED
         // Display messages
         $message = Request::get(self::PARAM_MESSAGE);
         $type = Request::get(self::PARAM_MESSAGE_TYPE);
-        
+
         if ($message)
         {
             $html[] = $this->display_message($message);
         }
-        
+
         $message = Request::get(self::PARAM_ERROR_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_error_message($message);
         }
-        
+
         $message = Request::get(self::PARAM_WARNING_MESSAGE);
         if ($message)
         {
             $html[] = $this->display_warning_message($message);
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
+     *
+     * @return string
+     */
+    protected function getPageTitle()
+    {
+        return \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'institution') . ' - ' .
+             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'site_name');
+    }
+
+    /**
      * Renders the page title
-     * 
+     *
      * @return string
      */
     protected function renderPageTitle()
     {
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
-        
+
         if ($breadcrumbTrail->size() > 0)
         {
             $pageTitle = BreadcrumbTrail::getInstance()->get_last()->get_name();
-            
+
             return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
         }
-        
+
         return '';
     }
 
@@ -353,28 +364,28 @@ abstract class Application
         {
             return $this->get_application()->render_footer();
         }
-        
+
         $page = Page::getInstance();
-        
+
         $html = array();
-        
+
         if ($page->isFullPage())
         {
             $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
-            
+
             $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
         }
-        
+
         $html[] = $page->getFooter()->toHtml();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays a normal message.
-     * 
+     *
      * @param string $message
      *
      * @return string
@@ -383,7 +394,7 @@ abstract class Application
     {
         $notificationMessageRenderer = new NotificationMessageRenderer();
         $notificationMessage = NotificationMessage::normal($message);
-        
+
         return $notificationMessageRenderer->render($notificationMessage);
     }
 
@@ -398,18 +409,18 @@ abstract class Application
     {
         $notificationMessageRenderer = new NotificationMessageRenderer();
         $notificationMessages = array();
-        
+
         foreach ($types as $key => $type)
         {
             $notificationMessages[] = new NotificationMessage($messages[$key], $type);
         }
-        
+
         return $notificationMessageRenderer->render($notificationMessages);
     }
 
     /**
      * Displays an error message.
-     * 
+     *
      * @param string $message
      *
      * @return string
@@ -418,13 +429,13 @@ abstract class Application
     {
         $notificationMessageRenderer = new NotificationMessageRenderer();
         $notificationMessage = NotificationMessage::error($message);
-        
+
         return $notificationMessageRenderer->render($notificationMessage);
     }
 
     /**
      * Displays a warning message.
-     * 
+     *
      * @param string $message
      *
      * @return string
@@ -433,13 +444,13 @@ abstract class Application
     {
         $notificationMessageRenderer = new NotificationMessageRenderer();
         $notificationMessage = NotificationMessage::warning($message);
-        
+
         return $notificationMessageRenderer->render($notificationMessage);
     }
 
     /**
      * Displays an error page.
-     * 
+     *
      * @param string $message
      *
      * @return string
@@ -450,19 +461,19 @@ abstract class Application
         {
             return $this->get_application()->display_error_page($message);
         }
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->display_error_message($message);
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
     /**
      * Displays a warning page.
-     * 
+     *
      * @param string $message
      */
     public function display_warning_page($message)
@@ -471,13 +482,13 @@ abstract class Application
         {
             return $this->get_application()->display_warning_page($message);
         }
-        
+
         $html = array();
-        
+
         $html[] = $this->render_header();
         $html[] = $this->display_warning_message($message);
         $html[] = $this->render_footer();
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -492,7 +503,7 @@ abstract class Application
 
     /**
      * Gets the user id of this personal calendars owner
-     * 
+     *
      * @return int
      * @deprecated Use getUser()->getId() now
      */
@@ -502,13 +513,13 @@ abstract class Application
         {
             return $this->get_user()->get_id();
         }
-        
+
         return 0;
     }
 
     /**
      * Gets the user.
-     * 
+     *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @deprecated Use getUser() now
      */
@@ -546,7 +557,7 @@ abstract class Application
 
     /**
      * Sets the current action.
-     * 
+     *
      * @param string $action
      */
     public function set_action($action)
@@ -563,7 +574,7 @@ abstract class Application
      * Does the entire application have a leftside menu? False per default.
      * Can be overwritten by the specific
      * application
-     * 
+     *
      * @return boolean
      */
     public function has_menu()
@@ -574,7 +585,7 @@ abstract class Application
     /**
      * Returns the html for the application-menu.
      * Empty per default Can be overwritten by the specific application
-     * 
+     *
      * @return string
      */
     public function get_menu()
@@ -584,7 +595,7 @@ abstract class Application
 
     /**
      * Determines if a given name is the name of an application
-     * 
+     *
      * @param string $string
      * @return boolean
      */
@@ -603,7 +614,7 @@ abstract class Application
      * @param string $succes_message_multiple
      * @return string
      */
-    public function get_result($failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single, 
+    public function get_result($failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single,
         $succes_message_multiple)
     {
         if ($failures)
@@ -628,13 +639,13 @@ abstract class Application
                 $message = $succes_message_multiple;
             }
         }
-        
+
         return Translation::get($message);
     }
 
     /**
      * Generates a general results message like ObjectCreated, ObjectUpdated, ObjectDeleted
-     * 
+     *
      * @param int $failures
      * @param int $count
      * @param string $single_object
@@ -642,13 +653,13 @@ abstract class Application
      * @param string $type
      * @return string
      */
-    public function get_general_result($failures, $count, $single_object, $multiple_object, 
+    public function get_general_result($failures, $count, $single_object, $multiple_object,
         $type = Application :: RESULT_TYPE_CREATED)
     {
         if ($count == 1)
         {
             $param = array('OBJECT' => $single_object);
-            
+
             if ($failures)
             {
                 $message = 'ObjectNot' . $type;
@@ -661,7 +672,7 @@ abstract class Application
         else
         {
             $param = array('OBJECTS' => $multiple_object);
-            
+
             if ($failures)
             {
                 $message = 'ObjectsNot' . $type;
@@ -671,13 +682,13 @@ abstract class Application
                 $message = 'Objects' . $type;
             }
         }
-        
+
         return Translation::get($message, $param);
     }
 
     /**
      * Returns the breadcrumb generator
-     * 
+     *
      * @return BreadcrumbGeneratorInterface
      */
     public function get_breadcrumb_generator()
@@ -763,7 +774,7 @@ abstract class Application
     public static function get_application_namespace($application_name)
     {
         $path = Path::getInstance()->namespaceToFullPath('Chamilo\Core') . $application_name . '/';
-        
+
         if (is_dir($path))
         {
             return 'Chamilo\Core\\' . $application_name;
@@ -771,7 +782,7 @@ abstract class Application
         else
         {
             $path = Path::getInstance()->namespaceToFullPath('Chamilo\Application') . $application_name . '/';
-            
+
             if (is_dir($path))
             {
                 return 'Chamilo\Application\\' . $application_name;
@@ -785,49 +796,49 @@ abstract class Application
 
     /**
      * Get a list of core and web applications from the filesystem as an array
-     * 
+     *
      * @return multitype:string
      */
     public static function get_packages_from_filesystem($type = null)
     {
         $applications = array();
-        
+
         if (! $type || $type == Registration::TYPE_CORE)
         {
             $directories = Filesystem::get_directory_content(
-                Path::getInstance()->namespaceToFullPath('Chamilo\Core'), 
-                Filesystem::LIST_DIRECTORIES, 
+                Path::getInstance()->namespaceToFullPath('Chamilo\Core'),
+                Filesystem::LIST_DIRECTORIES,
                 false);
-            
+
             foreach ($directories as $directory)
             {
                 $namespace = self::get_application_namespace(basename($directory));
-                
+
                 if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
             }
         }
-        
+
         if (! $type || $type == Registration::TYPE_APPLICATION)
         {
             $directories = Filesystem::get_directory_content(
-                Path::getInstance()->namespaceToFullPath('Chamilo\Application'), 
-                Filesystem::LIST_DIRECTORIES, 
+                Path::getInstance()->namespaceToFullPath('Chamilo\Application'),
+                Filesystem::LIST_DIRECTORIES,
                 false);
-            
+
             foreach ($directories as $directory)
             {
                 $namespace = self::get_application_namespace(basename($directory));
-                
+
                 if (\Chamilo\Configuration\Package\Storage\DataClass\Package::exists($namespace))
                 {
                     $applications[] = $namespace;
                 }
             }
         }
-        
+
         return $applications;
     }
 
@@ -838,16 +849,16 @@ abstract class Application
     public static function get_active_packages($type = Registration :: TYPE_APPLICATION)
     {
         $applications = \Chamilo\Configuration\Configuration::registrations_by_type($type);
-        
+
         $active_applications = array();
-        
+
         foreach ($applications as $application)
         {
             if (! $application[Registration::PROPERTY_STATUS])
             {
                 continue;
             }
-            
+
             $active_applications[] = $application[Registration::PROPERTY_CONTEXT];
         }
         return $active_applications;
@@ -857,23 +868,23 @@ abstract class Application
     {
         // Check if the context exists
         $context_path = Path::getInstance()->namespaceToFullPath($context);
-        
+
         if (! is_dir($context_path))
         {
             $original_context = $context;
-            
+
             // Adding a fallback for old-style contexts which might still exis in certain applications, links, etc.
-            
+
             $convertedContextParts = explode('\\', $context);
-            
+
             foreach ($convertedContextParts as $key => $convertedContextPart)
             {
                 $convertedContextParts[$key] = (string) StringUtilities::getInstance()->createString(
                     $convertedContextPart)->upperCamelize();
             }
-            
+
             $convertedContext = implode('\\', $convertedContextParts);
-            
+
             foreach ($fallbackContexts as $fallbackContext)
             {
                 $possibleContext = $fallbackContext . $convertedContext;
@@ -883,7 +894,7 @@ abstract class Application
                     break;
                 }
             }
-            
+
             $context_path = Path::getInstance()->namespaceToFullPath($context);
             if (! is_dir($context_path))
             {
@@ -893,7 +904,7 @@ abstract class Application
             {
                 $query = $_GET;
                 $query[self::PARAM_CONTEXT] = $context;
-                
+
                 // $notificationMessageManager = new NotificationMessageManager();
                 // $notificationMessageManager->addMessage(
                 // new \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage(
@@ -905,18 +916,18 @@ abstract class Application
                 // ),
                 // 1
                 // );
-                
+
                 $redirect = new Redirect();
                 $currentUrl = $redirect->getCurrentUrl();
-                
+
                 $logger = new FileLogger(Path::getInstance()->getLogPath() . '/application_parameters.log', true);
                 $logger->log_message($currentUrl);
-                
+
                 $redirect = new Redirect($query);
                 $redirect->toUrl();
             }
         }
-        
+
         return $context;
     }
 
@@ -928,13 +939,13 @@ abstract class Application
     {
         $level = 0;
         $application = $this;
-        
+
         while ($application->get_application() instanceof Application)
         {
             $level ++;
             $application = $application->get_application();
         }
-        
+
         return $level;
     }
 
@@ -945,7 +956,7 @@ abstract class Application
     public static function package()
     {
         $className = self::class_name(false);
-        
+
         if ($className == 'Manager')
         {
             return static::context();

@@ -10,6 +10,10 @@ use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Configuration\Service\FileConfigurationLocator;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Configuration\Service\FileConfigurationLoader;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -26,6 +30,12 @@ class Header
      * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $application;
+
+    /**
+     *
+     * @var string
+     */
+    private $title;
 
     /**
      *
@@ -113,6 +123,24 @@ class Header
 
     /**
      *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     *
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     *
      * @return integer
      */
     public function getViewMode()
@@ -189,6 +217,14 @@ class Header
     private function addDefaultHeaders()
     {
         $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
+
+        $fileConfigurationConsulter = new ConfigurationConsulter(
+            new FileConfigurationLoader(
+                new FileConfigurationLocator(new PathBuilder(new ClassnameUtilities(new StringUtilities())))));
+
+        $configurablePathBuilder = new ConfigurablePathBuilder(
+            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
+
         $theme = Theme::getInstance()->getTheme();
 
         $parameters = array();
@@ -201,7 +237,11 @@ class Header
         $this->addHtmlHeader('<meta name="viewport" content="width=device-width, initial-scale=1">');
         $this->addHtmlHeader('<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
 
-        $stylesheetCacheService = new StylesheetCacheService(Path::getInstance(), Theme::getInstance());
+        $stylesheetCacheService = new StylesheetCacheService(
+            $pathBuilder,
+            $configurablePathBuilder,
+            Theme::getInstance());
+
         $cssModified = $stylesheetCacheService->getLastModificationTime();
         $cssModified = $cssModified ? $cssModified : time();
 
@@ -220,7 +260,8 @@ class Header
         $this->addHtmlHeader(
             '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>');
 
-        $javascriptCacheService = new JavascriptCacheService(Path::getInstance());
+        $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
+
         $javascriptModified = $javascriptCacheService->getLastModificationTime();
         $javascriptModified = $javascriptModified ? $javascriptModified : time();
 
@@ -228,10 +269,7 @@ class Header
         $parameters['modified'] = $javascriptModified;
         $this->addJavascriptFile($pathBuilder->getBasePath(true) . '?' . http_build_query($parameters));
 
-        $pageTitle = \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'institution') . ' - ' .
-             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'site_name');
-
-        $this->addHtmlHeader('<title>' . $pageTitle . '</title>');
+        $this->addHtmlHeader('<title>' . $this->getTitle() . '</title>');
 
         $this->addGoogleAnalyticsTracking();
     }

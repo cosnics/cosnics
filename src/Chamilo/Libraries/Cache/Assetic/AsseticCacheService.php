@@ -2,11 +2,12 @@
 namespace Chamilo\Libraries\Cache\Assetic;
 
 use Assetic\Asset\AssetCache;
+use Assetic\Asset\AssetCollection;
 use Assetic\Cache\FilesystemCache;
 use Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface;
-use Chamilo\Libraries\File\Path;
-use Assetic\Asset\AssetCollection;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -26,9 +27,15 @@ abstract class AsseticCacheService implements CacheResetterInterface
 
     /**
      *
-     * @var \Chamilo\Libraries\File\Path
+     * @var \Chamilo\Libraries\File\PathBuilder
      */
-    private $pathUtilities;
+    private $pathBuilder;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    private $configurablePathBuilder;
 
     /**
      *
@@ -38,29 +45,49 @@ abstract class AsseticCacheService implements CacheResetterInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      */
-    public function __construct(Path $pathUtilities)
+    public function __construct(PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->pathBuilder = $pathBuilder;
+        $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\File\Path
+     * @return \Chamilo\Libraries\File\PathBuilder
      */
-    public function getPathUtilities()
+    public function getPathBuilder()
     {
-        return $this->pathUtilities;
+        return $this->pathBuilder;
     }
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
      */
-    public function setPathUtilities(Path $pathUtilities)
+    public function setPathBuilder(PathBuilder $pathBuilder)
     {
-        $this->pathUtilities = $pathUtilities;
+        $this->pathBuilder = $pathBuilder;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Libraries\File\ConfigurablePathBuilder
+     */
+    public function getConfigurablePathBuilder()
+    {
+        return $this->configurablePathBuilder;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     */
+    public function setConfigurablePathBuilder(ConfigurablePathBuilder $configurablePathBuilder)
+    {
+        $this->configurablePathBuilder = $configurablePathBuilder;
     }
 
     /**
@@ -79,7 +106,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             $this->filesystemCache = new FilesystemCache($this->getCachePath());
         }
-        
+
         return $this->filesystemCache;
     }
 
@@ -114,7 +141,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             $this->assetCollection = new AssetCollection($this->getAssets(), $this->getAssetFilters());
         }
-        
+
         return $this->assetCollection;
     }
 
@@ -128,7 +155,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             $this->assetCache = new AssetCache($this->getAssetCollection(), $this->getFilesystemCache());
         }
-        
+
         return $this->assetCache;
     }
 
@@ -168,7 +195,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             return false;
         }
-        
+
         return $this->warmUp();
     }
 
@@ -183,7 +210,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
 
     /**
      * Returns the last modification time of the resource
-     * 
+     *
      * @return int
      */
     public function getLastModificationTime()
@@ -192,7 +219,7 @@ abstract class AsseticCacheService implements CacheResetterInterface
         {
             return 0;
         }
-        
+
         return filemtime($this->getCachePath());
     }
 }

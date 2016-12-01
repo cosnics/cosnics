@@ -3,9 +3,10 @@ namespace Chamilo\Libraries\Cache\Assetic;
 
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssMinFilter;
-use Chamilo\Libraries\Format\Utilities\CssFileAsset;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Format\Theme;
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\Format\Utilities\CssFileAsset;
+use Chamilo\Libraries\File\PathBuilder;
 
 /**
  *
@@ -25,12 +26,14 @@ class StylesheetCacheService extends AsseticCacheService
 
     /**
      *
-     * @param \Chamilo\Libraries\File\Path $pathUtilities
+     * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
      * @param \Chamilo\Libraries\Format\Theme $themeUtilities
      */
-    public function __construct(Path $pathUtilities, Theme $themeUtilities)
+    public function __construct(PathBuilder $pathBuilder, ConfigurablePathBuilder $configurablePathBuilder,
+        Theme $themeUtilities)
     {
-        parent::__construct($pathUtilities);
+        parent::__construct($pathBuilder, $configurablePathBuilder);
         $this->themeUtilities = $themeUtilities;
     }
 
@@ -58,7 +61,7 @@ class StylesheetCacheService extends AsseticCacheService
      */
     protected function getCachePath()
     {
-        return $this->getPathUtilities()->getCachePath('Chamilo\Libraries\Resources\Stylesheet');
+        return $this->getConfigurablePathBuilder()->getCachePath('Chamilo\Libraries\Resources\Stylesheet');
     }
 
     /**
@@ -79,7 +82,7 @@ class StylesheetCacheService extends AsseticCacheService
 
                 if (file_exists($stylesheetPath))
                 {
-                    $assets[] = new CssFileAsset($this->getPathUtilities(), $stylesheetPath);
+                    $assets[] = new CssFileAsset($this->getPathBuilder(), $stylesheetPath);
                 }
             }
         }

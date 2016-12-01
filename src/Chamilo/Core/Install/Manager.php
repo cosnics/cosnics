@@ -81,6 +81,7 @@ abstract class Manager extends Application implements NoContextComponent
 
         $page->setApplication($this);
         $page->setContainerMode('container');
+        $page->setTitle(Translation::get('ChamiloInstallationTitle'));
 
         $html = array();
 
