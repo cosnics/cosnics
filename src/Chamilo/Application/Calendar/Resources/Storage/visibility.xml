@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="visibility">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            notnull="1" />
+        <property
+            name="source"
+            type="text"
+            length="255"
+            notnull="1" />
+    </properties>
+    <index
+        name="user_id_source"
+        type="unique">
+        <indexproperty name="user_id" />
+        <indexproperty name="source" />
+    </index>
+</object>

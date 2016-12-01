@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matching_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Zuordnungsfrage"
+Options = "Optionen"
+AddMatchingQuestionOption = "Eine Option hinzufügen"
+Answer = "Antwort"
+Matches = "Übereinstimmungen"
+Feedback = "Feedback"
+Score = "Punktzahl"
+Comment = "Kommentar"
+Weight = "Gewicht"
+AddMatch = "Ein"
+Match = "Übereinstimmung"
+Title = "Titel"
+Description = "Beschreibung"

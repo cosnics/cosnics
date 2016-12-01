@@ -1,0 +1,26 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\admin\announcement
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Systeemmededelingen"
+CreatorComponent = "Maak een aankondiging"
+NotAllowed = "U heeft geen toegang tot deze pagina. Gelieve de platform administrator te contacteren als u denkt dat dit onterecht is."
+EditorComponent = "Bewerk"
+DeleterComponent = "Verwijder"
+HiderComponent = "Verberg"
+ViewerComponent = "Bekijk"
+AllPublications = "Alle publicaties"
+PublishedForMe = "Gepubliceerd voor mij"
+MyPublications = "Mijn publicatis"
+Everyone = "Iedereen"
+OnlyForMe = "Enkel voor mij"
+SelectSpecificEntities = "Selecteer een publiek"
+PublicationPeriod = "Publicatieperiode"
+Hidden = "Verborgen"
+Status = "Status"
+Published = "Gepuliceerd op"
+PublisherId = "Gepubliceerd door"
+PublishedFor = "Gepubliceerd voor"
+Object = "Bericht"
+SystemAnnouncementPublication = "Systeembericht publicatie"

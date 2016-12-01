@@ -1,0 +1,25 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = core\lynx
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Lynx Package Manager"
+PackageTypeNameLynx = "Lynx"
+UpgraderComponent = "Upgrade"
+Upgrade = "Upgrading {PACKAGE}"
+CoreUpgraded = "The core was successfully upgraded. Click <a href=\"{URL}\">here</a> to upgrade the content objects."
+ContentObjectsUpgraded = "The content objects were successfully upgraded. Click <a href=\"{URL}\">here</a> to upgrade the applications."
+ApplicationsUpgraded = "The applications were successfully upgraded. Click <a href=\"{URL}\">here</a> to go back to the homepage."
+ContentObjectUpgraderComponent = "Upgrade content objecten"
+ApplicationUpgraderComponent = "Upgrade applicaties"
+CreateRegistrationFailed = "Het aanmaken van de registratie voor <i>{CONTEXT}</i> is mislukt"
+UpdateRegistrationFailed = "Het updaten van de registratie is mislukt"
+CreateStorageUnitFailed = "Het aanmaken van de tabel <i>{UNIT}</i> is mislukt"
+AlterStorageUnitFailed = "Het aanpassen van de kolom <i>{PROPERTY}</i> in de tabel <i>{UNIT}</i> is mislukt"
+RenameStorageUnitFailed = "Het hernoemen van de tabel <i>{UNIT}</i> naar <i>{NEW_UNIT}</i> is mislukt"
+UpdateTrackerRegistrationFailed = "Het aanpassen van de tracker registratie voor <i>{TRACKER}</i> is mislukt"
+UpgraderNotFoundIgnoringPackage = "Er kon geen geldige upgrader gevonden worden voor <i>{CONTEXT}</i>, de upgrade voor deze package wordt genegeerd."
+ManagePackages = "Beheer Packages"
+ManagePackagesDescription = "Installeer of verwijder packages op het systeem."
+Finished = "Klaar"
+Failed = "Gefaald"

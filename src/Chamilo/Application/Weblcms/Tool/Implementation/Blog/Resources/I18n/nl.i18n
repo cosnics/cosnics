@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\blog
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Blog"
+TypeNameSingle = "Blog"
+BrowserComponent = "Doorblader blogs"
+ViewerComponent = "Bekijk blog"
+UpdaterComponent = "Bewerk blog"
+IntroductionPublisherComponent = "Publiceer Introductie"
+CategoryMoverComponent = "Verplaats blog"
+Attachments = "Bijlagen"
+AuthorUnknown = "Auteur niet gekend"
+BlogLayout = "Blog lay-out"
+BlogLayoutNotExists = "Geselecteerde blog lay-out bestaat niet"
+Properties = "Eigenschappen"
+PublicationUpdaterComponent = "Bewerk blog"
+ComplexDisplayComponent = "Bekijk blog"

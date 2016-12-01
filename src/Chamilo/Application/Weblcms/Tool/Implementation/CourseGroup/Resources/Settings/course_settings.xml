@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="application\weblcms\tool\course_group">
+    <!--Disabled settings because they are not implemented. -->
+    <!--<settings> <category name="general"> <setting name="maximum_number_of_members_per_group" field="text" size="3" default="0" required="true"> 
+        <validations> <validation rule="numeric" message="MustBeNumeric"/> </validations> </setting> <setting name="multiple_group_subscriptions_allowed" 
+        field="checkbox" default="1"/> </category> </settings> -->
+</package>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="relation_instance">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="source_type"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="source_id"
+            unsigned="1"
+            type="integer"
+            notnull="1" />
+        <property
+            name="target_type"
+            type="text"
+            length="255"
+            notnull="1" />
+        <property
+            name="target_id"
+            unsigned="1"
+            type="integer"
+            notnull="1" />
+        <property
+            name="relation_id"
+            unsigned="1"
+            type="integer"
+            notnull="1" />
+        <property
+            name="user_id"
+            unsigned="1"
+            type="integer"
+            notnull="1" />
+        <property
+            name="creation_date"
+            unsigned="1"
+            type="integer"
+            notnull="1" />
+    </properties>
+    <index name="source_type">
+        <indexproperty name="source_type" />
+    </index>
+    <index name="source_id">
+        <indexproperty name="source_id" />
+    </index>
+    <index name="target_type">
+        <indexproperty name="target_type" />
+    </index>
+    <index name="target_id">
+        <indexproperty name="target_id" />
+    </index>
+    <index name="relation_id">
+        <indexproperty name="relation_id" />
+    </index>
+</object>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="link">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="name"
+            type="text"
+            length="100"
+            notnull="1"
+            default="" />
+        <property
+            name="description"
+            type="text"
+            length="500"
+            notnull="1"
+            default="" />
+        <property
+            name="url"
+            type="text"
+            length="255"
+            notnull="1"
+            default="" />
+    </properties>
+</object>

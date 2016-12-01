@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\AssessmentRatingQuestion">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Rating question</translation>
+            <translation language="nl">Rating vraag</translation>
+            <translation language="fr">Question à évaluation chiffrée</translation>
+            <translation language="de">Bewertungsfrage</translation>
+        </variable>
+    </translations>
+</template>
