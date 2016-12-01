@@ -68,7 +68,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
 
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-            $html[] = $buttonToolbarRenderer->render();exit;
+            $html[] = $buttonToolbarRenderer->render();
         }
 
         $html[] = $this->render_footer();

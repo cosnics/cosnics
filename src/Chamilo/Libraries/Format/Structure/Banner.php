@@ -110,7 +110,7 @@ class Banner
     public function render()
     {
         $html = array();
-        
+
         if ($this->getApplication() instanceof Application && $this->getApplication()->get_user() instanceof User)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class_name(), Session::get_user_id());
@@ -119,50 +119,50 @@ class Banner
         {
             $user = null;
         }
-        
+
         if (! is_null(Session::get('_as_admin')))
         {
             $redirect = new Redirect(
                 array(
-                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(), 
+                    Application::PARAM_CONTEXT => \Chamilo\Core\User\Manager::context(),
                     Application::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_ADMIN_USER));
             $link = $redirect->getUrl();
-            
+
             $html[] = '<div class="warning-banner bg-warning text-warning">' .
                  Translation::get('LoggedInAsUser', null, \Chamilo\Core\User\Manager::context()) . ' ' .
                  $this->getApplication()->getUser()->get_fullname() . ' <a href="' . $link . '">' .
                  Translation::get('Back', null, Utilities::COMMON_LIBRARIES) . '</a></div>';
         }
-        
+
         $html[] = '<a name="top"></a>';
-        
+
         if ($this->getApplication() instanceof Application)
         {
             $request = $this->getApplication()->getRequest();
         }
-        
+
         $menuRenderer = Configuration::getInstance()->get_setting(array('Chamilo\Core\Menu', 'menu_renderer'));
-        
+
         $html[] = \Chamilo\Core\Menu\Renderer\Menu\Renderer::toHtml(
-            $menuRenderer, 
-            $this->getContainerMode(), 
-            $request, 
+            $menuRenderer,
+            $this->getContainerMode(),
+            $request,
             $user);
-        
+
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
             if ($this->getViewMode() == Page::VIEW_MODE_FULL)
             {
                 $breadcrumbtrail = BreadcrumbTrail::getInstance();
                 $breadcrumbtrail->setContainerMode($this->getContainerMode());
-                
+
                 if ($breadcrumbtrail->size() > 0)
                 {
                     $html[] = $breadcrumbtrail->render();
                 }
             }
         }
-        
+
         return implode(PHP_EOL, $html);
     }
 }
