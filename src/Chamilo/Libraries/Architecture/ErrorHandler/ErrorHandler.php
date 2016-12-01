@@ -177,7 +177,7 @@ class ErrorHandler
      */
     protected function displayGeneralErrorPage()
     {
-        $path = $this->getThemeUtilities()->getTemplatePath('Chamilo\Configuration') . 'Error.html.tpl';
+        $path = $this->getThemeUtilities()->getTemplatePath('Chamilo\Configuration', false) . 'Error.html.tpl';
         
         $template = file_get_contents($path);
         
