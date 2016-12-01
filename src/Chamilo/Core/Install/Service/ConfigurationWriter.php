@@ -44,9 +44,10 @@ class ConfigurationWriter implements ConfigurationWriterInterface
     public function writeConfiguration(Configuration $configuration, $outputFile)
     {
         $templateContent = $this->readTemplate();
-
         $parameters = $this->initializeTemplateParameters($configuration);
         $templateContent = $this->substituteParameters($templateContent, $parameters);
+
+
 
         $this->writeConfigurationFile($templateContent, $outputFile);
     }
@@ -89,7 +90,7 @@ class ConfigurationWriter implements ConfigurationWriterInterface
         $parameters['chamilo.configuration.storage.scorm_path'] = $configuration->get_scorm_path();
         $parameters['chamilo.configuration.storage.temp_path'] = $configuration->get_temp_path();
         $parameters['chamilo.configuration.storage.userpictures_path'] = $configuration->get_userpictures_path();
-        
+
         return $parameters;
     }
 

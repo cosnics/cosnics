@@ -2,8 +2,8 @@
 namespace Chamilo\Core\Install\Storage;
 
 use Chamilo\Core\Install\Configuration;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 
 /**
  *
@@ -42,7 +42,7 @@ class DataManager
             'username' => $this->configuration->get_db_username(),
             'password' => $this->configuration->get_db_password(),
             'host' => $this->configuration->get_db_host(),
-            null,
+            'name' => null,
             'charset' => 'utf8');
 
         $connectionFactory = new ConnectionFactory(new DataSourceName($settings));

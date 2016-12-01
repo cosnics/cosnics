@@ -4,11 +4,9 @@ namespace Chamilo\Core\Install\Architecture\Bootstrap;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
-use Chamilo\Libraries\Architecture\Exceptions\NotAuthenticatedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Factory\ApplicationFactory;
 use Chamilo\Libraries\Format\Response\ExceptionResponse;
-use Chamilo\Libraries\Format\Response\NotAuthenticatedResponse;
 use Chamilo\Libraries\Format\Response\Response;
 
 /**
@@ -186,11 +184,6 @@ class Kernel
         {
             $this->configureContext()->buildApplication()->runApplication();
         }
-        catch (NotAuthenticatedException $exception)
-        {
-            $response = $this->getNotAuthenticatedResponse();
-            $response->send();
-        }
         catch (UserException $exception)
         {
             $this->getExceptionLogger()->logException($exception, ExceptionLoggerInterface::EXCEPTION_LEVEL_WARNING);
@@ -198,16 +191,6 @@ class Kernel
             $response = new ExceptionResponse($exception, $this->getApplication());
             $response->send();
         }
-    }
-
-    /**
-     * Returns a response that renders the not authenticated message
-     *
-     * @return NotAuthenticatedResponse
-     */
-    protected function getNotAuthenticatedResponse()
-    {
-        return new NotAuthenticatedResponse();
     }
 
     /**
