@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Application\Weblcms\Tool\Implementation\Ephorus">
+    <settings>
+        <category name="configuration">
+            <setting
+                name="hand_in_code"
+                field="text"
+                default="" />
+            <setting
+                name="index_document_service_wsdl"
+                field="text"
+                default="" />
+            <setting
+                name="handin_service_wsdl"
+                field="text"
+                default="" />
+            <setting
+                name="debugging_enabled"
+                field="toggle"
+                default="0">
+                <options type="static">
+                    <option
+                        name="debugging_enabled"
+                        value="0" />
+                </options>
+            </setting>
+        </category>
+    </settings>
+</package>

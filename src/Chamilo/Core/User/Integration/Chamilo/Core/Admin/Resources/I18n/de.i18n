@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+List = "Nutzerliste"
+ListDescription = "Die Nutzerliste"
+CreateDescription = "Einen neuen Nutzer in der Plattform erzeugen"
+ExportDescription = "Die Nutzer in csv /xml Dateien exportieren"
+ImportDescription = "Nutzer aus csv /xml Dateien importieren"
+BuildUserFields = "Nutzerfelder erstellen"
+BuildUserFieldsDescription = "Fügen Sie den Angaben des Nutzers Zusatzfelder hinzu. Der Nutzer kann diese Felder in 'Mein Konto' ausfüllen"
+EditTermsConditions = "Update terms and conditions"
+EditTermsConditionsDescription = "Make changes to the terms and conditions the users see when logging in"

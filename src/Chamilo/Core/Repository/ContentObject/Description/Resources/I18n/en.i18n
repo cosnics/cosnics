@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\description
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Description"
+TypeCategory = "Content Objects"
+Title = "Title"
+Properties = "Prpoerties"
+Description = "Description"
+DescriptionToolBrowserComponent = "Browse"
+DescriptionToolEvaluateComponent = "Evaluate"
+DescriptionToolIntroductionPublisherComponent = "Publish introduction"
+DescriptionToolMoverComponent = "Move"
+DescriptionToolPublisherComponent = "Publish"
+DescriptionToolUpdaterComponent = "Update"
+DescriptionToolViewerComponent = "View"

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.core.install.architecture.bootstrap.kernel"
+            class="Chamilo\Core\Install\Architecture\Bootstrap\Kernel">
+            <argument
+                type="service"
+                id="symfony.component.http_foundation.request" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.factory.application_factory" />
+            <argument
+                type="service"
+                id="chamilo.libraries.architecture.error_handler.exception_logger" />
+            <argument>%chamilo.configuration.version%</argument>
+        </service>
+    </services>
+</container>

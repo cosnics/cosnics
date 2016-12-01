@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application name="weblcms">
+    <settings>
+        <category name="general">
+            <setting
+                name="show_subscribe_button_on_course_home"
+                field="checkbox"
+                default="1">
+                <options type="static">
+                    <option
+                        name="show_subscribe_button_on_course_home"
+                        value="1" />
+                </options>
+            </setting>
+            <setting
+                name="allow_course_creation_without_coursetype"
+                field="checkbox"
+                default="1">
+                <options type="static">
+                    <option
+                        name="allow_course_creation_without_coursetype"
+                        value="1" />
+                </options>
+            </setting>
+        </category>
+        <category name="viewer">
+            <setting
+                name="view_state"
+                field="radio"
+                default="0"
+                user_setting="1">
+                <options type="static">
+                    <option
+                        name="open_and_closed_mixed"
+                        value="0" />
+                    <option
+                        name="open_and_closed_seperated"
+                        value="1" />
+                    <option
+                        name="open_only"
+                        value="2" />
+                </options>
+            </setting>
+        </category>
+        <category name="publication">
+            <setting
+                name="display_publication_screen"
+                field="radio"
+                default="1">
+                <options type="static">
+                    <option
+                        name="display_publication_screen"
+                        value="1" />
+                    <option
+                        name="quick_publication"
+                        value="2" />
+                    <option
+                        name="both"
+                        value="3" />
+                </options>
+            </setting>
+        </category>
+    </settings>
+</application>

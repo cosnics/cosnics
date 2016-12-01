@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_rating_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Bewertungsfrage"
+Properties = "Eigenschaften"
+Percentage = "Prozent"
+Rating = "Bewertung"
+CorrectValue = "Richtiger Wert"
+Weight = "Gewicht"
+Title = "Titel"
+Description = "Beschreibung"
+Hint = ""

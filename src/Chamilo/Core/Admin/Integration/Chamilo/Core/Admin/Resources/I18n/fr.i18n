@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+Settings = "Paramètres"
+SettingsDescription = "Gérer les paramètres de cette application"
+Importer = "Importateur"
+ImporterDescription = "Importer des cours, des utilisateurs et des inscriptions dans le système"
+SystemAnnouncements = "Annonces du système"
+SystemAnnouncementsDescription = "Gérer les annonces du système sur la plate-forme"
+TranslationsImport = "Importer traductions"
+TranslationsImportDescription = "Description importation de traductions"
+Diagnose = "Diagnostic"
+DiagnoseDescription = "Diagnostic du système, des paramètres et des serveurs"
+LogsViewer = "Voir les fichiers log"
+LogsViewerDescription = "Voir les différents logs du système (comme apache, php, mysql)"

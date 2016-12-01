@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = 
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Reporting"
+LoginDayBlock = "Aantal logins per dag"
+LoginBlock = "Aantal logins"
+LoginHourBlock = "Aantal logins per uur"
+LoginMonthBlock = "Aantal logins per maand"
+BrowserBlock = "Browsers"
+CountryBlock = "Countries"
+RefererBlock = "Referers"
+ProviderBlock = "Providers"
+OperatingSystemBlock = "Operating systems"
+LoginTemplate = "Login statistieken"
+DataTemplate = "Bezoekersstatistieken"
+PlatformStatisticsBlock = "Platform statistieken"
+FirstConnection = "Eerste connectie"
+LastConnection = "Laatste connectie"

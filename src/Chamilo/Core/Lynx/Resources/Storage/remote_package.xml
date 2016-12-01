@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="remote_package">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="code"
+            type="text"
+            length="255" />
+        <property
+            name="context"
+            type="text"
+            length="255" />
+        <property
+            name="name"
+            type="text"
+            length="255" />
+        <property
+            name="section"
+            type="text"
+            length="255" />
+        <property
+            name="category"
+            type="text"
+            length="255" />
+        <property
+            name="authors"
+            type="text" />
+        <property
+            name="version"
+            type="text"
+            length="255" />
+        <property
+            name="cycle"
+            type="text" />
+        <property
+            name="filename"
+            type="text"
+            length="255" />
+        <property
+            name="size"
+            type="integer"
+            notnull="0"
+            default="0" />
+        <property
+            name="md5"
+            type="text"
+            length="32" />
+        <property
+            name="sha1"
+            type="text"
+            length="40" />
+        <property
+            name="sha256"
+            type="text"
+            length="64" />
+        <property
+            name="sha512"
+            type="text"
+            length="128" />
+        <property
+            name="tagline"
+            type="text"
+            length="255" />
+        <property
+            name="description"
+            type="text" />
+        <property
+            name="homepage"
+            type="text"
+            length="255" />
+        <property
+            name="pre_depends"
+            type="text" />
+        <property
+            name="depends"
+            type="text" />
+        <property
+            name="recommends"
+            type="text" />
+        <property
+            name="suggests"
+            type="text" />
+        <property
+            name="enhances"
+            type="text" />
+        <property
+            name="source_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+    <index
+        name="context"
+        type="unique">
+        <indexproperty name="context" />
+        <indexproperty name="version" />
+        <indexproperty name="source_id" />
+    </index>
+    <index name="section">
+        <indexproperty name="section" />
+    </index>
+    <index name="category">
+        <indexproperty name="category" />
+    </index>
+</object>

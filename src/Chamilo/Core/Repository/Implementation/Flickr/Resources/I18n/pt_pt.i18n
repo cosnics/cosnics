@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\flickr
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Flickr"
+FlickrExternalRepositoryManagerBrowserComponent = "Browser"
+FlickrExternalRepositoryManagerViewerComponent = "Viewer"
+ContentObject = ""
+ExternalRepository = ""
+FlickrUploadProblem = ""
+MostRecent = ""
+MostInteresting = ""
+MyPhotos = ""
+AvailableSizes = ""
+Tags = ""
+License = ""
+FileName = ""
+Credentials = ""
+SessionToken = ""

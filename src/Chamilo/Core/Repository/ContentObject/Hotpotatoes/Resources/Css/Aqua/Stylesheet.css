@@ -1,0 +1,6 @@
+ul.tree-menu li div a.hotpotatoes, ul.tree-menu li div a.type_hotpotatoes,
+	.treeview .list-group .list-group-item .icon.node-icon.type_hotpotatoes,
+	.treeview .list-group .list-group-item .icon.node-icon.type_hotpotatoes_default,
+	ul.tree-menu li div a.type_hotpotatoes_default {
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}

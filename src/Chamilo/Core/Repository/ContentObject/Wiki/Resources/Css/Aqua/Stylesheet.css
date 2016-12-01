@@ -1,0 +1,298 @@
+.wiki-pane {
+	width: 90%;
+	border-left: 1px solid #e5edf9;
+	float: right;
+	margin-left: -1px;
+}
+
+.wiki-pane-actions-bar {
+	height: 29px;
+}
+
+.wiki-pane-actions {
+	list-style: none outside none;
+	font-size: 12px;
+	margin: 0;
+	padding: 0 1em 0 1em;
+	line-height: 1.3;
+	position: relative;
+	display: block;
+	font-weight: bold;
+}
+
+.wiki-pane-actions li {
+	position: relative;
+	float: left;
+	margin: 0 0.2em -1px 0;
+	line-height: 1.3;
+	padding: 0;
+}
+
+.wiki-pane-actions li a {
+	display: block;
+	padding: 0.5em 1em;
+	background-color: #eaf4fd;
+	color: #2e6e9e;
+	text-decoration: none;
+	border: 0px solid #eaf4fd;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	background:
+		url("../../../../../../Configuration/Resources/Images/Aqua/Plugin/Jquery/Images/UiBgGlass85Dfeffc1X400.png")
+		repeat-x scroll 50% 50% #DFEFFC;
+}
+
+.wiki-pane-actions li a:hover {
+	color: #1d5987;
+	background-color: #ddecf7;
+	background:
+		url("../../../../../../Configuration/Resources/Images/Aqua/Plugin/Jquery/Images/UiBgGlass75D0E5F51X400.png")
+		repeat-x scroll 50% 50% #DFEFFC;
+}
+
+.wiki-pane-actions li a.current {
+	background: white;
+	border: 1px solid #e5edf9;
+	border-bottom-color: white;
+	color: #e17009;
+}
+
+.wiki-pane-actions-left {
+	float: left;
+	padding-right: 0;
+}
+
+.wiki-pane-actions-right {
+	float: right;
+}
+
+.wiki-pane-content {
+	clear: both;
+	display: block;
+	margin: 0;
+	padding: 1.5em;
+	border-top: 1px solid #e5edf9;
+	line-height: 1.5em;
+}
+
+.wiki-pane-content-title, .wiki-pane-content-feedback h3 {
+	font-size: 20px;
+	font-weight: normal;
+}
+
+.wiki-pane-content-subtitle {
+	font-size: 98%;
+	clear: both;
+	margin-bottom: 1.5em;
+}
+
+.wiki-pane-content-discuss {
+	max-height: 400px;
+	overflow: auto;
+	margin-bottom: 1.5em;
+	border: 1px dotted #ebebeb;
+	padding: 10px;
+	background-color: #f5f5f5;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-bottom-radius: 10px;
+}
+
+.wiki-pane-top {
+	clear: both;
+	float: right;
+}
+
+.wiki-menu {
+	width: 10%;
+	float: left;
+	padding-top: 88px;
+	background-position: 50% 20px;
+	background-image: url(../../Images/Aqua/Logo/48.png);
+	background-repeat: no-repeat;
+}
+
+.wiki-menu a {
+	font-weight: normal;
+}
+
+.wiki-menu ul.toolbar_vertical li {
+	margin-bottom: 0.1em;
+	padding-bottom: 0.5em;
+}
+
+.wiki-menu ul.toolbar_vertical li img {
+	display: none;
+}
+
+.wiki-menu-section {
+	padding-top: 0.5em;
+	margin-top: 0.1em;
+	border-top: 1px solid #e5edf9;
+	overflow: hidden;
+}
+
+.wiki-pane-content-head, .wiki-pane-content-title,
+	.wiki-pane-content-feedback h3, .wiki-pane-content h2 {
+	border-bottom: 1px solid #2e6e9e;
+	clear: both;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+
+.wiki-pane-content .toc {
+	background-color: #f9f9f9;
+	padding: 10px;
+	font-size: 95%;
+	border: 1px solid #aaaaaa;
+	margin: 1.5em 0;
+}
+
+.wiki-pane-content .toc h2 {
+	border-bottom: 0px solid #2e6e9e;
+	text-align: center;
+	width: 100%;
+	clear: both;
+	font-size: 100%;
+	font-weight: bold;
+	padding: 0px;
+	margin: 0px;
+}
+
+.wiki-pane-content .toc ul {
+	list-style-type: none;
+	list-style-image: none;
+	margin-left: 0;
+	padding-left: 0;
+	text-align: left;
+	margin: 0px;
+}
+
+.wiki-pane-content .toc ul ul {
+	margin: 0 0 0 2em;
+}
+
+.wiki-pane-content .toc ul li {
+	margin-bottom: 0.1em;
+}
+
+.wiki-pane-content .toc a {
+	font-weight: normal;
+}
+
+.wiki-pane-search {
+	background-color: white;
+	border: 1px solid grey;
+	height: 18px;
+	overflow: hidden;
+	padding: 0;
+	margin-top: 3px;
+	margin-right: 1em;
+}
+
+.wiki-pane-search input.search_query {
+	border: 0px solid white;
+	background-image: none;
+	padding: 0px 2px 0px 2px;
+	height: 18px;
+}
+
+.wiki-pane-search button.search {
+	background-color: white;
+	border: 0px solid white;
+	background-image: none;
+	padding: 0px;
+	margin: 0px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.wiki-pane-search button.search img {
+	padding: 0px;
+	margin: 1px 2px 0px 2px;
+}
+
+.wiki-pane-content .tabbed-pane ul.tabbed-pane-tabs {
+	display: none;
+}
+
+.wiki-pane-content .tabbed-pane .tabbed-pane-content {
+	padding: 0px;
+	border: 0px solid white;
+}
+
+.wiki-pane-content .tabbed-pane .tabbed-pane-content .content_object {
+	max-height: 400px;
+	overflow: auto;
+	margin-bottom: 1.5em;
+	border: 1px dotted #ebebeb;
+	background-color: #f5f5f5;
+	-moz-border-radius-topleft: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-webkit-border-top-bottom-radius: 10px;
+}
+
+.wiki-pane-content .wiki-pane-content-body table {
+	border: 1px solid #999999;
+	background-color: #fbfbfb;
+}
+
+table.wikitable {
+	margin: 1em 1em 1em 0;
+	background: #f9f9f9;
+	border: 1px #aaa solid;
+	border-collapse: collapse;
+}
+
+.wikitable th, .wikitable td {
+	border: 1px #aaa solid;
+	padding: 0.2em;
+}
+
+.wikitable th {
+	background: #f2f2f2;
+	text-align: center;
+}
+
+.wikitable caption {
+	font-weight: bold;
+}
+
+.wiki-pane-content-history .sortable_table_selection_controls_options {
+	display: none;
+}
+
+/* hide initially collapsed collapsable tables */
+table.collapsed tr.collapsable {
+	display: none;
+}
+
+.wiki-pane-content-version {
+	border-width: 1px;
+	border-style: dotted;
+	background-repeat: no-repeat;
+	background-position: 10px 50%;
+	padding: 10px 36px 10px 36px;
+	text-align: justify;
+	background-image:
+		url('../../../../../../Configuration/Resources/Images/Aqua/StatusWarningMini.png');
+	border: 1px solid #ffd89b;
+	background-color: #fff8aa;
+	color: #996900;
+	margin-bottom: 1.5em;
+}
+
+.wiki-pane-content .wiki-pane-content-body a.new {
+	color: #e17009;
+}
+
+ul.tree-menu li div a.wiki, ul.tree-menu li div a.type_wiki, ul.tree-menu li div a.type_wiki_default,
+	.treeview .list-group .list-group-item .icon.node-icon.type_wiki,
+	.treeview .list-group .list-group-item .icon.node-icon.type_wiki_default
+	{
+	background-image: url(../../Images/Aqua/Logo/16.png);
+}

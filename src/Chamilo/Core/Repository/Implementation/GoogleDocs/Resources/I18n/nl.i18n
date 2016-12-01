@@ -1,0 +1,29 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = common\extensions\external_repository_manager\implementation\google_docs
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Google Drive (Docs)"
+MyFolders = "Mijn mappen"
+SharedFolders = "Gedeelde mappen"
+AllItems = "Alle items"
+OwnedByMe = "Mijn bestanden"
+OpenedByMe = "Door mij geopend"
+SharedWithMe = "Gedeeld met mij"
+Starred = "Met ster"
+Hidden = "Verborgen"
+Trash = "Verwijder"
+DocumentTypes = "Document types"
+PDFs = "PDFs"
+Documents = "Documenten"
+Presentations = "Presentaties"
+Spreadsheets = "Rekenbladen"
+NotShared = "Niet gedeeld"
+Everyone = "Iedereen"
+LastViewed = "Laatst bekeken"
+LastModifiedBy = "Laatst gewijzigd"
+SharedWith = "Gedeeld met"
+Credentials = "Toegewezen rechten"
+SessionToken = "Session token"
+YouMustBeLoggedIn = "Klik op aanmelden om Google Drive (Docs) te gebruiken"
+ImportAs = "Importeer als {TYPE}"

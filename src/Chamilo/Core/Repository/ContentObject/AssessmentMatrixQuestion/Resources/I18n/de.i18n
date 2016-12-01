@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_matrix_question
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Matrixfrage"
+Options = "Optionen"
+SwitchToMultipleMatches = "Mehrere Übereinstimmungen zulassen"
+SwitchToSingleMatch = "Nur eine Übereinstimmung zulassen"
+AddMatrixQuestionOption = "Eine Option hinzufügen"
+Answer = "Antwort"
+Matches = "Übereinstimmungen"
+Feedback = "Feedback"
+Score = "Punktzahl"
+Weight = "Gewicht"
+Title = "Titel"
+Description = "Beschreibung"
+AddMatch = ""
+Match = ""

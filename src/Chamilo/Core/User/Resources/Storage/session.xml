@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="session">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="name"
+            type="text" />
+        <property
+            name="session_id"
+            type="text"
+            length="255" />
+        <property
+            name="modified"
+            type="integer"
+            length="11" />
+        <property
+            name="lifetime"
+            type="integer"
+            length="11" />
+        <property
+            name="data"
+            type="text" />
+        <property
+            name="save_path"
+            type="text"
+            length="255" />
+    </properties>
+</object>

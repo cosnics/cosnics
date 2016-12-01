@@ -1,0 +1,7 @@
+Chamilo\Core\User:
+  - ManageAccount: ROLE_DEFAULT_USER
+  - Logout: ROLE_DEFAULT_USER
+  - ViewPicture: ROLE_DEFAULT_USER
+  - ManageUsers: ROLE_ADMINISTRATOR
+  - ChangeLanguage: ROLE_DEFAULT_USER
+  - ManageUserFields: ROLE_ADMINISTRATOR
