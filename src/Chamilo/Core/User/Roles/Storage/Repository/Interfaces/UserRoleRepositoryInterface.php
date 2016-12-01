@@ -2,13 +2,11 @@
 namespace Chamilo\Core\User\Roles\Storage\Repository\Interfaces;
 
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
-use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
 
 /**
  * Repository to manage the data for the relations between users and roles
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 interface UserRoleRepositoryInterface extends DataManagerRepositoryInterface
@@ -16,7 +14,7 @@ interface UserRoleRepositoryInterface extends DataManagerRepositoryInterface
 
     /**
      * Returns a user role relation for a given role id and user id
-     * 
+     *
      * @param int $roleId
      * @param int $userId
      *
@@ -26,7 +24,7 @@ interface UserRoleRepositoryInterface extends DataManagerRepositoryInterface
 
     /**
      * Returns a list of roles for a user
-     * 
+     *
      * @param int $userId
      *
      * @return Role[]
@@ -35,7 +33,7 @@ interface UserRoleRepositoryInterface extends DataManagerRepositoryInterface
 
     /**
      * Returns a list of users by a given role
-     * 
+     *
      * @param int $roleId
      *
      * @return User[]

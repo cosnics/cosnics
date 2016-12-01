@@ -2,11 +2,9 @@
 namespace Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
-use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Repository to manage the data open courses
@@ -15,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  */
 interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
 {
+
     /**
      * Retrieves the open courses for the given user roles
      *
@@ -26,9 +25,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @return RecordIterator
      */
-    public function findOpenCoursesByRoles(
-        $roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array()
-    );
+    public function findOpenCoursesByRoles($roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array());
 
     /**
      * Retrieves the open courses
