@@ -16,6 +16,7 @@
             <argument
                 type="service"
                 id="chamilo.libraries.architecture.error_handler.exception_logger" />
+            <argument>%chamilo.configuration.version%</argument>
         </service>
     </services>
 </container>

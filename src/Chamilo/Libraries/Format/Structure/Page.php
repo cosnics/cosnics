@@ -29,13 +29,13 @@ class Page
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Structure\Header
+     * @var \Chamilo\Libraries\Format\Structure\HeaderInterface
      */
     private $header;
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Structure\Footer
+     * @var \Chamilo\Libraries\Format\Structure\FooterInterface
      */
     private $footer;
 
@@ -75,10 +75,12 @@ class Page
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param integer $viewMode
+     * @param string $viewMode
+     * @param string $containerMode
+     * @param \Chamilo\Libraries\Format\Structure\HeaderInterface $header
+     * @param \Chamilo\Libraries\Format\Structure\FooterInterface $footer
      */
-    public function __construct($viewMode = self :: VIEW_MODE_FULL, $containerMode = 'container-fluid', Header $header, Footer $footer)
+    public function __construct($viewMode = self :: VIEW_MODE_FULL, $containerMode = 'container-fluid', HeaderInterface $header, FooterInterface $footer)
     {
         $this->viewMode = $viewMode;
         $this->containerMode = $containerMode;
@@ -178,7 +180,7 @@ class Page
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\Header
+     * @return \Chamilo\Libraries\Format\Structure\HeaderInterface
      */
     public function getHeader()
     {
@@ -187,7 +189,7 @@ class Page
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\Header $header
+     * @param \Chamilo\Libraries\Format\Structure\HeaderInterface $header
      */
     public function setHeader($header)
     {
@@ -196,7 +198,7 @@ class Page
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Structure\Footer
+     * @return \Chamilo\Libraries\Format\Structure\FooterInterface
      */
     public function getFooter()
     {
@@ -205,7 +207,7 @@ class Page
 
     /**
      *
-     * @param \Chamilo\Libraries\Format\Structure\Footer $footer
+     * @param \Chamilo\Libraries\Format\Structure\FooterInterface $footer
      */
     public function setFooter($footer)
     {

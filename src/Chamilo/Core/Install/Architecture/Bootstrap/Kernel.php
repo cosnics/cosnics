@@ -46,16 +46,30 @@ class Kernel
 
     /**
      *
+     * @var integer
+     */
+    private $version;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $application;
 
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param integer $version
+     */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request,
-        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger)
+        ApplicationFactory $applicationFactory, ExceptionLoggerInterface $exceptionLogger, $version)
     {
         $this->request = $request;
         $this->applicationFactory = $applicationFactory;
         $this->exceptionLogger = $exceptionLogger;
+        $this->version = $version;
     }
 
     /**
@@ -148,6 +162,24 @@ class Kernel
         $this->application = $application;
     }
 
+    /**
+     *
+     * @return integer
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     *
+     * @param integer $version
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+    }
+
     public function launch()
     {
         try
@@ -184,46 +216,9 @@ class Kernel
      */
     protected function configureContext()
     {
-        $getContext = $this->getRequest()->query->get(Application::PARAM_CONTEXT);
-
-        if (! $getContext)
-        {
-            $postContext = $this->getRequest()->request->get(Application::PARAM_CONTEXT);
-
-            if (! $postContext)
-            {
-                $this->getRequest()->query->set(Application::PARAM_CONTEXT, 'Chamilo\Core\Home');
-
-                $context = 'Chamilo\Core\Home';
-            }
-            else
-            {
-                $context = $postContext;
-            }
-        }
-        else
-        {
-            $context = $getContext;
-        }
-
-        $this->setContext(Application::context_fallback($context, $this->getFallbackContexts()));
+        $this->setContext('Chamilo\Core\Install');
 
         return $this;
-    }
-
-    /**
-     * Returns a list of the available fallback contexts
-     *
-     * @return array
-     */
-    protected function getFallbackContexts()
-    {
-        $fallbackContexts = array();
-        $fallbackContexts[] = 'Chamilo\Application\\';
-        $fallbackContexts[] = 'Chamilo\Core\\';
-        $fallbackContexts[] = 'Chamilo\\';
-
-        return $fallbackContexts;
     }
 
     /**
@@ -270,7 +265,7 @@ class Kernel
 
         if (! $response instanceof Response)
         {
-            $response = new Response($response);
+            $response = new Response($this->getVersion(), $response);
         }
 
         $response->send();
