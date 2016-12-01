@@ -3,6 +3,7 @@ namespace Chamilo\Core\Install;
 
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Libraries\Format\Theme;
 
 /**
  *
@@ -194,11 +195,37 @@ class SettingsOverview
         {
             if (isset($value) && $value == '1')
             {
-                $selectedPackages[] = Translation::get('TypeName', null, $context);
+                $selectedPackages[] = $context;
             }
         }
 
-        return implode(', ', $selectedPackages);
+        $html = array();
+
+        if (count($selectedPackages) > 0)
+        {
+            $html = array();
+
+            $html[] = '<div class="package-list">';
+            $html[] = '<div class="package-list-items row">';
+
+            foreach ($selectedPackages as $package)
+            {
+                $iconSource = Theme::getInstance()->getImagePath($package, 'Logo/22');
+
+                $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
+                $html[] = '<a class="btn btn-default"><img src="' . $iconSource . '"> ';
+
+                $html[] = Translation::get('TypeName', null, $package);
+                $html[] = '</a>';
+                $html[] = '</div>';
+            }
+
+            $html[] = '<div class="clear"></div>';
+            $html[] = '</div>';
+            $html[] = '</div>';
+        }
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
