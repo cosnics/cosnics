@@ -34,8 +34,6 @@ $values['self_reg'] = '0';
 
 $values['hashing_algorithm'] = 'sha1';
 
-$values['server_type'] = 'test';
-
 $values['external_instance'] = array();
 $values['install'] = array();
 $values['content_object'] = array();

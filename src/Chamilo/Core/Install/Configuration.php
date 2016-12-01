@@ -70,8 +70,6 @@ class Configuration
 
     private $crypt_algorithm = 'sha1';
 
-    private $server_type = 'production';
-
     public function __construct()
     {
     }
@@ -90,7 +88,7 @@ class Configuration
         $values['database_overwrite'] = $this->get_db_overwrite();
         $values['database_username'] = $this->get_db_username();
         $values['database_password'] = $this->get_db_password();
-        
+
         $values['platform_language'] = $this->get_platform_language();
         $values['platform_url'] = $this->get_base_url();
         $values['archive_path'] = $this->get_archive_path();
@@ -103,34 +101,32 @@ class Configuration
         $values['temp_path'] = $this->get_temp_path();
         $values['userpictures_path'] = $this->get_userpictures_path();
         $values['url_append'] = $this->get_url_append();
-        
+
         $values['admin_email'] = $this->get_admin_email();
         $values['admin_surname'] = $this->get_admin_lastname();
         $values['admin_firstname'] = $this->get_admin_firstname();
         $values['admin_phone'] = $this->get_admin_phone();
         $values['admin_username'] = $this->get_admin_login();
         $values['admin_password'] = $this->get_admin_password();
-        
+
         $values['platform_name'] = $this->get_campus_name();
         $values['organization_name'] = $this->get_institution_name();
         $values['organization_url'] = $this->get_institution_webpage();
-        
+
         $values['self_reg'] = $this->get_self_register();
-        
+
         $values['hashing_algorithm'] = $this->get_crypt_algorithm();
-        
-        $values['server_type'] = $this->get_server_type();
-        
+
         foreach ($this->packages as $package)
         {
             $values['install'][$package] = '1';
         }
-        
+
         foreach ($this->content_objects as $content_object)
         {
             $values['content_object'][$content_object] = '1';
         }
-        
+
         foreach ($this->external_instances as $external_instance)
         {
             $values['external_instance'][$external_instance] = '1';
@@ -144,7 +140,7 @@ class Configuration
             throw new \Exception("Install config file {$file} not found !");
         if (! (is_readable($file)))
             throw new \Exception("Install config file {$file} not readable !");
-        
+
         global $values;
         unset($values);
         $values = array();
@@ -169,14 +165,14 @@ class Configuration
             $this->set_db_username($values['database_username']);
         if (isset($values['database_password']))
             $this->set_db_password($values['database_password']);
-        
+
         if (isset($values['platform_language']))
             $this->set_platform_language($values['platform_language']);
         if (isset($values['platform_url']))
             $this->set_base_url($values['platform_url']);
         if (isset($values['url_append']))
             $this->set_url_append($values['url_append']);
-        
+
         if (isset($values['archive_path']))
             $this->set_archive_path($values['archive_path']);
         if (isset($values['cache_path']))
@@ -195,7 +191,7 @@ class Configuration
             $this->set_temp_path($values['temp_path']);
         if (isset($values['userpictures_path']))
             $this->set_userpictures_path($values['userpictures_path']);
-        
+
         if (isset($values['admin_email']))
             $this->set_admin_email($values['admin_email']);
         if (isset($values['admin_surname']))
@@ -208,21 +204,19 @@ class Configuration
             $this->set_admin_login($values['admin_username']);
         if (isset($values['admin_password']))
             $this->set_admin_password($values['admin_password']);
-        
+
         if (isset($values['platform_name']))
             $this->set_campus_name($values['platform_name']);
         if (isset($values['organization_name']))
             $this->set_institution_name($values['organization_name']);
         if (isset($values['organization_url']))
             $this->set_institution_webpage($values['organization_url']);
-        
+
         if (isset($values['self_reg']))
             $this->set_self_register($values['self_reg']);
         if (isset($values['hashing_algorithm']))
             $this->set_crypt_algorithm($values['hashing_algorithm']);
-        if (isset($values['server_type']))
-            $this->set_server_type($values['server_type']);
-        
+
         $this->set_packages(array_keys((array) $values['install']));
     }
 
@@ -529,16 +523,6 @@ class Configuration
     public function set_crypt_algorithm($crypt_algorithm)
     {
         $this->crypt_algorithm = $crypt_algorithm;
-    }
-
-    public function get_server_type()
-    {
-        return $this->server_type;
-    }
-
-    public function set_server_type($server_type)
-    {
-        $this->server_type = $server_type;
     }
 
     public function get_url_append()

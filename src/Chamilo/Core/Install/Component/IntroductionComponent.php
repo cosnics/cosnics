@@ -32,7 +32,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
 
         $html = array();
 
-//         $html[] = $this->render_header();
+        $html[] = $this->render_header();
 
         if ($phpVersion >= 5.4)
         {
@@ -68,10 +68,10 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
 
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-            $html[] = $buttonToolbarRenderer->render();
+            $html[] = $buttonToolbarRenderer->render();exit;
         }
 
-//         $html[] = $this->render_footer();
+        $html[] = $this->render_footer();
 
         return implode(PHP_EOL, $html);
     }
