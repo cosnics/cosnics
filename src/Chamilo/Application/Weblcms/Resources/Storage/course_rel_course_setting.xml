@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_rel_course_setting">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="course_setting_id"
+            type="integer"
+            notnull="1" />
+        <property
+            name="course_id"
+            type="integer"
+            notnull="1" />
+        <property
+            name="value"
+            type="text"
+            length="20"
+            notnull="1" />
+    </properties>
+    <index name="course_setting_id">
+        <indexproperty name="course_setting_id" />
+    </index>
+    <index name="course_id">
+        <indexproperty name="course_id" />
+    </index>
+</object>

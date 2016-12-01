@@ -1,0 +1,10 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\course_deleter
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Verwijder Cursus"
+DeleteWarningMessage = "Wilt deze cursus te verwijderen?"
+DeleteReDoMessage = "!!!!! Er is geen weg terug, de cursus wordt definitief verwijderd !!!!!!"
+CourseDeleted = "Cursus werd succesvol verwijderd"
+CourseDeleteFailed = "Cursus is niet verwijderd"

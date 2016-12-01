@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package context="Chamilo\Core\Reporting">
+    <settings>
+        <category name="template_style">
+            <setting
+                name="paper_orientation"
+                field="select"
+                default="Portrait">
+                <options type="static">
+                    <option
+                        name="Portrait"
+                        value="P" />
+                    <option
+                        name="Landscape"
+                        value="L" />
+                </options>
+            </setting>
+
+            <setting
+                name="template_header_text_color"
+                field="text"
+                default="0, 0, 0">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="template_header_font_family"
+                field="text"
+                default="Arial">
+                <validations>
+                    <validation
+                        rule="required"
+                        message="ThisFieldIsRequired" />
+                </validations>
+            </setting>
+
+            <setting
+                name="template_header_font_style"
+                field="select"
+                default="B">
+                <options type="static">
+                    <option
+                        name="Normal"
+                        value="" />
+                    <option
+                        name="Bold"
+                        value="B" />
+                    <option
+                        name="Italic"
+                        value="I" />
+                    <option
+                        name="Underline"
+                        value="U" />
+                </options>
+            </setting>
+
+            <setting
+                name="template_header_font_size"
+                field="text"
+                default="11">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeReportingFontSize" />
+                </validations>
+            </setting>
+
+            <setting
+                name="template_header_line_color"
+                field="text"
+                default="0, 0, 0">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="template_footer_text_color"
+                field="text"
+                default="0, 0, 0">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="template_footer_font_family"
+                field="text"
+                default="Arial">
+                <validations>
+                    <validation
+                        rule="required"
+                        message="ThisFieldIsRequired" />
+                </validations>
+            </setting>
+
+            <setting
+                name="template_footer_font_style"
+                field="select"
+                default="B">
+                <options type="static">
+                    <option
+                        name="Normal"
+                        value="" />
+                    <option
+                        name="Bold"
+                        value="B" />
+                    <option
+                        name="Italic"
+                        value="I" />
+                    <option
+                        name="Underline"
+                        value="U" />
+                </options>
+            </setting>
+
+            <setting
+                name="template_footer_font_size"
+                field="text"
+                default="10">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeReportingFontSize" />
+                </validations>
+            </setting>
+        </category>
+
+        <category name="block_style">
+            <setting
+                name="block_title_text_color"
+                field="text"
+                default="0, 0, 0">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="block_title_font_family"
+                field="text"
+                default="Arial">
+                <validations>
+                    <validation
+                        rule="required"
+                        message="ThisFieldIsRequired" />
+                </validations>
+            </setting>
+
+            <setting
+                name="block_title_font_style"
+                field="select"
+                default="B">
+                <options type="static">
+                    <option
+                        name="Normal"
+                        value="" />
+                    <option
+                        name="Bold"
+                        value="B" />
+                    <option
+                        name="Italic"
+                        value="I" />
+                    <option
+                        name="Underline"
+                        value="U" />
+                </options>
+            </setting>
+
+            <setting
+                name="block_title_font_size"
+                field="text"
+                default="11">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeReportingFontSize" />
+                </validations>
+            </setting>
+
+            <setting
+                name="min_relative_width"
+                field="text"
+                default="0.1">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeReportingRelativeWidth" />
+                </validations>
+            </setting>
+        </category>
+
+        <category name="heading_cell_style">
+            <setting
+                name="heading_cell_alignment"
+                field="select"
+                default="Left">
+                <options type="static">
+                    <option
+                        name="Left"
+                        value="L" />
+                    <option
+                        name="Center"
+                        value="C" />
+                    <option
+                        name="Right"
+                        value="R" />
+                    <option
+                        name="Justify"
+                        value="J" />
+                </options>
+            </setting>
+
+            <setting
+                name="heading_cell_text_color"
+                field="text"
+                default="255, 255, 255">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="heading_cell_background_color"
+                field="text"
+                default="150, 150, 150">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="heading_cell_border_color"
+                field="text"
+                default="0, 0, 0">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="heading_cell_font_family"
+                field="text"
+                default="Arial">
+                <validations>
+                    <validation
+                        rule="required"
+                        message="ThisFieldIsRequired" />
+                </validations>
+            </setting>
+
+            <setting
+                name="heading_cell_font_style"
+                field="select"
+                default="">
+                <options type="static">
+                    <option
+                        name="Normal"
+                        value="" />
+                    <option
+                        name="Bold"
+                        value="B" />
+                    <option
+                        name="Italic"
+                        value="I" />
+                    <option
+                        name="Underline"
+                        value="U" />
+                </options>
+            </setting>
+
+            <setting
+                name="heading_cell_font_size"
+                field="text"
+                default="10">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeReportingFontSize" />
+                </validations>
+            </setting>
+        </category>
+
+        <category name="data_cell_style">
+            <setting
+                name="data_cell_alignment"
+                field="select"
+                default="Left">
+                <options type="static">
+                    <option
+                        name="Left"
+                        value="L" />
+                    <option
+                        name="Center"
+                        value="C" />
+                    <option
+                        name="Right"
+                        value="R" />
+                    <option
+                        name="Justify"
+                        value="J" />
+                </options>
+            </setting>
+
+            <setting
+                name="data_cell_text_color"
+                field="text"
+                default="0, 0, 0">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="data_cell_background_color"
+                field="text"
+                default="255, 255, 255">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="data_cell_border_color"
+                field="text"
+                default="0, 0, 0">
+                <validations>
+                    <validation
+                        rule="regex"
+                        format="/^\s*\d+\s*,\s*\d+\s*,\s*\d+\s*$/"
+                        message="MustBeReportingColor" />
+                </validations>
+            </setting>
+
+            <setting
+                name="data_cell_font_family"
+                field="text"
+                default="Arial">
+                <validations>
+                    <validation
+                        rule="required"
+                        message="ThisFieldIsRequired" />
+                </validations>
+            </setting>
+
+            <setting
+                name="data_cell_font_style"
+                field="select"
+                default="">
+                <options type="static">
+                    <option
+                        name="Normal"
+                        value="" />
+                    <option
+                        name="Bold"
+                        value="B" />
+                    <option
+                        name="Italic"
+                        value="I" />
+                    <option
+                        name="Underline"
+                        value="U" />
+                </options>
+            </setting>
+
+            <setting
+                name="data_cell_font_size"
+                field="text"
+                default="10">
+                <validations>
+                    <validation
+                        rule="numeric"
+                        message="MustBeReportingFontSize" />
+                </validations>
+            </setting>
+        </category>
+    </settings>
+</package>

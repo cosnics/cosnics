@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="weblcms_peer_assessment_score_tracker">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="attempt_status_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <!-- the user that receives the scores: -->
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="indicator_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <!--TODO use float for future compatibility ??? -->
+        <property
+            name="score"
+            type="integer" />
+    </properties>
+    <index name="attempt_status_id">
+        <indexproperty name="attempt_id" />
+    </index>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+    <index name="indicator_id">
+        <indexproperty name="indicator_id" />
+    </index>
+</object>

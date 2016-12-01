@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.core.rights.structure.console.command.synchronize_structure_locations"
+            class="Chamilo\Core\Rights\Structure\Console\Command\SynchronizeStructureLocationsCommand">
+            <argument
+                type="service"
+                id="chamilo.core.rights.structure.service.structure_location_configuration.synchronizer" />
+            <tag name="chamilo.libraries.console.command" />
+        </service>
+
+    </services>
+</container>

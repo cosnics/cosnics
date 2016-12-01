@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_type_user_order">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="course_type_id"
+            type="integer"
+            notnull="1"
+            default="1" />
+        <property
+            name="user_id"
+            type="integer"
+            notnull="1"
+            default="1" />
+        <property
+            name="display_order"
+            type="integer"
+            notnull="1"
+            default="1" />
+    </properties>
+    <index name="course_type_id">
+        <indexproperty name="course_type_id" />
+    </index>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+    <index name="display_order">
+        <indexproperty name="display_order" />
+    </index>
+</object>

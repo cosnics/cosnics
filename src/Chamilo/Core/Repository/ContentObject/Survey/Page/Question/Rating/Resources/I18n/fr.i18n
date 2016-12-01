@@ -1,0 +1,7 @@
+Percentage = "Pourcentage"
+Properties = "Propriétés"
+Rating = "Évaluation"
+SurveyRatingType = "Type"
+TypeName = "Note question"
+ValueShouldBeNumeric = "La valeur entrée doit être numérique"
+Visible = "Visible"

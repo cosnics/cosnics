@@ -1,0 +1,27 @@
+{% block date_picker_widget %}
+    {% spaceless %}
+        {{ block('form_widget_simple') }}
+        <script type="text/javascript">
+            {% if not additional_options %}{% set additional_options = '{}' %}{% endif %}
+
+            var additional_options = {{ additional_options|trim|raw }};
+
+            var default_options = {
+                timeFormat:'HH:mm',
+                dateFormat:'dd/mm/yy',
+                controlType: 'select',
+                separator:'  ',
+                currentText: '{{ translations.current_time }}',
+                closeText: '{{ translations.close }}',
+                timeText: '{{ translations.time }}',
+                hourText: '{{ translations.hour }}',
+                minuteText: '{{ translations.minute }}',
+                monthNames: {{ translations.month_names|raw }},
+                dayNames: {{ translations.day_names|raw }},
+                dayNamesMin: {{ translations.day_names_short|raw }}
+            };
+
+            $("#{{ id }}").datetimepicker($.extend(default_options, additional_options)) ;
+        </script>
+    {% endspaceless %}
+{% endblock %}

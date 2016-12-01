@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\portfolio
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Portfolio folder"
+TypeCategory = "Content Objects"
+PreviewModeWarning = "Opgelet: In deze preview wordt feedback *niet* opgeslagen. Publiceer je portfolio om van alle functionaliteit gebruik te kunnen maken."
+View = "View"
+Edit = "Edit"
+Feedback = "Feedback"
+Add = "Add an item"
+Delete = "Delete item"
+CreatedOn = "Created on {DATE}"
+CreatedOnBy = "Created on {DATE} by {USER}"
+LastModifiedOn = "Last edited on {DATE}"
+ChangeIntroduction = "Change introduction"
