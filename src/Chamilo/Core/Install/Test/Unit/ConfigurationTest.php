@@ -14,56 +14,55 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function test_as_values_array_should_contains_all_db_slots()
     {
         $db_slots = array(
-            'database_driver', 
-            'database_host', 
-            'database_name', 
-            'database_overwrite', 
-            'database_username', 
+            'database_driver',
+            'database_host',
+            'database_name',
+            'database_overwrite',
+            'database_username',
             'database_password');
-        
+
         $values = $this->config->as_values_array();
         $all_keys = \Chamilo\ArrayKeys($values);
-        
+
         $this->assertEquals(array(), array_diff($db_slots, $all_keys));
     }
 
     public function test_as_values_array_should_contains_all_admin_slots()
     {
         $admin_slots = array(
-            'admin_email', 
-            'admin_surname', 
-            'admin_firstname', 
-            'admin_phone', 
-            'admin_username', 
+            'admin_email',
+            'admin_surname',
+            'admin_firstname',
+            'admin_phone',
+            'admin_username',
             'admin_password');
-        
+
         $values = $this->config->as_values_array();
         $all_keys = \Chamilo\ArrayKeys($values);
-        
+
         $this->assertEquals(array(), array_diff($admin_slots, $all_keys));
     }
 
     public function test_as_values_array_should_contains_all_platform_slots()
     {
         $platform_slots = array(
-            'platform_language', 
-            'platform_url', 
-            'platform_name', 
-            'organization_name', 
-            'organization_url', 
-            'self_reg', 
+            'platform_language',
+            'platform_name',
+            'organization_name',
+            'organization_url',
+            'self_reg',
             'hashing_algorithm');
-        
+
         $values = $this->config->as_values_array();
         $all_keys = \Chamilo\ArrayKeys($values);
-        
+
         $this->assertEquals(array(), array_diff($platform_slots, $all_keys));
     }
 
     public function test_load_file_should_be_able_to_load_a_install_config_file()
     {
         $this->config->load_config_file(__DIR__ . '/__files/config_ok.php');
-        
+
         $expected = array();
         $expected['storage_type'] = 'mdb2';
         $expected['database_driver'] = 'mysqli';
@@ -73,8 +72,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $expected['database_username'] = 'db_user';
         $expected['database_password'] = 'db_password';
         $expected['platform_language'] = 'english';
-        $expected['platform_url'] = 'http://localhost/chamilo-test/';
-        $expected['url_append'] = '/chamilo-test';
         $expected['admin_email'] = 'admin@localhost';
         $expected['admin_surname'] = 'Doe';
         $expected['admin_firstname'] = 'Jack';
@@ -86,7 +83,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $expected['organization_url'] = 'www.chamilo.org';
         $expected['self_reg'] = '0';
         $expected['hashing_algorithm'] = 'sha1';
-        
+
         $this->assertEquals($expected, $this->config->as_values_array());
     }
 }

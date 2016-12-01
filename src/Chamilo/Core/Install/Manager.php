@@ -13,6 +13,8 @@ use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeader;
 use Chamilo\Libraries\Format\Structure\WizardHeader\WizardHeaderRenderer;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Core\Install\Format\Structure\Header;
+use Chamilo\Core\Install\Format\Structure\Footer;
 
 /**
  *
@@ -73,11 +75,32 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
+     * @return \Chamilo\Libraries\Format\Structure\Page
+     */
+    public function getPage()
+    {
+        if (! isset($this->page))
+        {
+            $header = new Header(
+                Page::VIEW_MODE_FULL,
+                'container-fluid',
+                Translation::getInstance()->getLanguageIsocode(),
+                'ltr');
+            $footer = new Footer(Page::VIEW_MODE_FULL);
+
+            $this->page = new Page(Page::VIEW_MODE_FULL, 'container-fluid', $header, $footer);
+        }
+
+        return $this->page;
+    }
+
+    /**
+     *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
      */
     public function render_header()
     {
-        $page = Page::getInstance();
+        $page = $this->getPage();
 
         $page->setApplication($this);
         $page->setContainerMode('container');
@@ -86,6 +109,7 @@ abstract class Manager extends Application implements NoContextComponent
         $html = array();
 
         $html[] = $page->getHeader()->toHtml();
+
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
 
@@ -117,7 +141,7 @@ abstract class Manager extends Application implements NoContextComponent
 
         $html[] = '</div>';
         $html[] = '</div>';
-        $html[] = Page::getInstance()->getFooter()->toHtml();
+        $html[] = $this->getPage()->getFooter()->toHtml();
 
         return implode(PHP_EOL, $html);
     }

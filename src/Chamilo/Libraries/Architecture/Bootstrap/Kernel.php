@@ -60,6 +60,12 @@ class Kernel
 
     /**
      *
+     * @var integer
+     */
+    private $version;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $application;
@@ -70,14 +76,24 @@ class Kernel
      */
     private $user;
 
+    /**
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Chamilo\Configuration\Service\ConfigurationConsulter $configurationConsulter
+     * @param \Chamilo\Libraries\Architecture\Factory\ApplicationFactory $applicationFactory
+     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param integer $version
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
     public function __construct(\Symfony\Component\HttpFoundation\Request $request,
         ConfigurationConsulter $configurationConsulter, ApplicationFactory $applicationFactory,
-        ExceptionLoggerInterface $exceptionLogger, User $user = null)
+        ExceptionLoggerInterface $exceptionLogger, $version, User $user = null)
     {
         $this->request = $request;
         $this->configurationConsulter = $configurationConsulter;
         $this->applicationFactory = $applicationFactory;
         $this->exceptionLogger = $exceptionLogger;
+        $this->version = $version;
         $this->user = $user;
     }
 
@@ -207,6 +223,24 @@ class Kernel
         $this->application = $application;
     }
 
+    /**
+     *
+     * @return integer
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     *
+     * @param integer $version
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+    }
+
     public function launch()
     {
         try
@@ -329,7 +363,7 @@ class Kernel
 
         if (! $response instanceof Response)
         {
-            $response = new Response($response);
+            $response = new Response($this->getVersion(), $response);
         }
 
         $response->send();

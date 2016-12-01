@@ -12,17 +12,16 @@ class Response extends \Symfony\Component\HttpFoundation\Response
 {
 
     /**
-     * Constructor
      *
-     * @param string $content The response content
-     * @param int $status The response status code
-     * @param array $headers An array of response headers
+     * @param integer $version
+     * @param string $content
+     * @param integer $status
+     * @param string[] $headers
      */
-    public function __construct($content = '', $status = 200, $headers = array())
+    public function __construct($version, $content = '', $status = 200, $headers = array())
     {
         $headers['Content-Type'] = 'text/html';
-        $headers['X-Powered-By'] = 'Chamilo Connect ' .
-             \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'version');
+        $headers['X-Powered-By'] = 'Chamilo Connect ' . $version;
 
         parent::__construct($content, $status, $headers);
     }

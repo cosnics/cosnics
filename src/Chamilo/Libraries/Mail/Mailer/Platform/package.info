@@ -18,7 +18,7 @@
             </dependencies>
         </pre-depends>
         <extra>
-            <default-install>1</default-install>
+            <core-install>1</core-install>
         </extra>
     </package>
 </packages>
