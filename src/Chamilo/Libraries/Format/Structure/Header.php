@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceUtilities;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Configuration\Service\FileConfigurationLocator;
 
 /**
  *
@@ -71,7 +72,7 @@ class Header
         $this->textDirection = $textDirection;
 
         $this->htmlHeaders = array();
-//         $this->addDefaultHeaders();
+        $this->addDefaultHeaders();
     }
 
     /**
@@ -188,14 +189,12 @@ class Header
     private function addDefaultHeaders()
     {
         $pathBuilder = new PathBuilder(ClassnameUtilities::getInstance());
-        $server_type = \Chamilo\Configuration\Configuration::get('Chamilo\Core\Admin', 'server_type');
         $theme = Theme::getInstance()->getTheme();
 
         $parameters = array();
         $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Libraries\Ajax';
         $parameters[Application::PARAM_ACTION] = 'resource';
         $parameters[ResourceUtilities::PARAM_THEME] = $theme;
-        $parameters[ResourceUtilities::PARAM_SERVER_TYPE] = $server_type;
 
         $this->addHtmlHeader('<meta charset="utf-8">');
         $this->addHtmlHeader('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
@@ -242,7 +241,9 @@ class Header
      */
     protected function addGoogleAnalyticsTracking()
     {
-        if (! \Chamilo\Configuration\Configuration::getInstance()->is_available())
+        $fileConfigurationLocator = new FileConfigurationLocator(new PathBuilder(ClassnameUtilities::getInstance()));
+
+        if (! $fileConfigurationLocator->isAvailable())
         {
             return;
         }

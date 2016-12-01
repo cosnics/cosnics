@@ -58,18 +58,18 @@ class SettingsOverview
     public function render()
     {
         $html = array();
-        
+
         $html[] = '<div class="form-horizontal form-install-settings">';
-        
+
         $html[] = $this->renderSection(Translation::get('Database'), $this->getDatabaseContent());
         $html[] = $this->renderSection(Translation::get('SelectedPackages'), $this->getSelectedPackages());
         $html[] = $this->renderSection(Translation::get('GeneralProperties'), $this->getGeneralPropertiesContent());
         $html[] = $this->renderSection(Translation::get('Administrator'), $this->getAdministratorContent());
         $html[] = $this->renderSection(Translation::get('Platform'), $this->getPlatformContent());
         $html[] = $this->renderSection(Translation::get('Storage'), $this->getStorageContent());
-        
+
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -80,23 +80,23 @@ class SettingsOverview
     protected function getDatabaseContent()
     {
         $html = array();
-        
+
         $html[] = $this->renderSetting(Translation::get('DatabaseDriver'), $this->getSettingValue('database_driver'));
         $html[] = $this->renderSetting(Translation::get('DatabaseHost'), $this->getSettingValue('database_host'));
         $html[] = $this->renderSetting(Translation::get('DatabaseName'), $this->getSettingValue('database_name'));
         $html[] = $this->renderSetting(Translation::get('DatabaseLogin'), $this->getSettingValue('database_username'));
-        
+
         $html[] = $this->renderSetting(
-            Translation::get('DatabasePassword'), 
+            Translation::get('DatabasePassword'),
             $this->getSettingValue('database_password'));
-        
+
         $html[] = $this->renderSetting(
-            Translation::get('DatabaseExists'), 
+            Translation::get('DatabaseExists'),
             $this->getSettingValue('database_exists') ? Translation::get(
-                'ConfirmYes', 
-                null, 
+                'ConfirmYes',
+                null,
                 Utilities::COMMON_LIBRARIES) : Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES));
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -107,11 +107,10 @@ class SettingsOverview
     protected function getGeneralPropertiesContent()
     {
         $html = array();
-        
+
         $html[] = $this->renderSetting(Translation::get('MainLang'), $this->getSettingValue('platform_language'));
         $html[] = $this->renderSetting(Translation::get('ChamiloURL'), $this->getSettingValue('platform_url'));
-        $html[] = $this->renderSetting(Translation::get('ServerType'), $this->getSettingValue('server_type'));
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -122,14 +121,14 @@ class SettingsOverview
     protected function getAdministratorContent()
     {
         $html = array();
-        
+
         $html[] = $this->renderSetting(Translation::get('AdminEmail'), $this->getSettingValue('admin_email'));
         $html[] = $this->renderSetting(Translation::get('AdminLastName'), $this->getSettingValue('admin_surname'));
         $html[] = $this->renderSetting(Translation::get('AdminFirstName'), $this->getSettingValue('admin_firstname'));
         $html[] = $this->renderSetting(Translation::get('AdminPhone'), $this->getSettingValue('admin_phone'));
         $html[] = $this->renderSetting(Translation::get('AdminLogin'), $this->getSettingValue('admin_username'));
         $html[] = $this->renderSetting(Translation::get('AdminPass'), $this->getSettingValue('admin_password'));
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -140,23 +139,23 @@ class SettingsOverview
     protected function getPlatformContent()
     {
         $html = array();
-        
+
         $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('platform_name'));
-        
+
         $html[] = $this->renderSetting(
-            Translation::get('InstituteShortName'), 
+            Translation::get('InstituteShortName'),
             $this->getSettingValue('organization_name'));
-        
+
         $html[] = $this->renderSetting(Translation::get('InstituteURL'), $this->getSettingValue('organization_url'));
-        
+
         $html[] = $this->renderSetting(
-            Translation::get('AllowSelfReg'), 
+            Translation::get('AllowSelfReg'),
             Translation::get(($this->getSettingValue('self_reg') == 1 ? 'Yes' : 'No')));
-        
+
         $html[] = $this->renderSetting(
-            Translation::get('HashingAlgorithm'), 
+            Translation::get('HashingAlgorithm'),
             $this->getSettingValue('hashing_algorithm'));
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -167,7 +166,7 @@ class SettingsOverview
     protected function getStorageContent()
     {
         $html = array();
-        
+
         $html[] = $this->renderSetting(Translation::get('ArchivePath'), $this->getSettingValue('archive_path'));
         $html[] = $this->renderSetting(Translation::get('CachePath'), $this->getSettingValue('cache_path'));
         $html[] = $this->renderSetting(Translation::get('GarbagePath'), $this->getSettingValue('garbage_path'));
@@ -177,9 +176,9 @@ class SettingsOverview
         $html[] = $this->renderSetting(Translation::get('ScormPath'), $this->getSettingValue('scorm_path'));
         $html[] = $this->renderSetting(Translation::get('TempPath'), $this->getSettingValue('temp_path'));
         $html[] = $this->renderSetting(
-            Translation::get('UserpicturesPath'), 
+            Translation::get('UserpicturesPath'),
             $this->getSettingValue('userpictures_path'));
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -191,7 +190,7 @@ class SettingsOverview
     {
         $selectedPackages = array();
         $wizardPackages = (array) $this->getSettingValue('install');
-        
+
         foreach ($wizardPackages as $context => $value)
         {
             if (isset($value) && $value == '1')
@@ -199,7 +198,7 @@ class SettingsOverview
                 $selectedPackages[] = Translation::get('TypeName', null, $context);
             }
         }
-        
+
         return implode(', ', $selectedPackages);
     }
 
@@ -212,18 +211,18 @@ class SettingsOverview
     protected function renderSection($label, $content)
     {
         $html = array();
-        
+
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">' . $label . '</h3>';
         $html[] = '</div>';
-        
+
         $html[] = '<div class="panel-body">';
         $html[] = $content;
         $html[] = '</div>';
-        
+
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
@@ -236,14 +235,14 @@ class SettingsOverview
     protected function renderSetting($label, $value)
     {
         $html = array();
-        
+
         $html[] = '<div class="form-group">';
         $html[] = '<label class="col-xs-12 col-sm-4 control-label">' . $label . '</label>';
         $html[] = '<div class="col-xs-12 col-sm-8">';
         $html[] = '<p class="form-control-static">' . $value . '</p>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         return implode(PHP_EOL, $html);
     }
 }

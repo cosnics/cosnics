@@ -48,7 +48,7 @@ class SettingsForm extends FormValidator
     {
         parent::__construct('install_settings', $method = 'post', $action);
         $this->application = $application;
-        
+
         $this->buildForm();
         $this->setDefaults();
     }
@@ -79,25 +79,25 @@ class SettingsForm extends FormValidator
             new DynamicFormTab('database', Translation::get('DatabaseComponentTitle'), null, 'addDatabaseSettings'));
         $this->getTabsGenerator()->add_tab(
             new DynamicFormTab('general', Translation::get('SettingsComponentTitle'), null, 'addGeneralSettings'));
-        
+
         $this->getTabsGenerator()->render();
-        
+
         $buttons = array();
-        
+
         $buttons[] = $this->createElement(
-            'static', 
-            null, 
-            null, 
+            'static',
+            null,
+            null,
             '<a href="' . $this->getApplication()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_LICENSE)) .
                  '" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>' .
                  Translation::get('Previous', null, Utilities::COMMON_LIBRARIES) . '</a>');
-        
+
         $buttons[] = $this->createElement(
-            'style_button', 
-            'next', 
-            Translation::get('Next', null, Utilities::COMMON_LIBRARIES), 
-            array('class' => 'btn-primary'), 
-            null, 
+            'style_button',
+            'next',
+            Translation::get('Next', null, Utilities::COMMON_LIBRARIES),
+            array('class' => 'btn-primary'),
+            null,
             'chevron-right');
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
@@ -118,27 +118,27 @@ class SettingsForm extends FormValidator
     public function addDatabaseSettings()
     {
         $this->addElement(
-            'select', 
-            'database_driver', 
-            Translation::get('DatabaseDriver'), 
+            'select',
+            'database_driver',
+            Translation::get('DatabaseDriver'),
             $this->get_database_drivers());
         $this->addElement('text', 'database_host', Translation::get('DatabaseHost'), array('size' => '40'));
         $this->addElement('text', 'database_name', Translation::get('DatabaseName'), array('size' => '40'));
-        
+
         $this->addElement('text', 'database_username', Translation::get('DatabaseLogin'), array('size' => '40'));
         $this->addElement('password', 'database_password', Translation::get('DatabasePassword'), array('size' => '40'));
-        
+
         $this->addElement('checkbox', 'database_overwrite', Translation::get('DatabaseOverwrite'));
-        
+
         $this->addRule('database_host', 'ThisFieldIsRequired', 'required');
         $this->addRule('database_driver', 'ThisFieldIsRequired', 'required');
         $this->addRule('database_name', 'ThisFieldIsRequired', 'required');
-        
+
         $pattern = '/(^[a-zA-Z$_][0-9a-zA-Z$_]*$)|(^[0-9][0-9a-zA-Z$_]*[a-zA-Z$_][0-9a-zA-Z$_]*$)/';
         $this->addRule('database_name', 'OnlyCharactersNumbersUnderscoresAndDollarSigns', 'regex', $pattern);
         $this->addRule(
-            array('database_driver', 'database_host', 'database_username', 'database_password', 'database_name'), 
-            Translation::get('CouldNotConnectToDatabase'), 
+            array('database_driver', 'database_host', 'database_username', 'database_password', 'database_name'),
+            Translation::get('CouldNotConnectToDatabase'),
             new ValidateDatabaseConnection());
     }
 
@@ -146,107 +146,91 @@ class SettingsForm extends FormValidator
     {
         $this->addElement('category', Translation::get('GeneralProperties'));
         $this->addElement(
-            'select', 
-            'platform_language', 
-            Translation::get("MainLang"), 
+            'select',
+            'platform_language',
+            Translation::get("MainLang"),
             $this->getApplication()->getLanguages());
         $this->addElement('text', 'platform_url', Translation::get("ChamiloURL"), array('size' => '40'));
         $this->addRule(
-            'platform_url', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'platform_url',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addRule('platform_url', 'AddTrailingSlash', 'regex', '/^.*\/$/');
-        
-        $serverTypes = array();
-        $serverTypes[] = $this->createElement(
-            'radio', 
-            'server_type', 
-            null, 
-            Translation::get('Production'), 
-            'production');
-        $serverTypes[] = $this->createElement(
-            'radio', 
-            'server_type', 
-            null, 
-            Translation::get('Test', null, Utilities::COMMON_LIBRARIES), 
-            'test');
-        $this->addGroup($serverTypes, 'server_type', Translation::get("ServerType"), '&nbsp;', false);
-        
         $this->addElement('category');
-        
+
         $this->addElement('category', Translation::get('Administrator'));
         $this->addElement('text', 'admin_email', Translation::get("AdminEmail"), array('size' => '40'));
         $this->addRule(
-            'admin_email', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'admin_email',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addRule('admin_email', Translation::get('WrongEmail'), 'email');
         $this->addElement('text', 'admin_surname', Translation::get("AdminLastName"), array('size' => '40'));
         $this->addRule(
-            'admin_surname', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'admin_surname',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('text', 'admin_firstname', Translation::get("AdminFirstName"), array('size' => '40'));
         $this->addRule(
-            'admin_firstname', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'admin_firstname',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('text', 'admin_phone', Translation::get("AdminPhone"), array('size' => '40'));
         $this->addElement('text', 'admin_username', Translation::get("AdminLogin"), array('size' => '40'));
         $this->addRule(
-            'admin_username', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'admin_username',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('text', 'admin_password', Translation::get("AdminPass"), array('size' => '40'));
         $this->addRule(
-            'admin_password', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'admin_password',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('category');
-        
+
         $this->addElement('category', Translation::get('Platform'));
         $this->addElement('text', 'platform_name', Translation::get("CampusName"), array('size' => '40'));
         $this->addRule(
-            'platform_name', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'platform_name',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('text', 'organization_name', Translation::get("InstituteShortName"), array('size' => '40'));
         $this->addRule(
-            'organization_name', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'organization_name',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('text', 'organization_url', Translation::get("InstituteURL"), array('size' => '40'));
         $this->addRule(
-            'organization_url', 
-            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
+            'organization_url',
+            Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required');
         $this->addElement('category');
-        
+
         $this->addElement('category', Translation::get('Security'));
-        
+
         $selfRegistration = array();
         $selfRegistration[] = $this->createElement(
-            'radio', 
-            'self_reg', 
-            null, 
-            Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 
+            'radio',
+            'self_reg',
+            null,
+            Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES),
             1);
         $selfRegistration[] = $this->createElement('radio', 'self_reg', null, Translation::get('AfterApproval'), 2);
         $selfRegistration[] = $this->createElement(
-            'radio', 
-            'self_reg', 
-            null, 
-            Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES), 
+            'radio',
+            'self_reg',
+            null,
+            Translation::get('ConfirmNo', null, Utilities::COMMON_LIBRARIES),
             0);
         $this->addGroup($selfRegistration, 'self_reg', Translation::get("AllowSelfReg"), '&nbsp;', false);
-        
+
         $this->addElement(
-            'select', 
-            'hashing_algorithm', 
-            Translation::get('HashingAlgorithm'), 
+            'select',
+            'hashing_algorithm',
+            Translation::get('HashingAlgorithm'),
             Hashing::get_available_types());
         $this->addElement('category');
-        
+
         $this->addElement('category', Translation::get('Storage'));
         $this->addElement('text', 'archive_path', Translation::get("ArchivePath"), array('size' => '40'));
         $this->addElement('text', 'cache_path', Translation::get("CachePath"), array('size' => '40'));
@@ -270,7 +254,7 @@ class SettingsForm extends FormValidator
     protected function addPackageSelectionToggle()
     {
         $html = array();
-        
+
         $html[] = '&nbsp;';
         $html[] = '<small>';
         $html[] = '<a class="label label-success package-list-select-all">';
@@ -281,14 +265,14 @@ class SettingsForm extends FormValidator
         $html[] = Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES);
         $html[] = '</a>';
         $html[] = '</small>';
-        
+
         return implode(PHP_EOL, $html);
     }
 
     public function addPackageSettings()
     {
         $html = array();
-        
+
         $html[] = '<div class="package-selection">';
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
@@ -298,17 +282,17 @@ class SettingsForm extends FormValidator
         $html[] = '</h4>';
         $html[] = '</div>';
         $html[] = '</div>';
-        
+
         $this->addElement('html', implode(PHP_EOL, $html));
-        
+
         $this->renderPackages(PlatformPackageBundles::getInstance()->get_package_list());
-        
+
         $html = array();
-        
+
         $html[] = '<script type="text/javascript" src="' .
              Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
         $html[] = '</div>';
-        
+
         $this->addElement('html', implode(PHP_EOL, $html));
     }
 
@@ -321,23 +305,23 @@ class SettingsForm extends FormValidator
         else
         {
             $numberOfCorePackages = 0;
-            
+
             foreach ($packages as $package)
             {
                 $extra = $package->get_extra();
-                
+
                 if ($extra['core-install'])
                 {
                     $numberOfCorePackages ++;
                 }
             }
-            
+
             if ($numberOfCorePackages == count($packages))
             {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -348,44 +332,44 @@ class SettingsForm extends FormValidator
     public function renderPackages(PackageList $packageList)
     {
         $html = array();
-        
+
         $renderer = $this->defaultRenderer();
         $packages = $this->determinePackages($packageList);
-        
+
         if (count($packages) > 0)
         {
             $firstPackage = current($packages);
             $packageType = Translation::get('TypeCategory', null, $firstPackage->get_context());
-            
+
             $html = array();
-            
+
             $html[] = '<div class="package-list">';
-            
+
             $html[] = '<div class="row package-list-header">';
             $html[] = '<div class="col-xs-12">';
             $html[] = '<h4>';
             $html[] = $packageType;
-            
+
             if ($this->hasSelectablePackages($packages))
             {
                 $html[] = $this->addPackageSelectionToggle();
             }
-            
+
             $html[] = '</h4>';
             $html[] = '</div>';
             $html[] = '</div>';
-            
+
             $html[] = '<div class="package-list-items row">';
-            
+
             $this->addElement('html', implode(PHP_EOL, $html));
-            
+
             foreach ($packages as $package)
             {
                 $extraPackageInfo = $package->get_extra();
-                
+
                 $title = Translation::get('TypeName', null, $package->get_context());
                 $packageClasses = $this->getPackageClasses($package);
-                
+
                 if ($extraPackageInfo['core-install'])
                 {
                     $iconSource = Theme::getInstance()->getImagePath($package->get_context(), 'Logo/22Na');
@@ -396,40 +380,40 @@ class SettingsForm extends FormValidator
                     $iconSource = Theme::getInstance()->getImagePath($package->get_context(), 'Logo/22');
                     $disabled = '';
                 }
-                
+
                 $html = array();
                 $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
                 $html[] = '<a class="' . $packageClasses . '"' . $disabled . '><img src="' . $iconSource . '"> ';
                 $this->addElement('html', implode(PHP_EOL, $html));
-                
+
                 $checkbox_name = 'install_' .
                      ClassnameUtilities::getInstance()->getNamespaceId($package->get_context());
                 $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
                 $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
-                
+
                 $html = array();
                 $html[] = $title;
                 $html[] = '</a>';
                 $html[] = '</div>';
                 $this->addElement('html', implode(PHP_EOL, $html));
-                
+
                 $extra = $package->get_extra();
-                
+
                 if ($extra['core-install'] || $extra['default-install'])
                 {
                     $defaults['install'][$package->get_context()] = 1;
                 }
             }
-            
+
             $this->setDefaults($defaults);
-            
+
             $html = array();
             $html[] = '<div class="clear"></div>';
             $html[] = '</div>';
             $html[] = '</div>';
             $this->addElement('html', implode(PHP_EOL, $html));
         }
-        
+
         foreach ($packageList->get_children() as $child)
         {
             $this->renderPackages($child);
@@ -444,7 +428,7 @@ class SettingsForm extends FormValidator
     public function determinePackages(PackageList $packageList)
     {
         $packages = array();
-        
+
         foreach ($packageList->get_packages() as $namespace => $package)
         {
             if (strpos($namespace, '\Integration\Chamilo\\') === false)
@@ -452,9 +436,9 @@ class SettingsForm extends FormValidator
                 $packages[] = $package;
             }
         }
-        
+
         usort($packages, array($this, "orderPackages"));
-        
+
         return $packages;
     }
 
@@ -462,7 +446,7 @@ class SettingsForm extends FormValidator
     {
         $packageNameLeft = Translation::get('TypeName', null, $packageLeft->get_context());
         $packageNameRight = Translation::get('TypeName', null, $packageRight->get_context());
-        
+
         return strcmp($packageNameLeft, $packageNameRight);
     }
 
@@ -474,9 +458,9 @@ class SettingsForm extends FormValidator
     private function getPackageClasses(Package $package)
     {
         $classes = array('btn');
-        
+
         $extra = $package->get_extra();
-        
+
         if ($extra['core-install'])
         {
             $classes[] = 'btn-default';
@@ -486,7 +470,7 @@ class SettingsForm extends FormValidator
             if ($extra['default-install'])
             {
                 $sessionSettings = $this->getSessionSettings();
-                
+
                 if (! empty($sessionSettings))
                 {
                     if ($sessionSettings['install'][$package->get_context()])
@@ -508,7 +492,7 @@ class SettingsForm extends FormValidator
                 $classes[] = 'btn-default';
             }
         }
-        
+
         return implode(' ', $classes);
     }
 
@@ -521,7 +505,7 @@ class SettingsForm extends FormValidator
         if (! isset($this->sessionSettings))
         {
             $sessionSettings = Session::retrieve(Manager::PARAM_SETTINGS);
-            
+
             if (is_null($sessionSettings))
             {
                 $sessionSettings = array();
@@ -530,17 +514,17 @@ class SettingsForm extends FormValidator
             {
                 $sessionSettings = unserialize($sessionSettings);
             }
-            
+
             $this->sessionSettings = $sessionSettings;
         }
-        
+
         return $this->sessionSettings;
     }
 
     public function setDefaults($defaults = array())
     {
         $sessionSettings = $this->getSessionSettings();
-        
+
         if (! empty($sessionSettings))
         {
             $defaults = $sessionSettings;
@@ -551,9 +535,9 @@ class SettingsForm extends FormValidator
             $defaults['database_driver'] = 'mysqli';
             $defaults['database_host'] = 'localhost';
             $defaults['database_name'] = 'chamilo';
-            
+
             // General settings
-            
+
             $defaults['platform_language'] = Translation::getInstance()->getLanguageIsocode();
             $urlAppendPath = str_replace('/index.php', '', $_SERVER['PHP_SELF']);
             $defaults['platform_url'] = 'http://' . $_SERVER['HTTP_HOST'] . $urlAppendPath . '/';
@@ -572,8 +556,7 @@ class SettingsForm extends FormValidator
             $defaults['self_reg'] = 0;
             $defaults['encrypt_password'] = 1;
             $defaults['hashing_algorithm'] = 'Sha1';
-            $defaults['server_type'] = 'production';
-            
+
             // Storage paths
             $defaults['archive_path'] = Path::getInstance()->getStoragePath('archive');
             $defaults['cache_path'] = Path::getInstance()->getStoragePath('cache');
@@ -585,7 +568,7 @@ class SettingsForm extends FormValidator
             $defaults['temp_path'] = Path::getInstance()->getStoragePath('temp');
             $defaults['userpictures_path'] = Path::getInstance()->getStoragePath('userpictures');
         }
-        
+
         parent::setDefaults($defaults);
     }
 }
