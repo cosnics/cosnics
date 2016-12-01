@@ -11,11 +11,10 @@ use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Service to manage open courses
- * 
+ *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
 class OpenCourseService implements OpenCourseServiceInterface
@@ -41,7 +40,7 @@ class OpenCourseService implements OpenCourseServiceInterface
 
     /**
      * OpenCourseService constructor.
-     * 
+     *
      * @param OpenCourseRepositoryInterface $openCourseRepository
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param UserRoleServiceInterface $userRoleService
@@ -56,7 +55,7 @@ class OpenCourseService implements OpenCourseServiceInterface
 
     /**
      * Retrieves the open courses for a given user
-     * 
+     *
      * @param User $user
      * @param Condition $condition
      * @param int $offset
@@ -71,14 +70,14 @@ class OpenCourseService implements OpenCourseServiceInterface
         {
             return $this->openCourseRepository->findAllOpenCourses($condition, $offset, $count, $orderBy);
         }
-        
+
         $roles = $this->userRoleService->getRolesForUser($user);
         return $this->openCourseRepository->findOpenCoursesByRoles($roles, $condition, $offset, $count, $orderBy);
     }
 
     /**
      * Returns the closed courses
-     * 
+     *
      * @param Condition $condition
      * @param int $offset
      * @param int $count
@@ -93,7 +92,7 @@ class OpenCourseService implements OpenCourseServiceInterface
 
     /**
      * Counts the open courses for the given user
-     * 
+     *
      * @param User $user
      * @param Condition $condition
      *
@@ -105,14 +104,14 @@ class OpenCourseService implements OpenCourseServiceInterface
         {
             return $this->openCourseRepository->countAllOpenCourses($condition);
         }
-        
+
         $roles = $this->userRoleService->getRolesForUser($user);
         return $this->openCourseRepository->countOpenCoursesByRoles($roles, $condition);
     }
 
     /**
      * Counts the closed courses
-     * 
+     *
      * @param Condition $condition
      *
      * @return int
@@ -124,7 +123,7 @@ class OpenCourseService implements OpenCourseServiceInterface
 
     /**
      * Returns the roles for a given open course
-     * 
+     *
      * @param Course $course
      *
      * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
@@ -152,7 +151,7 @@ class OpenCourseService implements OpenCourseServiceInterface
         {
             return;
         }
-        
+
         foreach ($courseIds as $courseId)
         {
             foreach ($roleIds as $roleId)
@@ -161,7 +160,7 @@ class OpenCourseService implements OpenCourseServiceInterface
                 $courseEntityRelation->set_course_id($courseId);
                 $courseEntityRelation->setEntityType(CourseEntityRelation::ENTITY_TYPE_ROLE);
                 $courseEntityRelation->setEntityId($roleId);
-                
+
                 if (! $this->openCourseRepository->create($courseEntityRelation))
                 {
                     throw new \Exception(
@@ -207,7 +206,7 @@ class OpenCourseService implements OpenCourseServiceInterface
 
     /**
      * Returns whether or not the course is open for the current user, based on his roles
-     * 
+     *
      * @param Course $course
      * @param User $user
      *
