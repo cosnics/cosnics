@@ -1,11 +1,12 @@
 <?php
 namespace Chamilo\Configuration;
 
-use Chamilo\Configuration\Storage\DataClass\Language;
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Storage\DataManager\DataSourceName;
 use Doctrine\DBAL\DriverManager;
+use Chamilo\Libraries\Storage\Cache\RecordResultSetCache;
+use Chamilo\Configuration\Storage\DataClass\Setting;
+use Chamilo\Libraries\Storage\Cache\DataClassResultSetCache;
 
 /**
  * This class represents the current configuration
@@ -69,15 +70,6 @@ class Configuration
     public function getFileConfigurationLocator()
     {
         return $this->getService('chamilo.configuration.service.file_configuration_locator');
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    public function getDataClassRepositoryCache()
-    {
-        return $this->getService('chamilo.libraries.storage.cache.data_class_repository_cache');
     }
 
     /**
@@ -322,8 +314,11 @@ class Configuration
      */
     public static function reset()
     {
-        self::getInstance()->getDataClassRepositoryCache()->truncates(
-            array(Registration::class_name(), Setting::class_name(), Language::class_name()));
+        RecordResultSetCache::truncates(array(Registration::class_name(), Setting::class_name()));
+        DataClassResultSetCache::truncates(array(Registration::class_name(), Setting::class_name()));
+        self::getInstance()->getConfigurationConsulter()->clearData();
+        self::getInstance()->getRegistrationConsulter()->clearData();
+        self::getInstance()->getLanguageConsulter()->clearData();
     }
 
     /**

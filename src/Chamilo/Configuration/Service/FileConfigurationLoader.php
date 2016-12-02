@@ -65,10 +65,10 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
     {
         $fileContainer = new ContainerBuilder();
         $xmlFileLoader = new XmlFileLoader(
-            $fileContainer, 
+            $fileContainer,
             new FileLocator($this->getFileConfigurationLocator()->getFilePath()));
         $xmlFileLoader->load($this->getFileConfigurationLocator()->getFileName());
-        
+
         return $this->getSettingsFromContainer($fileContainer);
     }
 
@@ -80,10 +80,10 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
     {
         $fileContainer = new ContainerBuilder();
         $xmlFileLoader = new XmlFileLoader(
-            $fileContainer, 
+            $fileContainer,
             new FileLocator($this->getFileConfigurationLocator()->getDefaultFilePath()));
         $xmlFileLoader->load($this->getFileConfigurationLocator()->getDefaultFileName());
-        
+
         return $this->getSettingsFromContainer($fileContainer);
     }
 
@@ -97,27 +97,27 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
         $settings = array(
             $this->getSettingsContext() => array(
                 'general' => array(
-                    'security_key' => $fileContainer->getParameter('chamilo.configuration.general.security_key'), 
+                    'security_key' => $fileContainer->getParameter('chamilo.configuration.general.security_key'),
                     'hashing_algorithm' => $fileContainer->getParameter(
-                        'chamilo.configuration.general.hashing_algorithm'), 
-                    'install_date' => $fileContainer->getParameter('chamilo.configuration.general.install_date'), 
-                    'language' => $fileContainer->getParameter('chamilo.configuration.general.language'), 
-                    'theme' => $fileContainer->getParameter('chamilo.configuration.general.theme')), 
-                'database' => $fileContainer->getParameter('chamilo.configuration.database'), 
+                        'chamilo.configuration.general.hashing_algorithm'),
+                    'install_date' => $fileContainer->getParameter('chamilo.configuration.general.install_date'),
+                    'language' => $fileContainer->getParameter('chamilo.configuration.general.language'),
+                    'theme' => $fileContainer->getParameter('chamilo.configuration.general.theme')),
+                'database' => $fileContainer->getParameter('chamilo.configuration.database'),
                 'debug' => array(
-                    'show_errors' => $fileContainer->getParameter('chamilo.configuration.debug.show_errors'), 
+                    'show_errors' => $fileContainer->getParameter('chamilo.configuration.debug.show_errors'),
                     'enable_query_cache' => $fileContainer->getParameter(
-                        'chamilo.configuration.debug.enable_query_cache')), 
-                'storage' => $fileContainer->getParameter('chamilo.configuration.storage'), 
+                        'chamilo.configuration.debug.enable_query_cache')),
+                'storage' => $fileContainer->getParameter('chamilo.configuration.storage'),
                 'session' => array(
                     'session_handler' => $fileContainer->getParameter('chamilo.configuration.session.session_handler'))));
-        
+
         if ($fileContainer->hasParameter('chamilo.configuration.error_handling'))
         {
             $settings[$this->getSettingsContext()]['error_handling'] = $fileContainer->getParameter(
                 'chamilo.configuration.error_handling');
         }
-        
+
         return $settings;
     }
 
@@ -135,7 +135,7 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
         {
             $settings = $this->getDefaultSettings();
         }
-        
+
         return $settings;
     }
 
@@ -146,5 +146,10 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
     public function getIdentifier()
     {
         return md5(__CLASS__);
+    }
+
+    public function clearData()
+    {
+        return true;
     }
 }

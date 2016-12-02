@@ -15,7 +15,7 @@ use Exception;
 use Chamilo\Core\Install\Service\ConfigurationWriter;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Core\Install\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  *
@@ -162,8 +162,9 @@ class PlatformInstaller
 
         echo $this->performPreProduction();
         flush();
-
+        
         echo $this->performConfiguration();
+        $this->loadConfiguration();
         flush();
 
         try
@@ -214,7 +215,10 @@ class PlatformInstaller
      */
     private function performConfiguration()
     {
-        return $this->installerObserver->afterPreProductionConfigurationFileWritten($this->writeConfigurationFile());
+        $result = $this->writeConfigurationFile();
+        $this->loadConfiguration();
+
+        return $this->installerObserver->afterPreProductionConfigurationFileWritten($result);
     }
 
     private function writeConfigurationFile()
@@ -229,15 +233,7 @@ class PlatformInstaller
             $configurationWriter = new ConfigurationWriter($configurationTemplatePath);
             $configurationWriter->writeConfiguration($this->configuration, $this->configurationFilePath);
 
-            $platformPackageBundles = new PlatformPackageBundles();
-            $packages = array_keys($platformPackageBundles->get_packages());
 
-            $containerExtensionFinder = new PackagesContainerExtensionFinder(
-                new PackagesClassFinder(new PathBuilder(new ClassnameUtilities(new StringUtilities())), $packages)
-            );
-
-            $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
-            $dependencyInjectionContainerBuilder->rebuildContainer(null, $containerExtensionFinder);
 
             $result = true;
         }
@@ -247,6 +243,19 @@ class PlatformInstaller
         }
 
         return new StepResult($result, Translation::get($result ? 'ConfigWriteSuccess' : 'ConfigWriteFailed'));
+    }
+
+    private function loadConfiguration()
+    {
+        $platformPackageBundles = new PlatformPackageBundles();
+        $packages = array_keys($platformPackageBundles->get_packages());
+
+        $containerExtensionFinder = new PackagesContainerExtensionFinder(
+            new PackagesClassFinder(new PathBuilder(new ClassnameUtilities(new StringUtilities())), $packages)
+        );
+    
+        $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
+        $dependencyInjectionContainerBuilder->rebuildContainer(null, containerExtensionFinder);
     }
 
     private function installPackages()

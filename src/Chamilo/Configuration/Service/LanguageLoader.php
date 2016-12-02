@@ -55,12 +55,12 @@ class LanguageLoader implements CacheableDataLoaderInterface
     {
         $languages = array();
         $languageRecords = $this->getLanguageRepository()->findLanguagesAsRecords();
-        
+
         foreach ($languageRecords as $languageRecord)
         {
             $languages[$languageRecord[Language::PROPERTY_ISOCODE]] = $languageRecord[Language::PROPERTY_ORIGINAL_NAME];
         }
-        
+
         return $languages;
     }
 
@@ -71,5 +71,14 @@ class LanguageLoader implements CacheableDataLoaderInterface
     public function getIdentifier()
     {
         return md5(__CLASS__);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Configuration\Interfaces\DataLoaderInterface::clearData()
+     */
+    public function clearData()
+    {
+        return $this->getLanguageRepository()->clearLanguageCache();
     }
 }

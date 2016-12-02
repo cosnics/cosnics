@@ -78,13 +78,13 @@ class DependencyInjectionContainerBuilder
      *
      * @var ContainerInterface
      */
-    private static $container;
+    protected static $container;
 
     /**
      *
      * @var \Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder
      */
-    private static $instance;
+    protected static $instance;
 
     /**
      * Constructor
@@ -120,10 +120,10 @@ class DependencyInjectionContainerBuilder
     {
         if (!isset(self::$instance))
         {
-            self::$instance = new static();
+            static::$instance = new static();
         }
 
-        return self::$instance;
+        return static::$instance;
     }
 
     /**
@@ -141,12 +141,7 @@ class DependencyInjectionContainerBuilder
      */
     protected function getPathBuilder()
     {
-        if (!isset($this->pathBuilder))
-        {
-            $this->pathBuilder = new PathBuilder(new ClassnameUtilities($this->getStringUtilities()));
-        }
-
-        return $this->pathBuilder;
+        return new PathBuilder(new ClassnameUtilities($this->getStringUtilities()));
     }
 
     /**
@@ -215,9 +210,9 @@ class DependencyInjectionContainerBuilder
      */
     public function createContainer()
     {
-        if (self::$container instanceof ContainerInterface)
+        if (static::$container instanceof ContainerInterface)
         {
-            return self::$container;
+            return static::$container;
         }
 
         if (file_exists($this->cacheFile))
@@ -234,7 +229,7 @@ class DependencyInjectionContainerBuilder
             $this->cacheContainer($container, $this->cacheFile);
         }
 
-        self::$container = $container;
+        static::$container = $container;
 
         return $container;
     }
@@ -298,7 +293,7 @@ class DependencyInjectionContainerBuilder
      */
     public function clearContainerInstance()
     {
-        self::$container = null;
+        static::$container = null;
     }
 
     /**
@@ -354,7 +349,7 @@ class DependencyInjectionContainerBuilder
 
     /**
      *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @var \Chamilo\Configuration\Service\FileConfigurationLocator
      */
     private $fileConfigurationLocator;
 
@@ -363,18 +358,6 @@ class DependencyInjectionContainerBuilder
      * @var \Chamilo\Configuration\Service\ConfigurationConsulter
      */
     private $fileConfigurationConsulter;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
-     */
-    private $configurablePathBuilder;
-
-    /**
-     *
-     * @var \Chamilo\Configuration\Service\RegistrationConsulter
-     */
-    private $registrationConsulter;
 
     /**
      *
@@ -394,12 +377,7 @@ class DependencyInjectionContainerBuilder
      */
     protected function getFileConfigurationLocator()
     {
-        if (!isset($this->fileConfigurationLocator))
-        {
-            $this->fileConfigurationLocator = new FileConfigurationLocator($this->getPathBuilder());
-        }
-
-        return $this->fileConfigurationLocator;
+        return new FileConfigurationLocator($this->getPathBuilder());
     }
 
     /**
@@ -408,14 +386,8 @@ class DependencyInjectionContainerBuilder
      */
     protected function getFileConfigurationConsulter()
     {
-        if (!isset($this->fileConfigurationConsulter))
-        {
-            $this->fileConfigurationConsulter = new ConfigurationConsulter(
-                new FileConfigurationLoader($this->getFileConfigurationLocator())
+        return new ConfigurationConsulter(new FileConfigurationLoader($this->getFileConfigurationLocator()));
             );
-        }
-
-        return $this->fileConfigurationConsulter;
     }
 
     /**
@@ -424,16 +396,13 @@ class DependencyInjectionContainerBuilder
      */
     protected function getConfigurablePathBuilder()
     {
-        if (!isset($this->configurablePathBuilder))
-        {
-            $fileConfigurationConsulter = $this->getFileConfigurationConsulter();
+        $fileConfigurationConsulter = $this->getFileConfigurationConsulter();
 
-            $this->configurablePathBuilder = new ConfigurablePathBuilder(
-                $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage'))
+        $configurablePathBuilder = new ConfigurablePathBuilder(
+            $fileConfigurationConsulter->getSetting(array('Chamilo\Configuration', 'storage')));
             );
-        }
 
-        return $this->configurablePathBuilder;
+        return $configurablePathBuilder;
     }
 
     /**
@@ -442,34 +411,32 @@ class DependencyInjectionContainerBuilder
      */
     protected function getRegistrationConsulter()
     {
-        if (!isset($this->registrationConsulter))
-        {
-            $connectionFactory = new ConnectionFactory(
-                new DataSourceName(
-                    $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'database'))
+        $connectionFactory = new ConnectionFactory(
+            new DataSourceName(
+                $this->getFileConfigurationConsulter()->getSetting(array('Chamilo\Configuration', 'database'))));
                 )
             );
 
-            $exceptionLoggerFactory = new ExceptionLoggerFactory($this->getFileConfigurationConsulter());
+        $exceptionLoggerFactory = new ExceptionLoggerFactory($this->getFileConfigurationConsulter());
 
-            $this->registrationConsulter = new RegistrationConsulter(
-                $this->getStringUtilities(),
-                new DataCacheLoader(
-                    new RegistrationLoader(
-                        $this->getStringUtilities(),
-                        new RegistrationRepository(
-                            new DataClassRepository(
-                                new DataClassRepositoryCache(),
-                                new DataClassDatabase(
-                                    $connectionFactory->getConnection(),
-                                    new StorageAliasGenerator($this->getClassnameUtilities()),
-                                    $exceptionLoggerFactory->createExceptionLogger(),
-                                    new ConditionPartTranslatorService(
-                                        new ConditionPartTranslatorFactory($this->getClassnameUtilities()),
-                                        new ConditionPartCache(),
-                                        $this->getFileConfigurationConsulter()->getSetting(
-                                            array('Chamilo\Configuration', 'debug', 'enable_query_cache')
-                                        )
+        $registrationConsulter = new RegistrationConsulter(
+            $this->getStringUtilities(),
+            new DataCacheLoader(
+                new RegistrationLoader(
+                    $this->getStringUtilities(),
+                    new RegistrationRepository(
+                        new DataClassRepository(
+                            new DataClassRepositoryCache(),
+                            new DataClassDatabase(
+                                $connectionFactory->getConnection(),
+                                new StorageAliasGenerator($this->getClassnameUtilities()),
+                                $exceptionLoggerFactory->createExceptionLogger(),
+                                new ConditionPartTranslatorService(
+                                    new ConditionPartTranslatorFactory($this->getClassnameUtilities()),
+                                    new ConditionPartCache(),
+                                    $this->getFileConfigurationConsulter()->getSetting(
+                                        array('Chamilo\Configuration', 'debug', 'enable_query_cache')))),
+                            new DataClassFactory())))));
                                     )
                                 ),
                                 new DataClassFactory()
@@ -478,9 +445,8 @@ class DependencyInjectionContainerBuilder
                     )
                 )
             );
-        }
 
-        return $this->registrationConsulter;
+        return $registrationConsulter;
     }
 
     /**
@@ -489,12 +455,7 @@ class DependencyInjectionContainerBuilder
      */
     protected function getClassnameUtilities()
     {
-        if (!isset($this->classnameUtilities))
-        {
-            $this->classnameUtilities = new ClassnameUtilities($this->getStringUtilities());
-        }
-
-        return $this->classnameUtilities;
+        return new ClassnameUtilities($this->getStringUtilities());
     }
 
     /**
@@ -503,11 +464,6 @@ class DependencyInjectionContainerBuilder
      */
     protected function getStringUtilities()
     {
-        if (!isset($this->stringUtilities))
-        {
-            $this->stringUtilities = new StringUtilities();
-        }
-
-        return $this->stringUtilities;
+        return new StringUtilities();
     }
 }
