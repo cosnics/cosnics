@@ -385,7 +385,7 @@ class Kernel
     protected function configureTimezone()
     {
         date_default_timezone_set(
-            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Core\Admin', 'platform_timezone')));
+            $this->getConfigurationConsulter()->getSetting(array('Chamilo\Libraries\Calendar', 'platform_timezone')));
 
         return $this;
     }
