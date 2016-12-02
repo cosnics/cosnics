@@ -296,6 +296,27 @@ class DependencyInjectionContainerBuilder
     }
 
     /**
+     * Removes the container's cache file from the system
+     */
+    public function removeContainerCache()
+    {
+        if (file_exists($this->cacheFile))
+        {
+            Filesystem::remove($this->cacheFile);
+        }
+    }
+
+    /**
+     * Resets and rebuilds the container
+     */
+    public function rebuildContainer()
+    {
+        $this->removeContainerCache();
+        $this->clearContainerInstance();
+        $this->createContainer();
+    }
+
+    /**
      * DEPENDENCIES
      */
     
