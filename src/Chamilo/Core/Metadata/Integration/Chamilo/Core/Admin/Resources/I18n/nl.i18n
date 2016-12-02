@@ -1,0 +1,22 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\integration\core\home
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Home"
+MetadataNamespaces = "Metadata namespaces"
+MetadataElements = "Elementen"
+MetadataAttributes = "Attributen"
+ControlledVocabularyBrowser = "Beheer gecontroleerde vocabulaire"
+ControlledVocabularyBrowserDescription = "Beheer de lijst met gecontroleerde vocabulaire die kunnen toegevoegd worden aan elementen en / of attributen"
+ExportMetadata = "Exporter"
+ExportMetadaTitle = "Exporteer"
+ExportMetadataDescription = "Exporteert de metadata schema's"
+MetadataNamespacesBrowser = "Beheer schema's"
+MetadataNamespacesDescription = "Beheer de lijst van schemas: voeg nieuwe schemas toe, wijzig of verwijder bestaande schemas"
+MetadataElementsBrowser = "Beheer elementen"
+MetadataElementsDescription = "Beheer de lijst van elementen: voeg nieuwe elementen toe, wijzig of verwijder bestaande elementen, beheer de subelementen en attributen voor de elementen, beheer de gecontroleerde vocabulaire voor de elementen, beheer de standaard waarden voor de elementen"
+MetadataAttributesBrowser = "Beheer attributen"
+MetadataAttributesDescription = "Beheer de lijst van attributen: voeg nieuwe attributen toe, wijzig of verwijder bestaande attributen, beheer de gecontroleerde vocabulaire voor de attributen, beheer de standaard waarden voor de attributen"
+ImportMetadataDescription = "Importeert de metadata schema's"
+ImportMetadaTitle = "Importer"

@@ -1,0 +1,19 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = 
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Tracking"
+Type = "Activiteit"
+Date = "Datum"
+Content = "Inhoud"
+TypeIcon = "-"
+ObjectCreated = "Object aangemaakt"
+ObjectDeleted = "Object verwijderd"
+ObjectUpdated = "Object aangepast"
+ObjectRecycled = "Opject definitief verwijderd"
+ObjectRestored = "Object teruggezet"
+ItemAddedToObject = "Item toegevoegd aan object"
+ItemDeletedFromObject = "Item uit object verwijderd"
+ItemMovedInObject = "Item verplaatst in object"
+ItemUpdatedInObject = "Item aangepast in object"

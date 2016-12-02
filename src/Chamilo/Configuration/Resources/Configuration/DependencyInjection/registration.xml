@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+    xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service
+            id="chamilo.configuration.service.registration_consulter"
+            class="Chamilo\Configuration\Service\RegistrationConsulter">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
+                id="chamilo.configuration.service.registration_cache_loader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.registration_cache_loader"
+            class="Chamilo\Configuration\Service\DataCacheLoader">
+            <argument
+                type="service"
+                id="chamilo.configuration.service.registration_loader" />
+        </service>
+
+        <service
+            id="chamilo.configuration.service.registration_loader"
+            class="Chamilo\Configuration\Service\RegistrationLoader">
+            <argument
+                type="service"
+                id="chamilo.libraries.utilities.string_utilities" />
+            <argument
+                type="service"
+                id="chamilo.configuration.storage.repository.registration_repository" />
+        </service>
+
+        <service
+            id="chamilo.configuration.storage.repository.registration_repository"
+            class="Chamilo\Configuration\Storage\Repository\RegistrationRepository">
+            <argument
+                type="service"
+                id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
+        </service>
+    </services>
+</container>

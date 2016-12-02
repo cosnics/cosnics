@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="user_status_change">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="course_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="subject_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="new_status"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="date"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+</object>

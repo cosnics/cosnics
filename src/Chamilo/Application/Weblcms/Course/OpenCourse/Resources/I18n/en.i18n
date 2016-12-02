@@ -1,0 +1,21 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = Chamilo\Application\Weblcms\Course\OpenCourse
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Open courses management"
+BrowseComponent = "View open courses"
+CreateComponent = "Add open courses"
+UpdateComponent = "Update open course"
+DeleterComponent = "Delete open course"
+AddOpenCourses = "Add open courses"
+MarkSelectedCoursesAsNoLongerOpen = "Mark selected courses as no longer open"
+OpenCoursesAdded = "Open courses added"
+OpenCoursesNotAdded = "Open courses not added"
+CoursesRemovedFromOpenCourseList = "Courses removed from open course list"
+CoursesNotRemovedFromOpenCourseList = "Courses not removed from open course list"
+OpenCoursesUpdated = "Open course updated"
+OpenCoursesNotUpdated = "Open course not updated"
+Role = "Role"
+SelectRoles = "Select roles"
+SelectCourses = "Select courses"

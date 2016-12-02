@@ -1,0 +1,31 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\assessment_select_question
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Select question"
+TypeCategory = "Content Objects"
+SelectAtLeastOneCorrectAnswer = "Select at least one correct answer"
+SelectACorrectAnswer = "Select the correct answer"
+SwitchToMultipleSelect = "Allow multiple answers"
+SwitchToSingleSelect = "Allow only one answer"
+AddSelectOption = "Add an option"
+Answer = "Answer"
+Feedback = "Feedback"
+Score = "Score"
+Correct = "Correct"
+Weight = "Weight"
+Title = "Question"
+Description = "Extra instructions"
+Options = "Options"
+Hint = "Hint"
+RecalculateWeight = "Recalculate weight"
+RandomizeOptions = "Randomize options"
+FeedbackOptions = "Show feedback for"
+FeedbackOptionsAll = "All answers"
+FeedbackOptionsSelected = "Selected answer(s)"
+FeedbackAnswer = "Only show feedback for wrong answers"
+InstructionsText = ""
+AddHint = "Configure hint"
+ConfirmOptionDelete = "Are you certain you want to delete this answer?"
+MakeASelection = "Make your selection"

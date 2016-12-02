@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="course_visit">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="course_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="tool_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="category_id"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="publication_id"
+            type="integer"
+            unsigned="1" />
+        <property
+            name="first_access_date"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="last_access_date"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="total_number_of_access"
+            type="integer" />
+        <property
+            name="total_time"
+            type="integer" />
+    </properties>
+    <index
+        name="access"
+        type="unique">
+        <indexproperty name="user_id" />
+        <indexproperty name="course_id" />
+        <indexproperty name="tool_id" />
+        <indexproperty name="category_id" />
+        <indexproperty name="publication_id" />
+    </index>
+</object>

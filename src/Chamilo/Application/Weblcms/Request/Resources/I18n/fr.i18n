@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\quota
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Quota Manager"
+General = "General"
+QuotaPolicyUser = "QuotaPolicyUser"
+QuotaPolicyGroupHighest = "QuotaPolicyGroupHighest"
+QuotaPolicyGroupLowest = "QuotaPolicyGroupLowest"
+QuotaPolicyHighest = "QuotaPolicyHighest"
+QuotaPolicyLowest = "QuotaPolicyLowest"
+QuotaFallbackUserGroupHighest = "QuotaFallbackUserGroupHighest"
+QuotaFallbackUserGroupLowest = "QuotaFallbackUserGroupLowest"
+QuotaFallbackUser = "QuotaFallbackUser"
