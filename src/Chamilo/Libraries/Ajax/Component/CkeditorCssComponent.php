@@ -6,6 +6,7 @@ use Assetic\Filter\CssImportFilter;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\CssFileAsset;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -28,17 +29,18 @@ class CkeditorCssComponent extends \Chamilo\Libraries\Ajax\Manager implements No
         $assets = array();
         
         $contentObjectTypes = \Chamilo\Core\Repository\Storage\DataManager::get_registered_types();
-        
-        $pathUtilities = Path::getInstance();
-        $classnameUtilities = ClassnameUtilities::getInstance();
-        $themeUtilities = new Theme($theme, StringUtilities::getInstance(), $classnameUtilities, $pathUtilities);
+
+        /** @var PathBuilder $pathUtilities */
+        $pathUtilities = $this->getService('chamilo.libraries.file.path_builder');
+        $classNameUtilities = $this->getService('chamilo.libraries.architecture.classname_utilities');
+        $themeUtilities = $this->getService('chamilo.libraries.format.theme');
         
         foreach ($contentObjectTypes as $contentObjectType)
         {
             
             $relativeEditorPath = '/HtmlEditor/Ckeditor/Stylesheet.css';
-            $namespace = $classnameUtilities->getNamespaceFromClassname($contentObjectType);
-            $namespace = $classnameUtilities->getNamespaceParent($namespace, 2);
+            $namespace = $classNameUtilities->getNamespaceFromClassname($contentObjectType);
+            $namespace = $classNameUtilities->getNamespaceParent($namespace, 2);
             
             $stylesheetPath = $themeUtilities->getCssPath($namespace, false) . $relativeEditorPath;
             
