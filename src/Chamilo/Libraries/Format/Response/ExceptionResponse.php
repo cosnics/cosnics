@@ -16,10 +16,9 @@ class ExceptionResponse extends Response
 
     /**
      * Constructor
-     * 
-     * @param string $content The response content
-     * @param int $status The response status code
-     * @param array $headers An array of response headers
+     *
+     * @param \Exception $exception
+     * @param string $application
      */
     public function __construct($exception, $application)
     {
@@ -31,6 +30,6 @@ class ExceptionResponse extends Response
         $html[] = Display::error_message($exception->getMessage());
         $html[] = $page->getFooter()->toHtml();
         
-        parent::__construct(implode(PHP_EOL, $html));
+        parent::__construct('', implode(PHP_EOL, $html));
     }
 }
