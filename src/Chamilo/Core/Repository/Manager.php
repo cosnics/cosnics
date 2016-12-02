@@ -20,6 +20,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Architecture\Interfaces\NoAuthenticationSupport;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
@@ -179,9 +180,12 @@ abstract class Manager extends Application
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        
-        $this->checkAuthorization(Manager::context());
-        
+
+        if($this->getUser())
+        {
+            $this->checkAuthorization(Manager::context());
+        }
+
         $this->set_optional_parameters();
     }
 
