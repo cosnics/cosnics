@@ -15,7 +15,7 @@ use Exception;
 use Chamilo\Core\Install\Service\ConfigurationWriter;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Core\Install\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  *
