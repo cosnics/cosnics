@@ -324,6 +324,8 @@ class Configuration
     {
         self::getInstance()->getDataClassRepositoryCache()->truncates(
             array(Registration::class_name(), Setting::class_name(), Language::class_name()));
+        // self::getInstance()->getConfigurationConsulter()->clear();
+        // self::getInstance()->loadFromStorage();
     }
 
     /**
