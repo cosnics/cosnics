@@ -55,4 +55,13 @@ class RegistrationRepository
     {
         return $this->getDataClassRepository()->records(Registration::class_name(), new RecordRetrievesParameters());
     }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function clearRegistrationCache()
+    {
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Registration::class_name());
+    }
 }

@@ -55,4 +55,13 @@ class LanguageRepository
     {
         return $this->getDataClassRepository()->records(Language::class_name(), new RecordRetrievesParameters());
     }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function clearLanguageCache()
+    {
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Language::class_name());
+    }
 }

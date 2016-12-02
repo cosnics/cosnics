@@ -55,4 +55,13 @@ class ConfigurationRepository
     {
         return $this->getDataClassRepository()->records(Setting::class_name(), new RecordRetrievesParameters());
     }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function clearSettingCache()
+    {
+        return $this->getDataClassRepository()->getDataClassRepositoryCache()->truncate(Setting::class_name());
+    }
 }

@@ -61,7 +61,13 @@ class DataConsulter
         {
             $this->data = $this->getDataLoader()->getData();
         }
-        
+
         return $this->data;
+    }
+
+    public function clearData()
+    {
+        $this->data = null;
+        return $this->getDataLoader()->clearData();
     }
 }
