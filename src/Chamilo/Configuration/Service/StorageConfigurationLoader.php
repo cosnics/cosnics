@@ -55,12 +55,12 @@ class StorageConfigurationLoader implements CacheableDataLoaderInterface
     {
         $settings = array();
         $settingRecords = $this->getConfigurationRepository()->findSettingsAsRecords();
-        
+
         foreach ($settingRecords as $settingRecord)
         {
             $settings[$settingRecord[Setting::PROPERTY_CONTEXT]][$settingRecord[Setting::PROPERTY_VARIABLE]] = $settingRecord[Setting::PROPERTY_VALUE];
         }
-        
+
         return $settings;
     }
 
@@ -71,5 +71,14 @@ class StorageConfigurationLoader implements CacheableDataLoaderInterface
     public function getIdentifier()
     {
         return md5(__CLASS__);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Configuration\Interfaces\DataLoaderInterface::clearData()
+     */
+    public function clearData()
+    {
+        return $this->getConfigurationRepository()->clearSettingCache();
     }
 }

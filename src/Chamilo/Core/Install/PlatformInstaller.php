@@ -12,7 +12,7 @@ use Exception;
 use Chamilo\Core\Install\Service\ConfigurationWriter;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Core\Install\DependencyInjection\DependencyInjectionContainerBuilder;
 
 /**
  *
@@ -157,10 +157,12 @@ class PlatformInstaller
         echo $this->installerObserver->beforeInstallation();
         flush();
 
-        echo $this->performPreProduction();
+        echo $this->performConfiguration();
+        $this->loadConfiguration();
+
         flush();
 
-        echo $this->performConfiguration();
+        echo $this->performPreProduction();
         flush();
 
         try
@@ -211,7 +213,10 @@ class PlatformInstaller
      */
     private function performConfiguration()
     {
-        return $this->installerObserver->afterPreProductionConfigurationFileWritten($this->writeConfigurationFile());
+        $result = $this->writeConfigurationFile();
+        $this->loadConfiguration();
+
+        return $this->installerObserver->afterPreProductionConfigurationFileWritten($result);
     }
 
     private function writeConfigurationFile()
@@ -225,9 +230,6 @@ class PlatformInstaller
             $configurationWriter = new ConfigurationWriter($configurationTemplatePath);
             $configurationWriter->writeConfiguration($this->configuration, $this->configurationFilePath);
 
-            $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
-            $dependencyInjectionContainerBuilder->rebuildContainer();
-
             $result = true;
         }
         catch (\Exception $exception)
@@ -236,6 +238,12 @@ class PlatformInstaller
         }
 
         return new StepResult($result, Translation::get($result ? 'ConfigWriteSuccess' : 'ConfigWriteFailed'));
+    }
+
+    private function loadConfiguration()
+    {
+        $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
+        $dependencyInjectionContainerBuilder->rebuildContainer();
     }
 
     private function installPackages()

@@ -15,4 +15,6 @@ interface DataLoaderInterface
      * @return string[]
      */
     public function getData();
+
+    public function clearData();
 }
