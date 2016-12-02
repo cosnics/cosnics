@@ -39,7 +39,7 @@
         <parameter key="chamilo.configuration.debug.show_errors">{chamilo.configuration.debug.show_errors}</parameter>
         <parameter key="chamilo.configuration.debug.enable_query_cache">{chamilo.configuration.debug.enable_query_cache}</parameter>
         <parameter key="chamilo.configuration.session.session_handler">chamilo</parameter>
-        <parameter key="chamilo.configuration.kernel.service">chamilo.libraries.architecture.kernel</parameter>
+        <parameter key="chamilo.configuration.kernel.service">chamilo.libraries.architecture.bootstrap.kernel</parameter>
         <parameter key="chamilo.configuration.version">7</parameter>
 
         <parameter
