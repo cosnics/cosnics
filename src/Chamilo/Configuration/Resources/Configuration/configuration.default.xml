@@ -36,7 +36,7 @@
         <parameter key="chamilo.configuration.general.install_date"></parameter>
         <parameter key="chamilo.configuration.general.language">en</parameter>
         <parameter key="chamilo.configuration.general.theme">aqua</parameter>
-        <parameter key="chamilo.configuration.debug.show_errors">0</parameter>
+        <parameter key="chamilo.configuration.debug.show_errors">1</parameter>
         <parameter key="chamilo.configuration.debug.enable_query_cache">1</parameter>
         <parameter key="chamilo.configuration.session.session_handler"></parameter>
         <parameter key="chamilo.configuration.kernel.service">chamilo.core.install.architecture.bootstrap.kernel</parameter>
