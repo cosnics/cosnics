@@ -1,10 +1,13 @@
 <?php
 namespace Chamilo\Core\Install;
 
+use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Sequencer;
 use Chamilo\Core\Install\Exception\InstallFailedException;
 use Chamilo\Core\Install\Observer\InstallerObserver;
+use Chamilo\Libraries\DependencyInjection\ExtensionFinder\PackagesContainerExtensionFinder;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -157,12 +160,11 @@ class PlatformInstaller
         echo $this->installerObserver->beforeInstallation();
         flush();
 
+        echo $this->performPreProduction();
+        flush();
+        
         echo $this->performConfiguration();
         $this->loadConfiguration();
-
-        flush();
-
-        echo $this->performPreProduction();
         flush();
 
         try
@@ -225,10 +227,13 @@ class PlatformInstaller
 
         try
         {
-            $configurationTemplatePath = $pathBuilder->getTemplatesPath('Chamilo\Core\Install') . 'configuration.xml.tpl';
+            $configurationTemplatePath =
+                $pathBuilder->getTemplatesPath('Chamilo\Core\Install') . 'configuration.xml.tpl';
 
             $configurationWriter = new ConfigurationWriter($configurationTemplatePath);
             $configurationWriter->writeConfiguration($this->configuration, $this->configurationFilePath);
+
+
 
             $result = true;
         }
@@ -242,8 +247,15 @@ class PlatformInstaller
 
     private function loadConfiguration()
     {
+        $platformPackageBundles = new PlatformPackageBundles();
+        $packages = array_keys($platformPackageBundles->get_packages());
+
+        $containerExtensionFinder = new PackagesContainerExtensionFinder(
+            new PackagesClassFinder(new PathBuilder(new ClassnameUtilities(new StringUtilities())), $packages)
+        );
+    
         $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
-        $dependencyInjectionContainerBuilder->rebuildContainer();
+        $dependencyInjectionContainerBuilder->rebuildContainer(null, containerExtensionFinder);
     }
 
     private function installPackages()
@@ -271,13 +283,15 @@ class PlatformInstaller
             {
                 $isIntegrationPackage = StringUtilities::getInstance()->createString($package)->contains(
                     '\Integration\\',
-                    true);
+                    true
+                );
 
-                if (! $isIntegrationPackage)
+                if (!$isIntegrationPackage)
                 {
                     echo $this->installerObserver->beforePackageInstallation($package);
                     echo $this->installerObserver->afterPackageInstallation(
-                        new StepResult($success, $installer->get_message(), $package));
+                        new StepResult($success, $installer->get_message(), $package)
+                    );
 
                     flush();
                 }
@@ -305,13 +319,14 @@ class PlatformInstaller
             $values['userpictures_path'],
             $values['scorm_path'],
             $values['logs_path'],
-            $values['hotpotatoes_path']);
+            $values['hotpotatoes_path']
+        );
 
         foreach ($directories as $directory)
         {
-            if (! file_exists($directory))
+            if (!file_exists($directory))
             {
-                if (! Filesystem::create_dir($directory))
+                if (!Filesystem::create_dir($directory))
                 {
                     throw new \Exception(Translation::get('FoldersCreatedFailed'));
                 }
@@ -320,13 +335,14 @@ class PlatformInstaller
 
         $publicFilesPath = Path::getInstance()->getPublicStoragePath();
 
-        if (! Filesystem::create_dir($publicFilesPath))
+        if (!Filesystem::create_dir($publicFilesPath))
         {
             throw new \Exception(Translation::get('FoldersCreatedFailed'));
         }
 
         $html[] = $this->installerObserver->afterFilesystemPrepared(
-            new StepResult(true, Translation::get('FoldersCreatedSuccess')));
+            new StepResult(true, Translation::get('FoldersCreatedSuccess'))
+        );
 
         return implode(PHP_EOL, $html);
     }
