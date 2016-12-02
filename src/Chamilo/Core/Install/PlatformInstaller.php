@@ -226,8 +226,7 @@ class PlatformInstaller
             $configurationWriter->writeConfiguration($this->configuration, $this->configurationFilePath);
 
             $dependencyInjectionContainerBuilder = DependencyInjectionContainerBuilder::getInstance();
-            $dependencyInjectionContainerBuilder->clearContainerInstance();
-            $dependencyInjectionContainerBuilder->createContainer();
+            $dependencyInjectionContainerBuilder->rebuildContainer();
 
             $result = true;
         }
