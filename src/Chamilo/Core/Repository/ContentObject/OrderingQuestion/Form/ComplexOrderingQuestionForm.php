@@ -70,7 +70,16 @@ class ComplexOrderingQuestionForm extends ComplexContentObjectItemForm
             $defaults[ComplexOrderingQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
             $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
             $defaults[ComplexOrderingQuestion::PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
-            $defaults[ComplexOrderingQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+
+            if ($complex_content_object_item->get_show_answer_feedback() == Configuration::ANSWER_FEEDBACK_TYPE_NONE)
+            {
+                $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 0;
+            }
+            else
+            {
+                $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 1;
+                $defaults[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            }
         }
         
         return $defaults;
@@ -107,7 +116,11 @@ class ComplexOrderingQuestionForm extends ComplexContentObjectItemForm
         }
         
         $complex_content_object_item->set_random($values[ComplexOrderingQuestion::PROPERTY_RANDOM]);
-        $complex_content_object_item->set_show_answer_feedback(
-            $values[ComplexOrderingQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK]);
+
+        $answerFeedback = ($values[self::PROPERTY_ANSWER_FEEDBACK_OPTION] == 1) ?
+            $values[ComplexOrderingQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] :
+            Configuration::ANSWER_FEEDBACK_TYPE_NONE;
+
+        $complex_content_object_item->set_show_answer_feedback($answerFeedback);
     }
 }
