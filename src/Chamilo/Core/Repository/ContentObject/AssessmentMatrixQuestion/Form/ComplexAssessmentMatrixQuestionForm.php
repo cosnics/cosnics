@@ -30,8 +30,8 @@ class ComplexAssessmentMatrixQuestionForm extends ComplexContentObjectItemForm
         
         $elements[] = $this->createElement(
             'checkbox', 
-            self :: PROPERTY_RECALCULATE_WEIGHT, 
-            Translation :: get('RecalculateWeight'));
+            self::PROPERTY_RECALCULATE_WEIGHT, 
+            Translation::get('RecalculateWeight'));
         
         $elements[] = $this->createElement(
             'text', 
@@ -67,10 +67,19 @@ class ComplexAssessmentMatrixQuestionForm extends ComplexContentObjectItemForm
         
         if (isset($complex_content_object_item))
         {
-            $defaults[ComplexAssessmentMatrixQuestion :: PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
-            $defaults[self :: PROPERTY_RECALCULATE_WEIGHT] = 1;
-            $defaults[ComplexAssessmentMatrixQuestion :: PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
-            $defaults[ComplexAssessmentMatrixQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            $defaults[ComplexAssessmentMatrixQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
+            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
+            $defaults[ComplexAssessmentMatrixQuestion::PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
+
+            if ($complex_content_object_item->get_show_answer_feedback() == Configuration::ANSWER_FEEDBACK_TYPE_NONE)
+            {
+                $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 0;
+            }
+            else
+            {
+                $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 1;
+                $defaults[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            }
         }
         
         return $defaults;
@@ -106,8 +115,12 @@ class ComplexAssessmentMatrixQuestionForm extends ComplexContentObjectItemForm
             $complex_content_object_item->set_weight($values[ComplexAssessmentMatrixQuestion :: PROPERTY_WEIGHT]);
         }
         
-        $complex_content_object_item->set_random($values[ComplexAssessmentMatrixQuestion :: PROPERTY_RANDOM]);
-        $complex_content_object_item->set_show_answer_feedback(
-            $values[ComplexAssessmentMatrixQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK]);
+        $complex_content_object_item->set_random($values[ComplexAssessmentMatrixQuestion::PROPERTY_RANDOM]);
+
+        $answerFeedback = ($values[self::PROPERTY_ANSWER_FEEDBACK_OPTION] == 1) ?
+            $values[ComplexAssessmentMatrixQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] :
+            Configuration::ANSWER_FEEDBACK_TYPE_NONE;
+
+        $complex_content_object_item->set_show_answer_feedback($answerFeedback);
     }
 }

@@ -66,10 +66,19 @@ class ComplexHotspotQuestionForm extends ComplexContentObjectItemForm
         
         if (isset($complex_content_object_item))
         {
-            $defaults[ComplexHotspotQuestion :: PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
-            $defaults[self :: PROPERTY_RECALCULATE_WEIGHT] = 1;
-            $defaults[ComplexHotspotQuestion :: PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
-            $defaults[ComplexHotspotQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            $defaults[ComplexHotspotQuestion::PROPERTY_WEIGHT] = $complex_content_object_item->get_weight() ? $complex_content_object_item->get_weight() : 0;
+            $defaults[self::PROPERTY_RECALCULATE_WEIGHT] = 1;
+            $defaults[ComplexHotspotQuestion::PROPERTY_RANDOM] = $complex_content_object_item->get_random() ? $complex_content_object_item->get_random() : 0;
+
+            if ($complex_content_object_item->get_show_answer_feedback() == Configuration::ANSWER_FEEDBACK_TYPE_NONE)
+            {
+                $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 0;
+            }
+            else
+            {
+                $defaults[self::PROPERTY_ANSWER_FEEDBACK_OPTION] = 1;
+                $defaults[Configuration::PROPERTY_SHOW_ANSWER_FEEDBACK] = $complex_content_object_item->get_show_answer_feedback();
+            }
         }
         
         return $defaults;
@@ -105,8 +114,12 @@ class ComplexHotspotQuestionForm extends ComplexContentObjectItemForm
             $complex_content_object_item->set_weight($values[ComplexHotspotQuestion :: PROPERTY_WEIGHT]);
         }
         
-        $complex_content_object_item->set_random($values[ComplexHotspotQuestion :: PROPERTY_RANDOM]);
-        $complex_content_object_item->set_show_answer_feedback(
-            $values[ComplexHotspotQuestion :: PROPERTY_SHOW_ANSWER_FEEDBACK]);
+        $complex_content_object_item->set_random($values[ComplexHotspotQuestion::PROPERTY_RANDOM]);
+
+        $answerFeedback = ($values[self::PROPERTY_ANSWER_FEEDBACK_OPTION] == 1) ?
+            $values[ComplexHotspotQuestion::PROPERTY_SHOW_ANSWER_FEEDBACK] :
+            Configuration::ANSWER_FEEDBACK_TYPE_NONE;
+
+        $complex_content_object_item->set_show_answer_feedback($answerFeedback);
     }
 }
