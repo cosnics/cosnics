@@ -87,7 +87,7 @@ class Session
 
     public static function retrieve($variable)
     {
-        if (array_key_exists($variable, $_SESSION))
+        if (is_array($_SESSION) && array_key_exists($variable, $_SESSION))
         {
             return $_SESSION[$variable];
         }
@@ -95,7 +95,7 @@ class Session
 
     public static function get($variable, $default = null)
     {
-        if (array_key_exists($variable, $_SESSION))
+        if (is_array($_SESSION) && array_key_exists($variable, $_SESSION))
         {
             return $_SESSION[$variable];
         }
