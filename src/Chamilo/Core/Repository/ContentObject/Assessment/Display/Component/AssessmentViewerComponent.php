@@ -182,29 +182,32 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     {
         $question_ids = $this->get_parent()->get_registered_question_ids();
         $order_by = array();
-        
-        if (! is_array($question_ids) || count($question_ids) == 0)
+
+        if (!is_array($question_ids) || count($question_ids) == 0)
         {
             $question_ids = $this->get_question_ids_for_assessment();
             $this->get_parent()->register_question_ids($question_ids);
         }
-        else
-        {
-            $order_by[] = new OrderBy(
-                new PropertyConditionVariable(
-                    ComplexContentObjectItem::class_name(), 
-                    ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER));
-        }
-        
+
+        $order_by[] = new OrderBy(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem:: class_name(),
+                ComplexContentObjectItem :: PROPERTY_DISPLAY_ORDER
+            )
+        );
+
         $condition = new InCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class_name(), 
-                ComplexContentObjectItem::PROPERTY_ID), 
-            $question_ids);
-        
-        $this->questions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class_name(), 
-            new DataClassRetrievesParameters($condition, null, null, $order_by))->as_array();
+                ComplexContentObjectItem:: class_name(),
+                ComplexContentObjectItem :: PROPERTY_ID
+            ),
+            $question_ids
+        );
+
+        $this->questions = \Chamilo\Core\Repository\Storage\DataManager:: retrieve_complex_content_object_items(
+            ComplexContentObjectItem:: class_name(),
+            new DataClassRetrievesParameters($condition, null, null, $order_by)
+        )->as_array();
     }
 
     /**
@@ -343,7 +346,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     public function get_questions_page()
     {
-        if (! $this->current_page)
+        if (!$this->current_page)
         {
             if ($this->result_form_submitted() || $this->question_form_submitted())
             {
@@ -376,7 +379,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     public function get_previous_questions_page()
     {
-        if (! $this->previous_page)
+        if (!$this->previous_page)
         {
             if ($this->result_form_submitted() || $this->question_form_submitted())
             {
