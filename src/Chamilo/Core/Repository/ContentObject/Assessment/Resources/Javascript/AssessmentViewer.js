@@ -38,6 +38,12 @@ function handle_timer()
     $(document).ready(function()
     {
         handle_timer();
+
+        $('input[type="text"]').on('keypress', function(event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+            }
+        });
     });
     
 })(jQuery);
