@@ -232,7 +232,7 @@ class AccountForm extends FormValidator
             $this->addElement('category');
         }
         
-        if ($configurationConsulter->get_setting(array(__NAMESPACE__, 'show_personal_token')))
+        if ($configurationConsulter->get_setting(array(\Chamilo\Core\User\Manager::context(), 'show_personal_token')))
         {
             $this->addElement('category', Translation::get('Other'));
             $this->addElement('static', User::PROPERTY_SECURITY_TOKEN, Translation::get('SecurityToken'));
