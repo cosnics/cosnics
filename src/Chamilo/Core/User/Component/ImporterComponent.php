@@ -65,7 +65,7 @@ class ImporterComponent extends Manager
         $html[] = '<pre>';
         $text = '<b>action</b>;<b>lastname</b>;<b>firstname</b>;<b>username</b>;';
         
-        $requireEmail = Configuration::getInstance()->get_setting(array(self::context(), 'require_email'));
+        $requireEmail = Configuration::getInstance()->get_setting(array(Manager::context(), 'require_email'));
         
         if ($requireEmail)
         {
