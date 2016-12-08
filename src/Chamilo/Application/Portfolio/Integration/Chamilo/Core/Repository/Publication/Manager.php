@@ -193,10 +193,10 @@ class Manager implements PublicationInterface
         $attributes->set_id($record[Publication::PROPERTY_ID]);
         $attributes->set_publisher_id($record[Publication::PROPERTY_PUBLISHER_ID]);
         $attributes->set_date($record[Publication::PROPERTY_PUBLISHED]);
-        $attributes->set_application(__NAMESPACE__);
-        
-        $attributes->set_location(Translation::get('TypeName'));
-        
+        $attributes->set_application(\Chamilo\Application\Portfolio\Manager::context());
+
+        $attributes->set_location(Translation::get('TypeName', null, \Chamilo\Application\Portfolio\Manager::context()));
+
         $url = 'index.php?application=portfolio&amp;go=' . \Chamilo\Application\Portfolio\Manager::ACTION_HOME . '&amp;' .
              \Chamilo\Application\Portfolio\Manager::PARAM_USER_ID . '=' . $record[Publication::PROPERTY_PUBLISHER_ID];
         
@@ -307,7 +307,7 @@ class Manager implements PublicationInterface
     {
         $applicationContext = \Chamilo\Application\Portfolio\Manager::context();
         
-        $locations = new Locations(__NAMESPACE__);
+        $locations = new Locations($applicationContext);
         $allowed_types = Portfolio::get_allowed_types();
         
         $condition = new EqualityCondition(
