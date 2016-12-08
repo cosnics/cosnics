@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -133,7 +134,7 @@ abstract class GroupsFeedComponent extends \Chamilo\Libraries\Ajax\Manager
         
         $this->user_count = \Chamilo\Core\User\Storage\DataManager::count(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
-            $condition);
+            new DataClassCountParameters($condition));
         
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
             \Chamilo\Core\User\Storage\DataClass\User::class_name(), 
