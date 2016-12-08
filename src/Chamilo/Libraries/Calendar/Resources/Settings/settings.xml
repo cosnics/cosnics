@@ -169,7 +169,7 @@
                 user_setting="1">
                 <options type="static">
                     <option
-                        name="hide_non_working_hours"
+                        name="hide_none_working_hours"
                         value="1" />
                 </options>
             </setting>

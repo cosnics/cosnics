@@ -104,7 +104,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 LocalSetting::getInstance()->get('working_hours_start', 'Chamilo\Libraries\Calendar'));
             $renderer->setEndHour(LocalSetting::getInstance()->get('working_hours_end', 'Chamilo\Libraries\Calendar'));
             $renderer->setHideOtherHours(
-                LocalSetting::getInstance()->get('hide_non_working_hours', 'Chamilo\Libraries\Calendar'));
+                LocalSetting::getInstance()->get('hide_none_working_hours', 'Chamilo\Libraries\Calendar'));
         }
         
         return $renderer->render();
